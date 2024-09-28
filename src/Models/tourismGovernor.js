@@ -1,27 +1,32 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const tourismGovernorSchema = new Schema({
+const governorSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  email: {
+  username: {
     type: String,
     required: true,
     unique: true,
   },
-  password: {
+  email: {
     type: String,
     required: true,
   },
-  museumsAndHistoricalPlaces: [
+  password: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  tourismSite: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'MuseumHistoricalPlace', // References the Museums & Historical Places model
+      ref: 'tourismSite', // References the Museums & Historical Places model
     }
   ]
 }, { timestamps: true });
 
-const TourismGovernor = mongoose.model('TourismGovernor', tourismGovernorSchema);
-module.exports = TourismGovernor;
+const tourismGovernor = mongoose.model('tourismGovernor', governorSchema);
+module.exports = tourismGovernor;
