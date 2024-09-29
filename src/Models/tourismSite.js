@@ -28,6 +28,11 @@ const siteSchema = new Schema({
     type: Number,
     required: true,
   },
+  tag: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'tag',
+    required: true,
+  },  
   tourismGovernor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'tourismGovernor', // References the Tourism Governor model
