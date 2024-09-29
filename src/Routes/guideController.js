@@ -66,6 +66,7 @@ const createItinerary = async (req, res) => {
         availableTimes,
         accessibility,
         pickupDropoffLocations,
+        bookings,
         guideId
     } = req.body;
 
@@ -93,6 +94,7 @@ const createItinerary = async (req, res) => {
             availableTimes,
             accessibility,
             pickupDropoffLocations,
+            bookings,
             guide: guideId, // Link to tour guide
         });
 
@@ -160,6 +162,7 @@ const updateItinerary = async (req, res) => {
         availableDates, 
         accessibility, 
         pickupDropoffLocations,
+        bookings,
         tourGuideId 
     } = req.body; // Extract new data from the request body
 
@@ -172,6 +175,10 @@ const updateItinerary = async (req, res) => {
         // If a new tourGuideId is provided, validate it
         if (tourGuideId && !mongoose.Types.ObjectId.isValid(tourGuideId)) {
             return res.status(400).json({ error: 'Invalid tour guide ID' });
+        }
+
+        if(bookings){
+            return res.status(400).json({ error: 'Booking have been made!'});
         }
 
         // Debugging log for request body
@@ -190,6 +197,7 @@ const updateItinerary = async (req, res) => {
             availableDates, 
             accessibility, 
             pickupDropoffLocations,
+            bookings,
             tourGuideId 
         });
 
@@ -208,6 +216,7 @@ const updateItinerary = async (req, res) => {
                     availableDates,
                     accessibility,
                     pickupDropoffLocations,
+                    bookings,
                     ...(tourGuideId && { tourGuideId }) // Only update tourGuideId if it's provided and valid
                 }
             },
@@ -237,6 +246,10 @@ const deleteItineraryById = async (req, res) => {
     const { id } = req.params; // Extract itinerary ID from request parameters
 
     try {
+
+        if(bookings){
+            return res.status(400).json({ error: 'Booking have been made!'});
+        } 
         const deletedItinerary = await Itinerary.findByIdAndDelete(id);
 
         if (!deletedItinerary) {
