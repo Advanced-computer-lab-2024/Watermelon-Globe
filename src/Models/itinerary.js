@@ -24,6 +24,7 @@ const itinerarySchema = new Schema({
     pickupDropoffLocations: [pickupDropoffSchema], 
     bookings: {type: Boolean, default: false},// Array of pickup/dropoff objects
     guide: { type: mongoose.Types.ObjectId, ref: 'TourGuide', required: true } // Reference to the tour guide
+    
 }, { timestamps: true });
 
 const Itinerary = mongoose.model('Itinerary', itinerarySchema);

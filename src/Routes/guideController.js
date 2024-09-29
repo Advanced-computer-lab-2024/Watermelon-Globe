@@ -7,46 +7,46 @@ const createTourGuide = async (req, res) => {
     const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
     try {
-        
+
         const existingGuide = await tourGuide.findOne({ email });
         if (existingGuide) {
             return res.status(400).json({ message: 'Tour guide with this email already exists' });
         }
-        const newTourGuide = await tourGuide.create({name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries})
+        const newTourGuide = await tourGuide.create({ name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries })
         const savedTourGuide = await newTourGuide.save();
         res.status(201).json(savedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-  };
+};
 
 const getTourGuide = async (req, res) => {
 
     const { name } = req.body;
     console.log(req.body);
     try {
-        const retreivedTourGuide = await tourGuide.find({name})
+        const retreivedTourGuide = await tourGuide.find({ name })
         res.status(200).json(retreivedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-  };
+};
 
 const updateTourGuide = async (req, res) => {
     const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
     try {
         const updatedTourGuide = await tourGuide.findOneAndUpdate(
-            { email }, 
+            { email },
             { name, password, mobileNumber, nationality, yearsOfExperience, itineraries },
             { new: true }
         );
-        
+
         if (!updatedTourGuide) {
             return res.status(404).json({ message: "Tour guide not found" });
         }
 
-        res.status(200).json(updatedTourGuide); 
+        res.status(200).json(updatedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -106,31 +106,31 @@ const createItinerary = async (req, res) => {
 };
 
 const getMyItineraries = async (req, res) => {
-    const {governorID} = req.query; // Extract the Governor ID from the request parameters
+    const { governorID } = req.query; // Extract the Governor ID from the request parameters
 
     // Validate if the provided ID is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(governorID)) {
-      return res.status(400).json({ error: 'Invalid governor ID' });
+        return res.status(400).json({ error: 'Invalid governor ID' });
     }
 
     try {
-      // Find the tourism site by ID and populate the tourismGovernor field
-      const site = await siteModel.find({ tourismGovernor: governorID });
+        // Find the tourism site by ID and populate the tourismGovernor field
+        const site = await siteModel.find({ tourismGovernor: governorID });
 
-      // If no site is found, return a 404 error
-      if (!site) {
-        return res.status(404).json({ message: 'Site not found' });
-      }
+        // If no site is found, return a 404 error
+        if (!site) {
+            return res.status(404).json({ message: 'Site not found' });
+        }
 
-      // Return the found site as a response
-      res.status(200).json(site);
+        // Return the found site as a response
+        res.status(200).json(site);
     } catch (error) {
-      // Handle any server errors
-      res.status(500).json({ error: error.message });
+        // Handle any server errors
+        res.status(500).json({ error: error.message });
     }
-  };
+};
 
-const getAllItineraries = async(req,res) => {
+const getAllItineraries = async (req, res) => {
     try {
         // Fetch all itineraries, populating the 'guide' field to get tour guide details
         const itineraries = await Itinerary.find().populate('guide', 'name email');
@@ -175,19 +175,19 @@ const getItineraryById = async (req, res) => {
 
 const updateItinerary = async (req, res) => {
     const { id } = req.params; // Get the itinerary ID from the request parameters
-    const { 
-        name, 
-        activities, 
-        locationsToBeVisited, 
-        timeline, 
-        duration, 
-        languageOfTour, 
-        priceOfTour, 
-        availableDates, 
-        accessibility, 
+    const {
+        name,
+        activities,
+        locationsToBeVisited,
+        timeline,
+        duration,
+        languageOfTour,
+        priceOfTour,
+        availableDates,
+        accessibility,
         pickupDropoffLocations,
         bookings,
-        tourGuideId 
+        tourGuideId
     } = req.body; // Extract new data from the request body
 
     try {
@@ -201,8 +201,8 @@ const updateItinerary = async (req, res) => {
             return res.status(400).json({ error: 'Invalid tour guide ID' });
         }
 
-        if(bookings){
-            return res.status(400).json({ error: 'Booking have been made!'});
+        if (bookings) {
+            return res.status(400).json({ error: 'Booking have been made!' });
         }
 
         // Debugging log for request body
@@ -210,19 +210,19 @@ const updateItinerary = async (req, res) => {
 
         // Logging for debugging
         console.log("Updating itinerary with ID:", id);
-        console.log("New data:", { 
-            name, 
-            activities, 
-            locationsToBeVisited, 
-            timeline, 
-            duration, 
-            languageOfTour, 
-            priceOfTour, 
-            availableDates, 
-            accessibility, 
+        console.log("New data:", {
+            name,
+            activities,
+            locationsToBeVisited,
+            timeline,
+            duration,
+            languageOfTour,
+            priceOfTour,
+            availableDates,
+            accessibility,
             pickupDropoffLocations,
             bookings,
-            tourGuideId 
+            tourGuideId
         });
 
         // Update the itinerary with new data, including the tourGuideId if provided
@@ -271,9 +271,9 @@ const deleteItineraryById = async (req, res) => {
 
     try {
 
-        if(bookings){
-            return res.status(400).json({ error: 'Booking have been made!'});
-        } 
+        if (bookings) {
+            return res.status(400).json({ error: 'Booking have been made!' });
+        }
         const deletedItinerary = await Itinerary.findByIdAndDelete(id);
 
         if (!deletedItinerary) {
@@ -296,4 +296,5 @@ module.exports = {
     createTourGuide,
     getTourGuide,
     updateTourGuide,
-    getMyItineraries};
+    getMyItineraries
+};
