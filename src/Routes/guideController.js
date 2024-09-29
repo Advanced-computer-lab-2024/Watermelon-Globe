@@ -1,4 +1,6 @@
-<<<<<<< Updated upstream
+const mongoose = require('mongoose');
+const Itinerary = require('../Models/Itinerary');
+const TourGuide = require('../Models/tourGuide');
 const tourGuide = require('../Models/tourGuide.js');
 const { default: mongoose } = require('mongoose');
 
@@ -44,13 +46,8 @@ const createTourGuide = async (req, res) => {
         res.status(200).json(updatedTourGuide); 
     } catch (error) {
         res.status(400).json({ message: error.message });
-=======
-const mongoose = require('mongoose');
-const Itinerary = require('../Models/Itinerary');
-const TourGuide = require('../Models/tourGuide');
 
 // CREATE an itinerary
-
 const addGuide = async (req, res) => {
     const {
         name,
@@ -262,15 +259,11 @@ const updateItinerary = async (req, res) => {
         // Handle any potential errors
         console.error("Error updating itinerary:", error);
         res.status(500).json({ error: 'Error updating itinerary: ' + error.message });
->>>>>>> Stashed changes
     }
+
 };
 
 
-<<<<<<< Updated upstream
-
-  module.exports = { createTourGuide,getTourGuide,updateTourGuide};
-=======
 const deleteItineraryById = async (req, res) => {
     const { id } = req.params; // Extract itinerary ID from request parameters
 
@@ -291,10 +284,10 @@ const deleteItineraryById = async (req, res) => {
 module.exports = {
     addGuide,
     createItinerary,
+    getAllItineraries,
     getItineraryById,
     updateItinerary,
     deleteItineraryById,
-    getAllItineraries,
-    createTourGuide,getTourGuide,updateTourGuide
-};
->>>>>>> Stashed changes
+    createTourGuide,
+    getTourGuide,
+    updateTourGuide};
