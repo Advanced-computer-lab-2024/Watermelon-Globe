@@ -5,26 +5,20 @@ require("dotenv").config();
 const guideController = require('./Routes/guideController'); // Import the controller
 //Make sure to add your MongoDB URI in the .env file as MONGO_URI="your mongodb uri"
 //Check db connection links in README file
-const {createTourGuide,getTourGuide,updateTourGuide} = require("./Routes/guideController.js");
-const {createGov, createSite, readSite, updateSite, deleteSite} = require('./Routes/governorController');
+
+const {createGov, createSite, getSite, getAllSites, updateSite, deleteSite} = require('./Routes/governorController');
 const MongoURI = process.env.MONGO_URI;
-
-
-
 
 //App variables
 const app = express();
 const port = process.env.PORT || "8000";
 
+//importing models
 const governorModel = require('./Models/tourismGovernor');
 const siteModel = require('./Models/tourismSite');
-// #Importing the userController
-
 
 // configurations
 // Mongo DB
-
-
 mongoose.connect(MongoURI)
 .then(()=>{
   console.log("MongoDB is now connected!")
@@ -39,23 +33,21 @@ app.get("/home", (req, res) => {
   });
 
 app.use(express.json());
-app.post("/addGuide",createTourGuide);
-app.get("/getGuide", getTourGuide);
-app.put("/updateGuide",updateTourGuide);
 
+//tour guide routes
+app.post("/addGuide",guideController.createTourGuide);
+app.get("/getGuide", guideController.getTourGuide);
+app.put("/updateGuide", guideController.updateTourGuide);
+ 
+//tourism governor/sites routes
 app.post("/addGov", createGov);
 app.post("/addSite", createSite);
-app.get("/getSites", readSite);
+app.get("/getSite/:id", getSite);
+app.get("/getAllSites", getAllSites);
 app.put("/updateSite/:id", updateSite);
 app.delete("/deleteSite/:id", deleteSite);
 
-
-
-// Routes
-app.post("/guides", guideController.addGuide); // Create a new tour guide
-
-
-
+//itineraries routes
 app.post("/itineraries", guideController.createItinerary); // Create a new itinerary
 app.get("/itineraries", guideController.getAllItineraries); // Get all itineraries
 app.get("/itineraries/:id", guideController.getItineraryById); // Get a single itinerary by ID

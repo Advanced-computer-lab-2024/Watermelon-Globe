@@ -25,7 +25,32 @@ const createSite = async(req,res) => {
     }
 };
 
-const readSite = async (req, res) => {
+const getSite = async (req, res) => {
+  const { id } = req.params; // Extract the site ID from the request parameters
+
+  // Validate if the provided ID is a valid MongoDB ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid site ID' });
+  }
+
+  try {
+    // Find the tourism site by ID and populate the tourismGovernor field
+    const site = await siteModel.findById(id).populate('tourismGovernor');
+
+    // If no site is found, return a 404 error
+    if (!site) {
+      return res.status(404).json({ message: 'Site not found' });
+    }
+
+    // Return the found site as a response
+    res.status(200).json(site);
+  } catch (error) {
+    // Handle any server errors
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getAllSites = async (req, res) => {
     const sites = await siteModel.find({}).sort({createdAt: -1})
   
     for (let index = 0; index < sites.length; index++) {
@@ -91,4 +116,4 @@ const readSite = async (req, res) => {
   };
   
 
-module.exports = {createGov, createSite, readSite, updateSite, deleteSite};
+  module.exports = {createGov, createSite, getSite, getAllSites, updateSite, deleteSite};

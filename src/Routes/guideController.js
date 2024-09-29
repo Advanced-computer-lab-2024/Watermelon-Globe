@@ -2,13 +2,17 @@ const mongoose = require('mongoose');
 const Itinerary = require('../Models/Itinerary');
 const TourGuide = require('../Models/tourGuide');
 const tourGuide = require('../Models/tourGuide.js');
-const { default: mongoose } = require('mongoose');
 
 const createTourGuide = async (req, res) => {
 
     const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
     try {
+        
+        const existingGuide = await TourGuide.findOne({ email });
+        if (existingGuide) {
+            return res.status(400).json({ message: 'Tour guide with this email already exists' });
+        }
         const newTourGuide = await tourGuide.create({name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries})
         const savedTourGuide = await newTourGuide.save();
         res.status(201).json(savedTourGuide);
@@ -19,10 +23,10 @@ const createTourGuide = async (req, res) => {
 
 const getTourGuide = async (req, res) => {
 
-    const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
+    const { name } = req.body;
     console.log(req.body);
     try {
-        const retreivedTourGuide = await tourGuide.find({name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries})
+        const retreivedTourGuide = await tourGuide.find({name})
         res.status(200).json(retreivedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -48,43 +52,7 @@ const updateTourGuide = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
-// CREATE an itinerary
-const addGuide = async (req, res) => {
-    const {
-        name,
-        email,
-        password,
-        mobileNumber,
-        nationality,
-        yearsOfExperience
-    } = req.body; // Extract the tour guide details from the request body
 
-    try {
-        // Check if a guide with the same email already exists
-        const existingGuide = await TourGuide.findOne({ email });
-        if (existingGuide) {
-            return res.status(400).json({ message: 'Tour guide with this email already exists' });
-        }
-
-        // Create a new tour guide
-        const newGuide = new TourGuide({
-            name,
-            email,
-            password, // Make sure to hash passwords in real applications for security
-            mobileNumber,
-            nationality,
-            yearsOfExperience,
-            itineraries: [] // Initialize with an empty array of itineraries
-        });
-
-        // Save the tour guide to the database
-        const savedGuide = await newGuide.save();
-
-        res.status(201).json(savedGuide);
-    } catch (error) {
-        res.status(500).json({ message: 'Error creating tour guide', error });
-    }
-};
 
 const createItinerary = async (req, res) => {
     const {
@@ -283,7 +251,6 @@ const deleteItineraryById = async (req, res) => {
 
 
 module.exports = {
-    addGuide,
     createItinerary,
     getAllItineraries,
     getItineraryById,

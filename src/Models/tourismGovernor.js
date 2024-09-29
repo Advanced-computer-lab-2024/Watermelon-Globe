@@ -9,7 +9,6 @@ const governorSchema = new Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
@@ -18,7 +17,6 @@ const governorSchema = new Schema({
   password: {
     type: String,
     required: true,
-    unique: true,
   },
   tourismSite: [
     {
