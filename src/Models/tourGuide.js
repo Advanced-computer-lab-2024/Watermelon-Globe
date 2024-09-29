@@ -30,7 +30,7 @@ const tourGuideSchema = new Schema({
   itineraries: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Itinerary', // References the Itinerary model
+      ref: 'itinerary', // References the Itinerary model
     }
   ]
 }, { timestamps: true });

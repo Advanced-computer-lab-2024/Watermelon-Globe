@@ -1,62 +1,28 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const activitySchema = new Schema({
+    activityName: { type: String, required: true },
+    duration: { type: String, required: true }
+});
+
+const pickupDropoffSchema = new Schema({
+    pickup: { type: String, required: true },
+    dropoff: { type: String, required: true }
+});
+
 const itinerarySchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  activities: [
-    {
-      type: String,
-      required: true, // Each itinerary must have a list of activities
-    }
-  ],
-  locationsToBeVisited: {
-    type: [String],
-    required: true, // List of locations to visit
-  },
-  timeline: {
-    type: String, // E.g., a timeline description or format like "Day 1, Day 2"
-    required: true,
-  },
-  durationOfEachActivity: {
-    type: [Number], // Array of numbers representing the duration of each activity in hours
-    required: true,
-  },
-  languageOfTour: {
-    type: String,
-    required: true,
-  },
-  priceOfTour: {
-    type: Number,
-    required: true,
-  },
-  availableDatesAndTimes: [
-    {
-      date: {
-        type: Date,
-        required: true,
-      },
-      time: {
-        type: String, // E.g., "10:00 AM"
-        required: true,
-      }
-    }
-  ],
-  accessibility: {
-    type: Boolean, // Indicates whether the tour is accessible (for people with disabilities)
-    default: false,
-  },
-  pickupDropoffLocations: {
-    type: [String], // List of pickup/dropoff locations
-    required: true,
-  },
-  tourGuide: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'TourGuide', // References the TourGuide model
-    required: true,
-  }
+    name: { type: String, required: true },
+    activities: [activitySchema], // Array of activity objects
+    locations: { type: [String], required: true },
+    timeline: { type: String, required: true },
+    languageOfTour: { type: String, required: true }, // Correct field name
+    priceOfTour: { type: Number, required: true }, // Correct field name
+    availableDates: { type: [Date], required: true },
+    availableTimes: { type: [String], required: true },
+    accessibility: { type: Boolean, default: false },
+    pickupDropoffLocations: [pickupDropoffSchema], // Array of pickup/dropoff objects
+    guide: { type: mongoose.Types.ObjectId, ref: 'TourGuide', required: true } // Reference to the tour guide
 }, { timestamps: true });
 
 const Itinerary = mongoose.model('Itinerary', itinerarySchema);
