@@ -17,7 +17,7 @@ const createTourGuide = async (req, res) => {
     }
   };
 
-  const getTourGuide = async (req, res) => {
+const getTourGuide = async (req, res) => {
 
     const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
@@ -29,7 +29,7 @@ const createTourGuide = async (req, res) => {
     }
   };
 
-  const updateTourGuide = async (req, res) => {
+const updateTourGuide = async (req, res) => {
     const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
     try {
@@ -46,7 +46,8 @@ const createTourGuide = async (req, res) => {
         res.status(200).json(updatedTourGuide); 
     } catch (error) {
         res.status(400).json({ message: error.message });
-
+    }
+}
 // CREATE an itinerary
 const addGuide = async (req, res) => {
     const {
