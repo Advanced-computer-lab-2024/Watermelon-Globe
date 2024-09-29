@@ -5,6 +5,7 @@ require("dotenv").config();
 //Make sure to add your MongoDB URI in the .env file as MONGO_URI="your mongodb uri"
 //Check db connection links in README file
 const {createTourGuide,getTourGuide,updateTourGuide} = require("./Routes/guideController.js");
+const {createGov, createSite, readSite, updateSite, deleteSite} = require('./Routes/governorController');
 const MongoURI = process.env.MONGO_URI;
 
 
@@ -13,6 +14,9 @@ const MongoURI = process.env.MONGO_URI;
 //App variables
 const app = express();
 const port = process.env.PORT || "8000";
+
+const governorModel = require('./Models/tourismGovernor');
+const siteModel = require('./Models/tourismSite');
 // #Importing the userController
 
 
@@ -38,5 +42,9 @@ app.post("/addGuide",createTourGuide);
 app.get("/getGuide", getTourGuide);
 app.put("/updateGuide",updateTourGuide);
 
-
+app.post("/addGov", createGov);
+app.post("/addSite", createSite);
+app.get("/getSites", readSite);
+app.put("/updateSite/:id", updateSite);
+app.delete("/deleteSite/:id", deleteSite);
 
