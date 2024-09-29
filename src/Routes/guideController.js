@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const Itinerary = require('../Models/Itinerary');
-const TourGuide = require('../Models/tourGuide');
-const tourGuide = require('../Models/tourGuide.js');
+const Itinerary = require('../Models/itinerary');
+const tourGuide = require('../Models/tourGuide');
 
 const createTourGuide = async (req, res) => {
 
@@ -9,7 +8,7 @@ const createTourGuide = async (req, res) => {
     console.log(req.body);
     try {
         
-        const existingGuide = await TourGuide.findOne({ email });
+        const existingGuide = await tourGuide.findOne({ email });
         if (existingGuide) {
             return res.status(400).json({ message: 'Tour guide with this email already exists' });
         }
@@ -77,7 +76,7 @@ const createItinerary = async (req, res) => {
         }
 
         // Check if the tour guide exists
-        const guide = await TourGuide.findById(guideId);
+        const guide = await tourGuide.findById(guideId);
         if (!guide) {
             return res.status(404).json({ error: 'Tour guide not found' });
         }
@@ -105,6 +104,31 @@ const createItinerary = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+const getMyItineraries = async (req, res) => {
+    const {governorID} = req.query; // Extract the Governor ID from the request parameters
+
+    // Validate if the provided ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(governorID)) {
+      return res.status(400).json({ error: 'Invalid governor ID' });
+    }
+
+    try {
+      // Find the tourism site by ID and populate the tourismGovernor field
+      const site = await siteModel.find({ tourismGovernor: governorID });
+
+      // If no site is found, return a 404 error
+      if (!site) {
+        return res.status(404).json({ message: 'Site not found' });
+      }
+
+      // Return the found site as a response
+      res.status(200).json(site);
+    } catch (error) {
+      // Handle any server errors
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 const getAllItineraries = async(req,res) => {
     try {
@@ -271,4 +295,5 @@ module.exports = {
     deleteItineraryById,
     createTourGuide,
     getTourGuide,
-    updateTourGuide};
+    updateTourGuide,
+    getMyItineraries};

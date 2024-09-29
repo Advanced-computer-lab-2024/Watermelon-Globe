@@ -3,10 +3,11 @@ const express = require("express");
 const mongoose = require('mongoose');
 require("dotenv").config();
 const guideController = require('./Routes/guideController'); // Import the controller
-//Make sure to add your MongoDB URI in the .env file as MONGO_URI="your mongodb uri"
-//Check db connection links in README file
 
-const {createGov, createSite, getSite, getAllSites, updateSite, deleteSite} = require('./Routes/governorController');
+
+const {createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites} = 
+require('./Routes/governorController');
+
 const MongoURI = process.env.MONGO_URI;
 
 //App variables
@@ -46,6 +47,7 @@ app.get("/getSite/:id", getSite);
 app.get("/getAllSites", getAllSites);
 app.put("/updateSite/:id", updateSite);
 app.delete("/deleteSite/:id", deleteSite);
+app.get("/getMySites", getMySites);
 
 //itineraries routes
 app.post("/itineraries", guideController.createItinerary); // Create a new itinerary
@@ -53,6 +55,7 @@ app.get("/itineraries", guideController.getAllItineraries); // Get all itinerari
 app.get("/itineraries/:id", guideController.getItineraryById); // Get a single itinerary by ID
 app.patch("/itineraries/:id", guideController.updateItinerary); // Update an itinerary
 app.delete("/itineraries/:id", guideController.deleteItineraryById); // Delete an itinerary
+app.get("/getMyItineraries", guideController.getMyItineraries); 
 
 app.get("/home", (req, res) => {
     res.status(200).send("Tour Guide and Itinerary API");
