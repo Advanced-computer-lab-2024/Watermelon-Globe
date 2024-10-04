@@ -23,4 +23,50 @@ const createProfile = async (req, res) => {
     }
 };
 
-module.exports = { createProfile };
+
+const getProfiles = async (req, res) => {
+    const { id } = req.params;
+    try {
+        if (id) {
+            const profile = await CompanyProfileModel.findById(id);
+            if (!profile) {
+                return res.status(404).json({ message: 'Profile not found' });
+            }
+            res.status(200).json(profile);
+        } else {
+            const profiles = await CompanyProfileModel.find({});
+            res.status(200).json(profiles);
+        }
+        console.log('Fetching profile with ID:', id);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Error fetching company profiles',
+            error: error.message
+        });
+    }
+};
+
+const updateProfile = async (req, res) => {
+    const {id} = req.params;
+    const updates = req.body;
+
+    try {
+        const updatedProfile = await CompanyProfileModel.findByIdAndUpdate(id, updates, { new: true });
+        if (!updatedProfile) {
+            return res.status(404).json({ message: 'Profile not found' });
+        }
+        res.status(200).json({
+            message: 'Profile updated successfully',
+            profile: updatedProfile
+        });
+    } catch (error) {
+        console.error("Error fetching profiles:", error);
+        res.status(500).json({
+            message: 'Error fetching company profiles',
+            error: error.message
+        });
+    }
+}
+
+module.exports = { createProfile, getProfiles, updateProfile };

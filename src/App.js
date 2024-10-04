@@ -2,13 +2,17 @@ const express = require("express");
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
-const { createProfile } = require("./Routes/companyProfileController");
+const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Routes/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
+
 
 // App variables
 const app = express();
 const port = process.env.PORT || "8000";
+const cors = require('cors');
+app.use(cors());
 
 // Mongo DB
 mongoose.connect(MongoURI)
@@ -30,12 +34,11 @@ app.get("/home", (req, res) => {
 
 app.use(express.json())
 app.post("/createProfile", createProfile);
-app.get("/profiles", async (req, res) => {
-    try {
-        const profiles = await CompanyProfile.find();
-        res.status(200).json(profiles);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching profiles', error: error.message });
-    }
-});
+app.put("/updateProfile/:id", updateProfile);
+app.get("/profiles/:id?", getProfiles);
+
+app.post('/newActivity', createActivity);
+app.get('/activities', getActivities);
+app.get('/activities/:id', getActivityById);
+app.put('/updateActivity/:id', updateActivity);
+app.delete('/deleteActivity', deleteActivity);

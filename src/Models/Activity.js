@@ -4,18 +4,29 @@ const Schema = mongoose.Schema;
 const ActivitySchema = new Schema({
   Date: {
     type: Date,
-    required: false
+    required: true
   },
   Time: {
-    type: Time,
-    required: false
+    type: String,
+    required: true
   },
   Location: {
-    type: String,
-    required: false
+    type: {
+        type: String,
+        enum: ['Point'],
+        required: true
+    },
+    coordinates: {
+        type: [Number],
+        required: true
+    },
   },
   Price: {
     type: Number,
+    required: true
+  },
+  priceRange: {
+    type: [Number],
     required: false
   },
   Category: {
@@ -23,14 +34,19 @@ const ActivitySchema = new Schema({
     required: false
   },
   Tags: {
-    type: String,
+    type: [String],
     required: false
   },
   Discount: {
     type: Number,
-    required: false
+    required: true
+  },
+  bookingOpen: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: true });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+ActivitySchema.index({ Location: '2dsphere' });
+const Activity = mongoose.model('Activity', ActivitySchema);
+module.exports = Activity;
