@@ -4,7 +4,7 @@ const createActivity = async (req, res) => {
     try {
         const newActivity = new ActivityModel(req.body);
         await newActivity.save();
-        req.status(201).json()({
+        res.status(201).json({
             message: 'Activity created successfully',
             activity: newActivity
         });
