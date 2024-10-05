@@ -69,16 +69,16 @@ const createItinerary = async (req, res) => {
 };
 
 const getMyItineraries = async (req, res) => {
-    const { governorID } = req.query; // Extract the Governor ID from the request parameters
+    const { guideID } = req.query; // Extract the Governor ID from the request parameters
 
     // Validate if the provided ID is a valid MongoDB ObjectId
-    if (!mongoose.Types.ObjectId.isValid(governorID)) {
-        return res.status(400).json({ error: 'Invalid governor ID' });
+    if (!mongoose.Types.ObjectId.isValid(guideID)) {
+        return res.status(400).json({ error: 'Invalid guide ID' });
     }
 
     try {
         // Find the tourism site by ID and populate the tourismGovernor field
-        const site = await itineraryModel.Itinerary.find({ tourismGovernor: governorID });
+        const site = await itineraryModel.Itinerary.find({ guide: guideID });
 
         // If no site is found, return a 404 error
         if (!site) {

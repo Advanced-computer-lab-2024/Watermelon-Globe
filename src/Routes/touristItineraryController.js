@@ -1,10 +1,12 @@
 const ChildItinerary = require('../Models/touristItinerary');
-const Itinerary = require('../Models/itinerary');
+const itineraryModel = require('../Models/itinerary.js');
+const { default: mongoose } = require('mongoose');
 
 // Create a new child itinerary (booking)
 const createChildItinerary = async (req, res) => {
-  const { itinerary, buyer, chosenDates, chosenTimes } = req.body;
+  const { itinerary, buyer, chosenDates, chosenTimes, totalPrice, status } = req.body;
 
+  console.log(itinerary);
   try {
     // Validate if the provided itinerary ID is valid
     if (!mongoose.Types.ObjectId.isValid(itinerary)) {
@@ -12,21 +14,14 @@ const createChildItinerary = async (req, res) => {
     }
 
     // Validate if the itinerary exists
-    const parentItinerary = await Itinerary.findById(itinerary);
+    const parentItinerary = await itineraryModel.Itinerary.findById(itinerary);
     if (!parentItinerary) {
       return res.status(404).json({ error: 'Parent itinerary not found' });
     }
 
-    // Create a new child itinerary (booking)
-    const newChildItinerary = new ChildItinerary({
-      itinerary,
-      buyer,
-      chosenDates,
-      chosenTimes,
-    });
-
     // Save the child itinerary (this will also calculate the total price)
-    const savedChildItinerary = await newChildItinerary.save();
+    const savedChildItinerary = await ChildItinerary.create({itinerary, buyer, chosenDates, chosenTimes, totalPrice, status});
+    savedChildItinerary.totalPrice = parentItinerary.priceOfTour;
 
     res.status(201).json(savedChildItinerary);
   } catch (error) {
