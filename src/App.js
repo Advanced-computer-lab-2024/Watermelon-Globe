@@ -51,26 +51,27 @@ app.delete("/deleteSite/:id", deleteSite);
 app.get("/getMySites", getMySites);
 
 //itineraries routes
-app.post("/itineraries", guideController.createItinerary); // Create a new itinerary
-app.get("/itineraries", guideController.getAllItineraries); // Get all itineraries
-app.get("/itineraries/:id", guideController.getItineraryById); // Get a single itinerary by ID
-app.patch("/itineraries/:id", guideController.updateItinerary); // Update an itinerary
-app.delete("/itineraries/:id", guideController.deleteItineraryById); // Delete an itinerary
+app.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
+app.get("/getAllItineraries", guideController.getAllItineraries); // Get all itineraries
+app.get("/getItinerary/:id", guideController.getItineraryById); // Get a single itinerary by ID
+app.patch("/updateItinerary/:id", guideController.updateItinerary); // Update an itinerary
+app.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
 app.get("/getMyItineraries", guideController.getMyItineraries);
 
-app.post('/child-itineraries', touristItineraryController.createChildItinerary);
+//childItineraries
+app.post('/createChildItinerary', touristItineraryController.createChildItinerary);
 
 // Route to get a specific child itinerary by ID
-app.get('/child-itineraries/:id', touristItineraryController.getChildItineraryById);
+app.get('/getChildItinerary/:id', touristItineraryController.getChildItineraryById);
 
 // Route to get all child itineraries
-app.get('/child-itineraries', touristItineraryController.getAllChildItineraries);
+app.get('/getAllChildIitineraries', touristItineraryController.getAllChildItineraries);
 
 // Route to update a child itinerary by ID
-app.put('/child-itineraries/:id', touristItineraryController.updateChildItineraryById);
+app.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
 
 // Route to delete a child itinerary by ID
-app.delete('/child-itineraries/:id', touristItineraryController.deleteChildItineraryById);
+app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
 
 app.get("/home", (req, res) => {
   res.status(200).send("Tour Guide and Itinerary API");

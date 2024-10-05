@@ -1,5 +1,5 @@
-const ChildItinerary = require('../models/touristItinerary');
-const Itinerary = require('../models/itinerary');
+const ChildItinerary = require('../Models/touristItinerary');
+const Itinerary = require('../Models/itinerary');
 
 // Create a new child itinerary (booking)
 const createChildItinerary = async (req, res) => {
