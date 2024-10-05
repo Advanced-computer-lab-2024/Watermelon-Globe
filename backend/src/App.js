@@ -11,8 +11,6 @@ const MongoURI = process.env.MONGO_URI;
 // App variables
 const app = express();
 const port = process.env.PORT || "8000";
-const cors = require('cors');
-app.use(cors());
 
 // Mongo DB
 mongoose.connect(MongoURI)
@@ -30,27 +28,6 @@ const touristItineraryController = require('./Routes/touristItineraryController'
 
 const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
   require('./Routes/governorController');
-
-
-
-//importing models
-const governorModel = require('./Models/tourismGovernor');
-const siteModel = require('./Models/tourismSite');
-
-// configurations
-// Mongo DB
-mongoose.connect(MongoURI)
-  .then(() => {
-    console.log("MongoDB is now connected!")
-    // Starting server
-    app.listen(port, () => {
-      console.log(`Listening to requests on http://localhost:${port}`);
-    })
-  })
-  .catch(err => console.log(err));
-app.get("/home", (req, res) => {
-  res.status(200).send("You have everything installed!");
-});
 
 // Configurations
 
