@@ -44,6 +44,10 @@ const ActivitySchema = new Schema({
   bookingOpen: {
     type: Boolean,
     default: true
+  },
+  Rating: {
+    type: Number,
+    required: false,
   }
 }, { timestamps: true });
 
