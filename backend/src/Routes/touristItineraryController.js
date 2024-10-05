@@ -1,4 +1,4 @@
-const ChildItinerary = require('../Models/touristItinerary');
+const ChildItinerary = require('../Models/touristItinerary.js');
 const itineraryModel = require('../Models/itinerary.js');
 const { default: mongoose } = require('mongoose');
 
