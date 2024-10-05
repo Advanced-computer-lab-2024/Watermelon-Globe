@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const Itinerary = require('../Models/itinerary');
+const itineraryModel = require('../Models/itinerary.js');
 const tourGuide = require('../Models/tourGuide');
 
 const createTourGuide = async (req, res) => {
 
-    const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
+    const { name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
     try {
 
@@ -12,7 +12,7 @@ const createTourGuide = async (req, res) => {
         if (existingGuide) {
             return res.status(400).json({ message: 'Tour guide with this email already exists' });
         }
-        const newTourGuide = await tourGuide.create({ name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries })
+        const newTourGuide = await tourGuide.create({ name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries })
         const savedTourGuide = await newTourGuide.save();
         res.status(201).json(savedTourGuide);
     } catch (error) {
@@ -21,25 +21,26 @@ const createTourGuide = async (req, res) => {
 };
 
 const getTourGuide = async (req, res) => {
-
-    const { name } = req.body;
-    console.log(req.body);
     try {
-        const retreivedTourGuide = await tourGuide.find({ name })
-        res.status(200).json(retreivedTourGuide);
+        const searchCriteria = req.body;
+        console.log("Search criteria:", searchCriteria);
+
+        const retrievedTourGuide = await tourGuide.find(searchCriteria);
+        res.status(200).json(retrievedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
 const updateTourGuide = async (req, res) => {
-    const { name, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
+    const { id } = req.params; // Extracting the site ID from request parameters
+    const { name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
     console.log(req.body);
     try {
-        const updatedTourGuide = await tourGuide.findOneAndUpdate(
-            { email },
-            { name, password, mobileNumber, nationality, yearsOfExperience, itineraries },
-            { new: true }
+        const updatedTourGuide = await tourGuide.findByIdAndUpdate(
+            id ,
+            { name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries },
+            { new: true , runValidators: true}
         );
 
         if (!updatedTourGuide) {
@@ -54,55 +55,17 @@ const updateTourGuide = async (req, res) => {
 
 
 const createItinerary = async (req, res) => {
-    const {
-        name,
-        activities,
-        locations,
-        timeline,
-        languageOfTour,
-        priceOfTour,
-        availableDates,
-        availableTimes,
-        accessibility,
-        pickupDropoffLocations,
-        bookings,
-        guideId
-    } = req.body;
-
-    try {
-        // Validate if the provided guideId is a valid MongoDB ObjectId
-        if (!mongoose.Types.ObjectId.isValid(guideId)) {
-            return res.status(400).json({ error: 'Invalid guide ID' });
-        }
-
-        // Check if the tour guide exists
-        const guide = await tourGuide.findById(guideId);
-        if (!guide) {
-            return res.status(404).json({ error: 'Tour guide not found' });
-        }
-
-        // Create the new itinerary linked to the guide
-        const itinerary = await Itinerary.create({
-            name,
-            activities,
-            locations,
-            timeline,
-            languageOfTour,
-            priceOfTour,
-            availableDates,
-            availableTimes,
-            accessibility,
-            pickupDropoffLocations,
-            bookings,
-            guide: guideId, // Link to tour guide
-        });
-
-        // Respond with the newly created itinerary
-        res.status(201).json(itinerary);
-    } catch (error) {
-        // Catch and handle any errors
-        res.status(500).json({ error: error.message });
-    }
+    const { name, activities, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+        accessibility, pickupDropoffLocations, bookings, guide: guideId} = req.body;
+        try {
+            const itinerary = await itineraryModel.Itinerary.create({ name, activities, locations, timeline,
+                languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
+                pickupDropoffLocations, bookings, guide: guideId});
+        
+            res.status(200).json(itinerary)
+          } catch (error) {
+            res.status(400).json({ error: error.message })
+          }
 };
 
 const getMyItineraries = async (req, res) => {
@@ -115,7 +78,7 @@ const getMyItineraries = async (req, res) => {
 
     try {
         // Find the tourism site by ID and populate the tourismGovernor field
-        const site = await siteModel.find({ tourismGovernor: governorID });
+        const site = await itineraryModel.Itinerary.find({ tourismGovernor: governorID });
 
         // If no site is found, return a 404 error
         if (!site) {
@@ -133,7 +96,7 @@ const getMyItineraries = async (req, res) => {
 const getAllItineraries = async (req, res) => {
     try {
         // Fetch all itineraries, populating the 'guide' field to get tour guide details
-        const itineraries = await Itinerary.find().populate('guide', 'name email');
+        const itineraries = await itineraryModel.Itinerary.find({}).sort({ createdAt: -1 });
 
         // If no itineraries found, return a message
         if (!itineraries.length) {
@@ -158,7 +121,7 @@ const getItineraryById = async (req, res) => {
         }
 
         // Find the itinerary by ID and populate the guide details
-        const itinerary = await Itinerary.findById(id).populate('guide', 'name email');
+        const itinerary = await itineraryModel.Itinerary.findById(id).populate('guide');
 
         // If the itinerary is not found, return a 404 error
         if (!itinerary) {
@@ -172,98 +135,38 @@ const getItineraryById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 const updateItinerary = async (req, res) => {
-    const { id } = req.params; // Get the itinerary ID from the request parameters
-    const {
-        name,
-        activities,
-        locationsToBeVisited,
-        timeline,
-        duration,
-        languageOfTour,
-        priceOfTour,
-        availableDates,
-        accessibility,
-        pickupDropoffLocations,
-        bookings,
-        tourGuideId
-    } = req.body; // Extract new data from the request body
-
-    try {
-        // Check if the itinerary ID is a valid MongoDB ObjectId
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: 'Invalid itinerary ID' });
-        }
-
-        // If a new tourGuideId is provided, validate it
-        if (tourGuideId && !mongoose.Types.ObjectId.isValid(tourGuideId)) {
-            return res.status(400).json({ error: 'Invalid tour guide ID' });
-        }
-
-        if (bookings) {
-            return res.status(400).json({ error: 'Booking have been made!' });
-        }
-
-        // Debugging log for request body
-        console.log("Request Body:", req.body);
-
-        // Logging for debugging
-        console.log("Updating itinerary with ID:", id);
-        console.log("New data:", {
-            name,
-            activities,
-            locationsToBeVisited,
-            timeline,
-            duration,
-            languageOfTour,
-            priceOfTour,
-            availableDates,
-            accessibility,
-            pickupDropoffLocations,
-            bookings,
-            tourGuideId
-        });
-
-        // Update the itinerary with new data, including the tourGuideId if provided
-        const updatedItinerary = await Itinerary.findByIdAndUpdate(
-            id,
-            {
-                $set: {
-                    name,
-                    activities,
-                    locationsToBeVisited,
-                    timeline,
-                    duration,
-                    languageOfTour,
-                    priceOfTour,
-                    availableDates,
-                    accessibility,
-                    pickupDropoffLocations,
-                    bookings,
-                    ...(tourGuideId && { tourGuideId }) // Only update tourGuideId if it's provided and valid
-                }
-            },
-            { new: true, runValidators: true } // Return the updated document and run validators
-        );
-
-        // If the itinerary is not found, return a 404 error
-        if (!updatedItinerary) {
-            return res.status(404).json({ message: 'Itinerary not found' });
-        }
-
-        // Log the updated itinerary
-        console.log("Updated Itinerary:", updatedItinerary);
-
-        // Return the updated itinerary in the response
-        res.status(200).json(updatedItinerary);
-    } catch (error) {
-        // Handle any potential errors
-        console.error("Error updating itinerary:", error);
-        res.status(500).json({ error: 'Error updating itinerary: ' + error.message });
+    const { id } = req.params; // Extracting the site ID from request parameters
+    const { name, activities, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+            accessibility, pickupDropoffLocations, bookings, guide: guideId} = req.body; // Extracting the updated fields from request body
+  
+    // Validate the site ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid Itinerary ID' });
     }
+  
+    try {
+      // Find the Itinerary by ID and update it with the new details
+      const updatedItinerary = await itineraryModel.Itinerary.findByIdAndUpdate(
+        id,
+        {  name, activities, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+           accessibility, pickupDropoffLocations, bookings, guide: guideId }, // Updating the fields
+        { new: true, runValidators: true } // Option to return the updated site and run validation
+      );
+  
+      // If the Itinerary is not found, return a 404
+      if (!updatedItinerary) {
+        return res.status(404).json({ message: 'Itinerary not found' });
+      }
+  
+      // Send the updated site as a response
+      res.status(200).json(updatedItinerary);
+    } catch (error) {
+      // Handle any errors that occur
+      res.status(500).json({ error: error.message });
+    }
+  };
 
-};
 
 
 const deleteItineraryById = async (req, res) => {
@@ -271,10 +174,12 @@ const deleteItineraryById = async (req, res) => {
 
     try {
 
-        if (bookings) {
-            return res.status(400).json({ error: 'Booking have been made!' });
+        const foundItinerary = await itineraryModel.Itinerary.findById(id);
+
+        if (foundItinerary.bookings) {
+            return res.status(400).json({ error: 'Booking have been made! You cannot delete this itinerary!' });
         }
-        const deletedItinerary = await Itinerary.findByIdAndDelete(id);
+        const deletedItinerary = await itineraryModel.Itinerary.findByIdAndDelete(id);
 
         if (!deletedItinerary) {
             return res.status(404).json({ message: 'Itinerary not found' });

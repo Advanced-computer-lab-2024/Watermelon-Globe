@@ -39,7 +39,7 @@ app.use(express.json());
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
 app.get("/getGuide", guideController.getTourGuide);
-app.put("/updateGuide", guideController.updateTourGuide);
+app.put("/updateGuide/:id", guideController.updateTourGuide);
 
 //tourism governor/sites routes
 app.post("/addGov", createGov);
@@ -54,7 +54,7 @@ app.get("/getMySites", getMySites);
 app.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
 app.get("/getAllItineraries", guideController.getAllItineraries); // Get all itineraries
 app.get("/getItinerary/:id", guideController.getItineraryById); // Get a single itinerary by ID
-app.patch("/updateItinerary/:id", guideController.updateItinerary); // Update an itinerary
+app.put("/updateItinerary/:id", guideController.updateItinerary); // Update an itinerary
 app.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
 app.get("/getMyItineraries", guideController.getMyItineraries);
 
