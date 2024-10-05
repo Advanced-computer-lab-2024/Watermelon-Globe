@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require('mongoose');
 require("dotenv").config();
 const guideController = require('./Routes/guideController'); // Import the controller
+const touristItineraryController = require('./Routes/touristItineraryController')
 
 
 const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
@@ -56,6 +57,20 @@ app.get("/itineraries/:id", guideController.getItineraryById); // Get a single i
 app.patch("/itineraries/:id", guideController.updateItinerary); // Update an itinerary
 app.delete("/itineraries/:id", guideController.deleteItineraryById); // Delete an itinerary
 app.get("/getMyItineraries", guideController.getMyItineraries);
+
+app.post('/child-itineraries', touristItineraryController.createChildItinerary);
+
+// Route to get a specific child itinerary by ID
+app.get('/child-itineraries/:id', touristItineraryController.getChildItineraryById);
+
+// Route to get all child itineraries
+app.get('/child-itineraries', touristItineraryController.getAllChildItineraries);
+
+// Route to update a child itinerary by ID
+app.put('/child-itineraries/:id', touristItineraryController.updateChildItineraryById);
+
+// Route to delete a child itinerary by ID
+app.delete('/child-itineraries/:id', touristItineraryController.deleteChildItineraryById);
 
 app.get("/home", (req, res) => {
   res.status(200).send("Tour Guide and Itinerary API");
