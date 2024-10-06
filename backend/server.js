@@ -16,7 +16,7 @@ app.use(express.json());
 
 //routes 
 app.use('/api/workouts', WorkoutRoutes)
-app.use('/api/ActivityCategory', ActivityCategoryRoutes)
+app.use('/api/Admin', Admin)
 app.use('/api/PreferenceTag', PreferenceTag)
 app.use('/api/Admin', Admin)
 app.use('/api/Governer', Governer)
