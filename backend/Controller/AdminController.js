@@ -2,6 +2,7 @@ const Admin = require('../Models/AdminModel')
 const Governer = require('../Models/GovernerModel')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
+const Product = require('../Models/ProductModel')
 const mongoose = require('mongoose')
 
 //create new Admin
