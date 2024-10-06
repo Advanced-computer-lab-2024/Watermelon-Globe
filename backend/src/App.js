@@ -6,6 +6,8 @@ const { createProfile, updateProfile, getProfiles } = require("./Controller/comp
 const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Controller/activityController");
 const { createTags, getTags } = require ("./Controller/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
+const MongoURI = process.env.MONGO_URI;
+const cors = require('cors');
 // const MongoURI = process.env.MONGO_URI
 const Admin = require('./Routes/Admin')
 const Seller = require('./Routes/Seller')
@@ -14,6 +16,7 @@ const Seller = require('./Routes/Seller')
 // App variables
 const app = express();
 const port = process.env.PORT || "8000";
+app.use(cors());
 
 // Mongo DB
 mongoose.connect("mongodb+srv://Mr3amora400:400508900ohm@mernapp.nww7x.mongodb.net/?retryWrites=true&w=majority&appName=Mernapp")
@@ -51,7 +54,7 @@ app.post('/newActivity', createActivity);
 app.get('/activities', getActivities);
 app.get('/activities/:id', getActivityById);
 app.put('/updateActivity/:id', updateActivity);
-app.delete('/deleteActivity', deleteActivity);
+app.delete('/deleteActivity/:id', deleteActivity);
 
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);

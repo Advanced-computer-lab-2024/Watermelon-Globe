@@ -85,7 +85,6 @@ const createActivity = async (req, res) => {
     }
 };
 
-
 const getActivities = async (req, res) => {
     try {
         const activities = await ActivityModel.find({})
