@@ -66,7 +66,7 @@ router.delete('/ActivityCategory/:id', deleteActivityCategory)
 router.put('/ActivityCategory/:id', updateActivityCategory)
 
 //Get all products
-router.get('/products/', getAllProducts)
+router.get('/Products/', getAllProducts)
 
 //Get single product
 router.get('/filterProductPrice/', filterProduct)
