@@ -50,3 +50,18 @@ nav {
 .signupDiv button:hover {
     background-color: #0056b3;
 }
+
+.add-new-activity {
+    border: none;
+    background-color: grey;
+    color: white;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.add-new-activity button:hover {
+    background-color: #0056b3;
+}

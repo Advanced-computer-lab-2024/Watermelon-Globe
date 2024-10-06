@@ -17,7 +17,7 @@ const companyProfileSchema = new Schema({
   Link: {
     type: String,
     required: false
-  }
+  },
 }, { timestamps: true });
 
 const CompanyProfile = mongoose.model('CompanyProfile', companyProfileSchema);
