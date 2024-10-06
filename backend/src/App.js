@@ -31,9 +31,14 @@ mongoose.connect(MongoURI)
 
 app.use(express.json())
 
+app.use((req,res,next) =>{
+  console.log(req.method, req.path)
+  next()
+})
+
 //tags
-app.post("/createTags", createTags);
-app.get("/getTags", getTags);
+// app.post("/createTags", createTags);
+// app.get("/getTags", getTags);
 
 //profile 
 app.post("/createProfile", createProfile);

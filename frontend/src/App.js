@@ -4,6 +4,10 @@ import axios from 'axios';
 const App = () => {
   const [data, setData] = useState(null); // Holds the response data from backend
   const [error, setError] = useState(null); // Holds any error message
+  const [itineraryId, setItineraryId] = useState(''); // State for itinerary ID input
+  const [childItineraryId, setChildItineraryId] = useState('');
+  const [GuideId, setGuideId] = useState('');
+  const [rawJson, setRawJson] = useState(''); // State for raw JSON input
   
   const handleRequest = async (url, method = 'get', body = null) => {
     try {
@@ -20,9 +24,47 @@ const App = () => {
     }
   };
 
+  const handleRequest1 = async (url, method = 'get', rawJson = null) => {
+    try {
+      let response;
+      let options = {};
+
+      if (method === 'post' || method === 'put') {
+        const body = JSON.parse(rawJson); // Convert raw JSON input to JS object
+        options = {
+          headers: { 'Content-Type': 'application/json' },
+          data: body // Include the body in the request
+        };
+      }
+
+      response = await axios({ method, url, ...options });
+      setData(response.data);
+      setError(null); // Reset error if the request succeeds
+      setChildItineraryId('');
+      setGuideId('');
+      setItineraryId('');
+    } catch (err) {
+      setError(err.response ? err.response.data : "Something went wrong");
+    }
+  };
+
+  
   return (
     <div style={{ padding: '20px' }}>
       <h1>Backend Requests</h1>
+
+      {/* Itineraries Routes */}
+      <h2>Raw JSON Body</h2>
+      <textarea 
+        rows={10}
+        cols={50}
+        value={rawJson}
+        onChange={(e) => setRawJson(e.target.value)}
+        placeholder="Enter raw JSON Here"
+        style={{ width: '100%', marginBottom: '20px' }}
+      />
+      
+
 
       {/* Profile Routes */}
       <button onClick={() => handleRequest('/createProfile', 'post', { name: 'John Doe', email: 'john@example.com' })}>
@@ -91,46 +133,83 @@ const App = () => {
 
       <hr />
 
+
       {/* Itineraries Routes */}
-      <button onClick={() => handleRequest('/createItinerary', 'post', { name: 'Itinerary 1' })}>
+      <button onClick={() => handleRequest1('/createItinerary', 'post', rawJson)}>
         Create Itinerary
       </button>
-      <button onClick={() => handleRequest('/getAllItineraries')}>
+
+      <button onClick={() => handleRequest1('/getAllItineraries')}>
         Get All Itineraries
       </button>
-      <button onClick={() => handleRequest('/getItinerary/1')}>
+
+      <button onClick={() => handleRequest1(`/getItinerary/${itineraryId}`)}>
         Get Itinerary by ID
       </button>
-      <button onClick={() => handleRequest('/updateItinerary/1', 'put', { name: 'Updated Itinerary' })}>
+
+      
+      <div>
+        <input 
+          type="text" 
+          value={itineraryId} 
+          onChange={(e) => setItineraryId(e.target.value)} 
+          placeholder="Enter Itinerary ID for Update/Delete" 
+        />
+      </div>
+      
+      <button onClick={() => handleRequest1(`/updateItinerary/${itineraryId}`, 'put', rawJson)}>
         Update Itinerary
       </button>
-      <button onClick={() => handleRequest('/deleteItinerary/1', 'delete')}>
+      
+      <button onClick={() => handleRequest1(`/deleteItinerary/${itineraryId}`, 'delete')}>
         Delete Itinerary
       </button>
-      <button onClick={() => handleRequest('/getMyItineraries')}>
+
+      <button onClick={() => handleRequest1(`/getMyItineraries?guideID=${GuideId}`)}>
         Get My Itineraries
       </button>
+
+      <div>
+        <input 
+          type="text" 
+          value={GuideId} 
+          onChange={(e) => setGuideId(e.target.value)} 
+          placeholder="Enter Guide ID " 
+        />
+      </div>
+
 
       <hr />
 
       {/* Child Itineraries Routes */}
-      <button onClick={() => handleRequest('/createChildItinerary', 'post', { itinerary: 'Itinerary 1', buyer: 'Buyer 1' })}>
+      <button onClick={() => handleRequest1('/createChildItinerary', 'post', rawJson)}>
         Create Child Itinerary
       </button>
-      <button onClick={() => handleRequest('/getChildItinerary/1')}>
+      <button onClick={() => handleRequest1(`/getChildItinerary/${childItineraryId}`)}>
         Get Child Itinerary by ID
       </button>
-      <button onClick={() => handleRequest('/getAllChildIitineraries')}>
+      <button onClick={() => handleRequest1('/getAllChildIitineraries')}>
         Get All Child Itineraries
       </button>
-      <button onClick={() => handleRequest('/updateChildItinerary/1', 'put', { name: 'Updated Child Itinerary' })}>
+
+      <div>
+        <input 
+          type="text" 
+          value={childItineraryId} 
+          onChange={(e) => setChildItineraryId(e.target.value)} 
+          placeholder="Enter Itinerary ID for Update/Delete" 
+        />
+      </div>
+
+      <button onClick={() => handleRequest1(`/updateChildItinerary/${childItineraryId}`, 'put', rawJson)}>
         Update Child Itinerary
       </button>
-      <button onClick={() => handleRequest('/deleteChildItinerary/1', 'delete')}>
+      <button onClick={() => handleRequest1(`/deleteChildItinerary/${childItineraryId}`, 'delete')}>
         Delete Child Itinerary
       </button>
 
       <hr />
+
 
       {/* Display data or error */}
       <div>
