@@ -19,7 +19,7 @@ const port = process.env.PORT || "8000";
 app.use(cors());
 
 // Mongo DB
-mongoose.connect("mongodb+srv://Mr3amora400:400508900ohm@mernapp.nww7x.mongodb.net/?retryWrites=true&w=majority&appName=Mernapp")
+mongoose.connect(MongoURI)
 .then(() => {
   console.log("MongoDB is now connected!");
   // Starting server
@@ -62,7 +62,6 @@ app.get("/getGuide", guideController.getTourGuide);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
 
 //tourism governor/sites routes
-app.post("/addGov", createGov);
 app.post("/addSite", createSite);
 app.get("/getSite/:id", getSite);
 app.get("/getAllSites", getAllSites);
