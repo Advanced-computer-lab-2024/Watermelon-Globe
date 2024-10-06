@@ -4,6 +4,7 @@ mongoose.set('strictQuery', false);
 require("dotenv").config();
 const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
 const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Routes/activityController");
+const { createTags, getTags } = require ("./Routes/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
 
@@ -35,6 +36,9 @@ app.use(express.json())
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);
+
+app.post("/createTags", createTags);
+app.get("/getTags", getTags);
 
 app.post('/newActivity', createActivity);
 app.get('/activities', getActivities);

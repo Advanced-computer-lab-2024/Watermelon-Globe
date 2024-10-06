@@ -4,16 +4,11 @@ const createProfile = async (req, res) => {
     try {
         const { Name, About, Hotline, Link } = req.body;
 
-        // Assuming you might want to include userId from request or session
-        // const userId = req.user._id; // or however you're getting the user ID
-
         const newCompanyProfile = new CompanyProfileModel({
             Name,
             About,
             Hotline,
             Link,
-            // Uncomment the line below if you want to associate the profile with a user
-            // userId: userId // Make sure the CompanyProfileModel schema supports this
         });
 
         const savedProfile = await newCompanyProfile.save();
