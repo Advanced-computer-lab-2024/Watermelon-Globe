@@ -1,41 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../Components/Navbar.css';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
-    const [advertisers, setAdvertisers] = useState({}); // To hold advertiser names
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchActivities = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/activities');
                 setActivities(response.data);
-
-                const advertiserIds = response.data.map(activity => activity.Advertiser);
-                const uniqueAdvertiserIds = [...new Set(advertiserIds)];
-
-                const advertiserPromises = uniqueAdvertiserIds.map(id => 
-                    axios.get(`http://localhost:8000/profiles/${id}`).catch(error => {
-                        console.error(`Error fetching advertiser with ID ${id}:`, error);
-                        return null; // Return null on error
-                    })
-                );
-
-                // Wait for all advertiser promises to resolve
-                const advertiserResponses = await Promise.all(advertiserPromises);
-                
-                // Filter out null responses and map valid responses to advertiser IDs
-                const advertisersData = advertiserResponses.reduce((acc, res) => {
-                    if (res && res.data) {
-                        acc[res.data._id] = res.data.Name; // Ensure res.data is valid
-                    }
-                    return acc;
-                }, {});
-
-                setAdvertisers(advertisersData); 
-
+                console.log("Fetched activities: ", response.data);
             } catch (error) {
                 console.error('Error fetching activities:', error);
             }
@@ -43,6 +20,20 @@ const HomeScreen = () => {
 
         fetchActivities();
     }, []);
+
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this activity?');
+        if (confirmDelete) {
+            try {
+                await axios.delete(`http://localhost:8000/deleteActivity/${id}`);
+                setActivities(prevActivities => prevActivities.filter(activity => activity._id !== id));
+                alert('Activity deleted successfully');
+            } catch (error) {
+                console.error('Error deleting activity:', error);
+                alert('Error deleting activity');
+            }
+        }
+    };
 
     return (
         <div>
@@ -55,13 +46,13 @@ const HomeScreen = () => {
                     <p><strong>Location:</strong> {activity.Location.coordinates.join(', ')}</p>
                     <p><strong>Price:</strong> ${activity.Price}</p>
                     <p><strong>Discount:</strong> {activity.Discount}%</p>
-                    <p><strong>Advertiser:</strong> {advertisers[activity.Advertiser] || 'Unknown Advertiser'}</p>
+                    <p><strong>Advertiser:</strong> {activity.Advertiser.Name || 'Unknown Advertiser'}</p>
+                    <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
+                    <button onClick={() => handleDelete(activity._id)}>Delete Activity</button>
                 </div>
             ))}
             <Link to="/add-activity">
-                <button className='add-new-activity'>
-                    Add New Activity
-                </button>
+                <button className='add-new-activity'>Add New Activity</button>
             </Link>
         </div>
     );

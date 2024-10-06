@@ -7,11 +7,13 @@ const { createActivity, getActivities, getActivityById, updateActivity, deleteAc
 const { createTags, getTags } = require ("./Routes/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
+const cors = require('cors');
 
 
 // App variables
 const app = express();
 const port = process.env.PORT || "8000";
+app.use(cors());
 
 // Mongo DB
 mongoose.connect(MongoURI)
@@ -44,7 +46,7 @@ app.post('/newActivity', createActivity);
 app.get('/activities', getActivities);
 app.get('/activities/:id', getActivityById);
 app.put('/updateActivity/:id', updateActivity);
-app.delete('/deleteActivity', deleteActivity);
+app.delete('/deleteActivity/:id', deleteActivity);
 
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
