@@ -50,7 +50,7 @@ app.post('/newActivity', createActivity);
 app.get('/activities', getActivities);
 app.get('/activities/:id', getActivityById);
 app.put('/updateActivity/:id', updateActivity);
-app.delete('/deleteActivity', deleteActivity);
+app.delete('/deleteActivity/:id', deleteActivity);
 
 
 //tour guide routes

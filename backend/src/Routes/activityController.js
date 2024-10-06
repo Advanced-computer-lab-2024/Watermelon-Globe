@@ -81,7 +81,7 @@ const deleteActivity = async (req, res) => {
             });
         }
         res.status(200).json({
-            message: 'Activity deleted successfully'
+            message: 'Activity deleted successfully', deletedActivity
         });
     } catch (error) {
         console.error(error);

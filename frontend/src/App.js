@@ -6,6 +6,8 @@ import axios from 'axios';
 const App = () => {
   const [data, setData] = useState(null); // Holds the response data from backend
   const [error, setError] = useState(null); // Holds any error message
+  const [activId, setActivId] = useState('');
+  const [profId, setProfId] = useState('');
   const [GuideId, setGuideId] = useState('');
   const [Guide1Id, setGuide1Id] = useState('');
   const [siteId, setSiteId] = useState('');
@@ -13,21 +15,6 @@ const App = () => {
   const [itineraryId, setItineraryId] = useState(''); // State for itinerary ID input
   const [childItineraryId, setChildItineraryId] = useState('');
   const [rawJson, setRawJson] = useState(''); // State for raw JSON input
-  
-  const handleRequest = async (url, method = 'get', body = null) => {
-    try {
-      let response;
-      if (method === 'get' || method === 'delete') {
-        response = await axios[method](url);
-      } else {
-        response = await axios[method](url, body);
-      }
-      setData(response.data);
-      setError(null); // Reset error if the request succeeds
-    } catch (err) {
-      setError(err.response ? err.response.data : "Something went wrong");
-    }
-  };
 
   const handleRequest1 = async (url, method = 'get', rawJson = null) => {
     try {
@@ -49,6 +36,14 @@ const App = () => {
       setData(response.data);  // Set the response data
       setError(null);  // Reset error if the request succeeds
       setRawJson('');  // Clear the raw JSON input after the request
+      setActivId('');
+      setChildItineraryId('');
+      setGovId('');
+      setGuide1Id('');
+      setGuideId('');
+      setItineraryId('');
+      setProfId('');
+      setSiteId('');
     } catch (err) {
       setError(err.response ? err.response.data : "Something went wrong");
     }
@@ -74,34 +69,53 @@ const App = () => {
 
 
       {/* Profile Routes */}
-      <button onClick={() => handleRequest('/createProfile', 'post', { name: 'John Doe', email: 'john@example.com' })}>
-        Create Profile
+      <button onClick={() => handleRequest1('/createProfile', 'post', rawJson)}>
+        Create Profile  
       </button>
-      <button onClick={() => handleRequest('/updateProfile/1', 'put', { name: 'Jane Doe' })}>
+      <button onClick={() => handleRequest1(`/updateProfile/${profId}`, 'put', rawJson)}>
         Update Profile
       </button>
-      <button onClick={() => handleRequest('/profiles')}>
+      <button onClick={() => handleRequest1(`/profiles/${profId}`)}>
         Get Profiles
       </button>
       
+      <div>
+        <input 
+          type="text" 
+          value={profId} 
+          onChange={(e) => setProfId(e.target.value)} 
+          placeholder="Enter profile ID" 
+        />
+      </div>
+
       <hr />
 
       {/* Activity Routes */}
-      <button onClick={() => handleRequest('/newActivity', 'post', { name: 'Hiking', price: 50 })}>
+      <button onClick={() => handleRequest1('/newActivity', 'post', rawJson)}>
         Create Activity
       </button>
-      <button onClick={() => handleRequest('/activities')}>
+      <button onClick={() => handleRequest1('/activities')}>
         Get All Activities
       </button>
-      <button onClick={() => handleRequest('/activities/1')}>
+      <button onClick={() => handleRequest1(`/activities/${activId}`)}>
         Get Activity by ID
       </button>
-      <button onClick={() => handleRequest('/updateActivity/1', 'put', { name: 'Updated Activity' })}>
+      <button onClick={() => handleRequest1(`/UpdateActivity/${activId}`, 'put', rawJson)}>
         Update Activity
       </button>
-      <button onClick={() => handleRequest('/deleteActivity', 'delete')}>
+      <button onClick={() => handleRequest1(`/deleteActivity/${activId}`, 'delete')}>
         Delete Activity
       </button>
+
+
+      <div>
+        <input 
+          type="text" 
+          value={activId} 
+          onChange={(e) => setActivId(e.target.value)} 
+          placeholder="Enter activity ID" 
+        />
+      </div>
       
       <hr />
 
@@ -109,7 +123,7 @@ const App = () => {
       <button onClick={() => handleRequest1('/addGuide', 'post', rawJson)}>
         Add Guide
       </button>
-      <button onClick={() => handleRequest1(`/getGuide/${Guide1Id}`)}>
+      <button onClick={() => handleRequest1('/getGuide','get', rawJson)}>
         Get Guide
       </button>
       <button onClick={() => handleRequest1(`/updateGuide/${Guide1Id}`, 'put', rawJson)}>
