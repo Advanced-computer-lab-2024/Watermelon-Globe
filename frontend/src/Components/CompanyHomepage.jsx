@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import {useNavigate , Link } from 'react-router-dom';
 import axios from 'axios';
+
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
+    const navigate = useNavigate(); // useNavigate hook for navigation
+
 
     useEffect(() => {
         // Fetch all activities
@@ -19,12 +22,19 @@ const HomeScreen = () => {
         fetchActivities();
     }, []);
 
+    const goToItineraries = () => {
+        navigate('/itineraries'); // Navigate to the itineraries page
+    };
+
     return (
         <div>
             <h1>All Activities</h1>
             <Link to="/add-activity">
                 <button>Add New Activity</button>
             </Link>
+
+            <button onClick={goToItineraries}>View Itineraries</button> {/* Button to navigate to itineraries */}
+
             <div>
                 {activities.map((activity) => (
                     <div key={activity._id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
