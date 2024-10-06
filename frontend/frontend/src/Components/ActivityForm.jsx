@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +33,22 @@ const ActivityForm = () => {
 
         fetchTags();
     }, []);
+=======
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const ActivityForm = () => {
+    const [activity, setActivity] = useState({
+        date: '',
+        time: '',
+        location: '',
+        price: '',
+        category: '',
+        tags: '',
+        discount: '',
+        bookingOpen: false,
+    });
+>>>>>>> c4ce3dc547e25db25175f6c03b8dbc46becda68a
 
     const handleChange = (e) => {
         setActivity({
@@ -40,6 +57,7 @@ const ActivityForm = () => {
         });
     };
 
+<<<<<<< HEAD
     const handleTagChange = (e) => {
         const tagId = e.target.value;
         if (e.target.checked) {
@@ -82,11 +100,21 @@ const ActivityForm = () => {
             navigate('/');
         } catch (error) {
             console.error('Error creating activity:', error.response.data); // Log error response
+=======
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8000/activities', activity);
+            console.log('Activity created:', response.data);
+        } catch (error) {
+            console.error('Error creating activity:', error);
+>>>>>>> c4ce3dc547e25db25175f6c03b8dbc46becda68a
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
+<<<<<<< HEAD
             <input 
                 type="date" 
                 name="Date" 
@@ -157,6 +185,18 @@ const ActivityForm = () => {
                     checked={activity.bookingOpen} 
                     onChange={() => setActivity({ ...activity, bookingOpen: !activity.bookingOpen })} 
                 />
+=======
+            <input type="date" name="date" value={activity.date} onChange={handleChange} placeholder="Date" />
+            <input type="time" name="time" value={activity.time} onChange={handleChange} placeholder="Time" />
+            <input type="text" name="location" value={activity.location} onChange={handleChange} placeholder="Location" />
+            <input type="text" name="price" value={activity.price} onChange={handleChange} placeholder="Price" />
+            <input type="text" name="category" value={activity.category} onChange={handleChange} placeholder="Category" />
+            <input type="text" name="tags" value={activity.tags} onChange={handleChange} placeholder="Tags" />
+            <input type="text" name="discount" value={activity.discount} onChange={handleChange} placeholder="Special Discounts" />
+            <label>
+                Booking Open:
+                <input type="checkbox" name="bookingOpen" checked={activity.bookingOpen} onChange={() => setActivity({ ...activity, bookingOpen: !activity.bookingOpen })} />
+>>>>>>> c4ce3dc547e25db25175f6c03b8dbc46becda68a
             </label>
             <button type="submit">Submit</button>
         </form>
