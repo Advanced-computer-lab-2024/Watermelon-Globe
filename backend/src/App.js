@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
 const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
-const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Routes/activityController");
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity, createTags, getTags } = require ("./Routes/activityController");
+const guideController = require('./Routes/guideController'); // Import the controller
+const touristItineraryController = require('./Routes/touristItineraryController')
+const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
+  require('./Routes/governorController');
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
 
@@ -22,25 +26,27 @@ mongoose.connect(MongoURI)
   });
 })
 .catch(err => console.log(err));
-const guideController = require('./Routes/guideController'); // Import the controller
-const touristItineraryController = require('./Routes/touristItineraryController')
-
-
-const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
-  require('./Routes/governorController');
 
 // Configurations
 
 app.use(express.json())
+
+//tags
+app.post("/createTags", createTags);
+app.get("/getTags", getTags);
+
+//profile 
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);
 
+//activities
 app.post('/newActivity', createActivity);
 app.get('/activities', getActivities);
 app.get('/activities/:id', getActivityById);
 app.put('/updateActivity/:id', updateActivity);
 app.delete('/deleteActivity', deleteActivity);
+
 
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
@@ -66,17 +72,9 @@ app.get("/getMyItineraries", guideController.getMyItineraries);
 
 //childItineraries
 app.post('/createChildItinerary', touristItineraryController.createChildItinerary);
-
-// Route to get a specific child itinerary by ID
 app.get('/getChildItinerary/:id', touristItineraryController.getChildItineraryById);
-
-// Route to get all child itineraries
 app.get('/getAllChildIitineraries', touristItineraryController.getAllChildItineraries);
-
-// Route to update a child itinerary by ID
 app.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
-
-// Route to delete a child itinerary by ID
 app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
 
 app.get("/home", (req, res) => {
