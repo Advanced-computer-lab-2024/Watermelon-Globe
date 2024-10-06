@@ -69,6 +69,7 @@ const App = () => {
 
 
       {/* Profile Routes */}
+      <h2>Profiles</h2>
       <button onClick={() => handleRequest1('/createProfile', 'post', rawJson)}>
         Create Profile  
       </button>
@@ -91,6 +92,7 @@ const App = () => {
       <hr />
 
       {/* Activity Routes */}
+      <h2>Activities</h2>
       <button onClick={() => handleRequest1('/newActivity', 'post', rawJson)}>
         Create Activity
       </button>
@@ -120,6 +122,7 @@ const App = () => {
       <hr />
 
       {/* Tour Guide Routes */}
+      <h2>Tour Guides</h2>
       <button onClick={() => handleRequest1('/addGuide', 'post', rawJson)}>
         Add Guide
       </button>
@@ -142,6 +145,7 @@ const App = () => {
       <hr />
 
       {/* Tourism Governor/Sites Routes */}
+      <h2>Tourism Governor/Sites</h2>
       <button onClick={() => handleRequest1('/addGov', 'post', rawJson)}>
         Add Governor
       </button>
@@ -187,6 +191,7 @@ const App = () => {
 
 
       {/* Itineraries Routes */}
+      <h2>Itineraries</h2>
       <button onClick={() => handleRequest1('/createItinerary', 'post', rawJson)}>
         Create Itinerary
       </button>
@@ -234,6 +239,7 @@ const App = () => {
       <hr />
 
       {/* Child Itineraries Routes */}
+      <h2>Tourist Itineraries</h2>
       <button onClick={() => handleRequest1('/createChildItinerary', 'post', rawJson)}>
         Create Tourist Itinerary
       </button>
