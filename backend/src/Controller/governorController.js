@@ -3,16 +3,6 @@ const siteModel = require('../Models/tourismSite');
 const { default: mongoose } = require('mongoose');
 
 
-const createGov = async (req, res) => {
-
-  const { name, username, email, password, tourismSite } = req.body;
-  try {
-    const gov = await governorModel.create({ name, username, email, password, tourismSite });
-    res.status(200).json(gov)
-  } catch (error) {
-    res.status(400).json({ error: error.message })
-  }
-};
 
 const createSite = async (req, res) => {
 
@@ -143,4 +133,4 @@ const deleteSite = async (req, res) => {
 };
 
 
-module.exports = { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites };
+module.exports = {createSite, getSite, getAllSites, updateSite, deleteSite, getMySites };
