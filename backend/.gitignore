@@ -1,3 +1,272 @@
+Medo4255
+medo4255
+Online
+
+byson — 09/29/2024 10:47 PM
+@abuel3la
+Medo4255 — 09/29/2024 11:40 PM
+{
+"info": {
+"_postman_id": "2d8017ad-71f6-4b1b-ab55-51cda6e43414",
+"name": "Governor/site",
+"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+"_exporter_id": "38492923"
+Expand
+Governor-site.postman_collection.json
+5 KB
+byson — 09/30/2024 12:18 AM
+@abuel3la
+ro7t fen ya amr
+amr
+amar
+Medo4255 — Today at 4:14 PM
+const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Routes/activityController");
+const guideController = require('./Routes/guideController'); // Import the controller
+const touristItineraryController = require('./Routes/touristItineraryController')
+const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
+  require('./Routes/governorController');
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const App = () => {
+  const [data, setData] = useState(null); // Holds the response data from backend
+  const [error, setError] = useState(null); // Holds any error message
+Expand
+message.txt
+5 KB
+MONGO_URI = "mongodb+srv://hamdy:ACLGMGOW@cluster0.k992f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+Medo4255 — Today at 4:49 PM
+tmam
+sha8al
+mafeesh el node modules
+laaaaaaaaaaaaaaaaaaaa
+dool hotl
+argook
+yes yes
+malak ya aboe3ela
+you can hear my voice
+apoel3ela
+hahahahhahahahahah
+mo2 mo2 mo2 la 5alas
+tab ya wlad
+zabato el front end ba2a
+ma3lesh mesh hatesma3oni law 3amlt unmute
+fe dawsha kteer
+heee7777777
+tab el e5wa emta hayba3tooh
+lol
+tab sanya
+ana hafta7 el admin
+we ab3atlk el files manually
+tab el guest wel tourist
+mawgodeen wala la2
+yel3an ye7ra2
+ana leh anazl 40000 node module
+const ActivityCategory = require('../Models/ActivityCategoryModel')
+const mongoose = require('mongoose')
+
+//get all workouts
+const getAllActivityCategory = async (req, res) => {
+    const activitycategory = await ActivityCategory.find({}).sort({createdAt: -1})
+Expand
+ActivityCategoryController.js
+3 KB
+const Admin = require('../Models/AdminModel')
+const Governer = require('../Models/GovernerModel')
+const PreferenceTag = require('../Models/PreferenceTagModel')
+const ActivityCategory = require('../Models/ActivityCategoryModel')
+const mongoose = require('mongoose')
+Expand
+AdminController.js
+8 KB
+const Governer = require('../Models/GovernerModel')
+const mongoose = require('mongoose')
+
+//create new workout
+const createGoverner = async (req, res) => {
+    const {username, password} = req.body
+Expand
+GovernerController.js
+1 KB
+const PreferenceTag = require('../Models/PreferenceTagModel')
+const mongoose = require('mongoose')
+
+//get all workouts
+const getAllPreferenceTag = async (req, res) => {
+    const preferencetag = await PreferenceTag.find({}).sort({createdAt: -1})
+Expand
+PreferenceTagController.js
+3 KB
+const Workout = require('../Models/WorkoutModels')
+const mongoose = require('mongoose')
+
+//get all workouts
+const getAllWorkouts = async (req, res) => {
+    const workouts = await Workout.find({}).sort({createdAt: -1})
+Expand
+workoutController.js
+2 KB
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+
+const ActivityCategorySchema = new Schema({
+    activity: {
+Expand
+ActivityCategoryModel.js
+1 KB
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+
+const AdminSchema = new Schema({
+    username: {
+Expand
+AdminModel.js
+1 KB
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+
+const GovernerSchema = new Schema({
+    username: {
+Expand
+GovernerModel.js
+1 KB
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+
+const PreferenceTagSchema = new Schema({
+    tag: {
+Expand
+PreferenceTagModel.js
+1 KB
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+
+const workoutSchema = new Schema({
+    title: {
+Expand
+WorkoutModels.js
+1 KB
+const express = require('express')
+const {
+    getAllActivityCategory, 
+    getActivityCategory, 
+    createActivityCategory,
+    deleteActivityCategory,
+Expand
+ActivityCategory.js
+1 KB
+const express = require('express')
+const {
+    createAdmin, 
+    deleteAdmin
+} = require('../Controller/AdminController')
+Expand
+Admin.js
+1 KB
+const express = require('express')
+const {
+    createGoverner, 
+    deleteGoverner
+} = require('../Controller/AdminController')
+Expand
+Governer.js
+1 KB
+const express = require('express')
+const {
+    getAllPreferenceTag, 
+    getPreferenceTag, 
+    createPreferenceTag,
+    deletePreferenceTag,
+Expand
+PreferenceTag.js
+1 KB
+const express = require('express')
+const {
+    createWorkout, 
+    getAllWorkouts, 
+    getWorkout,
+    deleteWorkout,
+Expand
+workouts.js
+1 KB
+dool el files ahe
+require('dotenv').config()
+
+const express = require('express');
+const mongoose = require('mongoose')
+const WorkoutRoutes = require('./routes/workouts')
+const ActivityCategoryRoutes = require('./routes/ActivityCategory')
+const PreferenceTag = require('./routes/PreferenceTag')
+const Admin = require('./routes/Admin')
+const Governer = require('./routes/Governer')
+
+//expres app
+const app = express();
+
+//middleware
+app.use(express.json()); 
+
+//routes 
+app.use('/api/workouts', WorkoutRoutes)
+app.use('/api/ActivityCategory', ActivityCategoryRoutes)
+app.use('/api/PreferenceTag', PreferenceTag)
+app.use('/api/Admin', Admin)
+app.use('/api/Governer', Governer)
+
+
+// connect to db
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        app.listen(process.env.PORT , ()=> {
+            console.log('listening on port', process.env.PORT)
+        })
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+
+
+//listen for request
+
+
+process.env
+we dah el app.js
+bas homa 3amleen 7aga 3ageeba
+3amleen model we controller we route
+Medo4255 — Today at 4:56 PM
+what in the fuck
+aboel3ela 5ali el 4000 3andk yeb2a 8000
+ashal 7aga
+fel App.js
+ele fel backend we fel env
+Medo4255 — Today at 5:03 PM
+aaaaaaaaaaaaaaaaaaaaaaa33333333333333333333333333333333333333333333333333333333333333333
+ana el laptop kol shewaya ye3ml crash
+beymoot meni
+howa 5alas kda ana ta2reeban maleesh lazma
+ged3an mmkn 7ad yeb3at el git ignore hena
+3ashan kosom ele fe bali
+@byson
+he7
+byson — Today at 5:08 PM
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+Expand
+message.txt
+3 KB
+Medo4255 — Today at 5:08 PM
+sho sho
+﻿
 # Logs
 logs
 *.log

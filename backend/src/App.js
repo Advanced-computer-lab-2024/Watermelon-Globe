@@ -1,12 +1,14 @@
 const express = require("express");
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
-require("dotenv").config();
-const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
-const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Routes/activityController");
-const { createTags, getTags } = require ("./Routes/activityController");
+require('dotenv').config();
+const { createProfile, updateProfile, getProfiles } = require("./Controller/companyProfileController");
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Controller/activityController");
+const { createTags, getTags } = require ("./Controller/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
-const MongoURI = process.env.MONGO_URI;
+// const MongoURI = process.env.MONGO_URI
+const Admin = require('./Routes/Admin')
+const Seller = require('./Routes/Seller')
 
 
 // App variables
@@ -14,7 +16,7 @@ const app = express();
 const port = process.env.PORT || "8000";
 
 // Mongo DB
-mongoose.connect(MongoURI)
+mongoose.connect("mongodb+srv://Mr3amora400:400508900ohm@mernapp.nww7x.mongodb.net/?retryWrites=true&w=majority&appName=Mernapp")
 .then(() => {
   console.log("MongoDB is now connected!");
   // Starting server
@@ -23,16 +25,21 @@ mongoose.connect(MongoURI)
   });
 })
 .catch(err => console.log(err));
-const guideController = require('./Routes/guideController'); // Import the controller
-const touristItineraryController = require('./Routes/touristItineraryController')
+const guideController = require('./Controller/guideController'); // Import the controller
+const touristItineraryController = require('./Controller/touristItineraryController')
 
 
 const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
-  require('./Routes/governorController');
+  require('./Controller/governorController');
 
 // Configurations
 
 app.use(express.json())
+
+//admin
+app.use('/api/Admin', Admin)
+app.use('/api/Seller', Seller)
+
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);
