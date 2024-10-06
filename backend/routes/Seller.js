@@ -10,7 +10,7 @@ const {
     searchProductbyName,
     filterProduct,
     updateProduct
-} = require('../Controller/Seller-ProductController')
+} = require('../Controller/SellerController')
 
 const router = express.Router()
 

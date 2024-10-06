@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose')
 const WorkoutRoutes = require('./routes/workouts')
 const Admin = require('./routes/Admin')
+const Seller = require('./routes/Seller')
 
 //expres app
 const app = express();
@@ -14,6 +15,8 @@ app.use(express.json());
 //routes 
 app.use('/api/workouts', WorkoutRoutes)
 app.use('/api/Admin', Admin)
+app.use('/api/Seller', Seller)
+
 
 
 // connect to db
