@@ -3,14 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ActivityDetails = () => {
-    const { id } = useParams();  // Get activity ID from the URL
+    const { id } = useParams();
     const [activity, setActivity] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/activity/${id}`);
+                const response = await axios.get(`http://localhost:8000/activities/${id}`);
                 setActivity(response.data);
                 console.log("Fetched activity details: ", response.data);
             } catch (error) {
@@ -38,7 +38,8 @@ const ActivityDetails = () => {
             )}
             <p><strong>Discount:</strong> {activity.Discount}%</p>
             <p><strong>Advertiser:</strong> {activity.Advertiser.Name || 'Unknown Advertiser'}</p>
-            <p><strong>Tags:</strong> {activity.tags.map(tag => tag.name).join(', ')}</p>
+            <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p>
+            <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p>
             <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
             <button onClick={() => navigate(`/`)}>Back to Activities</button>
         </div>

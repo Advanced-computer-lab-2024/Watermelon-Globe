@@ -48,7 +48,7 @@ const HomeScreen = () => {
                     <p><strong>Price:</strong> ${activity.Price}</p>
                     <p><strong>Discount:</strong> {activity.Discount}%</p>
                     <p><strong>Advertiser:</strong> {activity.Advertiser?.Name || 'Unknown Advertiser'}</p>
-                    <p><strong>Tag types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p> {/* Displaying tags */}
+                    <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p> {/* Displaying tags */}
                     <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p> {/* Displaying tags */}
                     <button onClick={() => navigate(`/activity/${activity._id}`)}>View Details</button>
                     <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
