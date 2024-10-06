@@ -55,13 +55,13 @@ const updateTourGuide = async (req, res) => {
 
 
 const createItinerary = async (req, res) => {
-    const { name, activities, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+    const { name, activities, tag, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
         accessibility, pickupDropoffLocations, bookings, guide: guideId} = req.body;
         try {
-            const itinerary = await itineraryModel.Itinerary.create({ name, activities, locations, timeline,
-                languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
+            const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
+                timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
                 pickupDropoffLocations, bookings, guide: guideId});
-        
+
             res.status(200).json(itinerary)
           } catch (error) {
             res.status(400).json({ error: error.message })
@@ -78,7 +78,8 @@ const getMyItineraries = async (req, res) => {
 
     try {
         // Find the tourism site by ID and populate the tourismGovernor field
-        const site = await itineraryModel.Itinerary.find({ guide: guideID });
+        const site = await itineraryModel.Itinerary.find({ guide: guideID }).populate(
+            'activities').populate('guide');
 
         // If no site is found, return a 404 error
         if (!site) {
@@ -96,7 +97,8 @@ const getMyItineraries = async (req, res) => {
 const getAllItineraries = async (req, res) => {
     try {
         // Fetch all itineraries, populating the 'guide' field to get tour guide details
-        const itineraries = await itineraryModel.Itinerary.find({}).sort({ createdAt: -1 });
+        const itineraries = await itineraryModel.Itinerary.find({}).sort({ createdAt: -1 }).populate(
+            'activities').populate('guide');
 
         // If no itineraries found, return a message
         if (!itineraries.length) {
@@ -121,7 +123,8 @@ const getItineraryById = async (req, res) => {
         }
 
         // Find the itinerary by ID and populate the guide details
-        const itinerary = await itineraryModel.Itinerary.findById(id).populate('guide');
+        const itinerary = await itineraryModel.Itinerary.findById(id).populate(
+            'activities').populate('guide');
 
         // If the itinerary is not found, return a 404 error
         if (!itinerary) {
@@ -137,8 +140,9 @@ const getItineraryById = async (req, res) => {
 };
 const updateItinerary = async (req, res) => {
     const { id } = req.params; // Extracting the site ID from request parameters
-    const { name, activities, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
-            accessibility, pickupDropoffLocations, bookings, guide: guideId} = req.body; // Extracting the updated fields from request body
+    const { name, activities, tag, locations, timeline, languageOfTour, priceOfTour, availableDates,
+            availableTimes, accessibility, pickupDropoffLocations, bookings,
+            guide: guideId} = req.body; // Extracting the updated fields from request body
   
     // Validate the site ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -149,7 +153,7 @@ const updateItinerary = async (req, res) => {
       // Find the Itinerary by ID and update it with the new details
       const updatedItinerary = await itineraryModel.Itinerary.findByIdAndUpdate(
         id,
-        {  name, activities, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+        {  name, activities, tag, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
            accessibility, pickupDropoffLocations, bookings, guide: guideId }, // Updating the fields
         { new: true, runValidators: true } // Option to return the updated site and run validation
       );
