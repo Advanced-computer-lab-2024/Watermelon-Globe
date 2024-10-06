@@ -7,10 +7,6 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    details: {
-        type: String,
-        required: true
-    },
     price: {
         type: mongoose.Schema.Types.Decimal128,
         required: true
