@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import {useNavigate , Link } from 'react-router-dom';
 import axios from 'axios';
 import '../Components/Navbar.css';
+
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
     const [advertisers, setAdvertisers] = useState({}); // To hold advertiser names
+    const navigate = useNavigate(); // useNavigate hook for navigation
+
 
     useEffect(() => {
         const fetchActivities = async () => {
@@ -44,6 +47,10 @@ const HomeScreen = () => {
         fetchActivities();
     }, []);
 
+    const goToItineraries = () => {
+        navigate('/itineraries'); // Navigate to the itineraries page
+    };
+
     return (
         <div>
             <h1>Activities</h1>
@@ -63,6 +70,23 @@ const HomeScreen = () => {
                     Add New Activity
                 </button>
             </Link>
+
+            <button onClick={goToItineraries}>View Itineraries</button> {/* Button to navigate to itineraries */}
+
+            <div>
+                {activities.map((activity) => (
+                    <div key={activity._id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
+                        <p><strong>Date:</strong> {activity.Date}</p>
+                        <p><strong>Time:</strong> {activity.Time}</p>
+                        <p><strong>Location:</strong> {activity.location}</p>
+                        <p><strong>Price: $</strong>{activity.Price}</p>
+                        <p><strong>Category:</strong> {activity.Category}</p>
+                        <p><strong>Tags:</strong> {activity.Tags.join(', ')}</p>
+                        <p><strong>Special Discounts:</strong> {activity.Discount}%</p>
+                        <p><strong>Booking Open:</strong> {activity.bookingOpen ? 'Yes' : 'No'}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
