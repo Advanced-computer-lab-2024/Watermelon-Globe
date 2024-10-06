@@ -16,7 +16,7 @@ const tagSchema = new Schema({
     ],
     required: true,
   },
-});
+}); 
 
 const tag = mongoose.model('tag', tagSchema);
 module.exports = tag;

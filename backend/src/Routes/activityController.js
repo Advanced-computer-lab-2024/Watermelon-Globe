@@ -88,9 +88,8 @@ const createActivity = async (req, res) => {
 const getActivities = async (req, res) => {
     try {
         const activities = await ActivityModel.find({})
-            .populate('tags') // Populate the tags field with actual Tag data
-            .populate('Advertiser'); // Populate the Advertiser field with the corresponding CompanyProfile data
-
+            .populate('tags')
+            .populate('Advertiser');
         res.status(200).json(activities);
     } catch (error) {
         console.error('Error fetching activities:', error);
@@ -104,12 +103,13 @@ const getActivities = async (req, res) => {
 const getActivityById = async (req, res) => {
     try {
         const { id } = req.params;
-        const activity = await ActivityModel.findById(id);
+        // Populate related fields (tags and advertiser)
+        const activity = await ActivityModel.findById(id)
+            .populate('tags')
         if (!activity) {
-            return res.status(404).json({
-                message: 'Activity not found'
-            });
+            return res.status(404).json({ message: 'Activity not found' });
         }
+
         res.status(200).json(activity);
     } catch (error) {
         console.error(error);

@@ -7,7 +7,7 @@ const Navbar = ({ isSignedUp, handleSignOut }) => {
     return (
         <nav>
             <div className='homeButton'> 
-                <Link to="/" >Home</Link>
+                <Link to="/" >Activities</Link>
             </div>
             <div className='signupDiv'>
                 {isSignedUp ? (
