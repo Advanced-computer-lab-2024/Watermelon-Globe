@@ -3,10 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose')
 const WorkoutRoutes = require('./routes/workouts')
-const ActivityCategoryRoutes = require('./routes/ActivityCategory')
-const PreferenceTag = require('./routes/PreferenceTag')
 const Admin = require('./routes/Admin')
-const Governer = require('./routes/Governer')
 
 //expres app
 const app = express();
@@ -17,9 +14,6 @@ app.use(express.json());
 //routes 
 app.use('/api/workouts', WorkoutRoutes)
 app.use('/api/Admin', Admin)
-app.use('/api/PreferenceTag', PreferenceTag)
-app.use('/api/Admin', Admin)
-app.use('/api/Governer', Governer)
 
 
 // connect to db
