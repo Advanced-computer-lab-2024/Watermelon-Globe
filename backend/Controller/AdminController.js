@@ -86,7 +86,22 @@ const getPreferenceTag = async (req, res) => {
 //create new preferencetag
 const createPreferenceTag = async (req, res) => {
     const {tag} = req.body
+
+    let emptyFields = []
+        if (!tag) {
+            emptyFields.push('tag')
+        }
+        if (emptyFields.length > 0) {
+            return res.status(400).json({ error: 'Please fill in all fields', emptyFields })
+        }
+
+        const existingTag = await PreferenceTag.findOne({ tag });
+        if (existingTag) {
+            return res.status(400).json({ error: 'This tag already exists' });
+        }
+
     try {
+
         const preferencetag = await PreferenceTag.create({tag}) 
         res.status(200).json(preferencetag)
     }
@@ -114,10 +129,26 @@ const deletePreferenceTag = async (req, res) => {
 //uptade a preferencetag
 const updatePreferenceTag = async (req, res) => {
     const {id} = req.params
+    const { tag } = req.body
 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).json({error: 'No such tag'})
     }
+
+    let emptyFields = []
+        if (!tag) {
+            emptyFields.push('tag')
+        }
+        if (emptyFields.length > 0) {
+            return res.status(400).json({ error: 'Please fill in all fields', emptyFields })
+        }
+
+    const existingTag = await PreferenceTag.findOne({ tag });
+
+        if (existingTag) {
+            return res.status(400).json({ error: 'Tag name already exists' });
+        }
+        else{
 
     const preferencetag = await PreferenceTag.findOneAndUpdate({_id: id},{
         ...req.body 
@@ -127,6 +158,7 @@ const updatePreferenceTag = async (req, res) => {
         return res.status(400).json({error: 'No such tag'})
         }
     res.status(200).json(preferencetag)
+        }
 }
 
 //get all activitycategory
@@ -198,10 +230,26 @@ const deleteActivityCategory = async (req, res) => {
 //uptade a activitycategory
 const updateActivityCategory = async (req, res) => {
     const {id} = req.params
+    const { activity } = req.body
 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).json({error: 'No such activity'})
     }
+
+    let emptyFields = []
+        if (!activity) {
+            emptyFields.push('activity')
+        }
+        if (emptyFields.length > 0) {
+            return res.status(400).json({ error: 'Please fill in all fields', emptyFields })
+        }
+
+    const existingActivity = await ActivityCategory.findOne({ activity });
+
+        if (existingActivity) {
+            return res.status(400).json({ error: 'Activity name already exists' });
+        }
+        else{
 
     const activitycategory = await ActivityCategory.findOneAndUpdate({_id: id},{
         ...req.body 
@@ -211,6 +259,7 @@ const updateActivityCategory = async (req, res) => {
         return res.status(400).json({error: 'No such activity'})
         }
     res.status(200).json(activitycategory)
+        }
 }
 
 module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
