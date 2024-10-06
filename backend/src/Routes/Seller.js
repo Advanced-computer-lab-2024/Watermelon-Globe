@@ -9,7 +9,8 @@ const {
     getAllProducts,
     searchProductbyName,
     filterProduct,
-    updateProduct
+    updateProduct,
+    sortProducts
 } = require('../Controller/SellerController')
 
 const router = express.Router()
@@ -38,7 +39,7 @@ router.put('/updateSeller/:id', updateSeller)
 router.get('/products', getAllProducts)
 
 //Get single product
-router.get('/filterProductPrice', filterProduct)
+router.get('/filterProductPrice/:price', filterProduct)
 
 //post a new product 
 router.post('/createProduct', createProduct);
@@ -49,8 +50,9 @@ router.get('/searchProductName', searchProductbyName)
 //update a product 
 router.put('/editProduct', updateProduct)
 
+//sort Products according to Ratings
+router.get('/sortProducts', sortProducts)
 
 
 
-module.exports = router
-
+module.exports = router

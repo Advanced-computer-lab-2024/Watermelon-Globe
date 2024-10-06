@@ -1,5 +1,5 @@
 const Admin = require('../Models/AdminModel')
-const Governer = require('../Models/tourismGovernor')
+const Governer = require('../Models/GovernerModel')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/ProductModel')
@@ -43,13 +43,6 @@ const createGoverner = async (req, res) => {
     catch (error){
         res.status(400).json({error: error.mssg})
     }
-}
-
-//get all PreferenceTag
-const getAllGoverner = async (req, res) => {
-    const governer = await Governer.find({}).sort({createdAt: -1})
-
-    res.status(200).json(governer)
 }
 
 //delete a Governer 
@@ -272,7 +265,7 @@ const updateActivityCategory = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-    const { name,details, price, quantity,  description, seller, ratings } = req.body
+    const { name, price, quantity,  description, seller, ratings } = req.body
 
     try {
         // Create a new product with the provided details
@@ -328,18 +321,31 @@ const searchProductbyName = async (req, res) => {
 
 
 //filter products based on price
-const filterProduct = async(req,res) => {
-
-    let product = await Product.find(
-        { Price: req.body.Price },
-        req.body
-    )
-    if (!product){
-        return res.status(400).json({error: 'No such product'})
+const filterProduct = async (req, res) => {
+    // Extract the Price from the URL parameters
+    const { price } = req.params;  // Assuming the param is named 'price'
+  
+    try {
+      // Convert the price to a number for comparison
+      const priceValue = parseFloat(price);
+  
+      if (isNaN(priceValue)) {
+        return res.status(400).json({ error: 'Invalid price format' });
+      }
+  
+      // Find the product by price
+      let product = await Product.findOne({ price: priceValue });
+  
+      if (!product) {
+        return res.status(400).json({ error: 'No such product' });
+      }
+  
+      // Return the found product
+      return res.status(200).json(product);
+    } catch (error) {
+      return res.status(500).json({ error: 'An error occurred while fetching the product' });
     }
-
-    return res.send(product).status(201)
-}
+  };
 
 //Update a product
 const updateProduct = async (req, res) => {
@@ -369,8 +375,19 @@ const updateProduct = async (req, res) => {
     }
 }
 
-module.exports = {createAdmin , deleteAdmin,getAllGoverner, createGoverner, deleteGoverner,
+const sortProducts = async (req, res) => {
+    try {
+        // Fetch all products and sort them by ratings in descending order
+        const products = await Product.find({}).sort({ ratings: -1 })
+
+        res.status(200).json(products)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
      getAllPreferenceTag, getPreferenceTag, createPreferenceTag, deletePreferenceTag, updatePreferenceTag,
      getAllActivityCategory, getActivityCategory, createActivityCategory, deleteActivityCategory
      , updateActivityCategory, createProduct, getAllProducts, searchProductbyName, filterProduct, 
-    updateProduct}
+    updateProduct, sortProducts}

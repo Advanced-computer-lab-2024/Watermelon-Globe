@@ -19,6 +19,7 @@ app.use(cors());
 
 // Mongo DB
 mongoose.connect("mongodb+srv://malakabdelaziz1556:malak@mernapp.yye1c.mongodb.net/")
+mongoose.connect(MongoURI)
 .then(() => {
   console.log("MongoDB is now connected!");
   // Starting server

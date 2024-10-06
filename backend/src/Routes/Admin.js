@@ -3,7 +3,6 @@ const {
     createAdmin, 
     deleteAdmin,
     createGoverner,
-    getAllGoverner,
     deleteGoverner,
     getAllPreferenceTag,
     getPreferenceTag,
@@ -19,7 +18,8 @@ const {
     getAllProducts,
     searchProductbyName,
     filterProduct,
-    updateProduct
+    updateProduct,
+    sortProducts
 } = require('../Controller/AdminController')
 
 const router = express.Router()
@@ -29,9 +29,6 @@ router.post('/Admin/', createAdmin)
 
 //delete a workout 
 router.delete('/Admin/:id', deleteAdmin)
-
-//get all governer
-router.get('/Governer/', getAllGoverner)
 
 //post a new workout 
 router.post('/Governer/', createGoverner)
@@ -70,10 +67,10 @@ router.delete('/ActivityCategory/:id', deleteActivityCategory)
 router.put('/ActivityCategory/:id', updateActivityCategory)
 
 //Get all products
-router.get('/Products/', getAllProducts)
+router.get('/products/', getAllProducts)
 
 //Get single product
-router.get('/filterProductPrice/', filterProduct)
+router.get('/filterProductPrice/:price', filterProduct)
 
 //post a new product 
 router.post('/createProduct/', createProduct);
@@ -84,5 +81,7 @@ router.get('/searchProductName/', searchProductbyName)
 //update a product 
 router.put('/editProduct/', updateProduct)
 
+//sort Products according to Ratings
+router.get('/sortProducts', sortProducts)
 
-module.exports = router
+module.exports = router

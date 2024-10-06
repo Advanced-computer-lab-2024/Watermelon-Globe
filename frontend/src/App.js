@@ -13,7 +13,7 @@ function App() {
         <div className="pages">
           <Routes>
             <Route
-              path='/'
+              path='/ActivityCategory'
               element={<ActivityCategory />}
             />  
             <Route
