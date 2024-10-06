@@ -109,7 +109,7 @@ const App = () => {
       <button onClick={() => handleRequest1('/addGuide', 'post', rawJson)}>
         Add Guide
       </button>
-      <button onClick={() => handleRequest1('/getGuide','post', rawJson)}>
+      <button onClick={() => handleRequest1(`/getGuide/${Guide1Id}`)}>
         Get Guide
       </button>
       <button onClick={() => handleRequest1(`/updateGuide/${Guide1Id}`, 'put', rawJson)}>
