@@ -13,8 +13,8 @@ const createTourGuide = async (req, res) => {
             return res.status(400).json({ message: 'Tour guide with this email already exists' });
         }
         const newTourGuide = await tourGuide.create({ name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries })
-        const savedTourGuide = await newTourGuide.save();
-        res.status(201).json(savedTourGuide);
+        // const savedTourGuide = await newTourGuide.save();
+        res.status(201).json(newTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -28,8 +28,6 @@ const getTourGuide = async (req, res) => {
         if (!Object.keys(searchCriteria).length) {
             return res.status(400).json({ message: "Search criteria is required" });
         }
-
-        console.log("Search criteria:", searchCriteria);
 
         // Query the database based on search criteria
         const retrievedTourGuide = await tourGuide.find(searchCriteria);

@@ -32,30 +32,28 @@ const App = () => {
   const handleRequest1 = async (url, method = 'get', rawJson = null) => {
     try {
       let response;
-      let options = {};
-
-      if (method === 'post' || method === 'put') {
+      let options = {
+        headers: { 'Content-Type': 'application/json' },
+      };
+  
+      if (method === 'get' && rawJson) {
+        // Convert the raw JSON to query string parameters for GET request
+        const queryParams = new URLSearchParams(JSON.parse(rawJson)).toString();
+        url = `${url}?${queryParams}`; // Add query parameters to the URL
+      } else if (method === 'post' || method === 'put') {
         const body = JSON.parse(rawJson); // Convert raw JSON input to JS object
-        options = {
-          headers: { 'Content-Type': 'application/json' },
-          data: body // Include the body in the request
-        };
+        options.data = body; // Add the body to the request options
       }
-
+  
       response = await axios({ method, url, ...options });
-      setData(response.data);
-      setError(null); // Reset error if the request succeeds
-      setRawJson('');
-      setChildItineraryId('');
-      setGuideId('');
-      setItineraryId('');
-      setGuide1Id('');
-      setSiteId('');
-      setGovId('');
+      setData(response.data);  // Set the response data
+      setError(null);  // Reset error if the request succeeds
+      setRawJson('');  // Clear the raw JSON input after the request
     } catch (err) {
       setError(err.response ? err.response.data : "Something went wrong");
     }
   };
+  
 
   
   return (
@@ -111,7 +109,7 @@ const App = () => {
       <button onClick={() => handleRequest1('/addGuide', 'post', rawJson)}>
         Add Guide
       </button>
-      <button onClick={() => handleRequest1('/getGuide','get', rawJson)}>
+      <button onClick={() => handleRequest1('/getGuide','post', rawJson)}>
         Get Guide
       </button>
       <button onClick={() => handleRequest1(`/updateGuide/${Guide1Id}`, 'put', rawJson)}>

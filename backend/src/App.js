@@ -55,7 +55,7 @@ app.delete('/deleteActivity', deleteActivity);
 
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
-app.get("/getGuide", guideController.getTourGuide);
+app.post("/getGuide", guideController.getTourGuide);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
 
 //tourism governor/sites routes
