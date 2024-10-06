@@ -23,9 +23,22 @@ const createTourGuide = async (req, res) => {
 const getTourGuide = async (req, res) => {
     try {
         const searchCriteria = req.body;
+        
+        // Check if search criteria is provided
+        if (!Object.keys(searchCriteria).length) {
+            return res.status(400).json({ message: "Search criteria is required" });
+        }
+
         console.log("Search criteria:", searchCriteria);
 
+        // Query the database based on search criteria
         const retrievedTourGuide = await tourGuide.find(searchCriteria);
+
+        // Check if results are found
+        if (retrievedTourGuide.length === 0) {
+            return res.status(404).json({ message: "No tour guide found matching the criteria" });
+        }
+        
         res.status(200).json(retrievedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });

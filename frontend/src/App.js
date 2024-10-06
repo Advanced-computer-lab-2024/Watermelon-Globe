@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+// import { set } from 'mongoose';
+
 
 const App = () => {
   const [data, setData] = useState(null); // Holds the response data from backend
   const [error, setError] = useState(null); // Holds any error message
+  const [GuideId, setGuideId] = useState('');
+  const [Guide1Id, setGuide1Id] = useState('');
+  const [siteId, setSiteId] = useState('');
+  const [govId, setGovId] = useState('');
   const [itineraryId, setItineraryId] = useState(''); // State for itinerary ID input
   const [childItineraryId, setChildItineraryId] = useState('');
-  const [GuideId, setGuideId] = useState('');
   const [rawJson, setRawJson] = useState(''); // State for raw JSON input
   
   const handleRequest = async (url, method = 'get', body = null) => {
@@ -40,9 +45,13 @@ const App = () => {
       response = await axios({ method, url, ...options });
       setData(response.data);
       setError(null); // Reset error if the request succeeds
+      setRawJson('');
       setChildItineraryId('');
       setGuideId('');
       setItineraryId('');
+      setGuide1Id('');
+      setSiteId('');
+      setGovId('');
     } catch (err) {
       setError(err.response ? err.response.data : "Something went wrong");
     }
@@ -99,37 +108,68 @@ const App = () => {
       <hr />
 
       {/* Tour Guide Routes */}
-      <button onClick={() => handleRequest('/addGuide', 'post', { name: 'Guide 1' })}>
+      <button onClick={() => handleRequest1('/addGuide', 'post', rawJson)}>
         Add Guide
       </button>
-      <button onClick={() => handleRequest('/getGuide')}>
+      <button onClick={() => handleRequest1('/getGuide','get', rawJson)}>
         Get Guide
       </button>
-      <button onClick={() => handleRequest('/updateGuide/1', 'put', { name: 'Updated Guide' })}>
+      <button onClick={() => handleRequest1(`/updateGuide/${Guide1Id}`, 'put', rawJson)}>
         Update Guide
       </button>
+
+      <div>
+        <input 
+          type="text" 
+          value={Guide1Id} 
+          onChange={(e) => setGuide1Id(e.target.value)} 
+          placeholder="Enter Guide ID " 
+        />
+      </div>
       
       <hr />
 
       {/* Tourism Governor/Sites Routes */}
-      <button onClick={() => handleRequest('/addGov', 'post', { name: 'Governor 1' })}>
+      <button onClick={() => handleRequest1('/addGov', 'post', rawJson)}>
         Add Governor
       </button>
-      <button onClick={() => handleRequest('/addSite', 'post', { name: 'Site 1' })}>
+      <button onClick={() => handleRequest1('/addSite', 'post', rawJson)}>
         Add Site
       </button>
-      <button onClick={() => handleRequest('/getSite/1')}>
+      <button onClick={() => handleRequest1(`/getSite/${siteId}`)}>
         Get Site
       </button>
-      <button onClick={() => handleRequest('/getAllSites')}>
+      <button onClick={() => handleRequest1('/getAllSites')}>
         Get All Sites
       </button>
-      <button onClick={() => handleRequest('/updateSite/1', 'put', { name: 'Updated Site' })}>
+      <button onClick={() => handleRequest1(`/updateSite/${siteId}`, 'put', rawJson)}>
         Update Site
       </button>
-      <button onClick={() => handleRequest('/deleteSite/1', 'delete')}>
+      <button onClick={() => handleRequest1(`/deleteSite/${siteId}`, 'delete')}>
         Delete Site
       </button>
+
+      <div>
+        <input 
+          type="text" 
+          value={siteId} 
+          onChange={(e) => setSiteId(e.target.value)} 
+          placeholder="Enter Site ID" 
+        />
+      </div>
+
+      <button onClick={() => handleRequest1(`/getMySites?governorID=${govId}`)}>
+        Get My Sites
+      </button>
+
+      <div>
+        <input 
+          type="text" 
+          value={govId} 
+          onChange={(e) => setGovId(e.target.value)} 
+          placeholder="Enter Gov ID" 
+        />
+      </div>
 
       <hr />
 
@@ -139,23 +179,14 @@ const App = () => {
         Create Itinerary
       </button>
 
-      <button onClick={() => handleRequest1('/getAllItineraries')}>
-        Get All Itineraries
-      </button>
-
       <button onClick={() => handleRequest1(`/getItinerary/${itineraryId}`)}>
         Get Itinerary by ID
       </button>
 
-      
-      <div>
-        <input 
-          type="text" 
-          value={itineraryId} 
-          onChange={(e) => setItineraryId(e.target.value)} 
-          placeholder="Enter Itinerary ID for Update/Delete" 
-        />
-      </div>
+      <button onClick={() => handleRequest1('/getAllItineraries')}>
+        Get All Itineraries
+      </button>
+
       
       <button onClick={() => handleRequest1(`/updateItinerary/${itineraryId}`, 'put', rawJson)}>
         Update Itinerary
@@ -164,6 +195,15 @@ const App = () => {
       <button onClick={() => handleRequest1(`/deleteItinerary/${itineraryId}`, 'delete')}>
         Delete Itinerary
       </button>
+
+      <div>
+        <input 
+          type="text" 
+          value={itineraryId} 
+          onChange={(e) => setItineraryId(e.target.value)} 
+          placeholder="Enter Itinerary ID " 
+        />
+      </div>
 
       <button onClick={() => handleRequest1(`/getMyItineraries?guideID=${GuideId}`)}>
         Get My Itineraries
@@ -183,13 +223,13 @@ const App = () => {
 
       {/* Child Itineraries Routes */}
       <button onClick={() => handleRequest1('/createChildItinerary', 'post', rawJson)}>
-        Create Child Itinerary
+        Create Tourist Itinerary
       </button>
       <button onClick={() => handleRequest1(`/getChildItinerary/${childItineraryId}`)}>
-        Get Child Itinerary by ID
+        Get Tourist Itinerary by ID
       </button>
       <button onClick={() => handleRequest1('/getAllChildIitineraries')}>
-        Get All Child Itineraries
+        Get All Tourist Itineraries
       </button>
 
       <div>
@@ -202,10 +242,10 @@ const App = () => {
       </div>
 
       <button onClick={() => handleRequest1(`/updateChildItinerary/${childItineraryId}`, 'put', rawJson)}>
-        Update Child Itinerary
+        Update Tourist Itinerary
       </button>
       <button onClick={() => handleRequest1(`/deleteChildItinerary/${childItineraryId}`, 'delete')}>
-        Delete Child Itinerary
+        Delete Tourist Itinerary
       </button>
 
       <hr />
