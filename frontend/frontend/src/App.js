@@ -8,6 +8,7 @@ import EditProfilePage from './Components/EditCompanyProfile';
 import ActivityForm from './Components/ActivityForm';
 import HomeScreen from './Components/CompanyHomepage';
 import EditActivity from './Components/EditActivity';
+import ActivityDetails from './Components/ActivityDetails';
 
 function App() {
     const [isSignedUp, setIsSignedUp] = useState(false);
@@ -34,6 +35,7 @@ function App() {
                   <Route path="/account" element={<AccountPage profile={profile} />} />
                   <Route path="/edit-profile" element={<EditProfilePage/>} />
                   <Route path='/edit-activity/:id' element={<EditActivity/>}/>
+                  <Route path='/activity/:id' element={<ActivityDetails/>}/>
                 </Routes>
               </div>
         </Router>

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ActivitySchema = new Schema({
+  Name: {
+    type: String,
+    required: true
+  },
   Date: {
     type: Date,
     required: true

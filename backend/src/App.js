@@ -8,17 +8,17 @@ const { createTags, getTags } = require ("./Controller/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
 const cors = require('cors');
-// const MongoURI = process.env.MONGO_URI
 const Admin = require('./Routes/Admin')
 const Seller = require('./Routes/Seller')
 
 
 // App variables
 const app = express();
-const port = process.env.PORT || "8000";
+const port =  "8000";
 app.use(cors());
 
 // Mongo DB
+mongoose.connect("mongodb+srv://malakabdelaziz1556:malak@mernapp.yye1c.mongodb.net/")
 mongoose.connect(MongoURI)
 .then(() => {
   console.log("MongoDB is now connected!");
@@ -62,6 +62,7 @@ app.get("/getGuide", guideController.getTourGuide);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
 
 //tourism governor/sites routes
+// app.post("/addGov", createGov);
 app.post("/addSite", createSite);
 app.get("/getSite/:id", getSite);
 app.get("/getAllSites", getAllSites);
