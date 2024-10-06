@@ -18,6 +18,7 @@ function App() {
     };
     const handleSignOut =() => {
       setIsSignedUp(false);
+      localStorage.removeItem('userId');
       window.location.reload();
     }
 

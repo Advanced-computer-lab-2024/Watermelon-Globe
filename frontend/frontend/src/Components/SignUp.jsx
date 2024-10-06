@@ -16,8 +16,13 @@ const SignupPage = ({ onSignup }) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8000/createProfile', formData);
-            onSignup(response.data.profile);  // Call parent method to update isSignedUp state
-            navigate('/account');  // Redirect to account page
+            onSignup(response.data.profile); 
+            
+            localStorage.setItem('userId', response.data.profile._id);
+            const userId = localStorage.getItem('userId');
+            console.log("User ID:", userId);
+
+            navigate('/account');
         } catch (err) {
             setError('Error signing up');
         }

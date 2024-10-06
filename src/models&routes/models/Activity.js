@@ -33,7 +33,7 @@ const ActivitySchema = new Schema({
     type: String,
     required: false
   },
-  tags: [{
+  Tags: [{ // Linking to the Tag model
     type: mongoose.Schema.Types.ObjectId,
     ref: 'tag'
   }],

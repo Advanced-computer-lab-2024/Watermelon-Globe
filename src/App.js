@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
 const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
-const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require ("./Routes/activityController");
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity, createTags, getTags } = require ("./Routes/activityController");
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
 
@@ -33,6 +33,8 @@ app.get("/home", (req, res) => {
 });
 
 app.use(express.json())
+app.post("/createTags", createTags);
+app.get("/getTags", getTags);
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);
