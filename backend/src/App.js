@@ -28,7 +28,7 @@ mongoose.connect(MongoURI)
   });
 })
 .catch(err => console.log(err));
-const guideController = require('./Controller/guideController'); // Import the controller
+const guideController = require('./Controller/guideController');
 const touristItineraryController = require('./Controller/touristItineraryController')
 
 
@@ -70,7 +70,7 @@ app.put("/updateSite/:id", updateSite);
 app.delete("/deleteSite/:id", deleteSite);
 app.get("/getMySites", getMySites);
 
-//itineraries routes
+// //itineraries routes
 app.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
 app.get("/getAllItineraries", guideController.getAllItineraries); // Get all itineraries
 app.get("/getItinerary/:id", guideController.getItineraryById); // Get a single itinerary by ID

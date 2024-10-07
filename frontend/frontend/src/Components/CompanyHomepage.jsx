@@ -5,6 +5,7 @@ import './Navbar.css';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
+    const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,6 +20,8 @@ const HomeScreen = () => {
         };
 
         fetchActivities();
+        const storedUserId = localStorage.getItem('userId');
+        setUserId(storedUserId);
     }, []);
 
     const handleDelete = async (id) => {
@@ -48,17 +51,25 @@ const HomeScreen = () => {
                     <p><strong>Price:</strong> ${activity.Price}</p>
                     <p><strong>Discount:</strong> {activity.Discount}%</p>
                     <p><strong>Advertiser:</strong> {activity.Advertiser?.Name || 'Unknown Advertiser'}</p>
-                    <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p> {/* Displaying tags */}
-                    <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p> {/* Displaying tags */}
+                    <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p>
+                    <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p>
+                    
                     <button onClick={() => navigate(`/activity/${activity._id}`)}>View Details</button>
-                    <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
-                    <button onClick={() => handleDelete(activity._id)}>Delete Activity</button>
+                    
+                    {userId && activity.Advertiser?._id === userId && (
+                        <>
+                            <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
+                            <button onClick={() => handleDelete(activity._id)}>Delete Activity</button>
+                        </>
+                    )}
                 </div>
             ))}
 
-            <Link to="/add-activity">
-                <button className='add-new-activity'>Add New Activity</button>
-            </Link>
+            {userId && (
+                <Link to="/add-activity">
+                    <button className='add-new-activity'>Add New Activity</button>
+                </Link>
+            )}
         </div>
     );
 };
