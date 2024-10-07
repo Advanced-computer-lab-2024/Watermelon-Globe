@@ -209,7 +209,7 @@ app.get("/getAllGuides", guideController.getAllGuides);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
 app.get("/sortByPrice",guideController.sortByPrice);
 app.get("/sortByRating",guideController.sortByRatings);
-app.delete("/deleteGuide",guideController.deleteGuide);
+app.delete("/deleteGuide/:id",guideController.deleteGuide);
 
 //tourism governor/sites routes
 app.post("/addSite", createSite);
