@@ -25,14 +25,33 @@ const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, fi
 const Admin = require('./Routes/Admin');
 
 //seller imports
-const Seller = require('./Routes/Seller');
+const {
+  createSeller, 
+  getAllSellers, 
+  getSeller,
+  deleteSeller,
+  updateSeller,
+  createProduct,
+  getAllProducts,
+  searchProductbyName,
+  filterProduct,
+  updateProduct,
+  sortProducts
+} = require('./Controller/SellerController')
+
 
 //tourist imports
-const touristRoutes = require("./Routes/tourist");
+// const {
+//   createTourist,
+//   getTourists,
+//   getTourist,
+//   deleteTourist,
+//   updateTourist,
+// } = require("../Controller/touristController");
 const {updateRating} = require("./Controller/touristController");
 
 //guest imports
-const {createTourist,createTourguide, createSeller, createAdvertiser,getTourists,
+const {createTourist,createTourguide, createAdvertiser,getTourists,
 getItineraryDetails,filterItineraryByBudget, filterItineraryRating,filterItineraries,
 filterByLanguage,filterByDate,updateTourist} = require("./Controller/guestController"); 
 
@@ -75,7 +94,45 @@ app.post("/createTags",createTags);
 
 //admin
 app.use('/api/Admin', Admin)
-app.use('/api/Seller', Seller)
+
+
+//seller
+
+//Get all sellers
+app.get('/sellers', getAllSellers)
+
+//Get single seller
+app.get('/getSeller/:id', getSeller)
+
+//post a new seller 
+app.post('/createSeller', createSeller)
+
+//delete a seller 
+app.delete('/deleteSeller/:id', deleteSeller)
+
+//update a seller 
+app.put('/updateSeller/:id', updateSeller)
+
+//////////////// Seller ////////////////
+
+
+//Get all products
+app.get('/products', getAllProducts)
+
+//Get single product
+app.get('/filterProductPrice/:price', filterProduct)
+
+//post a new product 
+app.post('/createProduct', createProduct);
+
+//delete a product 
+app.get('/searchProductName', searchProductbyName)
+
+//update a product 
+app.put('/editProduct', updateProduct)
+
+//sort Products according to Ratings
+app.get('/sortProducts', sortProducts)
 
 //profile/adverstiser
 app.post("/createProfile", createProfile);
@@ -139,6 +196,22 @@ app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildIt
 app.post("/addTourist",createTourist);
 app.put("/updateTourist/:id",updateTourist);
 app.get("/getTourists",getTourists);
+
+//GET all tourists
+// app.get("/getTourists", getTourists);
+
+// //GET a single tourist
+// // app.get("/getTourist/:id", getTourist);
+
+// //POST a new tourist
+// app.post("/createTourist", createTourist);
+
+// //DELETE a tourist
+// // app.delete("/deleteTourist/:id", deleteTourist);
+
+// //UPDATE a tourist
+// app.put("/updateTourist/:id", updateTourist);
+
 // app.post("/addTourguide", createTourguide);
 // app.post("/addSeller", createSeller);
 

@@ -16,7 +16,7 @@ const HomePage = () => {
         Go to Guest Page
       </button>
 
-      <button onClick={() => navigate('/BackendReq')}>
+      <button onClick={() => navigate('/SellerPage')}>
         Go to Seller Page
       </button>
 
@@ -24,7 +24,7 @@ const HomePage = () => {
         Go to Advertiser Page
       </button>
 
-      <button onClick={() => navigate('/BackendReq')}>
+      <button onClick={() => navigate('/TouristPage')}>
         Go to Tourist Page
       </button>
 

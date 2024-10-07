@@ -4,7 +4,7 @@ const tourguideModel = require('../Models/tourGuide');
 const sellerModel = require('../Models/SellerModel');
 const advertiserModel = require('../Models/advertiserModel');
 const itineraryModel = require('../Models/itinerary');
-const activityModel= require("../Models/Activity")
+const activityModel= require("../Models/Activity");
 
 
 const { default: mongoose } = require('mongoose');
@@ -15,10 +15,10 @@ const createTourist = async (req, res) => {
     // Destructure the required fields from req.body
     const { username, email, password, mobileNumber, nationality, dob, status } = req.body;
 
-    // Validate if all fields are present
-    if (!username || !email || !password || !mobileNumber || !nationality || !dob || !status) {
-      return res.status(400).json({ message: 'All fields are required: username, email, password, mobile number, nationality, dob, and status.' });
-    }
+    // // Validate if all fields are present
+    // if (!username || !email || !password || !mobileNumber || !nationality || !dob || !status) {
+    //   return res.status(400).json({ message: 'All fields are required: username, email, password, mobile number, nationality, dob, and status.' });
+    // }
 
     // Create a new tourist instance and save to the database
     const newTourist = await touristModel.create({
@@ -41,9 +41,10 @@ const createTourist = async (req, res) => {
 };
 // update a tourist
 const updateTourist = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   console.log(id);
 
+  // Validate the ID format
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such tourist" });
   }
@@ -62,13 +63,22 @@ const updateTourist = async (req, res) => {
     });
   }
 
-  const tourist = await touristModel.findOneAndUpdate({ id: id }, { ...req.body });
+  // Update the tourist and return the updated document
+  const tourist = await touristModel.findOneAndUpdate(
+    { _id: id },
+    { ...req.body },
+    { new: true, runValidators: true } // 'new: true' returns the updated document
+  );
 
+  // Check if the tourist was found and updated
   if (!tourist) {
-    return res.status(400).json({ error: "No such tourist" });
+    return res.status(404).json({ error: "No such tourist" });
   }
+
+  // Return the updated tourist data
   res.status(200).json(tourist);
 };
+
 
 //Tour Guide
 const createTourguide = async (req, res) => {
@@ -262,7 +272,7 @@ const filterActivityByBudget = async (req, res) => {
 const getTourists = async (req, res) => {
    try {
       // Assuming User is a Mongoose model
-      const tourguids = await tourguideModel.find(); // This will retrieve all users
+      const tourguids = await touristModel.find(); // This will retrieve all users
       res.status(200).json(tourguids); // Send the users data as JSON
     } catch (error) {
       res.status(500).json({ message: error.message });

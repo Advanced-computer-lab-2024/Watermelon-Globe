@@ -67,4 +67,5 @@ const touristSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Tourist", touristSchema);
+const Tourist = mongoose.model('Tourist', touristSchema);
+module.exports = Tourist
