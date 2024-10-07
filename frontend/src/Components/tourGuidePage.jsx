@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const TourGuidePage = () => {
   const [data, setData] = useState(null);
@@ -9,6 +10,7 @@ const TourGuidePage = () => {
   const [itineraryId, setItineraryId] = useState('');
   const [childItineraryId, setChildItineraryId] = useState('');
   const [rawJson, setRawJson] = useState('');
+  const navigate = useNavigate();
   
 
   const handleRequest1 = async (url, method = 'get', rawJson = null) => {
@@ -105,11 +107,17 @@ const TourGuidePage = () => {
 
       <hr />
 
+      <button onClick={() => navigate('/')}>
+          Back to Home
+        </button>
       <div>
         <h2>Response Data:</h2>
         {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
+
+
+      
     </div>
   );
 };

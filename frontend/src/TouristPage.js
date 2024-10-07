@@ -7,6 +7,7 @@ const TouristPage = () => {
   const [error, setError] = useState(null);
   const [touristId, setTouristId] = useState('');
   const [rawJson, setRawJson] = useState('');
+  // const [childItineraryId, setChildItineraryId] = useState('');
   const navigate = useNavigate();
 
   const handleRequest = async (url, method = 'get', rawJson = null) => {
@@ -69,6 +70,21 @@ const TouristPage = () => {
         />
       </div>
 
+      <h2>Tourist Itineraries</h2>
+      <button onClick={() => handleRequest('/getAllChildIitineraries')}>
+         Get All Tourist Itineraries
+       </button>
+
+       <h2>Sites</h2>
+       <button onClick={() => handleRequest('/getAllSites')}>
+        Get All Sites
+      </button>
+
+      <h2>Activities</h2>
+      <button onClick={() => handleRequest('/activities')}>Get All Activities</button>
+      <button onClick={() => handleRequest(`/filterActivities`, 'post', rawJson)}>filter activities</button>
+
+      <hr />
       <button onClick={() => navigate('/')}>
         Go Back
       </button>
