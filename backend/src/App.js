@@ -2,12 +2,12 @@ const express = require("express");
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
-const { createProfile, updateProfile, getProfiles } = require("./Routes/companyProfileController");
+const { createProfile, updateProfile, getProfiles } = require("./Controller/companyProfileController");
 const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity, createTags, getTags } = require ("./Routes/activityController");
-const guideController = require('./Routes/guideController'); // Import the controller
-const touristItineraryController = require('./Routes/touristItineraryController')
+const guideController = require('./Controller/guideController'); // Import the controller
+const touristItineraryController = require('./Controller/touristItineraryController')
 const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
-  require('./Routes/governorController');
+  require('./Controller/governorController');
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
 const cors = require('cors');
@@ -21,7 +21,6 @@ const port =  "8000";
 app.use(cors());
 
 // Mongo DB
-mongoose.connect("mongodb+srv://malakabdelaziz1556:malak@mernapp.yye1c.mongodb.net/")
 mongoose.connect(MongoURI)
 .then(() => {
   console.log("MongoDB is now connected!");
@@ -45,11 +44,11 @@ app.use(express.json())
 // app.post("/createTags", createTags);
 // app.get("/getTags", getTags);
 
-//profile 
 //admin
 app.use('/api/Admin', Admin)
 app.use('/api/Seller', Seller)
 
+//profile 
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ActivityForm = () => {
     const [activity, setActivity] = useState({
+        Name: '',
         Date: '',
         Time: '',
         LocationType: 'Point', // Default type for location
@@ -87,6 +88,14 @@ const ActivityForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <input 
+                type="text" 
+                name="Name" 
+                value={activity.Name} 
+                onChange={handleChange} 
+                placeholder="Activity Name" 
+                required 
+            />
             <input 
                 type="date" 
                 name="Date" 
