@@ -7,10 +7,14 @@ const mongoose = require('mongoose')
 
 
 const getAllAdmin = async (req, res) => {
-    const admin = await Admin.find({}).sort({createdAt: -1})
+    try {
+        const admin = await Admin.find({}).sort({ createdAt: -1 });
+        res.status(200).json(admin);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving admins', error: error.message });
+    }
+};
 
-    res.status(200).json(admin)
-}
 
 const createAdmin = async (req, res) => {
     const { username, password } = req.body;

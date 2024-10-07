@@ -160,24 +160,24 @@ app.get('/sortProducts', sortProducts)
 app.get('/getAllAdmin', getAllAdmin);
 app.post('/createAdmin', createAdmin);
 app.delete('/Admin/:id', deleteAdmin);
-app.get('/getGoverner/', getAllGoverner);
-app.post('/createGoverner/', createGoverner);
+app.get('/getGoverner', getAllGoverner);
+app.post('/createGoverner', createGoverner);
 app.delete('/deleteGoverner/:id', deleteGoverner);
-app.get('/getAllPreferenceTag/', getAllPreferenceTag);
+app.get('/getAllPreferenceTag', getAllPreferenceTag);
 app.get('/getPreferenceTagById/:id', getPreferenceTag);
-app.post('/createPreferenceTag/', createPreferenceTag);
+app.post('/createPreferenceTag', createPreferenceTag);
 app.delete('/deletePreferenceTag/:id', deletePreferenceTag);
 app.put('/updatePreferenceTag/:id', updatePreferenceTag);
-app.get('/getAllActivityCategory/', getAllActivityCategory);
+app.get('/getAllActivityCategory', getAllActivityCategory);
 app.get('/getActivityCategory/:id', getActivityCategory);
-app.post('/createActivityCategory/', createActivityCategory);
+app.post('/createActivityCategory', createActivityCategory);
 app.delete('/deleteActivityCategory/:id', deleteActivityCategory);
 app.put('/updateActivityCategory/:id', updateActivityCategory);
-app.get('/getAllProducts/', getAllProducts);
+app.get('/getAllProducts', getAllProducts);
 app.get('/filterProductPrice/:price', filterProduct);
 //app.post('/createProduct/', createProduct);
-app.get('/searchProductName/', searchProductbyName);
-app.put('/editProduct/', updateProduct);
+app.get('/searchProductName', searchProductbyName);
+app.put('/editProduct', updateProduct);
 app.get('/sortProducts', sortProducts);
 
 
