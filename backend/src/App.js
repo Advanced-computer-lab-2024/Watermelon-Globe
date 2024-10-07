@@ -2,21 +2,45 @@ const express = require("express");
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
+
+//company profile imports
 const { createProfile, updateProfile, getProfiles } = require("./Controller/companyProfileController");
-const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity, createTags, getTags } = require ("./Routes/activityController");
+
+//activity imports
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity,
+createTags, getTags, sortByPriceActivity,sortByRatingsActivity,
+filterActivities,updateActivityRating } = require ("./Controller/activityController");
+
+//guide imports
 const guideController = require('./Controller/guideController'); // Import the controller
+
+//tourist intin imports
 const touristItineraryController = require('./Controller/touristItineraryController')
-const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, getMySites } =
+
+//governor imports
+const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags } =
   require('./Controller/governorController');
-const CompanyProfile = require('./Models/CompanyProfile');
-const MongoURI = process.env.MONGO_URI;
-const cors = require('cors');
-const Admin = require('./Routes/Admin')
-const Seller = require('./Routes/Seller')
+
+//admin imports
+const Admin = require('./Routes/Admin');
+
+//seller imports
+const Seller = require('./Routes/Seller');
+
+//tourist imports
+const touristRoutes = require("./Routes/tourist");
+const {updateRating} = require("./Controller/touristController");
+
+//guest imports
+const {createTourist,createTourguide, createSeller, createAdvertiser,getTourists,
+getItineraryDetails,filterItineraryByBudget, filterItineraryRating,filterItineraries,
+filterByLanguage,filterByDate,updateTourist} = require("./Controller/guestController"); 
 
 
 // App variables
 const app = express();
+const MongoURI = process.env.MONGO_URI;
+const cors = require('cors');
 const port =  "8000";
 app.use(cors());
 
@@ -64,6 +88,8 @@ app.delete('/deleteActivity/:id', deleteActivity);
 app.post("/addGuide", guideController.createTourGuide);
 app.get("/getGuide/:id", guideController.getTourGuide);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
+app.get("/sortByPrice",guideController.sortByPrice);
+app.get("/sortByRating",guideController.sortByRatings);
 
 //tourism governor/sites routes
 // app.post("/addGov", createGov);
@@ -88,6 +114,32 @@ app.get('/getChildItinerary/:id', touristItineraryController.getChildItineraryBy
 app.get('/getAllChildIitineraries', touristItineraryController.getAllChildItineraries);
 app.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
 app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
+
+//
+app.post("/addTourist",createTourist);
+// app.post("/addTourguide", createTourguide);
+// app.post("/addSeller", createSeller);
+app.post("/addAdvertiser", createAdvertiser);
+app.get("/getTourists",getTourists);
+app.get("/getItineraryDetails/:id",getItineraryDetails);
+app.get("/itineraryFilterBudget",filterItineraryByBudget);
+app.get("/itineraryFilterRating",filterItineraryRating);
+app.get("/itineraryFilter",filterItineraries);
+app.get("/itineraryFilterLanguage",filterByLanguage);
+app.get("/filterByDate",filterByDate);
+app.put("/updateTourist/:id",updateTourist);
+
+app.put("/updateRating/:id",updateRating);
+app.post("/addActivity",createActivity);
+app.get("/filterActivities",filterActivities);
+
+app.get("/sortByPriceActivity",sortByPriceActivity);
+app.get("/sortByRatingActivity",sortByRatingsActivity);
+app.put("/updateActivityRating/:id",updateActivityRating);
+
+app.get("/filterByTags",filterByTags);
+app.get("/getTags",getTags);
+app.post("/createTags",createTags);
 
 app.get("/home", (req, res) => {
   res.status(200).send("Tour Guide and Itinerary API");

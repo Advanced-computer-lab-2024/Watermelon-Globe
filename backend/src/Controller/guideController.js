@@ -201,6 +201,28 @@ const deleteItineraryById = async (req, res) => {
     }
 };
 
+const sortByRatings = async (req, res) => {
+    try {
+      // Fetch and sort itineraries by rating in descending order (highest to lowest)
+      const sortedItineraries = await itineraryModel.Itinerary.find().sort({ Rating: -1 });
+
+      return res.status(200).json(sortedItineraries);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error sorting itineraries by rating', error });
+    }
+  };
+
+  const sortByPrice = async (req, res) => {
+    try {
+      // Fetch and sort itineraries by price in ascending order (lowest to highest)
+      const sortedItineraries = await itineraryModel.Itinerary.find().sort({ priceOfTour: 1 });
+
+
+      return res.status(200).json(sortedItineraries);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error sorting itineraries by price', error });
+    }
+  };
 
 module.exports = {
     createItinerary,
@@ -211,5 +233,7 @@ module.exports = {
     createTourGuide,
     getTourGuide,
     updateTourGuide,
-    getMyItineraries
+    getMyItineraries,
+    sortByPrice,
+    sortByRatings
 };
