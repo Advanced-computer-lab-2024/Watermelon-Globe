@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const TourismGovernorPage = () => {
   const [data, setData] = useState(null); // Holds the response data from backend
@@ -7,6 +8,7 @@ const TourismGovernorPage = () => {
   const [siteId, setSiteId] = useState(''); // State for site ID input
   const [govId, setGovId] = useState(''); // State for governor ID input
   const [rawJson, setRawJson] = useState(''); // State for raw JSON input
+  const navigate = useNavigate();
 
   const handleRequest1 = async (url, method = 'get', rawJson = null) => {
     try {
@@ -78,11 +80,17 @@ const TourismGovernorPage = () => {
       </div>
       <hr />
 
+      <button onClick={() => navigate('/')}>
+          Back to Home
+        </button>
       <div>
         <h2>Response Data:</h2>
         {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
+
+      
+
     </div>
   );
 };

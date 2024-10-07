@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AdvertiserPage = () => {
   const [data, setData] = useState(null);
@@ -7,6 +8,7 @@ const AdvertiserPage = () => {
   const [activId, setActivId] = useState('');
   const [profId, setProfId] = useState('');
   const [rawJson, setRawJson] = useState('');
+  const navigate = useNavigate();
 
   const handleRequest1 = async (url, method = 'get', rawJson = null) => {
     try {
@@ -73,11 +75,16 @@ const AdvertiserPage = () => {
 
       <hr />
 
+      <button onClick={() => navigate('/')}>
+          Back to Home
+        </button>
       <div>
         <h2>Response Data:</h2>
         {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
+
+      
     </div>
   );
 };

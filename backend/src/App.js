@@ -180,8 +180,6 @@ app.get('/searchProductName', searchProductbyName);
 app.put('/editProduct', updateProduct);
 app.get('/sortProducts', sortProducts);
 
-
-
 //Seller
 //app.use('/api/Seller', Seller)
 

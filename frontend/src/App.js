@@ -366,9 +366,9 @@ const App = () => {
   return (
     <Router>
       <div style={{ padding: '20px' }}>
-        <h1>Navigation</h1>
+        {/* <h1>Navigation</h1> */}
         {/* Navigation Buttons */}
-        <nav style={{ marginBottom: '20px' }}>
+        {/* <nav style={{ marginBottom: '20px' }}>
           <Link to="/advertiser">
             <button >Advertiser Page</button>
           </Link>
@@ -381,7 +381,7 @@ const App = () => {
           <Link to="/signup">
             <button>signup</button>
           </Link>
-        </nav>
+        </nav> */}
 
         {/* Routes */}
         <Routes>
