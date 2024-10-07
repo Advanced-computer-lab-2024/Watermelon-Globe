@@ -23,6 +23,30 @@ const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, fi
 
 //admin imports
 const Admin = require('./Routes/Admin');
+const {
+  getAllAdmin,
+  createAdmin, 
+  deleteAdmin,
+  getAllGoverner,
+  createGoverner,
+  deleteGoverner,
+  getAllPreferenceTag,
+  getPreferenceTag,
+  createPreferenceTag,
+  deletePreferenceTag,
+  updatePreferenceTag,
+  getAllActivityCategory,
+  getActivityCategory,
+  createActivityCategory,
+  deleteActivityCategory,
+  updateActivityCategory,
+  createProduct,
+  getAllProducts,
+  searchProductbyName,
+  filterProduct,
+  updateProduct,
+  sortProducts
+} = require('./Controller/AdminController')
 
 //seller imports
 const Seller = require('./Routes/Seller');
@@ -74,7 +98,32 @@ app.get("/getTags",getTags);
 app.post("/createTags",createTags);
 
 //admin
-app.use('/api/Admin', Admin)
+app.get('/getAllAdmin', getAllAdmin);
+app.post('/createAdmin', createAdmin);
+app.delete('/Admin/:id', deleteAdmin);
+app.get('/getGoverner/', getAllGoverner);
+app.post('/createGoverner/', createGoverner);
+app.delete('/deleteGoverner/:id', deleteGoverner);
+app.get('/getAllPreferenceTag/', getAllPreferenceTag);
+app.get('/getPreferenceTagById/:id', getPreferenceTag);
+app.post('/createPreferenceTag/', createPreferenceTag);
+app.delete('/deletePreferenceTag/:id', deletePreferenceTag);
+app.put('/updatePreferenceTag/:id', updatePreferenceTag);
+app.get('/getAllActivityCategory/', getAllActivityCategory);
+app.get('/getActivityCategory/:id', getActivityCategory);
+app.post('/createActivityCategory/', createActivityCategory);
+app.delete('/deleteActivityCategory/:id', deleteActivityCategory);
+app.put('/updateActivityCategory/:id', updateActivityCategory);
+app.get('/getAllProducts/', getAllProducts);
+app.get('/filterProductPrice/:price', filterProduct);
+app.post('/createProduct/', createProduct);
+app.get('/searchProductName/', searchProductbyName);
+app.put('/editProduct/', updateProduct);
+app.get('/sortProducts', sortProducts);
+
+
+
+//Seller
 app.use('/api/Seller', Seller)
 
 //profile/adverstiser

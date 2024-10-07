@@ -22,9 +22,7 @@ const createAdmin = async (req, res) => {
 
     try {
         // Check if the username or password already exists
-        const existingAdmin = await Admin.findOne({
-            $or: [{ username }, { password }]
-        });
+        const existingAdmin = await Admin.findOne({username});
         
         if (existingAdmin) {
             return res.status(400).json({ error: 'This username or password already exists' });

@@ -27,10 +27,10 @@ const {
 const router = express.Router()
 
 //post a new workout 
-router.get('/Admin/', getAllAdmin)
+router.get('/getAdmin', getAllAdmin)
 
 //post a new workout 
-router.post('/Admin/', createAdmin)
+router.post('/Admin', createAdmin)
 
 //delete a workout 
 router.delete('/Admin/:id', deleteAdmin)
