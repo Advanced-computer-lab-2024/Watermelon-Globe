@@ -339,6 +339,15 @@ import AdvertiserPage from './Components/advertiserPage';
 import TourGuidePage from './Components/tourGuidePage';
 import TourismGovernorPage from './Components/tourismGovernorPage';
 import SignupPage from './Components/SignUp';
+// src/App.js
+import TouristPage from './TouristPage';
+import SellerPage from './SellerPage';
+import HomePage from './Components/Homepage';
+import AppPage from './Components/BackendReq'; 
+import AdminComponent from './Components/Admin';
+import CreateAdminForm from './Components/CreateAdminForm';
+//import ActivityDetails from './Components/ActivityDetails';
+import CompanyHomepage from './Components/CompanyHomepage';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -380,6 +389,13 @@ const App = () => {
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route path="/signup" element={<SignupPage onSignup={handleSignup} />} />
+          <Route path="/" element={<HomePage />} />
+        <Route path="/BackendReq" element={<AppPage />} />
+        <Route path="/TouristPage" element={<TouristPage />} />
+        <Route path="/SellerPage" element={<SellerPage />} />
+        <Route path="/Admin" element={<AdminComponent />} />
+        <Route path="/create-admin" element={<CreateAdminForm />} />
+        <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
         </Routes>
       </div>
     </Router>

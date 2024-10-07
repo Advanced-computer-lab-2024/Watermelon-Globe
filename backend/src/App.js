@@ -23,16 +23,59 @@ const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, fi
 
 //admin imports
 const Admin = require('./Routes/Admin');
+const {
+  getAllAdmin,
+  createAdmin, 
+  deleteAdmin,
+  getAllGoverner,
+  createGoverner,
+  deleteGoverner,
+  getAllPreferenceTag,
+  getPreferenceTag,
+  createPreferenceTag,
+  deletePreferenceTag,
+  updatePreferenceTag,
+  getAllActivityCategory,
+  getActivityCategory,
+  createActivityCategory,
+  deleteActivityCategory,
+  updateActivityCategory,
+  //createProduct,
+  //getAllProducts,
+  //searchProductbyName,
+  //filterProduct,
+  //updateProduct,
+  //sortProducts
+} = require('./Controller/AdminController')
 
 //seller imports
-const Seller = require('./Routes/Seller');
+const {
+  createSeller, 
+  getAllSellers, 
+  getSeller,
+  deleteSeller,
+  updateSeller,
+  createProduct,
+  getAllProducts,
+  searchProductbyName,
+  filterProduct,
+  updateProduct,
+  sortProducts
+} = require('./Controller/SellerController')
+
 
 //tourist imports
-const touristRoutes = require("./Routes/tourist");
+// const {
+//   createTourist,
+//   getTourists,
+//   getTourist,
+//   deleteTourist,
+//   updateTourist,
+// } = require("../Controller/touristController");
 const {updateRating} = require("./Controller/touristController");
 
 //guest imports
-const {createTourist,createTourguide, createSeller, createAdvertiser,getTourists,
+const {createTourist,createTourguide, createAdvertiser,getTourists,
 getItineraryDetails,filterItineraryByBudget, filterItineraryRating,filterItineraries,
 filterByLanguage,filterByDate,updateTourist} = require("./Controller/guestController"); 
 
@@ -75,7 +118,72 @@ app.post("/createTags",createTags);
 
 //admin
 app.use('/api/Admin', Admin)
-app.use('/api/Seller', Seller)
+
+
+//seller
+
+//Get all sellers
+app.get('/sellers', getAllSellers)
+
+//Get single seller
+app.get('/getSeller/:id', getSeller)
+
+//post a new seller 
+app.post('/createSeller', createSeller)
+
+//delete a seller 
+app.delete('/deleteSeller/:id', deleteSeller)
+
+//update a seller 
+app.put('/updateSeller/:id', updateSeller)
+
+//////////////// Seller ////////////////
+
+
+//Get all products
+app.get('/products', getAllProducts)
+
+//Get single product
+app.get('/filterProductPrice/:price', filterProduct)
+
+//post a new product 
+app.post('/createProduct', createProduct);
+
+//delete a product 
+app.get('/searchProductName', searchProductbyName)
+
+//update a product 
+app.put('/editProduct', updateProduct)
+
+//sort Products according to Ratings
+app.get('/sortProducts', sortProducts)
+app.get('/getAllAdmin', getAllAdmin);
+app.post('/createAdmin', createAdmin);
+app.delete('/Admin/:id', deleteAdmin);
+app.get('/getGoverner/', getAllGoverner);
+app.post('/createGoverner/', createGoverner);
+app.delete('/deleteGoverner/:id', deleteGoverner);
+app.get('/getAllPreferenceTag/', getAllPreferenceTag);
+app.get('/getPreferenceTagById/:id', getPreferenceTag);
+app.post('/createPreferenceTag/', createPreferenceTag);
+app.delete('/deletePreferenceTag/:id', deletePreferenceTag);
+app.put('/updatePreferenceTag/:id', updatePreferenceTag);
+app.get('/getAllActivityCategory/', getAllActivityCategory);
+app.get('/getActivityCategory/:id', getActivityCategory);
+app.post('/createActivityCategory/', createActivityCategory);
+app.delete('/deleteActivityCategory/:id', deleteActivityCategory);
+app.put('/updateActivityCategory/:id', updateActivityCategory);
+app.get('/getAllProducts/', getAllProducts);
+app.get('/filterProductPrice/:price', filterProduct);
+//app.post('/createProduct/', createProduct);
+app.get('/searchProductName/', searchProductbyName);
+app.put('/editProduct/', updateProduct);
+app.get('/sortProducts', sortProducts);
+
+
+
+//Seller
+//app.use('/api/Seller', Seller)
 
 //profile/adverstiser
 app.post("/createProfile", createProfile);
@@ -140,6 +248,22 @@ app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildIt
 app.post("/addTourist",createTourist);
 app.put("/updateTourist/:id",updateTourist);
 app.get("/getTourists",getTourists);
+
+//GET all tourists
+// app.get("/getTourists", getTourists);
+
+// //GET a single tourist
+// // app.get("/getTourist/:id", getTourist);
+
+// //POST a new tourist
+// app.post("/createTourist", createTourist);
+
+// //DELETE a tourist
+// // app.delete("/deleteTourist/:id", deleteTourist);
+
+// //UPDATE a tourist
+// app.put("/updateTourist/:id", updateTourist);
+
 // app.post("/addTourguide", createTourguide);
 // app.post("/addSeller", createSeller);
 

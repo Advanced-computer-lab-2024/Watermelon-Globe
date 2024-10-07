@@ -9,18 +9,18 @@ const {
 const router = express.Router();
 
 //GET all tourists
-router.get("/", getTourists);
+router.get("/getTourists", getTourists);
 
 //GET a single tourist
-router.get("/:id", getTourist);
+router.get("/getTourist/:id", getTourist);
 
 //POST a new tourist
-router.post("/", createTourist);
+router.post("/createTourist", createTourist);
 
 //DELETE a tourist
-router.delete("/:id", deleteTourist);
+router.delete("/deleteTourist/:id", deleteTourist);
 
 //UPDATE a tourist
-router.put("/:id", updateTourist);
+router.put("/updateTourist/:id", updateTourist);
 
 module.exports = router;
