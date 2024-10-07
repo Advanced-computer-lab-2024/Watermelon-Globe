@@ -10,13 +10,18 @@ const { createGov, createSite, getSite, getAllSites, updateSite, deleteSite, get
   require('./Routes/governorController');
 const CompanyProfile = require('./Models/CompanyProfile');
 const MongoURI = process.env.MONGO_URI;
+const cors = require('cors');
+const Admin = require('./Routes/Admin')
+const Seller = require('./Routes/Seller')
 
 
 // App variables
 const app = express();
-const port = process.env.PORT || "8000";
+const port =  "8000";
+app.use(cors());
 
 // Mongo DB
+mongoose.connect("mongodb+srv://malakabdelaziz1556:malak@mernapp.yye1c.mongodb.net/")
 mongoose.connect(MongoURI)
 .then(() => {
   console.log("MongoDB is now connected!");
@@ -31,16 +36,20 @@ mongoose.connect(MongoURI)
 
 app.use(express.json())
 
-app.use((req,res,next) =>{
-  console.log(req.method, req.path)
-  next()
-})
+// app.use((req,res,next) =>{
+//   console.log(req.method, req.path)
+//   next()
+// })
 
 //tags
 // app.post("/createTags", createTags);
 // app.get("/getTags", getTags);
 
 //profile 
+//admin
+app.use('/api/Admin', Admin)
+app.use('/api/Seller', Seller)
+
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);
@@ -52,14 +61,13 @@ app.get('/activities/:id', getActivityById);
 app.put('/updateActivity/:id', updateActivity);
 app.delete('/deleteActivity/:id', deleteActivity);
 
-
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
 app.get("/getGuide/:id", guideController.getTourGuide);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
 
 //tourism governor/sites routes
-app.post("/addGov", createGov);
+// app.post("/addGov", createGov);
 app.post("/addSite", createSite);
 app.get("/getSite/:id", getSite);
 app.get("/getAllSites", getAllSites);
