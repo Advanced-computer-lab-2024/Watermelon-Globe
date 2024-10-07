@@ -333,7 +333,7 @@
 // export default App;
 
 
-import {React, useState} from 'react';
+import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AdvertiserPage from './Components/advertiserPage';
 import TourGuidePage from './Components/tourGuidePage';
@@ -343,7 +343,7 @@ import SignupPage from './Components/SignUp';
 import TouristPage from './TouristPage';
 import SellerPage from './SellerPage';
 import HomePage from './Components/Homepage';
-import AppPage from './Components/BackendReq'; 
+import AppPage from './Components/BackendReq';
 import AdminComponent from './Components/Admin';
 import CreateAdminForm from './Components/CreateAdminForm';
 //import ActivityDetails from './Components/ActivityDetails';
@@ -370,10 +370,10 @@ const App = () => {
         {/* Navigation Buttons */}
         <nav style={{ marginBottom: '20px' }}>
           <Link to="/advertiser">
-            <button style={{ marginRight: '10px' }}>Advertiser Page</button>
+            <button >Advertiser Page</button>
           </Link>
           <Link to="/tour-guide">
-            <button style={{ marginRight: '10px' }}>Tour Guide Page</button>
+            <button >Tour Guide Page</button>
           </Link>
           <Link to="/tourism-governor">
             <button>Tourism Governor Page</button>
@@ -390,12 +390,12 @@ const App = () => {
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route path="/signup" element={<SignupPage onSignup={handleSignup} />} />
           <Route path="/" element={<HomePage />} />
-        <Route path="/BackendReq" element={<AppPage />} />
-        <Route path="/TouristPage" element={<TouristPage />} />
-        <Route path="/SellerPage" element={<SellerPage />} />
-        <Route path="/Admin" element={<AdminComponent />} />
-        <Route path="/create-admin" element={<CreateAdminForm />} />
-        <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
+          <Route path="/BackendReq" element={<AppPage />} />
+          <Route path="/TouristPage" element={<TouristPage />} />
+          <Route path="/SellerPage" element={<SellerPage />} />
+          <Route path="/Admin" element={<AdminComponent />} />
+          <Route path="/create-admin" element={<CreateAdminForm />} />
+          <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
         </Routes>
       </div>
     </Router>
