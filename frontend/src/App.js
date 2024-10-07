@@ -349,6 +349,24 @@ import CreateAdminForm from './Components/CreateAdminForm';
 //import ActivityDetails from './Components/ActivityDetails';
 import CompanyHomepage from './Components/CompanyHomepage';
 
+<<<<<<< Updated upstream
+=======
+import './App.css';
+//pages and components
+import TouristDetails from "./pages/TouristDetails.js";
+import SellerSignup from "./pages/SellerSignup.js";
+import AdvertiserSignup from "./pages/AdvertiserSignup.js";
+import TouristSignup from "./pages/TouristSignup.js";
+import TourguideSignup from "./pages/TourguideSignup.js";
+import SignupOptions from "./pages/SignUpOptions.js";
+// import Iteneraries from "./pages/Iteneraries.js"
+import ItineraryDetails from "./pages/ItineraryDetails.js";
+import MainTouristPage from "./pages/MainTouristPage.js"
+import MainHome from "./pages/MainHomeStart.js";
+import Homepage from "./Components/Homepage.jsx"
+import './pages/Navbar.jsx';
+
+>>>>>>> Stashed changes
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [profile, setProfile] = useState(null);
@@ -381,10 +399,13 @@ const App = () => {
           <Link to="/signup">
             <button>signup</button>
           </Link>
+
+          
         </nav> */}
 
         {/* Routes */}
         <Routes>
+<<<<<<< Updated upstream
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
@@ -394,6 +415,37 @@ const App = () => {
           <Route path="/TouristPage" element={<TouristPage />} />
           <Route path="/SellerPage" element={<SellerPage />} />
           <Route path="/Admin" element={<AdminComponent />} />
+=======
+
+
+          <Route path="/" element={<MainHome />} />
+
+          {/* <Route path="/" element={<Iteneraries />} />
+            <Route path="/" element={<SignupOptions />} /> */}
+          <Route path="/seller-signup" element={<SellerSignup />} />
+          <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
+          <Route path="/tourist-signup" element={<TouristSignup />} />
+          <Route path="/tourguide-signup" element={<TourguideSignup />} />
+          <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
+          <Route path="/signup-options" element={<SignupOptions />} />
+          <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
+          <Route path="/TouristDetails/:id" element={<TouristDetails />} />
+
+
+          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/tour-guide" element={<TourGuidePage />} />
+          <Route path="/tourism-governor" element={<TourismGovernorPage />} />
+          <Route path="/BackendReq" element={<AppPage />} />
+          <Route path="/TouristPage" element={<TouristPage />} />
+          <Route path="/SellerPage" element={<SellerPage />} />
+          <Route path="/AdminHome" element={<AdminHome />} />
+          <Route path="/Homepage" element={<Homepage />} />
+          <Route path='/Admin' element={<Admin />} />
+          <Route path='/Governer' element={<Governer />} />
+          <Route path='/ActivityCategory' element={<ActivityCategory />} />
+          <Route path='/PreferenceTag' element={<PreferenceTag />} />
+          <Route path='/AdminProduct' element={<AdminProduct />} />
+>>>>>>> Stashed changes
           <Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
         </Routes>

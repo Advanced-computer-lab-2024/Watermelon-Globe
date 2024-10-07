@@ -118,7 +118,8 @@ app.post("/createTags",createTags);
 
 //admin
 app.use('/api/Admin', Admin)
-
+//Seller
+app.use('/api/Seller', Seller)
 
 //seller
 
@@ -180,8 +181,7 @@ app.get('/searchProductName', searchProductbyName);
 app.put('/editProduct', updateProduct);
 app.get('/sortProducts', sortProducts);
 
-//Seller
-//app.use('/api/Seller', Seller)
+
 
 //profile/adverstiser
 app.post("/createProfile", createProfile);
