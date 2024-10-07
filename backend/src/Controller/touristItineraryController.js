@@ -71,7 +71,7 @@ const getAllChildItineraries = async (req, res) => {
 // Update a child itinerary by ID
 const updateChildItineraryById = async (req, res) => {
   const { id } = req.params;
-  const { chosenDates, chosenTimes, status } = req.body;
+  const { chosenDates, chosenTimes, totalPrice, status } = req.body;
 
   try {
     // Check if the child itinerary ID is valid
@@ -85,6 +85,7 @@ const updateChildItineraryById = async (req, res) => {
       {
         chosenDates,
         chosenTimes,
+        totalPrice,
         status, // Optional status update
       },
       { new: true, runValidators: true }

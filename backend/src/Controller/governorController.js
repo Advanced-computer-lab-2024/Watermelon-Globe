@@ -132,5 +132,24 @@ const deleteSite = async (req, res) => {
   }
 };
 
+const filterByTags = async (req, res) => {
+  try {
+    const { tag } = req.params;  // Get the tag from the request parameters
 
-module.exports = {createSite, getSite, getAllSites, updateSite, deleteSite, getMySites };
+    // Find itineraries (or sites) that include the tag
+    const filteredSites = await siteModel.find({
+      tag: tag // Assuming 'Tags' is an array of ObjectId references to the 'Tag' model
+    }).populate('Tags'); // Optionally populate the tags with details
+
+    // Send back the filtered itineraries
+    if (filteredSites.length === 0) {
+      return res.status(404).json({ message: 'No sites found with the specified tag' });
+    }
+
+    return res.status(200).json(filteredSites);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error filtering sites by tag', error });
+  }
+};
+
+module.exports = {createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags };

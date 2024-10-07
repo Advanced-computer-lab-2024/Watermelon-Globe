@@ -13,8 +13,8 @@ const createTourGuide = async (req, res) => {
             return res.status(400).json({ message: 'Tour guide with this email already exists' });
         }
         const newTourGuide = await tourGuide.create({ name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries })
-        const savedTourGuide = await newTourGuide.save();
-        res.status(201).json(savedTourGuide);
+        // const savedTourGuide = await newTourGuide.save();
+        res.status(201).json(newTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -22,10 +22,16 @@ const createTourGuide = async (req, res) => {
 
 const getTourGuide = async (req, res) => {
     try {
-        const searchCriteria = req.body;
-        console.log("Search criteria:", searchCriteria);
+        const { id } = req.params;
+        
+        // Query the database based on search criteria
+        const retrievedTourGuide = await tourGuide.findById(id);
 
-        const retrievedTourGuide = await tourGuide.find(searchCriteria);
+        // Check if results are found
+        if (retrievedTourGuide.length === 0) {
+            return res.status(404).json({ message: "No tour guide found matching the id" });
+        }
+        
         res.status(200).json(retrievedTourGuide);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -195,6 +201,28 @@ const deleteItineraryById = async (req, res) => {
     }
 };
 
+const sortByRatings = async (req, res) => {
+    try {
+      // Fetch and sort itineraries by rating in descending order (highest to lowest)
+      const sortedItineraries = await itineraryModel.Itinerary.find().sort({ Rating: -1 });
+
+      return res.status(200).json(sortedItineraries);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error sorting itineraries by rating', error });
+    }
+  };
+
+  const sortByPrice = async (req, res) => {
+    try {
+      // Fetch and sort itineraries by price in ascending order (lowest to highest)
+      const sortedItineraries = await itineraryModel.Itinerary.find().sort({ priceOfTour: 1 });
+
+
+      return res.status(200).json(sortedItineraries);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error sorting itineraries by price', error });
+    }
+  };
 
 module.exports = {
     createItinerary,
@@ -205,5 +233,7 @@ module.exports = {
     createTourGuide,
     getTourGuide,
     updateTourGuide,
-    getMyItineraries
+    getMyItineraries,
+    sortByPrice,
+    sortByRatings
 };

@@ -1,5 +1,5 @@
 const Admin = require('../Models/AdminModel')
-const Governer = require('../Models//GovernerModel')
+const Governer = require('../Models/tourismGovernor')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/ProductModel')
