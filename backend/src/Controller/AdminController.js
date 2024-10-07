@@ -5,17 +5,39 @@ const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/ProductModel')
 const mongoose = require('mongoose')
 
-//create new Admin
+
+const getAllAdmin = async (req, res) => {
+    const admin = await Admin.find({}).sort({createdAt: -1})
+
+    res.status(200).json(admin)
+}
+
 const createAdmin = async (req, res) => {
-    const {username, password} = req.body
-    try {
-        const admin = await Admin.create({username, password}) 
-        res.status(200).json(admin)
+    const { username, password } = req.body;
+
+    // Check if username or password are empty
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password are required' });
     }
-    catch (error){
-        res.status(400).json({error: error.mssg})
+
+    try {
+        // Check if the username or password already exists
+        const existingAdmin = await Admin.findOne({
+            $or: [{ username }, { password }]
+        });
+        
+        if (existingAdmin) {
+            return res.status(400).json({ error: 'This username or password already exists' });
+        }
+
+        // Create new admin if validations pass
+        const admin = await Admin.create({ username, password });
+        res.status(200).json(admin);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 }
+
 
 //delete a Admin 
 const deleteAdmin = async (req, res) => {
@@ -33,15 +55,36 @@ const deleteAdmin = async (req, res) => {
     res.status(200).json(admin)
 }
 
+const getAllGoverner = async (req, res) => {
+    const governer = await Governer.find({}).sort({createdAt: -1})
+
+    res.status(200).json(governer)
+}
+
 //create new Governer
 const createGoverner = async (req, res) => {
-    const {username, password} = req.body
-    try {
-        const governer = await Governer.create({username, password}) 
-        res.status(200).json(governer)
+    const { username, password } = req.body;
+
+    // Check if username or password are empty
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password are required' });
     }
-    catch (error){
-        res.status(400).json({error: error.mssg})
+
+    try {
+        // Check if the username or password already exists
+        const existingGoverner = await Governer.findOne({
+            $or: [{ username }, { password }]
+        });
+        
+        if (existingGoverner) {
+            return res.status(400).json({ error: 'This username or password already exists' });
+        }
+
+        // Create new Governer if validations pass
+        const governer = await Governer.create({ username, password });
+        res.status(200).json(governer);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 }
 
@@ -386,8 +429,10 @@ const sortProducts = async (req, res) => {
     }
 }
 
+
+
 module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
      getAllPreferenceTag, getPreferenceTag, createPreferenceTag, deletePreferenceTag, updatePreferenceTag,
      getAllActivityCategory, getActivityCategory, createActivityCategory, deleteActivityCategory
      , updateActivityCategory, createProduct, getAllProducts, searchProductbyName, filterProduct, 
-    updateProduct, sortProducts}
+    updateProduct, sortProducts, getAllAdmin, getAllGoverner}
