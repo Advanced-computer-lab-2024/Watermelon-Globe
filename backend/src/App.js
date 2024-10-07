@@ -68,14 +68,20 @@ app.use(express.json())
 // app.post("/createTags", createTags);
 // app.get("/getTags", getTags);
 
+//tags
+app.get("/filterByTags",filterByTags);
+app.get("/getTags",getTags);
+app.post("/createTags",createTags);
+
 //admin
 app.use('/api/Admin', Admin)
 app.use('/api/Seller', Seller)
 
-//profile 
+//profile/adverstiser
 app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles/:id?", getProfiles);
+app.post("/addAdvertiser", createAdvertiser);
 
 //activities
 app.post('/newActivity', createActivity);
@@ -83,6 +89,12 @@ app.get('/activities', getActivities);
 app.get('/activities/:id', getActivityById);
 app.put('/updateActivity/:id', updateActivity);
 app.delete('/deleteActivity/:id', deleteActivity);
+//activities filters
+app.post("/addActivity",createActivity);
+app.get("/filterActivities",filterActivities);
+app.get("/sortByPriceActivity",sortByPriceActivity);
+app.get("/sortByRatingActivity",sortByRatingsActivity);
+app.put("/updateActivityRating/:id",updateActivityRating);
 
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
@@ -92,13 +104,13 @@ app.get("/sortByPrice",guideController.sortByPrice);
 app.get("/sortByRating",guideController.sortByRatings);
 
 //tourism governor/sites routes
-// app.post("/addGov", createGov);
 app.post("/addSite", createSite);
 app.get("/getSite/:id", getSite);
 app.get("/getAllSites", getAllSites);
 app.put("/updateSite/:id", updateSite);
 app.delete("/deleteSite/:id", deleteSite);
 app.get("/getMySites", getMySites);
+// app.post("/addGov", createGov);
 
 //itineraries routes
 app.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
@@ -107,6 +119,14 @@ app.get("/getItinerary/:id", guideController.getItineraryById); // Get a single 
 app.put("/updateItinerary/:id", guideController.updateItinerary); // Update an itinerary
 app.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
 app.get("/getMyItineraries", guideController.getMyItineraries);
+//itineraries filters
+app.get("/getItineraryDetails/:id",getItineraryDetails);
+app.get("/itineraryFilterBudget",filterItineraryByBudget);
+app.get("/itineraryFilterRating",filterItineraryRating);
+app.get("/itineraryFilter",filterItineraries);
+app.get("/itineraryFilterLanguage",filterByLanguage);
+app.get("/filterByDate",filterByDate);
+app.put("/updateRating/:id",updateRating);
 
 //childItineraries
 app.post('/createChildItinerary', touristItineraryController.createChildItinerary);
@@ -115,31 +135,12 @@ app.get('/getAllChildIitineraries', touristItineraryController.getAllChildItiner
 app.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
 app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
 
-//
+//tourist
 app.post("/addTourist",createTourist);
+app.put("/updateTourist/:id",updateTourist);
+app.get("/getTourists",getTourists);
 // app.post("/addTourguide", createTourguide);
 // app.post("/addSeller", createSeller);
-app.post("/addAdvertiser", createAdvertiser);
-app.get("/getTourists",getTourists);
-app.get("/getItineraryDetails/:id",getItineraryDetails);
-app.get("/itineraryFilterBudget",filterItineraryByBudget);
-app.get("/itineraryFilterRating",filterItineraryRating);
-app.get("/itineraryFilter",filterItineraries);
-app.get("/itineraryFilterLanguage",filterByLanguage);
-app.get("/filterByDate",filterByDate);
-app.put("/updateTourist/:id",updateTourist);
-
-app.put("/updateRating/:id",updateRating);
-app.post("/addActivity",createActivity);
-app.get("/filterActivities",filterActivities);
-
-app.get("/sortByPriceActivity",sortByPriceActivity);
-app.get("/sortByRatingActivity",sortByRatingsActivity);
-app.put("/updateActivityRating/:id",updateActivityRating);
-
-app.get("/filterByTags",filterByTags);
-app.get("/getTags",getTags);
-app.post("/createTags",createTags);
 
 app.get("/home", (req, res) => {
   res.status(200).send("Tour Guide and Itinerary API");

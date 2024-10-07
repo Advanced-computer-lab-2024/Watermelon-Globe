@@ -414,7 +414,6 @@ module.exports = {
   filterItineraryRating,
   filterItineraryByBudget,
   getActivityDetails,
-
   filterActivityByBudget,
   getActivities,
   filterItineraries,
