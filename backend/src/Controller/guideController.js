@@ -76,7 +76,32 @@ const updateTourGuide = async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-}
+};
+
+const deleteGuide = async (req, res) => {
+    const { id } = req.params; // Extract the site ID from the request parameters
+
+    // Validate the site ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid guide ID' });
+    }
+
+    try {
+      // Attempt to find and delete the site by its ID
+      const deletedGuide = await TourGuide.findByIdAndDelete(id);
+
+      // If no site was found with the provided ID, return a 404 error
+      if (!deletedGuide) {
+        return res.status(404).json({ message: 'Guide not found' });
+      }
+
+      // Send a success message if the site was deleted
+      res.status(200).json({ message: 'Guide deleted successfully' });
+    } catch (error) {
+      // Handle any errors that occur
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 const deleteGuide = async (req, res) => {
     const { id } = req.params; // Extract the site ID from the request parameters
@@ -268,7 +293,7 @@ const sortByRatings = async (req, res) => {
     }
   };
 
-module.exports = {
+  module.exports = {
     createItinerary,
     getAllItineraries,
     getItineraryById,

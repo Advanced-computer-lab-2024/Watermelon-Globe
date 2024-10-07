@@ -8,6 +8,7 @@ const AdminComponent = () => {
     const [preferenceTags, setPreferenceTags] = useState([]);
     const [activityCategories, setActivityCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const [tourGuides, setTourGuides] = useState([]);
 
     // State for new entries
     const [data, setData] = useState(null); // Holds the response data from backend
@@ -20,6 +21,7 @@ const AdminComponent = () => {
     const [newPreferenceTag, setNewPreferenceTag] = useState({ tag: '' });
     const [newActivityCategory, setNewActivityCategory] = useState({ activity: '' });
     const [newProduct, setNewProduct] = useState({ name: '', description: '', price: '' });
+    const [newTourGuide, setNewTourGuide] = useState({ name: '', username: '', email: '', password: '', mobileNumber: '', nationality: '', yearsOfExperience: '' });
 
     useEffect(() => {
         fetchAdmins();
@@ -27,11 +29,13 @@ const AdminComponent = () => {
         fetchPreferenceTags();
         fetchActivityCategories();
         fetchProducts();
+        fetchTourGuides();
         setAdmins([]);
         setGovernors([]);
         setPreferenceTags([]);
         setActivityCategories([]);
         setProducts([]);
+        setTourGuides([]);
     }, []);
 
     const fetchAdmins = async () => {
@@ -78,6 +82,14 @@ const AdminComponent = () => {
             console.error('Error fetching products:', error);
         }
     };
+    const fetchTourGuides = async () => {
+        try {
+            const response = await axios.get('/getAllGuides'); 
+            setTourGuides(response.data);
+        } catch (error) {
+            console.error('Error fetching tour guides:', error);
+        }
+    };
 
     const deleteAdmin = async (id) => {
         try {
@@ -103,6 +115,15 @@ const AdminComponent = () => {
             fetchPreferenceTags();
         } catch (error) {
             console.error('Error deleting preference tag:', error);
+        }
+    };
+
+    const deleteTourGuide = async (id) => {
+        try {
+            await axios.delete(`/deleteGuide/${id}`);
+            fetchTourGuides();
+        } catch (error) {
+            console.error('Error deleting tour Guide:', error);
         }
     };
 
@@ -306,12 +327,62 @@ const AdminComponent = () => {
                     </li>
                 ))}
             </ul>
-
-            <div>
-                <h2>Response Data:</h2>
-                {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-            </div>
+            <h2>Tour Guide Management</h2>
+            <input
+                name="name"
+                value={newTourGuide.name}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Name"
+            />
+            <input
+                name="username"
+                value={newTourGuide.username}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Username"
+            />
+            <input
+                name="email"
+                value={newTourGuide.email}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Email"
+            />
+            <input
+                name="password"
+                value={newTourGuide.password}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Password"
+                type="password"
+            />
+            <input
+                name="mobileNumber"
+                value={newTourGuide.mobileNumber}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Mobile Number"
+            />
+            <input
+                name="nationality"
+                value={newTourGuide.nationality}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Nationality"
+            />
+            <input
+                name="yearsOfExperience"
+                value={newTourGuide.yearsOfExperience}
+                onChange={(e) => handleInputChange(e, setNewTourGuide)}
+                placeholder="Years of Experience"
+                type="number"
+            />
+            <button onClick={() => createEntity('/addGuide', newTourGuide, fetchTourGuides)}>
+                Add Tour Guide
+            </button>
+            <ul>
+                {tourGuides.map((tourGuide) => (
+                    <li key={tourGuide._id}>
+                        {tourGuide.name} ({tourGuide.username})
+                        <button onClick={() => deleteTourGuide(tourGuide._id)}>Delete</button>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
