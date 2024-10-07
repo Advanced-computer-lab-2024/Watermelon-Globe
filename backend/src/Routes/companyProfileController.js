@@ -51,11 +51,11 @@ const getProfiles = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-    const {id} = req.params;
-    const updates = req.body;
+    const { id } = req.params;
+    const updates = req.body;  // Expect partial updates here
 
     try {
-        const updatedProfile = await CompanyProfileModel.findByIdAndUpdate(id, updates, { new: true });
+        const updatedProfile = await CompanyProfileModel.findByIdAndUpdate(id, { $set: updates }, { new: true });
         if (!updatedProfile) {
             return res.status(404).json({ message: 'Profile not found' });
         }
@@ -64,12 +64,11 @@ const updateProfile = async (req, res) => {
             profile: updatedProfile
         });
     } catch (error) {
-        console.error("Error fetching profiles:", error);
+        console.error("Error updating profile:", error);
         res.status(500).json({
-            message: 'Error fetching company profiles',
+            message: 'Error updating company profile',
             error: error.message
         });
     }
-}
-
+};
 module.exports = { createProfile, getProfiles, updateProfile };
