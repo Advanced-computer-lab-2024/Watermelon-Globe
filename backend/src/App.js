@@ -99,6 +99,7 @@ app.put("/updateActivityRating/:id",updateActivityRating);
 //tour guide routes
 app.post("/addGuide", guideController.createTourGuide);
 app.get("/getGuide/:id", guideController.getTourGuide);
+app.get("/getAllGuides", guideController.getAllGuides);
 app.put("/updateGuide/:id", guideController.updateTourGuide);
 app.get("/sortByPrice",guideController.sortByPrice);
 app.get("/sortByRating",guideController.sortByRatings);

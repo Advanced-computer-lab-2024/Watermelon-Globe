@@ -38,6 +38,24 @@ const getTourGuide = async (req, res) => {
     }
 };
 
+const getAllGuides = async (req, res) => {
+    try {
+        // Fetch all itineraries, populating the 'guide' field to get tour guide details
+        const guide = await tourGuide.find({}).sort({ createdAt: -1 });
+
+        // If no itineraries found, return a message
+        if (!guide.length) {
+            return res.status(404).json({ message: 'No guides found' });
+        }
+
+        // Send the itineraries as a response
+        res.status(200).json(guide);
+    } catch (error) {
+        // Catch and handle any errors
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const updateTourGuide = async (req, res) => {
     const { id } = req.params; // Extracting the site ID from request parameters
     const { name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
@@ -195,7 +213,7 @@ const deleteItineraryById = async (req, res) => {
             return res.status(404).json({ message: 'Itinerary not found' });
         }
 
-        res.status(200).json({ message: 'Itinerary successfully deleted', deletedItinerary });
+        res.status(200).json({ deletedItinerary });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting itinerary', error });
     }
@@ -232,6 +250,7 @@ module.exports = {
     deleteItineraryById,
     createTourGuide,
     getTourGuide,
+    getAllGuides,
     updateTourGuide,
     getMyItineraries,
     sortByPrice,
