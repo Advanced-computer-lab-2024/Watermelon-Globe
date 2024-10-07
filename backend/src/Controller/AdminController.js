@@ -176,6 +176,7 @@ const deletePreferenceTag = async (req, res) => {
 const updatePreferenceTag = async (req, res) => {
     const {id} = req.params
     const { tag } = req.body
+    console.log(id);
 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).json({error: 'No such tag'})

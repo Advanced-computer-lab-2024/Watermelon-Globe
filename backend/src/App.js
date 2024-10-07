@@ -102,10 +102,10 @@ mongoose.connect(MongoURI)
 
 app.use(express.json())
 
-// app.use((req,res,next) =>{
-//   console.log(req.method, req.path)
-//   next()
-// })
+app.use((req,res,next) =>{
+  console.log(req.method, req.path)
+  next()
+})
 
 //tags
 // app.post("/createTags", createTags);

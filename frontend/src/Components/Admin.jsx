@@ -10,6 +10,11 @@ const AdminComponent = () => {
     const [products, setProducts] = useState([]);
 
     // State for new entries
+    const [data, setData] = useState(null); // Holds the response data from backend
+    const [error, setError] = useState(null); // Holds any error message
+    const [prefId, setPrefId] = useState('');
+    const [rawJson, setRawJson] = useState(''); // State for raw JSON input
+
     const [newAdmin, setNewAdmin] = useState({ username: '', password: '' });
     const [newGovernor, setNewGovernor] = useState({ username: '', password: '' });
     const [newPreferenceTag, setNewPreferenceTag] = useState({ tag: '' });
@@ -124,6 +129,42 @@ const AdminComponent = () => {
         setState((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleRequest = async (url, method = 'get', rawJson = null) => {
+        try {
+          let response;
+          let options = {
+            headers: { 'Content-Type': 'application/json' },
+          };
+      
+          if (method === 'get' && rawJson) {
+            // Convert the raw JSON to query string parameters for GET request
+            const queryParams = new URLSearchParams(JSON.parse(rawJson)).toString();
+            url = `${url}?${queryParams}`; // Add query parameters to the URL
+          } else if (method === 'post' || method === 'put') {
+            const body = JSON.parse(rawJson); // Convert raw JSON input to JS object
+            options.data = body; // Add the body to the request options
+          }
+      
+          response = await axios({ method, url, ...options });
+          console.log(response);
+          setData(response.data);  // Set the response data
+          setError(null);  // Reset error if the request succeeds
+          setRawJson('');  // Clear the raw JSON input after the request
+        //   setActivId('');
+        //   setChildItineraryId('');
+        //   setGovId('');
+        //   setGuide1Id('');
+        //   setGuideId('');
+        //   setItineraryId('');
+        //   setProfId('');
+        //   setSiteId('');
+        } catch (err) {
+          setError(err.response ? err.response.data : "Something went wrong");
+        }
+      };
+
+      
+
     const createEntity = async (url, entity, fetchFunction) => {
         try {
             await axios.post(url, entity);
@@ -135,6 +176,18 @@ const AdminComponent = () => {
 
     return (
         <div>
+
+            <h2>Raw JSON Body</h2>
+            <textarea
+                rows={10}
+                cols={50}
+                value={rawJson}
+                onChange={(e) => setRawJson(e.target.value)}
+                placeholder="Enter raw JSON Here"
+                style={{ width: '100%', marginBottom: '20px' }}
+            />
+
+
             <h2>Admin Management</h2>
             <Link to="/create-admin">
                 <button>Create New Admin</button>
@@ -182,9 +235,23 @@ const AdminComponent = () => {
             <button onClick={() => createEntity('/createPreferenceTag', newPreferenceTag, fetchPreferenceTags)}>
                 Add Preference Tag
             </button>
+            <button onClick={() => handleRequest(`/updatePreferenceTag/${prefId}`, 'put', rawJson)}>
+                update Preference Tag
+            </button>
+
+            <div>
+                <input
+                    type="text"
+                    value={prefId}
+                    onChange={(e) => setPrefId(e.target.value)}
+                    placeholder="Enter pref. tag ID"
+                />
+            </div>
+
             <ul>
                 {preferenceTags.map((tag) => (
                     <li key={tag._id}>
+                        {tag._id}
                         {tag.tag}
                         <button onClick={() => deletePreferenceTag(tag._id)}>Delete</button>
                     </li>
@@ -239,6 +306,12 @@ const AdminComponent = () => {
                     </li>
                 ))}
             </ul>
+
+            <div>
+                <h2>Response Data:</h2>
+                {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+            </div>
         </div>
     );
 };
