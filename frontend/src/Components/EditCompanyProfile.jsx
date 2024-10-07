@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const EditProfilePage = ({ profileId }) => {
+const EditProfilePage = () => {
+
+    const navigate = useNavigate();
+
     const [profile, setProfile] = useState({
         Name: '',
         About: '',
@@ -9,16 +13,40 @@ const EditProfilePage = ({ profileId }) => {
         Link: '',
     });
 
-    const handleChange = (e) => {
+    const profileId = localStorage.getItem('userId');
+
+    // Fetch the current profile data when the component loads
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/profiles/${profileId}`);
+                setProfile(response.data);
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+        fetchProfile();
+    }, [profileId]);
+
+    const handleChange = async (e) => {
         const { name, value } = e.target;
         setProfile({ ...profile, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const updates = {};
+        for (const key in profile) {
+            if (profile[key]) {
+                updates[key] = profile[key]; // Only include fields that are not empty
+            }
+        }
+
         try {
-            await axios.put(`http://localhost:8000/profiles/${profileId}`, profile);
+            await axios.put(`http://localhost:8000/updateProfile/${profileId}`, updates);
             alert('Profile updated successfully!');
+            navigate('/account');
         } catch (error) {
             console.error(error);
             alert('Error updating profile');

@@ -1,7 +1,23 @@
-// src/AccountPage.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const AccountPage = ({ profile }) => {
+const AccountPage = () => {
+    const [profile, setProfile] = useState(null);
+    const profileId = localStorage.getItem('userId');
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/profiles/${profileId}`);
+                setProfile(response.data);
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
+        fetchProfile();
+    }, [profileId]); // Fetch data on mount and when profileId changes
+
     if (!profile) return <p>No profile data available</p>;
 
     return (

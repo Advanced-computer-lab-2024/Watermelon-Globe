@@ -112,7 +112,7 @@ app.delete("/deleteSite/:id", deleteSite);
 app.get("/getMySites", getMySites);
 // app.post("/addGov", createGov);
 
-//itineraries routes
+// //itineraries routes
 app.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
 app.get("/getAllItineraries", guideController.getAllItineraries); // Get all itineraries
 app.get("/getItinerary/:id", guideController.getItineraryById); // Get a single itinerary by ID
