@@ -15,11 +15,6 @@ const createTourist = async (req, res) => {
     // Destructure the required fields from req.body
     const { username, email, password, mobileNumber, nationality, dob, status } = req.body;
 
-    // // Validate if all fields are present
-    // if (!username || !email || !password || !mobileNumber || !nationality || !dob || !status) {
-    //   return res.status(400).json({ message: 'All fields are required: username, email, password, mobile number, nationality, dob, and status.' });
-    // }
-
     // Create a new tourist instance and save to the database
     const newTourist = await touristModel.create({
       username,
