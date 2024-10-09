@@ -77,15 +77,17 @@ const deleteTourist = async (req, res) => {
 
 // update a tourist
 const updateTourist = async (req, res) => {
-  const {id} = req.params;
-  console.log(id);
+  const { id } = req.params;
+  const trimmedId = id.trim();
+  console.log(trimmedId); // Log the trimmed ID
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
     return res.status(404).json({ error: "No such tourist" });
   }
 
   // Define the fields that should not be updated
-  const restrictedFields = ["username", "dob", "wallet"];
+  const restrictedFields = ["username","wallet","dob"];
 
   // Check if any restricted fields are being updated
   const hasRestrictedField = restrictedFields.some(
@@ -98,11 +100,19 @@ const updateTourist = async (req, res) => {
     });
   }
 
-  const tourist = await Tourist.findOneAndUpdate({ id: id }, { ...req.body });
+  // Perform the update operation
+  const tourist = await Tourist.findOneAndUpdate(
+    { _id: trimmedId }, // Use _id here
+    { ...req.body },
+    { new: true, runValidators: true } // Get the updated document and validate
+  );
 
   if (!tourist) {
     return res.status(400).json({ error: "No such tourist" });
   }
+  console.log(tourist);
+
+  // Send back the updated tourist
   res.status(200).json(tourist);
 };
 

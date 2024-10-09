@@ -2,11 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { ActivityCategoryContextProvider} from './context/ActivityCategoryContext';
+import { PreferenceTagContextProvider } from './context/PreferenceTagContext';
+import { AdminContextProvider } from './context/AdminContext';
+import { GovernerContextProvider } from './context/GovernerContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ActivityCategoryContextProvider>
+      <PreferenceTagContextProvider>
+        <AdminContextProvider>
+          <GovernerContextProvider>
+          <App /> 
+          </GovernerContextProvider>
+        </AdminContextProvider>
+      </PreferenceTagContextProvider>
+    </ActivityCategoryContextProvider>
   </React.StrictMode>
 );
 

@@ -34,12 +34,13 @@ const ActivitySchema = new Schema({
     required: false
   },
   Category: {
-    type: String,
+    type:mongoose.Schema.Types.ObjectId,
+    ref: 'ActivityCategory',
     required: false
   },
   tags: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'tag'
+    ref: 'PreferenceTag'
   }],
   Discount: {
     type: Number,

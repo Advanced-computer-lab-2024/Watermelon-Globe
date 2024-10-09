@@ -7,10 +7,14 @@ const mongoose = require('mongoose')
 
 
 const getAllAdmin = async (req, res) => {
-    const admin = await Admin.find({}).sort({createdAt: -1})
+    try {
+        const admin = await Admin.find({}).sort({ createdAt: -1 });
+        res.status(200).json(admin);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving admins', error: error.message });
+    }
+};
 
-    res.status(200).json(admin)
-}
 
 const createAdmin = async (req, res) => {
     const { username, password } = req.body;
@@ -24,7 +28,7 @@ const createAdmin = async (req, res) => {
         // Check if the username or password already exists
         const existingAdmin = await Admin.findOne({
             $or: [{ username }, { password }]
-        });
+        })
         
         if (existingAdmin) {
             return res.status(400).json({ error: 'This username or password already exists' });
@@ -174,6 +178,7 @@ const deletePreferenceTag = async (req, res) => {
 const updatePreferenceTag = async (req, res) => {
     const {id} = req.params
     const { tag } = req.body
+    console.log(id);    
 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).json({error: 'No such tag'})

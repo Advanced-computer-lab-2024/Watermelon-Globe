@@ -134,17 +134,17 @@ const deleteSite = async (req, res) => {
 
 const filterByTags = async (req, res) => {
   try {
-    const { tag } = req.params;  // Get the tag from the request parameters
+    const { id } = req.params;  // Get the tag from the request parameters
 
     // Find itineraries (or sites) that include the tag
     const filteredSites = await siteModel.find({
-      tag: tag // Assuming 'Tags' is an array of ObjectId references to the 'Tag' model
-    }).populate('Tags'); // Optionally populate the tags with details
+      tag: id // Assuming 'Tags' is an array of ObjectId references to the 'Tag' model
+    }).populate('tag'); // Optionally populate the tags with details
 
     // Send back the filtered itineraries
-    if (filteredSites.length === 0) {
-      return res.status(404).json({ message: 'No sites found with the specified tag' });
-    }
+    // if (filteredSites.length === 0) {
+    //   return res.status(404).json({ message: 'No sites found with the specified tag' });
+    // }
 
     return res.status(200).json(filteredSites);
   } catch (error) {

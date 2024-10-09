@@ -26,6 +26,7 @@ const createProfile = async (req, res) => {
     }
 };
 
+
 const getProfiles = async (req, res) => {
     const { id } = req.params;
     try {

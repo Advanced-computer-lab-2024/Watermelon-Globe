@@ -10,7 +10,7 @@ const pickupDropoffSchema = new Schema({
 const itinerarySchema = new Schema({
     name: { type: String, required: true },
     activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }], // Array of activity objects
-    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tag'}],
+    tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PreferenceTag'}],
     locations: { type: [String], required: true },
     timeline: { type: String, required: true },
     languageOfTour: { type: String, required: true }, // Correct field name
@@ -20,7 +20,10 @@ const itinerarySchema = new Schema({
     accessibility: { type: Boolean, default: false },
     pickupDropoffLocations: [pickupDropoffSchema], 
     bookings: {type: Boolean, default: false},// Array of pickup/dropoff objects
-    guide: { type: mongoose.Types.ObjectId, ref: 'TourGuide', required: true } // Reference to the tour guide
+    guide: { type: mongoose.Types.ObjectId, ref: 'TourGuide', required: true } ,
+    rating: { type: Number, required: false },
+    noOfRatings: {type:Number ,required:false},
+    ratingsSum:{type:Number,required:false}// Reference to the tour guide
     
 }, { timestamps: true });
 

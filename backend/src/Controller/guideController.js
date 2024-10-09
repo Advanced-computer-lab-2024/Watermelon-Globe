@@ -38,6 +38,24 @@ const getTourGuide = async (req, res) => {
     }
 };
 
+const getAllGuides = async (req, res) => {
+    try {
+        // Fetch all itineraries, populating the 'guide' field to get tour guide details
+        const guide = await tourGuide.find({}).sort({ createdAt: -1 });
+
+        // If no itineraries found, return a message
+        if (!guide.length) {
+            return res.status(404).json({ message: 'No guides found' });
+        }
+
+        // Send the itineraries as a response
+        res.status(200).json(guide);
+    } catch (error) {
+        // Catch and handle any errors
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const updateTourGuide = async (req, res) => {
     const { id } = req.params; // Extracting the site ID from request parameters
     const { name, username, email, password, mobileNumber, nationality, yearsOfExperience, itineraries } = req.body;
@@ -59,10 +77,11 @@ const updateTourGuide = async (req, res) => {
     }
 }
 
-
 const createItinerary = async (req, res) => {
-    const { name, activities, tag, locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+    const { name, activities,tag,locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
         accessibility, pickupDropoffLocations, bookings, guide: guideId} = req.body;
+        console.log(req.body)
+        console.log(tag)
         try {
             const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
                 timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
@@ -73,7 +92,6 @@ const createItinerary = async (req, res) => {
             res.status(400).json({ error: error.message })
           }
 };
-
 const getMyItineraries = async (req, res) => {
     const { guideID } = req.query; // Extract the Governor ID from the request parameters
 
@@ -105,6 +123,7 @@ const getAllItineraries = async (req, res) => {
         // Fetch all itineraries, populating the 'guide' field to get tour guide details
         const itineraries = await itineraryModel.Itinerary.find({}).sort({ createdAt: -1 }).populate(
             'activities').populate('guide');
+            
 
         // If no itineraries found, return a message
         if (!itineraries.length) {
@@ -195,7 +214,7 @@ const deleteItineraryById = async (req, res) => {
             return res.status(404).json({ message: 'Itinerary not found' });
         }
 
-        res.status(200).json({ message: 'Itinerary successfully deleted', deletedItinerary });
+        res.status(200).json({ deletedItinerary });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting itinerary', error });
     }
@@ -224,6 +243,70 @@ const sortByRatings = async (req, res) => {
     }
   };
 
+  const filterItineraries = async (req, res) => {
+    const { startDate, endDate, languageOfTour, minPrice, maxPrice } = req.query; // Expecting date strings, a language string, and price parameters
+  
+    try {
+        // Convert strings to Date objects if provided
+        const start = startDate ? new Date(startDate) : null;
+        const end = endDate ? new Date(endDate) : null;
+  
+        // Parse minPrice and maxPrice to numbers, if provided
+        const min = minPrice ? parseFloat(minPrice) : null;
+        const max = maxPrice ? parseFloat(maxPrice) : null;
+  
+        // Find all itineraries
+        const itineraries = await itineraryModel.Itinerary.find({});
+  
+        // Filter itineraries based on availableDates, languageOfTour, and price
+        const filteredItineraries = itineraries.filter(itinerary => {
+            // Check if any date in availableDates is within the specified range, if startDate and endDate are provided
+            const dateInRange = (start && end) 
+                ? itinerary.availableDates.some(date => date >= start && date <= end) 
+                : true; // If no date range is specified, consider all dates
+  
+            // Check if the specified language is included in the languageOfTour
+            const languageMatch = languageOfTour ? itinerary.languageOfTour.includes(languageOfTour) : true;
+  
+            // Check if the price falls within the specified range
+            const priceMatch = (min === null || itinerary.priceOfTour >= min) && (max === null || itinerary.priceOfTour <= max);
+  
+            return dateInRange && languageMatch && priceMatch; // Return true if all conditions are satisfied
+        });
+  
+        if (filteredItineraries.length === 0) {
+            return res.status(404).json({ message: 'No itineraries found matching the specified criteria.' });
+        }
+  
+        return res.status(200).json(filteredItineraries);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error filtering itineraries.', error });
+    }
+  };
+
+
+  const filterByPreferenceItineraries = async (req, res) => {
+    try {
+      const { id } = req.params;  // Get the tag from the request parameters
+      console.log(id);
+  
+      // Find itineraries (or sites) that include the tag
+      const filteredItineraries = await itineraryModel.Itinerary.find({
+        tag: id // Assuming 'Tags' is an array of ObjectId references to the 'Tag' model
+      }).populate('tag'); // Optionally populate the tags with details
+      // Send back the filtered itineraries
+      // if (filteredSites.length === 0) {
+      //   return res.status(404).json({ message: 'No sites found with the specified tag' });
+      // }
+  
+      return res.status(200).json(filteredItineraries);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error filtering itineraries by tag', error });
+    }
+  };
+
+
 module.exports = {
     createItinerary,
     getAllItineraries,
@@ -232,8 +315,11 @@ module.exports = {
     deleteItineraryById,
     createTourGuide,
     getTourGuide,
+    getAllGuides,
     updateTourGuide,
     getMyItineraries,
     sortByPrice,
-    sortByRatings
+    sortByRatings,
+    filterItineraries,
+    filterByPreferenceItineraries
 };

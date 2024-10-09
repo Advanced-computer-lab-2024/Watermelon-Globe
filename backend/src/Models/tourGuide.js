@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const tourGuideSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: false,
   },
   username: {
     type: String,
@@ -22,15 +22,15 @@ const tourGuideSchema = new Schema({
   },
   mobileNumber: {
     type: String,
-    required: true,
+    required: false,
   },
   nationality: {
     type: String,
-    required: true,
+    required: false,
   },
   yearsOfExperience: {
     type: Number,
-    required: true,
+    required: false,
   },
   itineraries: [
     {

@@ -1,16 +1,13 @@
 import React from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
-import profileIcon from '../Assets/Profile.png';
+import profileIcon from '../Assets/Profile.png'; // Ensure the path is correct
 
 const Navbar = ({ isSignedUp, handleSignOut }) => {
     return (
         <nav>
             <div className='homeButton'> 
-                <Link to="/" >Activities</Link>
-            </div>
-            <div className='GMGOW'> 
-                <Link to="/gmgow" >Main</Link>
+                <Link to="/" >WATERMELON GLOBE</Link>
             </div>
             <div className='signupDiv'>
                 {isSignedUp ? (

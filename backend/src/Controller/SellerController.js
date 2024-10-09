@@ -39,37 +39,56 @@ const createSeller = async (req, res) => {
 
 //delete a seller 
 const deleteSeller = async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({error: 'No such seller'})
+    // Check if the ID is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'No such seller' });
     }
 
-    const seller = await Seller.findOneAndDelete({_id: id})
+    try {
+        // Find and delete the seller, and return the deleted document
+        const seller = await Seller.findOneAndDelete({ _id: id });
 
-    if (!seller){
-        return res.status(400).json({error: 'No such seller'})
+        // Check if the seller exists
+        if (!seller) {
+            return res.status(400).json({ error: 'No such seller' });
         }
-    res.status(200).json(seller)
-}
+
+        res.status(200).json({ message: 'Seller deleted successfully', seller });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
 
 //uptade a seller
 const updateSeller = async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({error: 'No such seller'})
+    // Check if the ID is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'No such seller' });
     }
 
-    const seller = await Seller.findOneAndUpdate({_id: id},{
-        ...req.body 
-    })
+    try {
+        // Find and update the seller, returning the updated document
+        const seller = await Seller.findOneAndUpdate(
+            { _id: id },
+            { ...req.body },
+            { new: true } // Returns the updated document
+        );
 
-    if (!seller){
-        return res.status(400).json({error: 'No such seller'})
+        // Check if the seller exists
+        if (!seller) {
+            return res.status(400).json({ error: 'No such seller' });
         }
-    res.status(200).json(seller)
-}
+
+        res.status(200).json({ message: 'Seller updated successfully', seller });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 
 //////////////// product ///////////////
 

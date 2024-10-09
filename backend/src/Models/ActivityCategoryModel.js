@@ -9,4 +9,6 @@ const ActivityCategorySchema = new Schema({
     }
 }, {timestamps: true})
 
-module.exports = mongoose.model('ActivityCategory', ActivityCategorySchema)
+
+const ActivityCategory = mongoose.model('ActivityCategory', ActivityCategorySchema)
+module.exports = ActivityCategory

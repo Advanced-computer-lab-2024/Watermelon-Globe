@@ -8,7 +8,7 @@ const productSchema = new Schema({
         required: true
     },
     price: {
-        type: mongoose.Schema.Types.Decimal128,
+        type: Number,
         required: true
     },
     quantity: {
@@ -46,4 +46,5 @@ const productSchema = new Schema({
     // ]
 }, {timestamps: true})
 
-module.exports = mongoose.model('Product', productSchema)
+const Product = mongoose.model('Product', productSchema)
+module.exports = Product
