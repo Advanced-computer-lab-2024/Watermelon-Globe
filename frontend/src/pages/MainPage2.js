@@ -326,7 +326,9 @@ const MainPage2 = () => {
         {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
+      <p>sidnoieoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawn</p>
     </div>
+    
   );
 };
 

@@ -50,6 +50,7 @@ const App = () => {
   }
 
   return (
+    
     <Router>
       <div style={{ padding: '20px' }}>
         {/* <h1>Navigation</h1> */}
@@ -82,6 +83,7 @@ const App = () => {
           {/* admin new */}
         
           <Route path="/AdminHome" element={<AdminHome />} />
+          
           <Route path="/ActivityCategory" element={<ActivityCategory />} />
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
           <Route path="/AdminProduct" element={<AdminProduct />} />
@@ -123,7 +125,9 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    
   );
+ 
 };
 
 export default App;
