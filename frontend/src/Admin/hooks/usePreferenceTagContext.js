@@ -1,4 +1,4 @@
-import { PreferenceTagContext } from "../Admin/context/PreferenceTagContext"
+import { PreferenceTagContext } from "../context/PreferenceTagContext"
 import { useContext } from "react"
 export const usePreferenceTagContext = () => {
   const context = useContext(PreferenceTagContext)

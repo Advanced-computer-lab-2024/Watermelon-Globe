@@ -1,4 +1,4 @@
-import { GovernerContext } from "../Admin/context/GovernerContext"
+import { GovernerContext } from "../context/GovernerContext"
 import { useContext } from "react"
 export const useGovernerContext = () => {
   const context = useContext(GovernerContext)

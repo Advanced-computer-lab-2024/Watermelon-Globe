@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { ActivityCategoryContextProvider} from './context/ActivityCategoryContext';
-import { PreferenceTagContextProvider } from './context/PreferenceTagContext';
-import { AdminContextProvider } from './context/AdminContext';
-import { GovernerContextProvider } from './context/GovernerContext';
+import { ActivityCategoryContextProvider} from './Admin/context/ActivityCategoryContext';
+import { PreferenceTagContextProvider } from './Admin/context/PreferenceTagContext';
+import { AdminContextProvider } from './Admin/context/AdminContext';
+import { GovernerContextProvider } from './Admin/context/GovernerContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
