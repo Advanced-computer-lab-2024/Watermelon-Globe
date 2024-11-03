@@ -1,4 +1,3 @@
-
 import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AdvertiserPage from './Components/advertiserPage';
@@ -25,14 +24,14 @@ import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
 
 // admin new
-import AdminHome from './pages/AdminHome.js';
-import ActivityCategory from './pages/ActivityCategory.js';
-import PreferenceTag from './pages/PrefenceTag.js';
-import AdminProduct from './pages/AdminProduct.js';
+import AdminHome from './Admin/pages/AdminHome.js';
+import ActivityCategory from './Admin/pages/ActivityCategory.js';
+import PreferenceTag from './Admin/pages/PrefenceTag.js';
+import AdminProduct from './Admin/pages/AdminProduct.js';
 import SellerProduct from './pages/SellerProduct.js';
 import TouristProduct from './pages/TouristProduct.js';
-import Admin from './pages/Admin.js';
-import Governer from './pages/Governer.js';
+import Admin from './Admin/pages/Admin.js';
+import Governer from './Admin/pages/Governer.js';
 import ActivityDetails from './Components/ActivityDetails.jsx';
 
 const App = () => {
