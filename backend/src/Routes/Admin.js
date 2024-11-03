@@ -19,77 +19,72 @@ const {
     createProduct,
     getAllProducts,
     searchProductbyName,
-    filterProduct,
     updateProduct,
-    sortProducts
-} = require('../Controller/AdminController')
+} = require('../Controller/adminController')
 
 const router = express.Router()
 
 //post a new workout 
-router.get('/Admin', getAllAdmin)
+router.get('/GetAllAdmin', getAllAdmin)
 
 //post a new workout 
-router.post('/Admin', createAdmin)
+router.post('/CreateAdmin', createAdmin)
 
 //delete a workout 
-router.delete('/Admin/:id', deleteAdmin)
+router.delete('/DeleteAdmin/:id', deleteAdmin)
 
 //post a new workout 
-router.get('/Governer/', getAllGoverner)
+router.get('/GetAllGoverner', getAllGoverner)
 
 //post a new workout 
-router.post('/Governer/', createGoverner)
+router.post('/CreateGoverner', createGoverner)
 
 //delete a workout 
-router.delete('/Governer/:id', deleteGoverner)
+router.delete('/DeleteGoverner/:id', deleteGoverner)
 
 //Get all workouts
-router.get('/PreferenceTag/', getAllPreferenceTag)
+router.get('/GetAllPreferenceTag', getAllPreferenceTag)
 
 //Get single workout
-router.get('/PreferenceTag/:id', getPreferenceTag)
+router.get('/GetPreferenceTag/:id', getPreferenceTag)
 
 //post a new workout 
-router.post('/PreferenceTag/', createPreferenceTag)
+router.post('/CreatePreferenceTag', createPreferenceTag)
 
 //delete a workout 
-router.delete('/PreferenceTag/:id', deletePreferenceTag)
+router.delete('/DeletePreferenceTag/:id', deletePreferenceTag)
 
 //update a workout 
-router.put('/PreferenceTag/:id', updatePreferenceTag)
+router.put('/UpdatePreferenceTag/:id', updatePreferenceTag)
 
 //Get all workouts
-router.get('/ActivityCategory/', getAllActivityCategory)
+router.get('/GetAllActivityCategory/', getAllActivityCategory)
 
 //Get single workout
-router.get('/ActivityCategory/:id', getActivityCategory)
+router.get('/GetActivityCategory/:id', getActivityCategory)
 
 //post a new workout 
-router.post('/ActivityCategory/', createActivityCategory)
+router.post('/CreateActivityCategory', createActivityCategory)
 
 //delete a workout 
-router.delete('/ActivityCategory/:id', deleteActivityCategory)
+router.delete('/DeleteActivityCategory/:id', deleteActivityCategory)
 
 //update a workout 
-router.put('/ActivityCategory/:id', updateActivityCategory)
+router.put('/UpdateActivityCategory/:id', updateActivityCategory)
 
 //Get all products
-router.get('/products/', getAllProducts)
+router.get('/GetAllProducts', getAllProducts)
 
-//Get single product
-router.get('/filterProductPrice/:price', filterProduct)
+
 
 //post a new product 
-router.post('/createProduct/', createProduct);
+router.post('/CreateProduct', createProduct);
 
 //delete a product 
-router.get('/searchProductName/', searchProductbyName)
+router.get('/SearchProductName', searchProductbyName)
 
 //update a product 
-router.put('/editProduct/', updateProduct)
+router.put('/EditProduct', updateProduct)
 
-//sort Products according to Ratings
-router.get('/sortProducts', sortProducts)
 
-module.exports = router
+module.exports = router;

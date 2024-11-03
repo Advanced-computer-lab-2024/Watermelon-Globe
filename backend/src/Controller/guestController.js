@@ -1,10 +1,10 @@
 // #Task route solution
 const touristModel = require('../Models/touristModel');
-const tourguideModel = require('../Models/tourGuide');
-const sellerModel = require('../Models/SellerModel');
+const tourguideModel = require('../Models/tourGuideModel');
+const sellerModel = require('../Models/sellerModel');
 const advertiserModel = require('../Models/advertiserModel');
-const itineraryModel = require('../Models/itinerary');
-const activityModel= require("../Models/Activity");
+const itineraryModel = require('../Models/itineraryModel');
+const activityModel= require("../Models/activityModel");
 
 
 const { default: mongoose } = require('mongoose');

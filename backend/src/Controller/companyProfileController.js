@@ -1,4 +1,4 @@
-const CompanyProfileModel = require('../Models/CompanyProfile');
+const CompanyProfileModel = require('../Models/companyProfileModel');
 
 const createProfile = async (req, res) => {
     try {

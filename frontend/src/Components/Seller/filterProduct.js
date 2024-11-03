@@ -11,7 +11,7 @@ const FilterProduct = () => {
 
     try {
       // Make the GET request to the correct API endpoint with the price as a URL parameter
-      const response = await fetch(`/api/Seller/filterProductPrice/${price}`, {
+      const response = await fetch(`/api/filter/filterProductPrice/${price}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

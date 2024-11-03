@@ -1,5 +1,5 @@
-const Seller = require('../Models/SellerModel')
-const Product = require('../Models/ProductModel')
+const Seller = require('../Models/sellerModel')
+const Product = require('../Models/productModel')
 const mongoose = require('mongoose')
 
 //get all sellers

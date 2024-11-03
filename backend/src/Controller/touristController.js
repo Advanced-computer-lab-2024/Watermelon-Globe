@@ -1,7 +1,7 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
-const itineraryModel = require ("../Models/itinerary");
-const Itinerary = require("../Models/itinerary");
+const itineraryModel = require ("../Models/itineraryModel");
+const Itinerary = require("../Models/itineraryModel");
 
 //Tourist
 

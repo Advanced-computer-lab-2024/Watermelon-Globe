@@ -1,5 +1,5 @@
-const governorModel = require('../Models/tourismGovernor');
-const siteModel = require('../Models/tourismSite');
+const governorModel = require('../Models/tourismGovernorModel');
+const siteModel = require('../Models/tourismSiteModel');
 const { default: mongoose } = require('mongoose');
 
 

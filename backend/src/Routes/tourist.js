@@ -1,4 +1,6 @@
 const express = require("express");
+const router = express.Router();
+
 const {
   createTourist,
   getTourists,
@@ -6,7 +8,6 @@ const {
   deleteTourist,
   updateTourist,
 } = require("../Controller/touristController");
-const router = express.Router();
 
 //GET all tourists
 router.get("/getTourists", getTourists);
