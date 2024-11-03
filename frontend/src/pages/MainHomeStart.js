@@ -330,23 +330,9 @@ handleSearch = (e) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      
       <header className="bg-white shadow-md">
-        <nav className="container mx-auto px-9 py-9 flex justify-between items-center">
-          <div className="text-2xl font-bold">WaterMelon Globe</div>
-          <div className="hidden md:flex space-x-4">
-            <a href="#" className="text-gray-600 hover:text-gray-900">Hotel</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Flight</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Train</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Travel</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Car Rental</a>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="px-9 py-1 border rounded">EN</button>
-            <button className="px-9 py-1 border rounded">Log in</button>
-            <button onClick={() => navigate('/signup-options')} className="px-9 py-1 bg-blue-600 text-white rounded">Sign up</button>
-          </div>
-        </nav>
+      <Navbar />
       </header>
 
       <main className="flex-grow">

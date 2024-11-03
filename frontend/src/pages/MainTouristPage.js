@@ -189,13 +189,7 @@ const fetchTrips = async () => {
       <header className="bg-white shadow-md">
         <nav className="container mx-auto px-9 py-9 flex justify-between items-center">
           <div className="text-2xl font-bold">WaterMelon Globe</div>
-          <div className="hidden md:flex space-x-4">
-            <a href="#" className="text-gray-600 hover:text-gray-900">Hotel</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Flight</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Train</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Travel</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Car Rental</a>
-          </div>
+          
           <div className="flex items-center space-x-2">
             <button className="px-9 py-1 border rounded">EN</button>
             <button onClick={()=> navigate ('/')}className="px-9 py-1 border rounded">Log out</button>
