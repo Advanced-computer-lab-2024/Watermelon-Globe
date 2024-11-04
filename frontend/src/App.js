@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AdvertiserPage from './Components/advertiserPage';
 import TourGuidePage from './Components/tourGuidePage';
-import TourismGovernorPage from './Components/tourismGovernorPage';
+import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
 import SignupPage from './Components/SignUp';
 import ActivityForm from './Components/ActivityForm.jsx';
 
