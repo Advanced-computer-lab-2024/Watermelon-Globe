@@ -21,7 +21,8 @@ const {
     searchProductbyName,
     filterProduct,
     updateProduct,
-    sortProducts
+    sortProducts,
+    changePasswordAdmin
 } = require('../Controller/AdminController')
 
 const router = express.Router()
@@ -91,5 +92,7 @@ router.put('/editProduct/', updateProduct)
 
 //sort Products according to Ratings
 router.get('/sortProducts', sortProducts)
+
+router.put('/changePasswordAdmin/:id',changePasswordAdmin)
 
 module.exports = router
