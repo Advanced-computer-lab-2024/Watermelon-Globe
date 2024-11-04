@@ -1,30 +1,50 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../pages/styles.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ExploreTrips from '../Components/ExploreTrips.jsx';
 import ExploreActivities from '../Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
 
 const HomePage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
+  const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
     e.preventDefault();
     console.log('Searching for:', { destination, dates, guests });
   };
 
+  const handleSignOut = () => {
+    // Implement your sign out logic here
+    setIsSignedUp(false);
+    // You might want to clear user data, tokens, etc.
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
-        <Navbar />
+        <Navbar id={id} isSignedUp={isSignedUp} handleSignOut={handleSignOut} />
+        {isSignedUp && (
+          <button 
+            onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
+            className="px-9 py-1 bg-blue-600 text-white rounded"
+          >
+            View Profile
+          </button>
+        )}
       </header>
 
       <main className="flex-grow">
         <section className="relative h-[600px] flex items-center justify-center text-center text-white">
-          <div className="absolute inset-0 bg-cover bg-center"></div>
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{backgroundImage: `url(/placeholder.svg?height=600&width=1200)`}}
+          ></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 max-w-4xl mx-auto px-4">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Your Next Great Adventure</h1>
@@ -71,6 +91,9 @@ const HomePage = () => {
                 <option value="4">4+ Guests</option>
               </select>
             </div>
+            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+              Search
+            </button>
           </form>
         </section>
 
@@ -78,12 +101,14 @@ const HomePage = () => {
           <h2 className="text-2xl font-bold mb-6">Exclusive deals just for you!</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
+              <img src="/placeholder.svg?height=200&width=400" alt="Exclusive Flight Deal" className="w-full h-48 object-cover" />
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-2">Exclusive Flight Deals Just For You!</h3>
                 <p className="text-blue-600 font-bold">50% Off</p>
               </div>
             </div>
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
+              <img src="/placeholder.svg?height=200&width=400" alt="Exclusive Rental Deal" className="w-full h-48 object-cover" />
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-2">Exclusive Rental Deals Just For You!</h3>
                 <p className="text-blue-600 font-bold">25% Off</p>
@@ -98,7 +123,7 @@ const HomePage = () => {
       </main>
 
       <footer className="bg-gray-800 text-white py-4 text-center">
-        <p>&copy; 2023 WaterMelon Globe. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} WaterMelon Globe. All rights reserved.</p>
       </footer>
     </div>
   );
