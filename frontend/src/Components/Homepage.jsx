@@ -30,7 +30,7 @@ const HomePage = () => {
         Go to Advertiser Page
       </button>
 
-      <button onClick={() => navigate('/TouristPage')}>
+      <button onClick={() => navigate('/MainTouristPage/:id')}>
         Go to Tourist Page
       </button>
 
