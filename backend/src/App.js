@@ -49,12 +49,12 @@ app.use('/api/Advertiser', Advertiser);
 app.use('/api/Filter' , Filter)
 app.use('/api/Governor', Governor);
 app.use('/api/Guest' , Guest);
-app.use('/api/Itenerary' , Itinerary);
+app.use('/api/Itinerary' , Itinerary);
 app.use('/api/Seller', Seller);
 app.use('/api/Sort' , Sort);
 app.use('/api/TourGuide' , TourGuide);
 app.use('/api/Tourist' , Tourist);
-app.use('/api/TouristItenerary' , TouristItinerary);
+app.use('/api/TouristItinerary' , TouristItinerary);
 
 
 
