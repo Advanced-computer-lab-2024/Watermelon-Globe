@@ -7,7 +7,8 @@ const {
   getTourist,
   deleteTourist,
   updateTourist,
-  changePasswordTourist
+  changePasswordTourist,
+  updateRating
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -26,5 +27,6 @@ router.delete("/deleteTourist/:id", deleteTourist);
 router.put("/updateTourist/:id", updateTourist);
 
 router.put("/changePasswordTourist/:id",changePasswordTourist);
+router.put("/updateRating/:id", updateRating);
 
 module.exports = router;

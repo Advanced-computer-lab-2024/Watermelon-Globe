@@ -12,7 +12,7 @@ const ItineraryDetails = () => {
 
     const fetchItinerary = async () => {
         try {
-            const response = await fetch(`/getItinerary/${id}`);
+            const response = await fetch(`/api/Itinerary/getItinerary/${id}`);
             if (!response.ok) {
                 throw new Error('Itinerary not found');
             }
@@ -37,18 +37,20 @@ const ItineraryDetails = () => {
     // Function to handle rating submission
     const handleRate = async () => {
         try {
-            const response = await fetch(`/updateRating/${id}?rating=${rating}`, {
+            const response = await fetch(`/api/Itinerary/updateRating/${id}?rating=${rating}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
             if (!response.ok) {
+                console.log(response.status, response.statusText);
                 throw new Error('Failed to submit rating');
             }
             alert('Rating submitted successfully!');
         } catch (error) {
             console.error('Error submitting rating:', error);
+            
             alert('Failed to submit rating. Please try again.');
         }
         fetchItinerary();
