@@ -382,7 +382,7 @@ const filterProduct = async (req, res) => {
       }
   
       // Find the product by price
-      let product = await Product.findOne({ price: priceValue });
+      let product = await Product.find({ price: priceValue });
   
       if (!product) {
         return res.status(400).json({ error: 'No such product' });

@@ -55,7 +55,7 @@ app.use('/api/Seller', Seller);
 app.use('/api/Sort' , Sort);
 app.use('/api/TourGuide' , TourGuide);
 app.use('/api/Tourist' , Tourist);
-app.use('/api/TouristItenerary' , TouristItinerary);
+app.use('/api/TouristItinerary' , TouristItinerary);
 
 
 

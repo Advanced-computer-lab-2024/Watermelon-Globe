@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AdvertiserPage from './Components/advertiserPage';
 import TourGuidePage from './Components/tourGuidePage';
-import TourismGovernorPage from './Components/tourismGovernorPage';
+import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
 import SignupPage from './Components/SignUp';
 import ActivityForm from './Components/ActivityForm.jsx';
 
@@ -29,7 +29,7 @@ import AdminHome from './Admin/pages/AdminHome.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './pages/SellerProduct.js';
+import SellerProduct from './Seller/pages/SellerProduct.js';
 import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
