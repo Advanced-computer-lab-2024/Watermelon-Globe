@@ -28,9 +28,9 @@ const getSeller = async (req, res) => {
 
 //create new seller
 const createSeller = async (req, res) => {
-    const {Name, Email, Password} = req.body
+    const {Name,Email,Password} = req.body
     try {
-        const seller = await Seller.create({Name, Email,Password}) 
+        const seller = await Seller.create({Name,Email,Password}) 
         res.status(200).json(seller)
     }
     catch (error){
