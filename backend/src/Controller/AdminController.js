@@ -434,10 +434,56 @@ const sortProducts = async (req, res) => {
     }
 }
 
+const changePasswordAdmin = async (req, res) => {
+    const { id } = req.params;
+    const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+  
+    console.log(id, oldPassword, newPassword);
+  
+    // Validate inputs
+    if (!oldPassword) {
+      return res.status(400).json({ error: "Old password is required" }); // Use 400 for bad requests
+    }
+    if (!newPassword) {
+      return res.status(400).json({ error: "New password is required" });
+    }
+    if (!newPasswordConfirmed) {
+      return res.status(400).json({ error: "New password confirmation is required" });
+    }
+  
+    try {
+      const admin = await Admin.findOne({ _id: id });
+  
+      if (!admin) {
+        return res.status(404).json({ error: "admin not found" }); // Tourist not found
+      }
+  
+      // Compare the old password directly
+      if (admin.password !== oldPassword) {
+        return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
+      }
+  
+      // Check if new passwords match
+      if (newPassword !== newPasswordConfirmed) {
+        return res.status(400).json({ error: "New password and confirmed password do not match" });
+      }
+  
+      // Update the password directly
+      admin.password = newPassword;
+      await admin.save();
+  
+      res.status(200).json({ message: "Password changed successfully" });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  };
+  
+
 
 
 module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
      getAllPreferenceTag, getPreferenceTag, createPreferenceTag, deletePreferenceTag, updatePreferenceTag,
      getAllActivityCategory, getActivityCategory, createActivityCategory, deleteActivityCategory
      , updateActivityCategory, createProduct, getAllProducts, searchProductbyName, filterProduct, 
-    updateProduct, sortProducts, getAllAdmin, getAllGoverner}
+    updateProduct, sortProducts, getAllAdmin, getAllGoverner,changePasswordAdmin}

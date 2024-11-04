@@ -4,7 +4,15 @@ const Schema = mongoose.Schema;
 const companyProfileSchema = new Schema({
   Name: {
     type: String,
-    required: false
+    required: true
+  },
+  Email:{
+    type:String,
+    required:true
+  },
+  Password:{
+    type:String,
+    required:true
   },
   About: {
     type: String,
