@@ -137,7 +137,7 @@ const ExploreTrips = () => {
   };
 
   const handleTripClick = (tripId) => {
-    navigate(`/api/Itinerary/getItinerary/${tripId}`);
+    navigate(`/itineraryDetails/${tripId}`);
   };
 
   return (
