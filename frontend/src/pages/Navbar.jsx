@@ -45,7 +45,10 @@ const Navbar = ({ id, isSignedUp, handleSignOut }) => {
               )}
             </>
           ) : (
-            <Link to="/signup-options" className="px-9 py-1 bg-blue-600 text-white rounded">Sign Up</Link>
+            <>
+              <Link to="/login" className="px-4 py-1 border rounded text-blue-600">Log In</Link>
+              <Link to="/signup-options" className="px-4 py-1 bg-blue-600 text-white rounded">Sign Up</Link>
+            </>
           )}
         </div>
       </div>

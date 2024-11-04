@@ -16,7 +16,8 @@ import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
 import ItineraryDetails from "./pages/ItineraryDetails.js";
 import MainTouristPage from "./pages/MainTouristPage.js"
-import MainHome from "./pages/MainHomeStart.js";
+import MainHome from "./Guest/pages/GuestHomepage.jsx";
+import MainTour from "./Tourist/pages/TouristHomepage.jsx";
 import TouristPage from './TouristPage.js';
 import SellerPage from './SellerPage.js';
 import HomePage from './Components/Homepage';

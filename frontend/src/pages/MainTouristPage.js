@@ -83,7 +83,7 @@ const { id } = useParams()
     };
   
     try {
-      const response = await axios.get('/itineraryFilter', { params });
+      const response = await axios.get('/api/filter/itineraryFilter', { params });
   
       if (response.data && response.data.length > 0) {
         setItineraries(response.data);
@@ -102,7 +102,7 @@ const { id } = useParams()
   
 const fetchTrips = async () => {
   try {
-    const response = await fetch('/getAllItineraries'); // Replace with your actual API endpoint
+    const response = await fetch('/api/itinerary/getAllItineraries'); // Replace with your actual API endpoint
     const data = await response.json();
     setItineraries(data); // Assuming data is an array of trips
   } catch (error) {
@@ -116,7 +116,7 @@ const fetchTrips = async () => {
 
     const fetchActivities = async () => {
       try {
-        const response = await fetch('/getActivities'); // Replace with your actual API endpoint
+        const response = await fetch('/api/advertiser/getActivitiesNew'); // Replace with your actual API endpoint
         const data = await response.json();
         setActivities(data); // Assuming data is an array of activities
         activities=data;
@@ -127,7 +127,7 @@ const fetchTrips = async () => {
 
     const fetchSites= async()=>{
       try{
-        const response = await fetch('/getAllSites');
+        const response = await fetch('/api/governor/getAllSites');
         const data = await response.json();
         setSites(data);
         sites=data;

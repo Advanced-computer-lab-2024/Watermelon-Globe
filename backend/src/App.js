@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
 //Routes
-const Admin = require('./Routes/admin');
+//const Admin = require('./Routes/admin');
+const admin = require('./Routes/admin');
 const Advertiser = require('./Routes/advertiser');
 const Filter = require('./Routes/filter');
 const Governor = require('./Routes/governor');
@@ -44,12 +45,12 @@ app.use((req,res,next) =>{
 })
 
 //APIs
-app.use('/api/Admin', Admin);
+app.use('/api/admin', admin);
 app.use('/api/Advertiser', Advertiser);
 app.use('/api/Filter' , Filter)
 app.use('/api/Governor', Governor);
 app.use('/api/Guest' , Guest);
-app.use('/api/Itenerary' , Itinerary);
+app.use('/api/Itinerary' , Itinerary);
 app.use('/api/Seller', Seller);
 app.use('/api/Sort' , Sort);
 app.use('/api/TourGuide' , TourGuide);

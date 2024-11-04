@@ -8,12 +8,8 @@ const { createProfile, updateProfile, getProfiles } = require("../Controller/com
 const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity,
 createTags, getTags, updateActivityRating,createActivityNew,getActivitiesNew } = require ("../Controller/activityController");
 
-//tags
-
 router.get("/getTags",getTags);
 router.post("/createTags",createTags);
-
-//profile/adverstiser
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
 router.get("/profiles", getProfiles);
