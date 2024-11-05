@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import '../pages/styles.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ExploreTrips from '../Components/ExploreTrips.jsx';
 import ExploreActivities from '../Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
+import profileIcon from '../../Assets/Profile.png';
 
 const HomePage = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const HomePage = () => {
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
-  const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
+  const [isSignedUp, setIsSignedUp] = useState(true); // Assuming the user is always logged in
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -25,18 +26,49 @@ const HomePage = () => {
     // You might want to clear user data, tokens, etc.
   };
 
+  const handleViewDetails = () => {
+    navigate(`TouristDetails${id}`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
-        <Navbar id={id} isSignedUp={isSignedUp} handleSignOut={handleSignOut} />
-        {isSignedUp && (
-          <button 
-            onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
-            className="px-9 py-1 bg-blue-600 text-white rounded"
-          >
-            View Profile
-          </button>
-        )}
+        <nav className="bg-white shadow-md">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div className="text-2xl font-bold">
+              <Link to="/Homepage" className="homeButton">WaterMelon Globe</Link>
+            </div>
+            <div className="hidden md:flex space-x-4">
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Hotel</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Flight</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Travel</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Car Rental</Link>
+              <Link to="/Tourist-ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button className="px-4 py-1 border rounded">EN</button>
+              <Link to="/account" className="AccountLink">
+                <img
+                  className="profileIcon"
+                  src={profileIcon}
+                  alt="Profile Icon"
+                  style={{ width: '30px', height: '30px' }}
+                />
+              </Link>
+              <Link to="/edit-profile">
+                <button className="editProfile px-4 py-1 border rounded">Edit Profile</button>
+              </Link>
+              <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
+              <button 
+                onClick={handleViewDetails} 
+                className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </nav>
       </header>
 
       <main className="flex-grow">
@@ -44,6 +76,8 @@ const HomePage = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{backgroundImage: `url(/placeholder.svg?height=600&width=1200)`}}
+            role="img"
+            aria-label="Background image of a travel destination"
           ></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 max-w-4xl mx-auto px-4">

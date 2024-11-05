@@ -19,7 +19,7 @@ const TouristDetails = () => {
         const fetchTourist = async () => {
             try {
                 console.log(`Fetching details for tourist ID: ${id}`); // Log ID
-                const response = await fetch(`/getTourist/${id}`);
+                const response = await fetch(`/api/tourist/getTourist/${id}`);
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`);
@@ -57,7 +57,7 @@ const TouristDetails = () => {
         setIsEditing(false);
         try {
             // Call API to update the tourist details
-            await axios.put(`/updateTourist/${id}`, formData);
+            await axios.put(`/api/tourist/updateTourist/${id}`, formData);
             alert('Tourist details updated successfully!');
             // Optionally, redirect or fetch updated tourist data
             const response = await fetch(`/getTourist/${id}`);
