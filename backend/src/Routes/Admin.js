@@ -22,6 +22,7 @@ const {
     filterProduct,
     updateProduct,
     sortProducts,
+    changePasswordAdmin,
     getAllComplaints,
     getComplaint,
     updateComplaint,
@@ -95,6 +96,8 @@ router.put('/editProduct/', updateProduct)
 
 //sort Products according to Ratings
 router.get('/sortProducts', sortProducts)
+
+router.put('/changePasswordAdmin/:id',changePasswordAdmin)
 
 //get All Complaints
 router.get('/Complaint', getAllComplaints)

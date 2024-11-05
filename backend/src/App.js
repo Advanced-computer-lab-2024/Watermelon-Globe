@@ -7,7 +7,7 @@ const Seller = require('./Routes/Seller')
 const Tourist = require('./Routes/tourist')
 
 //company profile imports
-const { createProfile, updateProfile, getProfiles } = require("./Controller/companyProfileController");
+const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser} = require("./Controller/companyProfileController");
 
 //activity imports
 const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity,
@@ -16,17 +16,17 @@ filterActivities,updateActivityRating,createActivityNew,getActivitiesNew } = req
 
 //guide imports
 const guideController = require('./Controller/guideController'); // Import the controller
-const{filterItineraries,filterByPreferenceItineraries}= require('./Controller/guideController');
+const{filterItineraries,filterByPreferenceItineraries,changePasswordTourGuide}= require('./Controller/guideController');
 
 //tourist intin imports
 const touristItineraryController = require('./Controller/touristItineraryController')
 
 //governor imports
-const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags } =
+const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags,changePasswordGovernor } =
   require('./Controller/governorController');
 
 
-const {updateRating,getTourist} = require("./Controller/touristController");
+const {updateRating,getTourist,changePasswordTourist} = require("./Controller/touristController");
 
 //guest imports
 const {createTourist,createTourguide, createAdvertiser,getTourists,
@@ -79,6 +79,7 @@ app.post("/createProfile", createProfile);
 app.put("/updateProfile/:id", updateProfile);
 app.get("/profiles", getProfiles);
 app.post("/addAdvertiser", createAdvertiser);
+app.put("/changePasswordAdvertiser/:id",changePasswordAdvertiser);
 
 //activities
 app.post('/newActivity', createActivity);
@@ -104,6 +105,8 @@ app.put("/updateGuide/:id", guideController.updateTourGuide);
 app.get("/sortByPrice",guideController.sortByPrice);
 app.get("/sortByRating",guideController.sortByRatings);
 app.get("/filterByPreferenceItineraries/:id",filterByPreferenceItineraries);
+app.put("/changePasswordTourGuide/:id",changePasswordTourGuide);
+
 
 //tourism governor/sites routes
 app.post("/addSite", createSite);
@@ -112,6 +115,7 @@ app.get("/getAllSites", getAllSites);
 app.put("/updateSite/:id", updateSite);
 app.delete("/deleteSite/:id", deleteSite);
 app.get("/getMySites", getMySites);
+app.put("/changePasswordGovernor/:id",changePasswordGovernor);
 // app.post("/addGov", createGov);
 
 // //itineraries routes
@@ -142,6 +146,7 @@ app.post("/addTourist",createTourist);
 app.get("/getTourists",getTourists);
 app.get("/getTourist/:id",getTourist);
 app.put("/updateTourist/:id",updateTourist);
+app.put("/changePasswordTourist/:id",changePasswordTourist);
 
 //GET all tourists
 // app.get("/getTourists", getTourists);

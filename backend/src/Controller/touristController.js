@@ -162,6 +162,56 @@ const updateRating = async (req, res) => {
   }
 };
 
+
+
+const changePasswordTourist = async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+
+  console.log(id, oldPassword, newPassword);
+
+  // Validate inputs
+  if (!oldPassword) {
+    return res.status(400).json({ error: "Old password is required" }); // Use 400 for bad requests
+  }
+  if (!newPassword) {
+    return res.status(400).json({ error: "New password is required" });
+  }
+  if (!newPasswordConfirmed) {
+    return res.status(400).json({ error: "New password confirmation is required" });
+  }
+
+  try {
+    const tourist = await Tourist.findOne({ _id: id });
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" }); // Tourist not found
+    }
+
+    // Compare the old password directly
+    if (tourist.password !== oldPassword) {
+      return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
+    }
+
+    // Check if new passwords match
+    if (newPassword !== newPasswordConfirmed) {
+      return res.status(400).json({ error: "New password and confirmed password do not match" });
+    }
+
+    // Update the password directly
+    tourist.password = newPassword;
+    await tourist.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+
+
 const fileComplaint = async (req, res) => {
   const { title, body, date } = req.body;
 
@@ -193,5 +243,6 @@ module.exports = {
   deleteTourist,
   updateTourist,
   updateRating,
+  changePasswordTourist,
   fileComplaint
 };

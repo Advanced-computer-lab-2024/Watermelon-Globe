@@ -27,23 +27,23 @@ const productSchema = new Schema({
         type: String, // Seller name or ID
         required: true
     },
-    ratings: {
-        type: Number, // Average product rating
-        min: 0,
-        max: 5,
-        default: 0
-    },
-    // reviews: [
-    //     {
-    //         reviewer: { type: String }, // Name or ID of the reviewer
-    //         review: { type: String }, // Review content
-    //         rating: {
-    //             type: Number, // Rating given by the reviewer
-    //             min: 0,
-    //             max: 5
-    //         }
-    //     }
-    // ]
+   
+
+    rating: { type: Number, required: false },
+    noOfRatings: {type:Number ,required:false},
+    ratingsSum:{type:Number,required:false},
+
+    reviews: [
+        {
+            reviewer: {     
+            type: mongoose.Schema.Types.ObjectId,
+             ref: 'Tourist', // Reference to the Buyer model (assuming there's a Buyer model)
+            required: false},
+            
+            review: { type: String,required:false }, // Review content
+            
+        }
+    ]
 }, {timestamps: true})
 
 const Product = mongoose.model('Product', productSchema)

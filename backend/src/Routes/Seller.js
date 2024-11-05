@@ -10,7 +10,10 @@ const {
     searchProductbyName,
     filterProduct,
     updateProduct,
-    sortProducts
+    sortProducts,
+    updateRatingProduct,
+    changePasswordSeller,
+    reviewProduct
 } = require('../Controller/SellerController')
 
 const router = express.Router()
@@ -32,6 +35,8 @@ router.delete('/deleteSeller/:id', deleteSeller)
 //update a seller 
 router.put('/updateSeller/:id', updateSeller)
 
+router.put('/changePasswordSeller/:id',changePasswordSeller);
+
 //////////////// Seller ////////////////
 
 
@@ -52,6 +57,10 @@ router.put('/editProduct', updateProduct)
 
 //sort Products according to Ratings
 router.get('/sortProducts', sortProducts)
+
+router.put("/updateRatingProduct/:id",updateRatingProduct);
+
+router.put("/reviewProduct/:ReviewerId/:ProductId",reviewProduct);
 
 
 
