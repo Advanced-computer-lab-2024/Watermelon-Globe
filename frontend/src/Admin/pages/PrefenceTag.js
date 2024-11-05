@@ -9,7 +9,7 @@ const PreferenceTag = () => {
 
     useEffect(() => {
         const fetchPreferencetag = async() => {
-            const response = await fetch('/api/Admin/PreferenceTag')
+            const response = await fetch('/api/Admin/GetAllPreferenceTag')
             const json = await response.json()
 
             if (response.ok){

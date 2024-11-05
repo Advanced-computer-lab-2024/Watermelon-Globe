@@ -22,9 +22,12 @@ const {
     getAllProducts,
     searchProductbyName,
     updateProduct,
-    changePasswordAdmin
-} = require('../Controller/adminController')
-
+    changePasswordAdmin,
+    getAllComplaints,
+    getComplaint,
+    updateComplaint,
+    replyComplaint
+} = require('../Controller/AdminController')
 
 
 router.get('/GetAllAdmin', getAllAdmin)
@@ -48,6 +51,18 @@ router.get('/GetAllProducts', getAllProducts)
 router.post('/CreateProduct', createProduct); 
 router.get('/SearchProductName', searchProductbyName)
 router.put('/EditProduct', updateProduct)
+
+//get All Complaints
+router.get('/Complaint', getAllComplaints)
+
+//sort single Complaint
+router.get('/Complaint/:id', getComplaint)
+
+//update Complaint status
+router.put('/Complaint/:id', updateComplaint)
+
+//reply to a Complaint
+router.put('/replyComplaint/:id', replyComplaint)
 
 
 module.exports = router;

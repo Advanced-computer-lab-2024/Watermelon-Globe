@@ -12,7 +12,7 @@ const PreferenceTagForm = () => {
     e.preventDefault()
     const preferencetag = {tag}
     
-    const response = await fetch('/api/Admin/PreferenceTag', {
+    const response = await fetch('/api/Admin/CreatePreferenceTag', {
       method: 'POST',
       body: JSON.stringify(preferencetag),
       headers: {

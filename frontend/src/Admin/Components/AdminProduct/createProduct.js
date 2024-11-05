@@ -15,7 +15,7 @@ const CreateProduct = () => {
 
     const product = { name, price, quantity, description, seller, ratings };
 
-    const response = await fetch('/api/Admin/createProduct', {
+    const response = await fetch('/api/Admin/CreateProduct', {
       method: 'POST',
       body: JSON.stringify(product),
       headers: {

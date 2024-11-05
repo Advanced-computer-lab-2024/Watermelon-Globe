@@ -4,7 +4,7 @@ const AdminDetails = ({ admin }) => {
     const { dispatch } = useAdminContext();
 
     const handleClick = async () => {
-      const response = await fetch('/api/Admin/Admin/' + admin._id, {
+      const response = await fetch('/api/Admin/DeleteAdmin/' + admin._id, {
         method: 'DELETE'
       });
       const json = await response.json();
