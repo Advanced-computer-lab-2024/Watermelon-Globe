@@ -4,6 +4,7 @@ mongoose.set('strictQuery', false);
 require("dotenv").config();
 const Admin = require('./Routes/Admin')
 const Seller = require('./Routes/Seller')
+const Tourist = require('./Routes/tourist')
 
 //company profile imports
 const { createProfile, updateProfile, getProfiles } = require("./Controller/companyProfileController");
@@ -71,6 +72,7 @@ app.post("/createTags",createTags);
 //admin
 app.use('/api/Admin', Admin)
 app.use('/api/Seller',Seller)
+app.use('/api/Tourist',Tourist)
 
 //profile/adverstiser
 app.post("/createProfile", createProfile);

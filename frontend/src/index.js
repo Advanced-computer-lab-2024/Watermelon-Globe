@@ -14,7 +14,7 @@ root.render(
       <PreferenceTagContextProvider>
         <AdminContextProvider>
           <GovernerContextProvider>
-          <App /> 
+              <App />
           </GovernerContextProvider>
         </AdminContextProvider>
       </PreferenceTagContextProvider>

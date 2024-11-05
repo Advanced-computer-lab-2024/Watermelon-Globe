@@ -2,6 +2,7 @@ const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
 const itineraryModel = require ("../Models/itinerary");
 const Itinerary = require("../Models/itinerary");
+const Complaint = require("../Models/Complaint");
 
 //Tourist
 
@@ -161,6 +162,27 @@ const updateRating = async (req, res) => {
   }
 };
 
+const fileComplaint = async (req, res) => {
+  const { title, body, date } = req.body;
+
+  // Check if title, body or date are missing
+  if (!title || !body) {
+    return res.status(400).json({ error: 'Title and body are required' });
+  }
+
+  try {
+    // Create a complaint
+    const complaint = await Complaint.create({ 
+      title, 
+      body, 
+      date: date || new Date() // Default to current date if not provided
+    });
+    res.status(200).json(complaint);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 
 
@@ -170,5 +192,6 @@ module.exports = {
   getTourist,
   deleteTourist,
   updateTourist,
-  updateRating
+  updateRating,
+  fileComplaint
 };

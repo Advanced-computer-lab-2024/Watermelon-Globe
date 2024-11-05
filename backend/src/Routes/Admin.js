@@ -21,7 +21,11 @@ const {
     searchProductbyName,
     filterProduct,
     updateProduct,
-    sortProducts
+    sortProducts,
+    getAllComplaints,
+    getComplaint,
+    updateComplaint,
+    replyComplaint
 } = require('../Controller/AdminController')
 
 const router = express.Router()
@@ -91,5 +95,17 @@ router.put('/editProduct/', updateProduct)
 
 //sort Products according to Ratings
 router.get('/sortProducts', sortProducts)
+
+//get All Complaints
+router.get('/Complaint', getAllComplaints)
+
+//sort single Complaint
+router.get('/Complaint/:id', getComplaint)
+
+//update Complaint status
+router.put('/Complaint/:id', updateComplaint)
+
+//reply to a Complaint
+router.put('/replyComplaint/:id', replyComplaint)
 
 module.exports = router

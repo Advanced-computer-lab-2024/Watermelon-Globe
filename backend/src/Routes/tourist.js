@@ -5,6 +5,7 @@ const {
   getTourist,
   deleteTourist,
   updateTourist,
+  fileComplaint,
 } = require("../Controller/touristController");
 const router = express.Router();
 
@@ -22,5 +23,8 @@ router.delete("/deleteTourist/:id", deleteTourist);
 
 //UPDATE a tourist
 router.put("/updateTourist/:id", updateTourist);
+
+//POST a new complaint
+router.post("/Complaint", fileComplaint);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const Governer = require('../Models/tourismGovernor')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/ProductModel')
+const Complaint = require('../Models/Complaint')
 const mongoose = require('mongoose')
 
 
@@ -434,10 +435,89 @@ const sortProducts = async (req, res) => {
     }
 }
 
+// Get all Complaints
+const getAllComplaints = async (req, res) => {
+    const complaint = await Complaint.find({}).sort({ createdAt: -1 })
+
+    res.status(200).json(complaint)
+}
+
+//get single Complaint
+const getComplaint = async (req, res) => {
+    const {id} = req.params
+
+    // if (!mongoose.Types.ObjectId.isValid(id)){
+    //     return res.status(400).json({error: 'No such activity'})
+    // }
+
+    const complaint = await Complaint.findById(id)
+
+    if (!complaint){
+        return res.status(400).json({error: 'No such complaint'})
+        }
+    res.status(200).json(complaint)
+}
+
+// Function to update complaint status
+const updateComplaint = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find the complaint by its ID and update the status if it's 'pending'
+      const complaint = await Complaint.findOneAndUpdate(
+        { _id: id, status: 'pending' },  // Condition to only update if status is 'pending'
+        { status: 'resolved' },          // Update the status to 'resolved'
+        { new: true }                    // Return the updated document
+      );
+  
+      // If no complaint found or already resolved, return an error
+      if (!complaint) {
+        return res.status(400).json({ error: 'already resolved' });
+      }
+  
+      res.status(200).json({ message: 'Complaint resolved successfully', complaint });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  // Function to reply to a complaint
+  const replyComplaint = async (req, res) => {
+    const { id } = req.params; // Get complaint ID from URL params
+    const { reply } = req.body; // Get reply content from the request body
+  
+    if (!reply) {
+      return res.status(400).json({ error: 'Reply cannot be empty' });
+    }
+  
+    try {
+      // Find the complaint by its ID and update the reply field
+      const complaint = await Complaint.findOneAndUpdate(
+        { _id: id },                // Find the complaint by ID
+        { reply: reply },           // Set the reply
+        { new: true }               // Return the updated complaint
+      );
+  
+      // If no complaint found
+      if (!complaint) {
+        return res.status(404).json({ error: 'Complaint not found' });
+      }
+  
+      // Send back the updated complaint with the reply
+      res.status(200).json({
+        message: 'Reply added successfully',
+        complaint
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 
 module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
      getAllPreferenceTag, getPreferenceTag, createPreferenceTag, deletePreferenceTag, updatePreferenceTag,
      getAllActivityCategory, getActivityCategory, createActivityCategory, deleteActivityCategory
      , updateActivityCategory, createProduct, getAllProducts, searchProductbyName, filterProduct, 
-    updateProduct, sortProducts, getAllAdmin, getAllGoverner}
+    updateProduct, sortProducts, getAllAdmin, getAllGoverner, getAllComplaints, getComplaint, updateComplaint,
+    replyComplaint
+    }
