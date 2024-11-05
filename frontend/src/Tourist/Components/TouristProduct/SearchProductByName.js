@@ -10,7 +10,7 @@ const SearchProductByName = () => {
 
     try {
       // Use a GET request and include the search term as a query parameter
-      const response = await fetch(`/api/Seller/searchProductName?name=${encodeURIComponent(searchTerm)}`, {
+      const response = await fetch(`/api/Tourist/searchProductName?name=${encodeURIComponent(searchTerm)}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

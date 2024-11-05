@@ -4,7 +4,7 @@ const router = express.Router();
 const {filterActivities} = require ("../Controller/activityController");
 const{filterItineraries,filterByPreferenceItineraries}= require('../Controller/guideController');
 const {filterByTags } = require('../Controller/governorController');
-const{filterProduct} = require('../Controller/adminController');
+const{filterProduct} = require('../Controller/AdminController');
 const{filterItineraryRating,filterActivityByBudget,filterItineraryByBudget,filterByLanguage,filterByDate}
  = require("../Controller/guestController");
 
