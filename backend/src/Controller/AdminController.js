@@ -1,8 +1,8 @@
-const Admin = require('../Models/AdminModel')
+const Admin = require('../Models/adminModel')
 const Governer = require('../Models/tourismGovernorModel')
 const PreferenceTag = require('../Models/preferenceTagModel')
 const ActivityCategory = require('../Models/activityCategoryModel')
-const Product = require('../Models/ProductModel')
+const Product = require('../Models/productModel')
 const mongoose = require('mongoose')
 
 

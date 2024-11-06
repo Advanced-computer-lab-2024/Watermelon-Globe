@@ -1,8 +1,7 @@
 const Seller = require('../Models/sellerModel')
+const Product = require('../Models/productModel')
 const mongoose = require('mongoose')
 const { findById } = require('../Models/touristModel')
-const Product = mongoose.models.Product || mongoose.model('Product', productSchema);
-
 
 //get all sellers
 const getAllSellers = async (req, res) => {
