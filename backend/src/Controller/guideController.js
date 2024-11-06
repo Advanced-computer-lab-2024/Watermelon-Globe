@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const itineraryModel = require('../Models/itinerary.js');
-const tourGuide = require('../Models/tourGuide.js');
+const itineraryModel = require('../Models/itineraryModel.js');
+const tourGuide = require('../Models/tourGuideModel.js');
 
 const createTourGuide = async (req, res) => {
 
@@ -307,6 +307,55 @@ const sortByRatings = async (req, res) => {
   };
 
 
+
+
+const changePasswordTourGuide = async (req, res) => {
+    const { id } = req.params;
+    const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+  
+    console.log(id, oldPassword, newPassword);
+  
+    // Validate inputs
+    if (!oldPassword) {
+      return res.status(400).json({ error: "Old password is required" }); // Use 400 for bad requests
+    }
+    if (!newPassword) {
+      return res.status(400).json({ error: "New password is required" });
+    }
+    if (!newPasswordConfirmed) {
+      return res.status(400).json({ error: "New password confirmation is required" });
+    }
+  
+    try {
+      const tourguide = await TourGuide.findOne({ _id: id });
+  
+      if (!tourguide) {
+        return res.status(404).json({ error: "tourguide not found" }); // Tourist not found
+      }
+  
+      // Compare the old password directly
+      if (tourguide.password !== oldPassword) {
+        return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
+      }
+  
+      // Check if new passwords match
+      if (newPassword !== newPasswordConfirmed) {
+        return res.status(400).json({ error: "New password and confirmed password do not match" });
+      }
+  
+      // Update the password directly
+      tourguide.password = newPassword;
+      await tourguide.save();
+  
+      res.status(200).json({ message: "Password changed successfully" });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  };
+  
+
+
 module.exports = {
     createItinerary,
     getAllItineraries,
@@ -321,5 +370,6 @@ module.exports = {
     sortByPrice,
     sortByRatings,
     filterItineraries,
-    filterByPreferenceItineraries
+    filterByPreferenceItineraries,
+    changePasswordTourGuide
 };

@@ -1,6 +1,6 @@
-const ActivityModel = require('../Models/Activity');
-const Tag = require('../Models/tag');
-const CompanyProfile = require('../Models/CompanyProfile'); // Adjust the path if necessary
+const ActivityModel = require('../Models/activityModel');
+const Tag = require('../Models/tagModel');
+const CompanyProfile = require('../Models/companyProfileModel'); // Adjust the path if necessary
 
 const createTags = async (req, res) => {
     const tags = [
