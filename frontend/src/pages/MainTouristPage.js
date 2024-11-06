@@ -195,6 +195,7 @@ const fetchTrips = async () => {
             <a href="#" className="text-gray-600 hover:text-gray-900">Train</a>
             <a href="#" className="text-gray-600 hover:text-gray-900">Travel</a>
             <a href="#" className="text-gray-600 hover:text-gray-900">Car Rental</a>
+            <a href="#" onClick={() => navigate(`/RatingsAndCommentsPage/${id}`)} className="text-gray-600 hover:text-gray-900">Ratings & Comments</a>
           </div>
           <div className="flex items-center space-x-2">
             <button className="px-9 py-1 border rounded">EN</button>

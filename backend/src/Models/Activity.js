@@ -34,7 +34,7 @@ const ActivitySchema = new Schema({
     required: false
   },
   Category: {
-    type:mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'ActivityCategory',
     required: false
   },
@@ -58,7 +58,22 @@ const ActivitySchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CompanyProfile',
     required: true
-  }
+  },
+  comments: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tourist', // Reference to the user model
+      required: true
+    },
+    text: {
+      type: String,
+      required: true
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }]
 }, { timestamps: true });
 
 ActivitySchema.index({ Location: '2dsphere' });

@@ -1,61 +1,77 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Define the child itinerary schema
 const childItinerarySchema = new Schema({
   itinerary: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Itinerary', // Reference to the parent itinerary model
+    ref: 'Itinerary',
     required: true
   },
   buyer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'TourGuide', // Reference to the Buyer model (assuming there's a Buyer model)
+    ref: 'Tourist',
     required: true
   },
   chosenDates: {
-    type: [Date], // Array of selected dates (from availableDates in parent itinerary)
+    type: [Date],
     required: true,
     validate: {
       validator: function(dates) {
-        // Ensure the chosen dates fall within the available dates of the parent itinerary
         return dates.length > 0;
       },
       message: 'You must select at least one valid date'
     }
   },
   chosenTimes: {
-    type: [String], // Array of selected times (from availableTimes in parent itinerary)
+    type: [String],
     required: true,
     validate: {
       validator: function(times) {
-        // Ensure the chosen times fall within the available times of the parent itinerary
         return times.length > 0;
       },
       message: 'You must select at least one valid time'
     }
   },
   totalPrice: {
-    type: Number, // Calculate based on the price of the parent itinerary and number of days selected
+    type: Number,
     required: true,
   },
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'cancelled'], // Booking status
+    enum: ['pending', 'confirmed', 'cancelled'],
     default: 'pending'
   },
+  completed: {
+    type: Boolean,
+    default: false
+  }
 }, { timestamps: true });
 
-// Pre-save hook to automatically calculate the total price
+// Pre-save hook to validate chosen dates and calculate total price
 childItinerarySchema.pre('save', async function (next) {
   try {
+    // Fetch the parent itinerary
     const parentItinerary = await mongoose.model('Itinerary').findById(this.itinerary);
 
-    if (parentItinerary) {
-      // Calculate the total price based on the number of selected days and parent price
-      this.totalPrice = parentItinerary.priceOfTour * this.chosenDates.length;
-    } else {
+    if (!parentItinerary) {
       throw new Error('Parent itinerary not found');
+    }
+
+    // Check if all chosen dates are within the available dates
+    const availableDatesSet = new Set(parentItinerary.availableDates.map(date => date.toISOString()));
+    const allDatesAvailable = this.chosenDates.every(date => availableDatesSet.has(date.toISOString()));
+
+    if (!allDatesAvailable) {
+      throw new Error('One or more chosen dates are not available in the itinerary');
+    }
+
+    // Calculate the total price based on the number of selected days and parent price
+    this.totalPrice = parentItinerary.priceOfTour * this.chosenDates.length;
+
+    // Check if all chosen dates have passed to set the 'completed' status
+    if (this.status === 'confirmed') {
+      const currentDate = new Date();
+      this.completed = this.chosenDates.every(date => date < currentDate);
     }
 
     next();

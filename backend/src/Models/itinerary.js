@@ -23,8 +23,23 @@ const itinerarySchema = new Schema({
     guide: { type: mongoose.Types.ObjectId, ref: 'TourGuide', required: true } ,
     rating: { type: Number, required: false },
     noOfRatings: {type:Number ,required:false},
-    ratingsSum:{type:Number,required:false}// Reference to the tour guide
-    
+    ratingsSum:{type:Number,required:false},// Reference to the tour guide
+
+    comments: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tourist', // Reference to the user model
+      required: true
+    },
+    text: {
+      type: String,
+      required: true
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }]
 }, { timestamps: true });
 
 const Itinerary = mongoose.model('Itinerary', itinerarySchema);

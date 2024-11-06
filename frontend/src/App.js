@@ -9,6 +9,7 @@ import ActivityForm from './Components/ActivityForm.jsx';
 
 import './App.css';
 
+import RatingsAndCommentsPage from "./pages/RatingsAndCommentsPage.js";
 import TouristDetails from "./pages/TouristDetails.js";
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./pages/AdvertiserSignup.js";
@@ -106,7 +107,10 @@ const App = () => {
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
           <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
           <Route path="/signup-options" element={<SignupOptions />} />
+
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
+          <Route path="/RatingsAndCommentsPage/:id" element={<RatingsAndCommentsPage />} />
+
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/tour-guide" element={<TourGuidePage />} />

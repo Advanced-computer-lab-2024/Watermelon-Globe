@@ -134,6 +134,17 @@ app.get('/getChildItinerary/:id', touristItineraryController.getChildItineraryBy
 app.get('/getAllChildIitineraries', touristItineraryController.getAllChildItineraries);
 app.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
 app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
+//sprint 2
+app.get(`/getMyCompletedItineraries/:buyerId`,async (req, res) => {
+  const { buyerId } = req.params;
+
+  try {
+    const completedItineraries = await touristItineraryController.getMyCompletedItineraries(buyerId);
+    res.status(200).json(completedItineraries);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 //tourist
 app.post("/addTourist",createTourist);
