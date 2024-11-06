@@ -12,7 +12,7 @@ const ActivityCategoryForm = () => {
     e.preventDefault()
     const activitycategory = {activity}
     
-    const response = await fetch('/api/Admin/ActivityCategory', {
+    const response = await fetch('/api/Admin/CreateActivityCategory', {
       method: 'POST',
       body: JSON.stringify(activitycategory),
       headers: {

@@ -7,8 +7,11 @@ const {
   getTourist,
   deleteTourist,
   updateTourist,
+  fileComplaint,
   changePasswordTourist,
-  updateRating
+  updateRating,
+  getAllProducts,
+  searchProductbyName,
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -26,7 +29,16 @@ router.delete("/deleteTourist/:id", deleteTourist);
 //UPDATE a tourist
 router.put("/updateTourist/:id", updateTourist);
 
+//POST a new complaint
+router.post("/Complaint", fileComplaint);
+
 router.put("/changePasswordTourist/:id",changePasswordTourist);
 router.put("/updateRating/:id", updateRating);
+
+//Get all products
+router.get('/GetAllProducts', getAllProducts)
+
+//search a product 
+router.get('/searchProductName', searchProductbyName)
 
 module.exports = router;

@@ -7,7 +7,7 @@ const SortProducts = () => {
   // Function to fetch and sort products by ratings
   const fetchSortedProducts = async () => {
     try {
-      const response = await fetch('/api/Admin/sortProducts', {
+      const response = await fetch('/api/Sort/sortProducts', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

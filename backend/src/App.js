@@ -4,7 +4,7 @@ mongoose.set('strictQuery', false);
 require("dotenv").config();
 //Routes
 //const Admin = require('./Routes/admin');
-const admin = require('./Routes/admin');
+const admin = require('./Routes/Admin');
 const Advertiser = require('./Routes/advertiser');
 const Filter = require('./Routes/filter');
 const Governor = require('./Routes/governor');
@@ -45,7 +45,7 @@ app.use((req,res,next) =>{
 })
 
 //APIs
-app.use('/api/admin', admin);
+app.use('/api/Admin', admin);
 app.use('/api/Advertiser', Advertiser);
 app.use('/api/Filter' , Filter)
 app.use('/api/Governor', Governor);

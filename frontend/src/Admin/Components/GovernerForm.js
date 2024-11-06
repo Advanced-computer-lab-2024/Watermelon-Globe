@@ -25,7 +25,7 @@ const GovernerForm = () => {
 
     const governer = { username, password };
 
-    const response = await fetch('/api/Admin/Governer', {
+    const response = await fetch('/api/Admin/CreateGoverner', {
       method: 'POST',
       body: JSON.stringify(governer),
       headers: {

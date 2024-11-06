@@ -19,7 +19,7 @@ const UpdateProduct = () => {
 
     try {
       // Pass the productId as a query parameter in the fetch URL
-      const response = await fetch(`/api/Admin/editProduct?id=${productId}`, {
+      const response = await fetch(`/api/Admin/EditProduct?id=${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
