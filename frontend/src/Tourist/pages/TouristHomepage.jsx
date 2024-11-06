@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../pages/styles.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ExploreTrips from '../Components/ExploreTrips.jsx';
 import ExploreActivities from '../Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
-import profileIcon from '../../Assets/Profile.png';
 
 const HomePage = () => {
   const { id } = useParams();
@@ -13,7 +12,7 @@ const HomePage = () => {
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
-  const [isSignedUp, setIsSignedUp] = useState(true); // Assuming the user is always logged in
+  const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -24,10 +23,6 @@ const HomePage = () => {
     // Implement your sign out logic here
     setIsSignedUp(false);
     // You might want to clear user data, tokens, etc.
-  };
-
-  const handleViewDetails = () => {
-    navigate(`TouristDetails${id}`);
   };
 
   return (
@@ -49,8 +44,6 @@ const HomePage = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{backgroundImage: `url(/placeholder.svg?height=600&width=1200)`}}
-            role="img"
-            aria-label="Background image of a travel destination"
           ></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 max-w-4xl mx-auto px-4">
