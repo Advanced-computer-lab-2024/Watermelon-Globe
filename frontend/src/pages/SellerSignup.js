@@ -2,15 +2,15 @@ import './SignUp.css';
 import {useState } from "react"
 // import Seller from "../../../ModelsGuest/seller"
 const SignupSeller =()=>{
-    const [Username,setUsername]=useState("")
+    const [Name,setUsername]=useState("")
     const [Email,setEmail]=useState("")
     const [Password,setPassword]=useState("")
     const [error,setError]=useState("")
 
     const handleSubmit =async(e)=>{
         e.preventDefault()
-        const seller ={Username,Email,Password}
-        const response = await fetch('/addSeller',{
+        const seller ={Name,Email,Password}
+        const response = await fetch('/api/seller/CreateSeller',{
             method:'POST',
             body:JSON.stringify(seller),
             headers :{
@@ -38,7 +38,7 @@ return (
         <input 
         type="text"
         onChange={(e)=> setUsername(e.target.value)}
-        value={Username}/>
+        value={Name}/>
         </label>
 
 <label> Email :

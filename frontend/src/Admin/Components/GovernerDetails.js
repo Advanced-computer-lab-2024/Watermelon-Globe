@@ -4,7 +4,7 @@ const GovernerDetails = ({ governer }) => {
     const { dispatch } = useGovernerContext();
 
     const handleClick = async () => {
-      const response = await fetch('/api/Admin/Governer/' + governer._id, {
+      const response = await fetch('/api/Admin/DeleteGoverner/' + governer._id, {
         method: 'DELETE'
       });
       const json = await response.json();

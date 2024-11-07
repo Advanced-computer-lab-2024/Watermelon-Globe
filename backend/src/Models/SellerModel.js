@@ -14,6 +14,18 @@ const sellerSchema = new Schema({
     Description: {
         type: String,
         required: true
+    },
+    idProof: { 
+        type: String, 
+        required: false 
+    },
+    taxationRegistryCard: { 
+        type: String, 
+        required: false 
+    },
+    Password:{
+        type: String,
+        required:true
     }
 }, {timestamps: true})
 

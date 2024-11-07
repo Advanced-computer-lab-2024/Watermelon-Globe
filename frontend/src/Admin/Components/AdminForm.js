@@ -25,7 +25,7 @@ const AdminForm = () => {
 
     const admin = { username, password };
 
-    const response = await fetch('/api/Admin/Admin', {
+    const response = await fetch('/api/Admin/CreateAdmin', {
       method: 'POST',
       body: JSON.stringify(admin),
       headers: {

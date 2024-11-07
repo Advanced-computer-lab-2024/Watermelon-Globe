@@ -10,7 +10,7 @@ const SignupAdvertiser =()=>{
     const handleSubmit =async(e)=>{
         e.preventDefault()
         const advertiser ={Username,Email,Password}
-        const response = await fetch('/addAdvertiser',{
+        const response = await fetch('/api/guest/addAdvertiser',{
             method:'POST',
             body:JSON.stringify(advertiser),
             headers :{

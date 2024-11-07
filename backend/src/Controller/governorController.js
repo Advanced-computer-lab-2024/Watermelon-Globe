@@ -152,4 +152,49 @@ const filterByTags = async (req, res) => {
   }
 };
 
-module.exports = {createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags };
+const changePasswordGovernor = async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+
+  console.log(id, oldPassword, newPassword);
+
+  // Validate inputs
+  if (!oldPassword) {
+    return res.status(400).json({ error: "Old password is required" }); // Use 400 for bad requests
+  }
+  if (!newPassword) {
+    return res.status(400).json({ error: "New password is required" });
+  }
+  if (!newPasswordConfirmed) {
+    return res.status(400).json({ error: "New password confirmation is required" });
+  }
+
+  try {
+    const governor = await governorModel.findOne({ _id: id });
+
+    if (!governor) {
+      return res.status(404).json({ error: "governor not found" }); // Tourist not found
+    }
+
+    // Compare the old password directly
+    if (governor.password !== oldPassword) {
+      return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
+    }
+
+    // Check if new passwords match
+    if (newPassword !== newPasswordConfirmed) {
+      return res.status(400).json({ error: "New password and confirmed password do not match" });
+    }
+
+    // Update the password directly
+    governor.password = newPassword;
+    await governor.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = {createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags,changePasswordGovernor };

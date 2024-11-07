@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import SideBar from '../../Components/Admin/AdminSideBar'; // Import the SideBar component
-import GetAllProducts from '../../Components/Admin/GetAllProducts';
-import CreateProduct from '../../Components/Admin/createProduct';
-import SearchProductByName from '../../Components/Admin/SearchProductByName';
-import UpdateProduct from '../../Components/Admin/updateProduct';
-import FilterProduct from '../../Components/Admin/filterProduct';
-import SortProduct from '../../Components/Admin/sortProduct';
+import SideBar from '../Components/AdminProduct/AdminSideBar'; // Import the SideBar component
+import GetAllProducts from '../Components/AdminProduct/GetAllProducts';
+import CreateProduct from '../Components/AdminProduct/createProduct';
+import SearchProductByName from '../Components/AdminProduct/SearchProductByName';
+import UpdateProduct from '../Components/AdminProduct/updateProduct';
+import FilterProduct from '../Components/AdminProduct/filterProduct';
+import SortProduct from '../Components/AdminProduct/sortProduct';
 
 
 const AdminProduct = () => {
