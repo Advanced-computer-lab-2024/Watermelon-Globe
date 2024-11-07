@@ -16,7 +16,7 @@ export default function YourMainPage() {
       <header className="bg-white shadow-md">
         <Navbar />
       </header>
-      <main>
+      <main> 
         <ItinerarySlider />
       </main>
     </div>
