@@ -23,6 +23,10 @@ const sellerSchema = new Schema({
         type: String, 
         required: false 
     },
+    Password:{
+        type: String,
+        required:true
+    }
 }, {timestamps: true})
 
 

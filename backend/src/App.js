@@ -13,7 +13,8 @@ require("dotenv").config();
 // }
 
 //Routes
-const Admin = require('./Routes/admin');
+//const Admin = require('./Routes/admin');
+const admin = require('./Routes/Admin');
 const Advertiser = require('./Routes/advertiser');
 const Activity = require('./Routes/Activities');
 const Filter = require('./Routes/filter');
@@ -138,18 +139,18 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
 
 //APIs
-app.use('/api/Admin', Admin);
+app.use('/api/Admin', admin);
 app.use('/api/Advertiser', Advertiser);
 app.use('/api/Activities', Activity);
 app.use('/api/Filter' , Filter)
 app.use('/api/Governor', Governor);
 app.use('/api/Guest' , Guest);
-app.use('/api/Itenerary' , Itinerary);
+app.use('/api/Itinerary' , Itinerary);
 app.use('/api/Seller', Seller);
 app.use('/api/Sort' , Sort);
 app.use('/api/TourGuide' , TourGuide);
 app.use('/api/Tourist' , Tourist);
-app.use('/api/TouristItenerary' , TouristItinerary);
+app.use('/api/TouristItinerary' , TouristItinerary);
 
 
 

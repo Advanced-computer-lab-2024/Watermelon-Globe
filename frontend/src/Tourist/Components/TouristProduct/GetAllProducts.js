@@ -6,7 +6,7 @@ const GetAllProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/Seller/products');
+        const response = await fetch('/api/Tourist/GetAllProducts');
         const data = await response.json();
         setProducts(data);
       } catch (error) {

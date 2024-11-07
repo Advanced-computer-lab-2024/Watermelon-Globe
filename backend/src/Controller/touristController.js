@@ -2,6 +2,8 @@ const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
 const itineraryModel = require ("../Models/itineraryModel");
 const Itinerary = require("../Models/itineraryModel");
+const Complaint = require("../Models/Complaint");
+const Product = require('../Models/productModel')
 
 //Tourist
 
@@ -163,6 +165,176 @@ const updateRating = async (req, res) => {
 
 
 
+const changePasswordTourist = async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+
+  console.log(id, oldPassword, newPassword);
+
+  // Validate inputs
+  if (!oldPassword) {
+    return res.status(400).json({ error: "Old password is required" }); // Use 400 for bad requests
+  }
+  if (!newPassword) {
+    return res.status(400).json({ error: "New password is required" });
+  }
+  if (!newPasswordConfirmed) {
+    return res.status(400).json({ error: "New password confirmation is required" });
+  }
+
+  try {
+    const tourist = await Tourist.findOne({ _id: id });
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" }); // Tourist not found
+    }
+
+    // Compare the old password directly
+    if (tourist.password !== oldPassword) {
+      return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
+    }
+
+    // Check if new passwords match
+    if (newPassword !== newPasswordConfirmed) {
+      return res.status(400).json({ error: "New password and confirmed password do not match" });
+    }
+
+    // Update the password directly
+    tourist.password = newPassword;
+    await tourist.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+// Get all products
+const getAllProducts = async (req, res) => {
+  const products = await Product.find({}).sort({ createdAt: -1 })
+
+  res.status(200).json(products)
+}
+
+
+//search a product by name
+const searchProductbyName = async (req, res) => {
+  try {
+    // Access the product name from query parameters
+    const productName = req.query.name;
+
+    // Search for the product in the database using the name from query
+    let product = await Product.find({ name: new RegExp(productName, 'i') });
+
+    if (!product || product.length === 0) {
+      // Return a 404 status code if no product is found
+      return res.status(404).json({ error: 'No such product' });
+    }
+
+    // Return the found product(s) with a 200 status
+    return res.status(200).json(product);
+  } catch (error) {
+    // Handle potential errors
+    return res.status(500).json({ error: 'An error occurred while searching for the product' });
+  }
+};
+
+
+
+//filter products based on price
+const filterProduct = async (req, res) => {
+  // Extract the Price from the URL parameters
+  const { price } = req.params;  // Assuming the param is named 'price'
+
+  try {
+    // Convert the price to a number for comparison
+    const priceValue = parseFloat(price);
+
+    if (isNaN(priceValue)) {
+      return res.status(400).json({ error: 'Invalid price format' });
+    }
+
+    // Find the product by price
+    let product = await Product.findOne({ price: priceValue });
+
+    if (!product) {
+      return res.status(400).json({ error: 'No such product' });
+    }
+
+    // Return the found product
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(500).json({ error: 'An error occurred while fetching the product' });
+  }
+};
+
+
+
+//Update a product
+const updateProduct = async (req, res) => {
+  const { id } = req.query
+  const { name, description, price} = req.body
+
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'No such product' })
+  }
+
+  try {
+      // Update only the details and price fields
+      const product = await Product.findOneAndUpdate(
+          { _id: id },
+          { name, description, price},
+          { new: true } // Return the updated product
+      )
+
+      if (!product) {
+          return res.status(400).json({ error: 'No such product' })
+      }
+
+      res.status(200).json(product)
+  } catch (error) {
+      res.status(400).json({ error: error.message })
+  }
+}
+// Sort products by ratings
+const sortProducts = async (req, res) => {
+  try {
+      // Fetch all products and sort them by ratings in descending order
+      const products = await Product.find({}).sort({ ratings: -1 })
+
+      res.status(200).json(products)
+  } catch (error) {
+      res.status(400).json({ error: error.message })
+  }
+}
+
+
+const fileComplaint = async (req, res) => {
+  const { title, body, date } = req.body;
+
+  // Check if title, body or date are missing
+  if (!title || !body) {
+    return res.status(400).json({ error: 'Title and body are required' });
+  }
+
+  try {
+    // Create a complaint
+    const complaint = await Complaint.create({ 
+      title, 
+      body, 
+      date: date || new Date() // Default to current date if not provided
+    });
+    res.status(200).json(complaint);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
 
 module.exports = {
   createTourist,
@@ -170,5 +342,11 @@ module.exports = {
   getTourist,
   deleteTourist,
   updateTourist,
-  updateRating
+  updateRating,
+  changePasswordTourist,
+  fileComplaint,
+  getAllProducts,
+  searchProductbyName,
+  filterProduct,
+  sortProducts
 };

@@ -9,7 +9,7 @@ const ActivityCategory = () => {
 
     useEffect(() => {
         const fetchActivitycategory = async() => {
-            const response = await fetch('/api/Admin/ActivityCategory')
+            const response = await fetch('/api/Admin/GetAllActivityCategory')
             const json = await response.json()
 
             if (response.ok){

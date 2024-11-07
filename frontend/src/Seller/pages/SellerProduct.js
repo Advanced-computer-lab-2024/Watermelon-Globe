@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import SideBar from '../Components/Seller/SellerSideBar'; // Import the SideBar component
-import GetAllProducts from '../Components/Seller/GetAllProducts';
-import CreateProduct from '../Components/Seller/createProduct';
-import SearchProductByName from '../Components/Seller/SearchProductByName';
-import UpdateProduct from '../Components/Seller/updateProduct';
-import FilterProduct from '../Components/Seller/filterProduct';
-import SortProduct from '../Components/Seller/sortProduct';
-import CreateProfile from '../Components/Seller/createProfile';
-import ViewProfile from '../Components/Seller/viewProfile';
-import UpdateProfile from '../Components/Seller/updateProfile';
+import SideBar from '../Components/SellerSideBar'; // Import the SideBar component
+import GetAllProducts from '../Components/GetAllProducts';
+import CreateProduct from '../Components/createProduct';
+import SearchProductByName from '../Components/SearchProductByName';
+import UpdateProduct from '../Components/updateProduct';
+import FilterProduct from '../Components/filterProduct';
+import SortProduct from '../Components/sortProduct';
+import CreateProfile from '../Components/createProfile';
+import ViewProfile from '../Components/viewProfile';
+import UpdateProfile from '../Components/updateProfile';
 
 
 

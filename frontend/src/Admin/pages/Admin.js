@@ -9,7 +9,7 @@ const Admin = () => {
 
     useEffect(() => {
         const fetchAdmin = async() => {
-            const response = await fetch('/api/Admin/Admin')
+            const response = await fetch('/api/Admin/GetAllAdmin')
             const json = await response.json()
 
             if (response.ok){

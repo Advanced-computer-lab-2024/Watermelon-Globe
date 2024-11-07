@@ -9,7 +9,7 @@ const ActivitycategoryDetails = ({ activitycategory }) => {
 
     // Function to handle deleting the activity category
     const handleClick = async () => {
-      const response = await fetch('/api/Admin/ActivityCategory/' + activitycategory._id, {
+      const response = await fetch('/api/Admin/DeleteActivityCategory/' + activitycategory._id, {
         method: 'DELETE'
       });
       const json = await response.json();
@@ -20,7 +20,7 @@ const ActivitycategoryDetails = ({ activitycategory }) => {
 
     // Function to handle updating the activity category
     const handleUpdate = async () => {
-      const response = await fetch('/api/Admin/ActivityCategory/' + activitycategory._id, {
+      const response = await fetch('/api/Admin/UpdateActivityCategory/' + activitycategory._id, {
         method: 'PUT',
         body: JSON.stringify({ activity: newActivity }),
         headers: {

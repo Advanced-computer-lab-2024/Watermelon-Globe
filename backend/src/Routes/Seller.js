@@ -9,7 +9,11 @@ const {
     getAllProducts,
     searchProductbyName,
     updateProduct,
-} = require('../Controller/sellerController')
+    sortProducts,
+    updateRatingProduct,
+    changePasswordSeller,
+    reviewProduct
+} = require('../Controller/SellerController')
 
 const router = express.Router()
 
@@ -30,6 +34,8 @@ router.delete('/DeleteSeller/:id', deleteSeller)
 //update a seller 
 router.put('/UpdateSeller/:id', updateSeller)
 
+router.put('/changePasswordSeller/:id',changePasswordSeller);
+
 //////////////// Products ////////////////
 
 
@@ -47,5 +53,14 @@ router.get('/searchProductName', searchProductbyName)
 
 //update a product 
 router.put('/editProduct', updateProduct)
+
+//sort Products according to Ratings
+router.get('/sortProducts', sortProducts)
+
+router.put("/updateRatingProduct/:id",updateRatingProduct);
+
+router.put("/reviewProduct/:ReviewerId/:ProductId",reviewProduct);
+
+
 
 module.exports = router

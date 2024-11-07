@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from "react";
-import './styles.css';
+import React, { useState, useRef, useEffect } from "react";
+import '../../pages/styles.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
-// import { ChevronLeft, ChevronRight } from 'lucide-react';
-import './Navbar.css';
-import Navbar from './Navbar.jsx';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import '../../pages/Navbar.css';
+import Navbar from '../../pages/Navbar';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -19,13 +19,13 @@ export default function HomePage() {
   const [activityFilter, setActivityFilter] = useState('all');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [minPrice, setMinPrice] = useState(null);
-  const [maxPrice, setMaxPrice] = useState(null);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const [startDateActivity, setStartDateActivity] = useState(null);
   const [endDateActivity, setEndDateActivity] = useState(null);
-  const [minPriceActivity, setMinPriceActivity] = useState(null);
-  const [maxPriceActivity, setMaxPriceActivity] = useState(null);
-  const [ratingActivity, setRatingActivity] = useState(null);
+  const [minPriceActivity, setMinPriceActivity] = useState('');
+  const [maxPriceActivity, setMaxPriceActivity] = useState('');
+  const [ratingActivity, setRatingActivity] = useState('');
   const [languageOfTour, setLanguageOfTour] = useState('');
   const [itineraries, setItineraries] = useState([]);
   const [sites, setSites] = useState([]);
@@ -43,9 +43,7 @@ export default function HomePage() {
   const tripScrollRef = useRef(null);
   const activitiesScrollRef = useRef(null);
 
-  const 
-  
-handleSearch = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     console.log('Searching for:', { destination, dates, guests });
   };
@@ -74,7 +72,7 @@ handleSearch = (e) => {
     const formatDate = (date) => {
       if (!date) return null;
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     };
@@ -87,13 +85,13 @@ handleSearch = (e) => {
       maxPrice,
     };
     
-
     try {
-      const response = await axios.get('/itineraryFilter', { params });
-      if (response==null) {
+      const response = await axios.get('/api/filter/itineraryFilter', { params });
+      if (response.data == null) {
         setItineraries([]); 
       } else {
-        setItineraries(response.data);}
+        setItineraries(response.data);
+      }
     } catch (error) {
       console.error("Error fetching itineraries", error);
     }
@@ -103,103 +101,83 @@ handleSearch = (e) => {
     const tagId = event.target.value;
     setSelectedTag(tagId);
 
-    
-
-  if (tagId === "all") {
-    fetchSites();
-  }
-  else{
-
-
-    if (tagId) {
+    if (tagId === "all") {
+      fetchSites();
+    } else if (tagId) {
       try {
-        const response = await fetch(`/filterByTags/${tagId}`); // Adjust API endpoint as necessary
+        const response = await fetch(`/api/filter/filterByTags/${tagId}`);
         const sites = await response.json();
         setFilteredSites2(sites);
       } catch (error) {
         console.error('Error filtering sites:', error);
       }
     } else {
-      setFilteredSites2([]); // Reset filtered sites if no tag is selected
+      setFilteredSites2([]);
     }
-  };}
+  };
 
   const handlePrefIChange = async (event) => {
     const tagId = event.target.value;
     setSelectedTag(tagId);
 
-    
-
-  if (tagId === "all") {
-    fetchTrips();
-  }
-  else{
-
-
-    if (tagId) {
+    if (tagId === "all") {
+      fetchTrips();
+    } else if (tagId) {
       try {
-        const response = await fetch(`/filterByPreferenceItineraries/${tagId}`); // Adjust API endpoint as necessary
+        const response = await fetch(`/api/filter/filterByPreferenceItineraries/${tagId}`);
         const trips = await response.json();
         setItineraries(trips);
       } catch (error) {
-        console.error('Error filtering sites:', error);
+        console.error('Error filtering itineraries:', error);
       }
     } else {
-      setItineraries([]); // Reset filtered sites if no tag is selected
+      setItineraries([]);
     }
-  };}
+  };
 
   const handlePrefAChange = async (event) => {
     const tagId = event.target.value;
     setSelectedTag(tagId);
 
-    
-
-  if (tagId === "all") {
-    fetchActivities();
-  }
-  else{
-
-
-    if (tagId) {
+    if (tagId === "all") {
+      fetchActivities();
+    } else if (tagId) {
       try {
-        const response = await fetch(`/filterByPreferenceItineraries/${tagId}`); // Adjust API endpoint as necessary
-        const trips = await response.json();
-        setItineraries(trips);
+        const response = await fetch(`/api/filter/filterByPreferenceActivities/${tagId}`);
+        const activities = await response.json();
+        setActivities(activities);
       } catch (error) {
-        console.error('Error filtering sites:', error);
+        console.error('Error filtering activities:', error);
       }
     } else {
-      setItineraries([]); // Reset filtered sites if no tag is selected
+      setActivities([]);
     }
-  };}
+  };
 
   const handleFilterActivity = async () => {
     const formatDate = (date) => {
       if (!date) return null;
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     };
     
     const params = {
-      startDateActivity: formatDate(startDate),
-      endDateActivity: formatDate(endDate),
+      startDateActivity: formatDate(startDateActivity),
+      endDateActivity: formatDate(endDateActivity),
       minPriceActivity,
       maxPriceActivity,
       ratingActivity
-
-      
     };
     
-
     try {
-      const response = await axios.get('/filterActivities', { params });
-      if (response==null) {
+      const response = await axios.get('/api/filter/filterActivities', { params });
+      if (response.data == null) {
         setActivities([]); 
       } else {
-        setActivities(response.data);}
+        setActivities(response.data);
+      }
     } catch (error) {
       console.error("Error fetching activities", error);
     }
@@ -207,16 +185,17 @@ handleSearch = (e) => {
 
   const fetchTrips = async () => {
     try {
-      const response = await fetch('/getAllItineraries');
+      const response = await fetch('/api/itinerary/getAllItineraries');
       const data = await response.json();
       setItineraries(data);
     } catch (error) {
       console.error('Error fetching trips:', error);
     }
   };
+
   const fetchSites = async () => {
     try {
-      const response = await fetch('/getAllSites');
+      const response = await fetch('/api/governor/getAllSites');
       const data = await response.json();
       setFilteredSites2(data);
     } catch (error) {
@@ -226,7 +205,7 @@ handleSearch = (e) => {
 
   const fetchActivities = async () => {
     try {
-      const response = await fetch('/getActivitiesNew');
+      const response = await fetch('/api/advertiser/getActivitiesNew');
       const data = await response.json();
       setActivities(data);
     } catch (error) {
@@ -234,13 +213,14 @@ handleSearch = (e) => {
     }
   };
 
-
   useEffect(() => {
     fetchTrips();
+    fetchActivities();
+    fetchSites();
 
     const fetchTags = async () => {
       try {
-        const response = await fetch('/getTags'); // Adjust the endpoint according to your API
+        const response = await fetch('/api/tags/getTags');
         const data = await response.json();
         setTags(data);
       } catch (error) {
@@ -248,28 +228,25 @@ handleSearch = (e) => {
       }
     };
 
-    const fetchPref =async()=>{
+    const fetchPref = async () => {
       try {
-        const response = await fetch('/api/Admin/PreferenceTag'); // Adjust the endpoint according to your API
+        const response = await fetch('/api/admin/PreferenceTag');
         const data = await response.json();
         setPrefItinerary(data);
       } catch (error) {
-        console.error('Error fetching tags:', error);
+        console.error('Error fetching preference tags:', error);
       }
-    }
-    fetchPref();
+    };
 
     fetchTags();
-  
-    fetchActivities();
-    fetchSites();
+    fetchPref();
   }, []);
 
   const resetFiltersAndFetchAll = () => {
     setStartDate(null);
     setEndDate(null);
-    setMinPrice(null);
-    setMaxPrice(null);
+    setMinPrice('');
+    setMaxPrice('');
     setLanguageOfTour('');
     setTripSearch('');
     setTripFilter('all');
@@ -279,9 +256,8 @@ handleSearch = (e) => {
   const resetFiltersAndFetchAllActivity = () => {
     setStartDateActivity(null);
     setEndDateActivity(null);
-    setMinPriceActivity(null);
-    setMaxPriceActivity(null);
-
+    setMinPriceActivity('');
+    setMaxPriceActivity('');
     setActivitySearch('');
     setActivityFilter('all');
     fetchActivities();
@@ -303,19 +279,6 @@ handleSearch = (e) => {
     return 0;
   });
 
-  // const filteredActivities = activities.filter(activity =>
-  //   activity && activity.name && activity.name.toLowerCase().includes(activitySearch.toLowerCase()) &&
-  //   (activityFilter === 'all' || activity.category === activityFilter)
-  // );
-
-  // const sortedActivities = [...filteredActivities].sort((a, b) => {
-  //   if (activitySort === 'priceAsc') return (a.price || 0) - (b.price || 0);
-  //   if (activitySort === 'priceDesc') return (b.price || 0) - (a.price || 0);
-  //   if (activitySort === 'ratingAsc') return (a.rating || 0) - (b.rating || 0);
-  //   if (activitySort === 'ratingDesc') return (b.rating || 0) - (a.rating || 0);
-  //   return 0;
-  // });
-
   const handleTripClick = (tripId) => {
     navigate(`/itineraryDetails/${tripId}`);
   };
@@ -327,12 +290,25 @@ handleSearch = (e) => {
   const scrollRight = (ref) => {
     ref.current.scrollBy({ left: 300, behavior: 'smooth' });
   };
-
   return (
     <div className="min-h-screen flex flex-col">
-      
-      <header className="bg-white shadow-md">
       <Navbar />
+      <header className="bg-white shadow-md">
+        <nav className="container mx-auto px-9 py-9 flex justify-between items-center">
+          <div className="text-2xl font-bold">WaterMelon Globe</div>
+          <div className="hidden md:flex space-x-4">
+            <a href="#" className="text-gray-600 hover:text-gray-900">Hotel</a>
+            <a href="#" className="text-gray-600 hover:text-gray-900">Flight</a>
+            <a href="#" className="text-gray-600 hover:text-gray-900">Train</a>
+            <a href="#" className="text-gray-600 hover:text-gray-900">Travel</a>
+            <a href="#" className="text-gray-600 hover:text-gray-900">Car Rental</a>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button className="px-9 py-1 border rounded">EN</button>
+            <button className="px-9 py-1 border rounded">Log in</button>
+            <button onClick={() => navigate('/signup-options')} className="px-9 py-1 bg-blue-600 text-white rounded">Sign up</button>
+          </div>
+        </nav>
       </header>
 
       <main className="flex-grow">

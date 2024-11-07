@@ -1,15 +1,15 @@
 import './SignUp.css';
 import {useState } from "react"
 const SignupTourguide =()=>{
-    const [Username,setUsername]=useState("")
-    const [Email,setEmail]=useState("")
-    const [Password,setPassword]=useState("")
+    const [username,setUsername]=useState("")
+    const [email,setEmail]=useState("")
+    const [password,setPassword]=useState("")
     const [error,setError]=useState("")
 
     const handleSubmit =async(e)=>{
         e.preventDefault()
-        const tourguide ={Username,Email,Password}
-        const response = await fetch('/addTourguide',{
+        const tourguide ={username,email,password}
+        const response = await fetch('/api/guest/addTourguide',{
             method:'POST',
             body:JSON.stringify(tourguide),
             headers :{
@@ -37,21 +37,21 @@ return (
         <input 
         type="text"
         onChange={(e)=> setUsername(e.target.value)}
-        value={Username}/>
+        value={username}/>
         </label>
 
 <label> Email :
         <input 
         type="email"
         onChange={(e)=> setEmail(e.target.value)}
-        value={Email}/>
+        value={email}/>
         </label>
 
 <label> Password :
         <input 
         type="password"
         onChange={(e)=> setPassword(e.target.value)}
-        value={Password}/>
+        value={password}/>
         </label>
 <button> Sign up as tourguide</button>
 {error & <div className='error'>{error}</div>}

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {sortByPriceActivity,sortByRatingsActivity} = require ("../Controller/activityController");
 const guideController = require('../Controller/guideController'); // Import the controller
-const{sortProducts} = require('../Controller/adminController')
+const{sortProducts} = require('../Controller/AdminController')
 
 
 router.get("/sortByPrice",guideController.sortByPrice);

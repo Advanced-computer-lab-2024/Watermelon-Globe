@@ -1,9 +1,0 @@
-.tourists {
-    max-height: 80vh; /* Set a max height for the container */
-    overflow-y: auto; /* Enable vertical scrolling */
-    padding: 10px; /* Optional padding */
-    border: 1px solid #ccc; /* Optional border */
-    border-radius: 5px; /* Optional rounded corners */
-    background-color: #f9f9f9; /* Optional background color */
-  }
-  

@@ -9,7 +9,7 @@ const Governer = () => {
 
     useEffect(() => {
         const fetchGoverner = async() => {
-            const response = await fetch('/api/Admin/Governer')
+            const response = await fetch('/api/Admin/GetAllGoverner')
             const json = await response.json()
 
             if (response.ok){

@@ -8,7 +8,7 @@ const PreferenceTagDetails = ({ preferencetag }) => {
     const [error, setError] = useState(null);
 
     const handleClick = async () => {
-      const response = await fetch('/api/Admin/PreferenceTag/' + preferencetag._id, {
+      const response = await fetch('/api/Admin/DeletePreferenceTag/' + preferencetag._id, {
         method: 'DELETE'
       });
       const json = await response.json();
@@ -18,7 +18,7 @@ const PreferenceTagDetails = ({ preferencetag }) => {
     };
 
     const handleUpdate = async () => {
-      const response = await fetch('/api/Admin/PreferenceTag/' + preferencetag._id, {
+      const response = await fetch('/api/Admin/UpdatePreferenceTag/' + preferencetag._id, {
         method: 'PUT',
         body: JSON.stringify({ tag: newTag }),
         headers: {
