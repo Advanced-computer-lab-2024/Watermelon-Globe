@@ -78,19 +78,19 @@ const createActivityNew = async (req, res) => {
       // Handle any server errors
       res.status(500).json({ message: 'Error creating activity', error: error.message });
     }
-  };
+};
 
-  const getActivitiesNew = async (req, res) => {
-    try {
-      const activities = await ActivityModel.find().populate('Category').populate('tags').populate('Advertiser');
-      res.status(200).json({
-        message: 'Activities retrieved successfully',
-        activities: activities
-      });
-    } catch (error) {
-      res.status(500).json({ message: 'Error retrieving activities', error: error.message });
-    }
-  };
+const getActivitiesNew = async (req, res) => {
+try {
+    const activities = await ActivityModel.find().populate('Category').populate('tags').populate('Advertiser');
+    res.status(200).json({
+    message: 'Activities retrieved successfully',
+    activities: activities
+    });
+} catch (error) {
+    res.status(500).json({ message: 'Error retrieving activities', error: error.message });
+}
+};
 
 const createActivity = async (req, res) => {
     try {
@@ -134,7 +134,7 @@ const createActivity = async (req, res) => {
                 error: error.message
             });
         }
-    };
+};
 
 const getActivities = async (req, res) => {
     try {
@@ -235,53 +235,53 @@ const sortByPriceActivity = async (req, res) => {
 };
 
 
-  const filterActivities = async (req, res) => {
-    const { startDate, endDate, minPrice, maxPrice, category, minRating, maxRating } = req.query; // Expecting date strings, price parameters, category, and rating parameters
-    console.log(req.query)
-    try {
-        // Convert strings to Date objects if provided
-        const start = startDate ? new Date(startDate) : null;
-        const end = endDate ? new Date(endDate) : null;
+const filterActivities = async (req, res) => {
+const { startDate, endDate, minPrice, maxPrice, category, minRating, maxRating } = req.query; // Expecting date strings, price parameters, category, and rating parameters
+console.log(req.query)
+try {
+    // Convert strings to Date objects if provided
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
 
-        // Parse minPrice and maxPrice to numbers, if provided
-        const min = minPrice ? parseFloat(minPrice) : null;
-        const max = maxPrice ? parseFloat(maxPrice) : null;
+    // Parse minPrice and maxPrice to numbers, if provided
+    const min = minPrice ? parseFloat(minPrice) : null;
+    const max = maxPrice ? parseFloat(maxPrice) : null;
 
-        // Parse minRating and maxRating to numbers, if provided
-        const minRate = minRating ? parseFloat(minRating) : null;
-        const maxRate = maxRating ? parseFloat(maxRating) : null;
+    // Parse minRating and maxRating to numbers, if provided
+    const minRate = minRating ? parseFloat(minRating) : null;
+    const maxRate = maxRating ? parseFloat(maxRating) : null;
 
-        // Find all activities
-        const activities = await ActivityModel.find(); // Replace activityModel with your actual model
+    // Find all activities
+    const activities = await ActivityModel.find(); // Replace activityModel with your actual model
 
-        // Filter activities based on provided criteria
-        const filteredActivities = activities.filter(activity => {
-            // Check if the date falls within the specified range
-            const dateMatch = (start && end)
-                ? new Date(activity.Date) >= start && new Date(activity.Date) <= end
-                : true; // If no date range is specified, consider all dates
+    // Filter activities based on provided criteria
+    const filteredActivities = activities.filter(activity => {
+        // Check if the date falls within the specified range
+        const dateMatch = (start && end)
+            ? new Date(activity.Date) >= start && new Date(activity.Date) <= end
+            : true; // If no date range is specified, consider all dates
 
-            // Check if the category matches
-            const categoryMatch = category ? activity.Category === category : true;
+        // Check if the category matches
+        const categoryMatch = category ? activity.Category === category : true;
 
-            // Check if the price falls within the specified range
-            const priceMatch = (min === null || activity.Price >= min) && (max === null || activity.Price <= max);
+        // Check if the price falls within the specified range
+        const priceMatch = (min === null || activity.Price >= min) && (max === null || activity.Price <= max);
 
-            // Check if the rating falls within the specified range
-            const ratingMatch = (minRate === null || activity.Rating >= minRate) && (maxRate === null || activity.Rating <= maxRate);
+        // Check if the rating falls within the specified range
+        const ratingMatch = (minRate === null || activity.Rating >= minRate) && (maxRate === null || activity.Rating <= maxRate);
 
-            return dateMatch && categoryMatch && priceMatch && ratingMatch; // Return true if all conditions are satisfied
-        });
+        return dateMatch && categoryMatch && priceMatch && ratingMatch; // Return true if all conditions are satisfied
+    });
 
-        if (filteredActivities.length === 0) {
-            return res.status(404).json({ message: 'No activities found matching the specified criteria.' });
-        }
-
-        return res.status(200).json(filteredActivities);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Error filtering activities.', error });
+    if (filteredActivities.length === 0) {
+        return res.status(404).json({ message: 'No activities found matching the specified criteria.' });
     }
+
+    return res.status(200).json(filteredActivities);
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error filtering activities.', error });
+}
 };
 
 const updateActivityRating = async (req, res) => {
@@ -328,9 +328,5 @@ const updateActivityRating = async (req, res) => {
       return res.status(500).json({ message: 'Server error' });
   }
 };
-
-
-  
-
 
 module.exports = {createTags,getTags, createActivity, getActivities, getActivityById, updateActivity, deleteActivity,sortByPriceActivity,sortByRatingsActivity,filterActivities,updateActivityRating,createActivityNew,getActivitiesNew};

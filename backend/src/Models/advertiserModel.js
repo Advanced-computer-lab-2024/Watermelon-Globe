@@ -13,7 +13,15 @@ const advertiserSchema = new Schema({
   Password: {
     type: String,
     required: true,
-  }
+  },
+  idProof: { 
+    type: String, 
+    required: false 
+  },
+  taxationRegistryCard: { 
+    type: String, 
+    required: false 
+  },
 }, { timestamps: true });
 
 const Advertiser = mongoose.model('Advertiser', advertiserSchema);
