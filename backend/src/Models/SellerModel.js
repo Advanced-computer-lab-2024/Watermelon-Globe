@@ -14,7 +14,21 @@ const sellerSchema = new Schema({
     Description: {
         type: String,
         required: true
+    },
+    idProof: { 
+        type: String, 
+        required: false 
+    },
+    taxationRegistryCard: { 
+        type: String, 
+        required: false 
+    },
+    Password:{
+        type: String,
+        required:true
     }
 }, {timestamps: true})
 
-module.exports = mongoose.model('Seller', sellerSchema)
+
+const Seller = mongoose.model('Seller', sellerSchema);
+module.exports = Seller

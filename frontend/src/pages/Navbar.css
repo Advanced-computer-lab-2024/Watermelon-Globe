@@ -1,0 +1,104 @@
+nav {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+}
+
+.homeButton a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #333;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    background-color: grey;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.homeButton a:hover {
+    background-color: #0056b3;
+}
+
+/* Profile icon /
+.profileIcon {
+    width: 50px;  / Adjust the size as needed /
+    height: 50px; / Adjust the size as needed /
+    border-radius: 50%; / Makes the image circular */
+/* } */
+
+.signupDiv {
+    display: flex;
+    align-items: center;
+}
+
+.signupDiv button {
+    border: none;
+    background-color: grey;
+    color: white;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.signupDiv button:hover {
+    background-color: #0056b3;
+}
+
+.add-new-activity {
+    border: none;
+    background-color: grey;
+    color: white;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.add-new-activity button:hover {
+    background-color: #0056b3;
+}
+.homeButton {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .AccountLink {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profileIcon {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .editProfile {
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s ease;
+  }
+  
+  .editProfile:hover {
+    background-color: #e0e0e0;
+  }
+  
+  nav button {
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  nav button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  nav button[class*="bg-blue-600"]:hover {
+    background-color: #2563eb;
+  }

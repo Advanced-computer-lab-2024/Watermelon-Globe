@@ -1,46 +1,42 @@
 const express = require("express");
 const mongoose = require('mongoose');
+const fs = require('fs');
+const multer = require('multer');
+const path = require('path');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
 
-//company profile imports
-const { createProfile, updateProfile, getProfiles } = require("./Controller/companyProfileController");
+// if (typeof Busboy === 'function') {
+//   console.log("Busboy is a function and should work as expected.");
+// } else {
+//   console.log("Busboy is not recognized as a constructor.");
+// }
 
-//activity imports
-const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity,
-createTags, getTags, sortByPriceActivity,sortByRatingsActivity,
-filterActivities,updateActivityRating } = require ("./Controller/activityController");
+//Routes
+//const Admin = require('./Routes/admin');
+const admin = require('./Routes/Admin');
+const Advertiser = require('./Routes/advertiser');
+const Activity = require('./Routes/Activities');
+const Filter = require('./Routes/filter');
+const Governor = require('./Routes/governor');
+const Guest = require('./Routes/guest');
+const Itinerary = require('./Routes/itinerary');
+const Seller = require('./Routes/seller');
+const Sort = require('./Routes/sort');
+const TourGuide = require('./Routes/tourGuide');
+const Tourist = require('./Routes/tourist');
+const TouristItinerary = require('./Routes/touristItinerary');
 
-//guide imports
-const guideController = require('./Controller/guideController'); // Import the controller
-
-//tourist intin imports
-const touristItineraryController = require('./Controller/touristItineraryController')
-
-//governor imports
-const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags } =
-  require('./Controller/governorController');
-
-//admin imports
-const Admin = require('./Routes/Admin');
-
-//seller imports
-const Seller = require('./Routes/Seller');
-
-//tourist imports
-const touristRoutes = require("./Routes/tourist");
-const {updateRating} = require("./Controller/touristController");
-
-//guest imports
-const {createTourist,createTourguide, createSeller, createAdvertiser,getTourists,
-getItineraryDetails,filterItineraryByBudget, filterItineraryRating,filterItineraries,
-filterByLanguage,filterByDate,updateTourist} = require("./Controller/guestController"); 
-
+//imports for upload
+const tourGuideUpload = require('./Models/tourGuideModel');
+const advertiserUpload = require('./Models/companyProfileModel');
+// const sellerUpload = require('./Models/SellerModel');
 
 // App variables
 const app = express();
 const MongoURI = process.env.MONGO_URI;
 const cors = require('cors');
+const CompanyProfile = require("./Models/companyProfileModel");
 const port =  "8000";
 app.use(cors());
 
@@ -59,89 +55,118 @@ mongoose.connect(MongoURI)
 
 app.use(express.json())
 
-// app.use((req,res,next) =>{
-//   console.log(req.method, req.path)
-//   next()
-// })
+app.use((req,res,next) =>{
+  console.log(req.method, req.path)
+  next()
+})
+
+//file directory
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+      cb(null, '${Date.now()}-${file.originalname}'); // Saves the file with its original name
+  },
+});
+const upload = multer({ storage });
+
+app.post("/upload/tourguide/:tourGuideId", upload.fields([
+  { name: "idProof", maxCount: 1},
+  { name: "certificates", maxCount: 5}
+]), async(req, res)=>{
+  try{
+    
+    const files = req.files;
+    const tourGuideId = req.params.tourGuideId;
+
+    console.log(files.certificates);
+
+    await tourGuideUpload.findByIdAndUpdate(tourGuideId, {
+      idProof: files.idProof ? files.idProof[0].path : null,
+      certificates: files.certificates ? files.certificates.map(file => file.path) : [],
+    })
+
+    res.status(200).json({ message: "Files Uploaded Successfully" });
+  }catch (error) {
+    console.error("Error uploading files:", error);
+    res.status(500).json({ message: "File upload failed", error });
+  }
+});
+
+app.post("/upload/advertiser", upload.fields([
+  { name: "idProof", maxCount: 1 },
+  { name: "taxationRegistryCard", maxCount: 1 }
+]), async(req, res) => {
+  const files = req.files;
+  const advertiserId = req.body.userId;
+
+  await advertiserUpload.findByIdAndUpdate(advertiserId, {
+    idProof: files.idProof ? files.idProof[0].path : null,
+    taxationRegistryCard: files.taxationRegistryCard ? files.taxationRegistryCard[0].path : null,
+  })
+  res.status(200).json({ message: "Files uploaded successfully" });
+});
+
+app.post("/upload/seller", upload.fields([
+  { name: "idProof", maxCount: 1 },
+  { name: "taxationRegistryCard", maxCount: 1 }
+]), async(req, res) => {
+  const files = req.files;
+  const sellerId = req.body.userId;
+
+  await sellerUpload.findByIdAndUpdate(sellerId, {
+    idProof: files.idProof ? files.idProof[0].path : null,
+    taxationRegistryCard: files.taxationRegistryCard ? files.taxationRegistryCard[0].path : null,
+  })
+  res.status(200).json({ message: "Files uploaded successfully" });
+});
+
+// File upload endpoint
+app.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+  }
+  console.log(`${req.file.originalname} has been uploaded successfully.`);
+  res.status(200).json({ message: "File upload complete", file: req.file });
+});
+
+
+
+//APIs
+app.use('/api/Admin', admin);
+app.use('/api/Advertiser', Advertiser);
+app.use('/api/Activities', Activity);
+app.use('/api/Filter' , Filter)
+app.use('/api/Governor', Governor);
+app.use('/api/Guest' , Guest);
+app.use('/api/Itinerary' , Itinerary);
+app.use('/api/Seller', Seller);
+app.use('/api/Sort' , Sort);
+app.use('/api/TourGuide' , TourGuide);
+app.use('/api/Tourist' , Tourist);
+app.use('/api/TouristItinerary' , TouristItinerary);
+
+
+
+
+
 
 //tags
 // app.post("/createTags", createTags);
 // app.get("/getTags", getTags);
 
 //tags
-// app.get("/filterByTags",filterByTags);
+// app.get("/filterByTags/:id",filterByTags);
 // app.get("/getTags",getTags);
 // app.post("/createTags",createTags);
 
-// //admin
-// app.use('/api/Admin', Admin)
-// app.use('/api/Seller', Seller)
 
-//profile/adverstiser
-app.post("/createProfile", createProfile);
-app.put("/updateProfile/:id", updateProfile);
-app.get("/profiles/:id?", getProfiles);
-app.post("/addAdvertiser", createAdvertiser);
-
-//activities
-app.post('/newActivity', createActivity);
-app.get('/activities', getActivities);
-app.get('/activities/:id', getActivityById);
-app.put('/updateActivity/:id', updateActivity);
-app.delete('/deleteActivity/:id', deleteActivity);
-//activities filters
-// app.post("/addActivity",createActivity);
-// app.get("/filterActivities",filterActivities);
-// app.get("/sortByPriceActivity",sortByPriceActivity);
-// app.get("/sortByRatingActivity",sortByRatingsActivity);
-// app.put("/updateActivityRating/:id",updateActivityRating);
-
-// //tour guide routes
-// app.post("/addGuide", guideController.createTourGuide);
-// app.get("/getGuide/:id", guideController.getTourGuide);
-// app.put("/updateGuide/:id", guideController.updateTourGuide);
-// app.get("/sortByPrice",guideController.sortByPrice);
-// app.get("/sortByRating",guideController.sortByRatings);
-
-// //tourism governor/sites routes
-// app.post("/addSite", createSite);
-// app.get("/getSite/:id", getSite);
-// app.get("/getAllSites", getAllSites);
-// app.put("/updateSite/:id", updateSite);
-// app.delete("/deleteSite/:id", deleteSite);
-// app.get("/getMySites", getMySites);
-// // app.post("/addGov", createGov);
-
-// // //itineraries routes
-// app.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
-// app.get("/getAllItineraries", guideController.getAllItineraries); // Get all itineraries
-// app.get("/getItinerary/:id", guideController.getItineraryById); // Get a single itinerary by ID
-// app.put("/updateItinerary/:id", guideController.updateItinerary); // Update an itinerary
-// app.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
-// app.get("/getMyItineraries", guideController.getMyItineraries);
-// //itineraries filters
-// app.get("/getItineraryDetails/:id",getItineraryDetails);
-// app.get("/itineraryFilterBudget",filterItineraryByBudget);
-// app.get("/itineraryFilterRating",filterItineraryRating);
-// app.get("/itineraryFilter",filterItineraries);
-// app.get("/itineraryFilterLanguage",filterByLanguage);
-// app.get("/filterByDate",filterByDate);
-// app.put("/updateRating/:id",updateRating);
-
-// //childItineraries
-// app.post('/createChildItinerary', touristItineraryController.createChildItinerary);
-// app.get('/getChildItinerary/:id', touristItineraryController.getChildItineraryById);
-// app.get('/getAllChildIitineraries', touristItineraryController.getAllChildItineraries);
-// app.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
-// app.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
-
-// //tourist
-// app.post("/addTourist",createTourist);
-// app.put("/updateTourist/:id",updateTourist);
-// app.get("/getTourists",getTourists);
-// // app.post("/addTourguide", createTourguide);
-// // app.post("/addSeller", createSeller);
-
-// app.get("/home", (req, res) => {
-//   res.status(200).send("Tour Guide and Itinerary API");
-// });
+app.get("/home", (req, res) => {
+  res.status(200).send("Tour Guide and Itinerary API");
+});

@@ -1,10 +1,10 @@
 // #Task route solution
 const touristModel = require('../Models/touristModel');
-const tourguideModel = require('../Models/tourGuide');
-const sellerModel = require('../Models/SellerModel');
+const tourguideModel = require('../Models/tourGuideModel');
+const sellerModel = require('../Models/sellerModel');
 const advertiserModel = require('../Models/advertiserModel');
-const itineraryModel = require('../Models/itinerary');
-const activityModel= require("../Models/Activity")
+const itineraryModel = require('../Models/itineraryModel');
+const activityModel= require("../Models/activityModel");
 
 
 const { default: mongoose } = require('mongoose');
@@ -14,11 +14,6 @@ const createTourist = async (req, res) => {
   try {
     // Destructure the required fields from req.body
     const { username, email, password, mobileNumber, nationality, dob, status } = req.body;
-
-    // Validate if all fields are present
-    if (!username || !email || !password || !mobileNumber || !nationality || !dob || !status) {
-      return res.status(400).json({ message: 'All fields are required: username, email, password, mobile number, nationality, dob, and status.' });
-    }
 
     // Create a new tourist instance and save to the database
     const newTourist = await touristModel.create({
@@ -41,9 +36,10 @@ const createTourist = async (req, res) => {
 };
 // update a tourist
 const updateTourist = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   console.log(id);
 
+  // Validate the ID format
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such tourist" });
   }
@@ -62,41 +58,48 @@ const updateTourist = async (req, res) => {
     });
   }
 
-  const tourist = await touristModel.findOneAndUpdate({ id: id }, { ...req.body });
+  // Update the tourist and return the updated document
+  const tourist = await touristModel.findOneAndUpdate(
+    { _id: id },
+    { ...req.body },
+    { new: true, runValidators: true } // 'new: true' returns the updated document
+  );
 
+  // Check if the tourist was found and updated
   if (!tourist) {
-    return res.status(400).json({ error: "No such tourist" });
+    return res.status(404).json({ error: "No such tourist" });
   }
+
+  // Return the updated tourist data
   res.status(200).json(tourist);
 };
 
 //Tour Guide
 const createTourguide = async (req, res) => {
+  try {
+    // Destructure the name, email, and age from req.body
+    const {username,email,password} = req.body;
+
+    // Validate if all fields are present
+    // if (!Username||!Email||!Password) {
+    //   return res.status(400).json({ message: 'All fields are required: name,email,password.' });
+    // }
+
+    // Create a new user instance and save to the database
+    const NewTourguide = await tourguideModel.create({
+      username,
+      email,
+      password
     
-    try {
-      // Destructure the name, email, and age from req.body
-      const {Username,Email,Password} = req.body;
-  
-      // Validate if all fields are present
-      if (!Username||!Email||!Password) {
-        return res.status(400).json({ message: 'All fields are required: name,email,password.' });
-      }
-  
-      // Create a new user instance and save to the database
-      const NewTourguide = await tourguideModel.create({
-        Username,
-        Email,
-        Password
-      
-      });
-  
-       await (await NewTourguide).save();
-      // Send the newly created user as a response
-      res.status(201).json(NewTourguide);
-    } catch (error) {
-      res.status(500).json({ message: error.message }); // Handle any errors
-    }
-  };
+    });
+
+    //  await (await NewTourguide).save();
+    // Send the newly created user as a response
+    res.status(201).json(NewTourguide);
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Handle any errors
+  }
+};
 const getItineraryDetails = async (req, res) => {
     const { id } = req.params;
 
@@ -141,32 +144,32 @@ try {
 
 //Advertiser
 const createAdvertiser = async (req, res) => {
-    try {
-      // Destructure the name, email, and age from req.body
-      const {Username,Email,Password} = req.body;
-  
-      // Validate if all fields are present
-      if (!Username||!Email||!Password) {
-        return res.status(400).json({ message: 'All fields are required: name, email,password.' });
-      }
-  
-      // Create a new user instance and save to the database
-      const NewAdvertiser = advertiserModel.create({
-        Username,
-        Email,
-        Password
+  try {
+    // Destructure the name, email, and age from req.body
+    const {Username,Email,Password} = req.body;
 
-      });
-  
-       await (await NewAdvertiser).save();
-      // Send the newly created user as a response
-      res.status(201).json(NewAdvertiser);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-      console.loge(error.message) // Handle any errors
+    // Validate if all fields are present
+    if (!Username||!Email||!Password) {
+      return res.status(400).json({ message: 'All fields are required: name, email,password.' });
     }
-  };
-  
+
+    // Create a new user instance and save to the database
+    const NewAdvertiser = advertiserModel.create({
+      Username,
+      Email,
+      Password
+
+    });
+
+      await (await NewAdvertiser).save();
+    // Send the newly created user as a response
+    res.status(201).json(NewAdvertiser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.loge(error.message) // Handle any errors
+  }
+};
+
 const getActivityDetails= async (req, res) => {
   const { id } = req.params;
 
@@ -231,73 +234,72 @@ const filterActivityByBudget = async (req, res) => {
 
 
 //Seller
-  const createSeller = async (req, res) => {
-    try {
-      // Destructure the name, email, and age from req.body
-      const {Username,Email,Password} = req.body;
-  
-      // Validate if all fields are present
-      if (!Username||!Email||!Password) {
-        return res.status(400).json({ message: 'All fields are required: username,email,password.' });
-      }
-  
-      // Create a new user instance and save to the database
-      const NewSeller = sellerModel.create({
-        Username,
-        Email,
-        Password
-       
-      });
-  
-       await (await NewSeller ).save();
-      // Send the newly created user as a response
-      res.status(201).json(NewSeller);
-    } catch (error) {
-      res.status(500).json({ message: error.message }); // Handle any errors
-    }
-  };
+const createSeller = async (req, res) => {
+  try {
+    // Destructure the name, email, and age from req.body
+    const {Username,Email,Password} = req.body;
 
- 
+    // Validate if all fields are present
+    if (!Username||!Email||!Password) {
+      return res.status(400).json({ message: 'All fields are required: username,email,password.' });
+    }
+
+    // Create a new user instance and save to the database
+    const NewSeller = sellerModel.create({
+      Username,
+      Email,
+      Password
+      
+    });
+
+      await (await NewSeller ).save();
+    // Send the newly created user as a response
+    res.status(201).json(NewSeller);
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Handle any errors
+  }
+};
 
 const getTourists = async (req, res) => {
-   try {
-      // Assuming User is a Mongoose model
-      const tourguids = await tourguideModel.find(); // This will retrieve all users
-      res.status(200).json(tourguids); // Send the users data as JSON
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-       // Handle any errors
-    }  }
+  try {
+    // Assuming User is a Mongoose model
+    const tourguids = await touristModel.find(); // This will retrieve all users
+    res.status(200).json(tourguids); // Send the users data as JSON
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+      // Handle any errors
+  }  
+}
 
-    const filterItineraryByBudget = async (req, res) => {
-      const { minPrice, maxPrice } = req.query;
+const filterItineraryByBudget = async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
 
-    try {
-        // Validate that minPrice and maxPrice are provided
-        if (!minPrice || !maxPrice) {
-            return res.status(400).json({ message: 'Please provide both minPrice and maxPrice.' });
-        }
-
-        // Query to find itineraries within the price range
-        const itineraries = await itineraryModel.find({
-          priceOfTour: { $gte: Number(minPrice), $lte: Number(maxPrice) }
-        });
-
-        if (itineraries.length === 0) {
-            return res.status(404).json({ message: 'No itineraries found within the given budget range.' });
-        }
-
-        res.status(200).json(itineraries);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+try {
+    // Validate that minPrice and maxPrice are provided
+    if (!minPrice || !maxPrice) {
+        return res.status(400).json({ message: 'Please provide both minPrice and maxPrice.' });
     }
+
+    // Query to find itineraries within the price range
+    const itineraries = await itineraryModel.find({
+      priceOfTour: { $gte: Number(minPrice), $lte: Number(maxPrice) }
+    });
+
+    if (itineraries.length === 0) {
+        return res.status(404).json({ message: 'No itineraries found within the given budget range.' });
+    }
+
+    res.status(200).json(itineraries);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+}
 };
  
 
 const filterItineraries = async (req, res) => {
   const { startDate, endDate, languageOfTour, minPrice, maxPrice } = req.query; // Expecting date strings, a language string, and price parameters
-
+ console.lo
   try {
       // Convert strings to Date objects if provided
       const start = startDate ? new Date(startDate) : null;

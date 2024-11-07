@@ -1,14 +1,13 @@
-const CompanyProfileModel = require('../Models/CompanyProfile');
+const CompanyProfileModel = require('../Models/companyProfileModel');
 
 const createProfile = async (req, res) => {
     try {
-        const { Name, About, Hotline, Link } = req.body;
+        const { Name, Email, Password } = req.body;
 
         const newCompanyProfile = new CompanyProfileModel({
             Name,
-            About,
-            Hotline,
-            Link,
+            Email,
+            Password
         });
 
         const savedProfile = await newCompanyProfile.save();
@@ -72,4 +71,49 @@ const updateProfile = async (req, res) => {
     }
 }
 
-module.exports = { createProfile, getProfiles, updateProfile };
+const changePasswordAdvertiser = async (req, res) => {
+    const { id } = req.params;
+    const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+  
+    console.log(id, oldPassword, newPassword);
+  
+    // Validate inputs
+    if (!oldPassword) {
+      return res.status(400).json({ error: "Old password is required" }); // Use 400 for bad requests
+    }
+    if (!newPassword) {
+      return res.status(400).json({ error: "New password is required" });
+    }
+    if (!newPasswordConfirmed) {
+      return res.status(400).json({ error: "New password confirmation is required" });
+    }
+  
+    try {
+      const adverstiser = await CompanyProfileModel.findOne({ _id: id });
+  
+      if (!adverstiser) {
+        return res.status(404).json({ error: "adverstiser not found" }); // Tourist not found
+      }
+  
+      // Compare the old password directly
+      if (adverstiser.Password !== oldPassword) {
+        return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
+      }
+  
+      // Check if new passwords match
+      if (newPassword !== newPasswordConfirmed) {
+        return res.status(400).json({ error: "New password and confirmed password do not match" });
+      }
+  
+      // Update the password directly
+      adverstiser.Password = newPassword;
+      await adverstiser.save();
+  
+      res.status(200).json({ message: "Password changed successfully" });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  };
+
+module.exports = { createProfile, getProfiles, updateProfile,changePasswordAdvertiser };
