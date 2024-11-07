@@ -33,6 +33,9 @@ import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 import ActivityDetails from './Components/ActivityDetails.jsx';
+import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+
+//tourguide new
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -116,6 +119,7 @@ const App = () => {
           <Route path="/TouristPage" element={<TouristPage />} />
           <Route path="/SellerPage" element={<SellerPage />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
+          <Route path="/TourGuideHome" element={<TourGuideHome />} />
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>

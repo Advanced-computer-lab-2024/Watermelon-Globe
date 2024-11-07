@@ -75,8 +75,6 @@ router.put('/UpdateActivityCategory/:id', updateActivityCategory)
 //Get all products
 router.get('/GetAllProducts', getAllProducts)
 
-
-
 //post a new product 
 router.post('/CreateProduct', createProduct);
 
