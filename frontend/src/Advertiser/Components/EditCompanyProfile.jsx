@@ -46,7 +46,7 @@ const EditProfilePage = () => {
         try {
             await axios.put(`http://localhost:8000/updateProfile/${profileId}`, updates);
             alert('Profile updated successfully!');
-            navigate('/account');
+            navigate('/CompanyAccount');
         } catch (error) {
             console.error(error);
             alert('Error updating profile');

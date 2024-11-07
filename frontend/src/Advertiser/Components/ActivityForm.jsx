@@ -80,7 +80,7 @@ const ActivityForm = () => {
         try {
             const response = await axios.post('http://localhost:8000/newActivity', activityData);
             console.log('Activity created:', response.data);
-            navigate('/');
+            navigate('/CompanyHomepage');
         } catch (error) {
             console.error('Error creating activity:', error.response.data); // Log error response
         }

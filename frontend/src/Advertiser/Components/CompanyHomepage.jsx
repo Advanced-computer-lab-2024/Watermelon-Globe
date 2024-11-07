@@ -58,7 +58,7 @@ const HomeScreen = () => {
                     
                     {userId && activity.Advertiser?._id === userId && (
                         <>
-                            <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
+                            <button onClick={() => navigate(`/editActivity/${activity._id}`)}>Edit Activity</button>
                             <button onClick={() => handleDelete(activity._id)}>Delete Activity</button>
                         </>
                     )}

@@ -52,7 +52,7 @@ const EditActivity = () => {
                 tags: selectedTags
             });
             alert('Activity updated successfully');
-            navigate('/');
+            navigate('/CompanyHomepage');
         } catch (error) {
             console.error('Error updating activity:', error);
             alert('Error updating activity');

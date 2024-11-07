@@ -22,7 +22,7 @@ const SignupPage = ({ onSignup }) => {
             const userId = localStorage.getItem('userId');
             console.log("User ID:", userId);
 
-            navigate('/account');
+            navigate('/CompanyAccount');
         } catch (err) {
             setError('Error signing up');
         }

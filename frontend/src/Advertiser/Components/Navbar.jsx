@@ -7,12 +7,12 @@ const Navbar = ({ isSignedUp, handleSignOut }) => {
     return (
         <nav>
             <div className='homeButton'> 
-                <Link to="/" >Activities</Link>
+                <Link to="/CompanyHomepage" >Activities</Link>
             </div>
             <div className='signupDiv'>
                 {isSignedUp ? (
                     <>
-                        <Link to="/account" className='AccountLink'>
+                        <Link to="/CompanyAccount" className='AccountLink'>
                             <img
                                 className='profileIcon'
                                 src={profileIcon}

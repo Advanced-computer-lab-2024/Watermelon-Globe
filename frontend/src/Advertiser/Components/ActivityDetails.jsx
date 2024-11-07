@@ -41,7 +41,7 @@ const ActivityDetails = () => {
             <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p>
             <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p>
             <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
-            <button onClick={() => navigate(`/`)}>Back to Activities</button>
+            <button onClick={() => navigate(`/CompanyHomepage`)}>Back to Activities</button>
         </div>
     );
 };
