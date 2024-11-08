@@ -1,9 +1,9 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
-const itineraryModel = require ("../Models/itineraryModel");
+const itineraryModel = require("../Models/itineraryModel");
 const Itinerary = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
-const Product = require('../Models/productModel')
+const Product = require("../Models/productModel");
 
 //Tourist
 
@@ -89,7 +89,7 @@ const updateTourist = async (req, res) => {
   }
 
   // Define the fields that should not be updated
-  const restrictedFields = ["username","wallet","dob"];
+  const restrictedFields = ["username", "wallet", "dob"];
 
   // Check if any restricted fields are being updated
   const hasRestrictedField = restrictedFields.some(
@@ -120,50 +120,50 @@ const updateTourist = async (req, res) => {
 
 const updateRating = async (req, res) => {
   try {
-      const { id } = req.params;
-      const { rating } = req.query;
+    const { id } = req.params;
+    const { rating } = req.query;
 
-      // Parse rating as a number
-      const numericRating = Number(rating);
-      console.log('Received rating:', numericRating);
+    // Parse rating as a number
+    const numericRating = Number(rating);
+    console.log("Received rating:", numericRating);
 
-      // Check if the rating is a valid number between 1 and 5
-      if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
-          return res.status(400).json({ message: 'Invalid rating. Rating should be between 1 and 5.' });
-      }
+    // Check if the rating is a valid number between 1 and 5
+    if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+      return res
+        .status(400)
+        .json({ message: "Invalid rating. Rating should be between 1 and 5." });
+    }
 
-      // Find the itinerary by ID
-      const itinerary = await itineraryModel.findById(id);
-      if (!itinerary) {
-          return res.status(404).json({ message: 'Itinerary not found' });
-      }
+    // Find the itinerary by ID
+    const itinerary = await itineraryModel.findById(id);
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
 
-      // Initialize the values if not already set
-      itinerary.noOfRatings = itinerary.noOfRatings || 0;
-      itinerary.ratingsSum = itinerary.ratingsSum || 0;
-      itinerary.rating = itinerary.rating || 0;
+    // Initialize the values if not already set
+    itinerary.noOfRatings = itinerary.noOfRatings || 0;
+    itinerary.ratingsSum = itinerary.ratingsSum || 0;
+    itinerary.rating = itinerary.rating || 0;
 
-      // Increment noOfRatings and ratingsSum with the new rating
-      itinerary.noOfRatings += 1;
-      itinerary.ratingsSum += numericRating;
+    // Increment noOfRatings and ratingsSum with the new rating
+    itinerary.noOfRatings += 1;
+    itinerary.ratingsSum += numericRating;
 
-      // Calculate the new average rating
-      itinerary.rating = itinerary.ratingsSum / itinerary.noOfRatings;
+    // Calculate the new average rating
+    itinerary.rating = itinerary.ratingsSum / itinerary.noOfRatings;
 
-      // Save the updated itinerary
-      await itinerary.save();
+    // Save the updated itinerary
+    await itinerary.save();
 
-      return res.status(200).json({
-          message: 'Rating updated successfully',
-          averageRating: itinerary.rating,
-      });
+    return res.status(200).json({
+      message: "Rating updated successfully",
+      averageRating: itinerary.rating,
+    });
   } catch (error) {
-      console.error('Server error:', error);
-      return res.status(500).json({ message: 'Server error' });
+    console.error("Server error:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 const changePasswordTourist = async (req, res) => {
   const { id } = req.params;
@@ -179,7 +179,9 @@ const changePasswordTourist = async (req, res) => {
     return res.status(400).json({ error: "New password is required" });
   }
   if (!newPasswordConfirmed) {
-    return res.status(400).json({ error: "New password confirmation is required" });
+    return res
+      .status(400)
+      .json({ error: "New password confirmation is required" });
   }
 
   try {
@@ -196,7 +198,9 @@ const changePasswordTourist = async (req, res) => {
 
     // Check if new passwords match
     if (newPassword !== newPasswordConfirmed) {
-      return res.status(400).json({ error: "New password and confirmed password do not match" });
+      return res
+        .status(400)
+        .json({ error: "New password and confirmed password do not match" });
     }
 
     // Update the password directly
@@ -210,14 +214,12 @@ const changePasswordTourist = async (req, res) => {
   }
 };
 
-
 // Get all products
 const getAllProducts = async (req, res) => {
-  const products = await Product.find({}).sort({ createdAt: -1 })
+  const products = await Product.find({}).sort({ createdAt: -1 });
 
-  res.status(200).json(products)
-}
-
+  res.status(200).json(products);
+};
 
 //search a product by name
 const searchProductbyName = async (req, res) => {
@@ -226,115 +228,111 @@ const searchProductbyName = async (req, res) => {
     const productName = req.query.name;
 
     // Search for the product in the database using the name from query
-    let product = await Product.find({ name: new RegExp(productName, 'i') });
+    let product = await Product.find({ name: new RegExp(productName, "i") });
 
     if (!product || product.length === 0) {
       // Return a 404 status code if no product is found
-      return res.status(404).json({ error: 'No such product' });
+      return res.status(404).json({ error: "No such product" });
     }
 
     // Return the found product(s) with a 200 status
     return res.status(200).json(product);
   } catch (error) {
     // Handle potential errors
-    return res.status(500).json({ error: 'An error occurred while searching for the product' });
+    return res
+      .status(500)
+      .json({ error: "An error occurred while searching for the product" });
   }
 };
-
-
 
 //filter products based on price
 const filterProduct = async (req, res) => {
   // Extract the Price from the URL parameters
-  const { price } = req.params;  // Assuming the param is named 'price'
+  const { price } = req.params; // Assuming the param is named 'price'
 
   try {
     // Convert the price to a number for comparison
     const priceValue = parseFloat(price);
 
     if (isNaN(priceValue)) {
-      return res.status(400).json({ error: 'Invalid price format' });
+      return res.status(400).json({ error: "Invalid price format" });
     }
 
     // Find the product by price
     let product = await Product.findOne({ price: priceValue });
 
     if (!product) {
-      return res.status(400).json({ error: 'No such product' });
+      return res.status(400).json({ error: "No such product" });
     }
 
     // Return the found product
     return res.status(200).json(product);
   } catch (error) {
-    return res.status(500).json({ error: 'An error occurred while fetching the product' });
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching the product" });
   }
 };
 
-
-
 //Update a product
 const updateProduct = async (req, res) => {
-  const { id } = req.query
-  const { name, description, price} = req.body
+  const { id } = req.query;
+  const { name, description, price } = req.body;
 
   // Check if the ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'No such product' })
+    return res.status(400).json({ error: "No such product" });
   }
 
   try {
-      // Update only the details and price fields
-      const product = await Product.findOneAndUpdate(
-          { _id: id },
-          { name, description, price},
-          { new: true } // Return the updated product
-      )
+    // Update only the details and price fields
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      { name, description, price },
+      { new: true } // Return the updated product
+    );
 
-      if (!product) {
-          return res.status(400).json({ error: 'No such product' })
-      }
+    if (!product) {
+      return res.status(400).json({ error: "No such product" });
+    }
 
-      res.status(200).json(product)
+    res.status(200).json(product);
   } catch (error) {
-      res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
-}
+};
 // Sort products by ratings
 const sortProducts = async (req, res) => {
   try {
-      // Fetch all products and sort them by ratings in descending order
-      const products = await Product.find({}).sort({ ratings: -1 })
+    // Fetch all products and sort them by ratings in descending order
+    const products = await Product.find({}).sort({ ratings: -1 });
 
-      res.status(200).json(products)
+    res.status(200).json(products);
   } catch (error) {
-      res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
-}
-
+};
 
 const fileComplaint = async (req, res) => {
   const { title, body, date } = req.body;
 
   // Check if title, body or date are missing
   if (!title || !body) {
-    return res.status(400).json({ error: 'Title and body are required' });
+    return res.status(400).json({ error: "Title and body are required" });
   }
 
   try {
     // Create a complaint
-    const complaint = await Complaint.create({ 
-      title, 
-      body, 
-      date: date || new Date() // Default to current date if not provided
+    const complaint = await Complaint.create({
+      title,
+      body,
+      date: date || new Date(), // Default to current date if not provided
     });
     res.status(200).json(complaint);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
-
-
 
 module.exports = {
   createTourist,
@@ -348,5 +346,5 @@ module.exports = {
   getAllProducts,
   searchProductbyName,
   filterProduct,
-  sortProducts
+  sortProducts,
 };
