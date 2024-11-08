@@ -24,10 +24,10 @@ const productSchema = new Schema({
         required: true
     },
     seller: {
-        type: String, // Seller name or ID
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Seller',
         required: true
     },
-   
 
     rating: { type: Number, required: false },
     noOfRatings: {type:Number ,required:false},

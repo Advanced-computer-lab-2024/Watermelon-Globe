@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const guideController = require('../Controller/guideController'); // Import the controller
+const guideController = require("../Controller/guideController");
+const guestController = require("../Controller/guestController");
 const touristController = require('../Controller/touristController');
 
 
@@ -14,6 +15,22 @@ router.get("/getMyItineraries", guideController.getMyItineraries);
 
 
 
+//Sprint 2 -- malak
+router.put(
+  "/updateActivateItinarary/:id",
+  guideController.activateItineraryAccessibility
+);
+router.put(
+  "/updateDeactivateItinarary/:id",
+  guideController.deactivateItineraryAccessibility
+);
 
+router.get("/activeItineraries", guestController.getAccessibleItineraries);
+
+//used for testing reasons
+router.get(
+  "/notActiveItineraries",
+  guestController.getNotAccessibleItineraries
+);
 
 module.exports = router;

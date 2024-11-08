@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../pages/styles.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ExploreTrips from '../Components/ExploreTrips.jsx';
-import ExploreActivities from '../Components/ExploreActivities.jsx';
+import ExploreActivities from '../../Guest/Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
-import profileIcon from '../../Assets/Profile.png';
 
 const HomePage = () => {
   const { id } = useParams();
@@ -13,7 +12,7 @@ const HomePage = () => {
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
-  const [isSignedUp, setIsSignedUp] = useState(true); // Assuming the user is always logged in
+  const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -30,14 +29,24 @@ const HomePage = () => {
     navigate(`TouristDetails${id}`);
   };
 
+  const handleViewPurchasedDetails =()=>{
+    navigate(`/PurchasedProducts/${id}`)
+  }
+
+  const handleViewProductsDetails =()=>{
+    navigate(`/ProductTourist/${id}`)
+
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
-        <Navbar id={id} isSignedUp={true} handleSignOut={handleSignOut} />
+        <Navbar id={id} isSignedUp={isSignedUp} handleSignOut={handleSignOut} />
         {isSignedUp && (
           <div>
           <button 
-            onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
+           // onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
+            onClick={handleViewDetails()}
             className="px-9 py-1 bg-blue-600 text-white rounded"
           >
             View Profile
@@ -54,8 +63,6 @@ const HomePage = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{backgroundImage: `url(/placeholder.svg?height=600&width=1200)`}}
-            role="img"
-            aria-label="Background image of a travel destination"
           ></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 max-w-4xl mx-auto px-4">
@@ -128,6 +135,14 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+
+        <button onClick={handleViewPurchasedDetails}>
+          View your purchased products
+           </button>
+
+        <button onClick={handleViewProductsDetails}>
+          View all available products
+           </button>
 
         <ExploreTrips />
         <ExploreActivities />

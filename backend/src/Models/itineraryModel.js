@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
 const pickupDropoffSchema = new Schema({
-    pickup: { type: String, required: true },
-    dropoff: { type: String, required: true }
+  pickup: { type: String, required: true },
+  dropoff: { type: String, required: true },
 });
 
-const itinerarySchema = new Schema({
+const itinerarySchema = new Schema(
+  {
     name: { type: String, required: true },
-    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }], // Array of activity objects
-    tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PreferenceTag'}],
+    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "Activity" }], // Array of activity objects
+    tag: [{ type: mongoose.Schema.Types.ObjectId, ref: "PreferenceTag" }],
     locations: { type: [String], required: true },
     timeline: { type: String, required: true },
     languageOfTour: { type: String, required: true }, // Correct field name
@@ -50,6 +50,6 @@ const itinerarySchema = new Schema({
   }]
 }, { timestamps: true });
 
-const Itinerary = mongoose.model('Itinerary', itinerarySchema);
-const pickup = mongoose.model('pickup', pickupDropoffSchema);
-module.exports = {Itinerary, pickup};
+const Itinerary = mongoose.model("Itinerary", itinerarySchema);
+const pickup = mongoose.model("pickup", pickupDropoffSchema);
+module.exports = { Itinerary, pickup };

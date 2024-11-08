@@ -13,6 +13,8 @@ const {
   updateRating,
   getAllProducts,
   searchProductbyName,
+  buyProduct,
+  getPurchasedProducts
   getMyCompletedItineraries,
   rateItinerary,
   commentOnItinerary,
@@ -49,6 +51,10 @@ router.get('/GetAllProducts', getAllProducts)
 
 //search a product 
 router.get('/searchProductName', searchProductbyName)
+
+router.put('/buyProduct/:touristId/:productId',buyProduct);
+
+router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
 
 //sprint 2

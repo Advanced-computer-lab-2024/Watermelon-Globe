@@ -25,7 +25,13 @@ const companyProfileSchema = new Schema({
   Link: {
     type: String,
     required: false
-  }
+  },
+  deletionRequest: {
+    type: String,
+    enum: ["Pending", "Accepted", "Rejected"],
+    default: null,
+  },
+
 }, { timestamps: true });
 
 const CompanyProfile = mongoose.model('CompanyProfile', companyProfileSchema);

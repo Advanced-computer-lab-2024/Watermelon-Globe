@@ -34,7 +34,7 @@ const Navbar = ({ id, isSignedUp, handleSignOut }) => {
               <Link to="/edit-profile">
                 <button className="editProfile px-4 py-1 border rounded">Edit Profile</button>
               </Link>
-              <button onClick={()=>navigate("/")} className="px-4 py-1 border rounded">Sign Out</button>
+              <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
               {id && (
                 <button 
                   onClick={() => navigate(`/TouristDetails/${id}`)} 
