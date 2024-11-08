@@ -36,7 +36,7 @@ const ExploreTrips = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/Itinerary/getAllItineraries');
+      const response = await fetch('/api/itinerary/getAllItineraries');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -53,7 +53,7 @@ const ExploreTrips = () => {
 
   const fetchPref = async () => {
     try {
-      const response = await fetch('/api/Admin/PreferenceTag');
+      const response = await fetch('/api/Admin/GetAllPreferenceTag');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -137,7 +137,7 @@ const ExploreTrips = () => {
   };
 
   const handleTripClick = (tripId) => {
-    navigate(`/itineraryDetails/${tripId}`);
+    navigate('/tourist-signup');
   };
 
   return (

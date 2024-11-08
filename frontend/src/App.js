@@ -24,6 +24,7 @@ import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
+import ViewProducts from './Guest/pages/ViewProducts.js';
 
 // admin new
 import AdminHome from './Admin/pages/AdminHome.js';
@@ -39,6 +40,8 @@ import AccountPage from './Advertiser/Components/AccountPage.jsx';
 import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
+import ProductTourist from './Tourist/pages/ProductsTourist.js';
+import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -96,7 +99,9 @@ const App = () => {
           <Route path="/TouristProduct" element={<TouristProduct />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
-
+          <Route path='/ViewProducts' element={<ViewProducts/>}/>
+          <Route path ='/ProductTourist/:id' element={<ProductTourist/>}/>
+          <Route path ='/PurchasedProducts/:id' element={<PurchasedProducts/>}/>
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}

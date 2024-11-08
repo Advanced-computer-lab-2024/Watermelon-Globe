@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import '../pages/styles.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ExploreTrips from '../Components/ExploreTrips.jsx';
-import ExploreActivities from '../Components/ExploreActivities.jsx';
+import ExploreActivities from '../../Guest/Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
 import profileIcon from '../../Assets/Profile.png';
 
@@ -30,13 +30,23 @@ const HomePage = () => {
     navigate(`TouristDetails${id}`);
   };
 
+  const handleViewPurchasedDetails =()=>{
+    navigate(`/PurchasedProducts/${id}`)
+  }
+
+  const handleViewProductsDetails =()=>{
+    navigate(`/ProductTourist/${id}`)
+
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
         <Navbar id={id} isSignedUp={true} handleSignOut={handleSignOut} />
         {isSignedUp && (
           <button 
-            onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
+           // onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
+            onClick={handleViewDetails()}
             className="px-9 py-1 bg-blue-600 text-white rounded"
           >
             View Profile
@@ -123,6 +133,14 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+
+        <button onClick={handleViewPurchasedDetails}>
+          View your purchased products
+           </button>
+
+        <button onClick={handleViewProductsDetails}>
+          View all available products
+           </button>
 
         <ExploreTrips />
         <ExploreActivities />

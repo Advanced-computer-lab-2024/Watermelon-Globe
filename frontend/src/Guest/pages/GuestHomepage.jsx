@@ -16,6 +16,10 @@ const HomePage = () => {
     console.log('Searching for:', { destination, dates, guests });
   };
 
+  const handleViewDetails = () => {
+    navigate('ViewProducts');
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
@@ -91,6 +95,10 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+
+        <button onClick={handleViewDetails}>
+          View all available products
+           </button>
 
         <ExploreTrips />
         <ExploreActivities />

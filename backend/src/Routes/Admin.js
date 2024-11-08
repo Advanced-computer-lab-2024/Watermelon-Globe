@@ -27,7 +27,7 @@ const {
     getComplaint,
     updateComplaint,
     replyComplaint
-} = require('../Controller/AdminController')
+} = require('../Controller/adminController')
 
 
 router.get('/GetAllAdmin', getAllAdmin)

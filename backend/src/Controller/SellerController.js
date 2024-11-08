@@ -150,6 +150,7 @@ const searchProductbyName = async (req, res) => {
   
 
 
+
 //filter products based on price
 const filterProduct = async (req, res) => {
     // Extract the Price from the URL parameters
@@ -335,9 +336,33 @@ const updateRatingProduct = async (req, res) => {
 
 
   }
+
+  const getProductById = async (req, res) => {
+    const { id } = req.body;
+    
+    try {
+      const product = await Product.findById(id);
+      
+      if (!product) {
+        // Respond with a descriptive error message if product not found
+        return res.status(404).json({ error: "Product not found" });
+      }
+      
+      // Return the product data directly, without wrapping in an object
+      return res.status(200).json(product);
+      
+    } catch (error) {
+      // Log the error (optional, useful for debugging)
+      console.error("Error finding product:", error);
+  
+      // Respond with a 500 status and include the error message
+      return res.status(500).json({ error: error.message || "Server error" });
+    }
+  };
+  
   
 
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
-      sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct}
+      sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct,getProductById}
