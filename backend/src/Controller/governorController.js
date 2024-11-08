@@ -1,19 +1,33 @@
-const governorModel = require('../Models/tourismGovernorModel');
-const siteModel = require('../Models/tourismSiteModel');
-const { default: mongoose } = require('mongoose');
-
-
+const governorModel = require("../Models/tourismGovernorModel");
+const siteModel = require("../Models/tourismSiteModel");
+const { default: mongoose } = require("mongoose");
 
 const createSite = async (req, res) => {
-
-  const { name, description, pictures, location, openingHours, ticketPrices, tag, tourismGovernor } = req.body;
+  const {
+    name,
+    description,
+    pictures,
+    location,
+    openingHours,
+    ticketPrices,
+    tag,
+    tourismGovernor,
+  } = req.body;
   try {
-    const site = await siteModel.create(
-      { name, description, pictures, location, openingHours, ticketPrices, tag, tourismGovernor });
+    const site = await siteModel.create({
+      name,
+      description,
+      pictures,
+      location,
+      openingHours,
+      ticketPrices,
+      tag,
+      tourismGovernor,
+    });
 
-    res.status(200).json(site)
+    res.status(200).json(site);
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -22,16 +36,16 @@ const getSite = async (req, res) => {
 
   // Validate if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid site ID' });
+    return res.status(400).json({ error: "Invalid site ID" });
   }
 
   try {
     // Find the tourism site by ID and populate the tourismGovernor field
-    const site = await siteModel.findById(id).populate('tourismGovernor');
+    const site = await siteModel.findById(id).populate("tourismGovernor");
 
     // If no site is found, return a 404 error
     if (!site) {
-      return res.status(404).json({ message: 'Site not found' });
+      return res.status(404).json({ message: "Site not found" });
     }
 
     // Return the found site as a response
@@ -43,13 +57,13 @@ const getSite = async (req, res) => {
 };
 
 const getAllSites = async (req, res) => {
-  const sites = await siteModel.find({}).sort({ createdAt: -1 })
+  const sites = await siteModel.find({}).sort({ createdAt: -1 });
 
   for (let index = 0; index < sites.length; index++) {
     const element = sites[index];
     //console.log(element.id);
   }
-  res.status(200).json(sites)
+  res.status(200).json(sites);
 };
 
 const getMySites = async (req, res) => {
@@ -57,7 +71,7 @@ const getMySites = async (req, res) => {
 
   // Validate if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(governorID)) {
-    return res.status(400).json({ error: 'Invalid governor ID' });
+    return res.status(400).json({ error: "Invalid governor ID" });
   }
 
   try {
@@ -66,7 +80,7 @@ const getMySites = async (req, res) => {
 
     // If no site is found, return a 404 error
     if (!site) {
-      return res.status(404).json({ message: 'Site not found' });
+      return res.status(404).json({ message: "Site not found" });
     }
 
     // Return the found site as a response
@@ -79,11 +93,12 @@ const getMySites = async (req, res) => {
 
 const updateSite = async (req, res) => {
   const { id } = req.params; // Extracting the site ID from request parameters
-  const { name, description, pictures, location, openingHours, ticketPrices } = req.body; // Extracting the updated fields from request body
+  const { name, description, pictures, location, openingHours, ticketPrices } =
+    req.body; // Extracting the updated fields from request body
 
   // Validate the site ID
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid site ID' });
+    return res.status(400).json({ error: "Invalid site ID" });
   }
 
   try {
@@ -96,7 +111,7 @@ const updateSite = async (req, res) => {
 
     // If the site is not found, return a 404
     if (!updatedSite) {
-      return res.status(404).json({ message: 'Tourism site not found' });
+      return res.status(404).json({ message: "Tourism site not found" });
     }
 
     // Send the updated site as a response
@@ -112,7 +127,7 @@ const deleteSite = async (req, res) => {
 
   // Validate the site ID
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid site ID' });
+    return res.status(400).json({ error: "Invalid site ID" });
   }
 
   try {
@@ -121,11 +136,11 @@ const deleteSite = async (req, res) => {
 
     // If no site was found with the provided ID, return a 404 error
     if (!deletedSite) {
-      return res.status(404).json({ message: 'Tourism site not found' });
+      return res.status(404).json({ message: "Tourism site not found" });
     }
 
     // Send a success message if the site was deleted
-    res.status(200).json({ message: 'Tourism site deleted successfully' });
+    res.status(200).json({ message: "Tourism site deleted successfully" });
   } catch (error) {
     // Handle any errors that occur
     res.status(500).json({ error: error.message });
@@ -134,12 +149,14 @@ const deleteSite = async (req, res) => {
 
 const filterByTags = async (req, res) => {
   try {
-    const { id } = req.params;  // Get the tag from the request parameters
+    const { id } = req.params; // Get the tag from the request parameters
 
     // Find itineraries (or sites) that include the tag
-    const filteredSites = await siteModel.find({
-      tag: id // Assuming 'Tags' is an array of ObjectId references to the 'Tag' model
-    }).populate('tag'); // Optionally populate the tags with details
+    const filteredSites = await siteModel
+      .find({
+        tag: id, // Assuming 'Tags' is an array of ObjectId references to the 'Tag' model
+      })
+      .populate("tag"); // Optionally populate the tags with details
 
     // Send back the filtered itineraries
     // if (filteredSites.length === 0) {
@@ -148,8 +165,18 @@ const filterByTags = async (req, res) => {
 
     return res.status(200).json(filteredSites);
   } catch (error) {
-    return res.status(500).json({ message: 'Error filtering sites by tag', error });
+    return res
+      .status(500)
+      .json({ message: "Error filtering sites by tag", error });
   }
 };
 
-module.exports = {createSite, getSite, getAllSites, updateSite, deleteSite, getMySites, filterByTags };
+module.exports = {
+  createSite,
+  getSite,
+  getAllSites,
+  updateSite,
+  deleteSite,
+  getMySites,
+  filterByTags,
+};

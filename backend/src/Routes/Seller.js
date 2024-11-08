@@ -1,51 +1,53 @@
-const express = require('express')
+const express = require("express");
 const {
-    createSeller, 
-    getAllSellers, 
-    getSeller,
-    deleteSeller,
-    updateSeller,
-    createProduct,
-    getAllProducts,
-    searchProductbyName,
-    updateProduct,
-} = require('../Controller/sellerController')
+  createSeller,
+  getAllSellers,
+  getSeller,
+  deleteSeller,
+  updateSeller,
+  createProduct,
+  getAllProducts,
+  searchProductbyName,
+  updateProduct,
+  acceptTermsAndConditions,
+} = require("../Controller/SellerController");
 
-const router = express.Router()
+const router = express.Router();
 
 //////////////// Seller ////////////////
 
 //Get all sellers
-router.get('/GetAllSeller', getAllSellers)
+router.get("/GetAllSeller", getAllSellers);
 
 //Get single seller
-router.get('/GetSeller/:id', getSeller)
+router.get("/GetSeller/:id", getSeller);
 
-//post a new seller 
-router.post('/CreateSeller', createSeller)
+//post a new seller
+router.post("/CreateSeller", createSeller);
 
-//delete a seller 
-router.delete('/DeleteSeller/:id', deleteSeller)
+//delete a seller
+router.delete("/DeleteSeller/:id", deleteSeller);
 
-//update a seller 
-router.put('/UpdateSeller/:id', updateSeller)
+//update a seller
+router.put("/UpdateSeller/:id", updateSeller);
 
 //////////////// Products ////////////////
 
-
 //Get all products
-router.get('/GetAllProducts', getAllProducts)
+router.get("/GetAllProducts", getAllProducts);
 
 //Get single product
 
+//post a new product
+router.post("/CreateProduct", createProduct);
 
-//post a new product 
-router.post('/CreateProduct', createProduct);
+//delete a product
+router.get("/searchProductName", searchProductbyName);
 
-//delete a product 
-router.get('/searchProductName', searchProductbyName)
+//update a product
+router.put("/editProduct", updateProduct);
 
-//update a product 
-router.put('/editProduct', updateProduct)
+//accept terms and conditions
+router.put("/acceptTermsAndConditions/:id", acceptTermsAndConditions);
 
-module.exports = router
+module.exports = router;

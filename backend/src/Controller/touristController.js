@@ -1,7 +1,6 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
-const itineraryModel = require ("../Models/itineraryModel");
-const Itinerary = require("../Models/itineraryModel");
+const itineraryModel = require("../Models/itineraryModel");
 
 //Tourist
 
@@ -87,7 +86,7 @@ const updateTourist = async (req, res) => {
   }
 
   // Define the fields that should not be updated
-  const restrictedFields = ["username","wallet","dob"];
+  const restrictedFields = ["username", "wallet", "dob"];
 
   // Check if any restricted fields are being updated
   const hasRestrictedField = restrictedFields.some(
@@ -118,51 +117,50 @@ const updateTourist = async (req, res) => {
 
 const updateRating = async (req, res) => {
   try {
-      const { id } = req.params;
-      const { rating } = req.query;
+    const { id } = req.params;
+    const { rating } = req.query;
 
-      // Parse rating as a number
-      const numericRating = Number(rating);
-      console.log('Received rating:', numericRating);
+    // Parse rating as a number
+    const numericRating = Number(rating);
+    console.log("Received rating:", numericRating);
 
-      // Check if the rating is a valid number between 1 and 5
-      if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
-          return res.status(400).json({ message: 'Invalid rating. Rating should be between 1 and 5.' });
-      }
+    // Check if the rating is a valid number between 1 and 5
+    if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+      return res
+        .status(400)
+        .json({ message: "Invalid rating. Rating should be between 1 and 5." });
+    }
 
-      // Find the itinerary by ID
-      const itinerary = await itineraryModel.findById(id);
-      if (!itinerary) {
-          return res.status(404).json({ message: 'Itinerary not found' });
-      }
+    // Find the itinerary by ID
+    const itinerary = await itineraryModel.findById(id);
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
 
-      // Initialize the values if not already set
-      itinerary.noOfRatings = itinerary.noOfRatings || 0;
-      itinerary.ratingsSum = itinerary.ratingsSum || 0;
-      itinerary.rating = itinerary.rating || 0;
+    // Initialize the values if not already set
+    itinerary.noOfRatings = itinerary.noOfRatings || 0;
+    itinerary.ratingsSum = itinerary.ratingsSum || 0;
+    itinerary.rating = itinerary.rating || 0;
 
-      // Increment noOfRatings and ratingsSum with the new rating
-      itinerary.noOfRatings += 1;
-      itinerary.ratingsSum += numericRating;
+    // Increment noOfRatings and ratingsSum with the new rating
+    itinerary.noOfRatings += 1;
+    itinerary.ratingsSum += numericRating;
 
-      // Calculate the new average rating
-      itinerary.rating = itinerary.ratingsSum / itinerary.noOfRatings;
+    // Calculate the new average rating
+    itinerary.rating = itinerary.ratingsSum / itinerary.noOfRatings;
 
-      // Save the updated itinerary
-      await itinerary.save();
+    // Save the updated itinerary
+    await itinerary.save();
 
-      return res.status(200).json({
-          message: 'Rating updated successfully',
-          averageRating: itinerary.rating,
-      });
+    return res.status(200).json({
+      message: "Rating updated successfully",
+      averageRating: itinerary.rating,
+    });
   } catch (error) {
-      console.error('Server error:', error);
-      return res.status(500).json({ message: 'Server error' });
+    console.error("Server error:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
 
 module.exports = {
   createTourist,
@@ -170,5 +168,5 @@ module.exports = {
   getTourist,
   deleteTourist,
   updateTourist,
-  updateRating
+  updateRating,
 };
