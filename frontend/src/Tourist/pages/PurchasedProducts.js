@@ -112,7 +112,7 @@ const PurchasedProducts = () => {
 
                   <div className="flex items-center space-x-4">
 
-                  <div className="rating-container">
+                  {/* <div className="rating-container">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <span 
                         key={star}
@@ -122,7 +122,7 @@ const PurchasedProducts = () => {
                         ★
                     </span>
                 ))}
-            </div>
+            </div> */}
       
                     <StarRating productId={product._id} onRate={(rating) => handleRateProduct(product._id, rating)} />
                     <button
