@@ -38,12 +38,15 @@ const tourGuideSchema = new Schema({
       ref: 'itinerary', // References the Itinerary model
     }
   ],
-  Rating: {
-    type: Number,
-    required: false
-  },
+  ratings: [
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
+      rating: { type: Number, required: true, min: 1, max: 5 }
+    }
+  ],
+  rating: { type: Number, default: 0 },
   noOfRatings: {type:Number ,required:false},
-  ratingsSum:{type:Number,required:false},
+  ratingsSum:{type:Number,required:false},// Reference to the tour guide
   comments: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,

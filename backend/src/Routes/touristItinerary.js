@@ -9,4 +9,6 @@ router.get('/getAllChildIitineraries', touristItineraryController.getAllChildIti
 router.put('/updateChildItinerary/:id', touristItineraryController.updateChildItineraryById);
 router.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChildItineraryById);
 
+
+
 module.exports = router;

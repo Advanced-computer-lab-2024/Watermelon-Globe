@@ -1,7 +1,9 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
 const itineraryModel = require ("../Models/itineraryModel");
-const Itinerary = require("../Models/itineraryModel");
+const ChildItinerary = require ("../Models/touristItineraryModel");
+const Activity = require('../Models/activityModel');
+const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const Complaint = require("../Models/Complaint");
 const Product = require('../Models/productModel')
 
@@ -335,6 +337,291 @@ const fileComplaint = async (req, res) => {
 
 
 
+// Method to refresh all 'completed' statuses and get completed itineraries for the current buyer
+const getMyCompletedItineraries = async (buyerId) => {
+  try {
+    const currentDate = new Date();
+
+    // Step 1: Refresh the 'completed' status for all ChildItineraries with status 'confirmed'
+    await ChildItinerary.updateMany(
+      { status: 'confirmed' }, // Only update 'completed' status if booking is confirmed
+      [
+        {
+          $set: {
+            completed: {
+              $and: [
+                { $ne: ['$chosenDates', []] }, // Ensure there are chosen dates
+                { $not: { $gt: ['$chosenDates', currentDate] } } // All dates have passed
+              ],
+            },
+          },
+        },
+      ]
+    );
+
+    // Step 2: Fetch all itineraries where 'completed' is true and buyer matches the current buyer ID
+    const completedItineraries = await ChildItinerary.find({
+      completed: true,
+      buyer: buyerId, // Filter by the current buyer's ID
+    });
+
+    return completedItineraries;
+  } catch (error) {
+    console.error('Error fetching completed itineraries:', error);
+    throw new Error('Failed to retrieve completed itineraries');
+  }
+};
+
+
+// const rateItinerary = async (req, res) => {
+//   const { itineraryId } = req.params;
+//   const { rating } = req.body;
+//   const Itinerary = itineraryModel.Itinerary; // Access the Itinerary model from the export object
+
+//   try {
+//     const itinerary = await Itinerary.findById(itineraryId);
+
+//     if (!itinerary) {
+//       return res.status(404).json({ error: 'Itinerary not found' });
+//     }
+
+//     // Update the total ratings sum and count
+//     itinerary.ratingsSum = (itinerary.ratingsSum || 0) + rating;
+//     itinerary.noOfRatings = (itinerary.noOfRatings || 0) + 1;
+//     // Calculate the new average rating
+//     itinerary.rating = itinerary.ratingsSum / itinerary.noOfRatings;
+
+//     await itinerary.save();
+//     res.status(200).json({ message: 'Rating added successfully', rating: itinerary.rating });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error adding rating to itinerary', details: error.message });
+//   }
+// };
+
+const rateItinerary = async (req, res) => {
+  const { itineraryId } = req.params;
+  const { touristId, rating } = req.body;
+  const Itinerary = itineraryModel.Itinerary; // Access the Itinerary model from the export object
+
+  try {
+    // Fetch the itinerary
+    const itinerary = await Itinerary.findById(itineraryId);
+
+    if (!itinerary) {
+      return res.status(404).json({ error: "Itinerary not found" });
+    }
+
+    // Check if the tourist has already rated this itinerary
+    const existingRating = itinerary.ratings.find(
+      (ratingEntry) => ratingEntry.user.toString() === touristId
+    );
+
+    if (existingRating) {
+      // If the tourist has rated before, update the existing rating
+      const oldRating = existingRating.rating;
+      existingRating.rating = rating;
+
+      // Adjust ratingsSum
+      itinerary.ratingsSum = itinerary.ratingsSum - oldRating + rating;
+    } else {
+      // If this is a new rating, add it to the ratings array
+      itinerary.ratings.push({ user: touristId, rating });
+      itinerary.noOfRatings += 1;
+      itinerary.ratingsSum += rating;
+    }
+
+    // Recalculate the average rating
+    itinerary.rating = itinerary.ratingsSum / itinerary.noOfRatings;
+
+    // Save the updated itinerary
+    await itinerary.save();
+
+    res.status(200).json({ message: "Rating submitted successfully", itinerary });
+  } catch (error) {
+    console.error("Error adding rating to itinerary:", error);
+    res.status(500).json({ error: "Error adding rating to itinerary", details: error.message });
+  }
+};
+
+
+const commentOnItinerary = async (req, res) => {
+  const { itineraryId } = req.params;
+  const { touristId, text } = req.body;
+  const Itinerary = itineraryModel.Itinerary;
+
+  try {
+    const itinerary = await Itinerary.findById(itineraryId);
+
+    if (!itinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+
+    // Check if the tourist has already commented
+    const existingCommentIndex = itinerary.comments.findIndex(
+      (comment) => comment.user.toString() === touristId
+    );
+
+    if (existingCommentIndex !== -1) {
+      // Update existing comment
+      itinerary.comments[existingCommentIndex].text = text;
+      itinerary.comments[existingCommentIndex].date = new Date(); // Update the date
+    } else {
+      // Add a new comment
+      itinerary.comments.push({
+        user: touristId,
+        text: text,
+        date: new Date(),
+      });
+    }
+
+    // Save changes
+    await itinerary.save();
+
+    res.status(200).json({ message: 'Comment added/updated successfully', comments: itinerary.comments });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding/updating comment to itinerary', details: error.message });
+  }
+};
+
+
+const rateTourGuide = async (req, res) => {
+  const { tourGuideId } = req.params;
+  const { touristId, rating } = req.body;
+
+  try {
+    const tourGuide = await TourGuide.findById(tourGuideId);
+    if (!tourGuide) {
+      return res.status(404).json({ error: 'Tour guide not found' });
+    }
+
+    const existingRating = tourGuide.ratings.find(r => r.user.toString() === touristId);
+    if (existingRating) {
+      existingRating.rating = rating;
+    } else {
+      tourGuide.ratings.push({ user: touristId, rating });
+    }
+
+    tourGuide.ratingsSum = tourGuide.ratings.reduce((sum, r) => sum + r.rating, 0);
+    tourGuide.noOfRatings = tourGuide.ratings.length;
+    tourGuide.rating = tourGuide.ratingsSum / tourGuide.noOfRatings;
+
+    await tourGuide.save();
+    res.status(200).json({ message: 'Rating added/updated successfully', rating: tourGuide.rating });
+  } catch (error) {
+    res.status(500).json({ error: 'Error rating tour guide', details: error.message });
+  }
+};
+
+const commentOnTourGuide = async (req, res) => {
+  const { tourGuideId } = req.params;
+  const { touristId, text } = req.body;
+
+  try {
+    const tourGuide = await TourGuide.findById(tourGuideId);
+    if (!tourGuide) {
+      return res.status(404).json({ error: 'Tour guide not found' });
+    }
+
+    const existingComment = tourGuide.comments.find(c => c.user.toString() === touristId);
+    if (existingComment) {
+      existingComment.text = text;
+      existingComment.date = new Date();
+    } else {
+      tourGuide.comments.push({ user: touristId, text, date: new Date() });
+    }
+
+    await tourGuide.save();
+    res.status(200).json({ message: 'Comment added/updated successfully', comments: tourGuide.comments });
+  } catch (error) {
+    res.status(500).json({ error: 'Error commenting on tour guide', details: error.message });
+  }
+};
+
+
+const getMyCompletedActivities = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    const completedActivities = await ActivityBooking.find({
+      tourist: touristId,
+      completed: true
+    }).populate('activity');
+
+    res.status(200).json({ message: 'Completed activities retrieved successfully', completedActivities });
+  } catch (error) {
+    res.status(500).json({ error: 'Error retrieving completed activities', details: error.message });
+  }
+};
+
+
+const rateActivity = async (req, res) => {
+  const { activityId } = req.params;
+  const { touristId, rating } = req.body;
+
+  try {
+    const activity = await Activity.findById(activityId);
+
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    // Check if the user has already rated, if so, update the rating
+    const existingRating = activity.ratings.find(r => r.user.toString() === touristId);
+
+    if (existingRating) {
+      // Update the existing rating
+      activity.ratingsSum = activity.ratingsSum - existingRating.rating + rating;
+      existingRating.rating = rating;
+    } else {
+      // Add a new rating
+      activity.ratings.push({ user: touristId, rating });
+      activity.ratingsSum = (activity.ratingsSum || 0) + rating;
+      activity.noOfRatings = (activity.noOfRatings || 0) + 1;
+    }
+
+    // Update average rating
+    activity.rating = activity.noOfRatings > 0 ? activity.ratingsSum / activity.noOfRatings : 0;
+
+    await activity.save();
+    res.status(200).json({ message: 'Rating added successfully', rating: activity.rating });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding rating to activity', details: error.message });
+  }
+};
+
+const commentOnActivity = async (req, res) => {
+  const { activityId } = req.params;
+  const { touristId, text } = req.body;
+
+  try {
+    const activity = await Activity.findById(activityId);
+
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    // Check if the user has already commented, if so, update the comment
+    const existingComment = activity.comments.find(c => c.user.toString() === touristId);
+
+    if (existingComment) {
+      existingComment.text = text;
+      existingComment.date = new Date(); // Update timestamp
+    } else {
+      // Add a new comment
+      activity.comments.push({
+        user: touristId,
+        text,
+        date: new Date()
+      });
+    }
+
+    await activity.save();
+    res.status(200).json({ message: 'Comment added successfully', comments: activity.comments });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding comment to activity', details: error.message });
+  }
+};
+
 
 module.exports = {
   createTourist,
@@ -348,5 +635,13 @@ module.exports = {
   getAllProducts,
   searchProductbyName,
   filterProduct,
-  sortProducts
+  sortProducts,
+  getMyCompletedItineraries,
+  rateItinerary,
+  commentOnItinerary,
+  rateTourGuide,
+  commentOnTourGuide,
+  getMyCompletedActivities,
+  rateActivity,
+  commentOnActivity
 };

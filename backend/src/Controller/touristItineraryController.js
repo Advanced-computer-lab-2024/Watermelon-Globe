@@ -164,128 +164,12 @@ const getMyCompletedItineraries = async (buyerId) => {
   }
 };
 
-// Endpoint to submit a rating and comment on the parent itinerary if child itinerary is completed
-const rateAndCommentOnItinerary = async (req, res) => {
-  try {
-      const { childItineraryId } = req.params;
-      const { rating, comment } = req.body;
-      const userId = req.user.id; // assuming user ID is available from authentication
 
-      // Find the child itinerary
-      const childItinerary = await ChildItinerary.findById(childItineraryId).populate('itinerary');
-      if (!childItinerary) {
-          return res.status(404).json({ message: 'Child itinerary not found' });
-      }
-
-      // Check if child itinerary is completed
-      if (!childItinerary.completed) {
-          return res.status(403).json({ message: 'Cannot rate and comment: itinerary is not yet completed' });
-      }
-
-      // Find the parent itinerary to update ratings and comments
-      const parentItinerary = await Itinerary.findById(childItinerary.itinerary._id);
-      if (!parentItinerary) {
-          return res.status(404).json({ message: 'Parent itinerary not found' });
-      }
-
-      // Update the ratings and comments
-      if (rating) {
-          parentItinerary.noOfRatings = parentItinerary.noOfRatings || 0;
-          parentItinerary.ratingsSum = parentItinerary.ratingsSum || 0;
-          parentItinerary.noOfRatings += 1;
-          parentItinerary.ratingsSum += rating;
-          parentItinerary.rating = parentItinerary.ratingsSum / parentItinerary.noOfRatings;
-      }
-
-      if (comment) {
-          parentItinerary.comments.push({
-              user: userId,
-              text: comment,
-          });
-      }
-
-      // Save the updates
-      await parentItinerary.save();
-
-      return res.status(200).json({
-          message: 'Rating and comment added successfully',
-          rating: parentItinerary.rating,
-          comments: parentItinerary.comments,
-      });
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error rating and commenting on itinerary', error: error.message });
-  }
-};
-
-
-// Endpoint to submit a rating and comment on the tour guide if child itinerary is completed
-const rateAndCommentOnGuide = async (req, res) => {
-  try {
-      const { childItineraryId } = req.params;
-      const { rating, comment } = req.body;
-      const userId = req.user.id; // assuming user ID is available from authentication
-
-      // Find the child itinerary
-      const childItinerary = await ChildItinerary.findById(childItineraryId).populate('itinerary');
-      if (!childItinerary) {
-          return res.status(404).json({ message: 'Child itinerary not found' });
-      }
-
-      // Check if child itinerary is completed
-      if (!childItinerary.completed) {
-          return res.status(403).json({ message: 'Cannot rate and comment: itinerary is not yet completed' });
-      }
-
-      // Find the parent itinerary
-      const parentItinerary = await Itinerary.findById(childItinerary.itinerary._id).populate('guide');
-      if (!parentItinerary) {
-          return res.status(404).json({ message: 'Parent itinerary not found' });
-      }
-
-      // Find the tour guide to update ratings and comments
-      const tourGuide = await TourGuide.findById(parentItinerary.guide._id);
-      if (!tourGuide) {
-          return res.status(404).json({ message: 'Tour guide not found' });
-      }
-
-      // Update the ratings and comments for the tour guide
-      if (rating) {
-          tourGuide.noOfRatings = tourGuide.noOfRatings || 0;
-          tourGuide.ratingsSum = tourGuide.ratingsSum || 0;
-          tourGuide.noOfRatings += 1;
-          tourGuide.ratingsSum += rating;
-          tourGuide.Rating = tourGuide.ratingsSum / tourGuide.noOfRatings;
-      }
-
-      if (comment) {
-          tourGuide.comments.push({
-              user: userId,
-              text: comment,
-          });
-      }
-
-      // Save the updates
-      await tourGuide.save();
-
-      return res.status(200).json({
-          message: 'Rating and comment added successfully to the tour guide',
-          rating: tourGuide.Rating,
-          comments: tourGuide.comments,
-      });
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error rating and commenting on tour guide', error: error.message });
-  }
-};
 
 module.exports = {
   createChildItinerary,
   getChildItineraryById,
   getAllChildItineraries,
   updateChildItineraryById,
-  deleteChildItineraryById,
-  getMyCompletedItineraries,
-  rateAndCommentOnItinerary,
-  rateAndCommentOnGuide
+  deleteChildItineraryById
 };

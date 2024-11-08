@@ -35,12 +35,17 @@ const HomePage = () => {
       <header className="bg-white shadow-md">
         <Navbar id={id} isSignedUp={true} handleSignOut={handleSignOut} />
         {isSignedUp && (
+          <div>
           <button 
             onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
             className="px-9 py-1 bg-blue-600 text-white rounded"
           >
             View Profile
           </button>
+          <Link to={`/completed-activities/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+           Completed Activities
+          </Link>
+          </div>
         )}
       </header>
 
