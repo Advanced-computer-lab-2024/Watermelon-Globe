@@ -334,6 +334,62 @@ const fileComplaint = async (req, res) => {
   }
 };
 
+const buyProduct = async (req, res) => {
+  const { touristId, productId } = req.params;
+ 
+  console.log(touristId);
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(400).json({ error: "Tourist not found" });
+    }
+    const product = await Product.findById(productId);
+    if(!product){
+      return res.status(400).json({ error: "Product not found" });
+
+    }
+    if(product.quantity>0){
+    // Add the product ID to the tourist's products and save
+    tourist.products.push(productId); 
+    product.quantity--;
+  
+    }
+    // Assuming `products` is an array field in your model
+    await tourist.save();
+    await product.save();
+
+
+    res.status(200).json("Product was purchased successfully");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
+
+const getPurchasedProducts = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Return the list of purchased product IDs
+    res.status(200).json(tourist.products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
+
 const requestDeletionTourist = async (req, res) => {
   try {
       const { id } = req.params;
@@ -372,5 +428,7 @@ module.exports = {
   searchProductbyName,
   filterProduct,
   sortProducts,
+  buyProduct,
+  getPurchasedProducts,
   requestDeletionTourist
 };

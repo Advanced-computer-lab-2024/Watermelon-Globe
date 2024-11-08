@@ -23,6 +23,8 @@ import SellerPage from './SellerPage.js';
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
+import TouristProductsPage from './Tourist/pages/TouristProduct.js';
+import ViewProducts from './Guest/pages/ViewProducts.js';
 
 // admin new
 import AdminHome from './Admin/pages/AdminHome.js';
@@ -30,7 +32,7 @@ import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
 import SellerProduct from './Seller/pages/SellerProduct.js';
-import TouristProduct from './pages/TouristProduct.js';
+// import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 import ActivityDetails from './Components/ActivityDetails.jsx';
@@ -38,6 +40,8 @@ import AccountPage from './Advertiser/Components/AccountPage.jsx';
 import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
+import ProductTourist from './Tourist/pages/ProductsTourist.js';
+import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 
 //tourguide new
@@ -95,10 +99,12 @@ const App = () => {
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
           <Route path="/AdminProduct" element={<AdminProduct />} />
           <Route path="/SellerProduct" element={<SellerProduct />} />
-          <Route path="/TouristProduct" element={<TouristProduct />} />
+          {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
-
+          <Route path='/ViewProducts' element={<ViewProducts/>}/>
+          <Route path ='/ProductTourist/:id' element={<ProductTourist/>}/>
+          <Route path ='/PurchasedProducts/:id' element={<PurchasedProducts/>}/>
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}

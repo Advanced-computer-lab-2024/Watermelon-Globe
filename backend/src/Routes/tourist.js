@@ -12,6 +12,8 @@ const {
   updateRating,
   getAllProducts,
   searchProductbyName,
+  buyProduct,
+  getPurchasedProducts
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -40,5 +42,9 @@ router.get('/GetAllProducts', getAllProducts)
 
 //search a product 
 router.get('/searchProductName', searchProductbyName)
+
+router.put('/buyProduct/:touristId/:productId',buyProduct);
+
+router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
 module.exports = router;

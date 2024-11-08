@@ -13,5 +13,8 @@ router.put('/updateActivity/:id', updateActivity);
 router.delete('/deleteActivity/:id', deleteActivity);
 router.post("/createActivityNew",createActivityNew); //duplicate
 router.get("/getActivitiesNew",getActivitiesNew); //duplicate
+router.post('/createHistoricalTags',createTags);
+router.get('/getHistoricalTags',getTags);
+
 
 module.exports = router;

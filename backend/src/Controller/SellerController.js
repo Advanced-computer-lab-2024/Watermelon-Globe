@@ -143,6 +143,7 @@ const searchProductbyName = async (req, res) => {
   }
 };
 
+
 //filter products based on price
 const filterProduct = async (req, res) => {
   // Extract the Price from the URL parameters
@@ -328,27 +329,60 @@ const changePasswordSeller = async (req, res) => {
   }
 };
 
-const reviewProduct = async (req, res) => {
-  const { ReviewerId, ProductId } = req.params;
-  const { Review } = req.query;
 
-  const product = await Product.findById(ProductId);
-  if (!product) {
-    res.status(400).json({ message: "Product cannot be found" });
-  } else {
+
+  const reviewProduct =async(req,res)=>{
+    const {ReviewerId,ProductId} = req.params;
+    const {Review}=req.query;
+
+    const product = await Product.findById(ProductId);
+    if(!product){
+        res.status(400).json({message:"Product cannot be found"})
+    }
+    else{
+        try{
+            product.reviews.push({
+                reviewer: ReviewerId, // Use correct field name as per schema
+                review: Review        // Use correct field name as per schema
+            });
+        await product.save();
+        res.status(200).json({ message: "Review was added successfully" });
+        }
+        catch{
+            console.error("Error updating reviews:", error);
+            res.status(500).json({ error: "Server error" });
+        }
+
+    }
+
+
+
+
+  }
+
+  const getProductById = async (req, res) => {
+    const { id } = req.body;
+    
     try {
-      product.reviews.push({
-        reviewer: ReviewerId, // Use correct field name as per schema
-        review: Review, // Use correct field name as per schema
-      });
-      await product.save();
-      res.status(200).json({ message: "Review was added successfully" });
-    } catch {
-      console.error("Error updating reviews:", error);
-      res.status(500).json({ error: "Server error" });
+      const product = await Product.findById(id);
+      
+      if (!product) {
+        // Respond with a descriptive error message if product not found
+        return res.status(404).json({ error: "Product not found" });
+      }
+      
+      // Return the product data directly, without wrapping in an object
+      return res.status(200).json(product);
+      
+    } catch (error) {
+      // Log the error (optional, useful for debugging)
+      console.error("Error finding product:", error);
+  
+      // Respond with a 500 status and include the error message
+      return res.status(500).json({ error: error.message || "Server error" });
     }
   };
-};
+  
   
   const requestDeletionSeller = async (req, res) => {
     try {
@@ -379,4 +413,4 @@ const reviewProduct = async (req, res) => {
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
-      acceptTermsAndConditions,};
+      acceptTermsAndConditions,getProductById};
