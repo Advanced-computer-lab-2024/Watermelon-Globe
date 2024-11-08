@@ -26,7 +26,13 @@ const sellerSchema = new Schema({
     Password:{
         type: String,
         required:true
-    }
+    },
+    deletionRequest: {
+        type: String,
+        enum: ["Pending", "Accepted", "Rejected"],
+        default: null,
+    },
+
 }, {timestamps: true})
 
 

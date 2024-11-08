@@ -1,7 +1,7 @@
 // #Task route solution
 const touristModel = require('../Models/touristModel');
 const tourguideModel = require('../Models/tourGuideModel');
-const sellerModel = require('../Models/sellerModel');
+const sellerModel = require('../Models/SellerModel');
 const advertiserModel = require('../Models/advertiserModel');
 const itineraryModel = require('../Models/itineraryModel');
 const activityModel= require("../Models/activityModel");

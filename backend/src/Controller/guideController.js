@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const itineraryModel = require('../Models/itineraryModel.js');
 const tourGuide = require('../Models/tourGuideModel.js');
+const TourGuide = require('../Models/tourGuideModel.js');
 
 const createTourGuide = async (req, res) => {
 
@@ -353,9 +354,32 @@ const changePasswordTourGuide = async (req, res) => {
       res.status(500).json({ error: "Server error" });
     }
   };
+
+  const requestDeletionGuide = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find the guide by ID and update the deletionRequest to "Pending"
+        const guide = await TourGuide.findByIdAndUpdate(
+            id,
+            { deletionRequest: "Pending" },
+            { new: true } // Return the updated document
+        );
+
+        if (!guide) {
+            return res.status(404).json({ message: 'Guide not found' });
+        }
+
+        res.status(200).json({
+            message: 'Deletion request updated successfully',
+            data: advertiser
+        });
+    } catch (error) {
+        console.error('Error updating deletion request:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
   
-
-
 module.exports = {
     createItinerary,
     getAllItineraries,
@@ -371,5 +395,6 @@ module.exports = {
     sortByRatings,
     filterItineraries,
     filterByPreferenceItineraries,
-    changePasswordTourGuide
+    changePasswordTourGuide,
+    requestDeletionGuide
 };

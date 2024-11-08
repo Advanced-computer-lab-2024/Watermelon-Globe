@@ -22,6 +22,7 @@ const advertiserSchema = new Schema({
     type: String, 
     required: false 
   },
+
 }, { timestamps: true });
 
 const Advertiser = mongoose.model('Advertiser', advertiserSchema);

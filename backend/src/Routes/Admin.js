@@ -26,7 +26,11 @@ const {
     getAllComplaints,
     getComplaint,
     updateComplaint,
-    replyComplaint
+    replyComplaint,
+    deleteTourist,
+    deleteGuide,
+    deleteCompany,
+    deleteSeller
 } = require('../Controller/AdminController')
 
 
@@ -67,6 +71,12 @@ router.put('/Complaint/:id', updateComplaint)
 
 //reply to a Complaint
 router.put('/replyComplaint/:id', replyComplaint)
+
+router.delete('/deleteTourist/:id', deleteTourist);
+router.delete('/deleteGuide/:id', deleteGuide);
+router.delete('/deleteCompany/:id', deleteCompany);
+router.delete('/deleteSeller/:id', deleteSeller);
+
 
 
 module.exports = router;

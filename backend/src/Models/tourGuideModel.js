@@ -46,6 +46,12 @@ const tourGuideSchema = new Schema({
     type: [String],
     required: false 
   },
+  deletionRequest: {
+    type: String,
+    enum: ["Pending", "Accepted", "Rejected"],
+    default: null,
+  },
+
 }, { timestamps: true });
 
 const TourGuide = mongoose.model('TourGuide', tourGuideSchema);

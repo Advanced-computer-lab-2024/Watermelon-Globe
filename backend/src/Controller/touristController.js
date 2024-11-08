@@ -333,8 +333,30 @@ const fileComplaint = async (req, res) => {
   }
 };
 
+const requestDeletionTourist = async (req, res) => {
+  try {
+      const { id } = req.params;
 
+      // Find the tourist by ID and update the deletionRequest to "Pending"
+      const tourist = await Tourist.findByIdAndUpdate(
+          id,
+          { deletionRequest: "Pending" },
+          { new: true } // Return the updated document
+      );
 
+      if (!tourist) {
+          return res.status(404).json({ message: 'Tourist not found' });
+      }
+
+      res.status(200).json({
+          message: 'Deletion request updated successfully',
+          data: advertiser
+      });
+  } catch (error) {
+      console.error('Error updating deletion request:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+};
 
 module.exports = {
   createTourist,
@@ -348,5 +370,6 @@ module.exports = {
   getAllProducts,
   searchProductbyName,
   filterProduct,
-  sortProducts
+  sortProducts,
+  requestDeletionTourist
 };

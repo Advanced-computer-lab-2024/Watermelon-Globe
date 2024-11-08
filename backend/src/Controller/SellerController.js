@@ -1,4 +1,4 @@
-const Seller = require('../Models/sellerModel')
+const Seller = require('../Models/SellerModel')
 const Product = require('../Models/productModel')
 const mongoose = require('mongoose')
 const { findById } = require('../Models/touristModel')
@@ -329,14 +329,34 @@ const updateRatingProduct = async (req, res) => {
         }
 
     }
-
-
-
-
   }
   
+  const requestDeletionSeller = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find the seller by ID and update the deletionRequest to "Pending"
+        const seller = await Seller.findByIdAndUpdate(
+            id,
+            { deletionRequest: "Pending" },
+            { new: true } // Return the updated document
+        );
+
+        if (!seller) {
+            return res.status(404).json({ message: 'seller not found' });
+        }
+
+        res.status(200).json({
+            message: 'Deletion request updated successfully',
+            data: advertiser
+        });
+    } catch (error) {
+        console.error('Error updating deletion request:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
-      sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct}
+      sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller};

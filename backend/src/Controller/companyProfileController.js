@@ -116,4 +116,30 @@ const changePasswordAdvertiser = async (req, res) => {
     }
   };
 
-module.exports = { createProfile, getProfiles, updateProfile,changePasswordAdvertiser };
+  const requestDeletionAdvertiser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find the advertiser by ID and update the deletionRequest to "Pending"
+        const advertiser = await CompanyProfileModel.findByIdAndUpdate(
+            id,
+            { deletionRequest: "Pending" },
+            { new: true } // Return the updated document
+        );
+
+        if (!advertiser) {
+            return res.status(404).json({ message: 'Advertiser not found' });
+        }
+
+        res.status(200).json({
+            message: 'Deletion request updated successfully',
+            data: advertiser
+        });
+    } catch (error) {
+        console.error('Error updating deletion request:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+module.exports = { createProfile, getProfiles, updateProfile,changePasswordAdvertiser,
+     requestDeletionAdvertiser };

@@ -1,5 +1,9 @@
 const Admin = require('../Models/AdminModel')
 const Governer = require('../Models/tourismGovernorModel')
+const Tourist = require('../Models/touristModel')
+const TourGuide = require('../Models/tourGuideModel')
+const Seller = require('../Models/SellerModel')
+const Company = require('../Models/companyProfileModel')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/productModel')
@@ -559,11 +563,71 @@ const updateComplaint = async (req, res) => {
     }
   };
 
+ const deleteTourist = async (req, res) => {
+    const {id} = req.params
 
-module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
-     getAllPreferenceTag, getPreferenceTag, createPreferenceTag, deletePreferenceTag, updatePreferenceTag,
-     getAllActivityCategory, getActivityCategory, createActivityCategory, deleteActivityCategory
-     , updateActivityCategory, createProduct, getAllProducts, searchProductbyName, filterProduct, 
-    updateProduct, sortProducts, getAllAdmin, getAllGoverner, getAllComplaints, getComplaint, updateComplaint,
-    replyComplaint
-    ,changePasswordAdmin}
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'No such tourist'})
+    }
+
+    const tourist = await Tourist.findOneAndDelete({_id: id})
+
+    if (!tourist){
+        return res.status(400).json({error: 'No such tourist'})
+        }
+    res.status(200).json(tourist)
+ };
+
+ const deleteGuide = async (req, res) => {
+    const {id} = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'No such guide'})
+    }
+
+    const guide = await TourGuide.findOneAndDelete({_id: id})
+
+    if (!guide){
+        return res.status(400).json({error: 'No such guide'})
+        }
+    res.status(200).json(guide)
+ };
+
+ const deleteSeller = async (req, res) => {
+    const {id} = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'No such seller'})
+    }
+
+    const seller = await Seller.findOneAndDelete({_id: id})
+
+    if (!seller){
+        return res.status(400).json({error: 'No such seller'})
+        }
+    res.status(200).json(seller)
+ };
+
+ const deleteCompany = async (req, res) => {
+    const {id} = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'No such company'})
+    }
+
+    const company = await Company.findOneAndDelete({_id: id})
+
+    if (!company){
+        return res.status(400).json({error: 'No such company'})
+        }
+    res.status(200).json(company)
+ };
+
+
+module.exports = {createAdmin , createGoverner, getAllPreferenceTag, getPreferenceTag,
+     createPreferenceTag, deletePreferenceTag, updatePreferenceTag, getAllActivityCategory,
+     getActivityCategory, createActivityCategory,deleteActivityCategory, updateActivityCategory,
+     createProduct, getAllProducts, searchProductbyName, filterProduct, updateProduct,
+     sortProducts, getAllAdmin, getAllGoverner, getAllComplaints, getComplaint, updateComplaint,
+     replyComplaint, changePasswordAdmin,
+     deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany}
