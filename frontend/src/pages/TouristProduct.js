@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import SideBar from '../Components/Tourist/TouristSideBar'; // Import the SideBar component
-import GetAllProducts from '../Components/Tourist/GetAllProducts';
-import SearchProductByName from '../Components/Tourist/SearchProductByName';
-import FilterProduct from '../Components/Tourist/filterProduct';
-import SortProduct from '../Components/Tourist/sortProduct';
+import SideBar from '../Tourist/Components/TouristProduct/TouristSideBar'; // Import the SideBar component
+import GetAllProducts from '../Tourist/Components/TouristProduct/GetAllProducts';
+import SearchProductByName from '../Tourist/Components/TouristProduct/SearchProductByName';
+import FilterProduct from '../Tourist/Components/TouristProduct/filterProduct';
+import SortProduct from '../Tourist/Components/TouristProduct/sortProduct';
 
 const TouristProduct = () => {
   const [selectedOption, setSelectedOption] = useState('allProducts'); // Default option to display all products
