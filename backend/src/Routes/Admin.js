@@ -48,7 +48,11 @@ router.post('/CreateActivityCategory', createActivityCategory)
 router.delete('/DeleteActivityCategory/:id', deleteActivityCategory)
 router.put('/UpdateActivityCategory/:id', updateActivityCategory)
 router.get('/GetAllProducts', getAllProducts)
-router.post('/CreateProduct', createProduct); 
+
+//post a new product 
+router.post('/CreateProduct', createProduct);
+
+//delete a product 
 router.get('/SearchProductName', searchProductbyName)
 router.put('/EditProduct', updateProduct)
 

@@ -74,34 +74,32 @@ const updateTourist = async (req, res) => {
   res.status(200).json(tourist);
 };
 
-
 //Tour Guide
 const createTourguide = async (req, res) => {
+  try {
+    // Destructure the name, email, and age from req.body
+    const {username,email,password} = req.body;
+
+    // Validate if all fields are present
+    // if (!Username||!Email||!Password) {
+    //   return res.status(400).json({ message: 'All fields are required: name,email,password.' });
+    // }
+
+    // Create a new user instance and save to the database
+    const NewTourguide = await tourguideModel.create({
+      username,
+      email,
+      password
     
-    try {
-      // Destructure the name, email, and age from req.body
-      const {username,email,password} = req.body;
-  
-      // Validate if all fields are present
-      // if (!Username||!Email||!Password) {
-      //   return res.status(400).json({ message: 'All fields are required: name,email,password.' });
-      // }
-  
-      // Create a new user instance and save to the database
-      const NewTourguide = await tourguideModel.create({
-        username,
-        email,
-        password
-      
-      });
-  
-      //  await (await NewTourguide).save();
-      // Send the newly created user as a response
-      res.status(201).json(NewTourguide);
-    } catch (error) {
-      res.status(500).json({ message: error.message }); // Handle any errors
-    }
-  };
+    });
+
+    //  await (await NewTourguide).save();
+    // Send the newly created user as a response
+    res.status(201).json(NewTourguide);
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Handle any errors
+  }
+};
 const getItineraryDetails = async (req, res) => {
     const { id } = req.params;
 
@@ -146,32 +144,32 @@ try {
 
 //Advertiser
 const createAdvertiser = async (req, res) => {
-    try {
-      // Destructure the name, email, and age from req.body
-      const {Username,Email,Password} = req.body;
-  
-      // Validate if all fields are present
-      if (!Username||!Email||!Password) {
-        return res.status(400).json({ message: 'All fields are required: name, email,password.' });
-      }
-  
-      // Create a new user instance and save to the database
-      const NewAdvertiser = advertiserModel.create({
-        Username,
-        Email,
-        Password
+  try {
+    // Destructure the name, email, and age from req.body
+    const {Username,Email,Password} = req.body;
 
-      });
-  
-       await (await NewAdvertiser).save();
-      // Send the newly created user as a response
-      res.status(201).json(NewAdvertiser);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-      console.loge(error.message) // Handle any errors
+    // Validate if all fields are present
+    if (!Username||!Email||!Password) {
+      return res.status(400).json({ message: 'All fields are required: name, email,password.' });
     }
-  };
-  
+
+    // Create a new user instance and save to the database
+    const NewAdvertiser = advertiserModel.create({
+      Username,
+      Email,
+      Password
+
+    });
+
+      await (await NewAdvertiser).save();
+    // Send the newly created user as a response
+    res.status(201).json(NewAdvertiser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.loge(error.message) // Handle any errors
+  }
+};
+
 const getActivityDetails= async (req, res) => {
   const { id } = req.params;
 
@@ -236,67 +234,66 @@ const filterActivityByBudget = async (req, res) => {
 
 
 //Seller
-  const createSeller = async (req, res) => {
-    try {
-      // Destructure the name, email, and age from req.body
-      const {Username,Email,Password} = req.body;
-  
-      // Validate if all fields are present
-      if (!Username||!Email||!Password) {
-        return res.status(400).json({ message: 'All fields are required: username,email,password.' });
-      }
-  
-      // Create a new user instance and save to the database
-      const NewSeller = sellerModel.create({
-        Username,
-        Email,
-        Password
-       
-      });
-  
-       await (await NewSeller ).save();
-      // Send the newly created user as a response
-      res.status(201).json(NewSeller);
-    } catch (error) {
-      res.status(500).json({ message: error.message }); // Handle any errors
-    }
-  };
+const createSeller = async (req, res) => {
+  try {
+    // Destructure the name, email, and age from req.body
+    const {Username,Email,Password} = req.body;
 
- 
+    // Validate if all fields are present
+    if (!Username||!Email||!Password) {
+      return res.status(400).json({ message: 'All fields are required: username,email,password.' });
+    }
+
+    // Create a new user instance and save to the database
+    const NewSeller = sellerModel.create({
+      Username,
+      Email,
+      Password
+      
+    });
+
+      await (await NewSeller ).save();
+    // Send the newly created user as a response
+    res.status(201).json(NewSeller);
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Handle any errors
+  }
+};
 
 const getTourists = async (req, res) => {
-   try {
-      // Assuming User is a Mongoose model
-      const tourguids = await touristModel.find(); // This will retrieve all users
-      res.status(200).json(tourguids); // Send the users data as JSON
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-       // Handle any errors
-    }  }
+  try {
+    // Assuming User is a Mongoose model
+    const tourguids = await touristModel.find(); // This will retrieve all users
+    res.status(200).json(tourguids); // Send the users data as JSON
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+      // Handle any errors
+  }  
+}
 
-    const filterItineraryByBudget = async (req, res) => {
-      const { minPrice, maxPrice } = req.query;
+const filterItineraryByBudget = async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
 
-    try {
-        // Validate that minPrice and maxPrice are provided
-        if (!minPrice || !maxPrice) {
-            return res.status(400).json({ message: 'Please provide both minPrice and maxPrice.' });
-        }
-
-        // Query to find itineraries within the price range
-        const itineraries = await itineraryModel.find({
-          priceOfTour: { $gte: Number(minPrice), $lte: Number(maxPrice) }
-        });
-
-        if (itineraries.length === 0) {
-            return res.status(404).json({ message: 'No itineraries found within the given budget range.' });
-        }
-
-        res.status(200).json(itineraries);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+try {
+    // Validate that minPrice and maxPrice are provided
+    if (!minPrice || !maxPrice) {
+        return res.status(400).json({ message: 'Please provide both minPrice and maxPrice.' });
     }
+
+    // Query to find itineraries within the price range
+    const itineraries = await itineraryModel.find({
+      priceOfTour: { $gte: Number(minPrice), $lte: Number(maxPrice) }
+    });
+
+    if (itineraries.length === 0) {
+        return res.status(404).json({ message: 'No itineraries found within the given budget range.' });
+    }
+
+    res.status(200).json(itineraries);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+}
 };
  
 

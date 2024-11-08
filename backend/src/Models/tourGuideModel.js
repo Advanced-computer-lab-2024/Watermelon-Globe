@@ -37,7 +37,15 @@ const tourGuideSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'itinerary', // References the Itinerary model
     }
-  ]
+  ],
+  idProof: { 
+    type: String, 
+    required: false 
+  },
+  certificates: {
+    type: [String],
+    required: false 
+  },
 }, { timestamps: true });
 
 const TourGuide = mongoose.model('TourGuide', tourGuideSchema);
