@@ -8,7 +8,7 @@ import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 
 import './App.css';
 
-import TouristDetails from "./Tourist/Components/TouristDetails.js";
+import TouristDetails from "./pages/TouristDetails.js";
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
@@ -32,7 +32,7 @@ import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
 import SellerProduct from './Seller/pages/SellerProduct.js';
-import TouristProduct from './Tourist/pages/TouristProduct.js';
+import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 import ActivityDetails from './Components/ActivityDetails.jsx';
@@ -42,6 +42,9 @@ import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import ProductTourist from './Tourist/pages/ProductsTourist.js';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
+import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+
+//tourguide new
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -116,7 +119,6 @@ const App = () => {
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
           <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
           <Route path="/signup-options" element={<SignupOptions />} />
-          <Route path="/Tourist-ProductsPage" element={<TouristProductsPage />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
@@ -134,6 +136,7 @@ const App = () => {
           <Route path="/editActivity/:id" element={<EditActivity/>}/>
           <Route path='/activity/:id' element={<ActivityDetails/>}/>
 
+          <Route path="/TourGuideHome" element={<TourGuideHome />} />
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>

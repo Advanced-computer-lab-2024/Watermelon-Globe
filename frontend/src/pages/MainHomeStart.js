@@ -4,7 +4,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
-// import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './Navbar.css';
 import Navbar from './Navbar.jsx';
 
@@ -195,7 +195,7 @@ handleSearch = (e) => {
     
 
     try {
-      const response = await axios.get('/filterActivities', { params });
+      const response = await axios.get('/api/filter/filterActivities', { params });
       if (response==null) {
         setActivities([]); 
       } else {
@@ -216,7 +216,7 @@ handleSearch = (e) => {
   };
   const fetchSites = async () => {
     try {
-      const response = await fetch('/getAllSites');
+      const response = await fetch('/api/governor/getAllSites');
       const data = await response.json();
       setFilteredSites2(data);
     } catch (error) {
@@ -226,7 +226,7 @@ handleSearch = (e) => {
 
   const fetchActivities = async () => {
     try {
-      const response = await fetch('/getActivitiesNew');
+      const response = await fetch('/api/advertiser/getActivitiesNew');
       const data = await response.json();
       setActivities(data);
     } catch (error) {

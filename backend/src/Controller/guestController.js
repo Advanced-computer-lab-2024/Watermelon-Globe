@@ -1,19 +1,26 @@
 // #Task route solution
 const touristModel = require('../Models/touristModel');
 const tourguideModel = require('../Models/tourGuideModel');
-const sellerModel = require('../Models/sellerModel');
+const sellerModel = require('../Models/SellerModel');
 const advertiserModel = require('../Models/advertiserModel');
 const itineraryModel = require('../Models/itineraryModel');
 const activityModel= require("../Models/activityModel");
 
-
-const { default: mongoose } = require('mongoose');
+const { default: mongoose } = require("mongoose");
 
 //Tourist
 const createTourist = async (req, res) => {
   try {
     // Destructure the required fields from req.body
-    const { username, email, password, mobileNumber, nationality, dob, status } = req.body;
+    const {
+      username,
+      email,
+      password,
+      mobileNumber,
+      nationality,
+      dob,
+      status,
+    } = req.body;
 
     // Create a new tourist instance and save to the database
     const newTourist = await touristModel.create({
@@ -24,7 +31,7 @@ const createTourist = async (req, res) => {
       nationality,
       dob,
       status,
-      wallet: 0
+      wallet: 0,
     });
 
     // Send the newly created tourist as a response
@@ -78,7 +85,7 @@ const updateTourist = async (req, res) => {
 const createTourguide = async (req, res) => {
   try {
     // Destructure the name, email, and age from req.body
-    const {username,email,password} = req.body;
+    const { username, email, password } = req.body;
 
     // Validate if all fields are present
     // if (!Username||!Email||!Password) {
@@ -89,8 +96,7 @@ const createTourguide = async (req, res) => {
     const NewTourguide = await tourguideModel.create({
       username,
       email,
-      password
-    
+      password,
     });
 
     //  await (await NewTourguide).save();
@@ -101,104 +107,109 @@ const createTourguide = async (req, res) => {
   }
 };
 const getItineraryDetails = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        const itinerary = await itineraryModel.findById(id); // Await the Promise
+  try {
+    const itinerary = await itineraryModel.findById(id); // Await the Promise
 
-        if (!itinerary) { // Check for null/undefined after awaiting
-            return res.status(404).json({ message: "Itinerary not found" }); // Change to 404 for not found
-        }
-
-        res.status(200).json(itinerary); // Respond with the itinerary
-    } catch (error) {
-        console.error("Error fetching itinerary:", error); // Log the error for debugging
-        res.status(500).json({ message: "Internal server error" }); // Handle any errors
+    if (!itinerary) {
+      // Check for null/undefined after awaiting
+      return res.status(404).json({ message: "Itinerary not found" }); // Change to 404 for not found
     }
+
+    res.status(200).json(itinerary); // Respond with the itinerary
+  } catch (error) {
+    console.error("Error fetching itinerary:", error); // Log the error for debugging
+    res.status(500).json({ message: "Internal server error" }); // Handle any errors
+  }
 };
 
 //sort
 const filterItineraryRating = async (req, res) => {
-const {rating} = req.query;
+  const { rating } = req.query;
 
-// Check if authorId is provided
+  // Check if authorId is provided
 
-
-try {
+  try {
     // Find all blogs that have the same authorId
-    const Itineraries = await itineraryModel.find({rating: rating });
+    const Itineraries = await itineraryModel.find({ rating: rating });
 
     // If no blogs found, send a 404 response
     if (Itineraries.length === 0) {
-        return res.status(404).json({ message: 'No itineray has this rating .' });
+      return res.status(404).json({ message: "No itineray has this rating ." });
     }
 
     // Send the blogs as a response
     return res.status(200).json(Itineraries);
-} catch (error) {
+  } catch (error) {
     // Handle any potential errors
     console.error(error);
-    return res.status(500).json({ message: 'An error occurred while filtering blogs.' });
-}
+    return res
+      .status(500)
+      .json({ message: "An error occurred while filtering blogs." });
+  }
 };
 
 //Advertiser
 const createAdvertiser = async (req, res) => {
   try {
     // Destructure the name, email, and age from req.body
-    const {Username,Email,Password} = req.body;
+    const { Username, Email, Password } = req.body;
 
     // Validate if all fields are present
-    if (!Username||!Email||!Password) {
-      return res.status(400).json({ message: 'All fields are required: name, email,password.' });
+    if (!Username || !Email || !Password) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required: name, email,password." });
     }
 
     // Create a new user instance and save to the database
     const NewAdvertiser = advertiserModel.create({
       Username,
       Email,
-      Password
-
+      Password,
     });
 
-      await (await NewAdvertiser).save();
+    await (await NewAdvertiser).save();
     // Send the newly created user as a response
     res.status(201).json(NewAdvertiser);
   } catch (error) {
     res.status(500).json({ message: error.message });
-    console.loge(error.message) // Handle any errors
+    console.loge(error.message); // Handle any errors
   }
 };
 
-const getActivityDetails= async (req, res) => {
+const getActivityDetails = async (req, res) => {
   const { id } = req.params;
 
   try {
-      const activity = await activityModel.findById(id); // Await the Promise
+    const activity = await activityModel.findById(id); // Await the Promise
 
-      if (!activity) { // Check for null/undefined after awaiting
-          return res.status(404).json({ message: "Activity not found" }); // Change to 404 for not found
-      }
+    if (!activity) {
+      // Check for null/undefined after awaiting
+      return res.status(404).json({ message: "Activity not found" }); // Change to 404 for not found
+    }
 
-      res.status(200).json(activity); // Respond with the itinerary
+    res.status(200).json(activity); // Respond with the itinerary
   } catch (error) {
-      console.error("Error fetching activity:", error); // Log the error for debugging
-      res.status(500).json({ message: "Internal server error" }); // Handle any errors
+    console.error("Error fetching activity:", error); // Log the error for debugging
+    res.status(500).json({ message: "Internal server error" }); // Handle any errors
   }
 };
 const getActivities = async (req, res) => {
   try {
-      const activities = await activityModel.find({})
-          .populate('Tags') // Populate the tags field with actual Tag data
-          .populate('Advertiser'); // Populate the Advertiser field with the corresponding CompanyProfile data
+    const activities = await activityModel
+      .find({})
+      .populate("Tags") // Populate the tags field with actual Tag data
+      .populate("Advertiser"); // Populate the Advertiser field with the corresponding CompanyProfile data
 
-      res.status(200).json(activities);
+    res.status(200).json(activities);
   } catch (error) {
-      console.error('Error fetching activities:', error);
-      res.status(500).json({
-          message: 'Error fetching activities',
-          error: error.message
-      });
+    console.error("Error fetching activities:", error);
+    res.status(500).json({
+      message: "Error fetching activities",
+      error: error.message,
+    });
   }
 };
 
@@ -208,51 +219,51 @@ const filterActivityByBudget = async (req, res) => {
 
   // Validate query parameter
   if (!priceRange) {
-    return res.status(400).json({ error: 'Price range is required.' });
+    return res.status(400).json({ error: "Price range is required." });
   }
 
   // Parse the price range (assuming it's passed as a comma-separated string)
-  const [minPrice, maxPrice] = priceRange.split(',').map(Number);
+  const [minPrice, maxPrice] = priceRange.split(",").map(Number);
 
   // Validate min and max prices
   if (isNaN(minPrice) || isNaN(maxPrice)) {
-    return res.status(400).json({ error: 'Invalid price range.' });
+    return res.status(400).json({ error: "Invalid price range." });
   }
 
   try {
     const activities = await Activity.find({
-      'priceRange.min': { $gte: minPrice },
-      'priceRange.max': { $lte: maxPrice }
+      "priceRange.min": { $gte: minPrice },
+      "priceRange.max": { $lte: maxPrice },
     });
 
     return res.status(200).json(activities);
   } catch (error) {
     console.error("Error fetching activities:", error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 //Seller
 const createSeller = async (req, res) => {
   try {
     // Destructure the name, email, and age from req.body
-    const {Username,Email,Password} = req.body;
+    const { Username, Email, Password } = req.body;
 
     // Validate if all fields are present
-    if (!Username||!Email||!Password) {
-      return res.status(400).json({ message: 'All fields are required: username,email,password.' });
+    if (!Username || !Email || !Password) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required: username,email,password." });
     }
 
     // Create a new user instance and save to the database
     const NewSeller = sellerModel.create({
       Username,
       Email,
-      Password
-      
+      Password,
     });
 
-      await (await NewSeller ).save();
+    await (await NewSeller).save();
     // Send the newly created user as a response
     res.status(201).json(NewSeller);
   } catch (error) {
@@ -267,78 +278,93 @@ const getTourists = async (req, res) => {
     res.status(200).json(tourguids); // Send the users data as JSON
   } catch (error) {
     res.status(500).json({ message: error.message });
-      // Handle any errors
-  }  
-}
+    // Handle any errors
+  }
+};
 
 const filterItineraryByBudget = async (req, res) => {
   const { minPrice, maxPrice } = req.query;
 
-try {
+  try {
     // Validate that minPrice and maxPrice are provided
     if (!minPrice || !maxPrice) {
-        return res.status(400).json({ message: 'Please provide both minPrice and maxPrice.' });
+      return res
+        .status(400)
+        .json({ message: "Please provide both minPrice and maxPrice." });
     }
 
     // Query to find itineraries within the price range
     const itineraries = await itineraryModel.find({
-      priceOfTour: { $gte: Number(minPrice), $lte: Number(maxPrice) }
+      priceOfTour: { $gte: Number(minPrice), $lte: Number(maxPrice) },
     });
 
     if (itineraries.length === 0) {
-        return res.status(404).json({ message: 'No itineraries found within the given budget range.' });
+      return res
+        .status(404)
+        .json({
+          message: "No itineraries found within the given budget range.",
+        });
     }
 
     res.status(200).json(itineraries);
-} catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
-}
-};
- 
-
-const filterItineraries = async (req, res) => {
-  const { startDate, endDate, languageOfTour, minPrice, maxPrice } = req.query; // Expecting date strings, a language string, and price parameters
- console.lo
-  try {
-      // Convert strings to Date objects if provided
-      const start = startDate ? new Date(startDate) : null;
-      const end = endDate ? new Date(endDate) : null;
-
-      // Parse minPrice and maxPrice to numbers, if provided
-      const min = minPrice ? parseFloat(minPrice) : null;
-      const max = maxPrice ? parseFloat(maxPrice) : null;
-
-      // Find all itineraries
-      const itineraries = await itineraryModel.find();
-
-      // Filter itineraries based on availableDates, languageOfTour, and price
-      const filteredItineraries = itineraries.filter(itinerary => {
-          // Check if any date in availableDates is within the specified range, if startDate and endDate are provided
-          const dateInRange = (start && end) 
-              ? itinerary.availableDates.some(date => date >= start && date <= end) 
-              : true; // If no date range is specified, consider all dates
-
-          // Check if the specified language is included in the languageOfTour
-          const languageMatch = languageOfTour ? itinerary.languageOfTour.includes(languageOfTour) : true;
-
-          // Check if the price falls within the specified range
-          const priceMatch = (min === null || itinerary.priceOfTour >= min) && (max === null || itinerary.priceOfTour <= max);
-
-          return dateInRange && languageMatch && priceMatch; // Return true if all conditions are satisfied
-      });
-
-      if (filteredItineraries.length === 0) {
-          return res.status(404).json({ message: 'No itineraries found matching the specified criteria.' });
-      }
-
-      return res.status(200).json(filteredItineraries);
   } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Error filtering itineraries.', error });
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
+const filterItineraries = async (req, res) => {
+  const { startDate, endDate, languageOfTour, minPrice, maxPrice } = req.query; // Expecting date strings, a language string, and price parameters
+  console.lo;
+  try {
+    // Convert strings to Date objects if provided
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+
+    // Parse minPrice and maxPrice to numbers, if provided
+    const min = minPrice ? parseFloat(minPrice) : null;
+    const max = maxPrice ? parseFloat(maxPrice) : null;
+
+    // Find all itineraries
+    const itineraries = await itineraryModel.find();
+
+    // Filter itineraries based on availableDates, languageOfTour, and price
+    const filteredItineraries = itineraries.filter((itinerary) => {
+      // Check if any date in availableDates is within the specified range, if startDate and endDate are provided
+      const dateInRange =
+        start && end
+          ? itinerary.availableDates.some(
+              (date) => date >= start && date <= end
+            )
+          : true; // If no date range is specified, consider all dates
+
+      // Check if the specified language is included in the languageOfTour
+      const languageMatch = languageOfTour
+        ? itinerary.languageOfTour.includes(languageOfTour)
+        : true;
+
+      // Check if the price falls within the specified range
+      const priceMatch =
+        (min === null || itinerary.priceOfTour >= min) &&
+        (max === null || itinerary.priceOfTour <= max);
+
+      return dateInRange && languageMatch && priceMatch; // Return true if all conditions are satisfied
+    });
+
+    if (filteredItineraries.length === 0) {
+      return res.status(404).json({
+        message: "No itineraries found matching the specified criteria.",
+      });
+    }
+
+    return res.status(200).json(filteredItineraries);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Error filtering itineraries.", error });
+  }
+};
 
 const filterByLanguage = async (req, res) => {
   try {
@@ -346,7 +372,9 @@ const filterByLanguage = async (req, res) => {
 
     // Ensure that languageOfTour is provided
     if (!languageOfTour) {
-      return res.status(400).json({ message: 'Please provide a language to filter by.' });
+      return res
+        .status(400)
+        .json({ message: "Please provide a language to filter by." });
     }
 
     // Construct the query to check if the language is in the array
@@ -356,12 +384,16 @@ const filterByLanguage = async (req, res) => {
     const filteredItineraries = await itineraryModel.find();
 
     if (filteredItineraries.length === 0) {
-      return res.status(404).json({ message: `No itineraries found for language: ${languageOfTour}` });
+      return res.status(404).json({
+        message: `No itineraries found for language: ${languageOfTour}`,
+      });
     }
 
     return res.status(200).json(filteredItineraries);
   } catch (error) {
-    return res.status(500).json({ message: 'Error filtering itineraries by language', error });
+    return res
+      .status(500)
+      .json({ message: "Error filtering itineraries by language", error });
   }
 };
 
@@ -370,56 +402,98 @@ const filterByDate = async (req, res) => {
 
   // Validate that both startDate and endDate are provided
   if (!startDate || !endDate) {
-      return res.status(400).json({ message: 'Please provide both startDate and endDate.' });
+    return res
+      .status(400)
+      .json({ message: "Please provide both startDate and endDate." });
   }
 
   try {
-      // Convert strings to Date objects
-      const start = new Date(startDate);
-      const end = new Date(endDate);
+    // Convert strings to Date objects
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-      // Find all itineraries
-      const itineraries = await itineraryModel.find();
+    // Find all itineraries
+    const itineraries = await itineraryModel.find();
 
-      // Filter itineraries based on availableDates
-      const filteredItineraries = itineraries.filter(itinerary => 
-          itinerary.availableDates.some(date => date >= start && date <= end)
-      );
+    // Filter itineraries based on availableDates
+    const filteredItineraries = itineraries.filter((itinerary) =>
+      itinerary.availableDates.some((date) => date >= start && date <= end)
+    );
 
-      if (filteredItineraries.length === 0) {
-          return res.status(404).json({ message: 'No itineraries found within the specified date range.' });
-      }
+    if (filteredItineraries.length === 0) {
+      return res.status(404).json({
+        message: "No itineraries found within the specified date range.",
+      });
+    }
 
-      return res.status(200).json(filteredItineraries);
+    return res.status(200).json(filteredItineraries);
   } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Error filtering itineraries by date.', error });
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Error filtering itineraries by date.", error });
   }
 };
 
+//Get accessible/notAccessible itineraries
+const getAccessibleItineraries = async (req, res) => {
+  try {
+    // Find itineraries where accessibility is true
+    const accessibleItineraries = await itineraryModel.Itinerary.find({
+      accessibility: true,
+    });
 
+    if (accessibleItineraries.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No accessible itineraries found" });
+    }
 
+    res.status(200).json(accessibleItineraries);
+  } catch (error) {
+    res.status(500).json({
+      error: "Error retrieving accessible itineraries: " + error.message,
+    });
+  }
+};
 
+const getNotAccessibleItineraries = async (req, res) => {
+  try {
+    // Find itineraries where accessibility is true
+    const accessibleItineraries = await itineraryModel.Itinerary.find({
+      accessibility: false,
+    });
 
+    if (accessibleItineraries.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No accessible itineraries found" });
+    }
 
-    
-    
-
+    res.status(200).json(accessibleItineraries);
+  } catch (error) {
+    res.status(500).json({
+      error: "Error retrieving accessible itineraries: " + error.message,
+    });
+  }
+};
 
 module.exports = {
   createSeller,
-  createAdvertiser, 
-  createTourguide, 
+  createAdvertiser,
+  createTourguide,
   createTourist,
   getTourists,
-  getItineraryDetails, 
+  getActivities,
+  getItineraryDetails,
+  getActivityDetails,
+  getAccessibleItineraries,
+  getNotAccessibleItineraries,
   filterItineraryRating,
   filterItineraryByBudget,
-  getActivityDetails,
   filterActivityByBudget,
-  getActivities,
   filterItineraries,
   filterByLanguage,
   filterByDate,
-  updateTourist
+  updateTourist,
 };
