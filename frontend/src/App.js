@@ -18,7 +18,7 @@ import SignupOptions from "./pages/SignUpOptions.js";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
-import MainTour from "./Tourist/pages/TouristHomepage.jsx";
+//import MainTour from "./Tourist/pages/TouristHomepage.jsx";
 import TouristPage from './TouristPage.js';
 import SellerPage from './SellerPage.js';
 import HomePage from './Components/Homepage';

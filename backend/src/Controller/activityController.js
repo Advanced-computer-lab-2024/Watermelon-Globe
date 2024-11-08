@@ -411,19 +411,3 @@ updateActivityRating,
 createActivityNew,
 getActivitiesNew,
 addComment};
-
-module.exports = {
-  createTags,
-  getTags,
-  createActivity,
-  getActivities,
-  getActivityById,
-  updateActivity,
-  deleteActivity,
-  sortByPriceActivity,
-  sortByRatingsActivity,
-  filterActivities,
-  updateActivityRating,
-  createActivityNew,
-  getActivitiesNew,
-};

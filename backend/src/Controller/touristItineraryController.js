@@ -1,7 +1,7 @@
-const ChildItinerary = require("../Models/touristItineraryModel.js");
-const itineraryModel = require("../Models/itineraryModel.js");
+const ChildItinerary = require('../Models/touristItineraryModel.js');
+const itineraryModel = require('../Models/itineraryModel.js');
 const TourGuide = require('../Models/tourGuideModel.js');
-const { default: mongoose } = require("mongoose");
+const { default: mongoose } = require('mongoose');
 
 // Create a new child itinerary (booking)
 const createChildItinerary = async (req, res) => {

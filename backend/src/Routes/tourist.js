@@ -14,7 +14,7 @@ const {
   getAllProducts,
   searchProductbyName,
   buyProduct,
-  getPurchasedProducts
+  getPurchasedProducts,
   getMyCompletedItineraries,
   rateItinerary,
   commentOnItinerary,
