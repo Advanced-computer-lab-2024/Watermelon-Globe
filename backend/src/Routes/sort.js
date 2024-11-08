@@ -1,16 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const {sortByPriceActivity,sortByRatingsActivity} = require ("../Controller/activityController");
-const guideController = require('../Controller/guideController'); // Import the controller
-const{sortProducts} = require('../Controller/AdminController')
+const {
+  sortByPriceActivity,
+  sortByRatingsActivity,
+} = require("../Controller/activityController");
+const guideController = require("../Controller/guideController"); // Import the controller
+const { sortProducts } = require("../Controller/AdminController");
 
-
-router.get("/sortByPrice",guideController.sortByPrice);
-router.get("/sortByRating",guideController.sortByRatings);
-router.get("/sortByPriceActivity",sortByPriceActivity);
-router.get("/sortByRatingActivity",sortByRatingsActivity);
-router.get('/sortProducts', sortProducts)
+router.get("/sortByPrice", guideController.sortByPrice);
+router.get("/sortByRating", guideController.sortByRatings);
+router.get("/sortByPriceActivity", sortByPriceActivity);
+router.get("/sortByRatingActivity", sortByRatingsActivity);
+router.get("/sortProducts", sortProducts);
 
 module.exports = router;
-
