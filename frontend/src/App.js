@@ -33,7 +33,7 @@ import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
 import SellerProduct from './Seller/pages/SellerProduct.js';
-import TouristProduct from './pages/TouristProduct.js';
+// import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 import ActivityDetails from './Components/ActivityDetails.jsx';
@@ -100,7 +100,7 @@ const App = () => {
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
           <Route path="/AdminProduct" element={<AdminProduct />} />
           <Route path="/SellerProduct" element={<SellerProduct />} />
-          <Route path="/TouristProduct" element={<TouristProduct />} />
+          {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
           <Route path='/ViewProducts' element={<ViewProducts/>}/>
