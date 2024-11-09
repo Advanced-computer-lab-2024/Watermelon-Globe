@@ -123,24 +123,6 @@ const PurchasedProducts = () => {
                     Submit Rating
                   </button>
 
-<<<<<<< Updated upstream
-                  <div className="rating-container">
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <span 
-                        key={star}
-                        className={`star ${rating >= star ? 'filled' : ''}`}
-                        onClick={() => setRating(star)}
-                    >
-                        ★
-                    </span>
-                ))}
-            </div>
-      
-                    <StarRating productId={product._id} onRate={(rating) => handleRateProduct(product._id, rating)} />
-                    <button
-                      onClick={() => handleRateProduct(product._id, product.rating)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-=======
                   <button
                     onClick={() => setShowReviewInput(product._id)}
                     
@@ -151,7 +133,6 @@ const PurchasedProducts = () => {
                   <button
                     onClick={() => handleViewReviews(product._id)}
                     className="mt-4 px-4 py-2 rounded bg-[#add8e6] text-white"
->>>>>>> Stashed changes
                     >
                     View Reviews
                   </button>
