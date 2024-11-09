@@ -39,6 +39,7 @@ import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+import Complaint from './Admin/pages/Complaint.js';
 
 //tourguide new
 
@@ -98,6 +99,7 @@ const App = () => {
           <Route path="/TouristProduct" element={<TouristProduct />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
+          <Route path="/Complaint" element={<Complaint />} />
 
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
