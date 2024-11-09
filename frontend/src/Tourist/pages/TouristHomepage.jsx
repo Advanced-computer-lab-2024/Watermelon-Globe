@@ -26,7 +26,7 @@ const HomePage = () => {
   };
 
   const handleViewDetails = () => {
-    navigate(`TouristDetails${id}`);
+    navigate(`/TouristDetails/${id}`);
   };
 
   const handleViewPurchasedDetails =()=>{
@@ -41,7 +41,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
-        <Navbar id={id} isSignedUp={isSignedUp} handleSignOut={handleSignOut} />
+        <Navbar id={id} isSignedUp={true} handleSignOut={handleSignOut} />
         {isSignedUp && (
           <button 
            // onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
