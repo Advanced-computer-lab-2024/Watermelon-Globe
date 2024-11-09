@@ -19,7 +19,7 @@ const TouristDetails = () => {
         const fetchTourist = async () => {
             try {
                 console.log(`Fetching details for tourist ID: ${id}`); // Log ID
-                const response = await fetch(`/getTourist/${id}`);
+                const response = await fetch(`/api/Tourist/getTourist/${id}`);
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`);

@@ -236,7 +236,7 @@ const PurchasedProducts = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/tourist/getPurchasedProducts/${id}`)
+    fetch(`/api/Tourist/getPurchasedProducts/${id}`)
       .then(response => response.json())
       .then(data => {
         setProductIds(data);

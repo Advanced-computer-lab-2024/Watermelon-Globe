@@ -52,8 +52,8 @@ const HomePage = () => {
               <Link to="#" className="text-gray-600 hover:text-gray-900">Flight</Link>
               <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
               <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
-              <Link to="/ProductTourist/${id}" className="text-gray-600 hover:text-gray-900">Available products</Link>
-              <Link to="/PurchasedProducts/${id}" className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
+              <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
+              <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
               
             </div>
             <div className="flex items-center space-x-2">
