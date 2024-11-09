@@ -103,7 +103,7 @@ const createProduct = async (req, res) => {
       // picture,
       description,
       seller,
-      ratings: ratings || 0, // Initialize ratings to 0 if not provided
+      //ratings: ratings || 0, // Initialize ratings to 0 if not provided
       // reviews: reviews || []  // Initialize reviews to an empty array if not provided
     });
     res.status(200).json(product);
@@ -409,8 +409,45 @@ const changePasswordSeller = async (req, res) => {
     }
 };
 
+// const getProductReviews = async (req, res) => {
+//     const { productId } = req.params;
+  
+//     try {
+//       const product = await Product.findById(productId);
+      
+//       if (!product) {
+//         return res.status(404).json({ message: 'Product not found' });
+//       }
+      
+//       // Return the reviews array
+//       return res.status(200).json(product.reviews);
+//     } catch (error) {
+//       console.error('Error fetching product reviews:', error);
+//       res.status(500).json({ message: 'Server error' });
+//     }
+//   };
+
+const getProductReviews = async (req, res) => {
+    const { productId } = req.params;
+  
+    try {
+      const product = await Product.findById(productId).populate('reviews.reviewer', 'username'); // Populate reviewer with 'name'
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      // Return the reviews array
+      return res.status(200).json(product.reviews);
+    } catch (error) {
+      console.error('Error fetching product reviews:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
+  
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
-      acceptTermsAndConditions,getProductById};
+      acceptTermsAndConditions,getProductById,getProductReviews};
