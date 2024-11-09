@@ -27,7 +27,6 @@ const {
     getComplaint,
     updateComplaint,
     replyComplaint,
-<<<<<<< Updated upstream
     deleteTourist,
     deleteGuide,
     deleteCompany,
@@ -38,11 +37,9 @@ const {
     rejectAdvertiser,
     rejectSeller,
     rejectTourGuide,
-=======
     sortComplaintsByDate,
     filterComplaintsByStatus,
     getUploadedDocuments
->>>>>>> Stashed changes
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);

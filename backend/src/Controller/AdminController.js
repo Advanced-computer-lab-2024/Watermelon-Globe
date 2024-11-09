@@ -1,14 +1,11 @@
 const Admin = require('../Models/AdminModel')
 const Governer = require('../Models/tourismGovernorModel')
 const Tourist = require('../Models/touristModel')
-const TourGuide = require('../Models/tourGuideModel')
-const Seller = require('../Models/SellerModel')
 const Company = require('../Models/companyProfileModel')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/productModel')
 const Complaint = require('../Models/Complaint')
-const Advertiser = require("../Models/advertiserModel");
 const mongoose = require('mongoose')
 const TourGuide = require('../Models/tourGuideModel')
 const Advertiser = require('../Models/advertiserModel');
@@ -561,7 +558,6 @@ const updateComplaint = async (req, res) => {
         return res.status(400).json({error: 'No such tourist'})
     }
 
-<<<<<<< Updated upstream
     const tourist = await Tourist.findOneAndDelete({_id: id})
 
     if (!tourist){
@@ -769,6 +765,57 @@ const rejectTourGuide = async (req, res) => {
     res.status(500).json({ error: "Error accepting guide: " + error.message });
   }
 };
+const sortComplaintsByDate = async (req, res) => {
+  try {
+    // The sort order can be 'asc' or 'desc', defaulting to 'desc' (newest first)
+    const { order = 'desc' } = req.query;
+    const sortOrder = order === 'asc' ? 1 : -1;
+
+    const complaints = await Complaint.find({})
+      .sort({ date: sortOrder })
+      .exec();
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Filter complaints by status
+const filterComplaintsByStatus = async (req, res) => {
+  try {
+    const { status } = req.query; // status can be 'pending' or 'resolved'
+    
+    // Validate status parameter
+    if (status && !['pending', 'resolved'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status. Must be either pending or resolved' });
+    }
+
+    // If status is provided, filter by it; otherwise, return all complaints
+    const query = status ? { status } : {};
+    const complaints = await Complaint.find(query).sort({ date: -1 });
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocuments = async (req, res) => {
+  try {
+    const tourGuides = await TourGuide.find({}, 'name username email idProof certificates');
+    const advertisers = await Advertiser.find({}, 'Username Email idProof taxationRegistryCard');
+    const sellers = await Seller.find({}, 'Name Email idProof taxationRegistryCard');
+      
+    res.status(200).json({
+      tourGuides,
+      advertisers,
+      sellers
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   createAdmin,
@@ -804,65 +851,11 @@ module.exports = {
   updateComplaint,
   replyComplaint,
   changePasswordAdmin,
-  deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany
+  sortComplaintsByDate,
+  filterComplaintsByStatus,
+  getUploadedDocuments,
+  deleteTourist,
+  deleteGuide,
+  deleteSeller,
+  deleteCompany,
 };
-=======
-  const sortComplaintsByDate = async (req, res) => {
-    try {
-      // The sort order can be 'asc' or 'desc', defaulting to 'desc' (newest first)
-      const { order = 'desc' } = req.query;
-      const sortOrder = order === 'asc' ? 1 : -1;
-  
-      const complaints = await Complaint.find({})
-        .sort({ date: sortOrder })
-        .exec();
-  
-      res.status(200).json(complaints);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  // Filter complaints by status
-  const filterComplaintsByStatus = async (req, res) => {
-    try {
-      const { status } = req.query; // status can be 'pending' or 'resolved'
-      
-      // Validate status parameter
-      if (status && !['pending', 'resolved'].includes(status)) {
-        return res.status(400).json({ error: 'Invalid status. Must be either pending or resolved' });
-      }
-  
-      // If status is provided, filter by it; otherwise, return all complaints
-      const query = status ? { status } : {};
-      const complaints = await Complaint.find(query).sort({ date: -1 });
-  
-      res.status(200).json(complaints);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  const getUploadedDocuments = async (req, res) => {
-    try {
-      const tourGuides = await TourGuide.find({}, 'name username email idProof certificates');
-      const advertisers = await Advertiser.find({}, 'Username Email idProof taxationRegistryCard');
-      const sellers = await Seller.find({}, 'Name Email idProof taxationRegistryCard');
-        
-      res.status(200).json({
-        tourGuides,
-        advertisers,
-        sellers
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-module.exports = {createAdmin , deleteAdmin, createGoverner, deleteGoverner,
-     getAllPreferenceTag, getPreferenceTag, createPreferenceTag, deletePreferenceTag, updatePreferenceTag,
-     getAllActivityCategory, getActivityCategory, createActivityCategory, deleteActivityCategory
-     , updateActivityCategory, createProduct, getAllProducts, searchProductbyName, filterProduct,
-    updateProduct, sortProducts, getAllAdmin, getAllGoverner, getAllComplaints, getComplaint, updateComplaint,
-    replyComplaint,changePasswordAdmin, sortComplaintsByDate, filterComplaintsByStatus, getUploadedDocuments }
->>>>>>> Stashed changes

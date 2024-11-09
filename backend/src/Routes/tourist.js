@@ -1,23 +1,7 @@
   const express = require("express");
   const router = express.Router();
 
-<<<<<<< Updated upstream
 const {
-  createTourist,
-  getTourists,
-  getTourist,
-  deleteTourist,
-  updateTourist,
-  fileComplaint,
-  changePasswordTourist,
-  updateRating,
-  getAllProducts,
-  searchProductbyName,
-  buyProduct,
-  getPurchasedProducts
-} = require("../Controller/touristController");
-=======
-  const {
     createTourist,
     getTourists,
     getTourist,
@@ -28,10 +12,11 @@ const {
     updateRating,
     getAllProducts,
     searchProductbyName,
+    buyProduct,
+    getPurchasedProducts,
     getTouristComplaints
   } = require("../Controller/touristController");
->>>>>>> Stashed changes
-
+  
   //GET all tourists
   router.get("/getTourists", getTourists);
 
@@ -61,15 +46,12 @@ const {
   //search a product 
   router.get('/searchProductName', searchProductbyName)
 
-<<<<<<< Updated upstream
 router.put('/buyProduct/:touristId/:productId',buyProduct);
 
 router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
 module.exports = router;
-=======
   //get own complaints
   router.get("/myComplaints/:touristId", getTouristComplaints);
 
   module.exports = router;
->>>>>>> Stashed changes

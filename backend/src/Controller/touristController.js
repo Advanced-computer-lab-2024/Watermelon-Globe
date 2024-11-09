@@ -315,33 +315,19 @@ const sortProducts = async (req, res) => {
 
 const fileComplaint = async (req, res) => {
   const { title, body, date } = req.body;
-<<<<<<< Updated upstream
-
-  // Check if title, body or date are missing
-  if (!title || !body) {
-    return res.status(400).json({ error: "Title and body are required" });
-=======
   const { touristId } = req.params;
   // Check if title, body or touristId are missing
   if (!title || !body || !touristId) {
     return res.status(400).json({ error: 'Title, body, and tourist ID are required' });
->>>>>>> Stashed changes
   }
 
   try {
     // Create a complaint
-<<<<<<< Updated upstream
-    const complaint = await Complaint.create({
-      title,
-      body,
-      date: date || new Date(), // Default to current date if not provided
-=======
     const complaint = await Complaint.create({ 
       title, 
       body, 
       date: date || new Date(), // Default to current date if not provided
       tourist: touristId
->>>>>>> Stashed changes
     });
     res.status(200).json(complaint);
   } catch (error) {
@@ -349,7 +335,6 @@ const fileComplaint = async (req, res) => {
   }
 };
 
-<<<<<<< Updated upstream
 const buyProduct = async (req, res) => {
   const { touristId, productId } = req.params;
  
@@ -373,11 +358,14 @@ const buyProduct = async (req, res) => {
     // Assuming `products` is an array field in your model
     await tourist.save();
     await product.save();
-=======
+    res.status(200).json("Product was purchased successfully");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 const getTouristComplaints = async (req, res) => {
   try {
     const { touristId } = req.params;
->>>>>>> Stashed changes
 
     if (!mongoose.Types.ObjectId.isValid(touristId)) {
       return res.status(400).json({ error: "Invalid tourist ID" });
@@ -390,15 +378,6 @@ const getTouristComplaints = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-    res.status(200).json("Product was purchased successfully");
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-
-
 
 
 const getPurchasedProducts = async (req, res) => {
@@ -460,11 +439,8 @@ module.exports = {
   searchProductbyName,
   filterProduct,
   sortProducts,
-<<<<<<< Updated upstream
   buyProduct,
   getPurchasedProducts,
-  requestDeletionTourist
-=======
+  requestDeletionTourist,
   getTouristComplaints
->>>>>>> Stashed changes
 };
