@@ -1,6 +1,13 @@
+<<<<<<< Updated upstream
 const Seller = require("../Models/SellerModel");
 const Product = require("../Models/productModel");
 const mongoose = require("mongoose");
+=======
+const Seller = require('../Models/SellerModel')
+const Product = require('../Models/productModel')
+const mongoose = require('mongoose')
+const { findById } = require('../Models/touristModel')
+>>>>>>> Stashed changes
 
 //get all sellers
 const getAllSellers = async (req, res) => {
