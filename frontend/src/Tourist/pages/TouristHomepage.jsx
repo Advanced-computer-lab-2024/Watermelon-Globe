@@ -27,7 +27,7 @@ const HomePage = () => {
   };
 
   const handleViewDetails = () => {
-    navigate(`TouristDetails${id}`);
+    navigate(`/TouristDetails/${id}`);
   };
 
   const handleViewPurchasedDetails =()=>{
