@@ -12,7 +12,7 @@ const HomePage = () => {
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
-  const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
+  const [isSignedUp, setIsSignedUp] = useState(true); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
     e.preventDefault();

@@ -25,8 +25,6 @@ const ItineraryDetails = () => {
         }
     };
     useEffect(() => {
-       
-
         fetchItinerary();
     }, [id]);
 

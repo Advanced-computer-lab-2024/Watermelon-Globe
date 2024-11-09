@@ -14,7 +14,7 @@ import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
+
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import MainTour from "./Tourist/pages/TouristHomepage.jsx";
@@ -43,6 +43,7 @@ import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import ProductTourist from './Tourist/pages/ProductsTourist.js';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+import ItineraryDetails from './Tourist/pages/ItineraryDetails.js';
 
 //tourguide new
 
@@ -117,7 +118,7 @@ const App = () => {
           <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
-          <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
+          <Route path="/ItineraryDetails/:id" element={<ItineraryDetails />} />
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />

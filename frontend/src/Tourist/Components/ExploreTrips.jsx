@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
 import axios from 'axios';
 import { Search, Calendar, DollarSign, Globe, Tag, Filter, RefreshCw, SortAsc } from 'lucide-react';
 
@@ -36,7 +37,7 @@ const ExploreTrips = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/itinerary/getAllItineraries');
+      const response = await fetch('/api/Itinerary/getAllItineraries');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -53,7 +54,7 @@ const ExploreTrips = () => {
 
   const fetchPref = async () => {
     try {
-      const response = await fetch('/api/Admin/GetAllPreferenceTag');
+      const response = await fetch('/api/Admin/PreferenceTag');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -137,7 +138,7 @@ const ExploreTrips = () => {
   };
 
   const handleTripClick = (tripId) => {
-    navigate('/tourist-signup');
+    navigate(`/ItineraryDetails/${tripId}`);
   };
 
   return (
