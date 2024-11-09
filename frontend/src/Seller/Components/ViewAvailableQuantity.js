@@ -6,12 +6,9 @@ const GetAllProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/Seller/GetAllProducts');
+        const response = await fetch('/api/Seller/getQuantity');
         const data = await response.json();
-
-        // Filter out archived products
-        const activeProducts = data.filter(product => !product.archived);
-        setProducts(activeProducts);
+        setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -20,13 +17,6 @@ const GetAllProducts = () => {
     fetchProducts();
   }, []);
 
-  const formatPrice = (price) => {
-    if (price && price.$numberDecimal) {
-      return parseFloat(price.$numberDecimal).toFixed(2); // Adjusting to a number and formatting it
-    }
-    return price; // Return as is if not an object
-  };
-
   return (
     <div>
       <h2>All Products</h2>
@@ -34,9 +24,8 @@ const GetAllProducts = () => {
         {products.map((product) => (
           <div key={product._id} className="product-details">
             <h4>{product.name}</h4>
-            <p>{product.description}</p>
-            <p>Price: ${formatPrice(product.price)}</p>
             <p>Quantity: {product.quantity}</p>
+            <p>Sales: {product.sales}</p>
             {/* Add any other product details you want to display */}
           </div>
         ))}

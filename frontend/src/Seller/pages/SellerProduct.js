@@ -3,12 +3,16 @@ import SideBar from '../Components/SellerSideBar'; // Import the SideBar compone
 import GetAllProducts from '../Components/GetAllProducts';
 import CreateProduct from '../Components/createProduct';
 import SearchProductByName from '../Components/SearchProductByName';
+import ViewProductSales_AvailableQuantity from '../Components/ViewAvailableQuantity';
+import ArchiveProduct from '../Components/ArchiveProduct';
+import UnArchiveProduct from '../Components/UnArchiveProduct';
 import UpdateProduct from '../Components/updateProduct';
 import FilterProduct from '../Components/filterProduct';
 import SortProduct from '../Components/sortProduct';
 import CreateProfile from '../Components/createProfile';
 import ViewProfile from '../Components/viewProfile';
 import UpdateProfile from '../Components/updateProfile';
+import UploadImage from '../Components/UploadImage';
 
 
 
@@ -24,12 +28,20 @@ const SellerProduct = () => {
         return <CreateProduct/>;
       case 'searchProductByName':
         return <SearchProductByName/>;
+      case 'viewAvailableQuantity':
+        return <ViewProductSales_AvailableQuantity/>;
+      case 'archiveProduct':
+        return <ArchiveProduct/>
+      case 'unarchiveProduct':
+        return <UnArchiveProduct/>
       case 'filterProductByPrice':
         return <FilterProduct/>;
       case 'updateProduct':
         return <UpdateProduct/>;
       case 'sortProducts':
         return <SortProduct/>;
+      case 'uploadImage':
+        return <UploadImage/>;
       case 'createProfile':
         return <CreateProfile/>;
       case 'viewProfile':

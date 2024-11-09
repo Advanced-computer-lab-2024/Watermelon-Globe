@@ -92,25 +92,28 @@ const updateSeller = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller } = req.body;
+  const { name, price, quantity, picture,  description, seller, ratings , sales , archived } = req.body
 
   try {
-    // Create a new product with the provided details
-    const product = await Product.create({
-      name,
-      price,
-      quantity,
-      // picture,
-      description,
-      seller,
-      ratings: ratings || 0, // Initialize ratings to 0 if not provided
-      // reviews: reviews || []  // Initialize reviews to an empty array if not provided
-    });
-    res.status(200).json(product);
+      // Create a new product with the provided details
+      const product = await Product.create({
+          name,
+          price,
+          quantity,
+          picture,
+          description,
+          seller,
+          ratings: ratings || 0,
+          sales: sales || 0,
+          archived: false
+          // reviews: reviews || []  // Initialize reviews to an empty array if not provided
+      })
+      product.sales = 0;
+      res.status(200).json(product)
   } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+      res.status(400).json({ error: error.message })
+    }
+}
 
 // Get all products
 const getAllProducts = async (req, res) => {
@@ -375,8 +378,102 @@ const reviewProduct = async (req, res) => {
     }
 };
 
+// view the sales & the available quantity of all products
+const getQuantity = async (req, res) => {
+  try {
+      const products = await Product.find({}, 'name quantity sales').sort({ createdAt: -1 });
+      res.status(200).json(products);
+  } catch (error) {
+      res.status(500).json({ error: "An error occurred while retrieving product quantities." });
+  }
+};
+
+
+// archive a product
+const archiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Set the archived field to true based on the product name
+      const product = await Product.findOneAndUpdate(
+          { name: name },
+          { archived: true },
+          { new: true } // Return the updated product
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Product archived successfully', product });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while archiving the product' });
+  }
+};
+
+
+
+
+
+// unarchive a product
+const unarchiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Set the archived field to false based on the product name
+      const product = await Product.findOneAndUpdate(
+          { name: name },
+          { archived: false },
+          { new: true } // Return the updated product
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Product unarchived successfully', product });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while unarchiving the product' });
+  }
+};
+
+const getProductImageByName = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Search for the product by name and return only the picture field
+      const product = await Product.findOne(
+          { name: new RegExp(name, 'i') }, 
+          'picture' // Select only the picture field
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'No product found with this name' });
+      }
+
+      res.status(200).json({ picture: product.picture });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while fetching the product image' });
+    }
+};
+
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
-      acceptTermsAndConditions,};
+      acceptTermsAndConditions, getQuantity, archiveProduct, unarchiveProduct, getProductImageByName};

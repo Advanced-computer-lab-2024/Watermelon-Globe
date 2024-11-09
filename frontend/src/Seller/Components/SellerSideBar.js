@@ -15,6 +15,15 @@ const SideBar = ({ setSelectedOption }) => {
           <button onClick={() => setSelectedOption('searchProductByName')}>Search Product by Name</button>
         </li>
         <li>
+          <button onClick={() => setSelectedOption('viewAvailableQuantity')}>View Sales & Avaiable Quantity</button>
+        </li>
+        <li>
+          <button onClick={() => setSelectedOption('archiveProduct')}>Archive a Product</button>
+        </li>
+        <li>
+          <button onClick={() => setSelectedOption('unarchiveProduct')}>UnArchive a Product</button>
+        </li>
+        <li>
           <button onClick={() => setSelectedOption('filterProductByPrice')}>Filter Products by Price</button>
         </li>
         <li>
@@ -22,6 +31,9 @@ const SideBar = ({ setSelectedOption }) => {
         </li>
         <li>
           <button onClick={() => setSelectedOption('sortProducts')}>Sort Products by Rating</button>
+        </li>
+        <li>
+          <button onClick={() => setSelectedOption('uploadImage')}>Upload Product Image</button>
         </li>
         <li>
           <button onClick={() => setSelectedOption('createProfile')}>Create a Profile</button>
