@@ -37,9 +37,9 @@ const {
     rejectAdvertiser,
     rejectSeller,
     rejectTourGuide,
-    // sortComplaintsByDate,
-    // filterComplaintsByStatus,
-    // getUploadedDocuments,
+    sortComplaintsByDate,
+    filterComplaintsByStatus,
+    getUploadedDocuments,
     getPassword
 } = require('../Controller/AdminController')
 
@@ -86,6 +86,14 @@ router.delete('/deleteTourist/:id', deleteTourist);
 router.delete('/deleteGuide/:id', deleteGuide);
 router.delete('/deleteCompany/:id', deleteCompany);
 router.delete('/deleteSeller/:id', deleteSeller);
+
+//sort and filter for the complaint
+router.get('/ComplaintsSortByDate', sortComplaintsByDate)
+router.get('/ComplaintsFilterByStatus', filterComplaintsByStatus);
+
+//view uploaded documents
+router.get('/uploaded-documents', getUploadedDocuments);
+
 
 
 // accept or reject user

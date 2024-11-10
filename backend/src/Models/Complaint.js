@@ -24,6 +24,11 @@ const ComplaintSchema = new Schema({
   reply: {
     type: String,
     default: "" 
+  },
+  tourist: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tourist',
+    required: true
   }
 }, { timestamps: true });
 

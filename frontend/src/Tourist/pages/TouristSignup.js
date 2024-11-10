@@ -128,41 +128,61 @@ const SignupTourist = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="signup-tourist-wrapper" style={{ minHeight: '100vh', display: 'flex', fontFamily: 'Arial, sans-serif' }}>
       {/* Left Section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-blue-600 p-12 flex-col justify-between">
+      <div style={{
+        display: 'none',
+        width: '50%',
+        backgroundColor: '#0066FF',
+        padding: '48px',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+      }} className="left-section">
         <div>
-          <div className="text-white font-semibold text-xl">WaterMelon Globe</div>
-          <div className="mt-20">
-            <h1 className="text-white text-5xl font-bold leading-tight">
+          <h1 style={{ color: 'white', fontSize: '24px', fontWeight: 600 }}>WaterMelon Globe</h1>
+          <div style={{ marginTop: '80px' }}>
+            <h2 style={{ color: 'white', fontSize: '48px', fontWeight: 700, lineHeight: 1.2 }}>
               Start your travel
               <br />
               journey today
-            </h1>
-            <p className="text-blue-100 mt-4 text-lg">
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.8)', marginTop: '16px', fontSize: '20px' }}>
               Join our community of global travelers. Discover new destinations and create unforgettable memories.
             </p>
           </div>
         </div>
         
         {/* Testimonial */}
-        <div className="bg-blue-700 rounded-xl p-6 text-white">
-          <p className="text-lg mb-4">
+        <div style={{
+          backgroundColor: 'rgba(0,82,204,0.5)',
+          borderRadius: '12px',
+          padding: '24px',
+          color: 'white'
+        }}>
+          <p style={{ fontSize: '18px', marginBottom: '16px' }}>
             "The perfect platform for travelers! Made my journey planning seamless and helped me discover amazing destinations."
           </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                backgroundColor: '#0066FF',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
                 M
               </div>
               <div>
-                <p className="font-medium">Maria Rodriguez</p>
-                <p className="text-blue-200 text-sm">Travel Enthusiast</p>
+                <p style={{ fontWeight: 500 }}>Maria Rodriguez</p>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>Travel Enthusiast</p>
               </div>
             </div>
-            <div className="flex gap-1">
+            <div style={{ display: 'flex', gap: '4px' }}>
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-current text-yellow-400" />
+                <Star key={i} style={{ width: '20px', height: '20px', color: '#FFD700' }} />
               ))}
             </div>
           </div>
@@ -170,152 +190,289 @@ const SignupTourist = () => {
       </div>
 
       {/* Right Section */}
-      <div className="w-full lg:w-1/2 p-6 lg:p-12">
-        <div className="max-w-md mx-auto">
-          {/* Progress Indicator */}
-          <div className="flex items-center mb-8">
-            <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm">1</div>
-            <div className="flex-1 h-1 mx-4 bg-gray-200">
-              <div className="w-0 h-full bg-blue-600"></div>
+      <div style={{
+        width: '100%',
+        padding: '48px 24px',
+        backgroundColor: 'white'
+      }} className="right-section">
+        <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+          {/* Progress Steps */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: '#0066FF',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 500
+              }}>
+                1
+              </div>
+              <div style={{ height: '2px', width: '96px', backgroundColor: '#E5E7EB', marginLeft: '8px' }} />
             </div>
-            <div className="w-8 h-8 rounded-full border-2 border-gray-200 text-gray-400 flex items-center justify-center text-sm">2</div>
-            <div className="flex-1 h-1 mx-4 bg-gray-200"></div>
-            <div className="w-8 h-8 rounded-full border-2 border-gray-200 text-gray-400 flex items-center justify-center text-sm">3</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '1px solid #D1D5DB',
+                color: '#9CA3AF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 500
+              }}>
+                2
+              </div>
+              <div style={{ height: '2px', width: '96px', backgroundColor: '#E5E7EB', marginLeft: '8px' }} />
+            </div>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              border: '1px solid #D1D5DB',
+              color: '#9CA3AF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 500
+            }}>
+              3
+            </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Let's get started</h2>
+          <h2 style={{ fontSize: '32px', fontWeight: 700, color: '#111827', marginBottom: '32px' }}>Let's get started</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Username</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className={`w-full px-4 py-2 border ${errors.username ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                style={{
+                  width: '100%',
+                  height: '48px',
+                  padding: '0 16px',
+                  backgroundColor: '#F8F9FF',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
                 placeholder="Enter username"
               />
-              {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full px-4 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                style={{
+                  width: '100%',
+                  height: '48px',
+                  padding: '0 16px',
+                  backgroundColor: 'white',
+                  border: '1px solid #D1D5DB',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
                 placeholder="Enter your email"
               />
-              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <div className="relative">
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Password</label>
+              <div style={{ position: 'relative' }}>
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`w-full px-4 py-2 pr-10 border ${errors.password ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                  style={{
+                    width: '100%',
+                    height: '48px',
+                    padding: '0 16px',
+                    backgroundColor: 'rgba(0,186,136,0.1)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px'
+                  }}
                   placeholder="Create a password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 px-3 flex items-center bg-transparent border-none cursor-pointer"
-                  tabIndex={-1}
+                  style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#00BA88'
+                  }}
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5 text-gray-400" />
-                  ) : (
-                    <Eye className="w-5 h-5 text-gray-400" />
-                  )}
+                  {showPassword ? <EyeOff style={{ width: '20px', height: '20px' }} /> : <Eye style={{ width: '20px', height: '20px' }} />}
                 </button>
               </div>
-              {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Mobile Number</label>
               <input
                 type="tel"
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
-                className={`w-full px-4 py-2 border ${errors.mobileNumber ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                placeholder="+1 (555) 000-0000"
+                style={{
+                  width: '100%',
+                  height: '48px',
+                  padding: '0 16px',
+                  backgroundColor: 'white',
+                  border: '1px solid #D1D5DB',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
+                placeholder="+2 "
               />
-              {errors.mobileNumber && <p className="mt-1 text-sm text-red-600">{errors.mobileNumber}</p>}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
-                <div className="relative">
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Nationality</label>
+                <div style={{ position: 'relative' }}>
                   <select
                     value={nationality}
                     onChange={(e) => setNationality(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    style={{
+                      width: '100%',
+                      height: '48px',
+                      padding: '0 16px',
+                      backgroundColor: 'white',
+                      border: '1px solid #D1D5DB',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      appearance: 'none'
+                    }}
                   >
                     <option value="">Select country</option>
                     <option value="US">United States</option>
                     <option value="UK">United Kingdom</option>
                     <option value="CA">Canada</option>
-                    <option value="AU">Australia</option>
+                    <option value="CA">Egypt</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  <ChevronDown style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '20px',
+                    height: '20px',
+                    color: '#9CA3AF',
+                    pointerEvents: 'none'
+                  }} />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <div className="relative">
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Status</label>
+                <div style={{ position: 'relative' }}>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className={`w-full px-4 py-2 border ${errors.status ? 'border-red-300' : 'border-gray-300'} rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                    style={{
+                      width: '100%',
+                      height: '48px',
+                      padding: '0 16px',
+                      backgroundColor: 'white',
+                      border: '1px solid #D1D5DB',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      appearance: 'none'
+                    }}
                   >
                     <option value="">Select status</option>
-                    <option value="student">Student</option>
-                    <option value="job">Professional</option>
+                    <option value="student">student</option>
+                    <option value="job">job</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  <ChevronDown style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '20px',
+                    height: '20px',
+                    color: '#9CA3AF',
+                    pointerEvents: 'none'
+                  }} />
                 </div>
-                {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-              <input
-                type="date"
-                value={dob}
-                onChange={(e) => setDOB(e.target.value)}
-                className={`w-full px-4 py-2 border ${errors.dob ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-              />
-              {errors.dob && <p className="mt-1 text-sm text-red-600">{errors.dob}</p>}
-            </div>
-
-            {errors.submit && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-600">{errors.submit}</p>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>Date of Birth</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  value={dob}
+                  onChange={(e) => setDOB(e.target.value)}
+                  style={{
+                    width: '100%',
+                    height: '48px',
+                    padding: '0 16px',
+                    backgroundColor: 'white',
+                    border: '1px solid #D1D5DB',
+                    borderRadius: '8px',
+                    fontSize: '16px'
+                  }}
+                  placeholder="mm/dd/yyyy"
+                  onFocus={(e) => e.target.type = 'date'}
+                  onBlur={(e) => {
+                    if (!e.target.value) e.target.type = 'text'
+                  }}
+                />
+                <ChevronDown style={{
+                  position: 'absolute',
+                  right: '16px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '20px',
+                  height: '20px',
+                  color: '#9CA3AF',
+                  pointerEvents: 'none'
+                }} />
               </div>
-            )}
+            </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              style={{
+                width: '100%',
+                height: '48px',
+                backgroundColor: '#00BA88',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
             >
               Create account
             </button>
-          </form>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
-            Already have an account?{" "}
-            <a href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
-              Sign in
-            </a>
-          </p>
+            <p style={{ textAlign: 'center', fontSize: '14px', color: '#4B5563' }}>
+              Already have an account?{" "}
+              <a href="/tourist-signup" style={{ color: '#0066FF', fontWeight: 500, textDecoration: 'none' }}>
+                Sign in
+              </a>
+            </p>
+          </form>
         </div>
       </div>
     </div>

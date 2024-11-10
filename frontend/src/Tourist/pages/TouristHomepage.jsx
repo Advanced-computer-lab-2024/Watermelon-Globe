@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {Link, useParams, useNavigate } from 'react-router-dom';
+import profileIcon from '../../Assets/Profile.png';
 import '../pages/styles.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ExploreTrips from '../Components/ExploreTrips.jsx';
@@ -40,17 +41,44 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-white shadow-md">
-        <Navbar id={id} isSignedUp={true} handleSignOut={handleSignOut} />
-        {isSignedUp && (
-          <button 
-           // onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
-            onClick={handleViewDetails()}
-            className="px-9 py-1 bg-blue-600 text-white rounded"
-          >
-            View Profile
-          </button>
-        )}
+        <header className="bg-white shadow-md">
+        <nav className="bg-white shadow-md">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div className="text-2xl font-bold">
+              <Link to="/Homepage" className="homeButton">WaterMelon Globe</Link>
+            </div>
+            <div className="hidden md:flex space-x-4">
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Hotel</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Flight</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
+              <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
+              <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
+              <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
+              
+            </div>
+            <div className="flex items-center space-x-2">
+              <button className="px-4 py-1 border rounded">EN</button>
+              <Link to="/account" className="AccountLink">
+                <img
+                  className="profileIcon"
+                  src={profileIcon}
+                  alt="Profile Icon"
+                  style={{ width: '30px', height: '30px' }}
+                />
+              </Link>
+              <Link to="/edit-profile">
+                <button className="editProfile px-4 py-1 border rounded">Edit Profile</button>
+              </Link>
+              <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
+              <button 
+                onClick={handleViewDetails} 
+                className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </nav>
       </header>
 
       <main className="flex-grow">

@@ -6,7 +6,7 @@ import ExploreActivities from '../Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
 
 const HomePage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');

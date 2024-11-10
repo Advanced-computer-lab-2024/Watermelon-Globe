@@ -315,18 +315,19 @@ const sortProducts = async (req, res) => {
 
 const fileComplaint = async (req, res) => {
   const { title, body, date } = req.body;
-
-  // Check if title, body or date are missing
-  if (!title || !body) {
-    return res.status(400).json({ error: "Title and body are required" });
+  const { touristId } = req.params;
+  // Check if title, body or touristId are missing
+  if (!title || !body || !touristId) {
+    return res.status(400).json({ error: 'Title, body, and tourist ID are required' });
   }
 
   try {
     // Create a complaint
-    const complaint = await Complaint.create({
-      title,
-      body,
+    const complaint = await Complaint.create({ 
+      title, 
+      body, 
       date: date || new Date(), // Default to current date if not provided
+      tourist: touristId
     });
     res.status(200).json(complaint);
   } catch (error) {
@@ -357,16 +358,26 @@ const buyProduct = async (req, res) => {
     // Assuming `products` is an array field in your model
     await tourist.save();
     await product.save();
-
-
     res.status(200).json("Product was purchased successfully");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+const getTouristComplaints = async (req, res) => {
+  try {
+    const { touristId } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(touristId)) {
+      return res.status(400).json({ error: "Invalid tourist ID" });
+    }
 
+    const complaints = await Complaint.find({ tourist: touristId }).sort({ createdAt: -1 });
 
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 const getPurchasedProducts = async (req, res) => {
@@ -385,10 +396,6 @@ const getPurchasedProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
-
 
 const requestDeletionTourist = async (req, res) => {
   try {
@@ -451,5 +458,6 @@ module.exports = {
   getPurchasedProducts,
   requestDeletionTourist,
   // getTouristComplaints,
-  getPassword
+  getPassword,
+  getTouristComplaints
 };

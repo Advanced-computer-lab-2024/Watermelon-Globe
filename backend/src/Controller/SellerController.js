@@ -1,6 +1,7 @@
-const Seller = require("../Models/SellerModel");
-const Product = require("../Models/productModel");
-const mongoose = require("mongoose");
+const Seller = require('../Models/SellerModel')
+const Product = require('../Models/productModel')
+const mongoose = require('mongoose')
+const { findById } = require('../Models/touristModel')
 
 //get all sellers
 const getAllSellers = async (req, res) => {
