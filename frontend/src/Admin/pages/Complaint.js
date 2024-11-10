@@ -11,18 +11,43 @@ const Complaint = () => {
     const [replyError, setReplyError] = useState(null); // Error state for reply submission
     const [replySuccess, setReplySuccess] = useState(null); // Success message for reply submission
 
-    useEffect(() => {
-        const fetchComplaints = async () => {
-            const response = await fetch('/api/Admin/Complaint');
+    // New states for sorting and filtering
+    const [sortOrder, setSortOrder] = useState('desc');
+    const [statusFilter, setStatusFilter] = useState('');
+
+    const fetchComplaints = async (url) => {
+        try {
+            const response = await fetch(url);
             const json = await response.json();
 
             if (response.ok) {
                 dispatch({ type: 'SET_COMPLAINT', payload: json });
             }
-        };
+        } catch (err) {
+            setError("Failed to fetch complaints");
+        }
+    };
 
-        fetchComplaints();
+    useEffect(() => {
+        fetchComplaints('/api/Admin/Complaint'); // Fetch complaints on initial load
     }, [dispatch]);
+
+    // Handle sorting by dates
+    const handleSortByDate = async () => {
+        const url = `/api/Admin/ComplaintsSortByDate?order=${sortOrder}`;
+        fetchComplaints(url);
+    };
+
+    // Handle filtering by status
+    const handleFilterByStatus = async (status) => {
+        const url = `/api/Admin/ComplaintsFilterByStatus?status=${status}`;
+        fetchComplaints(url);
+    };
+
+    const toggleSortOrder = () => {
+        setSortOrder(prevOrder => (prevOrder === 'desc' ? 'asc' : 'desc'));
+    };
+
 
     // Function to fetch a single complaint
     const handleViewDescription = async (complaintId) => {
@@ -108,6 +133,19 @@ const Complaint = () => {
 
     return (
         <div className="activitycategory">
+
+            <div className="complaint-actions">
+                {/* Sort Button */}
+                <button onClick={() => { toggleSortOrder(); handleSortByDate(); }}>
+                    Sort by Date ({sortOrder === 'desc' ? 'Newest First' : 'Oldest First'})
+                </button>
+
+                {/* Filter Buttons */}
+                <button onClick={() => handleFilterByStatus('pending')}>Show Pending Complaints</button>
+                <button onClick={() => handleFilterByStatus('resolved')}>Show Resolved Complaints</button>
+                <button onClick={() => fetchComplaints('/api/Admin/Complaint')}>Show All Complaints</button>
+            </div>
+
             <div className="workouts">
                 {complaint && complaint.map((complaintItem) => (
                     <ComplaintDetails 
