@@ -16,8 +16,8 @@ import SellerPage from './SellerPage.js';
 
 import './App.css';
 
-// import TouristDetails from "./pages/TouristDetails.js";
-import TouristDetails from './Tourist/Components/TouristDetails.js';
+ import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
+//import TouristDetails from './Tourist/Components/TouristDetails.jsx';
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
@@ -38,7 +38,7 @@ import AdminProduct from './Admin/pages/AdminProduct.js';
 import SellerProduct from './Seller/pages/SellerProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
-import ActivityDetails from './Components/ActivityDetails.jsx';
+// import ActivityDetails from './Components/ActivityDetails.jsx';
 import ChangePasswordAdmin from './Admin/pages/ChangePasswordAdmin.js';
 
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
@@ -81,6 +81,7 @@ const App = () => {
           <Route path="/SellerProduct" element={<SellerProduct />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
+          <Route path="/ChangePasswordAdmin" element ={<ChangePasswordAdmin/>}/>
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />

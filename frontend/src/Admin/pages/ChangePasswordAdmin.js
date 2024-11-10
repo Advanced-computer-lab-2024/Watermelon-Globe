@@ -82,7 +82,7 @@ const ChangePasswordAdmin = () => {
           Show Password
         </button>
         {sellerPassword && (
-          <p className="text-gray-700 mb-4"><strong>Seller Password:</strong> {sellerPassword}</p>
+          <p className="text-gray-700 mb-4"><strong>Admin Password:</strong> {sellerPassword}</p>
         )}
 
         <div className="mb-4">
