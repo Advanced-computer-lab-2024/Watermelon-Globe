@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+
 import axios from 'axios';
 import { Search, Calendar, DollarSign, Tag, Filter, RefreshCw } from 'lucide-react';
 
@@ -25,6 +25,19 @@ export default function ExploreActivities() {
     fetchActivities();
     fetchPref();
   }, []);
+
+  const handlePrefAChange = (event) => {
+    setSelectedPrefActivity(event.target.value);
+  };
+
+  const resetFilters = () => {
+    setStartDateActivity(null);
+    setEndDateActivity(null);
+    setMinPriceActivity('');
+    setMaxPriceActivity('');
+    setActivitySearch('');
+    setSelectedPrefActivity('');
+  };
 
   useEffect(() => {
     filterActivities();
@@ -67,7 +80,6 @@ export default function ExploreActivities() {
 
   const filterActivities = () => {
     let filtered = [...activities];
-    console.log("Before filter", filtered);
     if (activitySearch) {
       filtered = filtered.filter(activity => 
         activity.Name && activity.Name.toLowerCase().includes(activitySearch.toLowerCase())
@@ -105,7 +117,6 @@ export default function ExploreActivities() {
     }
 
     setFilteredActivities(filtered);
-    console.log("After filter", filtered);
   };
 
   const handleActivityClick = (activityId) => {
@@ -223,7 +234,7 @@ export default function ExploreActivities() {
             {filteredActivities.map((activity) => (
               <div
                 key={activity._id}
-                className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 overflow-x-auto cursor-pointer"
+                className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 cursor-pointer"
                 onClick={() => handleActivityClick(activity._id)}
               >
                 <div className="h-48 overflow-x-auto">
