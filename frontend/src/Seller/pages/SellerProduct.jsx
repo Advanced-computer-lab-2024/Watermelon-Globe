@@ -15,6 +15,8 @@ import ViewProfile from '../Components/viewProfile';
 import UpdateProfile from '../Components/updateProfile';
 import UploadImage from '../Components/UploadImage';
 
+const id = "6729244f151b6c9e346dd732";
+
 const menuItems = [
   { id: 'allProducts', label: 'View All Products' },
   { id: 'createProduct', label: 'Create New Product' },
@@ -41,7 +43,7 @@ function SellerProduct() {
         {(() => {
           switch (selectedOption) {
             case 'allProducts':
-              return <GetAllProducts />;
+              return <GetAllProducts/>;
             case 'createProduct':
               return <CreateProduct />;
             case 'searchProductByName':

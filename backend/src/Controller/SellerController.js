@@ -92,28 +92,29 @@ const updateSeller = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, picture,  description, seller, ratings , sales , archived } = req.body
+  const { name, price, quantity, picture, description, seller, ratings, sales } = req.body;
 
   try {
-      // Create a new product with the provided details
-      const product = await Product.create({
-          name,
-          price,
-          quantity,
-          picture,
-          description,
-          seller,
-          ratings: ratings || 0,
-          sales: sales || 0,
-          archived: false
-          // reviews: reviews || []  // Initialize reviews to an empty array if not provided
-      })
-      product.sales = 0;
-      res.status(200).json(product)
+    // Create a new product with the provided details
+    const product = await Product.create({
+      name,
+      price,
+      quantity,
+      picture,
+      description,
+      seller: "6729244f151b6c9e346dd732",
+      ratings: ratings || 0,
+      sales: sales || 0,
+      archived: false // Explicitly set this as a default value
+    });
+
+    // Return the created product as JSON response
+    res.status(200).json(product);
   } catch (error) {
-      res.status(400).json({ error: error.message })
-    }
-}
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 // Get all products
 const getAllProducts = async (req, res) => {
