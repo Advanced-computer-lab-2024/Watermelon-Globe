@@ -14,7 +14,9 @@ const {
     searchProductbyName,
     buyProduct,
     getPurchasedProducts,
-    getTouristComplaints
+    getTouristComplaints,
+    getPassword
+    
   } = require("../Controller/touristController");
   
   //GET all tourists
@@ -50,8 +52,15 @@ router.put('/buyProduct/:touristId/:productId',buyProduct);
 
 router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
+// router.get("/myComplaints/:touristId", getTouristComplaints);
+
+router.get("/getPassword",getPassword);
 module.exports = router;
   //get own complaints
+  
+
+  
+
   router.get("/myComplaints/:touristId", getTouristComplaints);
 
   module.exports = router;

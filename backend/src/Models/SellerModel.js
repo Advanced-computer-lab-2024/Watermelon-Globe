@@ -14,7 +14,7 @@ const sellerSchema = new Schema(
     },
     Description: {
       type: String,
-      required: true,
+      required: false,
     },
     idProof: {
       type: String,

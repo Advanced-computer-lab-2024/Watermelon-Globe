@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-
 const AdminHome = () => {
   return (
     <div className="admin-container">
@@ -19,6 +18,9 @@ const AdminHome = () => {
         </Link>
         <Link to="/AdminProduct">
           <button className="admin-button">Products</button>
+        </Link>
+        <Link to="/ChangePasswordAdmin">
+          <button className="admin-button">Change Password</button>
         </Link>
       </div>
     </div>

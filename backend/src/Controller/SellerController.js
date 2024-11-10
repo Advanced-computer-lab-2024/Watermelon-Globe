@@ -445,10 +445,31 @@ const getProductReviews = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
+
+
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const seller = await Seller.findById(id);
+    console.log(seller);
+    if(!seller){
+      res.status(400).json({message:"Seller is not found"});
+    }
+    else{
+      res.status(200).json(seller.Password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
   
   
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
-      acceptTermsAndConditions,getProductById,getProductReviews};
+      acceptTermsAndConditions,getProductById,getProductReviews,getPassword};

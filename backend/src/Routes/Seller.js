@@ -15,7 +15,8 @@ const {
   reviewProduct,
   acceptTermsAndConditions,
   getProductById,
-  getProductReviews
+  getProductReviews,
+  getPassword
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -38,6 +39,8 @@ router.delete("/DeleteSeller/:id", deleteSeller);
 router.put("/UpdateSeller/:id", updateSeller);
 
 router.put("/changePasswordSeller/:id", changePasswordSeller);
+
+router.get("/getPassword",getPassword);
 
 //////////////// Products ////////////////
 
