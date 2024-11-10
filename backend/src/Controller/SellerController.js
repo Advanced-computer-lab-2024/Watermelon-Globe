@@ -401,13 +401,14 @@ const changePasswordSeller = async (req, res) => {
 
         res.status(200).json({
             message: 'Deletion request updated successfully',
-            data: advertiser
         });
     } catch (error) {
         console.error('Error updating deletion request:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
 
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,

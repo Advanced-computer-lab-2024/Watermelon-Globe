@@ -1,14 +1,14 @@
 import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AdvertiserPage from './Components/advertiserPage';
-import TourGuidePage from './Components/tourGuidePage';
+import TourGuidePage from './TourGuide/pages/TourGuideHomePage.js';
 import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
 import SignupPage from './Components/SignUp';
 import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 
 import './App.css';
 
-import TouristDetails from "./pages/TouristDetails.js";
+import TouristDetails from "./Tourist/Components/TouristDetails.js";
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";

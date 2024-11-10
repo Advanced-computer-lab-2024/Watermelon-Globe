@@ -14,7 +14,8 @@ const {
   changePasswordSeller,
   reviewProduct,
   acceptTermsAndConditions,
-  getProductById
+  getProductById,
+  requestDeletionSeller
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -66,5 +67,6 @@ router.put("/reviewProduct/:ReviewerId/:ProductId", reviewProduct);
 
 router.post("/getProductById",getProductById);
 
+router.put("/requestDeletionSeller/:id", requestDeletionSeller);
 
 module.exports = router

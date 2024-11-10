@@ -4,7 +4,7 @@ const CreateProfile = () => {
   // Define state variables to store form input values
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [description, setDescription] = useState('');
+  const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -13,11 +13,11 @@ const CreateProfile = () => {
     e.preventDefault(); // Prevent page reload on form submission
 
     // Create a profile object with the form input values
-    const profile = { Name: name, Email: email, Description: description };
+    const profile = { Name: name, Email: email, Password: password };
 
     try {
       // Make the POST request to the backend API to create a profile
-      const response = await fetch('/api/Seller/createSeller', {
+      const response = await fetch('/api/Seller/CreateSeller', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const CreateProfile = () => {
         // Optionally clear the form fields after successful submission
         setName('');
         setEmail('');
-        setDescription('');
+        setPassword('');
       }
     } catch (error) {
       // Handle network or unexpected errors
@@ -67,10 +67,11 @@ const CreateProfile = () => {
           required
         />
 
-        <label>Description:</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+        <label>Password:</label>
+        <input
+        type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
 

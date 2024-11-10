@@ -1,20 +1,22 @@
-// components/ItinerarySlider.jsx
 
-"use client"
-
-import { useState, useEffect } from 'react'
-import { Calendar, Clock, DollarSign, Globe, MapPin, Star, Users, Accessibility } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Calendar, Clock, DollarSign, Globe, MapPin, Star, Users, Accessibility } from "lucide-react";
 
 export default function ItinerarySlider() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [itineraries, setItineraries] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const navigate = useNavigate();
+  // State for deleting the account
+  const [deleteError, setDeleteError] = useState('')
+  const [deleteSuccess, setDeleteSuccess] = useState('')
 
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await fetch('/api/Itenerary/getAllItineraries')
+        const response = await fetch('/api/Itinerary/getAllItineraries')
         if (!response.ok) throw new Error('Failed to fetch itineraries')
         
         const data = await response.json()
@@ -52,8 +54,48 @@ export default function ItinerarySlider() {
     return <div className="flex justify-center items-center h-64">No itineraries found.</div>
   }
 
+  // Function to delete the account
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch(`/api/TourGuide/requestDeletionGuide/67013950229bd3b168a94dde`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        setDeleteError('Failed to delete account.')
+        setDeleteSuccess('')
+      } else {
+        alert('Account deleted successfully.')
+        setDeleteError('')
+        navigate('/');
+        // Optionally, you can redirect the user after deletion or reset the state
+      }
+    } catch (error) {
+      setDeleteError('An error occurred while deleting the account.')
+      setDeleteSuccess('')
+      console.error('Error deleting account:', error)
+    }
+  }
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
+      {/* Delete Account Button */}
+      <div className="flex justify-end">
+        <button 
+          onClick={handleDeleteAccount}
+          className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
+        >
+          Delete Account
+        </button>
+      </div>
+
+      {/* Display any deletion success or error messages */}
+      {deleteSuccess && <div className="text-green-500">{deleteSuccess}</div>}
+      {deleteError && <div className="text-red-500">{deleteError}</div>}
+
       <div className="relative overflow-hidden">
         <div 
           className="flex transition-transform duration-500 ease-in-out" 
@@ -126,6 +168,7 @@ export default function ItinerarySlider() {
           ))}
         </div>
       </div>
+
       <div className="flex justify-center mt-4 space-x-2">
         {itineraries.map((_, index) => (
           <button

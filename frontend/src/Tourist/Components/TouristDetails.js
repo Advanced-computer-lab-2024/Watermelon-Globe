@@ -24,7 +24,7 @@ const TouristDetails = () => {
     useEffect(() => {
         const fetchTourist = async () => {
             try {
-                const response = await fetch(`/api/tourist/getTourist/${id}`);
+                const response = await fetch(`/api/Tourist/getTourist/${id}`);
                 if (!response.ok) throw new Error(`Error: ${response.status}`);
                 const data = await response.json();
                 setTourist(data);
@@ -108,6 +108,31 @@ const TouristDetails = () => {
     if (!tourist) {
         return <div className="text-center mt-10">Loading...</div>;
     }
+
+    // Delete Account handler
+    const handleDeleteAccount = async () => {
+        const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.');
+        if (confirmed) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/Tourist/requestDeletionTourist/${id}`, {
+                    method: 'PUT', 
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  });
+
+                if (response.ok) {
+                    alert('Your account has been successfully deleted.');
+                    navigate('/'); // Redirect to home or login after deletion
+                } else {
+                    alert('Failed to delete account. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                alert('An error occurred while trying to delete the account.');
+            }
+        }
+    };
 
     return (
         <div className="container mx-auto p-6">
@@ -198,6 +223,13 @@ const TouristDetails = () => {
                                 className=" mb-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
                             >
                                 Change Password
+                            </button>
+                            <button
+                                onClick={handleDeleteAccount}
+                                className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                                style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
+                            >
+                                Delete Account
                             </button>
                         </div>
                     </>

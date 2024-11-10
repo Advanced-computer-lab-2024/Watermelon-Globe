@@ -365,10 +365,6 @@ const buyProduct = async (req, res) => {
   }
 };
 
-
-
-
-
 const getPurchasedProducts = async (req, res) => {
   const { touristId } = req.params;
 
@@ -385,10 +381,6 @@ const getPurchasedProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
-
 
 const requestDeletionTourist = async (req, res) => {
   try {
@@ -407,7 +399,6 @@ const requestDeletionTourist = async (req, res) => {
 
       res.status(200).json({
           message: 'Deletion request updated successfully',
-          data: advertiser
       });
   } catch (error) {
       console.error('Error updating deletion request:', error);

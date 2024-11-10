@@ -13,7 +13,8 @@ const {
   getAllProducts,
   searchProductbyName,
   buyProduct,
-  getPurchasedProducts
+  getPurchasedProducts,
+  requestDeletionTourist
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -46,5 +47,7 @@ router.get('/searchProductName', searchProductbyName)
 router.put('/buyProduct/:touristId/:productId',buyProduct);
 
 router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
+
+router.put('/requestDeletionTourist/:id',requestDeletionTourist);
 
 module.exports = router;

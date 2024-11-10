@@ -105,7 +105,7 @@ export default function TourismGovernorPage() {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">{isEditing ? 'Update Site' : 'Add New Site'}</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+            <div>
               <label htmlFor="siteName" className="block text-sm font-medium text-gray-700">Site Name</label>
               <input
                 id="siteName"
@@ -211,15 +211,18 @@ export default function TourismGovernorPage() {
                 onChange={(e) => setSiteId(e.target.value)}
                 className="flex-grow px-3 py-2 border rounded-md"
               />
-              <button onClick={() => handleRequest(`/api/Governor/getSite/${siteId}`)} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+              <button onClick={() => handleRequest(`/api/Governor/getSite/${siteId}`)} className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                style={{ backgroundColor: 'rgb(38, 38, 220)', hover: { backgroundColor: 'rgb(28, 28, 185)' } }}>
                 Get Site
               </button>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => handleRequest('/api/Governor/getAllSites')} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+              <button onClick={() => handleRequest('/api/Governor/getAllSites')} className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                style={{ backgroundColor: 'rgb(38, 38, 220)', hover: { backgroundColor: 'rgb(28, 28, 185)' } }}>
                 Get All Sites
               </button>
-              <button onClick={() => handleRequest(`/api/Governor/deleteSite/${siteId}`, 'delete')} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+              <button onClick={() => handleRequest(`/api/Governor/deleteSite/${siteId}`, 'delete')} className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                style={{ backgroundColor: 'rgb(38, 38, 220)', hover: { backgroundColor: 'rgb(28, 28, 185)' } }}>
                 Delete Site
               </button>
             </div>
@@ -261,7 +264,7 @@ export default function TourismGovernorPage() {
                   <p>Location: {site.location}</p>
                   <p>Opening Hours: {site.openingHours}</p>
                   <p>Ticket Prices: {site.ticketPrices}</p>
-                  <button 
+                  <button
                     onClick={() => handleEdit(site)}
                     className="mt-2 px-3 py-1 bg-yellow-200 text-yellow-800 rounded hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50"
                   >
