@@ -357,6 +357,7 @@ const buyProduct = async (req, res) => {
     // Add the product ID to the tourist's products and save
     tourist.products.push(productId); 
     product.quantity--;
+    product.sales++;
   
     }
     // Assuming `products` is an array field in your model

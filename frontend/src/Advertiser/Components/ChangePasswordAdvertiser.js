@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ChangePasswordTourist = ({ id,onClose }) => {
+const ChangePasswordAdvertiser = ({ id,onClose }) => {
   const [sellerId, setSellerId] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -10,7 +10,7 @@ const ChangePasswordTourist = ({ id,onClose }) => {
   const handleShowPassword = async () => {
    
     try {
-      const response = await fetch(`/api/tourist/getPassword?id=${id}`);
+      const response = await fetch(`/api/advertiser/getPassword?id=${id}`);
       const data = await response.json();
       setSellerPassword(response.ok ? data : 'Password not available');
     } catch (error) {
@@ -24,7 +24,7 @@ const ChangePasswordTourist = ({ id,onClose }) => {
       return;
     }
     try {
-        const response = await fetch(`/api/tourist/changePasswordTourist/${id}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`, {
+        const response = await fetch(`/api/advertiser/changePasswordAdvertiser/${id}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`, {
             method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ oldPassword: currentPassword, newPassword }),
@@ -112,7 +112,7 @@ const ChangePasswordTourist = ({ id,onClose }) => {
   );
 };
 
-export default ChangePasswordTourist;
+export default ChangePasswordAdvertiser;
 
 
 

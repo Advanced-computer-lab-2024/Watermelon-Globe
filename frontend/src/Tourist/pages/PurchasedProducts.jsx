@@ -9,30 +9,38 @@ const StarRating = ({ rating, onRate }) => {
         <Star
           key={star}
           size={16}
-          onClick={() => onRate(star)}
           className={`cursor-pointer ${
-            star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-          }`}
+            star <= rating 
+              ? 'fill-yellow-400 text-yellow-400'
+              : 'text-yellow-300'
+          } hover:text-yellow-400`}
+          onClick={() => onRate(star)}
+         
+          
         />
       ))}
     </div>
   );
 };
 
-const ViewReviewsModal = ({ productId, reviews, onClose }) => {
+const ViewReviewsModal = ({ productId, reviews = [], onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4 text-green-700">Reviews for Product {productId}</h2>
+        
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
             <div key={index} className="mb-4 pb-4 border-b border-gray-200">
-              <p className="text-gray-700">{review}</p>
+              {/* Display the reviewer's name and the review */}
+              <p className="font-semibold text-blue-600">{review.reviewer?.username || 'Anonymous'}</p>
+              <p className="text-gray-700">{review.review || 'No review provided'}</p>
             </div>
           ))
         ) : (
           <p className="text-gray-500">No reviews yet for this product.</p>
         )}
+        
         <button
           onClick={onClose}
           className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
@@ -43,6 +51,7 @@ const ViewReviewsModal = ({ productId, reviews, onClose }) => {
     </div>
   );
 };
+
 
 const PurchasedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -103,7 +112,7 @@ const PurchasedProducts = () => {
           prevProducts.map(product => 
             product._id === productId ? { ...product, rating } : product
           )
-        );
+        );window.location.reload();
       } else {
         console.error('Error:', data.message);
       }
@@ -132,7 +141,7 @@ const PurchasedProducts = () => {
     try {
       const response = await fetch(`/api/Seller/getProductReviews/${productId}`);
       const data = await response.json();
-      setReviews(data.reviews);
+      setReviews(data);
       setSelectedProductId(productId);
       setShowReviewsModal(true);
     } catch (error) {
@@ -143,12 +152,14 @@ const PurchasedProducts = () => {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
+  
     const filtered = products.filter(product => 
-      product.name.toLowerCase().includes(term) || 
-      product.description.toLowerCase().includes(term)
+      (product.name && product.name.toLowerCase().includes(term)) || 
+      (product.description && product.description.toLowerCase().includes(term))
     );
     setFilteredProducts(filtered);
   };
+  
 
   const handleReset = () => {
     setSearchTerm('');
