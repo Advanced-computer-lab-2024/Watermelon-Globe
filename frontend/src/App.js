@@ -57,6 +57,7 @@ import FlightMain from './Flights/Pages/FlightMain.js';
 //tourguide new
 
 import './App.css';
+import ChangePasswordTourGuide from './TourGuide/pages/changePasswordTourGuide.js';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -130,6 +131,7 @@ const App = () => {
 
           {/* Tour Guide Pages */}
           <Route path="/TourGuideHome" element={<TourGuideHome />} />
+          <Route path='/changePasswordTourGuide' element={<ChangePasswordTourGuide/>}/>
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>
