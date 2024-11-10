@@ -14,6 +14,7 @@ import CreateProfile from '../Components/createProfile';
 import ViewProfile from '../Components/viewProfile';
 import UpdateProfile from '../Components/updateProfile';
 import UploadImage from '../Components/UploadImage';
+import ChangePasswordSeller from '../Components/changePasswordSeller';
 
 const id = "6729244f151b6c9e346dd732";
 
@@ -31,6 +32,8 @@ const menuItems = [
   { id: 'createProfile', label: 'Create a Profile' },
   { id: 'viewProfile', label: 'View Profile' },
   { id: 'updateProfile', label: 'Update my Profile' },
+  { id: 'changePasswordSeller', label: 'Change Password' },
+
 ];
 
 function SellerProduct() {
@@ -68,8 +71,10 @@ function SellerProduct() {
               return <ViewProfile />;
             case 'updateProfile':
               return <UpdateProfile />;
+            case 'changePasswordSeller':
+              return<ChangePasswordSeller/>
             default:
-              return <GetAllProducts />;
+              return <GetAllProducts/>;
           }
         })()}
       </div>
