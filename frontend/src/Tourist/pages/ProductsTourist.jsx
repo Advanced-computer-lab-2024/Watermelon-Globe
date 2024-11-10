@@ -16,10 +16,12 @@ const ProductList = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/Admin/GetAllProducts');
+      const response = await fetch('/api/Tourist/GetAllProducts');
       const data = await response.json();
-      setProducts(data);
-      setFilteredProducts(data);
+      const activeProducts = data.filter(product => !product.archived);
+      setProducts(activeProducts);
+     // setProducts(data);
+      setFilteredProducts(activeProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
       setErrorMessage('Failed to load products. Please try again.');

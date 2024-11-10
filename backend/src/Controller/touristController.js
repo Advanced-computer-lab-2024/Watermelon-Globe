@@ -20,6 +20,7 @@ const createTourist = async (req, res) => {
     dob,
     status,
     wallet,
+    points
   } = req.body;
   // add tourist to db
   try {
@@ -32,6 +33,7 @@ const createTourist = async (req, res) => {
       dob,
       status,
       wallet,
+      points: points || 0, 
     });
     res.status(200).json(tourist);
   } catch (error) {
@@ -474,6 +476,74 @@ const getPassword = async(req,res) =>{
       res.status(500).json({ message: 'An error occurred while booking the flight.', error: err.message });
     }
   };
+
+
+const redeemPoints = async (req, res) => {
+    const { id } = req.params;
+    const { pointsToRedeem } = req.body;
+
+    // Validate if pointsToRedeem is a number, at least 10,000, and in exact increments of 10,000
+    if (!Number.isInteger(pointsToRedeem) || pointsToRedeem < 10000 || pointsToRedeem % 10000 !== 0) {
+        return res.status(400).json({ 
+            error: "Invalid amount of points. Points must be at least 10,000 and in exact increments of 10,000." 
+        });
+    }
+
+    try {
+        // Find the tourist by ID
+        const tourist = await Tourist.findById(id);
+        if (!tourist) {
+            return res.status(404).json({ error: "Tourist not found." });
+        }
+
+        // Check if the tourist has enough points
+        if (tourist.points < pointsToRedeem) {
+            return res.status(400).json({ error: "Insufficient points for redemption." });
+        }
+
+        // Deduct points from the tourist's balance
+        tourist.points -= pointsToRedeem;
+
+        // Calculate the equivalent currency to add to the wallet
+        const currencyToAdd = (pointsToRedeem / 10000) * 100;
+        tourist.walletBalance += currencyToAdd;
+
+        // Save the updated tourist
+        await tourist.save();
+
+        // Respond with the updated points and wallet balance
+        res.status(200).json({
+            message: "Points redeemed successfully",
+            pointsRemaining: tourist.points,
+            walletBalance: tourist.walletBalance
+        });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while redeeming points." });
+    }
+};
+
+
+  const addPoints = async (req, res) => {
+    const { id } = req.params;
+    const { pointsToAdd } = req.body;
+    // Check if pointsToAdd is a valid number
+    if (!pointsToAdd || pointsToAdd <= 0) {
+      return res.status(400).json({ error: "Invalid points amount to add." });
+    }
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found." });
+    }
+    // Add points to the tourist's balance
+    tourist.points += pointsToAdd;
+    // Save the updated tourist
+    await tourist.save();
+    res.status(200).json({
+      message: "Points added successfully",
+      currentPoints: tourist.points,
+    });
+  };
   
 module.exports = {
   createTourist,
@@ -493,5 +563,7 @@ module.exports = {
   requestDeletionTourist,
   getPassword,
   getTouristComplaints,
-  bookFlight
+  bookFlight,
+  redeemPoints,
+  addPoints
 };

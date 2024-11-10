@@ -29,6 +29,20 @@ const productSchema = new Schema({
         required: true
     },
 
+    sales: {
+        type: Number,
+        required: true
+    },
+    archived: {
+        type: Boolean,
+        required: true
+    },
+
+    picture: {
+    type: String, // URL or file path for the product image
+    required: true
+    },
+
     rating: { type: Number, required: false },
     noOfRatings: {type:Number ,required:false},
     ratingsSum:{type:Number,required:false},

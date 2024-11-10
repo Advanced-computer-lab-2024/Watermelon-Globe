@@ -40,7 +40,12 @@ const {
     sortComplaintsByDate,
     filterComplaintsByStatus,
     getUploadedDocuments,
-    getPassword
+    getPassword,
+    getQuantity,
+    archiveProduct,
+    unarchiveProduct,
+    getProductImageByName,
+    markItineraryInappropriate
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -104,4 +109,22 @@ router.put("/acceptTourGuide/:id", acceptTourGuide);
 router.put("/rejectAdvertiser/:id", rejectAdvertiser);
 router.put("/rejectSeller/:id", rejectSeller);
 router.put("/rejectTourGuide/:id", rejectTourGuide);
+
+//archive a product
+router.put('/archiveProduct', archiveProduct)
+
+//unarchive a product
+router.put('/unarchiveProduct', unarchiveProduct)
+
+//upload product image
+router.get('/uploadImage',getProductImageByName)
+
+
+// view product's available quantity
+router.get('/getQuantity',getQuantity);
+
+
+//mark Itinerary Inappropriate
+router.put('/markItineraryInappropriate/:id', markItineraryInappropriate)
+
 module.exports = router;

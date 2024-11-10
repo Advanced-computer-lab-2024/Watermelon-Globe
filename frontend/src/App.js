@@ -25,19 +25,21 @@ import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
+import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import ViewProducts from './Guest/pages/ViewProducts.js';
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
+import TouristComplaints from './Tourist/pages/TouristComplaints.jsx'
 
 import AdminHome from './Admin/pages/AdminHome.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './Seller/pages/SellerProduct.js';
+import SellerProduct from './Seller/pages/SellerProduct.jsx';
+import TouristProduct from './Tourist/pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 // import ActivityDetails from './Components/ActivityDetails.jsx';
@@ -48,6 +50,8 @@ import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+import Complaint from './Admin/pages/Complaint.js';
+import Itinerary from './Admin/pages/Itinerary.js';
 
 import './App.css';
 import FlightMain from './Flights/Pages/FlightMain.js';
@@ -55,6 +59,7 @@ import FlightMain from './Flights/Pages/FlightMain.js';
 //tourguide new
 
 import './App.css';
+import ChangePasswordTourGuide from './TourGuide/pages/changePasswordTourGuide.js';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -87,6 +92,8 @@ const App = () => {
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
           <Route path="/ChangePasswordAdmin" element ={<ChangePasswordAdmin/>}/>
+          <Route path="/Complaint" element={<Complaint />} />
+          <Route path="/AdminViewItinerary" element={<Itinerary />} />
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
@@ -119,6 +126,9 @@ const App = () => {
           <Route path="/PurchasedProducts/:id" element={<PurchasedProducts />} />
           <Route path="/TouristPage" element={<TouristPage />} />
           <Route path="/TouristHomePage/:id" element={<TouristHomePage />} />
+          <Route path="/TouristComplaints/:id" element={<TouristComplaints />} />
+
+
           
 
           {/* Seller and Other Pages */}
@@ -126,7 +136,8 @@ const App = () => {
           <Route path='/ViewProducts' element={<ViewProducts />} />
 
           {/* Tour Guide Pages */}
-          <Route path="/TourGuideHome" element={<TourGuideHome />} />
+          <Route path="/TourGuideHome/:id" element={<TourGuideHome />} />
+          <Route path='/changePasswordTourGuide/:id' element={<ChangePasswordTourGuide/>}/>
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>

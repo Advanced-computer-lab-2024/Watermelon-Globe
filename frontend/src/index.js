@@ -6,6 +6,8 @@ import { ActivityCategoryContextProvider} from './Admin/context/ActivityCategory
 import { PreferenceTagContextProvider } from './Admin/context/PreferenceTagContext';
 import { AdminContextProvider } from './Admin/context/AdminContext';
 import { GovernerContextProvider } from './Admin/context/GovernerContext';
+import { ComplaintContextProvider } from './Admin/context/ComplaintContext';
+import { ItineraryContextProvider } from './Admin/context/ItineraryContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +16,11 @@ root.render(
       <PreferenceTagContextProvider>
         <AdminContextProvider>
           <GovernerContextProvider>
-              <App />
+            <ComplaintContextProvider>
+              <ItineraryContextProvider>
+                <App />
+              </ItineraryContextProvider>
+            </ComplaintContextProvider>
           </GovernerContextProvider>
         </AdminContextProvider>
       </PreferenceTagContextProvider>

@@ -508,10 +508,10 @@ const changePasswordTourGuide = async (req, res) => {
   }
 
   try {
-    const tourguide = await TourGuide.findOne({ _id: id });
+    const tourguide = await tourGuide.findOne({ _id: id });
 
     if (!tourguide) {
-      return res.status(404).json({ error: "tourguide not found" }); // Tourist not found
+      return res.status(404).json({ error: "tour guide not found" }); // Tourist not found
     }
 
     // Compare the old password directly
@@ -562,6 +562,25 @@ const requestDeletionGuide = async (req, res) => {
   }
 };
 
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const tourguide = await tourGuide.findById(id);
+    console.log(tourguide);
+    if(!tourguide){
+      res.status(400).json({message:"tourguide is not found"});
+    }
+    else{
+      res.status(200).json(tourguide.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
 module.exports = {
   createItinerary,
   getAllItineraries,
@@ -581,5 +600,6 @@ module.exports = {
   activateItineraryAccessibility,
   deactivateItineraryAccessibility,
   acceptTermsAndConditions,
-  requestDeletionGuide
+  requestDeletionGuide,
+  getPassword
 };

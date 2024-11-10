@@ -6,6 +6,7 @@ const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/productModel')
 const Complaint = require('../Models/Complaint')
+const Itinerary = require("../Models/itineraryModel");
 const mongoose = require('mongoose')
 const TourGuide = require('../Models/tourGuideModel')
 const Advertiser = require('../Models/advertiserModel');
@@ -335,21 +336,23 @@ const updateActivityCategory = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller, ratings } = req.body;
+  const { name, price, quantity, picture, description, seller, ratings, sales } = req.body;
 
   try {
     // Create a new product with the provided details
     const product = await Product.create({
       name,
-      details,
       price,
       quantity,
-      // picture,
+      picture,
       description,
-      seller,
-      ratings: ratings || 0, // Initialize ratings to 0 if not provided
-      // reviews: reviews || []  // Initialize reviews to an empty array if not provided
+      seller: "6729244f151b6c9e346dd732",
+      ratings: ratings || 0,
+      sales: sales || 0,
+      archived: false // Explicitly set this as a default value
     });
+
+    // Return the created product as JSON response
     res.status(200).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -837,6 +840,125 @@ const getPassword = async(req,res) =>{
   }
 
 
+// view the sales & the available quantity of all products
+const getQuantity = async (req, res) => {
+  try {
+      const products = await Product.find({}, 'name quantity sales').sort({ createdAt: -1 });
+      res.status(200).json(products);
+  } catch (error) {
+      res.status(500).json({ error: "An error occurred while retrieving product quantities." });
+  }
+};
+
+
+// archive a product
+const archiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Set the archived field to true based on the product name
+      const product = await Product.findOneAndUpdate(
+          { name: name },
+          { archived: true },
+          { new: true } // Return the updated product
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Product archived successfully', product });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while archiving the product' });
+  }
+};
+
+
+
+
+
+// unarchive a product
+const unarchiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Set the archived field to false based on the product name
+      const product = await Product.findOneAndUpdate(
+          { name: name },
+          { archived: false },
+          { new: true } // Return the updated product
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Product unarchived successfully', product });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while unarchiving the product' });
+  }
+};
+
+const getProductImageByName = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Search for the product by name and return only the picture field
+      const product = await Product.findOne(
+          { name: new RegExp(name, 'i') }, 
+          'picture' // Select only the picture field
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'No product found with this name' });
+      }
+
+      res.status(200).json({ picture: product.picture });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while fetching the product image' });
+    }
+};
+
+// Controller function to mark an itinerary as inappropriate
+const markItineraryInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the itinerary ID from request parameters
+
+  try {
+      // Find the itinerary by its ID and update the inappropriate field
+      const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+          id,
+          { inappropriate: true }, // Set the inappropriate field to true
+          { new: true } // Return the updated document
+      );
+
+      // If the itinerary is not found, send a 404 error response
+      if (!itinerary) {
+          return res.status(404).json({ error: 'Itinerary not found' });
+      }
+
+      // Send the updated itinerary as a response
+      res.status(200).json({ message: 'Itinerary marked as inappropriate', itinerary });
+  } catch (error) {
+      // Handle any errors during the process
+      res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -878,5 +1000,7 @@ module.exports = {
   deleteGuide,
   deleteSeller,
   deleteCompany,
-  getPassword
+  getPassword,
+  deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany,
+  getQuantity,archiveProduct,unarchiveProduct,getProductImageByName,markItineraryInappropriate
 };
