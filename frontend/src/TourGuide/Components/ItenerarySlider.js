@@ -14,7 +14,7 @@ export default function ItinerarySlider() {
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await fetch('/api/Itenerary/getAllItineraries')
+        const response = await fetch('/api/Itinerary/getAllItineraries')
         if (!response.ok) throw new Error('Failed to fetch itineraries')
         
         const data = await response.json()
