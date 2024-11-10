@@ -40,7 +40,8 @@ const {
     getQuantity,
     archiveProduct,
     unarchiveProduct,
-    getProductImageByName
+    getProductImageByName,
+    markItineraryInappropriate
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -108,5 +109,9 @@ router.get('/uploadImage',getProductImageByName)
 
 // view product's available quantity
 router.get('/getQuantity',getQuantity);
+
+
+//mark Itinerary Inappropriate
+router.put('/markItineraryInappropriate/:id', markItineraryInappropriate)
 
 module.exports = router;

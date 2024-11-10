@@ -24,6 +24,7 @@ const itinerarySchema = new Schema(
     rating: { type: Number, required: false, default: 0 },
     noOfRatings: { type: Number, required: false },
     ratingsSum: { type: Number, required: false }, // Reference to the tour guide
+    inappropriate: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
