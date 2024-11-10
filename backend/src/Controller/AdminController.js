@@ -7,10 +7,11 @@ const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/productModel')
 const Complaint = require('../Models/Complaint')
 const Itinerary = require("../Models/itineraryModel");
-const mongoose = require('mongoose')
 const TourGuide = require('../Models/tourGuideModel')
 const Advertiser = require('../Models/advertiserModel');
 const Seller = require('../Models/SellerModel');
+const mongoose = require('mongoose')
+
 
 
 const getAllAdmin = async (req, res) => {
@@ -806,19 +807,37 @@ const filterComplaintsByStatus = async (req, res) => {
 
 const getUploadedDocuments = async (req, res) => {
   try {
+    // Fetch all users (TourGuides, Advertisers, Sellers)
     const tourGuides = await TourGuide.find({}, 'name username email idProof certificates');
     const advertisers = await Advertiser.find({}, 'Username Email idProof taxationRegistryCard');
     const sellers = await Seller.find({}, 'Name Email idProof taxationRegistryCard');
-      
+
+    // Filter TourGuides who have uploaded documents (either idProof or certificates)
+    const filteredTourGuides = tourGuides.filter(tourGuide => 
+      tourGuide.idProof || (tourGuide.certificates && tourGuide.certificates.length > 0)
+    );
+
+    // Filter Advertisers who have uploaded documents (either idProof or taxationRegistryCard)
+    const filteredAdvertisers = advertisers.filter(advertiser =>
+      advertiser.idProof || advertiser.taxationRegistryCard
+    );
+
+    // Filter Sellers who have uploaded documents (either idProof or taxationRegistryCard)
+    const filteredSellers = sellers.filter(seller =>
+      seller.idProof || seller.taxationRegistryCard
+    );
+
+    // Respond with the filtered lists of users who uploaded documents
     res.status(200).json({
-      tourGuides,
-      advertisers,
-      sellers
+      tourGuides: filteredTourGuides,
+      advertisers: filteredAdvertisers,
+      sellers: filteredSellers
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const getPassword = async(req,res) =>{
   const{id}= req.query;
@@ -959,6 +978,7 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -1002,5 +1022,5 @@ module.exports = {
   deleteCompany,
   getPassword,
   deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany,
-  getQuantity,archiveProduct,unarchiveProduct,getProductImageByName,markItineraryInappropriate
+  getQuantity,archiveProduct,unarchiveProduct,getProductImageByName,markItineraryInappropriate,
 };
