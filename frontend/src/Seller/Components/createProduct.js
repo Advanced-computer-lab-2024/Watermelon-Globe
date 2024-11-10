@@ -5,37 +5,54 @@ const CreateProduct = () => {
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [description, setDescription] = useState('');
-  const [seller, setSeller] = useState('');
+  const seller = "6729244f151b6c9e346dd732"; // Default seller ID
   const [ratings, setRatings] = useState('');
+  const [sales, setSales] = useState('');
+  const [picture, setPicture] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const product = { name, price, quantity, description, seller, ratings };
+    const product = { 
+      name, 
+      price, 
+      quantity, 
+      picture, 
+      description, 
+      seller, // Use default seller ID
+      ratings: ratings || 0, 
+      sales: sales || 0 
+    };
 
-    const response = await fetch('/api/Seller/createProduct', {
-      method: 'POST',
-      body: JSON.stringify(product),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const response = await fetch('/api/Seller/createProduct', {
+        method: 'POST',
+        body: JSON.stringify(product),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-
-    if (!response.ok) {
-      setErrorMessage('Failed to create product. Please try again.');
-    } else {
-      setSuccessMessage('Product created successfully!'); // Set success message
-      setErrorMessage(''); // Clear any error message if successful
-      // Optionally reset form fields after successful creation
-      setName('');
-      setPrice('');
-      setQuantity('');  
-      setDescription('');
-      setSeller('');
-      setRatings('');
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || 'Failed to create product. Please try again.');
+      } else {
+        setSuccessMessage('Product created successfully!');
+        setErrorMessage('');
+        
+        // Reset form fields
+        setName('');
+        setPrice('');
+        setQuantity('');
+        setPicture('');
+        setDescription('');
+        setRatings('');
+        setSales('');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred: ' + error.message);
     }
   };
 
@@ -51,14 +68,17 @@ const CreateProduct = () => {
         <label>Quantity:</label>
         <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
 
+        <label>Picture URL:</label>
+        <input type="text" value={picture} onChange={(e) => setPicture(e.target.value)} required />
+
         <label>Description:</label>
         <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
 
-        <label>Seller:</label>
-        <input type="text" value={seller} onChange={(e) => setSeller(e.target.value)} required />
-
         <label>Ratings:</label>
         <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
+
+        <label>Sales:</label>
+        <input type="number" value={sales} onChange={(e) => setSales(e.target.value)} />
 
         <button type="submit">Create Product</button>
       </form>
@@ -70,4 +90,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default CreateProduct;

@@ -37,7 +37,8 @@ import AdminHome from './Admin/pages/AdminHome.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './Seller/pages/SellerProduct.js';
+import SellerProduct from './Seller/pages/SellerProduct.jsx';
+import TouristProduct from './Tourist/pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 // import ActivityDetails from './Components/ActivityDetails.jsx';
@@ -48,6 +49,7 @@ import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+import Complaint from './Admin/pages/Complaint.js';
 
 import './App.css';
 import FlightMain from './Flights/Pages/FlightMain.js';
@@ -87,6 +89,7 @@ const App = () => {
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
           <Route path="/ChangePasswordAdmin" element ={<ChangePasswordAdmin/>}/>
+          <Route path="/Complaint" element={<Complaint />} />
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />

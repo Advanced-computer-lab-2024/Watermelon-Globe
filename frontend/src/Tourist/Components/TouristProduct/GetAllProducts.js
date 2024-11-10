@@ -14,7 +14,10 @@ const GetAllProducts = () => {
           throw new Error('Failed to fetch products');
         }
         const data = await response.json();
-        setProducts(data);
+
+        // Filter out archived products
+        const activeProducts = data.filter(product => !product.archived);
+        setProducts(activeProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
         setError('Failed to load products. Please try again later.');

@@ -6,6 +6,10 @@ import SearchProductByName from '../Components/AdminProduct/SearchProductByName'
 import UpdateProduct from '../Components/AdminProduct/updateProduct';
 import FilterProduct from '../Components/AdminProduct/filterProduct';
 import SortProduct from '../Components/AdminProduct/sortProduct';
+import ViewProductSales_AvailableQuantity from '../Components/AdminProduct/ViewAvailableQuantity';
+import ArchiveProduct from '../Components/AdminProduct/ArchiveProduct';
+import UnArchiveProduct from '../Components/AdminProduct/UnArchiveProduct';
+import UploadImage from '../Components/AdminProduct/UploadImage';
 
 
 const AdminProduct = () => {
@@ -20,12 +24,20 @@ const AdminProduct = () => {
         return <CreateProduct/>;
       case 'searchProductByName':
         return <SearchProductByName/>;
+      case 'viewAvailableQuantity':
+        return <ViewProductSales_AvailableQuantity/>;
+      case 'archiveProduct':
+        return <ArchiveProduct/>
+      case 'unarchiveProduct':
+        return <UnArchiveProduct/>
       case 'filterProductByPrice':
         return <FilterProduct/>;
       case 'updateProduct':
         return <UpdateProduct/>;
       case 'sortProducts':
         return <SortProduct/>;
+      case 'uploadImage':
+        return <UploadImage/>;
     default:
       return <div>Invalid option selected</div>; // Handle invalid option
     }
