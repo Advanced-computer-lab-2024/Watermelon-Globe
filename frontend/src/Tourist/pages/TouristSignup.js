@@ -107,7 +107,7 @@ const SignupTourist = () => {
         setNationality('');
         setDOB('');
         setStatus('');
-        navigate(`/MainTouristPage/${data._id}`);
+        navigate(`/TouristHomepage/${data._id}`);
       } else {
         const errorData = await response.json();
         if (errorData.message.includes("duplicate key error")) {

@@ -13,6 +13,8 @@ import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
 import TouristPage from './TouristPage.js';
 import SellerPage from './SellerPage.js';
+import TouristHomePage from './Tourist/pages/TouristHomepage.jsx';
+
 
 import './App.css';
 
@@ -116,6 +118,8 @@ const App = () => {
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
           <Route path="/PurchasedProducts/:id" element={<PurchasedProducts />} />
           <Route path="/TouristPage" element={<TouristPage />} />
+          <Route path="/TouristHomePage/:id" element={<TouristHomePage />} />
+          
 
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
@@ -129,7 +133,7 @@ const App = () => {
           <Route path='/activityDetails' element={<ActivityDetails/>}/>
 
           {/* Path for Flight and Hotel APIs */}
-          <Route path='/Flights' element={<FlightMain/>}/>
+          <Route path='/Flights/:touristId' element={<FlightMain/>}/>
 
         </Routes>
       </div>

@@ -4,6 +4,8 @@ const itineraryModel = require("../Models/itineraryModel");
 const Itinerary = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
+const Booking = require('../Models/FlightBooking');
+
 
 //Tourist
 
@@ -441,6 +443,38 @@ const getPassword = async(req,res) =>{
     }
   }
 
+  const bookFlight = async (req, res) => {
+    try {
+      const { airline, flightNumber1, departure1, arrival1, flightNumber2, departure2, arrival2, price, currency } = req.body;
+  
+      // Create the booking
+      const newBooking = new Booking({
+        touristId: req.params.touristId, // Get the touristId from the URL parameter
+        airline,
+        flightNumber1,
+        departure1,
+        arrival1,
+        flightNumber2,
+        departure2,
+        arrival2,
+        price,
+        currency,
+      });
+  
+      // Save the booking
+      const savedBooking = await newBooking.save();
+  
+      // Send a success response
+      res.status(201).json({
+        message: 'Flight successfully booked!',
+        booking: savedBooking,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while booking the flight.', error: err.message });
+    }
+  };
+  
 module.exports = {
   createTourist,
   getTourists,
@@ -457,7 +491,7 @@ module.exports = {
   buyProduct,
   getPurchasedProducts,
   requestDeletionTourist,
-  // getTouristComplaints,
   getPassword,
-  getTouristComplaints
+  getTouristComplaints,
+  bookFlight
 };

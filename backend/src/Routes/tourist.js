@@ -15,7 +15,8 @@ const {
     buyProduct,
     getPurchasedProducts,
     getTouristComplaints,
-    getPassword
+    getPassword,
+    bookFlight
     
   } = require("../Controller/touristController");
   
@@ -55,12 +56,10 @@ router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 // router.get("/myComplaints/:touristId", getTouristComplaints);
 
 router.get("/getPassword",getPassword);
-module.exports = router;
-  //get own complaints
+
+router.post("/bookFlight/:touristId" , bookFlight);
   
 
-  
-
-  router.get("/myComplaints/:touristId", getTouristComplaints);
+router.get("/myComplaints/:touristId", getTouristComplaints);
 
   module.exports = router;

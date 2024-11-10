@@ -7,7 +7,7 @@ import ExploreTrips from '../Components/ExploreTrips.jsx';
 import ExploreActivities from '../../Guest/Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
 
-const HomePage = () => {
+const TouristHomePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
@@ -49,7 +49,7 @@ const HomePage = () => {
             </div>
             <div className="hidden md:flex space-x-4">
               <Link to="#" className="text-gray-600 hover:text-gray-900">Hotel</Link>
-              <Link to="#" className="text-gray-600 hover:text-gray-900">Flight</Link>
+              <Link to={`/Flights/${id}`} className="text-gray-600 hover:text-gray-900">Flight</Link>
               <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
               <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
               <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
@@ -179,4 +179,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default TouristHomePage;

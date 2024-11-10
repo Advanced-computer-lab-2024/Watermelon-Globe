@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
-import { bookFlight } from '../api';
+import axios from 'axios';
 
-const FlightBooking = ({ flight, token }) => {
-  const [passengerName, setPassengerName] = useState('');
+const FlightBooking = ({ flight, touristId }) => {
+  const [message, setMessage] = useState('');
+  
 
-  const handleBooking = async () => {
-    const bookingDetails = await bookFlight(token, flight.id, passengerName);
-    alert(`Flight booked for ${passengerName}. Booking ID: ${bookingDetails.id}`);
+  const handleBookFlight = async () => {
+    try {
+
+      const segments = flight.itineraries[0]?.segments || [];
+    const firstSegment = segments[0] || {};
+    const secondSegment = segments[1] || {};
+
+    
+      // Sending POST request to the correct backend route
+      const response = await axios.post(`/api/Tourist/bookFlight/${touristId}`, {
+        airline: flight.validatingAirlineCodes[0],
+      flightNumber1: firstSegment?.carrierCode + firstSegment?.number,
+      departure1: firstSegment?.departure?.at,
+      arrival1: firstSegment?.arrival?.at,
+      flightNumber2: secondSegment?.carrierCode + secondSegment?.number,
+      departure2: secondSegment?.departure?.at,
+      arrival2: secondSegment?.arrival?.at,
+      price: flight.price?.grandTotal,
+      currency: flight.price?.currency,
+      });
+
+      // Display success message upon successful booking
+      setMessage('You have successfully booked your flight!');
+    } catch (error) {
+      console.error('Error booking flight:', error);
+      setMessage('Sorry, there was an issue booking your flight. Please try again.');
+    }
   };
 
   if (!flight) return <div>Select a flight to book.</div>;
@@ -15,12 +40,9 @@ const FlightBooking = ({ flight, token }) => {
     <div>
       <h3>Booking: {flight.validatingAirlineCodes[0]}</h3>
       <p>Flight: {flight.itineraries[0]?.segments[0]?.carrierCode} {flight.itineraries[0]?.segments[0]?.number}</p>
-      <input
-        type="text"
-        placeholder="Passenger Name"
-        onChange={(e) => setPassengerName(e.target.value)}
-      />
-      <button onClick={handleBooking}>Book Flight</button>
+      <button onClick={handleBookFlight}>Book Flight</button>
+
+      {message && <p>{message}</p>}
     </div>
   );
 };

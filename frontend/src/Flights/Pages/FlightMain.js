@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
+import { useParams } from 'react-router-dom'; // Correct import here
 import { format } from 'date-fns'
 import AccessToken from '../Components/AccessToken';
 import FlightSearch from '../Components/FlightSearch';
@@ -6,6 +7,7 @@ import FlightBooking from '../Components/FlightBooking';
 
 const FlightMain = () => {
   const [token, setToken] = useState('');
+  const { touristId } = useParams();
   const [flights, setFlights] = useState([]);
   const [selectedFlight, setSelectedFlight] = useState(null);
 
@@ -96,8 +98,8 @@ const FlightMain = () => {
           {selectedFlight && (
             <div className="bg-white shadow-md rounded-lg p-6 w-full">
               <h2 className="text-xl font-semibold mb-4">Flight Booking</h2>
-              <FlightBooking flight={selectedFlight} token={token} />
-            </div>
+              <FlightBooking flight={selectedFlight} touristId={touristId} />
+              </div>
           )}
         </>
       )}
