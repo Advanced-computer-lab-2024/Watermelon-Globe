@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom'; // Correct import here
 import { format } from 'date-fns'
 import AccessToken from '../Components/AccessToken';
@@ -25,6 +25,9 @@ const FlightMain = () => {
       departure2: secondSegment?.departure?.at,
       arrival2: secondSegment?.arrival?.at,
       price: flight.price?.grandTotal,
+      pricePerAdult: flight.travelerPricings?.find(tp => tp.travelerType === "ADULT")?.price?.total,
+      pricePerChild: flight.travelerPricings?.find(tp => tp.travelerType === "CHILD")?.price?.total,
+      pricePerInfant: flight.travelerPricings?.find(tp => tp.travelerType === "INFANT")?.price?.total,
       currency: flight.price?.currency,
     };
   };
@@ -44,7 +47,7 @@ const FlightMain = () => {
             <h2 className="text-xl font-semibold mb-4">Search Flights</h2>
             <FlightSearch token={token} setFlights={setFlights} />
           </div>
-          
+
           {flights?.length > 0 && (
             <div className="bg-white shadow-md rounded-lg p-6 mb-8 w-full">
               <h2 className="text-xl font-semibold mb-4">Flight Results</h2>
@@ -52,8 +55,8 @@ const FlightMain = () => {
                 {flights.map((flight) => {
                   const details = getFlightDetails(flight)
                   return (
-                    <div 
-                      key={flight.id} 
+                    <div
+                      key={flight.id}
                       className="border rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
                       onClick={() => setSelectedFlight(flight)}
                     >
@@ -82,7 +85,11 @@ const FlightMain = () => {
                           </div>
                         </div>
                         <div className="mt-4">
-                          <p className="text-2xl font-bold text-blue-600">{details.currency} {details.price}</p>
+                          <p className="text-2xl font-bold text-blue-600">Adults: {details.currency} {details.pricePerAdult}</p>
+                          <p className="text-2xl font-bold text-blue-600">Children: {details.currency} {details.pricePerChild}</p>
+                          {/* <p className="text-2xl font-bold text-blue-600">Infants: {details.currency} {details.pricePerInfant}</p> */}
+                          <p className="text-2xl font-bold text-red-600">Total: {details.currency} {details.price}</p>
+
                           <button className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                             Select
                           </button>
@@ -99,7 +106,7 @@ const FlightMain = () => {
             <div className="bg-white shadow-md rounded-lg p-6 w-full">
               <h2 className="text-xl font-semibold mb-4">Flight Booking</h2>
               <FlightBooking flight={selectedFlight} touristId={touristId} />
-              </div>
+            </div>
           )}
         </>
       )}
