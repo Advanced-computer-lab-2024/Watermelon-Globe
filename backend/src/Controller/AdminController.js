@@ -6,6 +6,7 @@ const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/productModel')
 const Complaint = require('../Models/Complaint')
+const Itinerary = require("../Models/itineraryModel");
 const mongoose = require('mongoose')
 const TourGuide = require('../Models/tourGuideModel')
 const Advertiser = require('../Models/advertiserModel');
@@ -933,6 +934,31 @@ const getProductImageByName = async (req, res) => {
     }
 };
 
+// Controller function to mark an itinerary as inappropriate
+const markItineraryInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the itinerary ID from request parameters
+
+  try {
+      // Find the itinerary by its ID and update the inappropriate field
+      const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+          id,
+          { inappropriate: true }, // Set the inappropriate field to true
+          { new: true } // Return the updated document
+      );
+
+      // If the itinerary is not found, send a 404 error response
+      if (!itinerary) {
+          return res.status(404).json({ error: 'Itinerary not found' });
+      }
+
+      // Send the updated itinerary as a response
+      res.status(200).json({ message: 'Itinerary marked as inappropriate', itinerary });
+  } catch (error) {
+      // Handle any errors during the process
+      res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -976,5 +1002,5 @@ module.exports = {
   deleteCompany,
   getPassword,
   deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany,
-  getQuantity,archiveProduct,unarchiveProduct,getProductImageByName
+  getQuantity,archiveProduct,unarchiveProduct,getProductImageByName,markItineraryInappropriate
 };

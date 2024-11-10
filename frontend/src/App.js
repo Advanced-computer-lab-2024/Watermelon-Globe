@@ -51,6 +51,7 @@ import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 import Complaint from './Admin/pages/Complaint.js';
+import Itinerary from './Admin/pages/Itinerary.js';
 
 import './App.css';
 import FlightMain from './Flights/Pages/FlightMain.js';
@@ -92,6 +93,7 @@ const App = () => {
           <Route path="/Governer" element={<Governer />} />
           <Route path="/ChangePasswordAdmin" element ={<ChangePasswordAdmin/>}/>
           <Route path="/Complaint" element={<Complaint />} />
+          <Route path="/AdminViewItinerary" element={<Itinerary />} />
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />

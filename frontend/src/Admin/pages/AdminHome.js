@@ -25,6 +25,9 @@ const AdminHome = () => {
         <Link to="/Complaint">
           <button className="admin-button">View Complaints</button>
         </Link>
+        <Link to="/AdminViewItinerary">
+          <button className="admin-button">View Itineraries</button>
+        </Link>
       </div>
     </div>
   );
