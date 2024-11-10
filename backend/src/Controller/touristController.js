@@ -4,6 +4,8 @@ const itineraryModel = require("../Models/itineraryModel");
 const Itinerary = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
+const Booking = require('../Models/FlightBooking');
+
 
 //Tourist
 
@@ -315,22 +317,85 @@ const sortProducts = async (req, res) => {
 
 const fileComplaint = async (req, res) => {
   const { title, body, date } = req.body;
-
-  // Check if title, body or date are missing
-  if (!title || !body) {
-    return res.status(400).json({ error: "Title and body are required" });
+  const { touristId } = req.params;
+  // Check if title, body or touristId are missing
+  if (!title || !body || !touristId) {
+    return res.status(400).json({ error: 'Title, body, and tourist ID are required' });
   }
 
   try {
     // Create a complaint
-    const complaint = await Complaint.create({
-      title,
-      body,
+    const complaint = await Complaint.create({ 
+      title, 
+      body, 
       date: date || new Date(), // Default to current date if not provided
+      tourist: touristId
     });
     res.status(200).json(complaint);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+const buyProduct = async (req, res) => {
+  const { touristId, productId } = req.params;
+ 
+  console.log(touristId);
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(400).json({ error: "Tourist not found" });
+    }
+    const product = await Product.findById(productId);
+    if(!product){
+      return res.status(400).json({ error: "Product not found" });
+
+    }
+    if(product.quantity>0){
+    // Add the product ID to the tourist's products and save
+    tourist.products.push(productId); 
+    product.quantity--;
+  
+    }
+    // Assuming `products` is an array field in your model
+    await tourist.save();
+    await product.save();
+    res.status(200).json("Product was purchased successfully");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+const getTouristComplaints = async (req, res) => {
+  try {
+    const { touristId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(touristId)) {
+      return res.status(400).json({ error: "Invalid tourist ID" });
+    }
+
+    const complaints = await Complaint.find({ tourist: touristId }).sort({ createdAt: -1 });
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+const getPurchasedProducts = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Return the list of purchased product IDs
+    res.status(200).json(tourist.products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -359,6 +424,57 @@ const requestDeletionTourist = async (req, res) => {
   }
 };
 
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const tourist = await Tourist.findById(id);
+    console.log(tourist);
+    if(!tourist){
+      res.status(400).json({message:"Tourist is not found"});
+    }
+    else{
+      res.status(200).json(tourist.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
+  const bookFlight = async (req, res) => {
+    try {
+      const { airline, flightNumber1, departure1, arrival1, flightNumber2, departure2, arrival2, price, currency } = req.body;
+  
+      // Create the booking
+      const newBooking = new Booking({
+        touristId: req.params.touristId, // Get the touristId from the URL parameter
+        airline,
+        flightNumber1,
+        departure1,
+        arrival1,
+        flightNumber2,
+        departure2,
+        arrival2,
+        price,
+        currency,
+      });
+  
+      // Save the booking
+      const savedBooking = await newBooking.save();
+  
+      // Send a success response
+      res.status(201).json({
+        message: 'Flight successfully booked!',
+        booking: savedBooking,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while booking the flight.', error: err.message });
+    }
+  };
+  
 module.exports = {
   createTourist,
   getTourists,
@@ -372,5 +488,10 @@ module.exports = {
   searchProductbyName,
   filterProduct,
   sortProducts,
-  requestDeletionTourist
+  buyProduct,
+  getPurchasedProducts,
+  requestDeletionTourist,
+  getPassword,
+  getTouristComplaints,
+  bookFlight
 };

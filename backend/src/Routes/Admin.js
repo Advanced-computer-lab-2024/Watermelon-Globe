@@ -37,6 +37,10 @@ const {
     rejectAdvertiser,
     rejectSeller,
     rejectTourGuide,
+    sortComplaintsByDate,
+    filterComplaintsByStatus,
+    getUploadedDocuments,
+    getPassword,
     getQuantity,
     archiveProduct,
     unarchiveProduct,
@@ -48,7 +52,7 @@ router.get("/GetAllAdmin", getAllAdmin);
 router.post("/CreateAdmin", createAdmin);
 router.delete("/DeleteAdmin/:id", deleteAdmin);
 router.put("/changePasswordAdmin/:id", changePasswordAdmin),
-  router.get("/GetAllGoverner", getAllGoverner);
+router.get("/GetAllGoverner", getAllGoverner);
 router.post("/CreateGoverner", createGoverner);
 router.delete("/DeleteGoverner/:id", deleteGoverner);
 router.get("/GetAllPreferenceTag", getAllPreferenceTag);
@@ -62,6 +66,7 @@ router.post("/CreateActivityCategory", createActivityCategory);
 router.delete("/DeleteActivityCategory/:id", deleteActivityCategory);
 router.put("/UpdateActivityCategory/:id", updateActivityCategory);
 router.get("/GetAllProducts", getAllProducts);
+router.get("/getPassword",getPassword);
 
 //post a new product
 router.post("/CreateProduct", createProduct);
@@ -86,6 +91,14 @@ router.delete('/deleteTourist/:id', deleteTourist);
 router.delete('/deleteGuide/:id', deleteGuide);
 router.delete('/deleteCompany/:id', deleteCompany);
 router.delete('/deleteSeller/:id', deleteSeller);
+
+//sort and filter for the complaint
+router.get('/ComplaintsSortByDate', sortComplaintsByDate)
+router.get('/ComplaintsFilterByStatus', filterComplaintsByStatus);
+
+//view uploaded documents
+router.get('/uploaded-documents', getUploadedDocuments);
+
 
 
 // accept or reject user

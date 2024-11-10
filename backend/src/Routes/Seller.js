@@ -14,6 +14,9 @@ const {
   changePasswordSeller,
   reviewProduct,
   acceptTermsAndConditions,
+  getProductById,
+  getProductReviews,
+  getPassword,
   getQuantity,
   archiveProduct,
   unarchiveProduct,
@@ -41,6 +44,8 @@ router.put("/UpdateSeller/:id", updateSeller);
 
 router.put("/changePasswordSeller/:id", changePasswordSeller);
 
+router.get("/getPassword",getPassword);
+
 //////////////// Products ////////////////
 
 //Get all products
@@ -67,6 +72,11 @@ router.put("/updateRatingProduct/:id", updateRatingProduct);
 
 router.put("/reviewProduct/:ReviewerId/:ProductId", reviewProduct);
 
+router.post("/getProductById",getProductById);
+
+router.get("/getProductReviews/:productId",getProductReviews);
+
+module.exports = router
 //archive a product
 router.put('/archiveProduct', archiveProduct)
 

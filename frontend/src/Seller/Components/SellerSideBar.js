@@ -44,6 +44,9 @@ const SideBar = ({ setSelectedOption }) => {
         <li>
           <button onClick={() => setSelectedOption('updateProfile')}>Update my Profile</button>
         </li>
+        <li>
+          <button onClick={() => setSelectedOption('changePassword')}>Change Password</button>
+        </li>
       </ul>
     </div>
   );

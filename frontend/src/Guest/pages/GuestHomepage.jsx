@@ -6,7 +6,7 @@ import ExploreActivities from '../Components/ExploreActivities.jsx';
 import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
 
 const HomePage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
@@ -14,6 +14,10 @@ const HomePage = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log('Searching for:', { destination, dates, guests });
+  };
+
+  const handleViewDetails = () => {
+    navigate('ViewProducts');
   };
 
   return (
@@ -91,6 +95,10 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+
+        <button onClick={handleViewDetails}>
+          View all available products
+           </button>
 
         <ExploreTrips />
         <ExploreActivities />

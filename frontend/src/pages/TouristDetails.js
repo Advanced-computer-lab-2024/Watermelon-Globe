@@ -58,10 +58,11 @@ const TouristDetails = () => {
         try {
             // Call API to update the tourist details
             await axios.put(`/updateTourist/${id}`, formData);
-            alert('Tourist details updated successfully!');
             // Optionally, redirect or fetch updated tourist data
             const response = await fetch(`/getTourist/${id}`);
             const updatedData = await response.json();
+            alert('Tourist details updated successfully!');
+
             setTourist(updatedData);
         } catch (error) {
             console.error('Error updating tourist details:', error);
@@ -168,7 +169,7 @@ const TouristDetails = () => {
                                     onClick={handleUpdate}
                                     className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
                                 >
-                                    Update
+                                    Save
                                 </button>
                             )}
                         </div>

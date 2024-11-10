@@ -1,16 +1,17 @@
 const Admin = require('../Models/AdminModel')
 const Governer = require('../Models/tourismGovernorModel')
 const Tourist = require('../Models/touristModel')
-const TourGuide = require('../Models/tourGuideModel')
-const Seller = require('../Models/SellerModel')
 const Company = require('../Models/companyProfileModel')
 const PreferenceTag = require('../Models/PreferenceTagModel')
 const ActivityCategory = require('../Models/ActivityCategoryModel')
 const Product = require('../Models/productModel')
 const Complaint = require('../Models/Complaint')
-const Advertiser = require("../Models/advertiserModel");
 const Itinerary = require("../Models/itineraryModel");
 const mongoose = require('mongoose')
+const TourGuide = require('../Models/tourGuideModel')
+const Advertiser = require('../Models/advertiserModel');
+const Seller = require('../Models/SellerModel');
+
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -767,6 +768,77 @@ const rejectTourGuide = async (req, res) => {
     res.status(500).json({ error: "Error accepting guide: " + error.message });
   }
 };
+const sortComplaintsByDate = async (req, res) => {
+  try {
+    // The sort order can be 'asc' or 'desc', defaulting to 'desc' (newest first)
+    const { order = 'desc' } = req.query;
+    const sortOrder = order === 'asc' ? 1 : -1;
+
+    const complaints = await Complaint.find({})
+      .sort({ date: sortOrder })
+      .exec();
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Filter complaints by status
+const filterComplaintsByStatus = async (req, res) => {
+  try {
+    const { status } = req.query; // status can be 'pending' or 'resolved'
+    
+    // Validate status parameter
+    if (status && !['pending', 'resolved'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status. Must be either pending or resolved' });
+    }
+
+    // If status is provided, filter by it; otherwise, return all complaints
+    const query = status ? { status } : {};
+    const complaints = await Complaint.find(query).sort({ date: -1 });
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocuments = async (req, res) => {
+  try {
+    const tourGuides = await TourGuide.find({}, 'name username email idProof certificates');
+    const advertisers = await Advertiser.find({}, 'Username Email idProof taxationRegistryCard');
+    const sellers = await Seller.find({}, 'Name Email idProof taxationRegistryCard');
+      
+    res.status(200).json({
+      tourGuides,
+      advertisers,
+      sellers
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const admin = await Admin.findById(id);
+    console.log(admin);
+    if(!admin){
+      res.status(400).json({message:"admin is not found"});
+    }
+    else{
+      res.status(200).json(admin.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
 
 // view the sales & the available quantity of all products
 const getQuantity = async (req, res) => {
@@ -921,6 +993,14 @@ module.exports = {
   updateComplaint,
   replyComplaint,
   changePasswordAdmin,
+  sortComplaintsByDate,
+  filterComplaintsByStatus,
+  getUploadedDocuments,
+  deleteTourist,
+  deleteGuide,
+  deleteSeller,
+  deleteCompany,
+  getPassword,
   deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany,
   getQuantity,archiveProduct,unarchiveProduct,getProductImageByName,markItineraryInappropriate
 };

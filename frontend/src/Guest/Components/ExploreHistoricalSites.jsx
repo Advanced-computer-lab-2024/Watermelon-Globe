@@ -25,7 +25,7 @@ const ExploreHistoricalSites = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await fetch('/api/advertiser/getTags');
+      const response = await fetch('/api/Activities/getHistoricalTags');
       const data = await response.json();
       setTags(data);
     } catch (error) {
