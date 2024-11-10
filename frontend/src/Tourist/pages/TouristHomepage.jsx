@@ -54,7 +54,7 @@ const TouristHomePage = () => {
               <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
               <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
               <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
-              <Link to={`/TouristComplaints/${id}`}className="text-gray-600 hover:text-gray-900">Complaints</Link>
+              <Link to={`/TouristComplaints/${id}`} className="text-gray-600 hover:text-gray-900">Complaints</Link>
 
             </div>
             <div className="flex items-center space-x-2">
@@ -159,14 +159,6 @@ const TouristHomePage = () => {
             </div>
           </div>
         </section>
-
-        <button onClick={handleViewPurchasedDetails}>
-          View your purchased products
-           </button>
-
-        <button onClick={handleViewProductsDetails}>
-          View all available products
-           </button>
 
         <ExploreTrips />
         <ExploreActivities />

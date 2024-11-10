@@ -1,29 +1,32 @@
 
 
-
 import '../../pages/styles.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../pages/Navbar.css';
 import Navbar from '../../pages/Navbar.jsx';
 import ItinerarySlider from '../Components/ItenerarySlider.js';
 import TourGuideSettings from './TourGuideSettings.js';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function YourMainPage() {
-  return (
-    <div>
-      <header className="bg-white shadow-md">
-        <Navbar />
-      </header>
-      
-      <div className="flex min-h-screen bg-gray-100">
-        {/* Sidebar */}
-        <TourGuideSettings />
+    const { id } = useParams();
+    const navigate = useNavigate();
+    
+    return (
+        <div>
+            <header className="bg-white shadow-md">
+                <Navbar />
+            </header>
+            
+            <div className="flex min-h-screen bg-gray-100">
+                {/* Sidebar */}
+                <TourGuideSettings id={id} />  {/* Pass id as prop */}
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          <ItinerarySlider />
-        </main>
-      </div>
-    </div>
-  )
+                {/* Main Content */}
+                <main className="flex-1 p-6">
+                    <ItinerarySlider />
+                </main>
+            </div>
+        </div>
+    );
 }

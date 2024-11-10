@@ -1,6 +1,7 @@
 
 
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const ChangePasswordTourGuide = () => {
   const [sellerId, setSellerId] = useState('');
@@ -9,14 +10,15 @@ const ChangePasswordTourGuide = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [sellerPassword, setSellerPassword] = useState('');
 
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const handleShowPassword = async () => {
-    if (!sellerId) {
-      alert("Please enter a seller ID.");
-      return;
-    }
+   
   
     try {
-      const response = await fetch(`/api/Admin/getPassword?id=${sellerId}`);
+      const response = await fetch(`/api/tourGuide/getPassword?id=${id}`);
   
       const data = await response.json();
   
@@ -40,7 +42,7 @@ const ChangePasswordTourGuide = () => {
     }
 
     try {
-            const response = await fetch(`/api/tourGuide/changePasswordTourGuide/${sellerId}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`, {
+            const response = await fetch(`/api/tourGuide/changePasswordTourGuide/${id}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`, {
     method: 'PUT',
       });
       const data = await response.json();
@@ -51,7 +53,10 @@ const ChangePasswordTourGuide = () => {
         setNewPassword('')
         setCurrentPassword('');
       } else {
-        alert(data.error.message || "Failed to change password.");
+        alert(data.error || "Failed to change password.");
+        setConfirmNewPassword('');
+        setNewPassword('')
+        setCurrentPassword('');
       }
     } catch (error) {
       console.error("Error changing password:", error);
@@ -62,18 +67,9 @@ const ChangePasswordTourGuide = () => {
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Example id : 672a82544da865652a105b6e</h3>
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Change Password</h2>
         
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Admin ID:</label>
-          <input
-            type="text"
-            value={sellerId}
-            onChange={(e) => setSellerId(e.target.value)}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        
 
         <button
           onClick={handleShowPassword}
@@ -82,7 +78,7 @@ const ChangePasswordTourGuide = () => {
           Show Password
         </button>
         {sellerPassword && (
-          <p className="text-gray-700 mb-4"><strong>Admin Password:</strong> {sellerPassword}</p>
+          <p className="py-2 text-gray-700 mb-4"><strong>Tour guide Password:</strong> {sellerPassword}</p>
         )}
 
         <div className="mb-4">

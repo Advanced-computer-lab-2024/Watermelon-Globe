@@ -478,56 +478,72 @@ const getPassword = async(req,res) =>{
   };
 
 
-  const redeemPoints = async (req, res) => {
+const redeemPoints = async (req, res) => {
     const { id } = req.params;
     const { pointsToRedeem } = req.body;
-    // Check if pointsToRedeem is a valid number
-    if (!pointsToRedeem || pointsToRedeem <= 0) {
-      return res.status(400).json({ error: "Invalid points amount to redeem." });
+
+    // Validate if pointsToRedeem is a number, at least 10,000, and in exact increments of 10,000
+    if (!Number.isInteger(pointsToRedeem) || pointsToRedeem < 10000 || pointsToRedeem % 10000 !== 0) {
+        return res.status(400).json({ 
+            error: "Invalid amount of points. Points must be at least 10,000 and in exact increments of 10,000." 
+        });
+    }
+
+    try {
+        // Find the tourist by ID
+        const tourist = await Tourist.findById(id);
+        if (!tourist) {
+            return res.status(404).json({ error: "Tourist not found." });
+        }
+
+        // Check if the tourist has enough points
+        if (tourist.points < pointsToRedeem) {
+            return res.status(400).json({ error: "Insufficient points for redemption." });
+        }
+
+        // Deduct points from the tourist's balance
+        tourist.points -= pointsToRedeem;
+
+        // Calculate the equivalent currency to add to the wallet
+        const currencyToAdd = (pointsToRedeem / 10000) * 100;
+        tourist.walletBalance += currencyToAdd;
+
+        // Save the updated tourist
+        await tourist.save();
+
+        // Respond with the updated points and wallet balance
+        res.status(200).json({
+            message: "Points redeemed successfully",
+            pointsRemaining: tourist.points,
+            walletBalance: tourist.walletBalance
+        });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while redeeming points." });
+    }
+};
+
+
+  const addPoints = async (req, res) => {
+    const { id } = req.params;
+    const { pointsToAdd } = req.body;
+    // Check if pointsToAdd is a valid number
+    if (!pointsToAdd || pointsToAdd <= 0) {
+      return res.status(400).json({ error: "Invalid points amount to add." });
     }
     // Find the tourist by ID
     const tourist = await Tourist.findById(id);
     if (!tourist) {
       return res.status(404).json({ error: "Tourist not found." });
     }
-    // Check if tourist has enough points
-    if (tourist.points < pointsToRedeem) {
-      return res.status(400).json({ error: "Insufficient points to redeem." });
-    }
-    // Calculate redeemable cash
-    const cashEquivalent = (pointsToRedeem / 10000) * 100;
-    // Update tourist's points and wallet
-    tourist.points -= pointsToRedeem;
-    tourist.wallet += cashEquivalent;
+    // Add points to the tourist's balance
+    tourist.points += pointsToAdd;
     // Save the updated tourist
     await tourist.save();
     res.status(200).json({
-      message: "Points redeemed successfully",
-      pointsRemaining: tourist.points,
-      walletBalance: tourist.wallet,
+      message: "Points added successfully",
+      currentPoints: tourist.points,
     });
   };
-  // const addPoints = async (req, res) => {
-  //   const { id } = req.params;
-  //   const { pointsToAdd } = req.body;
-  //   // Check if pointsToAdd is a valid number
-  //   if (!pointsToAdd || pointsToAdd <= 0) {
-  //     return res.status(400).json({ error: "Invalid points amount to add." });
-  //   }
-  //   // Find the tourist by ID
-  //   const tourist = await Tourist.findById(id);
-  //   if (!tourist) {
-  //     return res.status(404).json({ error: "Tourist not found." });
-  //   }
-  //   // Add points to the tourist's balance
-  //   tourist.points += pointsToAdd;
-  //   // Save the updated tourist
-  //   await tourist.save();
-  //   res.status(200).json({
-  //     message: "Points added successfully",
-  //     currentPoints: tourist.points,
-  //   });
-  // };
   
 module.exports = {
   createTourist,
@@ -548,5 +564,6 @@ module.exports = {
   getPassword,
   getTouristComplaints,
   bookFlight,
-  redeemPoints
+  redeemPoints,
+  addPoints
 };
