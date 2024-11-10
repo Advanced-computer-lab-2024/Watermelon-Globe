@@ -18,7 +18,7 @@ const HomePage = () => {
         Go to App Page
       </button>
 
-      <button onClick={() => navigate('/BackendReq')}>
+      <button onClick={() => navigate('/MainHome')}>
         Go to Guest Page
       </button>
 

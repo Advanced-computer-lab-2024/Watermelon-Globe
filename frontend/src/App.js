@@ -25,7 +25,7 @@ import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
+import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import ViewProducts from './Guest/pages/ViewProducts.js';
