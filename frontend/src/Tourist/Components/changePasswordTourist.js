@@ -1,0 +1,132 @@
+import React, { useState } from 'react';
+
+const ChangePasswordTourist = ({ id,onClose }) => {
+  const [sellerId, setSellerId] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [sellerPassword, setSellerPassword] = useState('');
+
+  const handleShowPassword = async () => {
+    if (!sellerId) {
+      alert("Please enter a seller ID.");
+      return;
+    }
+    try {
+      const response = await fetch(`/api/tourist/getPassword?id=${sellerId}`);
+      const data = await response.json();
+      setSellerPassword(response.ok ? data : 'Password not available');
+    } catch (error) {
+      alert("An error occurred while retrieving the password.");
+    }
+  };
+
+  const handleConfirmPasswordChange = async () => {
+    if (newPassword !== confirmNewPassword) {
+      alert("New password and confirm password do not match.");
+      return;
+    }
+    try {
+        const response = await fetch(`/api/tourist/changePasswordTourist/${id}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`, {
+            method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oldPassword: currentPassword, newPassword }),
+      });
+      const data = await response.json();
+      if(response.ok){
+        alert("Password changed successfully.");
+        setConfirmNewPassword('');
+        setCurrentPassword('');
+        setNewPassword('');
+      }
+      else{
+        alert(data.error.message || "Failed to change password.");
+      }
+
+    } catch (error) {
+      alert("An error occurred while changing the password.");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Example id : 672cd143a72c43a2d8fb01c0</h3>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Change Password</h2>
+        
+        <div className="mb-4">
+          <label className="block font-medium text-gray-700">Tourist ID:</label>
+          <input
+            type="text"
+            value={sellerId}
+            onChange={(e) => setSellerId(e.target.value)}
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <button
+          onClick={handleShowPassword}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+          >
+          Show Password
+        </button>
+        {sellerPassword && (
+          <p className="text-gray-700 mb-4"><strong>Governor Password:</strong> {sellerPassword}</p>
+        )}
+
+        <div className="mb-4">
+          <label className="block font-medium text-gray-700">Current Password:</label>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-medium text-gray-700">New Password:</label>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            minLength="8"/>
+            {newPassword && newPassword.length < 8 && (
+            <p className="mt-2 text-sm text-red-500">Password must be at least 8 characters long.</p>
+            )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-medium text-gray-700">Confirm New Password:</label>
+          <input
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            minLength="8"/>
+            {newPassword && newPassword.length < 8 && (
+            <p className="mt-2 text-sm text-red-500">Password must be at least 8 characters long.</p>
+            )}
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            onClick={handleConfirmPasswordChange}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+          >
+            Confirm
+          </button>
+        </div>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
+
+export default ChangePasswordTourist;
+
+
+
+
+

@@ -415,6 +415,25 @@ const requestDeletionTourist = async (req, res) => {
   }
 };
 
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const tourist = await Tourist.findById(id);
+    console.log(tourist);
+    if(!tourist){
+      res.status(400).json({message:"Tourist is not found"});
+    }
+    else{
+      res.status(200).json(tourist.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
 module.exports = {
   createTourist,
   getTourists,
@@ -430,5 +449,11 @@ module.exports = {
   sortProducts,
   buyProduct,
   getPurchasedProducts,
+<<<<<<< Updated upstream
   requestDeletionTourist
+=======
+  requestDeletionTourist,
+  getTouristComplaints,
+  getPassword
+>>>>>>> Stashed changes
 };

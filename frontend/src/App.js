@@ -8,7 +8,8 @@ import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 
 import './App.css';
 
-import TouristDetails from "./pages/TouristDetails.js";
+// import TouristDetails from "./pages/TouristDetails.js";
+import TouristDetails from './Tourist/Components/TouristDetails.js';
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
@@ -35,7 +36,12 @@ import SellerProduct from './Seller/pages/SellerProduct.js';
 // import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
+<<<<<<< Updated upstream
 import ActivityDetails from './Components/ActivityDetails.jsx';
+=======
+import ChangePasswordAdmin from './Admin/pages/ChangePasswordAdmin.js';
+
+>>>>>>> Stashed changes
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
 import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
@@ -44,7 +50,12 @@ import ProductTourist from './Tourist/pages/ProductsTourist.js';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 
+<<<<<<< Updated upstream
 //tourguide new
+=======
+
+import './App.css';
+>>>>>>> Stashed changes
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -102,9 +113,13 @@ const App = () => {
           {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
+<<<<<<< Updated upstream
           <Route path='/ViewProducts' element={<ViewProducts/>}/>
           <Route path ='/ProductTourist/:id' element={<ProductTourist/>}/>
           <Route path ='/PurchasedProducts/:id' element={<PurchasedProducts/>}/>
+=======
+          <Route path="/ChangePasswordAdmin" element={<ChangePasswordAdmin/>} />
+>>>>>>> Stashed changes
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}

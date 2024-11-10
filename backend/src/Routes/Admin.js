@@ -37,13 +37,20 @@ const {
     rejectAdvertiser,
     rejectSeller,
     rejectTourGuide,
+<<<<<<< Updated upstream
+=======
+    sortComplaintsByDate,
+    filterComplaintsByStatus,
+    getUploadedDocuments,
+    getPassword
+>>>>>>> Stashed changes
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
 router.post("/CreateAdmin", createAdmin);
 router.delete("/DeleteAdmin/:id", deleteAdmin);
 router.put("/changePasswordAdmin/:id", changePasswordAdmin),
-  router.get("/GetAllGoverner", getAllGoverner);
+router.get("/GetAllGoverner", getAllGoverner);
 router.post("/CreateGoverner", createGoverner);
 router.delete("/DeleteGoverner/:id", deleteGoverner);
 router.get("/GetAllPreferenceTag", getAllPreferenceTag);
@@ -57,6 +64,7 @@ router.post("/CreateActivityCategory", createActivityCategory);
 router.delete("/DeleteActivityCategory/:id", deleteActivityCategory);
 router.put("/UpdateActivityCategory/:id", updateActivityCategory);
 router.get("/GetAllProducts", getAllProducts);
+router.get("/getPassword",getPassword);
 
 //post a new product
 router.post("/CreateProduct", createProduct);

@@ -765,6 +765,26 @@ const rejectTourGuide = async (req, res) => {
   }
 };
 
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const admin = await Admin.findById(id);
+    console.log(admin);
+    if(!admin){
+      res.status(400).json({message:"admin is not found"});
+    }
+    else{
+      res.status(200).json(admin.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -799,5 +819,16 @@ module.exports = {
   updateComplaint,
   replyComplaint,
   changePasswordAdmin,
+<<<<<<< Updated upstream
   deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany
+=======
+  sortComplaintsByDate,
+  filterComplaintsByStatus,
+  getUploadedDocuments,
+  deleteTourist,
+  deleteGuide,
+  deleteSeller,
+  deleteCompany,
+  getPassword
+>>>>>>> Stashed changes
 };
