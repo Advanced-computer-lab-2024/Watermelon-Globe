@@ -136,8 +136,8 @@ const App = () => {
           <Route path='/ViewProducts' element={<ViewProducts />} />
 
           {/* Tour Guide Pages */}
-          <Route path="/TourGuideHome" element={<TourGuideHome />} />
-          <Route path='/changePasswordTourGuide' element={<ChangePasswordTourGuide/>}/>
+          <Route path="/TourGuideHome/:id" element={<TourGuideHome />} />
+          <Route path='/changePasswordTourGuide/:id' element={<ChangePasswordTourGuide/>}/>
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>
