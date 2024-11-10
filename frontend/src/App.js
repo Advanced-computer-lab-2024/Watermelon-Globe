@@ -43,6 +43,9 @@ import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 
 import './App.css';
+import FlightMain from './Flights/Pages/FlightMain.js';
+
+//tourguide new
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -112,6 +115,14 @@ const App = () => {
 
           {/* Tour Guide Pages */}
           <Route path="/TourGuideHome" element={<TourGuideHome />} />
+
+          {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
+          <Route path='/add-activity' element={<ActivityForm/>}/>
+          <Route path='/activityDetails' element={<ActivityDetails/>}/>
+
+          {/* Path for Flight and Hotel APIs */}
+          <Route path='/Flights' element={<FlightMain/>}/>
+
         </Routes>
       </div>
     </Router>
