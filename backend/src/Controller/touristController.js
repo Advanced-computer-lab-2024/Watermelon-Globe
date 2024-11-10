@@ -449,11 +449,7 @@ module.exports = {
   sortProducts,
   buyProduct,
   getPurchasedProducts,
-<<<<<<< Updated upstream
-  requestDeletionTourist
-=======
   requestDeletionTourist,
-  getTouristComplaints,
+  // getTouristComplaints,
   getPassword
->>>>>>> Stashed changes
 };

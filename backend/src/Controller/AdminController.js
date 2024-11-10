@@ -819,16 +819,12 @@ module.exports = {
   updateComplaint,
   replyComplaint,
   changePasswordAdmin,
-<<<<<<< Updated upstream
-  deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany
-=======
-  sortComplaintsByDate,
-  filterComplaintsByStatus,
-  getUploadedDocuments,
+ 
+  
+ 
   deleteTourist,
   deleteGuide,
   deleteSeller,
   deleteCompany,
   getPassword
->>>>>>> Stashed changes
 };

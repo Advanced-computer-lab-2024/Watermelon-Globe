@@ -37,13 +37,10 @@ const {
     rejectAdvertiser,
     rejectSeller,
     rejectTourGuide,
-<<<<<<< Updated upstream
-=======
-    sortComplaintsByDate,
-    filterComplaintsByStatus,
-    getUploadedDocuments,
+    // sortComplaintsByDate,
+    // filterComplaintsByStatus,
+    // getUploadedDocuments,
     getPassword
->>>>>>> Stashed changes
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
