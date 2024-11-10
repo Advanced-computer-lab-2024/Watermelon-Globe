@@ -35,7 +35,7 @@ import SellerProduct from './Seller/pages/SellerProduct.js';
 // import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
-import ActivityDetails from './Components/ActivityDetails.jsx';
+
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
 import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
@@ -44,6 +44,8 @@ import ProductTourist from './Tourist/pages/ProductsTourist.js';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 import ItineraryDetails from './Tourist/pages/ItineraryDetails.js';
+import SiteDetails from './Tourist/pages/siteDetails.js';
+import ActivityDetails from './Tourist/pages/activityDetails.js';
 
 //tourguide new
 
@@ -135,13 +137,14 @@ const App = () => {
           <Route path="/advertiserHomePage" element={<HomeScreen/>}/>
           <Route path="/editAdvertiser" element={<EditProfilePage/>}/>
           <Route path="/editActivity/:id" element={<EditActivity/>}/>
-          <Route path='/activity/:id' element={<ActivityDetails/>}/>
+          <Route path='/activityDetails/:id' element={<ActivityDetails/>}/>
+          <Route path="/siteDetails/:id" element={<SiteDetails />} />
 
           <Route path="/TourGuideHome" element={<TourGuideHome />} />
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>
-          <Route path='/activityDetails' element={<ActivityDetails/>}/>
+          {/* <Route path='/activityDetails' element={<ActivityDetails/>}/> */}
 
         </Routes>
       </div>

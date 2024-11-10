@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
@@ -17,6 +18,7 @@ export default function ExploreActivities() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
   const activitiesScrollRef = useRef(null);
 
   useEffect(() => {
@@ -37,15 +39,12 @@ export default function ExploreActivities() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log('Fetched activities:', data);
       if (data && data.activities && Array.isArray(data.activities)) {
         setActivities(data.activities);
       } else {
-        console.error('Unexpected data structure:', data);
         setActivities([]);
       }
     } catch (error) {
-      console.error('Error fetching activities:', error);
       setError('Failed to fetch activities. Please try again later.');
       setActivities([]);
     } finally {
@@ -62,14 +61,12 @@ export default function ExploreActivities() {
       const data = await response.json();
       setPrefItinerary(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error('Error fetching tags:', error);
       setPrefItinerary([]);
     }
   };
 
   const filterActivities = () => {
     let filtered = [...activities];
-
     if (activitySearch) {
       filtered = filtered.filter(activity => 
         activity.Name && activity.Name.toLowerCase().includes(activitySearch.toLowerCase())
@@ -109,17 +106,8 @@ export default function ExploreActivities() {
     setFilteredActivities(filtered);
   };
 
-  const handlePrefAChange = (event) => {
-    setSelectedPrefActivity(event.target.value);
-  };
-
-  const resetFilters = () => {
-    setStartDateActivity(null);
-    setEndDateActivity(null);
-    setMinPriceActivity('');
-    setMaxPriceActivity('');
-    setActivitySearch('');
-    setSelectedPrefActivity('');
+  const handleActivityClick = (activityId) => {
+    navigate(`/activityDetails/${activityId}`);
   };
 
   return (
@@ -226,12 +214,16 @@ export default function ExploreActivities() {
 
       {isLoading && <p className="text-center text-gray-600">Loading activities...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
-      
+
       {!isLoading && !error && (
         <div className="relative">
           <div className="flex overflow-x-auto pb-4" ref={activitiesScrollRef}>
             {filteredActivities.map((activity) => (
-              <div key={activity._id} className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 overflow-hidden">
+              <div
+                key={activity._id}
+                className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 overflow-hidden cursor-pointer"
+                onClick={() => handleActivityClick(activity._id)}
+              >
                 <div className="h-48 overflow-hidden">
                   <img 
                     src={activity.image || '/placeholder.svg?height=200&width=300'} 
@@ -240,7 +232,9 @@ export default function ExploreActivities() {
                   />
                 </div>
                 <div className="p-4 h-64 overflow-y-auto">
-                  <h3 className="font-bold text-lg text-gray-800 mb-2 line-clamp-2">{activity.Name || 'Unnamed Activity'}</h3>
+                  <h3 className="font-bold text-lg text-gray-800 mb-2 line-clamp-2">
+                    {activity.Name || 'Unnamed Activity'}
+                  </h3>
                   <p className="text-sm text-gray-600 mb-2 line-clamp-2">
                     {activity.Location?.coordinates.join(', ') || 'Location not specified'}
                   </p>

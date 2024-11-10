@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './ItineraryDetails.css';
 
-
 const ItineraryDetails = () => {
     const { id } = useParams(); // Get the id from the URL
     const [itinerary, setItinerary] = useState(null); // State to hold itinerary data
@@ -24,6 +23,7 @@ const ItineraryDetails = () => {
             setLoading(false); // Set loading to false when done
         }
     };
+
     useEffect(() => {
         fetchItinerary();
     }, [id]);
@@ -48,10 +48,24 @@ const ItineraryDetails = () => {
             alert('Rating submitted successfully!');
         } catch (error) {
             console.error('Error submitting rating:', error);
-            
             alert('Failed to submit rating. Please try again.');
         }
         fetchItinerary();
+    };
+
+    // Share itinerary functionality
+    const handleShareLink = () => {
+        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${id}`;
+        navigator.clipboard.writeText(itineraryUrl)
+            .then(() => alert('Itinerary link copied to clipboard!'))
+            .catch(err => alert('Failed to copy link: ' + err));
+    };
+
+    const handleShareEmail = () => {
+        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${id}`;
+        const subject = encodeURIComponent('Check out this itinerary!');
+        const body = encodeURIComponent(`I thought you might be interested in this itinerary: ${itineraryUrl}`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
     };
 
     // Render the itinerary details
@@ -101,11 +115,11 @@ const ItineraryDetails = () => {
 
             <h3>Average Rating</h3>
             <p>{itinerary.rating}</p>
-            
+
             <h3>Rate this Itinerary</h3>
             <div className="rating-container">
                 {[1, 2, 3, 4, 5].map((star) => (
-                    <span 
+                    <span
                         key={star}
                         className={`star ${rating >= star ? 'filled' : ''}`}
                         onClick={() => setRating(star)}
@@ -115,6 +129,12 @@ const ItineraryDetails = () => {
                 ))}
             </div>
             <button onClick={handleRate} className="rate-button">Submit Rating</button>
+
+            {/* Share Button */}
+            <div className="share-buttons">
+                <button onClick={handleShareLink} className="share-button">Copy Link</button>
+                <button onClick={handleShareEmail} className="share-button">Share via Email</button>
+            </div>
         </div>
     );
 };

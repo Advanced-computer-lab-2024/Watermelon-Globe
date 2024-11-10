@@ -54,7 +54,7 @@ const ExploreTrips = () => {
 
   const fetchPref = async () => {
     try {
-      const response = await fetch('/api/Admin/PreferenceTag');
+      const response = await fetch('/api/Admin/GetAllPreferenceTag');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
