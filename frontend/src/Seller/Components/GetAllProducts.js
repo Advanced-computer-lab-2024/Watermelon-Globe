@@ -19,22 +19,36 @@ const GetAllProducts = () => {
 
   const formatPrice = (price) => {
     if (price && price.$numberDecimal) {
-      return parseFloat(price.$numberDecimal).toFixed(2); // Adjusting to a number and formatting it
+      return parseFloat(price.$numberDecimal).toFixed(2);
     }
-    return price; // Return as is if not an object
+    return price;
   };
 
   return (
     <div>
-      <h2>All Products</h2>
-      <div>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>All Products</h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+          gap: '20px',
+        }}
+      >
         {products.map((product) => (
-          <div key={product._id} className="product-details">
+          <div
+            key={product._id}
+            style={{
+              border: '1px solid #ccc',
+              borderRadius: '5px',
+              padding: '10px',
+              textAlign: 'center',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+            }}
+          >
             <h4>{product.name}</h4>
             <p>{product.description}</p>
             <p>Price: ${formatPrice(product.price)}</p>
             <p>Quantity: {product.quantity}</p>
-            {/* Add any other product details you want to display */}
           </div>
         ))}
       </div>
