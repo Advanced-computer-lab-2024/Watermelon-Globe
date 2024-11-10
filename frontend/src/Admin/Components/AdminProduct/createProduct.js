@@ -5,7 +5,7 @@ const CreateProduct = () => {
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [description, setDescription] = useState('');
-  const [seller, setSeller] = useState('');
+  const [seller, setSeller] = "6729244f151b6c9e346dd732";
   const [ratings, setRatings] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');

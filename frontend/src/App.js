@@ -29,7 +29,7 @@ import AdminHome from './Admin/pages/AdminHome.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './Seller/pages/SellerProduct.js';
+import SellerProduct from './Seller/pages/SellerProduct.jsx';
 import TouristProduct from './Tourist/pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';

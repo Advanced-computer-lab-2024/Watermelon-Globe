@@ -5,7 +5,7 @@ const CreateProduct = () => {
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [description, setDescription] = useState('');
-  const [seller, setSeller] = useState('');
+  const seller = "6729244f151b6c9e346dd732"; // Default seller ID
   const [ratings, setRatings] = useState('');
   const [sales, setSales] = useState('');
   const [picture, setPicture] = useState('');
@@ -21,7 +21,7 @@ const CreateProduct = () => {
       quantity, 
       picture, 
       description, 
-      seller, 
+      seller, // Use default seller ID
       ratings: ratings || 0, 
       sales: sales || 0 
     };
@@ -48,7 +48,6 @@ const CreateProduct = () => {
         setQuantity('');
         setPicture('');
         setDescription('');
-        setSeller('');
         setRatings('');
         setSales('');
       }
@@ -75,9 +74,6 @@ const CreateProduct = () => {
         <label>Description:</label>
         <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
 
-        <label>Seller:</label>
-        <input type="text" value={seller} onChange={(e) => setSeller(e.target.value)} required />
-
         <label>Ratings:</label>
         <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
 
@@ -94,4 +90,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default CreateProduct;
