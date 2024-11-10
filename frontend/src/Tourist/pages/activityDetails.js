@@ -6,18 +6,21 @@ const ActivityDetails = () => {
   const [activity, setActivity] = useState(null);
 
   useEffect(() => {
-    const fetchActivityDetails = async () => {
-      try {
-        const response = await fetch(`/api/Activities/getActivityById/${activityId}`);
-        const data = await response.json();
-        setActivity(data);
-      } catch (error) {
-        console.error('Error fetching activity details:', error);
-      }
-    };
-
-    fetchActivityDetails();
+    if (activityId) {
+      const fetchActivityDetails = async () => {
+        try {
+          const response = await fetch(`/api/Activities/getActivityById/${activityId}`);
+          const data = await response.json();
+          setActivity(data);
+        } catch (error) {
+          console.error('Error fetching activity details:', error);
+        }
+      };
+  
+      fetchActivityDetails();
+    }
   }, [activityId]);
+  
 
   if (!activity) {
     return <p>Loading activity details...</p>;
@@ -39,24 +42,30 @@ const ActivityDetails = () => {
   };
 
   return (
-    <section className="container mx-auto px-4 py-12 bg-gray-50">
-      <h2 className="text-3xl font-bold mb-6">{activity.Name}</h2>
-      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-        {activity.Location?.coordinates ? activity.Location.coordinates.join(', ') : 'Location not specified'}
-      </p>
-      <p className="text-gray-600 mb-4">Price: ${activity.Price}</p>
-      <p className="text-gray-600 mb-4">Discount: {activity.Discount}%</p>
-      <p className="text-gray-600 mb-4">Date: {new Date(activity.Date).toLocaleDateString()}</p>
-      <p className="text-gray-600 mb-4">Time: {activity.Time}</p>
-      <p className="text-gray-600">{activity.Description}</p>
+  <section className="container mx-auto px-4 py-12 bg-gray-50">
+    {activity ? (
+      <>
+        <h2 className="text-3xl font-bold mb-6">{activity.Name}</h2>
+        <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+          {activity.Location?.coordinates ? activity.Location.coordinates.join(', ') : 'Location not specified'}
+        </p>
+        <p className="text-gray-600 mb-4">Price: ${activity.Price}</p>
+        <p className="text-gray-600 mb-4">Discount: {activity.Discount}%</p>
+        <p className="text-gray-600 mb-4">Date: {new Date(activity.Date).toLocaleDateString()}</p>
+        <p className="text-gray-600 mb-4">Time: {activity.Time}</p>
+        <p className="text-gray-600">{activity.Description}</p>
 
-      {/* Share Buttons */}
-      <div className="share-buttons mt-6">
-        <button onClick={handleShareLink} className="share-button mr-4">Copy Link</button>
-        <button onClick={handleShareEmail} className="share-button">Share via Email</button>
-      </div>
-    </section>
-  );
+        {/* Share Buttons */}
+        <div className="share-buttons mt-6">
+          <button onClick={handleShareLink} className="share-button mr-4">Copy Link</button>
+          <button onClick={handleShareEmail} className="share-button">Share via Email</button>
+        </div>
+      </>
+    ) : (
+      <p>Loading activity details...</p>
+    )}
+  </section>
+);
 };
 
 export default ActivityDetails;
