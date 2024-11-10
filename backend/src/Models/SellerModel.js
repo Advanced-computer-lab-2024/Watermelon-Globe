@@ -14,7 +14,7 @@ const sellerSchema = new Schema(
     },
     Description: {
       type: String,
-      required: true,
+      required: false,
     },
     idProof: {
       type: String,
@@ -41,7 +41,11 @@ const sellerSchema = new Schema(
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
       default: null,
-  },
+    },
+    Logo: {
+        type: String,
+        required: false,
+    }
   },
   { timestamps: true }
 );

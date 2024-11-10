@@ -32,9 +32,13 @@ const advertiserSchema = new Schema(
       type: String,
       required: false,
     },
+    Logo: {
+      type: String,
+      required: false,
+    }
   },
   { timestamps: true }
 );
 
-const Advertiser = mongoose.model('Advertiser', advertiserSchema);
+const Advertiser = mongoose.models.Advertiser || mongoose.model('Advertiser', advertiserSchema);
 module.exports = Advertiser;

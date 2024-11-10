@@ -22,7 +22,7 @@ import TouristPage from './TouristPage.js';
 import SellerPage from './SellerPage.js';
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Components/CompanyHomepage.jsx';
+import CompanyHomepage from './Advertiser/Components/CompanyHomepage.jsx';
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ViewProducts from './Guest/pages/ViewProducts.js';
 
@@ -35,14 +35,16 @@ import SellerProduct from './Seller/pages/SellerProduct.js';
 // import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
-import ActivityDetails from './Components/ActivityDetails.jsx';
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
+import HomeScreen from './Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
-import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import ProductTourist from './Tourist/pages/ProductsTourist.js';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+
+//activities
+import ActivityDetails from './Components/ActivityDetails.jsx';
+import EditActivity from './Advertiser/Components/EditActivity.jsx';
 
 //tourguide new
 
