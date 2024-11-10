@@ -20,6 +20,9 @@ const AdminHome = () => {
         <Link to="/AdminProduct">
           <button className="admin-button">Products</button>
         </Link>
+        <Link to="/Complaint">
+          <button className="admin-button">View Complaints</button>
+        </Link>
       </div>
     </div>
   );

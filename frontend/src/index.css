@@ -240,5 +240,113 @@ input.error {
 
 
 
+.complaint-page {
+  display: flex;
+  gap: 20px; /* Space between the complaint list and description */
+}
+
+.complaint-list {
+  flex: 1;
+  max-width: 50%; /* Take up 50% of the screen */
+}
+
+.complaint-description {
+  flex: 1;
+  max-width: 70%; /* Take up 50% of the screen */
+  padding: 20px;
+  border-left: 1px solid #ccc;.reply-section {
+    margin-top: 20px;
+}
+
+.reply-section h4 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.reply-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.reply-section button {
+    background: var(--primary);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.reply-section .error {
+    color: var(--error);
+    margin-bottom: 10px;
+}
+
+.reply-section .success {
+    color: green;
+    margin-bottom: 10px;
+}
+}
+
+/* Slider switch styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-left: 20px;
+}
+
+.switch input {
+  opacity: 0; /* Hide the default checkbox */
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px; /* Rounded corners for the slider */
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%; /* Circular shape for the knob */
+}
+
+/* Checked state styles */
+input:checked + .slider {
+  background-color: #4CAF50; /* Green background for the active slider */
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px); /* Move the knob to the right when checked */
+}
+
+/* Additional styles for pending/resolved text */
+.status-update {
+  display: flex;
+  align-items: center;
+  margin-top: 50px;
+}
+
+
+
 
 
