@@ -16,7 +16,9 @@ const {
     getPurchasedProducts,
     getTouristComplaints,
     getPassword,
-    bookFlight
+    bookFlight,
+    redeemPoints,
+    addPoints
     
   } = require("../Controller/touristController");
   
@@ -61,5 +63,8 @@ router.post("/bookFlight/:touristId" , bookFlight);
   
 
 router.get("/myComplaints/:touristId", getTouristComplaints);
+
+router.put("/redeemPoints/:id",redeemPoints);
+router.put("/addPoints/:id",addPoints);
 
   module.exports = router;

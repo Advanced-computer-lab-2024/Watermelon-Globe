@@ -41,7 +41,8 @@ const ExploreTrips = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setItineraries(data);
+      const appropriateItinerary = data.filter(itineraries => !itineraries.inappropriate);
+      setItineraries(appropriateItinerary);
     } catch (error) {
       console.error('Error fetching trips:', error);
       setError('Failed to fetch trips. Please try again later.');
@@ -137,7 +138,7 @@ const ExploreTrips = () => {
   };
 
   const handleTripClick = (tripId) => {
-    navigate('/tourist-signup');
+    navigate(`/itineraryDetails/${tripId}`);
   };
 
   return (

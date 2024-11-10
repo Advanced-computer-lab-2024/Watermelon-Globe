@@ -16,7 +16,11 @@ const {
   acceptTermsAndConditions,
   getProductById,
   getProductReviews,
-  getPassword
+  getPassword,
+  getQuantity,
+  archiveProduct,
+  unarchiveProduct,
+  getProductImageByName
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -73,3 +77,17 @@ router.post("/getProductById",getProductById);
 router.get("/getProductReviews/:productId",getProductReviews);
 
 module.exports = router
+//archive a product
+router.put('/archiveProduct', archiveProduct)
+
+//unarchive a product
+router.put('/unarchiveProduct', unarchiveProduct)
+
+//upload product image
+router.get('/uploadImage',getProductImageByName)
+
+
+// view product's available quantity
+router.get('/getQuantity',getQuantity);
+
+module.exports = router;

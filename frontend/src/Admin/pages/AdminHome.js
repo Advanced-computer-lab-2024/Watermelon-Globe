@@ -21,6 +21,12 @@ const AdminHome = () => {
         </Link>
         <Link to="/ChangePasswordAdmin">
           <button className="admin-button">Change Password</button>
+          </Link>
+        <Link to="/Complaint">
+          <button className="admin-button">View Complaints</button>
+        </Link>
+        <Link to="/AdminViewItinerary">
+          <button className="admin-button">View Itineraries</button>
         </Link>
       </div>
     </div>
