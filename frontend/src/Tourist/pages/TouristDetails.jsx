@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { User, Mail, Phone, Flag, Calendar, Briefcase, DollarSign, Edit2, Check, X } from 'lucide-react';
+import { User, Mail, Phone, Flag, Calendar, Briefcase, DollarSign, Edit2, Check, X, Gift } from 'lucide-react';
 
-const TouristDetails = () => {
+export default function TouristDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     
     const [tourist, setTourist] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [showRedeemModal, setShowRedeemModal] = useState(false);
+    const [pointsToRedeem, setPointsToRedeem] = useState('');
     const [formData, setFormData] = useState({
         email: '',
         mobileNumber: '',
@@ -78,6 +80,21 @@ const TouristDetails = () => {
         });
     };
 
+    const handleRedeemPoints = async () => {
+        try {
+            const response = await axios.put(`/api/Tourist/redeemPoints/${id}`, { pointsToRedeem: Number(pointsToRedeem) });
+            alert(response.data.message);
+            const updatedData = await fetch(`/api/Tourist/getTourist/${id}`);
+            const newTouristData = await updatedData.json();
+            setTourist(newTouristData);
+            setShowRedeemModal(false);
+            setPointsToRedeem('');
+        } catch (error) {
+            console.error('Error redeeming points:', error);
+            alert(error.response?.data?.error || 'Failed to redeem points. Please try again.');
+        }
+    };
+
     if (!tourist) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#FFE4E1' }}>
@@ -102,7 +119,7 @@ const TouristDetails = () => {
                         <h3 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{tourist.username}</h3>
                         <p style={{ color: '#666', marginBottom: '1rem' }}>Member since {new Date(tourist.createdAt).toLocaleDateString()}</p>
                         
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
                             <div>
                                 <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', color: '#4CAF50' }}>
                                     <Mail style={{ marginRight: '0.5rem' }} size={16} />
@@ -167,13 +184,15 @@ const TouristDetails = () => {
                                     Status:
                                 </label>
                                 {isEditing ? (
-                                    <input
-                                        type="text"
+                                    <select
                                         name="status"
                                         value={formData.status}
                                         onChange={handleInputChange}
                                         style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
-                                    />
+                                    >
+                                        <option value="student">Student</option>
+                                        <option value="job">Job</option>
+                                    </select>
                                 ) : (
                                     <p>{tourist.status}</p>
                                 )}
@@ -184,6 +203,13 @@ const TouristDetails = () => {
                                     Wallet Balance:
                                 </label>
                                 <p>${tourist.wallet.toFixed(2)}</p>
+                            </div>
+                            <div>
+                                <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', color: '#4CAF50' }}>
+                                    <Gift style={{ marginRight: '0.5rem' }} size={16} />
+                                    Points:
+                                </label>
+                                <p>{tourist.points}</p>
                             </div>
                         </div>
                         <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
@@ -224,27 +250,109 @@ const TouristDetails = () => {
                                     </button>
                                 </>
                             ) : (
-                                <button
-                                    onClick={handleUpdate}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        padding: '0.5rem 1rem',
-                                        backgroundColor: '#4CAF50',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <Edit2 style={{ marginRight: '0.5rem' }} size={18} />
-                                    Update
-                                </button>
+                                <>
+                                    <button
+                                        onClick={handleUpdate}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            padding: '0.5rem 1rem',
+                                            backgroundColor: '#4CAF50',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            marginRight: '1rem',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <Edit2 style={{ marginRight: '0.5rem' }} size={18} />
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() => setShowRedeemModal(true)}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            padding: '0.5rem 1rem',
+                                            backgroundColor: '#4CAF50',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <Gift style={{ marginRight: '0.5rem' }} size={18} />
+                                        Redeem Points
+                                    </button>
+                                </>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
+            {showRedeemModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <div style={{
+                        backgroundColor: 'white',
+                        padding: '2rem',
+                        borderRadius: '10px',
+                        width: '300px'
+                    }}>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Redeem Points</h3>
+                        <input
+                            type="number"
+                            value={pointsToRedeem}
+                            onChange={(e) => setPointsToRedeem(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                border: '1px solid #ccc',
+                                borderRadius: '4px',
+                                marginBottom: '1rem'
+                            }}
+                            placeholder="Enter points to redeem"
+                        />
+                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <button
+                                onClick={() => setShowRedeemModal(false)}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#ccc',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    marginRight: '1rem',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleRedeemPoints}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#4CAF50',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <style jsx>{`
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
@@ -253,6 +361,4 @@ const TouristDetails = () => {
             `}</style>
         </div>
     );
-};
-
-export default TouristDetails;
+}
