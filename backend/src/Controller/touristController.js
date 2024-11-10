@@ -397,10 +397,6 @@ const getPurchasedProducts = async (req, res) => {
   }
 };
 
-
-
-
-
 const requestDeletionTourist = async (req, res) => {
   try {
       const { id } = req.params;

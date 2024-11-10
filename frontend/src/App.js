@@ -14,7 +14,7 @@ import CompanyHomepage from './Components/CompanyHomepage.jsx';
 import TouristPage from './TouristPage.js';
 import SellerPage from './SellerPage.js';
 
-import TouristDetails from "./pages/TouristDetails.js";
+import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
