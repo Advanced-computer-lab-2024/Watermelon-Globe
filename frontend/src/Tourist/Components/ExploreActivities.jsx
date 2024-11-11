@@ -1,12 +1,20 @@
-
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-
-import axios from 'axios';
-import { Search, Calendar, DollarSign, Tag, Filter, RefreshCw } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import {
+  Search,
+  Calendar,
+  DollarSign,
+  Tag,
+  Filter,
+  RefreshCw,
+} from "lucide-react";
 
 export default function ExploreActivities() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [activities, setActivities] = useState([]);
   const [filteredActivities, setFilteredActivities] = useState([]);
   const [activitySearch, setActivitySearch] = useState('');
@@ -19,7 +27,6 @@ export default function ExploreActivities() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate();
   const activitiesScrollRef = useRef(null);
 
   useEffect(() => {
@@ -44,6 +51,10 @@ export default function ExploreActivities() {
     filterActivities();
   }, [activities, activitySearch, startDateActivity, endDateActivity, minPriceActivity, maxPriceActivity, selectedPrefActivity]);
 
+  const handleActivityClick = (activityId) => {
+    navigate(`/TouristActivityDetails/${activityId}/${id}`);
+  };
+
   const fetchActivities = async () => {
     setIsLoading(true);
     setError(null);
@@ -55,12 +66,15 @@ export default function ExploreActivities() {
       const data = await response.json();
       if (data && data.activities && Array.isArray(data.activities)) {
         setActivities(data.activities);
+        setFilteredActivities(data.activities);
       } else {
         setActivities([]);
+        setFilteredActivities([]);
       }
     } catch (error) {
       setError('Failed to fetch activities. Please try again later.');
       setActivities([]);
+      setFilteredActivities([]);
     } finally {
       setIsLoading(false);
     }
@@ -120,9 +134,13 @@ export default function ExploreActivities() {
     setFilteredActivities(filtered);
   };
 
-  const handleActivityClick = (activityId) => {
-    navigate(`/activityDetails/${activityId}`);
+
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
   };
+
+
 
   return (
     <section className="container mx-auto px-4 py-12 bg-gray-50">
@@ -265,7 +283,7 @@ export default function ExploreActivities() {
                   )}
                   {activity.Discount > 0 && (
                     <p className="text-sm text-green-600 font-semibold">
-                      Discount: {activity.Discount}% OFF
+                      Discount: {activity.Discount}% hohohoOFF
                     </p>
                   )}
                 </div>

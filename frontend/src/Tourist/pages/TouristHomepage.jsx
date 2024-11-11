@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import {Link, useParams, useNavigate } from 'react-router-dom';
-import profileIcon from '../../Assets/Profile.png';
-import '../pages/styles.css';
-import Navbar from '../../pages/Navbar.jsx';
-import ExploreTrips from '../Components/ExploreTrips.jsx';
-import ExploreActivities from '../Components/ExploreActivities.jsx';
-import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
+import React, { useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import profileIcon from "../../Assets/Profile.png";
+import "../pages/styles.css";
+import Navbar from "../../pages/Navbar.jsx";
+import ExploreTrips from "../Components/ExploreTrips.jsx";
+import ExploreActivities from "../Components/ExploreActivities.jsx";
+import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 
 const TouristHomePage = () => {
   const { id } = useParams();
@@ -60,30 +60,17 @@ const TouristHomePage = () => {
             </div>
             <div className="flex items-center space-x-2">
               <button className="px-4 py-1 border rounded">EN</button>
-              <Link to="/account" className="AccountLink">
-                <img
-                  className="profileIcon"
-                  src={profileIcon}
-                  alt="Profile Icon"
-                  style={{ width: "30px", height: "30px" }}
-                />
-              </Link>
-              <Link to="/edit-profile">
-                <button className="editProfile px-4 py-1 border rounded">
-                  Edit Profile
-                </button>
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-1 border rounded"
-              >
-                Sign Out
-              </button>
-              <button
-                onClick={handleViewDetails}
+              <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
+              <button 
+                onClick={handleViewDetails} 
                 className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-              >
-                View Details
+              ><img
+              className="profileIcon"
+              src={profileIcon}
+              alt="Profile Icon"
+              style={{ width: '20px', height: '20px', bg: 'blue'}}
+            />
+                View Profile
               </button>
             </div>
           </div>

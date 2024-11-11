@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import SellerLogo from './SellerLogo';
+
 const ViewProfile = () => {
   const [sellerId, setSellerId] = useState(''); // State to store the input seller ID
   const [seller, setSeller] = useState(null); // State to store seller data
@@ -147,6 +149,7 @@ const ViewProfile = () => {
           >
             Delete Account
           </button>
+          <SellerLogo id={seller._id}/>
         </div>
       )}
 

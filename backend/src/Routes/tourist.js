@@ -25,7 +25,9 @@ const {
     BookedItineraries,
     updateLoyaltyPoints,
     getHotelBookingsByTouristId,
-    getFlightBookingsByTouristId
+    getFlightBookingsByTouristId,
+    deleteActivity,
+    deleteItinerary,
     
   } = require("../Controller/touristController");
   
@@ -87,5 +89,8 @@ router.get('/BookedItineraries/:id/',BookedItineraries);
 
 
 router.put('/updateLoyaltyPoints/:id',updateLoyaltyPoints)
+
+router.delete('/deleteActivity/:touristId/:activityId', deleteActivity);
+router.delete('/deleteItinerary/:touristId/:itineraryId', deleteItinerary);
 
 module.exports = router;

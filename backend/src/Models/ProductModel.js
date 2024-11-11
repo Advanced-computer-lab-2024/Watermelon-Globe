@@ -15,10 +15,6 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
-    // picture: {
-    //     type: String, // URL or file path for the product image
-    //     required: true
-    // },
     description: {
         type: String, // Product description
         required: true
@@ -40,7 +36,7 @@ const productSchema = new Schema({
 
     picture: {
     type: String, // URL or file path for the product image
-    required: true
+    required:false
     },
 
     rating: { type: Number, required: false },

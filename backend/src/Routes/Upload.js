@@ -57,11 +57,11 @@ router.post(
         }
 
         if (files.idProof) {
-            tourGuide.idProof = files.idProof[0].path;
+            tourGuide.idProof = files.idProof[0].filename;
         }
 
         if (files.certificates) {
-            tourGuide.certificates = files.certificates.map((file) => file.path);
+            tourGuide.certificates = files.certificates.map((file) => file.filename);
         }
 
         await tourGuide.save();
@@ -88,11 +88,11 @@ router.post(
 
         const updateData = {};
         if (files.idProof) {
-            updateData.idProof = files.idProof[0].path;
+            updateData.idProof = files.idProof[0].filename;
         }
 
         if (files.taxationRegistryCard) {
-            updateData.taxationRegistryCard = files.taxationRegistryCard[0].path;
+            updateData.taxationRegistryCard = files.taxationRegistryCard[0].filename;
         }
 
         if (Object.keys(updateData).length === 0) {
@@ -128,11 +128,11 @@ router.post(
             const files = req.files;
             const updateData = {};
             if (files.idProof) {
-                updateData.idProof = files.idProof[0].path;
+                updateData.idProof = files.idProof[0].filename;
             }
 
             if (files.taxationRegistryCard) {
-                updateData.taxationRegistryCard = files.taxationRegistryCard[0].path;
+                updateData.taxationRegistryCard = files.taxationRegistryCard[0].filename;
             }
 
             if (Object.keys(updateData).length === 0) {
@@ -169,7 +169,7 @@ router.post(
       }
 
       // Save profile picture path
-      advertiser.profilePicture = req.file ? req.file.path : null;
+      advertiser.profilePicture = req.file ? req.file.filename : null;
       await advertiser.save();
 
       res.status(200).json({
@@ -197,7 +197,7 @@ router.post(
             }
     
             // Save logo path
-            advertiser.Logo = req.file ? req.file.path : null;
+            advertiser.Logo = req.file ? req.file.filename : null;
             await advertiser.save();
     
             res.status(200).json({
@@ -225,7 +225,7 @@ router.post(
             }
     
             // Save logo path
-            seller.Logo = req.file ? req.file.path : null;
+            seller.Logo = req.file ? req.file.filename : null;
             await seller.save();
     
             res.status(200).json({
@@ -242,29 +242,30 @@ router.post(
 //Photo upload for tour guide
 router.post(
     "/upload/tourGuidePhoto/:tourGuideId",
-    upload.single("photo"),
+    upload.single("photo"), // multer middleware for file upload
     async (req, res) => {
-        try {
-            const tourGuideId = req.params.tourGuideId;
-            const tourguide = await tourGuideUpload.findById(tourGuideId);
-    
-            if (!tourguide) {
-            return res.status(404).json({ message: "Tour guide not found" });
-            }
-    
-            // Save logo path
-            tourguide.photo = req.file ? req.file.path : null;
-            await tourguide.save();
-    
-            res.status(200).json({
-            message: "Photo uploaded successfully",
-            Photo: tourguide.photo,
-            });
-        } catch (error) {
-            console.error("Error uploading photo:", error);
-            res.status(500).json({ message: "Photo upload failed", error });
+      try {
+        const tourGuideId = req.params.tourGuideId;
+        const tourguide = await tourGuideUpload.findById(tourGuideId);
+  
+        if (!tourguide) {
+          return res.status(404).json({ message: "Tour guide not found" });
         }
+  
+        // Save the filename to the database (not the full path)
+        tourguide.photo = req.file ? req.file.filename : null; // Ensure filename is saved
+        await tourguide.save();
+  
+        res.status(200).json({
+          message: "Photo uploaded successfully",
+          Photo: tourguide.photo, // Return the filename, e.g., 'profile.jpg'
+        });
+      } catch (error) {
+        console.error("Error uploading photo:", error);
+        res.status(500).json({ message: "Photo upload failed", error });
+      }
     }
-);
+  );
+  
 
 module.exports = router;

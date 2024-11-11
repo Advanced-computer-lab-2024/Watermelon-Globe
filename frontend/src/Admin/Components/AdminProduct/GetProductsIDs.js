@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-const GetAllProducts = () => {
+const ProductNamesAndIds = () => {
   const [products, setProducts] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductNamesAndIds = async () => {
       try {
-        const response = await fetch('/api/Seller/getQuantity');
+        const response = await fetch('/api/Admin/GetProductsIDs');
 
         if (!response.ok) {
-          throw new Error('Failed to fetch products');
+          throw new Error('Failed to fetch product names and IDs');
         }
 
         const data = await response.json();
@@ -20,19 +20,19 @@ const GetAllProducts = () => {
       }
     };
 
-    fetchProducts();
+    fetchProductNamesAndIds();
   }, []);
 
   return (
     <div>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>All Products</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Product Names and IDs</h2>
 
       {errorMessage && <p style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</p>}
 
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)', // 4 products per row
+          gridTemplateColumns: 'repeat(4, 1fr)', // Adjusted for 4 products per row
           gap: '20px',
           padding: '10px',
         }}
@@ -49,8 +49,7 @@ const GetAllProducts = () => {
             }}
           >
             <h4>{product.name}</h4>
-            <p>Quantity: {product.quantity}</p>
-            <p>Sales: {product.sales}</p>
+            <p>ID: {product._id}</p>
           </div>
         ))}
       </div>
@@ -58,4 +57,4 @@ const GetAllProducts = () => {
   );
 };
 
-export default GetAllProducts;
+export default ProductNamesAndIds;

@@ -30,8 +30,9 @@ const GetAllProducts = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
+          gridTemplateColumns: 'repeat(4, 1fr)', // 4 products per row
           gap: '20px',
+          padding: '10px',
         }}
       >
         {products.map((product) => (
@@ -45,8 +46,15 @@ const GetAllProducts = () => {
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <h4>{product.name}</h4>
-            <p>{product.description}</p>
+            {product.picture && (
+              <img
+                src={product.picture}
+                alt={`Image of ${product.name}`}
+                style={{ width: '100%', height: 'auto', marginBottom: '10px' }}
+              />
+            )}
+            <h4>Name: {product.name}</h4>
+            <p>Description: {product.description}</p>
             <p>Price: ${formatPrice(product.price)}</p>
             <p>Quantity: {product.quantity}</p>
           </div>
@@ -56,4 +64,4 @@ const GetAllProducts = () => {
   );
 };
 
-export default GetAllProducts;
+export default GetAllProducts;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 // Import your existing components
 import GetAllProducts from '../Components/GetAllProducts';
+import GetProductsIDs from '../Components/GetProductsIDs';
 import CreateProduct from '../Components/createProduct';
 import SearchProductByName from '../Components/SearchProductByName';
 import ViewProductSales_AvailableQuantity from '../Components/ViewAvailableQuantity';
@@ -20,6 +21,7 @@ const id = "6729244f151b6c9e346dd732";
 
 const menuItems = [
   { id: 'allProducts', label: 'View All Products' },
+  { id: 'GetProductsIDs', label: 'Get All Products IDs'},
   { id: 'createProduct', label: 'Create New Product' },
   { id: 'searchProductByName', label: 'Search Product by Name' },
   { id: 'viewAvailableQuantity', label: 'View Sales & Available Quantity' },
@@ -45,8 +47,10 @@ function SellerProduct() {
       <div style={{ padding: '20px', backgroundColor: '#ffffff', borderRadius: '5px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
         {(() => {
           switch (selectedOption) {
-            case 'allProducts':
+            case 'allProducts': 
               return <GetAllProducts/>;
+            case 'GetProductsIDs':
+              return <GetProductsIDs/>;
             case 'createProduct':
               return <CreateProduct />;
             case 'searchProductByName':

@@ -1,13 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-
-import axios from 'axios';
-import { Search, Calendar, DollarSign, Globe, Tag, Filter, RefreshCw, SortAsc } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import {
+  Search,
+  Calendar,
+  DollarSign,
+  Globe,
+  Tag,
+  Filter,
+  RefreshCw,
+  SortAsc,
+} from "lucide-react";
 
 const ExploreTrips = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [itineraries, setItineraries] = useState([]);
   const [filteredItineraries, setFilteredItineraries] = useState([]);
   const [tripSearch, setTripSearch] = useState("");
@@ -29,20 +38,6 @@ const ExploreTrips = () => {
     fetchPref();
   }, []);
 
-  useEffect(() => {
-    filterAndSortItineraries();
-  }, [
-    itineraries,
-    tripSearch,
-    tripSort,
-    startDate,
-    endDate,
-    minPrice,
-    maxPrice,
-    languageOfTour,
-    selectedPrefItinerary,
-  ]);
-
   const fetchTrips = async () => {
     setIsLoading(true);
     setError(null);
@@ -57,10 +52,12 @@ const ExploreTrips = () => {
         (itineraries) => !itineraries.inappropriate
       );
       setItineraries(appropriateItinerary);
+      setFilteredItineraries(appropriateItinerary);
     } catch (error) {
       console.error("Error fetching trips:", error);
       setError("Failed to fetch trips. Please try again later.");
       setItineraries([]);
+      setFilteredItineraries([]);
     } finally {
       setIsLoading(false);
     }
@@ -68,86 +65,58 @@ const ExploreTrips = () => {
 
   const fetchPref = async () => {
     try {
-      const response = await fetch("/api/Admin/GetAllPreferenceTag");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setPrefItinerary(data);
+      const response = await axios.get("/api/Admin/GetAllPreferenceTag");
+      setPrefItinerary(response.data);
     } catch (error) {
       console.error("Error fetching tags:", error);
       setPrefItinerary([]);
     }
   };
 
-  const filterAndSortItineraries = () => {
-    let filtered = [...itineraries];
+  const applyFilters = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      let filterUrl = "/api/filter/itineraryFilter?";
+      
+      if (startDate) filterUrl += `startDate=${startDate.toISOString()}&`;
+      if (endDate) filterUrl += `endDate=${endDate.toISOString()}&`;
+      if (minPrice) filterUrl += `minPrice=${minPrice}&`;
+      if (maxPrice) filterUrl += `maxPrice=${maxPrice}&`;
+      if (languageOfTour) filterUrl += `language=${languageOfTour}&`;
+      if (selectedPrefItinerary && selectedPrefItinerary !== "all") 
+        filterUrl += `preferenceTag=${selectedPrefItinerary}&`;
 
-    if (tripSearch) {
-      filtered = filtered.filter(
-        (trip) =>
-          trip.name &&
-          trip.name.toLowerCase().includes(tripSearch.toLowerCase())
-      );
+      const response = await axios.get(filterUrl);
+      setFilteredItineraries(response.data);
+    } catch (error) {
+      console.error("Error applying filters:", error);
+      setError("Failed to apply filters. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    if (startDate) {
-      filtered = filtered.filter(
-        (trip) => trip.startDate && new Date(trip.startDate) >= startDate
-      );
+  const applySort = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      let sortUrl = "/api/sort/sortByPrice?";
+      if (tripSort === "priceAsc" || tripSort === "priceDesc") {
+        sortUrl += `order=${tripSort === "priceAsc" ? "asc" : "desc"}`;
+      } else if (tripSort === "ratingAsc" || tripSort === "ratingDesc") {
+        sortUrl = "/api/sortByRating?";
+        sortUrl += `order=${tripSort === "ratingAsc" ? "asc" : "desc"}`;
+      }
+
+      const response = await axios.get(sortUrl);
+      setFilteredItineraries(response.data);
+    } catch (error) {
+      console.error("Error applying sort:", error);
+      setError("Failed to apply sorting. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-
-    if (endDate) {
-      filtered = filtered.filter(
-        (trip) => trip.endDate && new Date(trip.endDate) <= endDate
-      );
-    }
-
-    if (minPrice) {
-      filtered = filtered.filter(
-        (trip) =>
-          trip.priceOfTour &&
-          parseFloat(trip.priceOfTour) >= parseFloat(minPrice)
-      );
-    }
-
-    if (maxPrice) {
-      filtered = filtered.filter(
-        (trip) =>
-          trip.priceOfTour &&
-          parseFloat(trip.priceOfTour) <= parseFloat(maxPrice)
-      );
-    }
-
-    if (languageOfTour) {
-      filtered = filtered.filter(
-        (trip) =>
-          trip.languageOfTour &&
-          trip.languageOfTour
-            .toLowerCase()
-            .includes(languageOfTour.toLowerCase())
-      );
-    }
-
-    if (selectedPrefItinerary && selectedPrefItinerary !== "all") {
-      filtered = filtered.filter(
-        (trip) =>
-          trip.PreferenceTag &&
-          trip.PreferenceTag.includes(selectedPrefItinerary)
-      );
-    }
-
-    filtered.sort((a, b) => {
-      if (tripSort === "priceAsc")
-        return (a.priceOfTour || 0) - (b.priceOfTour || 0);
-      if (tripSort === "priceDesc")
-        return (b.priceOfTour || 0) - (a.priceOfTour || 0);
-      if (tripSort === "ratingAsc") return (a.rating || 0) - (b.rating || 0);
-      if (tripSort === "ratingDesc") return (b.rating || 0) - (a.rating || 0);
-      return 0;
-    });
-
-    setFilteredItineraries(filtered);
   };
 
   const handlePrefIChange = (event) => {
@@ -163,10 +132,22 @@ const ExploreTrips = () => {
     setTripSearch("");
     setTripSort("");
     setSelectedPrefItinerary("");
+    setFilteredItineraries(itineraries);
   };
 
   const handleTripClick = (tripId) => {
-    navigate(`/ItineraryDetails/${tripId}`);
+    // navigate(`/ItineraryDetails/${tripId}`);////////////////////////////
+    navigate(`/itineraryDetails/${tripId}/${id}`);
+  };
+
+  const handleSearch = (e) => {
+    setTripSearch(e.target.value);
+    const searchResults = itineraries.filter(
+      (trip) =>
+        trip.name &&
+        trip.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setFilteredItineraries(searchResults);
   };
 
   return (
@@ -183,7 +164,7 @@ const ExploreTrips = () => {
             placeholder="Search trips"
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={tripSearch}
-            onChange={(e) => setTripSearch(e.target.value)}
+            onChange={handleSearch}
           />
         </div>
 
@@ -288,7 +269,10 @@ const ExploreTrips = () => {
               <select
                 className="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={tripSort}
-                onChange={(e) => setTripSort(e.target.value)}
+                onChange={(e) => {
+                  setTripSort(e.target.value);
+                  applySort();
+                }}
               >
                 <option value="">Select sorting</option>
                 <option value="priceAsc">Price: Low to High</option>
@@ -320,7 +304,7 @@ const ExploreTrips = () => {
         <div className="flex justify-end space-x-4">
           <button
             className="flex items-center px-4 py-2 bg-gray-200 text-gray rounded-md hover:bg-blue-600 transition duration-300"
-            onClick={filterAndSortItineraries}
+            onClick={applyFilters}
           >
             <Filter className="mr-2" size={16} />
             Apply Filters
