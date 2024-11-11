@@ -6,7 +6,7 @@ const { createActivity, getActivities, getActivityById, updateActivity, deleteAc
 
 router.post('/newActivity', createActivity); //duplicate
 router.get('/activities', getActivities); //duplicate
-router.get('/activities/:id', getActivityById);
+router.get('/getActivityById/:id', getActivityById);
 router.post("/addActivity",createActivity); //duplicate
 router.put("/updateActivityRating/:id",updateActivityRating); 
 router.put('/updateActivity/:id', updateActivity);

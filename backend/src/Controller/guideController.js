@@ -542,7 +542,7 @@ const requestDeletionGuide = async (req, res) => {
       const { id } = req.params;
 
       // Find the guide by ID and update the deletionRequest to "Pending"
-      const guide = await TourGuide.findByIdAndUpdate(
+      const guide = await tourGuide.findByIdAndUpdate(
           id,
           { deletionRequest: "Pending" },
           { new: true } // Return the updated document
@@ -554,7 +554,6 @@ const requestDeletionGuide = async (req, res) => {
 
       res.status(200).json({
           message: 'Deletion request updated successfully',
-          data: advertiser
       });
   } catch (error) {
       console.error('Error updating deletion request:', error);

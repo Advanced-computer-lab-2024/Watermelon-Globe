@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom'; // Correct import here
+import { useParams } from 'react-router-dom';
 import { format } from 'date-fns'
+import { Plane } from "lucide-react"
 import AccessToken from '../Components/AccessToken';
 import FlightSearch from '../Components/FlightSearch';
 import FlightBooking from '../Components/FlightBooking';
@@ -32,6 +33,114 @@ const FlightMain = () => {
     };
   };
 
+  const FlightTicket = ({ flight, onClick }) => {
+    const details = getFlightDetails(flight);
+
+    return (
+      <div className="w-full max-w-3xl mx-auto bg-white rounded-lg overflow-hidden border-4 border-gray-200 mb-20" 
+      style={{ 
+        border: '2px solid #000000',
+        marginBottom: '10px'             
+      }}
+      onClick={onClick}>
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-grow p-6 text-white" 
+          style={{ 
+            background: 'linear-gradient(to bottom right, #fc6c85, #2a9d8f)', 
+          }}>
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-2xl font-bold">{details.flightNumber1}</h3>
+                <p className="text-sm opacity-75">{details.airline}</p>
+              </div>
+              <Plane className="h-8 w-8 rotate-45" />
+            </div>
+            <div className="space-y-4">
+              <FlightInfo
+                flightNumber={details.flightNumber1}
+                departure={details.departure1}
+                arrival={details.arrival1}
+              />
+              {details.flightNumber2 && (
+                <FlightInfo
+                  flightNumber={details.flightNumber2}
+                  departure={details.departure2}
+                  arrival={details.arrival2}
+                />
+              )}
+            </div>
+          </div>
+
+          <div
+            className="flex-shrink-0 p-6 border-l border-gray-200"
+            style={{ backgroundColor: '#faf1f1' }}  // Watermelon Green color
+          >          <div className="text-center mb-6">
+              <p className="text-sm text-gray-600 mb-1">Total Price</p>
+              <p className="text-3xl font-bold text-gray-900">{details.currency} {details.price}</p>
+            </div>
+            <div className="space-y-2 text-sm text-gray-600">
+              <div className="flex justify-between text-xl">
+                <span>Adults:</span>
+                <span className="font-medium">{details.currency} {details.pricePerAdult}</span>
+              </div>
+              {details.pricePerChild && (
+                <div className="flex justify-between text-xl">
+                  <span>Children:</span>
+                  <span className="font-medium">{details.currency} {details.pricePerChild}</span>
+                </div>
+              )}
+              {details.pricePerInfant && (
+                <div className="flex justify-between text-xl">
+                  <span>Infants:</span>
+                  <span className="font-medium">{details.currency} {details.pricePerInfant}</span>
+                </div>
+              )}
+            </div>
+
+
+            <button
+              className="px-8 py-6 text-2xl font-bold text-white mt-10"
+              style={{ 
+                background: 'linear-gradient(to bottom right, #fc6c85, #2a9d8f)',
+                border: '2px solid #000000',
+                borderRadius: '0'              
+              }}
+            >
+              Select Flight
+            </button>
+
+
+
+
+          </div>
+        </div>
+        <div className="relative h-4">
+          <div className="absolute left-0 right-0 h-[1px] border-t border-dashed border-gray-300"></div>
+          <div className="absolute left-0 right-0 flex justify-between">
+            <div className="w-4 h-4 -mt-2 -ml-2 bg-gray-100 rounded-full"></div>
+            <div className="w-4 h-4 -mt-2 -mr-2 bg-gray-100 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const FlightInfo = ({ flightNumber, departure, arrival }) => {
+    return (
+      <div className="flex items-center space-x-4">
+        <div className="flex-shrink-0">
+          <Plane className="h-5 w-5" />
+        </div>
+        <div className="flex-grow">
+          <p className="font-semibold">{flightNumber}</p>
+          <p className="text-sm">
+            {format(new Date(departure), "HH:mm")} → {format(new Date(arrival), "HH:mm")}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-w-full px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-8">Amadeus Flight Booking</h1>
@@ -51,53 +160,17 @@ const FlightMain = () => {
           {flights?.length > 0 && (
             <div className="bg-white shadow-md rounded-lg p-6 mb-8 w-full">
               <h2 className="text-xl font-semibold mb-4">Flight Results</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {flights.map((flight) => {
-                  const details = getFlightDetails(flight)
-                  return (
-                    <div
-                      key={flight.id}
-                      className="border rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-                      onClick={() => setSelectedFlight(flight)}
-                    >
-                      <div className="flex flex-col h-full justify-between">
-                        <div>
-                          <h3 className="text-lg font-semibold">{details.airline}</h3>
-                          <div className="mt-2 space-y-2">
-                            <p className="text-sm text-gray-600">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="inline-block mr-2 h-4 w-4 rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M22 2L2 22"></path>
-                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
-                                <line x1="12" y1="16" x2="12" y2="20"></line>
-                              </svg>
-                              {details.flightNumber1} - {format(new Date(details.departure1), "HH:mm")} → {format(new Date(details.arrival1), "HH:mm")}
-                            </p>
-                            {details.flightNumber2 && (
-                              <p className="text-sm text-gray-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="inline-block mr-2 h-4 w-4 rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M22 2L2 22"></path>
-                                  <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
-                                  <line x1="12" y1="16" x2="12" y2="20"></line>
-                                </svg>
-                                {details.flightNumber2} - {format(new Date(details.departure2), "HH:mm")} → {format(new Date(details.arrival2), "HH:mm")}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div className="mt-4">
-                          <p className="text-2xl font-bold text-blue-600">Adults: {details.currency} {details.pricePerAdult}</p>
-                          <p className="text-2xl font-bold text-blue-600">Children: {details.currency} {details.pricePerChild}</p>
-                          {/* <p className="text-2xl font-bold text-blue-600">Infants: {details.currency} {details.pricePerInfant}</p> */}
-                          <p className="text-2xl font-bold text-red-600">Total: {details.currency} {details.price}</p>
-
-                          <button className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                            Select
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
+              <div className="space-y-6">
+                {flights.map((flight) => (
+                  <FlightTicket
+                    key={flight.id}
+                    flight={flight}
+                    onClick={() => setSelectedFlight(flight)}
+                    className="mb-20"
+                  />
+                  
+                ))}
+                
               </div>
             </div>
           )}

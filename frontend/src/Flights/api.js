@@ -54,22 +54,22 @@ export const fetchAccessToken = async () => {
     return data.data;  // Adjust this based on Amadeus API response structure
   };
   
-  export const bookFlight = async (token, flightId, passengerName) => {
-    const response = await fetch(
-      `https://test.api.amadeus.com/v2/booking/flights/${flightId}/book`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          passengerName,
-        }),
-      }
-    );
+  // export const bookFlight = async (token, flightId, passengerName) => {
+  //   const response = await fetch(
+  //     `https://test.api.amadeus.com/v2/booking/flights/${flightId}/book`,
+  //     {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         passengerName,
+  //       }),
+  //     }
+  //   );
     
-    const data = await response.json();
-    return data;  // Adjust based on booking API response
-  };
+  //   const data = await response.json();
+  //   return data;  // Adjust based on booking API response
+  // };
   
