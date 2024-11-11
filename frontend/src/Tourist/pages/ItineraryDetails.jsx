@@ -187,15 +187,15 @@ const ItineraryDetails = () => {
                     <Star className="mr-2" size={20} /> Rate this Itinerary
                 </h3>
                 <div className="flex items-center mb-4">
-            {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar
-                    key={star}
-                    size={32}
-                    className={`cursor-pointer ${rating >= star ? 'text-yellow-500' : 'text-gray-300'}`}
-                    onClick={() => setRating(star)}
-                />
-            ))}
-        </div>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <FaStar
+                            key={star}
+                            size={32}
+                            className={`cursor-pointer ${rating >= star ? 'text-yellow-500' : 'text-gray-300'}`}
+                            onClick={() => setRating(star)}
+                        />
+                    ))}
+                </div>
                 <button
                     onClick={handleRate}
                     className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
