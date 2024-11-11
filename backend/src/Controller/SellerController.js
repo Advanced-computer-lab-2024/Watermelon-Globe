@@ -1,6 +1,7 @@
-const Seller = require("../Models/SellerModel");
-const Product = require("../Models/productModel");
-const mongoose = require("mongoose");
+const Seller = require('../Models/SellerModel')
+const Product = require('../Models/productModel')
+const mongoose = require('mongoose')
+const { findById } = require('../Models/touristModel')
 
 //get all sellers
 const getAllSellers = async (req, res) => {
@@ -93,7 +94,7 @@ const updateSeller = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller } = req.body;
+  const { name, price, quantity, picture, description, seller, ratings, sales } = req.body;
 
   try {
     // Create a new product with the provided details
@@ -101,17 +102,21 @@ const createProduct = async (req, res) => {
       name,
       price,
       quantity,
-      // picture,
+      picture,
       description,
-      seller,
-      ratings: ratings || 0, // Initialize ratings to 0 if not provided
-      // reviews: reviews || []  // Initialize reviews to an empty array if not provided
+      seller: "6729244f151b6c9e346dd732",
+      ratings: ratings || 0,
+      sales: sales || 0,
+      archived: false // Explicitly set this as a default value
     });
+
+    // Return the created product as JSON response
     res.status(200).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // Get all products
 const getAllProducts = async (req, res) => {
@@ -410,8 +415,161 @@ const changePasswordSeller = async (req, res) => {
     }
 };
 
+// const getProductReviews = async (req, res) => {
+//     const { productId } = req.params;
+  
+//     try {
+//       const product = await Product.findById(productId);
+      
+//       if (!product) {
+//         return res.status(404).json({ message: 'Product not found' });
+//       }
+      
+//       // Return the reviews array
+//       return res.status(200).json(product.reviews);
+//     } catch (error) {
+//       console.error('Error fetching product reviews:', error);
+//       res.status(500).json({ message: 'Server error' });
+//     }
+//   };
+
+const getProductReviews = async (req, res) => {
+    const { productId } = req.params;
+  
+    try {
+      const product = await Product.findById(productId).populate('reviews.reviewer', 'username'); // Populate reviewer with 'name'
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      // Return the reviews array
+      return res.status(200).json(product.reviews);
+    } catch (error) {
+      console.error('Error fetching product reviews:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const seller = await Seller.findById(id);
+    console.log(seller);
+    if(!seller){
+      res.status(400).json({message:"Seller is not found"});
+    }
+    else{
+      res.status(200).json(seller.Password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
+  
+  
+// view the sales & the available quantity of all products
+const getQuantity = async (req, res) => {
+  try {
+      const products = await Product.find({}, 'name quantity sales').sort({ createdAt: -1 });
+      res.status(200).json(products);
+  } catch (error) {
+      res.status(500).json({ error: "An error occurred while retrieving product quantities." });
+  }
+};
+
+
+// archive a product
+const archiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Set the archived field to true based on the product name
+      const product = await Product.findOneAndUpdate(
+          { name: name },
+          { archived: true },
+          { new: true } // Return the updated product
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Product archived successfully', product });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while archiving the product' });
+  }
+};
+
+
+
+
+
+// unarchive a product
+const unarchiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Set the archived field to false based on the product name
+      const product = await Product.findOneAndUpdate(
+          { name: name },
+          { archived: false },
+          { new: true } // Return the updated product
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Product unarchived successfully', product });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while unarchiving the product' });
+  }
+};
+
+const getProductImageByName = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+      return res.status(400).json({ error: 'Product name is required' });
+  }
+
+  try {
+      // Search for the product by name and return only the picture field
+      const product = await Product.findOne(
+          { name: new RegExp(name, 'i') }, 
+          'picture' // Select only the picture field
+      );
+
+      if (!product) {
+          return res.status(404).json({ error: 'No product found with this name' });
+      }
+
+      res.status(200).json({ picture: product.picture });
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while fetching the product image' });
+    }
+};
+
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
-      acceptTermsAndConditions,getProductById};
+      acceptTermsAndConditions,getProductById,getProductReviews,getPassword,
+      acceptTermsAndConditions, getQuantity, archiveProduct, unarchiveProduct, getProductImageByName};

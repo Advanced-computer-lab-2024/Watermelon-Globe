@@ -1,15 +1,16 @@
-const Admin = require('../Models/AdminModel')
-const Governer = require('../Models/tourismGovernorModel')
-const Tourist = require('../Models/touristModel')
-const TourGuide = require('../Models/tourGuideModel')
-const Seller = require('../Models/SellerModel')
-const Company = require('../Models/companyProfileModel')
-const PreferenceTag = require('../Models/PreferenceTagModel')
-const ActivityCategory = require('../Models/ActivityCategoryModel')
-const Product = require('../Models/productModel')
-const Complaint = require('../Models/Complaint')
+const Admin = require("../Models/AdminModel");
+const Governer = require("../Models/tourismGovernorModel");
+const Tourist = require("../Models/touristModel");
+const Company = require("../Models/companyProfileModel");
+const PreferenceTag = require("../Models/PreferenceTagModel");
+const ActivityCategory = require("../Models/ActivityCategoryModel");
+const Product = require("../Models/productModel");
+const Complaint = require("../Models/Complaint");
+const Itinerary = require("../Models/itineraryModel");
+const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
-const mongoose = require('mongoose')
+const Seller = require("../Models/SellerModel");
+const mongoose = require("mongoose");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -334,21 +335,32 @@ const updateActivityCategory = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller, ratings } = req.body;
+  const {
+    name,
+    price,
+    quantity,
+    picture,
+    description,
+    seller,
+    ratings,
+    sales,
+  } = req.body;
 
   try {
     // Create a new product with the provided details
     const product = await Product.create({
       name,
-      details,
       price,
       quantity,
-      // picture,
+      picture,
       description,
-      seller,
-      ratings: ratings || 0, // Initialize ratings to 0 if not provided
-      // reviews: reviews || []  // Initialize reviews to an empty array if not provided
+      seller: "6729244f151b6c9e346dd732",
+      ratings: ratings || 0,
+      sales: sales || 0,
+      archived: false, // Explicitly set this as a default value
     });
+
+    // Return the created product as JSON response
     res.status(200).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -537,78 +549,78 @@ const updateComplaint = async (req, res) => {
       { status: "resolved" }, // Update the status to 'resolved'
       { new: true } // Return the updated document
     );
-        // If no complaint found or already resolved, return an error
-        if (!complaint) {
-          return res.status(400).json({ error: "already resolved" });
-        }
-    
-        res
-          .status(200)
-          .json({ message: "Complaint resolved successfully", complaint });
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-    };
-
- const deleteTourist = async (req, res) => {
-    const {id} = req.params
-
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({error: 'No such tourist'})
+    // If no complaint found or already resolved, return an error
+    if (!complaint) {
+      return res.status(400).json({ error: "already resolved" });
     }
 
-    const tourist = await Tourist.findOneAndDelete({_id: id})
+    res
+      .status(200)
+      .json({ message: "Complaint resolved successfully", complaint });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    if (!tourist){
-        return res.status(400).json({error: 'No such tourist'})
-        }
-    res.status(200).json(tourist)
- };
+const deleteTourist = async (req, res) => {
+  const { id } = req.params;
 
- const deleteGuide = async (req, res) => {
-    const {id} = req.params
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such tourist" });
+  }
 
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({error: 'No such guide'})
-    }
+  const tourist = await Tourist.findOneAndDelete({ _id: id });
 
-    const guide = await TourGuide.findOneAndDelete({_id: id})
+  if (!tourist) {
+    return res.status(400).json({ error: "No such tourist" });
+  }
+  res.status(200).json(tourist);
+};
 
-    if (!guide){
-        return res.status(400).json({error: 'No such guide'})
-        }
-    res.status(200).json(guide)
- };
+const deleteGuide = async (req, res) => {
+  const { id } = req.params;
 
- const deleteSeller = async (req, res) => {
-    const {id} = req.params
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such guide" });
+  }
 
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({error: 'No such seller'})
-    }
+  const guide = await TourGuide.findOneAndDelete({ _id: id });
 
-    const seller = await Seller.findOneAndDelete({_id: id})
+  if (!guide) {
+    return res.status(400).json({ error: "No such guide" });
+  }
+  res.status(200).json(guide);
+};
 
-    if (!seller){
-        return res.status(400).json({error: 'No such seller'})
-        }
-    res.status(200).json(seller)
- };
+const deleteSeller = async (req, res) => {
+  const { id } = req.params;
 
- const deleteCompany = async (req, res) => {
-    const {id} = req.params
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such seller" });
+  }
 
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({error: 'No such company'})
-    }
+  const seller = await Seller.findOneAndDelete({ _id: id });
 
-    const company = await Company.findOneAndDelete({_id: id})
+  if (!seller) {
+    return res.status(400).json({ error: "No such seller" });
+  }
+  res.status(200).json(seller);
+};
 
-    if (!company){
-        return res.status(400).json({error: 'No such company'})
-        }
-    res.status(200).json(company)
- };
+const deleteCompany = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such company" });
+  }
+
+  const company = await Company.findOneAndDelete({ _id: id });
+
+  if (!company) {
+    return res.status(400).json({ error: "No such company" });
+  }
+  res.status(200).json(company);
+};
 
 // Function to reply to a complaint
 const replyComplaint = async (req, res) => {
@@ -764,6 +776,234 @@ const rejectTourGuide = async (req, res) => {
     res.status(500).json({ error: "Error accepting guide: " + error.message });
   }
 };
+const sortComplaintsByDate = async (req, res) => {
+  try {
+    // The sort order can be 'asc' or 'desc', defaulting to 'desc' (newest first)
+    const { order = "desc" } = req.query;
+    const sortOrder = order === "asc" ? 1 : -1;
+
+    const complaints = await Complaint.find({})
+      .sort({ date: sortOrder })
+      .exec();
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Filter complaints by status
+const filterComplaintsByStatus = async (req, res) => {
+  try {
+    const { status } = req.query; // status can be 'pending' or 'resolved'
+
+    // Validate status parameter
+    if (status && !["pending", "resolved"].includes(status)) {
+      return res
+        .status(400)
+        .json({ error: "Invalid status. Must be either pending or resolved" });
+    }
+
+    // If status is provided, filter by it; otherwise, return all complaints
+    const query = status ? { status } : {};
+    const complaints = await Complaint.find(query).sort({ date: -1 });
+
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocuments = async (req, res) => {
+  try {
+    // Fetch all users (TourGuides, Advertisers, Sellers)
+    const tourGuides = await TourGuide.find(
+      {},
+      "name username email idProof certificates"
+    );
+    const advertisers = await Advertiser.find(
+      {},
+      "Username Email idProof taxationRegistryCard"
+    );
+    const sellers = await Seller.find(
+      {},
+      "Name Email idProof taxationRegistryCard"
+    );
+
+    // Filter TourGuides who have uploaded documents (either idProof or certificates)
+    const filteredTourGuides = tourGuides.filter(
+      (tourGuide) =>
+        tourGuide.idProof ||
+        (tourGuide.certificates && tourGuide.certificates.length > 0)
+    );
+
+    // Filter Advertisers who have uploaded documents (either idProof or taxationRegistryCard)
+    const filteredAdvertisers = advertisers.filter(
+      (advertiser) => advertiser.idProof || advertiser.taxationRegistryCard
+    );
+
+    // Filter Sellers who have uploaded documents (either idProof or taxationRegistryCard)
+    const filteredSellers = sellers.filter(
+      (seller) => seller.idProof || seller.taxationRegistryCard
+    );
+
+    // Respond with the filtered lists of users who uploaded documents
+    res.status(200).json({
+      tourGuides: filteredTourGuides,
+      advertisers: filteredAdvertisers,
+      sellers: filteredSellers,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getPassword = async (req, res) => {
+  const { id } = req.query;
+  console.log(id);
+  try {
+    const admin = await Admin.findById(id);
+    console.log(admin);
+    if (!admin) {
+      res.status(400).json({ message: "admin is not found" });
+    } else {
+      res.status(200).json(admin.password);
+    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// view the sales & the available quantity of all products
+const getQuantity = async (req, res) => {
+  try {
+    const products = await Product.find({}, "name quantity sales").sort({
+      createdAt: -1,
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while retrieving product quantities.",
+      });
+  }
+};
+
+// archive a product
+const archiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+    return res.status(400).json({ error: "Product name is required" });
+  }
+
+  try {
+    // Set the archived field to true based on the product name
+    const product = await Product.findOneAndUpdate(
+      { name: name },
+      { archived: true },
+      { new: true } // Return the updated product
+    );
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.status(200).json({ message: "Product archived successfully", product });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while archiving the product" });
+  }
+};
+
+// unarchive a product
+const unarchiveProduct = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+    return res.status(400).json({ error: "Product name is required" });
+  }
+
+  try {
+    // Set the archived field to false based on the product name
+    const product = await Product.findOneAndUpdate(
+      { name: name },
+      { archived: false },
+      { new: true } // Return the updated product
+    );
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Product unarchived successfully", product });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while unarchiving the product" });
+  }
+};
+
+const getProductImageByName = async (req, res) => {
+  const { name } = req.query;
+
+  // Check if the name is provided
+  if (!name) {
+    return res.status(400).json({ error: "Product name is required" });
+  }
+
+  try {
+    // Search for the product by name and return only the picture field
+    const product = await Product.findOne(
+      { name: new RegExp(name, "i") },
+      "picture" // Select only the picture field
+    );
+
+    if (!product) {
+      return res.status(404).json({ error: "No product found with this name" });
+    }
+
+    res.status(200).json({ picture: product.picture });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the product image" });
+  }
+};
+
+// Controller function to mark an itinerary as inappropriate
+const markItineraryInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the itinerary ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+      id,
+      { inappropriate: true }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    );
+
+    // If the itinerary is not found, send a 404 error response
+    if (!itinerary) {
+      return res.status(404).json({ error: "Itinerary not found" });
+    }
+
+    // Send the updated itinerary as a response
+    res
+      .status(200)
+      .json({ message: "Itinerary marked as inappropriate", itinerary });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   createAdmin,
@@ -799,5 +1039,23 @@ module.exports = {
   updateComplaint,
   replyComplaint,
   changePasswordAdmin,
-  deleteAdmin, deleteGoverner, deleteTourist, deleteGuide, deleteSeller, deleteCompany
+  sortComplaintsByDate,
+  filterComplaintsByStatus,
+  getUploadedDocuments,
+  deleteTourist,
+  deleteGuide,
+  deleteSeller,
+  deleteCompany,
+  getPassword,
+  deleteAdmin,
+  deleteGoverner,
+  deleteTourist,
+  deleteGuide,
+  deleteSeller,
+  deleteCompany,
+  getQuantity,
+  archiveProduct,
+  unarchiveProduct,
+  getProductImageByName,
+  markItineraryInappropriate,
 };

@@ -220,6 +220,25 @@ const changePasswordGovernor = async (req, res) => {
   }
 };
 
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const governor = await governorModel.findById(id);
+    console.log(governor);
+    if(!governor){
+      res.status(400).json({message:"governor is not found"});
+    }
+    else{
+      res.status(200).json(governor.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
 module.exports = {
   createSite,
   getSite,
@@ -229,4 +248,5 @@ module.exports = {
   getMySites,
   filterByTags,
   changePasswordGovernor,
+  getPassword
 };

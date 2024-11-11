@@ -10,7 +10,7 @@ const childItinerarySchema = new Schema({
   },
   buyer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'TourGuide', // Reference to the Buyer model (assuming there's a Buyer model)
+    ref: 'Tourist', // Reference to the Buyer model (assuming there's a Buyer model)
     required: true
   },
   chosenDates: {

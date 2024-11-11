@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //governor imports
-const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites,changePasswordGovernor } =
+const { createSite, getSite, getAllSites, updateSite, deleteSite, getMySites,changePasswordGovernor,getPassword} =
   require('../Controller/governorController');
 
 //tourism governor/sites routes
@@ -13,6 +13,7 @@ router.put("/updateSite/:id", updateSite);
 router.delete("/deleteSite/:id", deleteSite);
 router.get("/getMySites", getMySites);
 router.put("/changePasswordGovernor/:id",changePasswordGovernor);
+router.get("/getPassword",getPassword);
 
 
 // router.post("/addGov", createGov);

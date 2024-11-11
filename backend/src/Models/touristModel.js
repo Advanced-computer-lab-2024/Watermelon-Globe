@@ -61,13 +61,31 @@ const touristSchema = new Schema(
       type: Number,
       default: 0,
     },
+    points: {
+      type: Number,
+      default: 0,
+    },
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
       },
     ],
-  },
+  
+ bookedItineraries: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChildItinerary',
+      },
+    ],
+    bookedActivities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ActivityBooking',
+      },
+    ],
+    
+  },  
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }

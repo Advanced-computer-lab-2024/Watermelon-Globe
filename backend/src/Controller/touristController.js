@@ -4,6 +4,8 @@ const itineraryModel = require("../Models/itineraryModel");
 const Itinerary = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
+const Booking = require('../Models/FlightBooking');
+
 
 //Tourist
 
@@ -18,6 +20,7 @@ const createTourist = async (req, res) => {
     dob,
     status,
     wallet,
+    points
   } = req.body;
   // add tourist to db
   try {
@@ -30,6 +33,7 @@ const createTourist = async (req, res) => {
       dob,
       status,
       wallet,
+      points: points || 0, 
     });
     res.status(200).json(tourist);
   } catch (error) {
@@ -315,18 +319,19 @@ const sortProducts = async (req, res) => {
 
 const fileComplaint = async (req, res) => {
   const { title, body, date } = req.body;
-
-  // Check if title, body or date are missing
-  if (!title || !body) {
-    return res.status(400).json({ error: "Title and body are required" });
+  const { touristId } = req.params;
+  // Check if title, body or touristId are missing
+  if (!title || !body || !touristId) {
+    return res.status(400).json({ error: 'Title, body, and tourist ID are required' });
   }
 
   try {
     // Create a complaint
-    const complaint = await Complaint.create({
-      title,
-      body,
+    const complaint = await Complaint.create({ 
+      title, 
+      body, 
       date: date || new Date(), // Default to current date if not provided
+      tourist: touristId
     });
     res.status(200).json(complaint);
   } catch (error) {
@@ -352,21 +357,32 @@ const buyProduct = async (req, res) => {
     // Add the product ID to the tourist's products and save
     tourist.products.push(productId); 
     product.quantity--;
+    product.sales++;
   
     }
     // Assuming `products` is an array field in your model
     await tourist.save();
     await product.save();
-
-
     res.status(200).json("Product was purchased successfully");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+const getTouristComplaints = async (req, res) => {
+  try {
+    const { touristId } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(touristId)) {
+      return res.status(400).json({ error: "Invalid tourist ID" });
+    }
 
+    const complaints = await Complaint.find({ tourist: touristId }).sort({ createdAt: -1 });
 
+    res.status(200).json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 const getPurchasedProducts = async (req, res) => {
@@ -385,10 +401,6 @@ const getPurchasedProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
-
 
 const requestDeletionTourist = async (req, res) => {
   try {
@@ -415,6 +427,196 @@ const requestDeletionTourist = async (req, res) => {
   }
 };
 
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const tourist = await Tourist.findById(id);
+    console.log(tourist);
+    if(!tourist){
+      res.status(400).json({message:"Tourist is not found"});
+    }
+    else{
+      res.status(200).json(tourist.password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+
+  const bookFlight = async (req, res) => {
+    try {
+      const { airline, flightNumber1, departure1, arrival1, flightNumber2, departure2, arrival2, price, currency } = req.body;
+  
+      // Create the booking
+      const newBooking = new Booking({
+        touristId: req.params.touristId, // Get the touristId from the URL parameter
+        airline,
+        flightNumber1,
+        departure1,
+        arrival1,
+        flightNumber2,
+        departure2,
+        arrival2,
+        price,
+        currency,
+      });
+  
+      // Save the booking
+      const savedBooking = await newBooking.save();
+  
+      // Send a success response
+      res.status(201).json({
+        message: 'Flight successfully booked!',
+        booking: savedBooking,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while booking the flight.', error: err.message });
+    }
+  };
+
+
+const redeemPoints = async (req, res) => {
+    const { id } = req.params;
+    const { pointsToRedeem } = req.body;
+
+    // Validate if pointsToRedeem is a number, at least 10,000, and in exact increments of 10,000
+    if (!Number.isInteger(pointsToRedeem) || pointsToRedeem < 10000 || pointsToRedeem % 10000 !== 0) {
+        return res.status(400).json({ 
+            error: "Invalid amount of points. Points must be at least 10,000 and in exact increments of 10,000." 
+        });
+    }
+
+    try {
+        // Find the tourist by ID
+        const tourist = await Tourist.findById(id);
+        if (!tourist) {
+            return res.status(404).json({ error: "Tourist not found." });
+        }
+
+        // Check if the tourist has enough points
+        if (tourist.points < pointsToRedeem) {
+            return res.status(400).json({ error: "Insufficient points for redemption." });
+        }
+
+        // Deduct points from the tourist's balance
+        tourist.points -= pointsToRedeem;
+
+        // Calculate the equivalent currency to add to the wallet
+        const currencyToAdd = (pointsToRedeem / 10000) * 100;
+        tourist.walletBalance += currencyToAdd;
+
+        // Save the updated tourist
+        await tourist.save();
+
+        // Respond with the updated points and wallet balance
+        res.status(200).json({
+            message: "Points redeemed successfully",
+            pointsRemaining: tourist.points,
+            walletBalance: tourist.walletBalance
+        });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while redeeming points." });
+    }
+};
+
+
+  const addPoints = async (req, res) => {
+    const { id } = req.params;
+    const { pointsToAdd } = req.body;
+    // Check if pointsToAdd is a valid number
+    if (!pointsToAdd || pointsToAdd <= 0) {
+      return res.status(400).json({ error: "Invalid points amount to add." });
+    }
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found." });
+    }
+    // Add points to the tourist's balance
+    tourist.points += pointsToAdd;
+    // Save the updated tourist
+    await tourist.save();
+    res.status(200).json({
+      message: "Points added successfully",
+      currentPoints: tourist.points,
+    });
+  };
+
+
+
+
+//   const BookedItinerariesAndActivities = async (req, res) => {
+//   const { id } = req.params;
+
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(404).json({ error: "Invalid tourist ID" });
+//   }
+
+//   try {
+//     const tourist = await Tourist.findById(id)
+//       .populate('bookedItineraries')
+//       .populate('bookedActivities');
+
+//     if (!tourist) {
+//       return res.status(404).json({ error: "Tourist not found" });
+//     }
+
+//     res.status(200).json({
+//       bookedItineraries: tourist.bookedItineraries,
+//       bookedActivities: tourist.bookedActivities
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: "An error occurred while fetching booked itineraries and activities" });
+//   }
+// };
+
+
+
+const BookedItineraries = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "Invalid tourist ID" });
+  }
+
+  try {
+    const tourist = await Tourist.findById(id).populate('bookedItineraries');
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json(tourist.bookedItineraries);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching booked itineraries" });
+  }
+};
+
+const BookedActivities = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "Invalid tourist ID" });
+  }
+
+  try {
+    const tourist = await Tourist.findById(id).populate('bookedActivities');
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json(tourist.bookedActivities);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching booked activities" });
+  }
+};
+
+  
 module.exports = {
   createTourist,
   getTourists,
@@ -430,5 +632,13 @@ module.exports = {
   sortProducts,
   buyProduct,
   getPurchasedProducts,
-  requestDeletionTourist
+  requestDeletionTourist,
+  getPassword,
+  getTouristComplaints,
+  bookFlight,
+  redeemPoints,
+  addPoints,
+  BookedItineraries,
+  BookedActivities
+
 };

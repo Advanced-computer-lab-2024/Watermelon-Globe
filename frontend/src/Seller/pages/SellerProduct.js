@@ -9,6 +9,7 @@ import SortProduct from '../Components/sortProduct';
 import CreateProfile from '../Components/createProfile';
 import ViewProfile from '../Components/viewProfile';
 import UpdateProfile from '../Components/updateProfile';
+import ChangePasswordSeller from '../Components/changePasswordSeller';
 
 
 
@@ -36,6 +37,8 @@ const SellerProduct = () => {
         return <ViewProfile/>;
       case 'updateProfile':
         return <UpdateProfile/>;
+      case 'changePassword':
+        return <ChangePasswordSeller/>
       default:
         return <GetAllProducts/>;
     }

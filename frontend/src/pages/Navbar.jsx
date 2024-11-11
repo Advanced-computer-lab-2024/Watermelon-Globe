@@ -14,7 +14,7 @@ const Navbar = ({ id, isSignedUp, handleSignOut }) => {
         </div>
         <div className="hidden md:flex space-x-4">
           <Link to="#" className="text-gray-600 hover:text-gray-900">Hotel</Link>
-          <Link to="#" className="text-gray-600 hover:text-gray-900">Flight</Link>
+          <Link to="/Flights" className="text-gray-600 hover:text-gray-900">Flight</Link>
           <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
           <Link to="#" className="text-gray-600 hover:text-gray-900">Travel</Link>
           <Link to="#" className="text-gray-600 hover:text-gray-900">Car Rental</Link>
