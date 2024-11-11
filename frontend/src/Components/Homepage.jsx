@@ -34,7 +34,7 @@ const HomePage = () => {
         Go to Tourist Page
       </button>
 
-      <button onClick={() => navigate('/TourGuideHome/67291c4a2cab8a982f09e3fd')}>
+      <button onClick={() => navigate('/TourGuideHome/670137227c5a3dade4ba11dc')}>
         Go to Tour Guide Page
       </button>
 
