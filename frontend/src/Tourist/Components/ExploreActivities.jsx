@@ -52,7 +52,7 @@ export default function ExploreActivities() {
   }, [activities, activitySearch, startDateActivity, endDateActivity, minPriceActivity, maxPriceActivity, selectedPrefActivity]);
 
   const handleActivityClick = (activityId) => {
-    navigate(`/TouristActivityDetails/${activityId}/${id}`);
+    navigate(`/TouristActivityDetails/${activityId}`);
   };
 
   const fetchActivities = async () => {
@@ -133,13 +133,6 @@ export default function ExploreActivities() {
 
     setFilteredActivities(filtered);
   };
-
-
-
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-  };
-
 
 
   return (

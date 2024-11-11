@@ -132,7 +132,7 @@ const App = () => {
           <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
-          <Route path="/ItineraryDetails/:id" element={<ItineraryDetails />} />
+
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
@@ -168,8 +168,8 @@ const App = () => {
 
           {/* Tourist Pages */}
           <Route path="/Tourist_ProductsPage" element={<TouristProductsPage />} />
-          <Route path="/itineraryDetails/:tripid/:id" element={<ItineraryDetails />} />
-          <Route path="/TouristActivityDetails/:activityId/:id" element={<TouristActivityDetails />} />
+          <Route path="/ItineraryDetails/:tripid" element={<ItineraryDetails />} />
+          <Route path="/TouristActivityDetails/:activityId" element={<TouristActivityDetails />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
