@@ -20,6 +20,7 @@ const {
     updateActivityCategory,
     createProduct,
     getAllProducts,
+    getAllProductIds,
     searchProductbyName,
     updateProduct,
     changePasswordAdmin,
@@ -66,6 +67,7 @@ router.post("/CreateActivityCategory", createActivityCategory);
 router.delete("/DeleteActivityCategory/:id", deleteActivityCategory);
 router.put("/UpdateActivityCategory/:id", updateActivityCategory);
 router.get("/GetAllProducts", getAllProducts);
+router.get("/GetProductsIDs", getAllProductIds);
 router.get("/getPassword",getPassword);
 
 //post a new product
