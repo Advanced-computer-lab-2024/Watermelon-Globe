@@ -28,7 +28,7 @@ const createTourist = async (req, res) => {
     dob,
     status,
     wallet,
-    points
+    points,
   } = req.body;
   // add tourist to db
   try {
@@ -41,7 +41,7 @@ const createTourist = async (req, res) => {
       dob,
       status,
       wallet,
-      points: points || 0, 
+      points: points || 0,
     });
     res.status(200).json(tourist);
   } catch (error) {
@@ -330,16 +330,18 @@ const fileComplaint = async (req, res) => {
   const { touristId } = req.params;
   // Check if title, body or touristId are missing
   if (!title || !body || !touristId) {
-    return res.status(400).json({ error: 'Title, body, and tourist ID are required' });
+    return res
+      .status(400)
+      .json({ error: "Title, body, and tourist ID are required" });
   }
 
   try {
     // Create a complaint
-    const complaint = await Complaint.create({ 
-      title, 
-      body, 
+    const complaint = await Complaint.create({
+      title,
+      body,
       date: date || new Date(), // Default to current date if not provided
-      tourist: touristId
+      tourist: touristId,
     });
     res.status(200).json(complaint);
   } catch (error) {
@@ -349,7 +351,7 @@ const fileComplaint = async (req, res) => {
 
 const buyProduct = async (req, res) => {
   const { touristId, productId } = req.params;
- 
+
   console.log(touristId);
   try {
     const tourist = await Tourist.findById(touristId);
@@ -357,16 +359,14 @@ const buyProduct = async (req, res) => {
       return res.status(400).json({ error: "Tourist not found" });
     }
     const product = await Product.findById(productId);
-    if(!product){
+    if (!product) {
       return res.status(400).json({ error: "Product not found" });
-
     }
-    if(product.quantity>0){
-    // Add the product ID to the tourist's products and save
-    tourist.products.push(productId); 
-    product.quantity--;
-    product.sales++;
-  
+    if (product.quantity > 0) {
+      // Add the product ID to the tourist's products and save
+      tourist.products.push(productId);
+      product.quantity--;
+      product.sales++;
     }
     // Assuming `products` is an array field in your model
     await tourist.save();
@@ -384,14 +384,15 @@ const getTouristComplaints = async (req, res) => {
       return res.status(400).json({ error: "Invalid tourist ID" });
     }
 
-    const complaints = await Complaint.find({ tourist: touristId }).sort({ createdAt: -1 });
+    const complaints = await Complaint.find({ tourist: touristId }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json(complaints);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 const getPurchasedProducts = async (req, res) => {
   const { touristId } = req.params;
@@ -412,25 +413,26 @@ const getPurchasedProducts = async (req, res) => {
 
 const requestDeletionTourist = async (req, res) => {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
 
-      // Find the tourist by ID and update the deletionRequest to "Pending"
-      const tourist = await Tourist.findByIdAndUpdate(
-          id,
-          { deletionRequest: "Pending" },
-          { new: true } // Return the updated document
-      );
+    // Find the tourist by ID and update the deletionRequest to "Pending"
+    const tourist = await Tourist.findByIdAndUpdate(
+      id,
+      { deletionRequest: "Pending" },
+      { new: true } // Return the updated document
+    );
 
-      if (!tourist) {
-          return res.status(404).json({ message: 'Tourist not found' });
-      }
+    if (!tourist) {
+      return res.status(404).json({ message: "Tourist not found" });
+    }
 
-      res.status(200).json({
-          message: 'Deletion request updated successfully',
-      });
+    res.status(200).json({
+      message: "Deletion request updated successfully",
+      data: advertiser,
+    });
   } catch (error) {
-      console.error('Error updating deletion request:', error);
-      res.status(500).json({ message: 'Server error' });
+    console.error("Error updating deletion request:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 // Method to refresh all 'completed' statuses and get completed itineraries for the current buyer
@@ -892,24 +894,22 @@ const commentOnActivity = async (req, res) => {
   }
 };
 
-const getPassword = async(req,res) =>{
-  const{id}= req.query;
+const getPassword = async (req, res) => {
+  const { id } = req.query;
   console.log(id);
-  try{
+  try {
     const tourist = await Tourist.findById(id);
     console.log(tourist);
-    if(!tourist){
-      res.status(400).json({message:"Tourist is not found"});
+    if (!tourist) {
+      res.status(400).json({ message: "Tourist is not found" });
+    } else {
+      res.status(200).json(tourist.password);
     }
-    else{
-      res.status(200).json(tourist.password)
-    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
   }
-  catch{
-    console.error('Error getting password:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  }
+};
 
   const bookFlight = async (req, res) => {
     try {
@@ -987,29 +987,6 @@ const redeemPoints = async (req, res) => {
         res.status(500).json({ error: "An error occurred while redeeming points." });
     }
 };
-
-
-  const addPoints = async (req, res) => {
-    const { id } = req.params;
-    const { pointsToAdd } = req.body;
-    // Check if pointsToAdd is a valid number
-    if (!pointsToAdd || pointsToAdd <= 0) {
-      return res.status(400).json({ error: "Invalid points amount to add." });
-    }
-    // Find the tourist by ID
-    const tourist = await Tourist.findById(id);
-    if (!tourist) {
-      return res.status(404).json({ error: "Tourist not found." });
-    }
-    // Add points to the tourist's balance
-    tourist.points += pointsToAdd;
-    // Save the updated tourist
-    await tourist.save();
-    res.status(200).json({
-      message: "Points added successfully",
-      currentPoints: tourist.points,
-    });
-  };
 
   const bookHotel = async (req, res) => {
     try {
@@ -1092,6 +1069,27 @@ const redeemPoints = async (req, res) => {
   
 
 
+const addPoints = async (req, res) => {
+  const { id } = req.params;
+  const { pointsToAdd } = req.body;
+  // Check if pointsToAdd is a valid number
+  if (!pointsToAdd || pointsToAdd <= 0) {
+    return res.status(400).json({ error: "Invalid points amount to add." });
+  }
+  // Find the tourist by ID
+  const tourist = await Tourist.findById(id);
+  if (!tourist) {
+    return res.status(404).json({ error: "Tourist not found." });
+  }
+  // Add points to the tourist's balance
+  tourist.points += pointsToAdd;
+  // Save the updated tourist
+  await tourist.save();
+  res.status(200).json({
+    message: "Points added successfully",
+    currentPoints: tourist.points,
+  });
+};
 
 //   const BookedItinerariesAndActivities = async (req, res) => {
 //   const { id } = req.params;
@@ -1118,8 +1116,6 @@ const redeemPoints = async (req, res) => {
 //   }
 // };
 
-
-
 const BookedItineraries = async (req, res) => {
   const { id } = req.params;
 
@@ -1128,7 +1124,7 @@ const BookedItineraries = async (req, res) => {
   }
 
   try {
-    const tourist = await Tourist.findById(id).populate('bookedItineraries');
+    const tourist = await Tourist.findById(id).populate("bookedItineraries");
 
     if (!tourist) {
       return res.status(404).json({ error: "Tourist not found" });
@@ -1136,7 +1132,9 @@ const BookedItineraries = async (req, res) => {
 
     res.status(200).json(tourist.bookedItineraries);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while fetching booked itineraries" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching booked itineraries" });
   }
 };
 
@@ -1148,7 +1146,7 @@ const BookedActivities = async (req, res) => {
   }
 
   try {
-    const tourist = await Tourist.findById(id).populate('bookedActivities');
+    const tourist = await Tourist.findById(id).populate("bookedActivities");
 
     if (!tourist) {
       return res.status(404).json({ error: "Tourist not found" });
@@ -1156,7 +1154,9 @@ const BookedActivities = async (req, res) => {
 
     res.status(200).json(tourist.bookedActivities);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while fetching booked activities" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching booked activities" });
   }
 };
 
@@ -1214,15 +1214,15 @@ const updateLoyaltyPoints = async (req, res) => {
 const deleteItinerary = async (req, res) => {
   try {
     const { touristId, itineraryId } = req.params;
-    
+
     // Find the tourist
     const tourist = await Tourist.findById(touristId);
     if (!tourist) {
-      return res.status(404).json({ error: 'Tourist not found' });
+      return res.status(404).json({ error: "Tourist not found" });
     }
     // Remove the itinerary from the tourist's bookedItineraries
     tourist.bookedItineraries = tourist.bookedItineraries.filter(
-      id => id.toString() !== itineraryId
+      (id) => id.toString() !== itineraryId
     );
 
     await tourist.save();
@@ -1230,26 +1230,28 @@ const deleteItinerary = async (req, res) => {
     // You may also want to delete the itinerary from your ChildItinerary collection
     // await ChildItinerary.findByIdAndDelete(itineraryId);
 
-    res.status(200).json({ message: 'Itinerary deleted successfully' });
+    res.status(200).json({ message: "Itinerary deleted successfully" });
   } catch (error) {
-    console.error('Error deleting itinerary:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the itinerary' });
+    console.error("Error deleting itinerary:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the itinerary" });
   }
 };
 
 const deleteActivity = async (req, res) => {
   try {
     const { touristId, activityId } = req.params;
-    
+
     // Find the tourist
     const tourist = await Tourist.findById(touristId);
     if (!tourist) {
-      return res.status(404).json({ error: 'Tourist not found' });
+      return res.status(404).json({ error: "Tourist not found" });
     }
 
     // Remove the activity from the tourist's bookedActivities
     tourist.bookedActivities = tourist.bookedActivities.filter(
-      id => id.toString() !== activityId
+      (id) => id.toString() !== activityId
     );
 
     await tourist.save();
@@ -1257,10 +1259,12 @@ const deleteActivity = async (req, res) => {
     // You may also want to delete the activity from your ActivityBooking collection
     // await ActivityBooking.findByIdAndDelete(activityId);
 
-    res.status(200).json({ message: 'Activity deleted successfully' });
+    res.status(200).json({ message: "Activity deleted successfully" });
   } catch (error) {
-    console.error('Error deleting activity:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the activity' });
+    console.error("Error deleting activity:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the activity" });
   }
 };
 

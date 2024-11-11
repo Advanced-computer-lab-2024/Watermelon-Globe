@@ -2,12 +2,12 @@ import "./SignUp.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SignupSeller = () => {
+const SignupAdvertiser = () => {
   const [Name, setUsername] = useState("");
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [sellerId, setSellerId] = useState(null);
+  const [advertiserId, setAdvertiserId] = useState(null);
   const navigate = useNavigate(); // Use navigate instead of Link
 
   const handleSubmit = async (e) => {
@@ -19,12 +19,12 @@ const SignupSeller = () => {
       return; // Stop form submission
     }
 
-    const seller = { Name, Email, Password };
+    const advertiser = { Name, Email, Password };
 
     try {
-      const response = await fetch("/api/seller/CreateSeller", {
+      const response = await fetch("/api/guest/addAdvertiser", {
         method: "POST",
-        body: JSON.stringify(seller),
+        body: JSON.stringify(advertiser),
         headers: {
           "Content-type": "application/json",
         },
@@ -32,20 +32,23 @@ const SignupSeller = () => {
 
       const json = await response.json();
       if (!response.ok) {
-        throw new Error(json.error || "Signup failed");
+        throw new Error(
+          json.error || "Signup failed most probably due to dup data"
+        );
       }
 
       //alert("Sign up as seller was successful");
-      setSellerId(json._id);
+      setAdvertiserId(json._id);
+      console.log(json);
       setUsername("");
       setEmail("");
       setPassword("");
       setError(null);
 
       // Redirect to terms and conditions after successful signup
-      navigate(`/terms-and-conditions/${json._id}`);
+      navigate(`/terms-and-conditionsAdvertiser/${json._id}`);
     } catch (error) {
-      console.error("Error signing up:", error);
+      //console.error("Error signing up:", error);
       setError(error.message);
     }
   };
@@ -83,10 +86,10 @@ const SignupSeller = () => {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit">Sign up as seller</button>
+        <button type="submit">Sign up as Advertiser</button>
       </form>
     </div>
   );
 };
 
-export default SignupSeller;
+export default SignupAdvertiser;

@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 //company profile imports
@@ -11,6 +11,9 @@ const { requestDeletionAdvertiser} = require("../Controller/companyProfileContro
 // router.post("/createTags",createTags);
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
+router.get("/profiles", getProfiles);
+
+router.put("/acceptTermsAndConditions/:id", acceptTermsAndConditions);
 router.get("/profiles/:id?", getProfiles);
 router.put("/changePasswordAdvertiser/:id",changePasswordAdvertiser);
 router.get("/lastApprovedAdvertiser", getLastApprovedAdvertiser);

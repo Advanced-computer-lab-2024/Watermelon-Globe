@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+//for seller
 
-const TermsAndConditions = ({ userId }) => {
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+const TermsAndConditions = () => {
+  const { userId } = useParams();
+  const navigate = useNavigate(); // Initialize navigate
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +21,7 @@ const TermsAndConditions = ({ userId }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `/api/TourGuide/acceptTermsAndConditions/${userId}`,
+        `/api/Seller/acceptTermsAndConditions/${userId}`,
         {
           method: "PUT",
           headers: {
@@ -28,9 +33,14 @@ const TermsAndConditions = ({ userId }) => {
       if (!response.ok) {
         throw new Error("Failed to accept terms");
       }
+
       const data = await response.json();
-      alert("Thank you for accepting the terms and conditions!");
+      //alert("Thank you for accepting the terms and conditions!");
       console.log("API response:", data);
+
+      // Redirect to a new page (e.g., seller dashboard or homepage) after accepting terms
+      navigate(`/SellerProduct`); // Replace with your target path
+      //navigate(`/SellerPage/${sellerId}`); // Replace with your target path
     } catch (error) {
       console.error("Error:", error);
       alert("There was a problem accepting the terms. Please try again.");
@@ -62,7 +72,6 @@ const TermsAndConditions = ({ userId }) => {
             the Platform for other Users to view and comment on. You represent
             and warrant that you own the User Content you post to the Platform.
           </p>
-          {/* Additional terms content here */}
         </div>
 
         <div style={styles.actions}>
@@ -87,7 +96,11 @@ const TermsAndConditions = ({ userId }) => {
             </button>
             <button
               style={styles.declineButton}
-              onClick={() => alert("Declined")}
+              onClick={() =>
+                alert(
+                  "You can't access the system without accepting terms and conditions"
+                )
+              }
             >
               Decline
             </button>
@@ -97,7 +110,6 @@ const TermsAndConditions = ({ userId }) => {
     </div>
   );
 };
-
 const styles = {
   overlay: {
     position: "fixed",
@@ -109,6 +121,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1000,
   },
   modal: {
     backgroundColor: "#ffffff",
@@ -144,6 +157,7 @@ const styles = {
     padding: "10px 0",
     borderTop: "1px solid #ddd",
     borderBottom: "1px solid #ddd",
+    margin: "10px 0",
   },
   subheading: {
     fontSize: "15px",
@@ -167,7 +181,7 @@ const styles = {
     marginRight: "8px",
   },
   label: {
-    fontSize: "10px",
+    fontSize: "12px",
     color: "#555",
   },
   buttonContainer: {
@@ -196,6 +210,7 @@ const styles = {
     fontSize: "14px",
     flex: 1,
     marginRight: "10px",
+    cursor: "not-allowed",
   },
   declineButton: {
     backgroundColor: "#ddd",

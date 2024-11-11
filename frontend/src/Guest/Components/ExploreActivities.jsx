@@ -53,6 +53,7 @@ export default function ExploreActivities() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      //console.log("Fetched activities:", data);
       if (data && data.activities && Array.isArray(data.activities)) {
         setActivities(data.activities);
       } else {

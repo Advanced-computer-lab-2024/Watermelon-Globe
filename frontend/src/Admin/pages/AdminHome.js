@@ -28,9 +28,6 @@ const AdminHome = () => {
         <Link to="/AdminViewItinerary">
           <button className="admin-button">View Itineraries</button>
         </Link>
-        <Link to="/AcceptRejectPage">
-          <button className="admin-button">Manage Users</button>
-        </Link>
         <Link to="/AdminViewDocuments">
           <button className="admin-button">View Documents</button>
         </Link>

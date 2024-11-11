@@ -887,11 +887,9 @@ const getQuantity = async (req, res) => {
     });
     res.status(200).json(products);
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while retrieving product quantities.",
-      });
+    res.status(500).json({
+      error: "An error occurred while retrieving product quantities.",
+    });
   }
 };
 
@@ -1067,10 +1065,6 @@ module.exports = {
   getPassword,
   deleteAdmin,
   deleteGoverner,
-  deleteTourist,
-  deleteGuide,
-  deleteSeller,
-  deleteCompany,
   getQuantity,
   archiveProduct,
   unarchiveProduct,
