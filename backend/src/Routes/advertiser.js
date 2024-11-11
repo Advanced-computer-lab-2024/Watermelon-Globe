@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //company profile imports
-const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser, getLastApprovedAdvertiser, approveAdvertiser} = require("../Controller/companyProfileController");
+const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser, getLastApprovedAdvertiser, approveAdvertiser,getPassword} = require("../Controller/companyProfileController");
 
 // //tags
 
@@ -11,9 +11,10 @@ const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser, getL
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
 router.get("/profiles/:id?", getProfiles);
-router.put("/changePasswordAdvertiser:/id",changePasswordAdvertiser);
+router.put("/changePasswordAdvertiser/:id",changePasswordAdvertiser);
 router.get("/lastApprovedAdvertiser", getLastApprovedAdvertiser);
 router.put("/approve/:id", approveAdvertiser);
+router.get("/getPassword",getPassword);
 
 
 // router.post("/addAdvertiser", createAdvertiser);

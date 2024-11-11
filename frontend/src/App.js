@@ -34,6 +34,7 @@ import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import ActivityDetails from "./Components/ActivityDetails.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
+import ChangePasswordAdvertiser from './Advertiser/Components/ChangePasswordAdvertiser.js';
 //Seller Pages
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
@@ -115,6 +116,7 @@ const App = () => {
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
           />
+          <Route path='/ChangePasswordAdvertiser/:advertiserId' element={<ChangePasswordAdvertiser/>}/>
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
           {/* <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
