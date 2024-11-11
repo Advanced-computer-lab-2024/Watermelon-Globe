@@ -54,11 +54,10 @@ const HomeScreen = () => {
                 <Sidebar 
                     advertiserId = {advertiser._id}
                     advertiser={advertiser} 
-                    onEditProfile={() => navigate(`/edit-profile/${advertiser._id}`)}
+                    onProfileView={() => navigate(`/advertiserProfile/${advertiser._id}`)}
                     onViewActivities={() => navigate(`/view-activities/${advertiser._id}`)}
                     onCreateActivity={() => navigate('/add-activity')}
-                    ChangePassword={() => navigate('/changeAdvertiserPassword')
-                    }
+                    // ChangePassword={() => navigate('/changeAdvertiserPassword')}
                 />
             )}
 

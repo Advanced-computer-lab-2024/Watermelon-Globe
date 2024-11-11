@@ -1,7 +1,8 @@
 // models/TransportationModel.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const TransportationSchema = new mongoose.Schema({
+const TransportationSchema = new Schema({
   type: {
     type: String,
     required: true,  // E.g., "bus", "train", "flight", etc.

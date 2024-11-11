@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
-const Sidebar = ({ onEditProfile, advertiser, onViewActivities, onCreateActivity, advertiserId , ChangePassword}) => {
+const Sidebar = ({ onProfileView, advertiser, onViewActivities, onCreateActivity, advertiserId }) => {
     const navigate = useNavigate();
     console.log(advertiserId);
 
@@ -27,10 +27,10 @@ const Sidebar = ({ onEditProfile, advertiser, onViewActivities, onCreateActivity
             <h2>{advertiser.Name}</h2>
             
             {/* Sidebar Links */}
-            <button onClick={onEditProfile}>Edit Profile</button>
+            <button onClick={onProfileView}>Profile</button>
             <button onClick={onViewActivities}>View Activities</button>
             <button onClick={onCreateActivity}>Create Activity</button>
-            <button onClick={handleChangePassword}>Change Password</button>
+            {/* <button onClick={ChangePassword}>Change Password</button> */}
         </div>
     );
 };

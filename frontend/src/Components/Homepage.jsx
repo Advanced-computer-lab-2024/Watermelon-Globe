@@ -26,7 +26,7 @@ const HomePage = () => {
         Go to Seller Page
       </button>
 
-      <button onClick={() => navigate('/advertiserHomePage')}>
+      <button onClick={() => navigate('/advertiser')}>
         Go to Advertiser Page
       </button>
 
