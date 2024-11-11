@@ -95,28 +95,6 @@ const AdminProduct = () => {
             </button>
             <h1 style={{ fontSize: '24px', margin: 0 }}>Watermelon Globe</h1>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button
-              style={{
-                color: 'white',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              🛒 View Cart
-            </button>
-            <button
-              style={{
-                color: 'white',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              🚪 Sign Out
-            </button>
-          </div>
         </header>
 
         {/* Main Content */}

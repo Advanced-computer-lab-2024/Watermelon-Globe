@@ -152,30 +152,7 @@ function SellerProduct() {
             >
               ☰
             </button>
-            <h1 style={{ fontSize: '24px', margin: 0 }}>Watermelon Globe</h1>
-          </div>
-          <div>
-            <button
-              style={{
-                color: 'white',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                marginRight: '15px',
-              }}
-            >
-              🛒 View Cart
-            </button>
-            <button
-              style={{
-                color: 'white',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              🚪 Sign Out
-            </button>
+            <h1 style={{ fontSize: '24px' }}>Watermelon Globe</h1>
           </div>
         </header>
 
