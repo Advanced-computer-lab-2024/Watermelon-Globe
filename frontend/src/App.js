@@ -22,6 +22,7 @@ import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
 import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
 import Complaint from "./Admin/pages/Complaint.js";
 import Itinerary from "./Admin/pages/Itinerary.js";
+import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 //Advertiser Pages
 import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 import AdvertiserSignupConfirm from './Advertiser/Components/AdvertiserSignupConfirm.jsx';
@@ -55,7 +56,7 @@ import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
 import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
-import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
+import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
 import TouristProduct from "./Tourist/pages/TouristProduct.js";
@@ -83,7 +84,9 @@ const App = () => {
       <div style={{ padding: "20px" }}>
         <Routes>
           {/* Main Home Page */}
-          <Route path="/" element={<MainHome />} />
+          <Route path="/" element={<GuestPage />} />
+
+          <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
           <Route path="/AdminHome" element={<AdminHome />} />

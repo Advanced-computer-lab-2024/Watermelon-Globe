@@ -18,7 +18,7 @@ const HomePage = () => {
         Go to App Page
       </button>
 
-      <button onClick={() => navigate('/MainHome')}>
+      <button onClick={() => navigate('/GuestPage')}>
         Go to Guest Page
       </button>
 
