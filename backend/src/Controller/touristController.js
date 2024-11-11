@@ -545,6 +545,77 @@ const redeemPoints = async (req, res) => {
       currentPoints: tourist.points,
     });
   };
+
+
+
+
+//   const BookedItinerariesAndActivities = async (req, res) => {
+//   const { id } = req.params;
+
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(404).json({ error: "Invalid tourist ID" });
+//   }
+
+//   try {
+//     const tourist = await Tourist.findById(id)
+//       .populate('bookedItineraries')
+//       .populate('bookedActivities');
+
+//     if (!tourist) {
+//       return res.status(404).json({ error: "Tourist not found" });
+//     }
+
+//     res.status(200).json({
+//       bookedItineraries: tourist.bookedItineraries,
+//       bookedActivities: tourist.bookedActivities
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: "An error occurred while fetching booked itineraries and activities" });
+//   }
+// };
+
+
+
+const BookedItineraries = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "Invalid tourist ID" });
+  }
+
+  try {
+    const tourist = await Tourist.findById(id).populate('bookedItineraries');
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json(tourist.bookedItineraries);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching booked itineraries" });
+  }
+};
+
+const BookedActivities = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "Invalid tourist ID" });
+  }
+
+  try {
+    const tourist = await Tourist.findById(id).populate('bookedActivities');
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json(tourist.bookedActivities);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching booked activities" });
+  }
+};
+
   
 module.exports = {
   createTourist,
@@ -566,5 +637,8 @@ module.exports = {
   getTouristComplaints,
   bookFlight,
   redeemPoints,
-  addPoints
+  addPoints,
+  BookedItineraries,
+  BookedActivities
+
 };

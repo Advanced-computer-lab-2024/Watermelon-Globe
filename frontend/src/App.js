@@ -33,6 +33,7 @@ import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
 import TouristComplaints from './Tourist/pages/TouristComplaints.jsx'
+import MyBookings from './Tourist/pages/MyBookings.jsx'
 
 import AdminHome from './Admin/pages/AdminHome.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
@@ -127,6 +128,8 @@ const App = () => {
           <Route path="/TouristPage" element={<TouristPage />} />
           <Route path="/TouristHomePage/:id" element={<TouristHomePage />} />
           <Route path="/TouristComplaints/:id" element={<TouristComplaints />} />
+          <Route path="/MyBookings/:id" element={<MyBookings />} />
+
 
 
           
