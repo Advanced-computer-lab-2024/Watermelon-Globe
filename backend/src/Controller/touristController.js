@@ -417,13 +417,14 @@ const requestDeletionTourist = async (req, res) => {
   }
 };
 // Method to refresh all 'completed' statuses and get completed itineraries for the current buyer
-const getMyCompletedItineraries = async (buyerId) => {
+const getMyCompletedItineraries = async (req, res) => {
   try {
+    const { buyerId } = req.params;
     const currentDate = new Date();
 
     // Step 1: Refresh the 'completed' status for all ChildItineraries with status 'confirmed'
     await ChildItinerary.updateMany(
-      { status: 'confirmed' }, // Only update 'completed' status if booking is confirmed
+      { status: 'confirmed' },
       [
         {
           $set: {
@@ -441,15 +442,22 @@ const getMyCompletedItineraries = async (buyerId) => {
     // Step 2: Fetch all itineraries where 'completed' is true and buyer matches the current buyer ID
     const completedItineraries = await ChildItinerary.find({
       completed: true,
-      buyer: buyerId, // Filter by the current buyer's ID
-    });
+      buyer: buyerId,
+    })
+      .populate({
+        path: 'itinerary', // Populate the itinerary field
+        populate: { path: 'activities' } // Populate nested activities if needed
+      });
 
-    return completedItineraries;
+    // Step 3: Send the populated itineraries to the client
+    res.status(200).json(completedItineraries);
   } catch (error) {
     console.error('Error fetching completed itineraries:', error);
+    res.status(500).json({ message: error.message });
     throw new Error('Failed to retrieve completed itineraries');
   }
 };
+
 
 
 // const rateItinerary = async (req, res) => {

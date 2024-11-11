@@ -9,14 +9,18 @@ import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 import './App.css';
 
 import RatingsAndCommentsPage from "./pages/RatingsAndCommentsPage.js";
-import TouristDetails from "./pages/TouristDetails.js";
+//import TouristDetails from "./pages/TouristDetails.js";
+import TouristDetails from "./Tourist/Components/TouristDetails.js"
 import SellerSignup from "./pages/SellerSignup.js";
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
+
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
+import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
+
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 //import MainTour from "./Tourist/pages/TouristHomepage.jsx";
 import TouristPage from './TouristPage.js';
@@ -121,6 +125,9 @@ const App = () => {
           <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
+          <Route path="/completed-activities/:id" element={<CompletedActivities />} />
+          {/* <Route path="/rate-tour-guide/:id" element={<RateTourGuide />} /> */}
+          {/* <Route path="/rate-itinerary/:id" element={<RateItinerary />} /> */}
 
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}

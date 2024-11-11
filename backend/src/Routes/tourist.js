@@ -58,16 +58,18 @@ router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
 
 //sprint 2
-router.get(`/getMyCompletedItineraries/:buyerId`,async (req, res) => {
-  const { buyerId } = req.params;
+router.get('/getMyCompletedItineraries/:buyerId',getMyCompletedItineraries);
+  
+//   async (req, res) => {
+//   const { buyerId } = req.params;
 
-  try {
-    const completedItineraries = await touristController.getMyCompletedItineraries(buyerId);
-    res.status(200).json(completedItineraries);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+//   try {
+//     const completedItineraries = await touristController.getMyCompletedItineraries(buyerId);
+//     res.status(200).json(completedItineraries);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 
 
 router.post('/itineraries/:itineraryId/rate',rateItinerary);

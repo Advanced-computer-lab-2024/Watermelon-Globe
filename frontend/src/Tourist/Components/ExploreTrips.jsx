@@ -137,7 +137,8 @@ const ExploreTrips = () => {
   };
 
   const handleTripClick = (tripId) => {
-    navigate('/tourist-signup');
+    //navigate('/tourist-signup');
+    navigate(`/itineraryDetails/${tripId}`);
   };
 
   return (
