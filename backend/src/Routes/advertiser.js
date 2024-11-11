@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 //company profile imports
-const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser, getLastApprovedAdvertiser, approveAdvertiser,getPassword} = require("../Controller/companyProfileController");
+const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser, getLastApprovedAdvertiser, approveAdvertiser,getPassword,acceptTermsAndConditions} = require("../Controller/companyProfileController");
 const { requestDeletionAdvertiser} = require("../Controller/companyProfileController");
 
 // //tags
