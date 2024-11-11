@@ -52,7 +52,9 @@ const companyProfileSchema = new Schema(
   Logo: {
     type: String,
     required: false,
-  },{ timestamps: true });
+  },
+},
+{ timestamps: true });
 
 const CompanyProfile = mongoose.model("CompanyProfile", companyProfileSchema);
 module.exports = CompanyProfile;

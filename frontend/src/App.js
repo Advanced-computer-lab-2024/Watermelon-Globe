@@ -1,102 +1,65 @@
 import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import AdvertiserPage from './Components/advertiserPage';
-import TourGuidePage from './Components/tourGuidePage';
-import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
-import SignupPage from './Components/SignUp';
-import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
-
 import './App.css';
 
-
 // Importing all necessary components
-import AdvertiserPage from "./Components/advertiserPage";
-import TourGuidePage from "./Components/tourGuidePage";
-import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+//Main Pages
 import SignupPage from "./Components/SignUp";
-import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
-import ActivityDetails from "./Components/ActivityDetails.jsx";
 import HomePage from "./Components/Homepage";
 import AppPage from "./Components/BackendReq";
-import CompanyHomepage from "./Components/CompanyHomepage.jsx";
-import TouristPage from "./TouristPage.js";
-import SellerPage from "./SellerPage.js";
-import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
-
-import "./App.css";
-
-import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
-//import TouristDetails from './Tourist/Components/TouristDetails.jsx';
-import SellerSignup from "./pages/SellerSignup.jsx";
-import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
-import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
-import TouristSignup from "./Tourist/pages/TouristSignup.js";
-import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
-import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
+//Guest
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
-import MainTour from "./Tourist/pages/TouristHomepage.jsx";
-import TouristPage from './TouristPage.js';
-import SellerPage from './SellerPage.js';
-import HomePage from './Components/Homepage';
-import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Advertiser/Components/CompanyHomepage.jsx';
-import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ViewProducts from './Guest/pages/ViewProducts.js';
-
-// admin new
+//Admin Pages
 import AdminHome from './Admin/pages/AdminHome.js';
-import ActivityCategory from './Admin/pages/ActivityCategory.js';
-import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './Seller/pages/SellerProduct.js';
-// import TouristProduct from './pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
-import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import HomeScreen from './Components/CompanyHomepage.jsx';
-import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
-import ProductTourist from './Tourist/pages/ProductsTourist.js';
-import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
-import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
-import ViewProducts from "./Guest/pages/ViewProducts.js";
-import TouristProductsPage from "./Tourist/pages/TouristProduct.js";
-import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
-import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
-import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
-import MyBookings from "./Tourist/pages/MyBookings.jsx";
+import ActivityCategory from './Admin/pages/ActivityCategory.js';
+import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
-import AdminHome from "./Admin/pages/AdminHome.js";
-import ActivityCategory from "./Admin/pages/ActivityCategory.js";
-import PreferenceTag from "./Admin/pages/PrefenceTag.js";
-import AdminProduct from "./Admin/pages/AdminProduct.js";
-import SellerProduct from "./Seller/pages/SellerProduct.jsx";
-import TouristProduct from "./Tourist/pages/TouristProduct.js";
-import Admin from "./Admin/pages/Admin.js";
-import Governer from "./Admin/pages/Governer.js";
-// import ActivityDetails from './Components/ActivityDetails.jsx';
 import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
-
-import AccountPage from "./Advertiser/Components/AccountPage.jsx";
-import HomeScreen from "./Advertiser/Components/CompanyHomepage.jsx";
-import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
-import EditActivity from "./Advertiser/Components/EditActivity.jsx";
-import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import Complaint from "./Admin/pages/Complaint.js";
 import Itinerary from "./Admin/pages/Itinerary.js";
-
-import "./App.css";
-import FlightMain from "./Flights/Pages/FlightMain.js";
-
-//activities
-import ActivityDetails from './Components/ActivityDetails.jsx';
+//Advertiser Pages
+import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
+import CompanyHomepage from "./Components/CompanyHomepage.jsx";
+import AccountPage from './Advertiser/Components/AccountPage.jsx';
+import AdvertiserPage from "./Components/advertiserPage";
+import HomeScreen from './Components/CompanyHomepage.jsx';
+import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
+import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
+import ActivityDetails from "./Components/ActivityDetails.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
-
-//tourguide new
-
-import "./App.css";
+//Seller Pages
+import SellerSignup from "./pages/SellerSignup.jsx";
+import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
+import SellerPage from "./SellerPage.js";
+import SellerProduct from './Seller/pages/SellerProduct.js';
+//Tour guide pages
+import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+import TourguideSignup from "./pages/TourguideSignup.js";
+import TourGuidePage from "./Components/tourGuidePage";
 import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.js";
+//Tourism governer pages
+import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+//Tourist pages
+import TouristSignup from "./Tourist/pages/TouristSignup.js";
+import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
+import MainTour from "./Tourist/pages/TouristHomepage.jsx";
+import TouristPage from "./TouristPage.js";
+import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
+import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
+import TouristProductsPage from './Tourist/pages/TouristProduct.js';
+import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
+import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
+import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
+import MyBookings from "./Tourist/pages/MyBookings.jsx";
+import TouristProduct from "./Tourist/pages/TouristProduct.js";
+import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+//Flights
+import FlightMain from "./Flights/Pages/FlightMain.js";
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
