@@ -98,6 +98,7 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
+import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -256,6 +257,7 @@ const App = () => {
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>
+          <Route path='/TransportationDetails/:id' element={<TransportationDetails/>}/>
 
           {/* Path for Flight and Hotel APIs */}
           <Route path='/Flights/:touristId' element={<FlightMain/>}/>
