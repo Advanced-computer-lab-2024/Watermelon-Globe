@@ -90,8 +90,10 @@ const BookingPage = () => {
         amountPaid: offer?.price?.base
       });
 
+
+
       console.log('Booking successful:', response.data);
-      alert('Booking successful!');
+      alert(`Booking successful!\nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
     } catch (error) {
       console.error('Error booking hotel:', error);
       alert('Booking failed. Please try again.');

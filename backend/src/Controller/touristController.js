@@ -500,16 +500,16 @@ const redeemPoints = async (req, res) => {
         }
 
         // Check if the tourist has enough points
-        if (tourist.points < pointsToRedeem) {
+        if (tourist.loyaltyPoints < pointsToRedeem) {
             return res.status(400).json({ error: "Insufficient points for redemption." });
         }
 
         // Deduct points from the tourist's balance
-        tourist.points -= pointsToRedeem;
+        tourist.loyaltyPoints -= pointsToRedeem;
 
         // Calculate the equivalent currency to add to the wallet
         const currencyToAdd = (pointsToRedeem / 10000) * 100;
-        tourist.walletBalance += currencyToAdd;
+        tourist.wallet += currencyToAdd;
 
         // Save the updated tourist
         await tourist.save();
@@ -517,7 +517,7 @@ const redeemPoints = async (req, res) => {
         // Respond with the updated points and wallet balance
         res.status(200).json({
             message: "Points redeemed successfully",
-            pointsRemaining: tourist.points,
+            pointsRemaining: tourist.loyaltyPoints,
             walletBalance: tourist.walletBalance
         });
     } catch (error) {

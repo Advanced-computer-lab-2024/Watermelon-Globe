@@ -30,7 +30,7 @@ const FlightBooking = ({ flight, touristId }) => {
       });
 
       // Display success message upon successful booking
-      setMessage('You have successfully booked your flight!');
+      setMessage(`You have successfully booked your flight! \nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
     } catch (error) {
       console.error('Error booking flight:', error);
       setMessage('Sorry, there was an issue booking your flight. Please try again.');
