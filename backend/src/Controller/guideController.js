@@ -131,9 +131,11 @@ const createItinerary = async (req, res) => {
   }
 };
 const getMyItineraries = async (req, res) => {
-  const { guideID } = req.query; // Extract the Governor ID from the request parameters
+  const { guideID } = req.params; // Extract the Governor ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
+
+  console.log(guideID);
   if (!mongoose.Types.ObjectId.isValid(guideID)) {
     return res.status(400).json({ error: "Invalid guide ID" });
   }
