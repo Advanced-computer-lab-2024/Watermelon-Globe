@@ -31,6 +31,18 @@ const companyProfileSchema = new Schema({
     enum: ["Pending", "Accepted", "Rejected"],
     default: null,
   },
+  idProof: {
+    type: String,
+    required: false,
+  },
+  taxationRegistryCard: {
+    type: String,
+    required: false,
+  },
+  Logo: {
+    type: String,
+    required: false,
+  }
 
 }, { timestamps: true });
 

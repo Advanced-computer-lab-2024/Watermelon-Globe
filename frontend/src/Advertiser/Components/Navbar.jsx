@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
-import profileIcon from '../Assets/Profile.png'; // Ensure the path is correct
+import profileIcon from '../Assets/profileIcon.png'
 
 const Navbar = ({ isSignedUp, handleSignOut }) => {
     return (
