@@ -25,12 +25,15 @@ const FlightBooking = ({ flight, touristId }) => {
       price: flight.price?.grandTotal,
       currency: flight.price?.currency,
       });
+      const response2 = await axios.put(`/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+        amountPaid: flight.price?.grandTotal
+      });
 
       // Display success message upon successful booking
-      setMessage('You have successfully booked your flight!');
+      alert(`You have successfully booked your flight! \nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
     } catch (error) {
       console.error('Error booking flight:', error);
-      setMessage('Sorry, there was an issue booking your flight. Please try again.');
+      alert('Sorry, there was an issue booking your flight. Please try again.');
     }
   };
 

@@ -1,0 +1,110 @@
+/* Container for the hotel search results */
+.hotel-search-container {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  /* Heading for search section */
+  .search-heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  /* Search input box styling */
+  .search-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  /* Search button styling */
+  .search-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .search-button:hover:enabled {
+    background-color: #0056b3;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Hotel list styling */
+  .hotel-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));  /* Responsive columns */
+    gap: 20px; /* Space between each hotel item */
+    margin-top: 20px;
+  }
+  
+  /* Individual hotel item container */
+  .hotel-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;  /* Cursor changes to pointer on hover */
+  }
+  
+  .hotel-item:hover {
+    transform: translateY(-5px);  /* Slight lift effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);  /* More pronounced shadow on hover */
+  }
+  
+  /* Hotel name styling */
+  .hotel-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Location styling */
+  .hotel-location {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  /* Distance styling */
+  .hotel-distance {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  /* Coordinates styling */
+  .hotel-coordinates {
+    font-size: 14px;
+    color: #777;
+  }
+  
