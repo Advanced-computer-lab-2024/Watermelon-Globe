@@ -25,7 +25,7 @@ const FlightBooking = ({ flight, touristId }) => {
       price: flight.price?.grandTotal,
       currency: flight.price?.currency,
       });
-      const response2 = await axios.put(`http://localhost:8000/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+      const response2 = await axios.put(`/api/Tourist/updateLoyaltyPoints/${touristId}`, {
         amountPaid: flight.price?.grandTotal
       });
 

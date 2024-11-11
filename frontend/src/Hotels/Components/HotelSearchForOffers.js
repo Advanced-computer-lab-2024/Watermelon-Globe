@@ -86,6 +86,10 @@ const BookingPage = () => {
         checkOutDate,
       });
 
+      const response2 = await axios.put(`/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+        amountPaid: offer?.price?.base
+      });
+
       console.log('Booking successful:', response.data);
       alert('Booking successful!');
     } catch (error) {

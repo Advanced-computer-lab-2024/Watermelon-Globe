@@ -60,6 +60,7 @@ const BookingPage = () => {
       const currency = hotelOffer?.price?.currency;
 
       // Sending POST request to the correct backend route
+
       const response = await axios.post(`/api/Tourist/bookHotel/${touristId}`, {
         hotelId: hotelId,
         hotelName: hotelName,
