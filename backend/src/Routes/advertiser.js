@@ -10,7 +10,7 @@ const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser} = re
 // router.post("/createTags",createTags);
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
-router.get("/profiles", getProfiles);
+router.get("/profiles/:id?", getProfiles);
 router.put("/changePasswordAdvertiser:/id",changePasswordAdvertiser);
 
 

@@ -10,8 +10,9 @@ const ActivityDetails = () => {
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/activities/${id}`);
-                setActivity(response.data);
+                const response = await fetch(`/api/Activities/activities/${id}`);
+                const data = await response.json();
+                setActivity(data);
                 console.log("Fetched activity details: ", response.data);
             } catch (error) {
                 console.error('Error fetching activity:', error);
@@ -47,3 +48,4 @@ const ActivityDetails = () => {
 };
 
 export default ActivityDetails;
+

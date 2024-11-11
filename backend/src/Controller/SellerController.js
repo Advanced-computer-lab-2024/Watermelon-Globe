@@ -31,6 +31,7 @@ const createSeller = async (req, res) => {
   const { Name, Email, Password } = req.body;
   try {
     const seller = await Seller.create({ Name, Email, Password });
+    seller.status = "pending";
     res.status(200).json(seller);
   } catch (error) {
     res.status(400).json({ error: error.mssg });

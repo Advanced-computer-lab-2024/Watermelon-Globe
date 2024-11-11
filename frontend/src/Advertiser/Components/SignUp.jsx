@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignupPage = ({ onSignup }) => {
-    const [formData, setFormData] = useState({ Name: '', About: '', Hotline: '', Link: '' });
+    const [formData, setFormData] = useState({ Name: '', Email: '', Password: ''});
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ const SignupPage = ({ onSignup }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/createProfile', formData);
+            const response = await axios.post('http://localhost:8000/api/Advertiser/createProfile', formData);
             onSignup(response.data.profile); 
             
             localStorage.setItem('userId', response.data.profile._id);
@@ -33,9 +33,8 @@ const SignupPage = ({ onSignup }) => {
             <h1>Sign Up</h1>
             <form onSubmit={handleSubmit}>
                 <input type="text" name="Name" placeholder="Name" onChange={handleChange} required />
-                <input type="text" name="About" placeholder="About" onChange={handleChange} required />
-                <input type="text" name="Hotline" placeholder="Hotline" onChange={handleChange} required />
-                <input type="text" name="Link" placeholder="Link" onChange={handleChange} required />
+                <input type="text" name="Email" placeholder="Email" onChange={handleChange} required />
+                <input type="password" name="Password" placeholder="Password" onChange={handleChange} required />
                 <button type="submit">Sign Up</button>
             </form>
             {error && <p>{error}</p>}

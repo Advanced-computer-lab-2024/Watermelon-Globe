@@ -14,7 +14,7 @@ const EditActivity = () => {
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/activities/${id}`);
+                const response = await axios.get(`/api/Activities/activities/${id}`);
                 setActivity(response.data);
                 setNewPrice(response.data.Price);
                 setNewDiscount(response.data.Discount);
@@ -26,7 +26,7 @@ const EditActivity = () => {
 
         const fetchTags = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/getTags'); // Adjust the endpoint for fetching tags
+                const response = await axios.get('/api/Activities/getTags'); // Adjust the endpoint for fetching tags
                 setAvailableTags(response.data);
             } catch (error) {
                 console.error('Error fetching tags:', error);
@@ -46,7 +46,7 @@ const EditActivity = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8000/updateActivity/${id}`, {
+            await axios.put(`/api/Activities/updateActivity/${id}`, {
                 Price: newPrice,
                 Discount: newDiscount,
                 tags: selectedTags

@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { React, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import AdvertiserPage from './Components/advertiserPage';
+import TourGuidePage from './Components/tourGuidePage';
+import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
+import SignupPage from './Components/SignUp';
+import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
+
+import './App.css';
+
 
 // Importing all necessary components
 import AdvertiserPage from "./Components/advertiserPage";
@@ -19,7 +27,8 @@ import "./App.css";
 
 import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
 //import TouristDetails from './Tourist/Components/TouristDetails.jsx';
-import SellerSignup from "./pages/SellerSignup.js";
+import SellerSignup from "./pages/SellerSignup.jsx";
+import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
@@ -27,6 +36,30 @@ import SignupOptions from "./pages/SignUpOptions.js";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
+import MainTour from "./Tourist/pages/TouristHomepage.jsx";
+import TouristPage from './TouristPage.js';
+import SellerPage from './SellerPage.js';
+import HomePage from './Components/Homepage';
+import AppPage from './Components/BackendReq';
+import CompanyHomepage from './Advertiser/Components/CompanyHomepage.jsx';
+import TouristProductsPage from './Tourist/pages/TouristProduct.js';
+import ViewProducts from './Guest/pages/ViewProducts.js';
+
+// admin new
+import AdminHome from './Admin/pages/AdminHome.js';
+import ActivityCategory from './Admin/pages/ActivityCategory.js';
+import PreferenceTag from './Admin/pages/PrefenceTag.js';
+import AdminProduct from './Admin/pages/AdminProduct.js';
+import SellerProduct from './Seller/pages/SellerProduct.js';
+// import TouristProduct from './pages/TouristProduct.js';
+import Admin from './Admin/pages/Admin.js';
+import Governer from './Admin/pages/Governer.js';
+import AccountPage from './Advertiser/Components/AccountPage.jsx';
+import HomeScreen from './Components/CompanyHomepage.jsx';
+import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
+import ProductTourist from './Tourist/pages/ProductsTourist.js';
+import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
+import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 import ViewProducts from "./Guest/pages/ViewProducts.js";
 import TouristProductsPage from "./Tourist/pages/TouristProduct.js";
 import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
@@ -55,6 +88,10 @@ import Itinerary from "./Admin/pages/Itinerary.js";
 
 import "./App.css";
 import FlightMain from "./Flights/Pages/FlightMain.js";
+
+//activities
+import ActivityDetails from './Components/ActivityDetails.jsx';
+import EditActivity from './Advertiser/Components/EditActivity.jsx';
 
 //tourguide new
 
@@ -148,7 +185,7 @@ const App = () => {
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
           <Route path="/ViewProducts" element={<ViewProducts />} />
-
+          <Route path="/SellerSignupConfirm/:id" element={<SellerSignupConfirm/>}/>
           {/* Tour Guide Pages */}
           <Route path="/TourGuideHome/:id" element={<TourGuideHome />} />
           <Route
