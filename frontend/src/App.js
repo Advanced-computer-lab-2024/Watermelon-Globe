@@ -26,14 +26,14 @@ import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 //Advertiser Pages
 import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 import AdvertiserSignupConfirm from './Advertiser/Components/AdvertiserSignupConfirm.jsx';
-import CompanyHomepage from "./Components/CompanyHomepage.jsx";
+import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import AdvertiserPage from "./Components/advertiserPage";
 import HomeScreen from './Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import ActivityDetails from "./Components/ActivityDetails.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
+import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
 //Seller Pages
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
@@ -108,6 +108,7 @@ const App = () => {
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route
@@ -116,7 +117,7 @@ const App = () => {
           />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
-          <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
+          {/* <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
           <Route path="/CompanyAccount" element={<AccountPage />} />
           <Route path="/advertiserHomePage" element={<HomeScreen />} />
           <Route path="/editAdvertiser" element={<EditProfilePage />} />
