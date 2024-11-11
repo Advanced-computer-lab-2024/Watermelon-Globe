@@ -4,6 +4,7 @@ import "../../pages/Navbar.css";
 import Navbar from "../../pages/Navbar.jsx";
 import ItinerarySlider from "../Components/ItenerarySlider.js";
 import TourGuideSettings from "./TourGuideSettings.js";
+import ProfilePhotoUpload from "../Components/ProfilePhoto.jsx";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function YourMainPage() {
@@ -17,8 +18,13 @@ export default function YourMainPage() {
       </header>
 
       <div className="flex min-h-screen bg-gray-100">
+        <div>
+          <ProfilePhotoUpload id={id}/>
+        </div>
         {/* Sidebar */}
-        <TourGuideSettings id={id} /> {/* Pass id as prop */}
+        <div>
+          <TourGuideSettings id={id} />
+        </div>
         {/* Main Content */}
         <main className="flex-1 p-6">
           <ItinerarySlider />

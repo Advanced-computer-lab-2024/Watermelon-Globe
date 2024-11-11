@@ -7,6 +7,7 @@ const {
   updateSeller,
   createProduct,
   getAllProducts,
+  getAllProductIds,
   searchProductbyName,
   updateProduct,
   getSellerStatus,
@@ -54,7 +55,8 @@ router.get('/sellerStatus/:id', getSellerStatus);
 //Get all products
 router.get("/GetAllProducts", getAllProducts);
 
-//Get single product
+//Get all products ids
+router.get("/GetProductsIDs", getAllProductIds);
 
 //post a new product
 router.post("/CreateProduct", createProduct);

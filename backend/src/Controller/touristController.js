@@ -616,6 +616,64 @@ const BookedActivities = async (req, res) => {
   }
 };
 
+
+const deleteItinerary = async (req, res) => {
+  try {
+    const { touristId, itineraryId } = req.params;
+    
+    // Find the tourist
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    // Remove the itinerary from the tourist's bookedItineraries
+    tourist.bookedItineraries = tourist.bookedItineraries.filter(
+      id => id.toString() !== itineraryId
+    );
+
+    await tourist.save();
+
+    // You may also want to delete the itinerary from your ChildItinerary collection
+    // await ChildItinerary.findByIdAndDelete(itineraryId);
+
+    res.status(200).json({ message: 'Itinerary deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting itinerary:', error);
+    res.status(500).json({ error: 'An error occurred while deleting the itinerary' });
+  }
+};
+
+const deleteActivity = async (req, res) => {
+  try {
+    const { touristId, activityId } = req.params;
+    
+    // Find the tourist
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    // Remove the activity from the tourist's bookedActivities
+    tourist.bookedActivities = tourist.bookedActivities.filter(
+      id => id.toString() !== activityId
+    );
+
+    await tourist.save();
+
+    // You may also want to delete the activity from your ActivityBooking collection
+    // await ActivityBooking.findByIdAndDelete(activityId);
+
+    res.status(200).json({ message: 'Activity deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting activity:', error);
+    res.status(500).json({ error: 'An error occurred while deleting the activity' });
+  }
+};
+
+
+
+
   
 module.exports = {
   createTourist,
@@ -639,6 +697,7 @@ module.exports = {
   redeemPoints,
   addPoints,
   BookedItineraries,
-  BookedActivities
-
+  BookedActivities,
+  deleteActivity,
+  deleteItinerary
 };

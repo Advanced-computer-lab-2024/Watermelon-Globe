@@ -242,29 +242,30 @@ router.post(
 //Photo upload for tour guide
 router.post(
     "/upload/tourGuidePhoto/:tourGuideId",
-    upload.single("photo"),
+    upload.single("photo"), // multer middleware for file upload
     async (req, res) => {
-        try {
-            const tourGuideId = req.params.tourGuideId;
-            const tourguide = await tourGuideUpload.findById(tourGuideId);
-    
-            if (!tourguide) {
-            return res.status(404).json({ message: "Tour guide not found" });
-            }
-    
-            // Save logo path
-            tourguide.photo = req.file ? req.file.path : null;
-            await tourguide.save();
-    
-            res.status(200).json({
-            message: "Photo uploaded successfully",
-            Photo: tourguide.photo,
-            });
-        } catch (error) {
-            console.error("Error uploading photo:", error);
-            res.status(500).json({ message: "Photo upload failed", error });
+      try {
+        const tourGuideId = req.params.tourGuideId;
+        const tourguide = await tourGuideUpload.findById(tourGuideId);
+  
+        if (!tourguide) {
+          return res.status(404).json({ message: "Tour guide not found" });
         }
+  
+        // Save the filename to the database (not the full path)
+        tourguide.photo = req.file ? req.file.filename : null; // Ensure filename is saved
+        await tourguide.save();
+  
+        res.status(200).json({
+          message: "Photo uploaded successfully",
+          Photo: tourguide.photo, // Return the filename, e.g., 'profile.jpg'
+        });
+      } catch (error) {
+        console.error("Error uploading photo:", error);
+        res.status(500).json({ message: "Photo upload failed", error });
+      }
     }
-);
+  );
+  
 
 module.exports = router;

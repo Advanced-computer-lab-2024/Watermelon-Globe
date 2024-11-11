@@ -144,6 +144,20 @@ const getAllProducts = async (req, res) => {
   res.status(200).json(products);
 };
 
+// Get All Products' Names & IDs
+const getAllProductIds = async (req, res) => {
+  try {
+    // Retrieve all products, selecting only the name and _id fields
+    const products = await Product.find({}, 'name _id');
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while retrieving products' });
+  }
+};
+
+
+
 //search a product by name
 const searchProductbyName = async (req, res) => {
   try {
@@ -588,7 +602,7 @@ const getProductImageByName = async (req, res) => {
 
 
 module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller, getSellerStatus,
-     createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
+     createProduct , getAllProducts , getAllProductIds , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
       acceptTermsAndConditions,getProductById,getProductReviews,getPassword,
       acceptTermsAndConditions, getQuantity, archiveProduct, unarchiveProduct, getProductImageByName};
