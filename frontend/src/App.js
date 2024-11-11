@@ -8,7 +8,7 @@ import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 
 import './App.css';
 
-import RatingsAndCommentsPage from "./pages/RatingsAndCommentsPage.js";
+import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
 //import TouristDetails from "./pages/TouristDetails.js";
 import TouristDetails from "./Tourist/Components/TouristDetails.js"
 import SellerSignup from "./pages/SellerSignup.js";
@@ -20,6 +20,7 @@ import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
 
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
+import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js"
 
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 //import MainTour from "./Tourist/pages/TouristHomepage.jsx";
@@ -125,9 +126,13 @@ const App = () => {
           <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
+          <Route path="/completed-itineraries/:id" element={<CompletedItineraries />} />
           <Route path="/completed-activities/:id" element={<CompletedActivities />} />
           {/* <Route path="/rate-tour-guide/:id" element={<RateTourGuide />} /> */}
           {/* <Route path="/rate-itinerary/:id" element={<RateItinerary />} /> */}
+          {/* <Route path="/ratingsAndCommentsPage/:relatedObjectId" element={<RatingsAndCommentsPage />} /> */}
+          <Route path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type" element={<RatingsAndCommentsPage />} />
+
 
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}

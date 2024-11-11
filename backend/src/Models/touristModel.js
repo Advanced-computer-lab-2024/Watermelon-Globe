@@ -67,6 +67,9 @@ const touristSchema = new Schema(
         ref: 'Product',
       },
     ],
+    // Activities: [
+    //   { type: mongoose.Types.ObjectId, ref: 'Activty'},
+    // ],
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

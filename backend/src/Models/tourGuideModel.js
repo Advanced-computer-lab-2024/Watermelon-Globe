@@ -76,7 +76,7 @@ const tourGuideSchema = new Schema(
         ref: 'Tourist', // Reference to the user model
         required: true
       },
-      text: {
+      comment: {
         type: String,
         required: true
       },

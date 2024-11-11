@@ -20,6 +20,8 @@ const {
   commentOnItinerary,
   rateTourGuide,
   commentOnTourGuide,
+  createActivityBooking,
+  getAllActivityBookings,
   getMyCompletedActivities,
   rateActivity,
   commentOnActivity
@@ -59,18 +61,6 @@ router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
 //sprint 2
 router.get('/getMyCompletedItineraries/:buyerId',getMyCompletedItineraries);
-  
-//   async (req, res) => {
-//   const { buyerId } = req.params;
-
-//   try {
-//     const completedItineraries = await touristController.getMyCompletedItineraries(buyerId);
-//     res.status(200).json(completedItineraries);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-
 
 router.post('/itineraries/:itineraryId/rate',rateItinerary);
 router.post('/itineraries/:itineraryId/comment', commentOnItinerary);
@@ -81,7 +71,9 @@ router.post('/tourGuide/:tourGuideId/rate',rateTourGuide);
 // Route to comment on a tour guide
 router.post('/tourGuide/:tourGuideId/comment',commentOnTourGuide);
 
-router.get('/tourists/:touristId/completedActivities', getMyCompletedActivities);
+router.post('/createActivityBooking', createActivityBooking);
+router.get('/getAllActivityBookings', getAllActivityBookings);
+router.get('/getMyCompletedActivities/:touristId', getMyCompletedActivities);
 
 router.post('/activities/:activityId/rate', rateActivity);
 router.post('/activities/:activityId/comment', commentOnActivity);

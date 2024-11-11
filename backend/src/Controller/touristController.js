@@ -6,6 +6,7 @@ const Activity = require('../Models/activityModel');
 const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
+const ActivityBooking = require('../Models/activityBookingModel');
 
 //Tourist
 
@@ -533,7 +534,7 @@ const rateItinerary = async (req, res) => {
 
 const commentOnItinerary = async (req, res) => {
   const { itineraryId } = req.params;
-  const { touristId, text } = req.body;
+  const { touristId, comment } = req.body;
   const Itinerary = itineraryModel.Itinerary;
 
   try {
@@ -550,13 +551,13 @@ const commentOnItinerary = async (req, res) => {
 
     if (existingCommentIndex !== -1) {
       // Update existing comment
-      itinerary.comments[existingCommentIndex].text = text;
+      itinerary.comments[existingCommentIndex].comment = comment;
       itinerary.comments[existingCommentIndex].date = new Date(); // Update the date
     } else {
       // Add a new comment
       itinerary.comments.push({
         user: touristId,
-        text: text,
+        comment: comment,
         date: new Date(),
       });
     }
@@ -571,6 +572,34 @@ const commentOnItinerary = async (req, res) => {
 };
 
 
+// const rateTourGuide = async (req, res) => {
+//   const { tourGuideId } = req.params;
+//   const { touristId, rating } = req.body;
+
+//   try {
+//     const tourGuide = await TourGuide.findById(tourGuideId);
+//     if (!tourGuide) {
+//       return res.status(404).json({ error: 'Tour guide not found' });
+//     }
+
+//     const existingRating = tourGuide.ratings.find(r => r.user.toString() === touristId);
+//     if (existingRating) {
+//       existingRating.rating = rating;
+//     } else {
+//       tourGuide.ratings.push({ user: touristId, rating });
+//     }
+
+//     tourGuide.ratingsSum = tourGuide.ratings.reduce((sum, r) => sum + r.rating, 0);
+//     tourGuide.noOfRatings = tourGuide.ratings.length;
+//     tourGuide.rating = tourGuide.ratingsSum / tourGuide.noOfRatings;
+
+//     await tourGuide.save();
+//     res.status(200).json({ message: 'Rating added/updated successfully', rating: tourGuide.rating });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error rating tour guide', details: error.message });
+//   }
+// };
+
 const rateTourGuide = async (req, res) => {
   const { tourGuideId } = req.params;
   const { touristId, rating } = req.body;
@@ -581,6 +610,7 @@ const rateTourGuide = async (req, res) => {
       return res.status(404).json({ error: 'Tour guide not found' });
     }
 
+    // Update or add the rating
     const existingRating = tourGuide.ratings.find(r => r.user.toString() === touristId);
     if (existingRating) {
       existingRating.rating = rating;
@@ -588,20 +618,56 @@ const rateTourGuide = async (req, res) => {
       tourGuide.ratings.push({ user: touristId, rating });
     }
 
+    // Calculate the new average rating
     tourGuide.ratingsSum = tourGuide.ratings.reduce((sum, r) => sum + r.rating, 0);
     tourGuide.noOfRatings = tourGuide.ratings.length;
     tourGuide.rating = tourGuide.ratingsSum / tourGuide.noOfRatings;
 
-    await tourGuide.save();
+    // Use the `.updateOne()` method to modify only the `ratings` field in the database.
+    await TourGuide.updateOne(
+      { _id: tourGuideId },
+      {
+        ratings: tourGuide.ratings,
+        ratingsSum: tourGuide.ratingsSum,
+        noOfRatings: tourGuide.noOfRatings,
+        rating: tourGuide.rating,
+      }
+    );
+
     res.status(200).json({ message: 'Rating added/updated successfully', rating: tourGuide.rating });
   } catch (error) {
     res.status(500).json({ error: 'Error rating tour guide', details: error.message });
   }
 };
 
+// const commentOnTourGuide = async (req, res) => {
+//   const { tourGuideId } = req.params;
+//   const { touristId, comment } = req.body;
+
+//   try {
+//     const tourGuide = await TourGuide.findById(tourGuideId);
+//     if (!tourGuide) {
+//       return res.status(404).json({ error: 'Tour guide not found' });
+//     }
+
+//     const existingComment = tourGuide.comments.find(c => c.user.toString() === touristId);
+//     if (existingComment) {
+//       existingComment.text = comment;
+//       existingComment.date = new Date();
+//     } else {
+//       tourGuide.comments.push({ user: touristId, comment, date: new Date() });
+//     }
+
+//     await tourGuide.save();
+//     res.status(200).json({ message: 'Comment added/updated successfully', comments: tourGuide.comments });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error commenting on tour guide', details: error.message });
+//   }
+// };
+
 const commentOnTourGuide = async (req, res) => {
   const { tourGuideId } = req.params;
-  const { touristId, text } = req.body;
+  const { touristId, comment } = req.body;
 
   try {
     const tourGuide = await TourGuide.findById(tourGuideId);
@@ -611,10 +677,11 @@ const commentOnTourGuide = async (req, res) => {
 
     const existingComment = tourGuide.comments.find(c => c.user.toString() === touristId);
     if (existingComment) {
-      existingComment.text = text;
-      existingComment.date = new Date();
+      existingComment.comment = comment; // Ensure the correct field name `comment`
+      existingComment.date = new Date(); // Update the date
     } else {
-      tourGuide.comments.push({ user: touristId, text, date: new Date() });
+      // Use the correct field names when pushing a new comment
+      tourGuide.comments.push({ user: touristId, comment: comment, date: new Date() });
     }
 
     await tourGuide.save();
@@ -624,6 +691,45 @@ const commentOnTourGuide = async (req, res) => {
   }
 };
 
+
+const createActivityBooking = async (req, res) => {
+  const { activityId, touristId, chosenDate, status, paymentStatus } = req.body;
+
+  try {
+    // Check if the required fields are provided
+    if (!activityId || !touristId || !chosenDate) {
+      return res.status(400).json({ error: 'Activity ID, Tourist ID, and Chosen Date are required' });
+    }
+
+    // Create a new activity booking
+    const newBooking = new ActivityBooking({
+      activity: activityId,
+      tourist: touristId,
+      chosenDate: new Date(chosenDate), // Convert chosenDate to Date object if needed
+      status: status || 'pending',
+      paymentStatus: paymentStatus || 'unpaid'
+    });
+
+    // Save the booking to the database
+    await newBooking.save();
+    res.status(201).json({ message: 'Activity booking created successfully', booking: newBooking });
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating activity booking', details: error.message });
+  }
+};
+
+const getAllActivityBookings = async (req, res) => {
+  try {
+    // Fetch all activity bookings, populating related fields for activity and tourist details
+    const bookings = await ActivityBooking.find()
+      .populate('activity')
+      .populate('tourist');
+
+    res.status(200).json({ message: 'All activity bookings retrieved successfully', bookings });
+  } catch (error) {
+    res.status(500).json({ error: 'Error retrieving activity bookings', details: error.message });
+  }
+};
 
 const getMyCompletedActivities = async (req, res) => {
   const { touristId } = req.params;
@@ -669,16 +775,60 @@ const rateActivity = async (req, res) => {
     // Update average rating
     activity.rating = activity.noOfRatings > 0 ? activity.ratingsSum / activity.noOfRatings : 0;
 
-    await activity.save();
+    //await activity.save();
+
+    await Activity.updateOne(
+      { _id: activityId },
+      {
+        ratings: activity.ratings,
+        ratingsSum: activity.ratingsSum,
+        noOfRatings: activity.noOfRatings,
+        rating: activity.rating,
+      }
+    );
     res.status(200).json({ message: 'Rating added successfully', rating: activity.rating });
   } catch (error) {
     res.status(500).json({ error: 'Error adding rating to activity', details: error.message });
   }
 };
 
+// const commentOnActivity = async (req, res) => {
+//   const { activityId } = req.params;
+//   const { touristId, comment } = req.body;
+
+//   try {
+//     const activity = await Activity.findById(activityId);
+
+//     if (!activity) {
+//       return res.status(404).json({ error: 'Activity not found' });
+//     }
+
+//     // Check if the user has already commented, if so, update the comment
+//     const existingComment = activity.comments.find(c => c.user.toString() === touristId);
+
+//     if (existingComment) {
+//       existingComment.comment = comment;
+//       existingComment.date = new Date(); // Update timestamp
+//     } else {
+//       // Add a new comment
+//       activity.comments.push({
+//         user: touristId,
+//         comment,
+//         date: new Date()
+//       });
+//     }
+
+//     await activity.save();
+//     res.status(200).json({ message: 'Comment added successfully', comments: activity.comments });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error adding comment to activity', details: error.message });
+//   }
+// };
+
+
 const commentOnActivity = async (req, res) => {
   const { activityId } = req.params;
-  const { touristId, text } = req.body;
+  const { touristId, comment } = req.body;
 
   try {
     const activity = await Activity.findById(activityId);
@@ -687,28 +837,44 @@ const commentOnActivity = async (req, res) => {
       return res.status(404).json({ error: 'Activity not found' });
     }
 
-    // Check if the user has already commented, if so, update the comment
+    // Check if the user has already commented
     const existingComment = activity.comments.find(c => c.user.toString() === touristId);
 
     if (existingComment) {
-      existingComment.text = text;
-      existingComment.date = new Date(); // Update timestamp
+      // Update the existing comment
+      await Activity.updateOne(
+        { _id: activityId, 'comments.user': touristId },
+        {
+          $set: {
+            'comments.$.comment': comment,
+            'comments.$.date': new Date(),
+          },
+        }
+      );
     } else {
       // Add a new comment
-      activity.comments.push({
-        user: touristId,
-        text,
-        date: new Date()
-      });
+      await Activity.updateOne(
+        { _id: activityId },
+        {
+          $push: {
+            comments: {
+              user: touristId,
+              comment,
+              date: new Date(),
+            },
+          },
+        }
+      );
     }
 
-    await activity.save();
-    res.status(200).json({ message: 'Comment added successfully', comments: activity.comments });
+    // Fetch the updated comments array to return in response
+    const updatedActivity = await Activity.findById(activityId).populate('comments.user', 'name'); // Populate user name if needed
+
+    res.status(200).json({ message: 'Comment added successfully', comments: updatedActivity.comments });
   } catch (error) {
     res.status(500).json({ error: 'Error adding comment to activity', details: error.message });
   }
 };
-
 
 module.exports = {
   createTourist,
@@ -731,6 +897,8 @@ module.exports = {
   commentOnItinerary,
   rateTourGuide,
   commentOnTourGuide,
+  createActivityBooking,
+  getAllActivityBookings,
   getMyCompletedActivities,
   rateActivity,
   commentOnActivity

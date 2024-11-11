@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './ItineraryDetails.css';
+import './ItineraryDetails.css'; // Reuse existing CSS or create a new one for activities if needed
 
 const CompletedActivities = () => {
-    const { id } = useParams(); // ID for ChildItinerary
-    const [childItineraries, setChildItineraries] = useState([]);
+    const { id: touristId } = useParams(); // Get the tourist ID from the route params
+    const [completedActivities, setCompletedActivities] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const fetchChildItineraries = async () => {
-        try {
-            const response = await fetch(`/api/Tourist/getMyCompletedItineraries/${id}`);
+    const fetchCompletedActivities = async () => {
+        try {                                
+            const response = await fetch(`/api/Tourist/getMyCompletedActivities/${touristId}`);
             if (!response.ok) {
-                throw new Error('Child itinerary not found');
+                throw new Error('Completed activities not found');
             }
             const data = await response.json();
-            setChildItineraries(data);
+            setCompletedActivities(data.completedActivities); // Access completedActivities from response
         } catch (error) {
             setError(error.message);
         } finally {
@@ -25,66 +25,40 @@ const CompletedActivities = () => {
     };
 
     useEffect(() => {
-        fetchChildItineraries();
-    }, [id]);
+        fetchCompletedActivities();
+    }, [touristId]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    // Handler to redirect to the ratings page with parent itinerary ID
-    const redirectToRatingsPage = (itineraryId, type) => {
-        if (type === 'guide') {
-            navigate(`/rateTourGuide/${itineraryId}`);
-        } else if (type === 'itinerary') {
-            navigate(`/rateItinerary/${itineraryId}`);
-        }
+    // Handler to redirect to the ratings page with activity ID and tourist ID
+    const redirectToRatingsPage = (activityId, type) => {
+        navigate(`/ratingsAndCommentsPage/${activityId}/${touristId}/${type}`);
     };
 
     return (
         <div className="itinerary-details">
             <h2>Completed Activities</h2>
-            {childItineraries.map((child) => (
-                <div key={child._id} className="child-itinerary-box">
-                    <h3>Status: {child.status}</h3>
-                    <p><strong>Total Price:</strong> ${child.totalPrice}</p>
-                    <p><strong>Completed:</strong> {child.completed ? 'Yes' : 'No'}</p>
+            {completedActivities.map((activityBooking) => (
+                <div key={activityBooking._id} className="activity-box">
+                    <h3>Status: {activityBooking.status}</h3>
+                    <p><strong>Total Price:</strong> ${activityBooking.activity.Price}</p>
+                    <p><strong>Completed:</strong> {activityBooking.completed ? 'Yes' : 'No'}</p>
 
-                    <h3>Itinerary Details</h3>
-                    <p><strong>Name:</strong> {child.itinerary?.name}</p>
-                    <p><strong>Locations:</strong> {child.itinerary?.locations?.join(', ')}</p>
-                    <p><strong>Language of Tour:</strong> {child.itinerary?.languageOfTour}</p>
-                    <p><strong>Price Per Day:</strong> ${child.itinerary?.priceOfTour}</p>
+                    <h3>Activity Details</h3>
+                    <p><strong>Name:</strong> {activityBooking.activity.Name}</p>
+                    <p><strong>Location:</strong> {activityBooking.activity.Location.coordinates.join(', ')}</p>
+                    <p><strong>Date:</strong> {new Date(activityBooking.activity.Date).toLocaleDateString()}</p>
+                    <p><strong>Time:</strong> {activityBooking.activity.Time}</p>
+                    <p><strong>Price:</strong> ${activityBooking.activity.Price}</p>
 
-                    <h3>Chosen Dates</h3>
-                    <ul>
-                        {child.chosenDates.map((date, index) => (
-                            <li key={index}>{new Date(date).toLocaleDateString()}</li>
-                        ))}
-                    </ul>
+                    <h3>Chosen Date</h3>
+                    <p>{new Date(activityBooking.chosenDate).toLocaleDateString()}</p>
 
-                    <h3>Chosen Times</h3>
-                    <ul>
-                        {child.chosenTimes.map((time, index) => (
-                            <li key={index}>{time}</li>
-                        ))}
-                    </ul>
-
-                    <h3>Activities</h3>
-                    <ul>
-                        {child.itinerary?.activities?.map((activity, index) => (
-                            <li key={index}>
-                                {activity.activityName} - {activity.duration}
-                            </li>
-                        ))}
-                    </ul>
-
-                    {/* Buttons for rating the tour guide and itinerary */}
+                    {/* Button for rating the activity */}
                     <div className="rating-buttons">
-                        <button onClick={() => redirectToRatingsPage(child.itinerary._id, 'guide')}>
-                            Rate Tour Guide
-                        </button>
-                        <button onClick={() => redirectToRatingsPage(child.itinerary._id, 'itinerary')}>
-                            Rate Itinerary
+                        <button onClick={() => redirectToRatingsPage(activityBooking.activity._id, 'activity')}>
+                            Rate Activity
                         </button>
                     </div>
                 </div>

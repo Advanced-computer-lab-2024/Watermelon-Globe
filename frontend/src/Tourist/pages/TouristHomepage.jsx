@@ -51,6 +51,9 @@ const HomePage = () => {
           >
             View Profile
           </button>
+          <Link to={`/completed-itineraries/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+           Completed Itineraries
+          </Link>   
           <Link to={`/completed-activities/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
            Completed Activities
           </Link>
