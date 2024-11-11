@@ -550,7 +550,8 @@ const redeemPoints = async (req, res) => {
 
   const bookHotel = async (req, res) => {
     try {
-      const { touristId, hotelId, roomType, price, currency, checkInDate, checkOutDate } = req.body;
+      const { touristId } = req.params;
+      const { hotelId, roomType, price, currency, checkInDate, checkOutDate } = req.body;
   
       // Check if tourist exists
       const tourist = await Tourist.findById(touristId);
@@ -558,15 +559,9 @@ const redeemPoints = async (req, res) => {
         return res.status(404).json({ message: 'Tourist not found' });
       }
   
-      // Check if hotel exists
-      const hotel = await Hotel.findById(hotelId);
-      if (!hotel) {
-        return res.status(404).json({ message: 'Hotel not found' });
-      }
-  
       // Create new hotel booking
       const newBooking = new HotelBooking({
-        touristId,
+        touristId: req.params.touristId, // Get the touristId from the URL parameter
         hotelId,
         roomType,
         price,

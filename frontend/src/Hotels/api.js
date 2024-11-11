@@ -59,7 +59,7 @@ export const getHotelIdsByCity = async (token, cityCode) => {
 // Step 2: Fetch hotel offers by hotel IDs
 export const getHotelOffersById = async ({
     token,
-    hotelIds,
+    hotelId,
     checkInDate,
     checkOutDate,
     adults = 1,
@@ -68,7 +68,7 @@ export const getHotelOffersById = async ({
     rating,
     currency = 'USD',
 }) => {
-    const url = `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${hotelIds.join(',')}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adults=${adults}&roomQuantity=${roomQuantity}&currency=${currency}`;
+    let url = `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adults=${adults}&roomQuantity=${roomQuantity}&currency=${currency}`;
 
     if (priceRange) url += `&priceRange=${priceRange}`;
     if (rating) url += `&rating=${rating}`;
@@ -81,6 +81,8 @@ export const getHotelOffersById = async ({
 
     if (!response.ok) throw new Error('Failed to fetch hotel offers');
 
+
+    console.log(url);
     const data = await response.json();
     return data.data; // Adjust based on Amadeus response structure
 };
