@@ -37,7 +37,7 @@ import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
 import SellerPage from "./SellerPage.js";
-import SellerProduct from './Seller/pages/SellerProduct.js';
+import SellerProduct from './Seller/pages/SellerProduct.jsx';
 //Tour guide pages
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 import TourguideSignup from "./pages/TourguideSignup.jsx";
