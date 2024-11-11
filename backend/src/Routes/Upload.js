@@ -3,10 +3,9 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const tourGuideUpload = require("../models/tourGuideModel");
-const advertiserUpload = require("../models/advertiserModel");
-const sellerUpload = require("../models/sellerModel");
-const Advertiser = require("../models/advertiserModel");
+const tourGuideUpload = require("../Models/tourGuideModel");
+const advertiserUpload = require("../Models/companyProfileModel");
+const sellerUpload = require("../Models/sellerModel");
 
 const router = express.Router();
 
@@ -77,7 +76,7 @@ router.post(
 
 // Advertiser Upload Route
 router.post(
-  "/upload/advertiser",
+  "/upload/advertiser/:advertiserId",
   upload.fields([
     { name: "idProof", maxCount: 1 },
     { name: "taxationRegistryCard", maxCount: 1 },
@@ -85,22 +84,28 @@ router.post(
   async (req, res) => {
     try {
         const files = req.files;
-        const advertiserId = req.body.userId;
+        const advertiserId = req.params.advertiserId;
 
-        const advertiser = await advertiserUpload.findById(advertiserId);
-        if(!advertiser){
-            return res.status(404).json({ message: "Advertiser not found" });
-        }
-
+        const updateData = {};
         if (files.idProof) {
-            advertiser.idProof = files.idProof[0].path;
+            updateData.idProof = files.idProof[0].path;
         }
 
         if (files.taxationRegistryCard) {
-            advertiser.taxationRegistryCard = files.taxationRegistryCard[0].path;
+            updateData.taxationRegistryCard = files.taxationRegistryCard[0].path;
         }
 
-        await advertiser.save();
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ message: "No files to upload" });
+        }
+
+        const advertiser = await sellerUpload.findByIdAndUpdate(advertiserId, {
+            $set: updateData,
+        }, { new: true });
+
+        if(!advertiser){
+            return res.status(404).json({ message: "Advertiser not found" });
+        }
 
         res.status(200).json({ message: "Files uploaded successfully" });
         } catch (error) {

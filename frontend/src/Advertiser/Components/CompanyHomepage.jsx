@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Navbar.css';
+import Navbar from './Navbar';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
@@ -40,6 +41,7 @@ const HomeScreen = () => {
 
     return (
         <div>
+            <Navbar/>
             <h1>Activities</h1>
             {activities.map(activity => (
                 <div key={activity._id} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>

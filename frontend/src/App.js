@@ -9,7 +9,8 @@ import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 import './App.css';
 
 import TouristDetails from "./pages/TouristDetails.js";
-import SellerSignup from "./pages/SellerSignup.js";
+import SellerSignup from "./pages/SellerSignup.jsx";
+import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
 import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
@@ -56,6 +57,7 @@ const App = () => {
     setIsSignedUp(true);
     setProfile(newProfile);
   };
+
   const handleSignOut = () => {
     setIsSignedUp(false);
     localStorage.removeItem('userId');
@@ -139,6 +141,7 @@ const App = () => {
           <Route path='/activity/:id' element={<ActivityDetails/>}/>
 
           <Route path="/TourGuideHome" element={<TourGuideHome />} />
+          <Route path="/SellerSignupConfirm/:id" element={<SellerSignupConfirm/>}/>
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>

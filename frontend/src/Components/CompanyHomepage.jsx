@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate , Link } from 'react-router-dom';
-import axios from 'axios';
 import '../Components/Navbar.css';
 import Navbar from '../Components/Navbar.jsx';
 
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
-    const [advertisers, setAdvertisers] = useState({}); // To hold advertiser names
-    const navigate = useNavigate(); // useNavigate hook for navigation
+    const [advertisers, setAdvertisers] = useState({});
+    const navigate = useNavigate();
 
 
     useEffect(() => {
