@@ -44,41 +44,6 @@ const ViewProfile = () => {
     }
   };
 
-  // Function to fetch all sellers
-  const getAllSellers = async () => {
-    try {
-      const response = await fetch('/api/Seller/GetAllSeller', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const json = await response.json(); // Parse the JSON response
-
-      if (!response.ok) {
-        setErrorMessage(json.error || 'Failed to fetch sellers.');
-      } else {
-        setAllSellers(json); // Store the list of sellers in the state
-        setErrorMessage(''); // Clear any error message if successful
-      }
-    } catch (error) {
-      // Handle any network or unexpected errors
-      console.error("Error fetching all sellers:", error);
-      setErrorMessage('An error occurred while fetching the sellers.');
-    }
-  };
-
-  // Handle form submission when user submits the seller ID
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent page reload on form submission
-    if (sellerId) {
-      fetchSellerProfile(sellerId); // Fetch seller profile based on input ID
-    } else {
-      setErrorMessage('Please enter a valid seller ID.');
-      setSeller(null); // Clear previous seller data if the input is invalid
-    }
-  };
 
   // Function to handle delete account request
   const handleDeleteAccount = async () => {
@@ -112,7 +77,8 @@ const ViewProfile = () => {
 
   // Fetch all sellers on component mount
   useEffect(() => {
-    getAllSellers(); // Call getAllSellers when the component mounts
+    setSellerId(sellerId);
+    fetchSellerProfile(sellerId);
   }, []);
 
   return (
@@ -120,17 +86,6 @@ const ViewProfile = () => {
       <h2>View Seller Profile</h2>
 
       {/* Input form to accept seller ID */}
-      <form onSubmit={handleSubmit}>
-        <label>Enter Seller ID:</label>
-        <input
-          type="text"
-          value={sellerId}
-          onChange={(e) => setSellerId(e.target.value)}
-          required
-        />
-        <button type="submit">View Profile</button>
-      </form>
-
       {/* Display error message if any */}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
@@ -158,7 +113,7 @@ const ViewProfile = () => {
         !errorMessage && <p>Loading...</p>
       )}
 
-      <h3>All Sellers</h3>
+      {/* <h3>All Sellers</h3>
       <ul>
         {allSellers.length > 0 ? (
           allSellers.map((seller) => (
@@ -171,7 +126,7 @@ const ViewProfile = () => {
         ) : (
           <p>No sellers found.</p>
         )}
-      </ul>
+      </ul> */}
     </div>
   );
 };
