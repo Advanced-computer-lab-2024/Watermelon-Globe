@@ -37,7 +37,7 @@ const HomeScreen = () => {
         const confirmDelete = window.confirm('Are you sure you want to delete this activity?');
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:8000/api/Activities/deleteActivity/${id}`);
+                await axios.delete(`/api/Activities/deleteActivity/${id}`);
                 setActivities(prevActivities => prevActivities.filter(activity => activity._id !== id));
                 alert('Activity deleted successfully');
             } catch (error) {
