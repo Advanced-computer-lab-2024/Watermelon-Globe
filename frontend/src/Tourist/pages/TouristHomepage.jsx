@@ -57,6 +57,8 @@ const TouristHomePage = () => {
               <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
               <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
               <Link to={`/TouristComplaints/${id}`} className="text-gray-600 hover:text-gray-900">Complaints</Link>
+              <Link to={`/MyBookings/${id}`} className="text-gray-600 hover:text-gray-900">MyBookings</Link>
+
 
             </div>
             <div className="flex items-center space-x-2">
