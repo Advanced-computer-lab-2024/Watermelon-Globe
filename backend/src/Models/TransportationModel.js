@@ -17,6 +17,10 @@ const TransportationSchema = new Schema({
     type: Number,
     required: true  // Price of the transportation ticket
   },
+  booked:{
+    type: Boolean,
+    default: false
+  },
   bookingDate: {
     type: Date,      // The date the booking was made
     default: Date.now  
