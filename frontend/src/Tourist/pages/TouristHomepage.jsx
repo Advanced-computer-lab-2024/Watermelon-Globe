@@ -6,6 +6,7 @@ import Navbar from "../../pages/Navbar.jsx";
 import ExploreTrips from "../Components/ExploreTrips.jsx";
 import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
+import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 
 const TouristHomePage = () => {
   const { id } = useParams();
@@ -200,6 +201,7 @@ const TouristHomePage = () => {
         <ExploreTrips />
         <ExploreActivities />
         <ExploreHistoricalSites />
+        <ExploreTransportations/>
       </main>
 
       <footer className="bg-gray-800 text-white py-4 text-center">
