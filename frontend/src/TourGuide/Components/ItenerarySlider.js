@@ -18,7 +18,7 @@ export default function ItinerarySlider() {
       try {
         const response = await fetch('/api/Itinerary/getAllItineraries')
         if (!response.ok) throw new Error('Failed to fetch itineraries')
-        
+
         const data = await response.json()
         setItineraries(data)
         setIsLoading(false)
@@ -84,9 +84,10 @@ export default function ItinerarySlider() {
     <div className="w-full max-w-4xl mx-auto p-4">
       {/* Delete Account Button */}
       <div className="flex justify-end">
-        <button 
+        <button
           onClick={handleDeleteAccount}
-          className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
+          className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+          style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
         >
           Delete Account
         </button>
@@ -97,8 +98,8 @@ export default function ItinerarySlider() {
       {deleteError && <div className="text-red-500">{deleteError}</div>}
 
       <div className="relative overflow-hidden">
-        <div 
-          className="flex transition-transform duration-500 ease-in-out" 
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
           {itineraries.map((itinerary, index) => (

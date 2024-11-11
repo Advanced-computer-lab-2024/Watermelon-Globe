@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ViewProfile = () => {
   const [sellerId, setSellerId] = useState(''); // State to store the input seller ID
@@ -6,6 +7,7 @@ const ViewProfile = () => {
   const [errorMessage, setErrorMessage] = useState(''); // State to store error messages
   const [successMessage, setSuccessMessage] = useState(''); // State to store success messages
   const [allSellers, setAllSellers] = useState([]); // State to store all sellers
+  const navigate = useNavigate();
 
   // Function to fetch seller profile by ID
   const fetchSellerProfile = async (id) => {
@@ -92,9 +94,10 @@ const ViewProfile = () => {
         setErrorMessage('Failed to delete account.');
         setSuccessMessage(''); // Clear success message on error
       } else {
-        setSuccessMessage('Account deleted successfully.');
+        alert('Account deleted successfully.');
         setErrorMessage(''); // Clear error message on success
         setSeller(null); // Clear seller data after deletion
+        navigate('/');
       }
     } catch (error) {
       console.error('Error deleting account:', error);
