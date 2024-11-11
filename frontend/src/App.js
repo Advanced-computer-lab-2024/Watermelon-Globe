@@ -27,6 +27,7 @@ import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
 import HomeScreen from './Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
+import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.jsx';
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
@@ -156,9 +157,9 @@ const App = () => {
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route path="/advertiserProfile/:profileId" element = {<AccountPage/>}/>
           <Route path="/editAdvertiser/:profileId" element={<EditProfilePage/>} />
-          <Route path="/activityDetails" element={<ActivityDetails />} />
+          <Route path="/activityDetails/:id" element={<AdvertiserActivityDetails />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
-          <Route path="/add-activity" element={<ActivityForm />} />
+          <Route path="/add-activity/:userId" element={<ActivityForm />} />
 
           {/* Signup Pages */}
           <Route path="/seller-signup" element={<SellerSignup />} />

@@ -55,8 +55,7 @@ const HomeScreen = () => {
                     advertiserId = {advertiser._id}
                     advertiser={advertiser} 
                     onProfileView={() => navigate(`/advertiserProfile/${advertiser._id}`)}
-                    onViewActivities={() => navigate(`/view-activities/${advertiser._id}`)}
-                    onCreateActivity={() => navigate('/add-activity')}
+                    onCreateActivity={() => navigate(`/add-activity/${advertiser._id}`)}
                     // ChangePassword={() => navigate('/changeAdvertiserPassword')}
                 />
             )}
@@ -74,7 +73,7 @@ const HomeScreen = () => {
                         <p><strong>Discount:</strong> {activity.Discount}%</p>
                         <p><strong>Advertiser:</strong> {activity.Advertiser?.Name || 'Unknown Advertiser'}</p>
 
-                        <button onClick={() => navigate(`/activity/${activity._id}`)}>View Details</button>
+                        <button onClick={() => navigate(`/activityDetails/${activity._id}`)}>View Details</button>
 
                         {advertiser && activity.Advertiser?._id === advertiser._id && (
                             <>
