@@ -20,7 +20,9 @@ const {
     redeemPoints,
     addPoints,
     BookedActivities,
-    BookedItineraries
+    BookedItineraries,
+    deleteActivity,
+    deleteItinerary
     
   } = require("../Controller/touristController");
   
@@ -71,5 +73,8 @@ router.put("/addPoints/:id",addPoints);
 
 router.get('/bookedActivities/:id/',BookedActivities);
 router.get('/BookedItineraries/:id/',BookedItineraries);
+
+router.delete('/deleteActivity/:touristId/:activityId', deleteActivity);
+router.delete('/deleteItinerary/:touristId/:itineraryId', deleteItinerary);
 
   module.exports = router;
