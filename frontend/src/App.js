@@ -59,7 +59,7 @@ import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
-import TouristProduct from "./Tourist/pages/TouristProduct.js";
+import TouristActivityDetails from "./Tourist/pages/ActivityDetails.jsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
@@ -136,7 +136,8 @@ const App = () => {
           <Route path="/signup-options" element={<SignupOptions />} />
 
           {/* Tourist Pages */}
-          <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
+          <Route path="/itineraryDetails/:tripid/:id" element={<ItineraryDetails />} />
+          <Route path="/TouristActivityDetails/:activityId/:id" element={<TouristActivityDetails />} />
           <Route
             path="/Tourist_ProductsPage"
             element={<TouristProductsPage />}

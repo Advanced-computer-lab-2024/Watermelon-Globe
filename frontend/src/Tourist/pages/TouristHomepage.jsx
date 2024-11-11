@@ -4,7 +4,7 @@ import profileIcon from "../../Assets/Profile.png";
 import "../pages/styles.css";
 import Navbar from "../../pages/Navbar.jsx";
 import ExploreTrips from "../Components/ExploreTrips.jsx";
-import ExploreActivities from "../../Guest/Components/ExploreActivities.jsx";
+import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 
 const TouristHomePage = () => {

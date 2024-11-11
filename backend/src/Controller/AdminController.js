@@ -335,16 +335,7 @@ const updateActivityCategory = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const {
-    name,
-    price,
-    quantity,
-    picture,
-    description,
-    seller,
-    ratings,
-    sales,
-  } = req.body;
+  const { name, price, quantity, description, seller, ratings, sales } = req.body;
 
   try {
     // Create a new product with the provided details
@@ -352,12 +343,11 @@ const createProduct = async (req, res) => {
       name,
       price,
       quantity,
-      picture,
       description,
       seller: "6729244f151b6c9e346dd732",
       ratings: ratings || 0,
       sales: sales || 0,
-      archived: false, // Explicitly set this as a default value
+      archived: false // Explicitly set this as a default value
     });
 
     // Return the created product as JSON response
@@ -963,30 +953,31 @@ const unarchiveProduct = async (req, res) => {
   }
 };
 
-const getProductImageByName = async (req, res) => {
-  const { name } = req.query;
+//Upload product image
+const uploadPicture = async (req, res) => {
+  const { id } = req.query; // Get the product ID from the route parameters
+  const { picture } = req.body; // Get the picture URL from the request body
 
-  // Check if the name is provided
-  if (!name) {
-    return res.status(400).json({ error: "Product name is required" });
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid product ID' });
   }
 
   try {
-    // Search for the product by name and return only the picture field
-    const product = await Product.findOne(
-      { name: new RegExp(name, "i") },
-      "picture" // Select only the picture field
+    // Update the product's picture field
+    const product = await Product.findOneAndUpdate(
+      { _id: id }, // Find the product by ID
+      { picture }, // Update the picture field
+      { new: true } // Return the updated product
     );
 
     if (!product) {
-      return res.status(404).json({ error: "No product found with this name" });
+      return res.status(404).json({ error: 'No product found with this ID' });
     }
 
-    res.status(200).json({ picture: product.picture });
+    res.status(200).json({ message: 'Product picture updated successfully', product });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the product image" });
+    res.status(500).json({ error: 'An error occurred while updating the product picture' });
   }
 };
 
@@ -1069,6 +1060,6 @@ module.exports = {
   getQuantity,
   archiveProduct,
   unarchiveProduct,
-  getProductImageByName,
+  uploadPicture,
   markItineraryInappropriate,
 };
