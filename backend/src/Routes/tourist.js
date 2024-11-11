@@ -69,7 +69,7 @@ router.get("/getPassword",getPassword);
 
 router.post("/bookFlight/:touristId" , bookFlight);
 
-router.post("bookHotel/:touristId", bookHotel)
+router.post("/bookHotel/:touristId", bookHotel)
   
 
 router.get("/myComplaints/:touristId", getTouristComplaints);

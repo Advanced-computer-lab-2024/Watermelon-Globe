@@ -68,6 +68,7 @@ import SiteDetails from './Tourist/pages/siteDetails.js';
 import ActivityDetails from './Tourist/pages/activityDetails.js';
 import Complaint from './Admin/pages/Complaint.js';
 import Itinerary from './Admin/pages/Itinerary.js';
+import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -187,7 +188,8 @@ const App = () => {
           {/* Path for Flight and Hotel APIs */}
           <Route path='/Flights/:touristId' element={<FlightMain/>}/>
           <Route path='/Hotels/:touristId' element={<HotelMain/>}/>
-          <Route path='/HotelBooking/:hotelId' element={<HotelBooking/>}/>
+          <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
+
 
 
         </Routes>

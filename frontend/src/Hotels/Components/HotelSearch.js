@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
 import { getHotelIdsByCity } from '../api'; // API function to get hotel data
-
+import { useParams } from 'react-router-dom'; // Correct import here
+import './HotelSearch.css';  // Adjust the path based on where the CSS file is located
 
 const HotelSearch = ({ token }) => {
   const [cityCode, setCityCode] = useState('');
+  const { touristId } = useParams();
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,8 +30,8 @@ const HotelSearch = ({ token }) => {
   };
 
   const handleHotelClick = (hotelId) => {
-    // Redirect to the booking page with the selected hotel ID
-    navigate(`/BookingHotel/${hotelId}`);
+    // Redirect to the hotel offers page with the selected hotel ID and tourist ID
+    navigate(`/HotelOffers/${hotelId}/${touristId}`);
   };
 
   return (
@@ -52,18 +54,18 @@ const HotelSearch = ({ token }) => {
         {hotels?.length > 0 ? (
           hotels.map((hotel) => {
             const hotelDetails = {
-                name: hotel.name || 'No name available',  // Fallback if hotel name is missing
-                location: hotel.location || 'Location not available',
-                distance: hotel.distance || 'Distance not available',
-                longitude: hotel.longitude || 'Longitude not available',
-                latitude: hotel.latitude || 'Latitude not available',
-              };
+              name: hotel.name || 'No name available',  // Fallback if hotel name is missing
+              location: hotel.location || 'Location not available',
+              distance: hotel.distance || 'Distance not available',
+              longitude: hotel.longitude || 'Longitude not available',
+              latitude: hotel.latitude || 'Latitude not available',
+            };
 
             return (
               <div
                 key={hotel.hotelId}
                 className="hotel-item"
-                onClick={() => handleHotelClick(hotel.hotelId)}
+                onClick={() => handleHotelClick(hotel.id)}  // Call handleHotelClick with the hotel ID
               >
                 <h4 className="hotel-name">{hotelDetails.name}</h4>
                 <p className="hotel-location"><strong>Location:</strong> {hotelDetails.location}</p>

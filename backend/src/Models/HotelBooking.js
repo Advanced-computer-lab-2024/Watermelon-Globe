@@ -8,8 +8,7 @@ const hotelBookingSchema = new mongoose.Schema({
     required: true,
   },
   hotelId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hotel', // Assuming there's a Hotel model to reference
+    type: String,
     required: true,
   },
   roomType: {
