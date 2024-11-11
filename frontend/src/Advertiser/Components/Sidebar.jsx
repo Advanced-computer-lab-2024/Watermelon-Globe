@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
-const Sidebar = ({ onEditProfile, advertiser, onViewActivities, onCreateActivity, advertiserId }) => {
+const Sidebar = ({ onEditProfile, advertiser, onViewActivities, onCreateActivity, advertiserId , ChangePassword}) => {
     const navigate = useNavigate();
     console.log(advertiserId);
 

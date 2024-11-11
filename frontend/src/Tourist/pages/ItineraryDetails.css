@@ -96,3 +96,17 @@ p {
     background-color: #45a049; /* Darker green on hover */
 }
 
+.share-button{
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.share-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+

@@ -1,4 +1,4 @@
-const ActivityModel = require("../Models/activityModel");
+const ActivityModel = require("../Models/activityModel.js");
 const Tag = require("../Models/tagModel");
 const CompanyProfile = require("../Models/companyProfileModel"); // Adjust the path if necessary
 

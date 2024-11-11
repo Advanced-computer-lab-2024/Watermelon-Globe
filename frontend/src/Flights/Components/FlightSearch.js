@@ -16,11 +16,10 @@ const FlightSearch = ({ token, setFlights }) => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
-  const [travelClass, setTravelClass] = useState('');
+  const [travelClass, setTravelClass] = useState('ECONOMY');
   const [nonStop, setNonStop] = useState(false);
   const [maxPrice, setMaxPrice] = useState('');
   const [max, setMax] = useState(250);
-  const [cabinClass, setCabinClass] = useState('ECONOMY'); // Default cabin class value
   const [message, setMessage] = useState(''); // State to hold message
 
 
@@ -52,7 +51,7 @@ const FlightSearch = ({ token, setFlights }) => {
       } else {
         setMessage('');
       }
-      
+
       setFlights(flights);
     } catch (error) {
       console.error('Error fetching flight offers:', error);
@@ -62,43 +61,17 @@ const FlightSearch = ({ token, setFlights }) => {
 
   return (
     <div>
-      {/* <h3>Search Flights</h3>
-      <input placeholder="Origin" value={origin} onChange={(e) => setOrigin(e.target.value)} />
-      <input placeholder="Destination" value={destination} onChange={(e) => setDestination(e.target.value)} />
-      <input placeholder="Departure Date" type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} />
-      <input placeholder="Return Date" type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
-      <input placeholder="Adults" type="number" min="1" value={adults} onChange={(e) => setAdults(e.target.value)} />
-      <input placeholder="Children" type="number" min="0" value={children} onChange={(e) => setChildren(e.target.value)} />
-      <input placeholder="Infants" type="number" min="0" value={infants} onChange={(e) => setInfants(e.target.value)} />
-      <input placeholder="Travel Class" value={travelClass} onChange={(e) => setTravelClass(e.target.value)} />
-      <label>
-        Non-Stop Only
-        <input type="checkbox" checked={nonStop} onChange={(e) => setNonStop(e.target.checked)} />
-      </label>
-      <input placeholder="Max Price" type="number" min="0" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
-      <input placeholder="Max Results" type="number" min="1" value={max} onChange={(e) => setMax(e.target.value)} />
-      <button onClick={handleSearch}>Search</button> */}
-
-
-      {/* new */}
-
       <div className="bg-white rounded-lg p-4">
-        <div className="flex gap-4 mb-4">
-          <button className={`flex items-center gap-2 px-4 py-2`}>
-            <Plane className="w-5 h-5" />
-            Flights
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 text-gray-600">
-            <Building2 className="w-5 h-5" />
-            Hotels
-          </button>
-        </div>
+      
+
+
 
         <div className="flex gap-4 mb-4">
           <button
             className="px-6 py-4 bg-blue-600 text-white font-bold text-xl rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
           >
-            One-way Only
+            <Plane className="w-5 h-5" />
+              One-way Only
           </button>
         </div>
 

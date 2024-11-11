@@ -1,216 +1,154 @@
-'use client'
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { format } from 'date-fns'
+import { Plane } from "lucide-react"
+import AccessToken from '../Components/AccessToken';
+import FlightSearch from '../Components/FlightSearch';
+import FlightBooking from '../Components/FlightBooking';
 
-import { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ChevronDown, Globe, Menu, Plane, Building2, Briefcase } from 'lucide-react'
+const FlightMain = () => {
+  const [token, setToken] = useState('');
+  const { touristId } = useParams();
+  const [flights, setFlights] = useState([]);
+  const [selectedFlight, setSelectedFlight] = useState(null);
 
-export default function Component() {
-  const [tripType, setTripType] = useState('one-way')
-  const [passengers, setPassengers] = useState('1 Adult')
-  const [cabinClass, setCabinClass] = useState('Economy')
-  const [paymentTypes, setPaymentTypes] = useState('2 Payment Types')
+  const getFlightDetails = (flight) => {
+    const segments = flight.itineraries[0]?.segments || [];
+    const firstSegment = segments[0] || {};
+    const secondSegment = segments[1] || {};
+
+    return {
+      airline: flight.validatingAirlineCodes[0],
+      flightNumber1: firstSegment?.carrierCode + firstSegment?.number,
+      departure1: firstSegment?.departure?.at,
+      arrival1: firstSegment?.arrival?.at,
+      flightNumber2: secondSegment?.carrierCode + secondSegment?.number,
+      departure2: secondSegment?.departure?.at,
+      arrival2: secondSegment?.arrival?.at,
+      price: flight.price?.grandTotal,
+      pricePerAdult: flight.travelerPricings?.find(tp => tp.travelerType === "ADULT")?.price?.total,
+      pricePerChild: flight.travelerPricings?.find(tp => tp.travelerType === "CHILD")?.price?.total,
+      pricePerInfant: flight.travelerPricings?.find(tp => tp.travelerType === "INFANT")?.price?.total,
+      currency: flight.price?.currency,
+    };
+  };
+
+  const FlightTicket = ({ flight, onClick }) => {
+    const details = getFlightDetails(flight);
+
+    return (
+      <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer" onClick={onClick}>
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-grow p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-2xl font-bold">{details.airline}</h3>
+                <p className="text-sm opacity-75">Flight ID: {flight.id}</p>
+              </div>
+              <Plane className="h-8 w-8 rotate-45" />
+            </div>
+            <div className="space-y-2">
+              <FlightInfo
+                flightNumber={details.flightNumber1}
+                departure={details.departure1}
+                arrival={details.arrival1}
+              />
+              {details.flightNumber2 && (
+                <FlightInfo
+                  flightNumber={details.flightNumber2}
+                  departure={details.departure2}
+                  arrival={details.arrival2}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex-shrink-0 p-6 bg-gray-100">
+            <div className="text-center mb-4">
+              <p className="text-sm text-gray-600">Total Price</p>
+              <p className="text-3xl font-bold text-gray-800">
+                {details.currency} {details.price}
+              </p>
+            </div>
+            <div className="space-y-2 text-sm text-gray-600">
+              <p>Adults: {details.currency} {details.pricePerAdult}</p>
+              <p>Children: {details.currency} {details.pricePerChild}</p>
+              {details.pricePerInfant && (
+                <p>Infants: {details.currency} {details.pricePerInfant}</p>
+              )}
+            </div>
+            <button className="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+              Select Flight
+            </button>
+          </div>
+        </div>
+        <div className="relative">
+          <div className="absolute left-0 w-full border-t border-dashed border-gray-300 z-10"></div>
+          <div className="absolute left-0 w-full flex justify-between px-4">
+            <div className="w-4 h-8 bg-white border-l border-r border-b border-gray-300 rounded-b-full"></div>
+            <div className="w-4 h-8 bg-white border-l border-r border-b border-gray-300 rounded-b-full"></div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const FlightInfo = ({ flightNumber, departure, arrival }) => {
+    return (
+      <div className="flex items-center space-x-4">
+        <div className="flex-shrink-0">
+          <Plane className="h-5 w-5" />
+        </div>
+        <div className="flex-grow">
+          <p className="font-semibold">{flightNumber}</p>
+          <p className="text-sm">
+            {format(new Date(departure), "HH:mm")} → {format(new Date(arrival), "HH:mm")}
+          </p>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="absolute top-0 left-0 right-0 z-50 px-4 py-2">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link href="/" className="text-white font-bold text-2xl">wego</Link>
-          <div className="flex items-center gap-4">
-            <button className="text-white flex items-center gap-2">
-              <Globe className="w-4 h-4" />
-              EN
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            <button className="text-white">EGP</button>
-            <button className="text-white px-4 py-1">LOGIN</button>
-            <button className="bg-[#4FA52C] text-white px-4 py-1 rounded">GET STARTED</button>
-            <button className="text-white"><Menu className="w-6 h-6" /></button>
-          </div>
+    <div className="min-w-full px-4 py-8">
+      <h1 className="text-3xl font-bold text-center mb-8">Amadeus Flight Booking</h1>
+
+      {!token ? (
+        <div className="bg-white shadow-md rounded-lg p-6 w-full">
+          <h2 className="text-xl font-semibold mb-4">Access Token Required</h2>
+          <AccessToken setToken={setToken} />
         </div>
-      </nav>
+      ) : (
+        <>
+          <div className="bg-white shadow-md rounded-lg p-6 mb-8 w-full">
+            <h2 className="text-xl font-semibold mb-4">Search Flights</h2>
+            <FlightSearch token={token} setFlights={setFlights} />
+          </div>
 
-      {/* Hero Section */}
-      <div className="relative h-[600px]">
-        <Image
-          src="/placeholder.svg?height=600&width=1920"
-          alt="Forest background"
-          width={1920}
-          height={600}
-          className="object-cover w-full h-full"
-        />
-        <div className="absolute inset-0 bg-black/30">
-          <div className="max-w-7xl mx-auto pt-32 px-4">
-            <h1 className="text-white text-4xl font-bold mb-12">Discover the real value of travel</h1>
-            
-            {/* Search Form */}
-            <div className="bg-white rounded-lg p-4">
-              <div className="flex gap-4 mb-4">
-                <button className={`flex items-center gap-2 px-4 py-2 ${tripType === 'flights' ? 'text-[#4FA52C]' : 'text-gray-600'}`}>
-                  <Plane className="w-5 h-5" />
-                  Flights
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 text-gray-600">
-                  <Building2 className="w-5 h-5" />
-                  Hotels
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 text-gray-600">
-                  <Briefcase className="w-5 h-5" />
-                  WegoPro Business Travel
-                  <span className="bg-orange-500 text-white text-xs px-1 rounded">NEW</span>
-                </button>
-              </div>
-
-              <div className="flex gap-4 mb-4">
-                <button
-                  onClick={() => setTripType('one-way')}
-                  className={`px-4 py-2 rounded-full ${tripType === 'one-way' ? 'bg-[#4FA52C] text-white' : 'text-gray-600'}`}
-                >
-                  One-way
-                </button>
-                <button
-                  onClick={() => setTripType('round-trip')}
-                  className={`px-4 py-2 rounded-full ${tripType === 'round-trip' ? 'bg-[#4FA52C] text-white' : 'text-gray-600'}`}
-                >
-                  Round-trip
-                </button>
-                <button
-                  onClick={() => setTripType('multi-city')}
-                  className={`px-4 py-2 rounded-full ${tripType === 'multi-city' ? 'bg-[#4FA52C] text-white' : 'text-gray-600'}`}
-                >
-                  Multi-city
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <input
-                  type="text"
-                  placeholder="From"
-                  className="w-full p-3 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="To"
-                  className="w-full p-3 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Mon, 11 Nov 2024"
-                  className="w-full p-3 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Return"
-                  className="w-full p-3 border rounded"
-                  disabled={tripType === 'one-way'}
-                />
-              </div>
-
-              <div className="flex flex-wrap gap-4 items-center">
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4" />
-                  Direct flight only
-                </label>
-                
-                <button className="px-4 py-2 border rounded flex items-center gap-2">
-                  {passengers}
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-                
-                <button className="px-4 py-2 border rounded flex items-center gap-2">
-                  {cabinClass}
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-                
-                <button className="px-4 py-2 border rounded flex items-center gap-2">
-                  {paymentTypes}
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-
-                <button className="bg-[#4FA52C] text-white px-8 py-2 rounded ml-auto">
-                  Search
-                </button>
+          {flights?.length > 0 && (
+            <div className="bg-white shadow-md rounded-lg p-6 mb-8 w-full">
+              <h2 className="text-xl font-semibold mb-4">Flight Results</h2>
+              <div className="grid grid-cols-1 gap-6">
+                {flights.map((flight) => (
+                  <FlightTicket
+                    key={flight.id}
+                    flight={flight}
+                    onClick={() => setSelectedFlight(flight)}
+                  />
+                ))}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          )}
 
-      {/* Warning Banner */}
-      <div className="bg-yellow-50 border-y border-yellow-100 p-4 text-sm text-yellow-800">
-        <div className="max-w-7xl mx-auto">
-          Please be aware that the local Egyptian banks have imposed a restriction on the use of local debit and credit cards for international purchases. Kindly use an international card if possible. We regret the inconvenience caused.
-        </div>
-      </div>
-
-      {/* Features */}
-      <div className="max-w-7xl mx-auto py-16 px-4">
-        <div className="grid md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div className="w-24 h-24 mx-auto mb-4">
-              <Image
-                src="/placeholder.svg?height=96&width=96"
-                alt="Top travel app icon"
-                width={96}
-                height={96}
-                className="w-full h-full"
-              />
+          {selectedFlight && (
+            <div className="bg-white shadow-md rounded-lg p-6 w-full">
+              <h2 className="text-xl font-semibold mb-4">Flight Booking</h2>
+              <FlightBooking flight={selectedFlight} touristId={touristId} />
             </div>
-            <h3 className="font-semibold mb-2">Top travel app in Egypt</h3>
-            <p className="text-gray-600 text-sm">Highly rated in App Store & Google Play</p>
-          </div>
-          <div>
-            <div className="w-24 h-24 mx-auto mb-4">
-              <Image
-                src="/placeholder.svg?height=96&width=96"
-                alt="Shop icon"
-                width={96}
-                height={96}
-                className="w-full h-full"
-              />
-            </div>
-            <h3 className="font-semibold mb-2">Shop with confidence</h3>
-            <p className="text-gray-600 text-sm">No hidden fees, taxes or other nasty surprises</p>
-          </div>
-          <div>
-            <div className="w-24 h-24 mx-auto mb-4">
-              <Image
-                src="/placeholder.svg?height=96&width=96"
-                alt="Payment icon"
-                width={96}
-                height={96}
-                className="w-full h-full"
-              />
-            </div>
-            <h3 className="font-semibold mb-2">Pay the way you want</h3>
-            <p className="text-gray-600 text-sm">See only sellers who support your preferred methods</p>
-          </div>
-          <div>
-            <div className="w-24 h-24 mx-auto mb-4">
-              <Image
-                src="/placeholder.svg?height=96&width=96"
-                alt="Booking icon"
-                width={96}
-                height={96}
-                className="w-full h-full"
-              />
-            </div>
-            <h3 className="font-semibold mb-2">Instant booking</h3>
-            <p className="text-gray-600 text-sm">For selected sellers, book with just a couple of clicks</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stories Section */}
-      <div className="max-w-7xl mx-auto pb-16 px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">Stories</h2>
-          <Link href="/stories" className="text-[#4FA52C]">
-            See all stories
-          </Link>
-        </div>
-      </div>
+          )}
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
+
+export default FlightMain;

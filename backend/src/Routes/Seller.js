@@ -17,6 +17,7 @@ const {
   reviewProduct,
   acceptTermsAndConditions,
   getProductById,
+  requestDeletionSeller,
   getProductReviews,
   getPassword,
   getQuantity,
@@ -79,9 +80,10 @@ router.put("/reviewProduct/:ReviewerId/:ProductId", reviewProduct);
 
 router.post("/getProductById",getProductById);
 
+router.put("/requestDeletionSeller/:id", requestDeletionSeller);
 router.get("/getProductReviews/:productId",getProductReviews);
 
-module.exports = router
+
 //archive a product
 router.put('/archiveProduct', archiveProduct)
 

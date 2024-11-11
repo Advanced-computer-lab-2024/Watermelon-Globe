@@ -1,10 +1,12 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
-// const {itineraryModel} = require("../Models/itineraryModel");
-const {Itinerary} = require("../Models/itineraryModel");
+const itineraryModel = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
 const Booking = require('../Models/FlightBooking');
+const HotelBooking = require('../Models/HotelBooking');
+const Hotel = require('../Models/Hotel.js');
+
 
 
 //Tourist
@@ -132,14 +134,14 @@ const updateRating = async (req, res) => {
     console.log("Received rating:", numericRating);
 
     // Check if the rating is a valid number between 1 and 5
-    if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+    if ( numericRating < 1 || numericRating > 5) {
       return res
         .status(400)
         .json({ message: "Invalid rating. Rating should be between 1 and 5." });
     }
 
     // Find the itinerary by ID
-    const itinerary = await Itinerary.findById(id);
+    const itinerary = await itineraryModel.Itinerary.findById(id);
     if (!itinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
     }
@@ -419,7 +421,6 @@ const requestDeletionTourist = async (req, res) => {
 
       res.status(200).json({
           message: 'Deletion request updated successfully',
-          data: advertiser
       });
   } catch (error) {
       console.error('Error updating deletion request:', error);
@@ -466,7 +467,7 @@ const getPassword = async(req,res) =>{
   
       // Save the booking
       const savedBooking = await newBooking.save();
-  
+      
       // Send a success response
       res.status(201).json({
         message: 'Flight successfully booked!',
@@ -498,16 +499,16 @@ const redeemPoints = async (req, res) => {
         }
 
         // Check if the tourist has enough points
-        if (tourist.points < pointsToRedeem) {
+        if (tourist.loyaltyPoints < pointsToRedeem) {
             return res.status(400).json({ error: "Insufficient points for redemption." });
         }
 
         // Deduct points from the tourist's balance
-        tourist.points -= pointsToRedeem;
+        tourist.loyaltyPoints -= pointsToRedeem;
 
         // Calculate the equivalent currency to add to the wallet
         const currencyToAdd = (pointsToRedeem / 10000) * 100;
-        tourist.walletBalance += currencyToAdd;
+        tourist.wallet += currencyToAdd;
 
         // Save the updated tourist
         await tourist.save();
@@ -515,7 +516,7 @@ const redeemPoints = async (req, res) => {
         // Respond with the updated points and wallet balance
         res.status(200).json({
             message: "Points redeemed successfully",
-            pointsRemaining: tourist.points,
+            pointsRemaining: tourist.loyaltyPoints,
             walletBalance: tourist.walletBalance
         });
     } catch (error) {
@@ -546,6 +547,85 @@ const redeemPoints = async (req, res) => {
     });
   };
 
+  const bookHotel = async (req, res) => {
+    try {
+      const { touristId } = req.params;
+      const { hotelId, roomType, price, currency, checkInDate, checkOutDate } = req.body;
+  
+      // Check if tourist exists
+      const tourist = await Tourist.findById(touristId);
+      if (!tourist) {
+        return res.status(404).json({ message: 'Tourist not found' });
+      }
+  
+      // Create new hotel booking
+      const newBooking = new HotelBooking({
+        touristId: req.params.touristId, // Get the touristId from the URL parameter
+        hotelId,
+        roomType,
+        price,
+        currency,
+        checkInDate,
+        checkOutDate,
+      });
+  
+      // Save the booking
+      await newBooking.save();
+  
+      return res.status(201).json({
+        message: 'Hotel booked successfully',
+        booking: newBooking,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  const getHotelBookingsByTouristId = async (req, res) => {
+    try {
+      const { touristId } = req.params;
+  
+      // Find all hotel bookings by touristId
+      const bookings = await HotelBooking.find({ touristId });
+  
+      if (!bookings.length) {
+        return res.status(404).json({ message: 'No hotel bookings found for this tourist' });
+      }
+  
+      return res.status(200).json({
+        message: 'Hotel bookings fetched successfully',
+        bookings,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  const getFlightBookingsByTouristId = async (req, res) => {
+    try {
+      const { touristId } = req.params;
+  
+      // Find all flight bookings by touristId
+      const bookings = await Booking.find({ touristId });
+  
+      if (!bookings.length) {
+        return res.status(404).json({ message: 'No flight bookings found for this tourist' });
+      }
+  
+      return res.status(200).json({
+        message: 'Flight bookings fetched successfully',
+        bookings,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
+  
+  
 
 
 
@@ -616,7 +696,57 @@ const BookedActivities = async (req, res) => {
   }
 };
 
+const updateLoyaltyPoints = async (req, res) => {
+  const { id } = req.params;
+  const { amountPaid } = req.body;
 
+  try {
+    const tourist = await Tourist.findById(id);
+
+    // Calculate points based on loyalty level
+    let pointsToAdd;
+    switch (tourist.loyaltyLevel) {
+      case 1:
+        pointsToAdd = amountPaid * 0.5;
+        break;
+      case 2:
+        pointsToAdd = amountPaid * 1;
+        break;
+      case 3:
+        pointsToAdd = amountPaid * 1.5;
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid loyalty level' });
+    }
+
+    // Update loyalty points
+    tourist.loyaltyPoints += pointsToAdd;
+
+    // Update loyalty level based on points and assign badge
+    if (tourist.loyaltyPoints <= 100000 ) {
+      tourist.loyaltyLevel = 1;
+      tourist.badge = 'Bronze';
+    } else if (tourist.loyaltyPoints <= 500000) {
+      tourist.loyaltyLevel = 2;
+      tourist.badge = 'Silver';
+    } else {
+      tourist.loyaltyLevel = 3;
+      tourist.badge = 'Gold';
+    }
+
+    await tourist.save();
+
+    res.json({
+      message: 'Loyalty points and badge updated successfully',
+      loyaltyPoints: tourist.loyaltyPoints,
+      loyaltyLevel: tourist.loyaltyLevel,
+      badge: tourist.badge
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating loyalty points and badge' });
+  }
+};
 const deleteItinerary = async (req, res) => {
   try {
     const { touristId, itineraryId } = req.params;
@@ -626,7 +756,6 @@ const deleteItinerary = async (req, res) => {
     if (!tourist) {
       return res.status(404).json({ error: 'Tourist not found' });
     }
-
     // Remove the itinerary from the tourist's bookedItineraries
     tourist.bookedItineraries = tourist.bookedItineraries.filter(
       id => id.toString() !== itineraryId
@@ -671,9 +800,6 @@ const deleteActivity = async (req, res) => {
   }
 };
 
-
-
-
   
 module.exports = {
   createTourist,
@@ -696,8 +822,12 @@ module.exports = {
   bookFlight,
   redeemPoints,
   addPoints,
+  bookHotel,
   BookedItineraries,
   BookedActivities,
+  updateLoyaltyPoints,
+  getHotelBookingsByTouristId,
+  getFlightBookingsByTouristId,
   deleteActivity,
-  deleteItinerary
+  deleteItinerary,
 };
