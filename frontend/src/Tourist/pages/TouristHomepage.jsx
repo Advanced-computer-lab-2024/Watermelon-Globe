@@ -48,7 +48,7 @@ const TouristHomePage = () => {
               <Link to="/Homepage" className="homeButton">WaterMelon Globe</Link>
             </div>
             <div className="hidden md:flex space-x-4">
-              <Link to="#" className="text-gray-600 hover:text-gray-900">Hotel</Link>
+              <Link to={`/Hotels/${id}`} className="text-gray-600 hover:text-gray-900">Hotel</Link>
               <Link to={`/Flights/${id}`} className="text-gray-600 hover:text-gray-900">Flight</Link>
               <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
               <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>

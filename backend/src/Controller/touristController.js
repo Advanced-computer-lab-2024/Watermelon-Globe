@@ -5,6 +5,9 @@ const Itinerary = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
 const Booking = require('../Models/FlightBooking');
+const HotelBooking = require('../Models/HotelBooking');
+const Hotel = require('../Models/Hotel.js');
+
 
 
 //Tourist
@@ -544,6 +547,47 @@ const redeemPoints = async (req, res) => {
       currentPoints: tourist.points,
     });
   };
+
+  const bookHotel = async (req, res) => {
+    try {
+      const { touristId, hotelId, roomType, price, currency, checkInDate, checkOutDate } = req.body;
+  
+      // Check if tourist exists
+      const tourist = await Tourist.findById(touristId);
+      if (!tourist) {
+        return res.status(404).json({ message: 'Tourist not found' });
+      }
+  
+      // Check if hotel exists
+      const hotel = await Hotel.findById(hotelId);
+      if (!hotel) {
+        return res.status(404).json({ message: 'Hotel not found' });
+      }
+  
+      // Create new hotel booking
+      const newBooking = new HotelBooking({
+        touristId,
+        hotelId,
+        roomType,
+        price,
+        currency,
+        checkInDate,
+        checkOutDate,
+      });
+  
+      // Save the booking
+      await newBooking.save();
+  
+      return res.status(201).json({
+        message: 'Hotel booked successfully',
+        booking: newBooking,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
   
 module.exports = {
   createTourist,
@@ -565,5 +609,6 @@ module.exports = {
   getTouristComplaints,
   bookFlight,
   redeemPoints,
-  addPoints
+  addPoints,
+  bookHotel 
 };
