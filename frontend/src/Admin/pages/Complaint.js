@@ -237,24 +237,45 @@ const Complaint = () => {
               </div>
   
               {/* Status Update */}
-              <div className="flex items-center">
-                <label className="mr-2">Mark as Resolved:</label>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={selectedComplaint.status === "resolved"}
-                    onChange={handleStatusChange}
-                    className="form-checkbox"
-                  />
-                </label>
+            <div className="flex items-center mt-4">
+              <label htmlFor="status-toggle" className="mr-2 text-gray-700 font-medium">
+                Mark as Resolved:
+              </label>
+              <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                <input
+                  type="checkbox"
+                  name="status-toggle"
+                  id="status-toggle"
+                  checked={selectedComplaint.status === "resolved"}
+                  onChange={handleStatusChange}
+                  className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                />
+                <label
+                  htmlFor="status-toggle"
+                  className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+                ></label>
               </div>
+              <span className="text-gray-700 font-medium">
+                {selectedComplaint.status === "resolved" ? "Resolved" : "Pending"}
+              </span>
             </div>
-          ) : (
-            <p>Select a complaint to view the description</p>
-          )}
-        </div>
+          </div>
+        ) : (
+          <p>Select a complaint to view the description</p>
+        )}
       </div>
-    );
-  }
+
+      <style jsx>{`
+        .toggle-checkbox:checked {
+          right: 0;
+          border-color: #68D391;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+          background-color: #68D391;
+        }
+      `}</style>
+    </div>
+  )
+}
 
 export default Complaint;
