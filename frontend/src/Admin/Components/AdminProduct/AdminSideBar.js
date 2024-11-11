@@ -36,7 +36,7 @@ const SideBar = ({ setSelectedOption }) => {
           <button onClick={() => setSelectedOption('sortProducts')}>Sort Products by Rating</button>
         </li>
         <li>
-          <button onClick={() => setSelectedOption('uploadImage')}>Upload Product Image</button>
+          <button onClick={() => setSelectedOption('uploadImage')}>View Product Image</button>
         </li>
       </ul>
     </div>

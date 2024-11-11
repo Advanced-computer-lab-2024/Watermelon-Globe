@@ -22,7 +22,7 @@ const {
   getQuantity,
   archiveProduct,
   unarchiveProduct,
-  getProductImageByName
+  uploadPicture
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -89,7 +89,7 @@ router.put('/archiveProduct', archiveProduct)
 router.put('/unarchiveProduct', unarchiveProduct)
 
 //upload product image
-router.get('/uploadImage',getProductImageByName)
+router.put('/uploadPicture',uploadPicture)
 
 
 // view product's available quantity

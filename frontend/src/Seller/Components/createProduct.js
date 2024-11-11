@@ -7,8 +7,6 @@ const CreateProduct = () => {
   const [description, setDescription] = useState('');
   const seller = "6729244f151b6c9e346dd732"; // Default seller ID
   const [ratings, setRatings] = useState('');
-  const [sales, setSales] = useState('');
-  const [picture, setPicture] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -19,11 +17,9 @@ const CreateProduct = () => {
       name, 
       price, 
       quantity, 
-      picture, 
       description, 
       seller, // Use default seller ID
-      ratings: ratings || 0, 
-      sales: sales || 0 
+      ratings: ratings || 0
     };
 
     try {
@@ -46,10 +42,8 @@ const CreateProduct = () => {
         setName('');
         setPrice('');
         setQuantity('');
-        setPicture('');
         setDescription('');
         setRatings('');
-        setSales('');
       }
     } catch (error) {
       setErrorMessage('An error occurred: ' + error.message);
@@ -68,17 +62,11 @@ const CreateProduct = () => {
         <label>Quantity:</label>
         <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
 
-        <label>Picture URL:</label>
-        <input type="text" value={picture} onChange={(e) => setPicture(e.target.value)} required />
-
         <label>Description:</label>
         <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
 
         <label>Ratings:</label>
         <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
-
-        <label>Sales:</label>
-        <input type="number" value={sales} onChange={(e) => setSales(e.target.value)} />
 
         <button type="submit">Create Product</button>
       </form>
