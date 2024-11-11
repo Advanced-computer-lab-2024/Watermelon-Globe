@@ -52,7 +52,7 @@ export default function ExploreActivities() {
   }, [activities, activitySearch, startDateActivity, endDateActivity, minPriceActivity, maxPriceActivity, selectedPrefActivity]);
 
   const handleActivityClick = (activityId) => {
-    navigate(`/TouristActivityDetails/${activityId}`);
+    navigate(`/TouristActivityDetails/${activityId}/${id}`);
   };
 
   const fetchActivities = async () => {
