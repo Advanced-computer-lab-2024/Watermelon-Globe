@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 
-const SearchProductImageByName = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [imageLink, setImageLink] = useState('');
+const UploadProductPicture = () => {
+  const [productId, setProductId] = useState('');
+  const [pictureUrl, setPictureUrl] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Fetch the product image by name
-      const response = await fetch(`/api/Seller/uploadImage?name=${encodeURIComponent(searchTerm)}`, {
-        method: 'GET',
+      // Make a PUT request to update the product's picture
+      const response = await fetch(`/api/Seller/uploadPicture?id=${encodeURIComponent(productId)}`, {
+        method: 'PUT',
+        body: JSON.stringify({ picture: pictureUrl }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -19,50 +21,51 @@ const SearchProductImageByName = () => {
 
       if (response.ok) {
         const data = await response.json();
-        if (data.picture) {
-          setImageLink(data.picture); // Use the base64 image link
-          setErrorMessage('');
-        } else {
-          setImageLink('');
-          setErrorMessage('No image found for this product.');
-        }
+        setSuccessMessage(data.message || 'Picture uploaded successfully');
+        setErrorMessage('');
       } else {
-        setErrorMessage('Error fetching the product image.');
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || 'Failed to upload picture');
+        setSuccessMessage('');
       }
     } catch (error) {
       setErrorMessage('An error occurred: ' + error.message);
+      setSuccessMessage('');
     }
   };
 
   return (
     <div>
-      <h2>Search and Load Product Image</h2>
+      <h2>Upload Product Picture</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Product Name:</label>
+          <label>Product ID:</label>
           <input
             type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={productId}
+            onChange={(e) => setProductId(e.target.value)}
             required
-            placeholder="Enter product name"
+            placeholder="Enter product ID"
           />
         </div>
-        <button type="submit">Search</button>
+        <div>
+          <label>Picture URL:</label>
+          <input
+            type="text"
+            value={pictureUrl}
+            onChange={(e) => setPictureUrl(e.target.value)}
+            required
+            placeholder="Enter picture URL"
+          />
+        </div>
+        <button type="submit">Upload Picture</button>
       </form>
 
-      {/* Display Error Message */}
+      {/* Display success or error messages */}
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-
-      {/* Display Product Image */}
-      {imageLink && (
-        <div>
-          <h3>Product Image</h3>
-          <img src={imageLink} alt={`Image of ${searchTerm}`} style={{ width: '300px', height: 'auto' }} />
-        </div>
-      )}
     </div>
   );
 };
 
-export default SearchProductImageByName;
+export default UploadProductPicture;

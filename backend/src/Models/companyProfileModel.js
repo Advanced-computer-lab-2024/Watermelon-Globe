@@ -41,6 +41,18 @@ const companyProfileSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    idProof: {
+      type: String,
+      required: false,
+    },
+    taxationRegistryCard: {
+      type: String,
+      required: false,
+    },
+    Logo: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

@@ -20,6 +20,7 @@ const {
     updateActivityCategory,
     createProduct,
     getAllProducts,
+    getAllProductIds,
     searchProductbyName,
     updateProduct,
     changePasswordAdmin,
@@ -44,7 +45,7 @@ const {
     getQuantity,
     archiveProduct,
     unarchiveProduct,
-    getProductImageByName,
+    uploadPicture,
     markItineraryInappropriate
 } = require('../Controller/AdminController')
 
@@ -66,13 +67,16 @@ router.post("/CreateActivityCategory", createActivityCategory);
 router.delete("/DeleteActivityCategory/:id", deleteActivityCategory);
 router.put("/UpdateActivityCategory/:id", updateActivityCategory);
 router.get("/GetAllProducts", getAllProducts);
+router.get("/GetProductsIDs", getAllProductIds);
 router.get("/getPassword",getPassword);
 
 //post a new product
 router.post("/CreateProduct", createProduct);
 
-//delete a product
+//search a product by its name
 router.get("/SearchProductName", searchProductbyName);
+
+// update a product
 router.put("/EditProduct", updateProduct);
 
 //get All Complaints
@@ -117,7 +121,7 @@ router.put('/archiveProduct', archiveProduct)
 router.put('/unarchiveProduct', unarchiveProduct)
 
 //upload product image
-router.get('/uploadImage',getProductImageByName)
+router.put('/uploadPicture',uploadPicture)
 
 
 // view product's available quantity

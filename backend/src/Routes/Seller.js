@@ -7,8 +7,10 @@ const {
   updateSeller,
   createProduct,
   getAllProducts,
+  getAllProductIds,
   searchProductbyName,
   updateProduct,
+  getSellerStatus,
   sortProducts,
   updateRatingProduct,
   changePasswordSeller,
@@ -20,7 +22,7 @@ const {
   getQuantity,
   archiveProduct,
   unarchiveProduct,
-  getProductImageByName
+  uploadPicture
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -46,12 +48,15 @@ router.put("/changePasswordSeller/:id", changePasswordSeller);
 
 router.get("/getPassword",getPassword);
 
+router.get('/sellerStatus/:id', getSellerStatus);
+
 //////////////// Products ////////////////
 
 //Get all products
 router.get("/GetAllProducts", getAllProducts);
 
-//Get single product
+//Get all products ids
+router.get("/GetProductsIDs", getAllProductIds);
 
 //post a new product
 router.post("/CreateProduct", createProduct);
@@ -84,7 +89,7 @@ router.put('/archiveProduct', archiveProduct)
 router.put('/unarchiveProduct', unarchiveProduct)
 
 //upload product image
-router.get('/uploadImage',getProductImageByName)
+router.put('/uploadPicture',uploadPicture)
 
 
 // view product's available quantity

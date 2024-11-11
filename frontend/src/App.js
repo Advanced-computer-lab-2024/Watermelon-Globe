@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { React, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import "./App.css";
 
 // Importing all necessary components
-import AdvertiserPage from "./Components/advertiserPage";
-import TourGuidePage from "./Components/tourGuidePage";
-import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+//Main Pages
 import SignupPage from "./Components/SignUp";
-import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
-import ActivityDetails from "./Components/ActivityDetails.jsx";
 import HomePage from "./Components/Homepage";
 import AppPage from "./Components/BackendReq";
 import CompanyHomepage from "./Components/CompanyHomepage.jsx";
@@ -29,32 +26,18 @@ import AdvertiserSignup from "./pages/ AdvertiserSignUp2.js";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
-import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
+//Guest
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import ViewProducts from "./Guest/pages/ViewProducts.js";
-import TouristProductsPage from "./Tourist/pages/TouristProduct.js";
-import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
-import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
-import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
-import MyBookings from "./Tourist/pages/MyBookings.jsx";
-import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
+//Admin Pages
 import AdminHome from "./Admin/pages/AdminHome.js";
-import ActivityCategory from "./Admin/pages/ActivityCategory.js";
-import PreferenceTag from "./Admin/pages/PrefenceTag.js";
-import AdminProduct from "./Admin/pages/AdminProduct.js";
-import SellerProduct from "./Seller/pages/SellerProduct.jsx";
-import TouristProduct from "./Tourist/pages/TouristProduct.js";
+import AdminProduct from "./Admin/pages/AdminProduct.jsx";
 import Admin from "./Admin/pages/Admin.js";
 import Governer from "./Admin/pages/Governer.js";
-// import ActivityDetails from './Components/ActivityDetails.jsx';
+import ActivityCategory from "./Admin/pages/ActivityCategory.js";
+import PreferenceTag from "./Admin/pages/PrefenceTag.js";
+import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
 import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
-
-import AccountPage from "./Advertiser/Components/AccountPage.jsx";
-import HomeScreen from "./Advertiser/Components/CompanyHomepage.jsx";
-import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
-import EditActivity from "./Advertiser/Components/EditActivity.jsx";
-import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import Complaint from "./Admin/pages/Complaint.js";
 import Itinerary from "./Admin/pages/Itinerary.js";
 import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
@@ -64,7 +47,48 @@ import FlightMain from "./Flights/Pages/FlightMain.js";
 //tourguide new
 
 import "./App.css";
+import GuestPage from "./Guest/pages/GuestHomepage.jsx";
+//Advertiser Pages
+import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
+import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
+import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
+import AccountPage from "./Advertiser/Components/AccountPage.jsx";
+import HomeScreen from "./Components/CompanyHomepage.jsx";
+import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
+import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
+import ActivityDetails from "./Components/ActivityDetails.jsx";
+import EditActivity from "./Advertiser/Components/EditActivity.jsx";
+import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
+//Seller Pages
+import SellerSignup from "./pages/SellerSignup.jsx";
+import SellerSignupConfirm from "./pages/sellerSignupConfirm.jsx";
+import SellerPage from "./SellerPage.js";
+import SellerProduct from "./Seller/pages/SellerProduct.jsx";
+//Tour guide pages
+import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
+import TourguideSignup from "./pages/TourguideSignup.jsx";
+import TourguideSignupConfirm from "./pages/TourguideSignupConfirm.jsx";
+import TourGuidePage from "./Components/tourGuidePage";
 import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.js";
+//Tourism governer pages
+import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+//Tourist pages
+import TouristSignup from "./Tourist/pages/TouristSignup.js";
+import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
+import MainTour from "./Tourist/pages/TouristHomepage.jsx";
+import TouristPage from "./TouristPage.js";
+import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
+import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
+import TouristProductsPage from "./Tourist/pages/TouristProduct.js";
+import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
+import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
+import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
+import MyBookings from "./Tourist/pages/MyBookings.jsx";
+import TouristActivityDetails from "./Tourist/pages/ActivityDetails.jsx";
+import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+//Flights
+import FlightMain from "./Flights/Pages/FlightMain.js";
+import ViewDocuments from "./Admin/pages/ViewDocuments.jsx";
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -86,7 +110,9 @@ const App = () => {
       <div style={{ padding: "20px" }}>
         <Routes>
           {/* Main Home Page */}
-          <Route path="/" element={<MainHome />} />
+          <Route path="/" element={<GuestPage />} />
+
+          <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
           <Route path="/AdminHome" element={<AdminHome />} />
@@ -103,9 +129,11 @@ const App = () => {
           />
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
+          <Route path="/AdminViewDocuments" element={<ViewDocuments />} />
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route
@@ -114,7 +142,7 @@ const App = () => {
           />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
-          <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
+          {/* <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
           <Route path="/CompanyAccount" element={<AccountPage />} />
           <Route path="/advertiserHomePage" element={<HomeScreen />} />
           <Route path="/editAdvertiser" element={<EditProfilePage />} />
@@ -137,13 +165,32 @@ const App = () => {
             path="/terms-and-conditionsAdvertiser/:userId"
             element={<TermsAndConditionsAdvertiser />}
           />
+          <Route
+            path="/SellerSignupConfirm/:id"
+            element={<SellerSignupConfirm />}
+          />
           <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
+          <Route
+            path="/advertiserSignupConfirm/:id"
+            element={<AdvertiserSignupConfirm />}
+          />
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
+          <Route
+            path="/TourguideSignupConfirm/:id"
+            element={<TourguideSignupConfirm />}
+          />
           <Route path="/signup-options" element={<SignupOptions />} />
 
           {/* Tourist Pages */}
-          <Route path="/itineraryDetails/:id" element={<ItineraryDetails />} />
+          <Route
+            path="/itineraryDetails/:tripid/:id"
+            element={<ItineraryDetails />}
+          />
+          <Route
+            path="/TouristActivityDetails/:activityId/:id"
+            element={<TouristActivityDetails />}
+          />
           <Route
             path="/Tourist_ProductsPage"
             element={<TouristProductsPage />}
@@ -168,7 +215,6 @@ const App = () => {
           <Route path="/SellerPage" element={<SellerPage />} />
 
           <Route path="/ViewProducts" element={<ViewProducts />} />
-
           {/* Tour Guide Pages */}
           <Route path="/TourGuideHome/:id" element={<TourGuideHome />} />
           <Route

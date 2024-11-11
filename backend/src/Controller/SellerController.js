@@ -31,6 +31,7 @@ const createSeller = async (req, res) => {
   const { Name, Email, Password } = req.body;
   try {
     const seller = await Seller.create({ Name, Email, Password });
+    seller.status = "pending";
     res.status(200).json(seller);
   } catch (error) {
     res.status(400).json({ error: error.mssg });
@@ -89,6 +90,25 @@ const updateSeller = async (req, res) => {
   }
 };
 
+const getSellerStatus = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Seller does not exist" });
+  }
+
+  try {
+    const seller = await Seller.findById(id).select("status");
+    if (!seller) {
+      return res.status(400).json({ error: "No such seller" });
+    }
+
+    res.json({ status: seller });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving seller status" });
+  }
+};
+
 //////////////// product ///////////////
 
 //create a new product
@@ -110,7 +130,6 @@ const createProduct = async (req, res) => {
       name,
       price,
       quantity,
-      picture,
       description,
       seller: "6729244f151b6c9e346dd732",
       ratings: ratings || 0,
@@ -130,6 +149,20 @@ const getAllProducts = async (req, res) => {
   const products = await Product.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(products);
+};
+
+// Get All Products' Names & IDs
+const getAllProductIds = async (req, res) => {
+  try {
+    // Retrieve all products, selecting only the name and _id fields
+    const products = await Product.find({}, "name _id");
+
+    res.status(200).json(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving products" });
+  }
 };
 
 //search a product by name
@@ -540,30 +573,34 @@ const unarchiveProduct = async (req, res) => {
   }
 };
 
-const getProductImageByName = async (req, res) => {
-  const { name } = req.query;
-
-  // Check if the name is provided
-  if (!name) {
-    return res.status(400).json({ error: "Product name is required" });
+// upload a product picture
+const uploadPicture = async (req, res) => {
+  const { id } = req.query; // Get the product ID from the route parameters
+  const { picture } = req.body; // Get the picture URL from the request body
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid product ID" });
   }
 
   try {
-    // Search for the product by name and return only the picture field
-    const product = await Product.findOne(
-      { name: new RegExp(name, "i") },
-      "picture" // Select only the picture field
+    // Update the product's picture field
+    const product = await Product.findOneAndUpdate(
+      { _id: id }, // Find the product by ID
+      { picture }, // Update the picture field
+      { new: true } // Return the updated product
     );
 
     if (!product) {
-      return res.status(404).json({ error: "No product found with this name" });
+      return res.status(404).json({ error: "No product found with this ID" });
     }
 
-    res.status(200).json({ picture: product.picture });
+    res
+      .status(200)
+      .json({ message: "Product picture updated successfully", product });
   } catch (error) {
     res
       .status(500)
-      .json({ error: "An error occurred while fetching the product image" });
+      .json({ error: "An error occurred while updating the product picture" });
   }
 };
 
@@ -573,8 +610,10 @@ module.exports = {
   getSeller,
   deleteSeller,
   updateSeller,
+  getSellerStatus,
   createProduct,
   getAllProducts,
+  getAllProductIds,
   searchProductbyName,
   filterProduct,
   updateProduct,
@@ -591,4 +630,5 @@ module.exports = {
   archiveProduct,
   unarchiveProduct,
   getProductImageByName,
+  uploadPicture,
 };

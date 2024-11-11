@@ -41,7 +41,11 @@ const sellerSchema = new Schema(
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
       default: null,
-  },
+    },
+    Logo: {
+        type: String,
+        required: false,
+    }
   },
   { timestamps: true }
 );

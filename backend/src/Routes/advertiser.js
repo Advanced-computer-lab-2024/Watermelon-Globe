@@ -8,6 +8,8 @@ const {
   getProfiles,
   changePasswordAdvertiser,
   acceptTermsAndConditions,
+  getLastApprovedAdvertiser,
+  approveAdvertiser,
 } = require("../Controller/companyProfileController");
 
 // //tags
@@ -17,8 +19,12 @@ const {
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
 router.get("/profiles", getProfiles);
-router.put("/changePasswordAdvertiser:/id", changePasswordAdvertiser);
+
 router.put("/acceptTermsAndConditions/:id", acceptTermsAndConditions);
+router.get("/profiles/:id?", getProfiles);
+router.put("/changePasswordAdvertiser:/id", changePasswordAdvertiser);
+router.get("/lastApprovedAdvertiser", getLastApprovedAdvertiser);
+router.put("/approve/:id", approveAdvertiser);
 
 // router.post("/addAdvertiser", createAdvertiser);
 

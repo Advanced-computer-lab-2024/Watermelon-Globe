@@ -14,7 +14,7 @@ const createProfile = async (req, res) => {
 
     res.status(201).json({
       message: "Company Profile created successfully",
-      profile: savedProfile, // This should contain _id
+      profile: savedProfile,
     });
   } catch (error) {
     console.error(error);
@@ -43,6 +43,54 @@ const getProfiles = async (req, res) => {
     console.error(error);
     res.status(500).json({
       message: "Error fetching company profiles",
+      error: error.message,
+    });
+  }
+};
+
+const getLastApprovedAdvertiser = async (req, res) => {
+  try {
+    const lastApprovedAdvertiser = await CompanyProfileModel.findOne({
+      status: "accepted",
+    })
+      .sort({ updatedAt: -1 }) // Sort by latest update
+      .exec();
+
+    if (!lastApprovedAdvertiser) {
+      return res.status(404).json({ message: "No approved advertiser found" });
+    }
+
+    res.status(200).json(lastApprovedAdvertiser);
+  } catch (error) {
+    console.error("Error fetching last approved advertiser:", error);
+    res.status(500).json({
+      message: "Error fetching last approved advertiser",
+      error: error.message,
+    });
+  }
+};
+
+const approveAdvertiser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedAdvertiser = await CompanyProfileModel.findByIdAndUpdate(
+      id,
+      { status: "accepted" },
+      { new: true }
+    ).exec();
+
+    if (!updatedAdvertiser) {
+      return res.status(404).json({ message: "Advertiser not found" });
+    }
+
+    res.status(200).json({
+      message: "Advertiser approved successfully",
+      profile: updatedAdvertiser,
+    });
+  } catch (error) {
+    console.error("Error approving advertiser:", error);
+    res.status(500).json({
+      message: "Error approving advertiser",
       error: error.message,
     });
   }
@@ -191,6 +239,8 @@ const acceptTermsAndConditions = async (req, res) => {
 module.exports = {
   createProfile,
   getProfiles,
+  getLastApprovedAdvertiser,
+  approveAdvertiser,
   updateProfile,
   changePasswordAdvertiser,
   requestDeletionAdvertiser,
