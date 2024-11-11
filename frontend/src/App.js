@@ -106,9 +106,7 @@ const App = () => {
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
           <Route path="/AdminViewDocuments" element={<ViewDocuments />} />
 
-          {/* Guest and Advertiser Routes */}
-          <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+          {/* Guest Routes */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route
@@ -117,12 +115,15 @@ const App = () => {
           />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
-          {/* <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
-          <Route path="/CompanyAccount" element={<AccountPage />} />
-          <Route path="/advertiserHomePage" element={<HomeScreen />} />
-          <Route path="/editAdvertiser" element={<EditProfilePage />} />
-          <Route path="/editActivity/:id" element={<EditActivity />} />
+          {/* <Route path="/advertiserHomePage" element={<HomeScreen />} /> */}
+
+          {/* Advertiser Pages */}
+          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route path="/advertiserProfile/:profileId" element = {<AccountPage/>}/>
+          <Route path="/editAdvertiser/:profileId" element={<EditProfilePage/>} />
           <Route path="/activityDetails" element={<ActivityDetails />} />
+          <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity" element={<ActivityForm />} />
 
           {/* Signup Pages */}
