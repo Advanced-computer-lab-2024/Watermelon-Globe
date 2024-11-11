@@ -42,6 +42,7 @@ import SellerProduct from "./Seller/pages/SellerProduct.jsx";
 import TouristProduct from "./Tourist/pages/TouristProduct.js";
 import Admin from "./Admin/pages/Admin.js";
 import Governer from "./Admin/pages/Governer.js";
+import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 // import ActivityDetails from './Components/ActivityDetails.jsx';
 import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
 
@@ -81,7 +82,9 @@ const App = () => {
       <div style={{ padding: "20px" }}>
         <Routes>
           {/* Main Home Page */}
-          <Route path="/" element={<MainHome />} />
+          <Route path="/" element={<GuestPage />} />
+
+          <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
           <Route path="/AdminHome" element={<AdminHome />} />
