@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SellerSignupConfirm = () => {
     const [idProof, setIdProof] = useState(null);
     const [taxationRegistryCard, setTaxationRegistryCard] = useState(null);
     const {id} = useParams();
+    const navigate = useNavigate();
 
     const handleFileChange = (e) => {
         if (e.target.name === "idProof") {
@@ -27,6 +28,7 @@ const SellerSignupConfirm = () => {
 
         if (response.ok) {
             alert("Documents uploaded. Please wait for approval.");
+            navigate('/');
         } else {
             alert("Failed to upload documents.");
         }
