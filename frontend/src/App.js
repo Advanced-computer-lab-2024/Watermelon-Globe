@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 // Importing all necessary components
 import SignupPage from './Components/SignUp';
+
+import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
+import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
+import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js"
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
@@ -140,6 +144,17 @@ const App = () => {
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+
+          {/* Guest Routes */}
+          <Route path="/completed-itineraries/:id" element={<CompletedItineraries />} />
+          <Route path="/completed-activities/:id" element={<CompletedActivities />} />
+          {/* <Route path="/rate-tour-guide/:id" element={<RateTourGuide />} /> */}
+          {/* <Route path="/rate-itinerary/:id" element={<RateItinerary />} /> */}
+          {/* <Route path="/ratingsAndCommentsPage/:relatedObjectId" element={<RatingsAndCommentsPage />} /> */}
+          <Route path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type" element={<RatingsAndCommentsPage />} />
+
+
+          {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route
@@ -148,13 +163,14 @@ const App = () => {
           />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
-          <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
-          <Route path="/CompanyAccount" element={<AccountPage/>}/>
-          <Route path="/advertiserHomePage" element={<HomeScreen/>}/>
-          <Route path="/editAdvertiser" element={<EditProfilePage/>}/>
-          <Route path="/editActivity/:id" element={<EditActivity/>}/>
-          <Route path='/activityDetails/:activityId' element={<ActivityDetails/>}/>
-          <Route path="/siteDetails/:id" element={<SiteDetails />} />
+
+          {/* Advertiser Pages */}
+          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route path="/advertiserProfile/:profileId" element = {<AccountPage/>}/>
+          <Route path="/editAdvertiser/:profileId" element={<EditProfilePage/>} />
+          <Route path="/activityDetails" element={<ActivityDetails />} />
+          <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity" element={<ActivityForm />} />
 
           {/* Signup Pages */}

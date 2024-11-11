@@ -42,7 +42,7 @@ export default function ItinerarySlider() {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch(`/api/TourGuide/requestDeletionGuide/67013950229bd3b168a94dde`, {
+      const response = await fetch(`/api/TourGuide/requestDeletionGuide/670137227c5a3dade4ba11dc`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

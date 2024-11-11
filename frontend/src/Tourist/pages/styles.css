@@ -7,6 +7,10 @@
 /* Ensure the page takes up at least the full viewport height */
 html, body {
   height: 100%;
+
+  /* Adjust text size for compatibility */
+  -webkit-text-size-adjust: 100%; /* for older WebKit-based browsers */
+  text-size-adjust: 100%;         /* for modern browsers */
 }
 
 /* Custom styles for the hero section */
@@ -19,6 +23,11 @@ html, body {
 /* Custom styles for form inputs */
 .form-input {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  /* Appearance compatibility for inputs */
+  -moz-appearance: none;    /* for Firefox */
+  -webkit-appearance: none; /* for older Safari and Chrome */
+  appearance: none;         /* for modern browsers */
 }
 
 .form-input:focus {
@@ -29,6 +38,11 @@ html, body {
 /* Custom styles for buttons */
 .btn {
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
+  /* Ensure appearance compatibility for buttons */
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .btn-primary {
