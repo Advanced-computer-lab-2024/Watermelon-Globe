@@ -5,7 +5,7 @@ import { FaStar } from 'react-icons/fa';
 
 
 const ItineraryDetails = () => {
-    const { tripid } = useParams();
+    const { tripid, id } = useParams();
     const [itinerary, setItinerary] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -51,7 +51,7 @@ const ItineraryDetails = () => {
                 },
                 body: JSON.stringify({
                     itinerary: tripid,
-                    buyer: "672cd143a72c43a2d8fb01c0", // Replace with actual buyer ID
+                    buyer: id, // Replace with actual buyer ID
                     chosenDates: [selectedDate],
                     chosenTimes: [selectedTime],
                     totalPrice: itinerary.priceOfTour,

@@ -341,6 +341,7 @@ const PurchasedProducts = () => {
                       Rating: {product.rating || 'N/A'}
                     </span>
                   </div>
+                  
                   <StarRating 
                     rating={product.rating || 0}
                     onRate={(rating) => handleRateProduct(product._id, rating)}

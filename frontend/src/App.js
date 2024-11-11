@@ -34,6 +34,7 @@ import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
+import ChangePasswordAdvertiser from './Advertiser/Components/ChangePasswordAdvertiser.js';
 //Seller Pages
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
@@ -161,6 +162,7 @@ const App = () => {
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
           />
+          <Route path='/ChangePasswordAdvertiser/:advertiserId' element={<ChangePasswordAdvertiser/>}/>
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
 
@@ -185,8 +187,8 @@ const App = () => {
 
           {/* Tourist Pages */}
           <Route path="/Tourist_ProductsPage" element={<TouristProductsPage />} />
-          <Route path="/ItineraryDetails/:tripid" element={<ItineraryDetails />} />
-          <Route path="/TouristActivityDetails/:activityId" element={<TouristActivityDetails />} />
+          <Route path="/ItineraryDetails/:tripid/:id" element={<ItineraryDetails />} />
+          <Route path="/TouristActivityDetails/:activityId/:id" element={<TouristActivityDetails />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />

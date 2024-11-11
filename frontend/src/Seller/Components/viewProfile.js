@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import SellerLogo from './SellerLogo';
 
-const sellerId = "6729244f151b6c9e346dd732";
+const id = "6729244f151b6c9e346dd732";
 
 const ViewProfile = () => {
-  const [sellerId, setSellerId] = useState("6729244f151b6c9e346dd732"); // State for seller ID input
   const [seller, setSeller] = useState(null); // State to store seller data
   const [errorMessage, setErrorMessage] = useState(''); // State to store error messages
   const [successMessage, setSuccessMessage] = useState(''); // State to store success messages
@@ -16,8 +15,8 @@ const ViewProfile = () => {
   // Function to fetch seller profile by ID
   const fetchSellerProfile = async () => {
     try {
-      console.log("Fetching seller profile for ID:", sellerId);
-      const response = await fetch(`/api/Seller/getSeller/${sellerId}`, {
+      console.log("Fetching seller profile for ID:", id);
+      const response = await fetch(`/api/Seller/getSeller/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -44,6 +43,10 @@ const ViewProfile = () => {
     }
   };
 
+  // Fetch the seller profile automatically on component mount
+  useEffect(() => {
+    fetchSellerProfile();
+  }, []);
 
   // Function to handle delete account request
   const handleDeleteAccount = async () => {
@@ -77,15 +80,13 @@ const ViewProfile = () => {
 
   // Fetch all sellers on component mount
   useEffect(() => {
-    setSellerId(sellerId);
-    fetchSellerProfile(sellerId);
+    getAllSellers(); // Call getAllSellers when the component mounts
   }, []);
 
   return (
     <div>
-      <h2>View Seller Profile</h2>
+      <h2>Seller Profile</h2>
 
-      {/* Input form to accept seller ID */}
       {/* Display error message if any */}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
@@ -99,21 +100,13 @@ const ViewProfile = () => {
           <p><strong>Name:</strong> {seller.Name}</p>
           <p><strong>Email:</strong> {seller.Email}</p>
           <p><strong>Description:</strong> {seller.Description}</p>
-
-          {/* Add Delete Account Button */}
-          <button 
-            onClick={handleDeleteAccount}
-            style={{ backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px' }}
-          >
-            Delete Account
-          </button>
-          <SellerLogo id={seller._id}/>
+          <SellerLogo id={seller._id} />
         </div>
       ) : (
         !errorMessage && <p>Loading...</p>
       )}
 
-      {/* <h3>All Sellers</h3>
+      <h3>All Sellers</h3>
       <ul>
         {allSellers.length > 0 ? (
           allSellers.map((seller) => (
@@ -126,7 +119,7 @@ const ViewProfile = () => {
         ) : (
           <p>No sellers found.</p>
         )}
-      </ul> */}
+      </ul>
     </div>
   );
 };

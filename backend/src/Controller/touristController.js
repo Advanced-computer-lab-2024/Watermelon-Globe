@@ -10,6 +10,10 @@ const ChildItinerary = require ("../Models/touristItineraryModel");
 const Activity = require('../Models/activityModel');
 const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const ActivityBooking = require('../Models/activityBookingModel');
+const Transportation = require('../Models/TransportationModel');
+
+
+
 
 //Tourist
 
@@ -1260,6 +1264,18 @@ const deleteActivity = async (req, res) => {
   }
 };
 
+// get all trips
+const getAllTransportations = async (req, res) => {
+  try {
+    // Fetch all transportation records, sorted by creation date (latest first)
+    const transportations = await Transportation.find({}).sort({ createdAt: -1 });
+    
+    res.status(200).json(transportations);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching transportation records.' });
+  }
+};
+
   
 module.exports = {
   createTourist,
@@ -1299,5 +1315,6 @@ module.exports = {
   getAllActivityBookings,
   getMyCompletedActivities,
   rateActivity,
-  commentOnActivity
+  commentOnActivity,
+  getAllTransportations
 };

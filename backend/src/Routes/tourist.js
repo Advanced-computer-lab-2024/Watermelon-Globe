@@ -38,8 +38,13 @@ const {
   getAllActivityBookings,
   getMyCompletedActivities,
   rateActivity,
-  commentOnActivity
+  commentOnActivity,
+  getAllTransportations
 } = require("../Controller/touristController");
+
+  
+  //GET all tourists
+  router.get("/getTourists", getTourists);
 
   router.get("/getTourists", getTourists);
   //GET a single tourist
@@ -121,5 +126,6 @@ router.post('/activities/:activityId/rate', rateActivity);
 router.post('/activities/:activityId/comment', commentOnActivity);
 
 
+router.get('/getAllTransportations' ,getAllTransportations);
 
 module.exports = router;
