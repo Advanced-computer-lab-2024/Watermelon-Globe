@@ -30,8 +30,9 @@ const GetAllProducts = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
+          gridTemplateColumns: 'repeat(4, 1fr)', // Changed to 4 products per row
           gap: '20px',
+          padding: '10px',
         }}
       >
         {products.map((product) => (
@@ -56,4 +57,4 @@ const GetAllProducts = () => {
   );
 };
 
-export default GetAllProducts;
+export default GetAllProducts;

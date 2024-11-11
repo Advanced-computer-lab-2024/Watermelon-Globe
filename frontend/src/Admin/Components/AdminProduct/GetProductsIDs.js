@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from 'react';
 
-const GetAllProducts = () => {
+const ProductNamesAndIds = () => {
   const [products, setProducts] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductNamesAndIds = async () => {
       try {
-        const response = await fetch('/api/Admin/GetAllProducts');
+        const response = await fetch('/api/Admin/GetProductsIDs');
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch product names and IDs');
+        }
+
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        setErrorMessage(error.message);
       }
     };
 
-    fetchProducts();
+    fetchProductNamesAndIds();
   }, []);
-
-  const formatPrice = (price) => {
-    if (price && price.$numberDecimal) {
-      return parseFloat(price.$numberDecimal).toFixed(2);
-    }
-    return price;
-  };
 
   return (
     <div>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>All Products</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Product Names and IDs</h2>
+
+      {errorMessage && <p style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</p>}
+
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)', // Changed to 4 products per row
+          gridTemplateColumns: 'repeat(4, 1fr)', // Adjusted for 4 products per row
           gap: '20px',
           padding: '10px',
         }}
@@ -47,9 +49,7 @@ const GetAllProducts = () => {
             }}
           >
             <h4>{product.name}</h4>
-            <p>{product.description}</p>
-            <p>Price: ${formatPrice(product.price)}</p>
-            <p>Quantity: {product.quantity}</p>
+            <p>ID: {product._id}</p>
           </div>
         ))}
       </div>
@@ -57,4 +57,4 @@ const GetAllProducts = () => {
   );
 };
 
-export default GetAllProducts;
+export default ProductNamesAndIds;

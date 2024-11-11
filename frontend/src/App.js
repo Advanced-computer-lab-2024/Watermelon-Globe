@@ -13,7 +13,7 @@ import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import ViewProducts from './Guest/pages/ViewProducts.js';
 //Admin Pages
 import AdminHome from './Admin/pages/AdminHome.js';
-import AdminProduct from './Admin/pages/AdminProduct.js';
+import AdminProduct from './Admin/pages/AdminProduct.jsx';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
