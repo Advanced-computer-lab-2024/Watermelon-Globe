@@ -12,8 +12,9 @@ const ItineraryDetails = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [bookingMessage, setBookingMessage] = useState(null);
+    const [rating, setRating] = useState(0);
 
-    useEffect(() => {
+ 
         const fetchItinerary = async () => {
             try {
                 const response = await fetch(`/api/Itinerary/getItinerary/${tripid}`);
@@ -28,7 +29,7 @@ const ItineraryDetails = () => {
                 setLoading(false);
             }
         };
-
+        useEffect(() => {
         fetchItinerary();
     }, [tripid]);
 
@@ -67,16 +68,35 @@ const ItineraryDetails = () => {
         }
     };
 
+    const handleRate = async () => {
+        try {
+            const response = await fetch(`/api/Tourist/updateRating/${tripid}?rating=${rating}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to submit rating');
+            }
+            alert('Rating submitted successfully!');
+            fetchItinerary();
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+            alert('Failed to submit rating. Please try again.');
+        }
+    };
+
     // Share itinerary functionality
     const handleShareLink = () => {
-        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${id}`;
+        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}`;
         navigator.clipboard.writeText(itineraryUrl)
             .then(() => alert('Itinerary link copied to clipboard!'))
             .catch(err => alert('Failed to copy link: ' + err));
     };
 
     const handleShareEmail = () => {
-        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${id}`;
+        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}`;
         const subject = encodeURIComponent('Check out this itinerary!');
         const body = encodeURIComponent(`I thought you might be interested in this itinerary: ${itineraryUrl}`);
         window.location.href = `mailto:?subject=${subject}&body=${body}`;
@@ -232,6 +252,27 @@ const ItineraryDetails = () => {
                 <span className={`px-4 py-2 rounded-full text-lg font-semibold ${itinerary.bookings ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
                     {itinerary.bookings ? 'Yes' : 'No'}
                 </span>
+            </div>
+            <h3>Average Rating</h3>
+            <p>{itinerary.rating}</p>
+
+            <h3>Rate this Itinerary</h3>
+            <div className="flex items-center mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <FaStar
+                            key={star}
+                            size={32}
+                            className={`cursor-pointer ${rating >= star ? 'text-yellow-500' : 'text-gray-300'}`}
+                            onClick={() => setRating(star)}
+                        />
+                    ))}
+                </div>
+            <button onClick={handleRate} className="rate-button">Submit Rating</button>
+
+            {/* Share Button */}
+            <div className="share-buttons">
+                <button onClick={handleShareLink} className="share-button">Copy Link</button>
+                <button onClick={handleShareEmail} className="share-button">Share via Email</button>
             </div>
         </div>
     );
