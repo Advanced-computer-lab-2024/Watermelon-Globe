@@ -33,7 +33,7 @@ import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
 import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
-
+import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
 import AdminHome from "./Admin/pages/AdminHome.js";
 import ActivityCategory from "./Admin/pages/ActivityCategory.js";
 import PreferenceTag from "./Admin/pages/PrefenceTag.js";
