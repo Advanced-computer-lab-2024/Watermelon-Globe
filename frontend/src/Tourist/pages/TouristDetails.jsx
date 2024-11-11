@@ -97,6 +97,10 @@ export default function TouristDetails() {
         }
     };
 
+    const handleViewBookings = () => {
+        navigate(`/MyBookings/${id}`); // Navigating to the bookings page for the tourist
+    };
+
     const handleDeleteAccount = async () => {
         const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.');
         if (confirmed) {
@@ -334,6 +338,13 @@ export default function TouristDetails() {
                     </div>
                 </div>
             </div>
+            <button
+                onClick={handleViewBookings}
+                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
+            >
+                View My Bookings
+            </button>
+
             <button
                 onClick={handleDeleteAccount}
                 className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"

@@ -23,7 +23,9 @@ const {
     bookHotel,
     BookedActivities,
     BookedItineraries,
-    updateLoyaltyPoints
+    updateLoyaltyPoints,
+    getHotelBookingsByTouristId,
+    getFlightBookingsByTouristId
     
   } = require("../Controller/touristController");
   
@@ -69,7 +71,10 @@ router.get("/getPassword",getPassword);
 
 router.post("/bookFlight/:touristId" , bookFlight);
 
-router.post("/bookHotel/:touristId", bookHotel)
+router.post("/bookHotel/:touristId", bookHotel);
+
+router.get("/getHotelBookingsByTouristId/:touristId" , getHotelBookingsByTouristId);
+router.get("/getFlightBookingsByTouristId/:touristId" , getFlightBookingsByTouristId);
   
 
 router.get("/myComplaints/:touristId", getTouristComplaints);

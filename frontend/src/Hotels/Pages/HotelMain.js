@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Correct imports for navigation
 import AccessToken from '../Components/AccessToken';
 import HotelSearch from '../Components/HotelSearch'; // For hotel search functionality
-import HotelBooking from '../Components/HotelBooking'; // For booking functionality
 
 const HotelMain = () => {
   const [token, setToken] = useState('');
@@ -77,13 +76,6 @@ const HotelMain = () => {
                   );
                 })}
               </div>
-            </div>
-          )}
-
-          {selectedHotel && (
-            <div className="bg-white shadow-md rounded-lg p-6 w-full">
-              <h2 className="text-xl font-semibold mb-4">Hotel Booking</h2>
-              <HotelBooking hotel={selectedHotel} touristId={touristId} />
             </div>
           )}
         </>
