@@ -582,6 +582,50 @@ const redeemPoints = async (req, res) => {
       return res.status(500).json({ message: 'Server error' });
     }
   };
+
+  const getHotelBookingsByTouristId = async (req, res) => {
+    try {
+      const { touristId } = req.params;
+  
+      // Find all hotel bookings by touristId
+      const bookings = await HotelBooking.find({ touristId });
+  
+      if (!bookings.length) {
+        return res.status(404).json({ message: 'No hotel bookings found for this tourist' });
+      }
+  
+      return res.status(200).json({
+        message: 'Hotel bookings fetched successfully',
+        bookings,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  const getFlightBookingsByTouristId = async (req, res) => {
+    try {
+      const { touristId } = req.params;
+  
+      // Find all flight bookings by touristId
+      const bookings = await Booking.find({ touristId });
+  
+      if (!bookings.length) {
+        return res.status(404).json({ message: 'No flight bookings found for this tourist' });
+      }
+  
+      return res.status(200).json({
+        message: 'Flight bookings fetched successfully',
+        bookings,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
+  
   
   
 module.exports = {
@@ -605,5 +649,7 @@ module.exports = {
   bookFlight,
   redeemPoints,
   addPoints,
-  bookHotel 
+  bookHotel,
+  getHotelBookingsByTouristId,
+  getFlightBookingsByTouristId
 };

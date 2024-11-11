@@ -57,6 +57,7 @@ import './App.css';
 import FlightMain from './Flights/Pages/FlightMain.js';
 import HotelMain from './Hotels/Pages/HotelMain.js';
 import HotelOffers from './Hotels/Components/HotelSearchForOffers.js'
+import MyBookings from './Tourist/Components/MyBookings.js'
 //tourguide new
 
 import './App.css';
@@ -148,6 +149,7 @@ const App = () => {
           <Route path='/Flights/:touristId' element={<FlightMain/>}/>
           <Route path='/Hotels/:touristId' element={<HotelMain/>}/>
           <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
+          <Route path='/MyBookings/:touristId' element={<MyBookings/>}/>
 
 
 
