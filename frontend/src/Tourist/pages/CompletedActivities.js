@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './ItineraryDetails.css'; // Reuse existing CSS or create a new one for activities if needed
+import './CompletedActivities.css'; // Reuse existing CSS or create a new one for activities if needed
 
 const CompletedActivities = () => {
     const { id: touristId } = useParams(); // Get the tourist ID from the route params

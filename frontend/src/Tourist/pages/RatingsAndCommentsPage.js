@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
+import './RatingsAndCommentsPage.css';
 
 const RatingsAndCommentsPage = () => {
   const { relatedObjectId, touristId, type} = useParams();  // Extract both relatedObjectId and touristId from the URL params

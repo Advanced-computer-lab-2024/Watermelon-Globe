@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './ItineraryDetails.css';
+import './CompletedItineraries.css';
 
 const CompletedItineraries = () => {
     const { id: touristId } = useParams(); // Get the tourist ID from the route params
@@ -42,7 +42,7 @@ const CompletedItineraries = () => {
 
     return (
         <div className="itinerary-details">
-            <h2>Completed Activities</h2>
+            <h2>Completed Itineraries</h2>
             {childItineraries.map((child) => (
                 <div key={child._id} className="child-itinerary-box">
                     <h3>Status: {child.status}</h3>
