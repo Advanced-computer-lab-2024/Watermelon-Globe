@@ -63,6 +63,7 @@ import TouristProduct from "./Tourist/pages/TouristProduct.js";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
+import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -103,6 +104,7 @@ const App = () => {
           />
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
+          <Route path="/AdminViewDocuments" element={<ViewDocuments />} />
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />

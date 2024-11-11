@@ -31,6 +31,9 @@ const AdminHome = () => {
         <Link to="/AcceptRejectPage">
           <button className="admin-button">Manage Users</button>
         </Link>
+        <Link to="/AdminViewDocuments">
+          <button className="admin-button">View Documents</button>
+        </Link>
       </div>
     </div>
   );
