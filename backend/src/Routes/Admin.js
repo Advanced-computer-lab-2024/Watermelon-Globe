@@ -37,13 +37,22 @@ const {
     rejectAdvertiser,
     rejectSeller,
     rejectTourGuide,
+    sortComplaintsByDate,
+    filterComplaintsByStatus,
+    getUploadedDocuments,
+    getPassword,
+    getQuantity,
+    archiveProduct,
+    unarchiveProduct,
+    getProductImageByName,
+    markItineraryInappropriate
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
 router.post("/CreateAdmin", createAdmin);
 router.delete("/DeleteAdmin/:id", deleteAdmin);
 router.put("/changePasswordAdmin/:id", changePasswordAdmin),
-  router.get("/GetAllGoverner", getAllGoverner);
+router.get("/GetAllGoverner", getAllGoverner);
 router.post("/CreateGoverner", createGoverner);
 router.delete("/DeleteGoverner/:id", deleteGoverner);
 router.get("/GetAllPreferenceTag", getAllPreferenceTag);
@@ -57,6 +66,7 @@ router.post("/CreateActivityCategory", createActivityCategory);
 router.delete("/DeleteActivityCategory/:id", deleteActivityCategory);
 router.put("/UpdateActivityCategory/:id", updateActivityCategory);
 router.get("/GetAllProducts", getAllProducts);
+router.get("/getPassword",getPassword);
 
 //post a new product
 router.post("/CreateProduct", createProduct);
@@ -82,6 +92,14 @@ router.delete('/deleteGuide/:id', deleteGuide);
 router.delete('/deleteCompany/:id', deleteCompany);
 router.delete('/deleteSeller/:id', deleteSeller);
 
+//sort and filter for the complaint
+router.get('/ComplaintsSortByDate', sortComplaintsByDate)
+router.get('/ComplaintsFilterByStatus', filterComplaintsByStatus);
+
+//view uploaded documents
+router.get('/uploaded-documents', getUploadedDocuments);
+
+
 
 // accept or reject user
 router.put("/acceptAdvertiser/:id", acceptAdvertiser);
@@ -91,4 +109,22 @@ router.put("/acceptTourGuide/:id", acceptTourGuide);
 router.put("/rejectAdvertiser/:id", rejectAdvertiser);
 router.put("/rejectSeller/:id", rejectSeller);
 router.put("/rejectTourGuide/:id", rejectTourGuide);
+
+//archive a product
+router.put('/archiveProduct', archiveProduct)
+
+//unarchive a product
+router.put('/unarchiveProduct', unarchiveProduct)
+
+//upload product image
+router.get('/uploadImage',getProductImageByName)
+
+
+// view product's available quantity
+router.get('/getQuantity',getQuantity);
+
+
+//mark Itinerary Inappropriate
+router.put('/markItineraryInappropriate/:id', markItineraryInappropriate)
+
 module.exports = router;

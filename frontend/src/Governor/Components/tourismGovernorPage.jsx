@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ChangePasswordGovernor from './changePasswordGovernor';
 
 export default function TourismGovernorPage() {
   const [sites, setSites] = useState([]);
@@ -16,6 +17,12 @@ export default function TourismGovernorPage() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+const [showPasswordModal, setShowPasswordModal] = useState(false); // Toggle for password modal
+
+
+  // const changePassword=() =>{
+  //   <ChangePasswordGovernor/>
+  // }
 
   const handleRequest = async (url, method = 'get', data = null) => {
     setLoading(true);
@@ -187,11 +194,13 @@ export default function TourismGovernorPage() {
               />
             </div>
             <div className="flex space-x-2">
-              <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+
                 {isEditing ? 'Update Site' : 'Add Site'}
               </button>
               {isEditing && (
-                <button type="button" onClick={clearForm} className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                <button type="button" onClick={clearForm} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+
                   Cancel
                 </button>
               )}
@@ -276,8 +285,22 @@ export default function TourismGovernorPage() {
           ) : (
             <p>No sites available.</p>
           )}
+
+           <h2 className="text-2xl font-bold mb-4">Change Password</h2>
+
+         <button onClick={() => setShowPasswordModal(true)} 
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+          Change Password
+          </button>
+
         </div>
       </div>
+  {/* Password Change Modal */}
+  {showPasswordModal && <ChangePasswordGovernor onClose={() => setShowPasswordModal(false)} />}
     </div>
   );
 }
+
+
+
+  

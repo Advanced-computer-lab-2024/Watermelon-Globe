@@ -9,6 +9,8 @@ router.get("/getAllGuides", guideController.getAllGuides);
 router.put("/updateGuide/:id", guideController.updateTourGuide);
 router.put("/changePasswordTourGuide/:id",guideController.changePasswordTourGuide);
 router.put("/requestDeletionGuide/:id",guideController.requestDeletionGuide);
+router.get("/getPassword",guideController.getPassword);
+
 //accept terms and conditions
 router.put(
   "/acceptTermsAndConditions/:id",

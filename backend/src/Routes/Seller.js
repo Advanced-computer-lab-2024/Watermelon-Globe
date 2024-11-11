@@ -15,7 +15,13 @@ const {
   reviewProduct,
   acceptTermsAndConditions,
   getProductById,
-  requestDeletionSeller
+  requestDeletionSeller,
+  getProductReviews,
+  getPassword,
+  getQuantity,
+  archiveProduct,
+  unarchiveProduct,
+  getProductImageByName
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -38,6 +44,8 @@ router.delete("/DeleteSeller/:id", deleteSeller);
 router.put("/UpdateSeller/:id", updateSeller);
 
 router.put("/changePasswordSeller/:id", changePasswordSeller);
+
+router.get("/getPassword",getPassword);
 
 //////////////// Products ////////////////
 
@@ -68,5 +76,20 @@ router.put("/reviewProduct/:ReviewerId/:ProductId", reviewProduct);
 router.post("/getProductById",getProductById);
 
 router.put("/requestDeletionSeller/:id", requestDeletionSeller);
+router.get("/getProductReviews/:productId",getProductReviews);
 
-module.exports = router
+
+//archive a product
+router.put('/archiveProduct', archiveProduct)
+
+//unarchive a product
+router.put('/unarchiveProduct', unarchiveProduct)
+
+//upload product image
+router.get('/uploadImage',getProductImageByName)
+
+
+// view product's available quantity
+router.get('/getQuantity',getQuantity);
+
+module.exports = router;
