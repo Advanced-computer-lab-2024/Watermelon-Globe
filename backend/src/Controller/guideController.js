@@ -116,39 +116,14 @@ const updateTourGuide = async (req, res) => {
 };
 
 const createItinerary = async (req, res) => {
-  const {
-    name,
-    activities,
-    tag,
-    locations,
-    timeline,
-    languageOfTour,
-    priceOfTour,
-    availableDates,
-    availableTimes,
-    accessibility,
-    pickupDropoffLocations,
-    bookings,
-    guide: guideId,
-  } = req.body;
-  console.log(req.body);
-  console.log(tag);
-  try {
-    const itinerary = await itineraryModel.Itinerary.create({
-      name,
-      activities,
-      tag,
-      locations,
-      timeline,
-      languageOfTour,
-      priceOfTour,
-      availableDates,
-      availableTimes,
-      accessibility,
-      pickupDropoffLocations,
-      bookings,
-      guide: guideId,
-    });
+    const { name, activities,tag,locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+        accessibility, pickupDropoffLocations, bookings,rating, guide: guideId} = req.body;
+        console.log(req.body)
+        console.log(tag)
+        try {
+            const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
+                timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
+                pickupDropoffLocations, bookings, guide: guideId});
 
     res.status(200).json(itinerary);
   } catch (error) {

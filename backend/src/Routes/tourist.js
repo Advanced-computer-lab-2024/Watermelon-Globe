@@ -1,5 +1,6 @@
-  const express = require("express");
-  const router = express.Router();
+const express = require("express");
+const router = express.Router();
+const touristController = require("../Controller/touristController");
 
 const {
   createTourist,
@@ -28,12 +29,19 @@ const {
     getFlightBookingsByTouristId,
     deleteActivity,
     deleteItinerary,
-    
-  } = require("../Controller/touristController");
-  
-  //GET all tourists
-  router.get("/getTourists", getTourists);
+  getMyCompletedItineraries,
+  rateItinerary,
+  commentOnItinerary,
+  rateTourGuide,
+  commentOnTourGuide,
+  createActivityBooking,
+  getAllActivityBookings,
+  getMyCompletedActivities,
+  rateActivity,
+  commentOnActivity
+} = require("../Controller/touristController");
 
+  router.get("/getTourists", getTourists);
   //GET a single tourist
   router.get("/getTourist/:id", getTourist);
 
@@ -92,5 +100,26 @@ router.put('/updateLoyaltyPoints/:id',updateLoyaltyPoints)
 
 router.delete('/deleteActivity/:touristId/:activityId', deleteActivity);
 router.delete('/deleteItinerary/:touristId/:itineraryId', deleteItinerary);
+
+//sprint 2
+router.get('/getMyCompletedItineraries/:buyerId',getMyCompletedItineraries);
+
+router.post('/itineraries/:itineraryId/rate',rateItinerary);
+router.post('/itineraries/:itineraryId/comment', commentOnItinerary);
+
+// Route to rate a tour guide
+router.post('/tourGuide/:tourGuideId/rate',rateTourGuide);
+
+// Route to comment on a tour guide
+router.post('/tourGuide/:tourGuideId/comment',commentOnTourGuide);
+
+router.post('/createActivityBooking', createActivityBooking);
+router.get('/getAllActivityBookings', getAllActivityBookings);
+router.get('/getMyCompletedActivities/:touristId', getMyCompletedActivities);
+
+router.post('/activities/:activityId/rate', rateActivity);
+router.post('/activities/:activityId/comment', commentOnActivity);
+
+
 
 module.exports = router;

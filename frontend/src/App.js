@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 // Importing all necessary components
 import SignupPage from './Components/SignUp';
+
+import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
+import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
+import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js"
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
@@ -142,6 +146,15 @@ const App = () => {
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
 
           {/* Guest Routes */}
+          <Route path="/completed-itineraries/:id" element={<CompletedItineraries />} />
+          <Route path="/completed-activities/:id" element={<CompletedActivities />} />
+          {/* <Route path="/rate-tour-guide/:id" element={<RateTourGuide />} /> */}
+          {/* <Route path="/rate-itinerary/:id" element={<RateItinerary />} /> */}
+          {/* <Route path="/ratingsAndCommentsPage/:relatedObjectId" element={<RatingsAndCommentsPage />} /> */}
+          <Route path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type" element={<RatingsAndCommentsPage />} />
+
+
+          {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route

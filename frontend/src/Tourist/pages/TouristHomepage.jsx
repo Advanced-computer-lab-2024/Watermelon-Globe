@@ -61,17 +61,23 @@ const TouristHomePage = () => {
             <div className="flex items-center space-x-2">
               <button className="px-4 py-1 border rounded">EN</button>
               <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
-              <button 
-                onClick={handleViewDetails} 
+              <button
+                onClick={handleViewDetails}
                 className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               ><img
-              className="profileIcon"
-              src={profileIcon}
-              alt="Profile Icon"
-              style={{ width: '20px', height: '20px', bg: 'blue'}}
-            />
+                  className="profileIcon"
+                  src={profileIcon}
+                  alt="Profile Icon"
+                  style={{ width: '20px', height: '20px', bg: 'blue' }}
+                />
                 View Profile
               </button>
+              <Link to={`/completed-itineraries/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+                Completed Itineraries
+              </Link>
+              <Link to={`/completed-activities/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+                Completed Activities
+              </Link>
             </div>
           </div>
         </nav>
