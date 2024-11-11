@@ -1,71 +1,71 @@
 import React, { useState, useEffect } from "react";
 
 const SellerLogo = ({ id }) => {
-  const [photo, setPhoto] = useState(null);
+  const [Logo, setLogo] = useState(null);
   const [preview, setPreview] = useState(null);
 
   useEffect(() => {
-    async function fetchPhoto() {
+    async function fetchLogo() {
       try {
-        const response = await fetch(`/api/TourGuide/getGuide/${id}`);
+        const response = await fetch(`/api/Seller/GetSeller/${id}`);
         const data = await response.json();
-        if (data.photo) {
-            setPreview(`/uploads/${data.photo}`);
+        if (data.Logo) {
+            setPreview(`/uploads/${data.Logo}`);
         }
       } catch (error) {
-        console.error("Error fetching profile photo:", error);
+        console.error("Error fetching logo:", error);
       }
     }
-    fetchPhoto();
+    fetchLogo();
   }, [id]);
 
-  const handlePhotoChange = (e) => {
+  const handleLogoChange = (e) => {
     const file = e.target.files[0];
-    setPhoto(file);
+    setLogo(file);
     setPreview(URL.createObjectURL(file));
   };
 
-  const handlePhotoUpload = async (e) => {
+  const handleLogoUpload = async (e) => {
     e.preventDefault();
-    if (!photo) {
-      alert("Please select a photo to upload.");
+    if (!Logo) {
+      alert("Please select a logo to upload.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("photo", photo);
+    formData.append("Logo", Logo);
 
     try {
-      const response = await fetch(`/api/upload/tourGuidePhoto/${id}`, {
+      const response = await fetch(`/api/upload/sellerLogo/${id}`, {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
-        alert("Photo uploaded successfully");
-        setPreview(data.Photo);
+        alert("Logo uploaded successfully");
+        setPreview(data.Logo);
       } else {
-        alert("Failed to upload photo.");
+        alert("Failed to upload logo.");
       }
     } catch (error) {
-      console.error("Error uploading photo:", error);
-      alert("Photo upload failed.");
+      console.error("Error uploading logo:", error);
+      alert("Logo upload failed.");
     }
   };
 
   return (
     <div className="logo-upload">
-      <h3>Profile Photo</h3>
-      <div className="photo-preview">
+      <h3>Logo</h3>
+      <div className="logo-preview">
         {preview ? (
-          <img src={preview} alt="Profile Preview" className="h-24 w-24 rounded-full object-cover" />
+          <img src={preview} alt="Logo Preview" className="h-24 w-24 rounded-full object-cover" />
         ) : (
-          <p>No photo available</p>
+          <p>No logo available</p>
         )}
       </div>
-      <input type="file" accept="image/*" onChange={handlePhotoChange} />
-      <button onClick={handlePhotoUpload}>Upload Photo</button>
+      <input type="file" accept="image/*" onChange={handleLogoChange} />
+      <button onClick={handleLogoUpload}>Upload Photo</button>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
@@ -12,6 +13,8 @@ import {
 } from "lucide-react";
 
 export default function ExploreActivities() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [activities, setActivities] = useState([]);
   const [filteredActivities, setFilteredActivities] = useState([]);
   const [activitySearch, setActivitySearch] = useState("");
@@ -47,11 +50,14 @@ export default function ExploreActivities() {
     selectedCategory,
   ]);
 
+  const handleActivityClick = (activityId) => {
+    navigate(`/TouristActivityDetails/${activityId}/${id}`);
+  };
+
   const fetchActivities = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      // change this api to not include the ones that are flagged
       const response = await fetch("/api/Activities/getActivitiesNew");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -60,14 +66,17 @@ export default function ExploreActivities() {
       console.log("Fetched activities:", data);
       if (data && data.activities && Array.isArray(data.activities)) {
         setActivities(data.activities);
+        setFilteredActivities(data.activities);
       } else {
         console.error("Unexpected data structure:", data);
         setActivities([]);
+        setFilteredActivities([]);
       }
     } catch (error) {
       console.error("Error fetching activities:", error);
       setError("Failed to fetch activities. Please try again later.");
       setActivities([]);
+      setFilteredActivities([]);
     } finally {
       setIsLoading(false);
     }
@@ -167,6 +176,7 @@ export default function ExploreActivities() {
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
+
   const resetFilters = () => {
     setStartDateActivity(null);
     setEndDateActivity(null);
@@ -175,6 +185,7 @@ export default function ExploreActivities() {
     setActivitySearch("");
     setSelectedPrefActivity("");
     setSelectedCategory("");
+    setFilteredActivities(activities);
   };
 
   return (
@@ -329,7 +340,9 @@ export default function ExploreActivities() {
             {filteredActivities.map((activity) => (
               <div
                 key={activity._id}
-                className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 overflow-hidden"
+                onClick={() => handleActivityClick(activity._id)}
+                className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 overflow-hidden cursor-pointer"
+                
               >
                 <div className="h-48 overflow-hidden">
                   <img
@@ -365,7 +378,7 @@ export default function ExploreActivities() {
                   )}
                   {activity.Discount > 0 && (
                     <p className="text-sm text-green-600 font-semibold">
-                      Discount: {activity.Discount}% OFF
+                      Discount: {activity.Discount}% hohohoOFF
                     </p>
                   )}
                 </div>
