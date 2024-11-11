@@ -241,6 +241,7 @@ const App = () => {
             element={<TouristComplaints />}
           />
           <Route path="/MyBookings/:id" element={<MyBookings />} />
+          <Route path="/SiteDetails/:id" element={<SiteDetails />} />
 
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
@@ -262,7 +263,7 @@ const App = () => {
           <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
           <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
 
-
+          
 
         </Routes>
       </div>
