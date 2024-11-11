@@ -28,6 +28,7 @@ import SignupOptions from "./pages/SignUpOptions.js";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
+import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import ViewProducts from './Guest/pages/ViewProducts.js';
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
@@ -82,7 +83,9 @@ const App = () => {
       <div style={{ padding: '20px' }}>
         <Routes>
           {/* Main Home Page */}
-          <Route path="/" element={<MainHome />} />
+          <Route path="/" element={<GuestPage />} />
+
+          <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
           <Route path="/AdminHome" element={<AdminHome />} />
