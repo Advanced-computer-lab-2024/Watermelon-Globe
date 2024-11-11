@@ -11,7 +11,7 @@ const HomeScreen = () => {
     useEffect(() => {
         const fetchActivities = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/activities');
+                const response = await fetch('/api/Activties/activities');
                 setActivities(response.data);
                 console.log("Fetched activities: ", response.data);
             } catch (error) {

@@ -22,7 +22,7 @@ import TouristPage from './TouristPage.js';
 import SellerPage from './SellerPage.js';
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Components/CompanyHomepage.jsx';
+import CompanyHomepage from './Advertiser/Components/CompanyHomepage.jsx';
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ViewProducts from './Guest/pages/ViewProducts.js';
 
@@ -124,7 +124,7 @@ const App = () => {
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
-          {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
+          {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
           <Route path="/signup" element={<SignupPage onSignup={handleSignup} />} />
