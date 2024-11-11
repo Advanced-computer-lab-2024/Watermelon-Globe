@@ -14,7 +14,7 @@ const createProfile = async (req, res) => {
 
     res.status(201).json({
       message: "Company Profile created successfully",
-      profile: savedProfile, // This should contain _id
+      profile: savedProfile, 
     });
   } catch (error) {
     console.error(error);

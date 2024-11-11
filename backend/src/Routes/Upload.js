@@ -49,7 +49,7 @@ router.post(
     try {
         console.log(req.files)
         const files = req.files;
-        const tourGuideId = req.params.tourGuideId;c
+        const tourGuideId = req.params.tourGuideId;
         const tourGuide = await tourGuideUpload.findById(tourGuideId);
 
         if(!tourGuide){
@@ -99,7 +99,7 @@ router.post(
             return res.status(400).json({ message: "No files to upload" });
         }
 
-        const advertiser = await sellerUpload.findByIdAndUpdate(advertiserId, {
+        const advertiser = await advertiserUpload.findByIdAndUpdate(advertiserId, {
             $set: updateData,
         }, { new: true });
 

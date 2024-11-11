@@ -23,7 +23,8 @@ import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
 import Complaint from "./Admin/pages/Complaint.js";
 import Itinerary from "./Admin/pages/Itinerary.js";
 //Advertiser Pages
-import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
+import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
+import AdvertiserSignupConfirm from './Advertiser/Components/AdvertiserSignupConfirm.jsx';
 import CompanyHomepage from "./Components/CompanyHomepage.jsx";
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
 import AdvertiserPage from "./Components/advertiserPage";
@@ -39,7 +40,8 @@ import SellerPage from "./SellerPage.js";
 import SellerProduct from './Seller/pages/SellerProduct.js';
 //Tour guide pages
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
-import TourguideSignup from "./pages/TourguideSignup.js";
+import TourguideSignup from "./pages/TourguideSignup.jsx";
+import TourguideSignupConfirm from './pages/TourguideSignupConfirm.jsx';
 import TourGuidePage from "./Components/tourGuidePage";
 import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.js";
 //Tourism governer pages
@@ -119,9 +121,12 @@ const App = () => {
 
           {/* Signup Pages */}
           <Route path="/seller-signup" element={<SellerSignup />} />
+          <Route path="/SellerSignupConfirm/:id" element={<SellerSignupConfirm/>}/>
           <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
+          <Route path="/advertiserSignupConfirm/:id" element={<AdvertiserSignupConfirm/>}/>
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
+          <Route path="/TourguideSignupConfirm/:id" element={<TourguideSignupConfirm/>}/>
           <Route path="/signup-options" element={<SignupOptions />} />
 
           {/* Tourist Pages */}
@@ -148,7 +153,6 @@ const App = () => {
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
           <Route path="/ViewProducts" element={<ViewProducts />} />
-          <Route path="/SellerSignupConfirm/:id" element={<SellerSignupConfirm/>}/>
           {/* Tour Guide Pages */}
           <Route path="/TourGuideHome/:id" element={<TourGuideHome />} />
           <Route
