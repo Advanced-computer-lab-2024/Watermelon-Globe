@@ -819,15 +819,15 @@ const getUploadedDocuments = async (req, res) => {
     // Fetch all users (TourGuides, Advertisers, Sellers)
     const tourGuides = await TourGuide.find(
       {},
-      "name username email idProof certificates"
+      "username idProof certificates"
     );
     const advertisers = await Advertiser.find(
       {},
-      "Username Email idProof taxationRegistryCard"
+      "Username idProof taxationRegistryCard"
     );
     const sellers = await Seller.find(
       {},
-      "Name Email idProof taxationRegistryCard"
+      "Name idProof taxationRegistryCard"
     );
 
     // Filter TourGuides who have uploaded documents (either idProof or certificates)
