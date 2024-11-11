@@ -57,8 +57,7 @@ const HomeScreen = () => {
                     onProfileView={() => navigate(`/advertiserProfile/${advertiser._id}`)}
                     onViewActivities={() => navigate(`/view-activities/${advertiser._id}`)}
                     onCreateActivity={() => navigate('/add-activity')}
-                    // ChangePassword={() => navigate('/changeAdvertiserPassword')
-                    }
+                    // ChangePassword={() => navigate('/changeAdvertiserPassword')}
                 />
             )}
 
