@@ -175,8 +175,8 @@ const App = () => {
 
           {/* Tourist Pages */}
           <Route path="/Tourist_ProductsPage" element={<TouristProductsPage />} />
-          <Route path="/ItineraryDetails/:tripid" element={<ItineraryDetails />} />
-          <Route path="/TouristActivityDetails/:activityId" element={<TouristActivityDetails />} />
+          <Route path="/ItineraryDetails/:tripid/:id" element={<ItineraryDetails />} />
+          <Route path="/TouristActivityDetails/:activityId/:id" element={<TouristActivityDetails />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />

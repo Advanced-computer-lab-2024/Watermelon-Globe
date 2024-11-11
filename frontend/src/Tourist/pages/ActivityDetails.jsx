@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { MapPin, Clock, Calendar, DollarSign, Tag, AlertCircle, Star, Users, Percent } from 'lucide-react';
 
 const ActivityDetails = () => {
-    const { activityId } = useParams();
+    const { activityId, id } = useParams();
     const [activity, setActivity] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -42,7 +42,7 @@ const ActivityDetails = () => {
                 },
                 body: JSON.stringify({
                     activity: activityId,
-                    tourist: "672cd143a72c43a2d8fb01c0", // Replace with actual user ID
+                    tourist: id, // Replace with actual user ID
                     chosenDate: activity.Date,
                 }),
             });
