@@ -55,7 +55,7 @@ import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
 import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
-import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
+import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
 import TouristProduct from "./Tourist/pages/TouristProduct.js";
