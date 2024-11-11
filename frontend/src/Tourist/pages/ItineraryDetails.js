@@ -28,14 +28,12 @@ const ItineraryDetails = () => {
         fetchItinerary();
     }, [id]);
 
-    // Show loading or error state
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+
 
     // Function to handle rating submission
     const handleRate = async () => {
         try {
-            const response = await fetch(`/api/Itinerary/updateRating/${id}?rating=${rating}`, {
+            const response = await fetch(`/api/updateRating/updateRating/${id}?rating=${rating}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,6 +65,10 @@ const ItineraryDetails = () => {
         const body = encodeURIComponent(`I thought you might be interested in this itinerary: ${itineraryUrl}`);
         window.location.href = `mailto:?subject=${subject}&body=${body}`;
     };
+
+        // Show loading or error state
+        if (loading) return <div>Loading...</div>;
+        if (error) return <div>Error: {error}</div>;
 
     // Render the itinerary details
     return (

@@ -23,6 +23,7 @@ const {
     bookHotel,
     BookedActivities,
     BookedItineraries,
+    updateLoyaltyPoints
     
   } = require("../Controller/touristController");
   
@@ -78,5 +79,8 @@ router.put("/addPoints/:id",addPoints);
 
 router.get('/bookedActivities/:id/',BookedActivities);
 router.get('/BookedItineraries/:id/',BookedItineraries);
+
+
+router.put('/updateLoyaltyPoints/:id',updateLoyaltyPoints)
 
 module.exports = router;

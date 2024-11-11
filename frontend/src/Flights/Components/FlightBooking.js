@@ -25,6 +25,9 @@ const FlightBooking = ({ flight, touristId }) => {
       price: flight.price?.grandTotal,
       currency: flight.price?.currency,
       });
+      const response2 = await axios.put(`http://localhost:8000/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+        amountPaid: flight.price?.grandTotal
+      });
 
       // Display success message upon successful booking
       setMessage('You have successfully booked your flight!');

@@ -97,6 +97,30 @@ export default function TouristDetails() {
         }
     };
 
+    const handleDeleteAccount = async () => {
+        const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.');
+        if (confirmed) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/Tourist/requestDeletionTourist/${id}`, {
+                    method: 'PUT', 
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  });
+
+                if (response.ok) {
+                    alert('Your account has been successfully deleted.');
+                    navigate('/'); // Redirect to home or login after deletion
+                } else {
+                    alert('Failed to delete account. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                alert('An error occurred while trying to delete the account.');
+            }
+        }
+    };
+
     if (!tourist) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#FFE4E1' }}>
@@ -292,6 +316,13 @@ export default function TouristDetails() {
                     </div>
                 </div>
             </div>
+            <button
+                                onClick={handleDeleteAccount}
+                                className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                                style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
+                            >
+                                Delete Account
+                            </button>
             {showRedeemModal && (
                 <div style={{
                     position: 'fixed',

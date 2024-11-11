@@ -468,7 +468,7 @@ const getPassword = async(req,res) =>{
   
       // Save the booking
       const savedBooking = await newBooking.save();
-  
+      
       // Send a success response
       res.status(201).json({
         message: 'Flight successfully booked!',
@@ -658,6 +658,61 @@ const BookedActivities = async (req, res) => {
   }
 };
 
+const updateLoyaltyPoints = async (req, res) => {
+  const { id } = req.params;
+  const { amountPaid } = req.body;
+
+  try {
+    const tourist = await Tourist.findById(id);
+
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    // Calculate points based on loyalty level
+    let pointsToAdd;
+    switch (tourist.loyaltyLevel) {
+      case 1:
+        pointsToAdd = amountPaid * 0.5;
+        break;
+      case 2:
+        pointsToAdd = amountPaid * 1;
+        break;
+      case 3:
+        pointsToAdd = amountPaid * 1.5;
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid loyalty level' });
+    }
+
+    // Update loyalty points
+    tourist.loyaltyPoints += pointsToAdd;
+
+    // Update loyalty level based on points and assign badge
+    if (tourist.loyaltyPoints <= 100000 ) {
+      tourist.loyaltyLevel = 1;
+      tourist.badge = 'Bronze';
+    } else if (tourist.loyaltyPoints <= 500000) {
+      tourist.loyaltyLevel = 2;
+      tourist.badge = 'Silver';
+    } else {
+      tourist.loyaltyLevel = 3;
+      tourist.badge = 'Gold';
+    }
+
+    await tourist.save();
+
+    res.json({
+      message: 'Loyalty points and badge updated successfully',
+      loyaltyPoints: tourist.loyaltyPoints,
+      loyaltyLevel: tourist.loyaltyLevel,
+      badge: tourist.badge
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating loyalty points and badge' });
+  }
+};
   
 module.exports = {
   createTourist,
@@ -683,5 +738,5 @@ module.exports = {
   bookHotel,
   BookedItineraries,
   BookedActivities,
-
+  updateLoyaltyPoints
 };

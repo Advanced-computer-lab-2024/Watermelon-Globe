@@ -1,81 +1,50 @@
 import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
-
 // Importing all necessary components
-import AdvertiserPage from './Components/advertiserPage';
-import TourGuidePage from './TourGuide/pages/TourGuideHomePage.js';
-import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
 import SignupPage from './Components/SignUp';
-import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
-
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
-import TouristPage from './TouristPage.js';
-import SellerPage from './SellerPage.js';
-import TouristHomePage from './Tourist/pages/TouristHomepage.jsx';
 
-
-import './App.css';
-
-import TouristDetailsHamdy from "./Tourist/Components/TouristDetails.js";
-import TouristDetailsHegawy from "./Tourist/pages/TouristDetails.jsx";
-//import TouristDetails from './Tourist/Components/TouristDetails.jsx';
-import SellerSignup from "./pages/SellerSignup.js";
-import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
-import TouristSignup from "./Tourist/pages/TouristSignup.js";
-import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-
-import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
-import MainTour from "./Tourist/pages/TouristHomepage.jsx";
-
-
-import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ViewProducts from './Guest/pages/ViewProducts.js';
-
-import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
-import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
-import TouristComplaints from './Tourist/pages/TouristComplaints.jsx'
-
 import AdminHome from './Admin/pages/AdminHome.js';
 import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './Seller/pages/SellerProduct.jsx';
-import TouristProduct from './Tourist/pages/TouristProduct.js';
 import Admin from './Admin/pages/Admin.js';
 import Governer from './Admin/pages/Governer.js';
 import ActivityCategory from './Admin/pages/ActivityCategory.js';
 import PreferenceTag from './Admin/pages/PrefenceTag.js';
 import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
 import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
-import Complaint from "./Admin/pages/Complaint.js";
-import Itinerary from "./Admin/pages/Itinerary.js";
+
 //Advertiser Pages
 import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 import AdvertiserSignupConfirm from './Advertiser/Components/AdvertiserSignupConfirm.jsx';
-import CompanyHomepage from "./Components/CompanyHomepage.jsx";
+import AdvertiserPage from './Components/advertiserPage';
 import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import AdvertiserPage from "./Components/advertiserPage";
 import HomeScreen from './Components/CompanyHomepage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
-import ActivityDetails from "./Components/ActivityDetails.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
+
 //Seller Pages
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
 import SellerPage from "./SellerPage.js";
 import SellerProduct from './Seller/pages/SellerProduct.js';
+
 //Tour guide pages
 import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
 import TourguideSignup from "./pages/TourguideSignup.jsx";
 import TourguideSignupConfirm from './pages/TourguideSignupConfirm.jsx';
 import TourGuidePage from "./Components/tourGuidePage";
 import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.js";
+
 //Tourism governer pages
 import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
@@ -88,8 +57,8 @@ import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
-import TouristProduct from "./Tourist/pages/TouristProduct.js";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
 import HotelMain from './Hotels/Pages/HotelMain.js';
@@ -153,7 +122,6 @@ const App = () => {
           <Route path="/ItineraryDetails/:id" element={<ItineraryDetails />} />
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
-          <Route path="/TouristDetails/:id" element={<TouristDetailsHamdy />} />
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
           
           {/* Guest and Advertiser Routes */}
@@ -188,7 +156,7 @@ const App = () => {
           {/* Tourist Pages */}
           <Route path="/Tourist_ProductsPage" element={<TouristProductsPage />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
-          <Route path="/TouristDetails/:id" element={<TouristDetailsHegawy />} />
+          <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
           <Route
             path="/PurchasedProducts/:id"

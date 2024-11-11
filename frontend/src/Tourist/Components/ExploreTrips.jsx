@@ -48,7 +48,7 @@ const ExploreTrips = () => {
     setError(null);
     try {
       // const response = await fetch('/api/Itinerary/getAllItineraries');//////////////
-      const response = await fetch("/api/itinerary/activeItineraries");
+      const response = await fetch("/api/Itinerary/activeItineraries");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
