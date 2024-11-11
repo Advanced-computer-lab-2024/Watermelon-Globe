@@ -814,6 +814,40 @@ const getAllTransportations = async (req, res) => {
   }
 };
 
+// get a single tourist -- used to view profile
+const getTransportation = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Transportation" });
+  }
+
+  const transportaion = await Transportation.findById(id);
+
+  if (!transportaion) {
+    return res.status(404).json({ error: "No such tourist" });
+  }
+  res.status(200).json(transportaion);
+};
+
+const bookTransportation = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const transportaion = await Transportation.findOneAndUpdate(
+      { _id: id },
+      { booked: true },
+      { new: true } 
+    );
+    res
+      .status(200)
+      .json({ message: "Booked successfully", transportaion });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
   
 module.exports = {
   createTourist,
@@ -844,5 +878,7 @@ module.exports = {
   getFlightBookingsByTouristId,
   deleteActivity,
   deleteItinerary,
-  getAllTransportations
+  getAllTransportations,
+  getTransportation,
+  bookTransportation
 };
