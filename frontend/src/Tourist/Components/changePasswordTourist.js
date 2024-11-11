@@ -8,12 +8,9 @@ const ChangePasswordTourist = ({ id,onClose }) => {
   const [sellerPassword, setSellerPassword] = useState('');
 
   const handleShowPassword = async () => {
-    if (!sellerId) {
-      alert("Please enter a seller ID.");
-      return;
-    }
+   
     try {
-      const response = await fetch(`/api/tourist/getPassword?id=${sellerId}`);
+      const response = await fetch(`/api/tourist/getPassword?id=${id}`);
       const data = await response.json();
       setSellerPassword(response.ok ? data : 'Password not available');
     } catch (error) {
@@ -51,18 +48,9 @@ const ChangePasswordTourist = ({ id,onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Example id : 672cd143a72c43a2d8fb01c0</h3>
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Change Password</h2>
         
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Tourist ID:</label>
-          <input
-            type="text"
-            value={sellerId}
-            onChange={(e) => setSellerId(e.target.value)}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+       
 
         <button
           onClick={handleShowPassword}
@@ -71,7 +59,7 @@ const ChangePasswordTourist = ({ id,onClose }) => {
           Show Password
         </button>
         {sellerPassword && (
-          <p className="text-gray-700 mb-4"><strong>Governor Password:</strong> {sellerPassword}</p>
+          <p className="py-2 text-gray-700 mb-4"><strong>Tourist Password:</strong> {sellerPassword}</p>
         )}
 
         <div className="mb-4">

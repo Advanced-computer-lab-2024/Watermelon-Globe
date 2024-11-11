@@ -31,6 +31,7 @@ const createSeller = async (req, res) => {
   const { Name, Email, Password } = req.body;
   try {
     const seller = await Seller.create({ Name, Email, Password });
+    seller.status = "pending";
     res.status(200).json(seller);
   } catch (error) {
     res.status(400).json({ error: error.mssg });
@@ -86,6 +87,25 @@ const updateSeller = async (req, res) => {
     res.status(200).json({ message: "Seller updated successfully", seller });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+const getSellerStatus = async (req, res) => {
+  const {id} = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Seller does not exist" });
+  }
+
+  try {
+    const seller = await Seller.findById(id).select('status');
+    if (!seller) {
+      return res.status(400).json({ error: "No such seller" });
+    }
+
+    res.json({ status: seller });
+  } catch (error) {
+    console.error(error);
+        res.status(500).json({ message: 'Error retrieving seller status' });
   }
 };
 
@@ -566,9 +586,7 @@ const getProductImageByName = async (req, res) => {
 };
 
 
-
-
-module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller,
+module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller, getSellerStatus,
      createProduct , getAllProducts , searchProductbyName , filterProduct , updateProduct,
       sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
       acceptTermsAndConditions,getProductById,getProductReviews,getPassword,

@@ -36,6 +36,11 @@ const createChildItinerary = async (req, res) => {
     });
     savedChildItinerary.totalPrice = parentItinerary.priceOfTour;
 
+    // Add the booked itinerary to the tourist's document
+    await Tourist.findByIdAndUpdate(buyer, {
+      $push: { bookedItineraries: savedChildItinerary._id }
+    });
+
     res.status(201).json(savedChildItinerary);
   } catch (error) {
     res
@@ -187,6 +192,14 @@ const createActivityBooking = async (req, res) => {
     });
     // Save the activity booking
     const savedActivityBooking = await newActivityBooking.save();
+   
+ // Add the booked activity to the tourist's document
+    await Tourist.findByIdAndUpdate(tourist, {
+      $push: { bookedActivities: savedActivityBooking._id }
+    });
+
+
+
     res.status(201).json(savedActivityBooking);
   } catch (error) {
     res.status(500).json({ error: 'Error creating activity booking: ' + error.message });

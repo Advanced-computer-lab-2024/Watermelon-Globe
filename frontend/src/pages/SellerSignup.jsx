@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 import {useState } from "react"
 // import Seller from "../../../ModelsGuest/seller"
@@ -6,6 +7,7 @@ const SignupSeller =()=>{
     const [Email,setEmail]=useState("")
     const [Password,setPassword]=useState("")
     const [error,setError]=useState("")
+    const navigate = useNavigate()
 
     const handleSubmit =async(e)=>{
         e.preventDefault()
@@ -22,12 +24,13 @@ const SignupSeller =()=>{
         //     setError(json.error)
         // }
         if(response.ok){
-             alert("Singing in as seller was successful")
+            //alert("Singing in as seller was successful")
             setUsername('');
             setEmail('');
             setPassword('')
             setError(null)
             console.log("new Seller added",json)
+            navigate(`/sellersignUpConfirm/${json._id}`); 
         }
     }
 return (
@@ -41,20 +44,20 @@ return (
         value={Name}/>
         </label>
 
-<label> Email :
-        <input 
-        type="email"
-        onChange={(e)=> setEmail(e.target.value)}
-        value={Email}/>
+        <label> Email :
+            <input 
+            type="email"
+            onChange={(e)=> setEmail(e.target.value)}
+            value={Email}/>
         </label>
 
-<label> Password :
-        <input 
-        type="password"
-        onChange={(e)=> setPassword(e.target.value)}
-        value={Password}/>
+        <label> Password :
+            <input 
+            type="password"
+            onChange={(e)=> setPassword(e.target.value)}
+            value={Password}/>
         </label>
-<button> Sign up as seller</button>
+        <button> Sign up as seller</button>
     </form>
 )}
 

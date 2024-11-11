@@ -56,6 +56,10 @@ const tourGuideSchema = new Schema(
       type: [String],
       required: false,
     },
+    photo: {
+      type: String, 
+      required: false,
+    },
     deletionRequest: {
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
@@ -65,5 +69,5 @@ const tourGuideSchema = new Schema(
   { timestamps: true }
 );
 
-const TourGuide = mongoose.model("TourGuide", tourGuideSchema);
+const TourGuide = mongoose.models.TourGuide || mongoose.model("TourGuide", tourGuideSchema);
 module.exports = TourGuide;

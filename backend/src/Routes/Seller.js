@@ -9,6 +9,7 @@ const {
   getAllProducts,
   searchProductbyName,
   updateProduct,
+  getSellerStatus,
   sortProducts,
   updateRatingProduct,
   changePasswordSeller,
@@ -46,6 +47,8 @@ router.put("/UpdateSeller/:id", updateSeller);
 router.put("/changePasswordSeller/:id", changePasswordSeller);
 
 router.get("/getPassword",getPassword);
+
+router.get('/sellerStatus/:id', getSellerStatus);
 
 //////////////// Products ////////////////
 

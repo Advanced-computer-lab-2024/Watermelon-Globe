@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { User, Mail, Phone, Flag, Calendar, Briefcase, DollarSign, Edit2, Check, X, Gift } from 'lucide-react';
+import ChangePasswordTourist from '../Components/changePasswordTourist'
 
 export default function TouristDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
-    
+    const [showPasswordModal, setShowPasswordModal] = useState(false); // Toggle for password modal
+
     const [tourist, setTourist] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [showRedeemModal, setShowRedeemModal] = useState(false);
@@ -353,6 +355,12 @@ export default function TouristDetails() {
                     </div>
                 </div>
             )}
+            <button onClick={() => setShowPasswordModal(true)} 
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+          Change Password
+          </button>
+          {/* Password Change Modal */}
+        {showPasswordModal && <ChangePasswordTourist id ={id} onClose={() => setShowPasswordModal(false)} />}
             <style jsx>{`
                 @keyframes spin {
                     0% { transform: rotate(0deg); }

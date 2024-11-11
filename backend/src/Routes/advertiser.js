@@ -11,7 +11,7 @@ const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser,reque
 // router.post("/createTags",createTags);
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
-router.get("/profiles", getProfiles);
+router.get("/profiles/:id?", getProfiles);
 router.put("/changePasswordAdvertiser:/id",changePasswordAdvertiser);
 router.put("/requestDeletionAdvertiser:/id",requestDeletionAdvertiser);
 

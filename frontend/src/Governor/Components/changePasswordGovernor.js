@@ -40,7 +40,7 @@ const ChangePasswordGovernor = ({ onClose }) => {
         setNewPassword('');
       }
       else{
-        alert(data.error.message || "Failed to change password.");
+        alert(data.error|| "Failed to change password.");
       }
 
     } catch (error) {

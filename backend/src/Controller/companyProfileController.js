@@ -14,7 +14,7 @@ const createProfile = async (req, res) => {
 
     res.status(201).json({
       message: "Company Profile created successfully",
-      profile: savedProfile, // This should contain _id
+      profile: savedProfile, 
     });
   } catch (error) {
     console.error(error);
@@ -146,6 +146,25 @@ const requestDeletionAdvertiser = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 };
+
+const getPassword = async(req,res) =>{
+  const{id}= req.query;
+  console.log(id);
+  try{
+    const advertiser = await CompanyProfileModel.findById(id);
+    console.log(advertiser);
+    if(!advertiser){
+      res.status(400).json({message:"advertiser is not found"});
+    }
+    else{
+      res.status(200).json(advertiser.Password)
+    }
+  }
+  catch{
+    console.error('Error getting password:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
 
 module.exports = {
   createProfile,

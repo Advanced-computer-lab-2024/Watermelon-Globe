@@ -20,8 +20,14 @@ const {
     bookFlight,
     redeemPoints,
     addPoints,
-    bookHotel
-} = require("../Controller/touristController");
+    bookHotel,
+    BookedActivities,
+    BookedItineraries,
+    
+  } = require("../Controller/touristController");
+  
+  //GET all tourists
+  router.get("/getTourists", getTourists);
 
   //GET a single tourist
   router.get("/getTourist/:id", getTourist);
@@ -69,5 +75,8 @@ router.get("/myComplaints/:touristId", getTouristComplaints);
 
 router.put("/redeemPoints/:id",redeemPoints);
 router.put("/addPoints/:id",addPoints);
+
+router.get('/bookedActivities/:id/',BookedActivities);
+router.get('/BookedItineraries/:id/',BookedItineraries);
 
 module.exports = router;
