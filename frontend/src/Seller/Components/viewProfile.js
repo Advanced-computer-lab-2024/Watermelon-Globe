@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SellerLogo from './SellerLogo';
 
 const ViewProfile = () => {
   const [sellerId, setSellerId] = useState(''); // State to store the input seller ID
@@ -72,6 +73,7 @@ const ViewProfile = () => {
           <p><strong>Name:</strong> {seller.Name}</p>
           <p><strong>Email:</strong> {seller.Email}</p>
           <p><strong>Description:</strong> {seller.Description}</p>
+          <SellerLogo id={seller._id}/>
         </div>
       )}
     </div>

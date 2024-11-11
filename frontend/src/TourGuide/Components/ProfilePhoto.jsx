@@ -12,7 +12,7 @@ const ProfilePhotoUpload = ({ id }) => {
         console.log(data);
         if (data.photo) {
             setPreview(`/uploads/${data.photo}`);
-            console.log(`/uploads/${data.photo}`);
+            console.log(`uploads/${data.photo}`);
         }
       } catch (error) {
         console.error("Error fetching profile photo:", error);
