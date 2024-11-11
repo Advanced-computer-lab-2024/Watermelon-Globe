@@ -6,6 +6,8 @@ const Product = require("../Models/productModel");
 const Booking = require('../Models/FlightBooking');
 const HotelBooking = require('../Models/HotelBooking');
 const Hotel = require('../Models/Hotel.js');
+const Transportation = require('../Models/TransportationModel');
+
 
 
 
@@ -800,6 +802,52 @@ const deleteActivity = async (req, res) => {
   }
 };
 
+// get all trips
+const getAllTransportations = async (req, res) => {
+  try {
+    // Fetch all transportation records, sorted by creation date (latest first)
+    const transportations = await Transportation.find({}).sort({ createdAt: -1 });
+    
+    res.status(200).json(transportations);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching transportation records.' });
+  }
+};
+
+// get a single tourist -- used to view profile
+const getTransportation = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Transportation" });
+  }
+
+  const transportaion = await Transportation.findById(id);
+
+  if (!transportaion) {
+    return res.status(404).json({ error: "No such tourist" });
+  }
+  res.status(200).json(transportaion);
+};
+
+const bookTransportation = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const transportaion = await Transportation.findOneAndUpdate(
+      { _id: id },
+      { booked: true },
+      { new: true } 
+    );
+    res
+      .status(200)
+      .json({ message: "Booked successfully", transportaion });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
   
 module.exports = {
   createTourist,
@@ -830,4 +878,7 @@ module.exports = {
   getFlightBookingsByTouristId,
   deleteActivity,
   deleteItinerary,
+  getAllTransportations,
+  getTransportation,
+  bookTransportation
 };

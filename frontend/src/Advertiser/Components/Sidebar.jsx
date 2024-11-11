@@ -9,6 +9,9 @@ const Sidebar = ({ onProfileView, advertiser, onCreateActivity, advertiserId }) 
     const handleLogoClick = () => {
         navigate(`/edit-logo/${advertiserId}`);
     };
+    const handleChangePassword=async()=>{
+            navigate(`/ChangePasswordAdvertiser/${advertiserId}`)
+    }
 
     return (
         <div className="sidebar">
@@ -25,7 +28,7 @@ const Sidebar = ({ onProfileView, advertiser, onCreateActivity, advertiserId }) 
             {/* Sidebar Links */}
             <button onClick={onProfileView}>Profile</button>
             <button onClick={onCreateActivity}>Create Activity</button>
-            {/* <button onClick={ChangePassword}>Change Password</button> */}
+            <button onClick={handleChangePassword}>Change Password</button> 
         </div>
     );
 };

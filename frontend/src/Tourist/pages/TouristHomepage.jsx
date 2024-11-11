@@ -6,6 +6,7 @@ import Navbar from "../../pages/Navbar.jsx";
 import ExploreTrips from "../Components/ExploreTrips.jsx";
 import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
+import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 
 const TouristHomePage = () => {
   const { id } = useParams();
@@ -56,6 +57,8 @@ const TouristHomePage = () => {
               <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
               <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
               <Link to={`/TouristComplaints/${id}`} className="text-gray-600 hover:text-gray-900">Complaints</Link>
+              <Link to={`/MyBookings/${id}`} className="text-gray-600 hover:text-gray-900">MyBookings</Link>
+
 
             </div>
             <div className="flex items-center space-x-2">
@@ -200,6 +203,7 @@ const TouristHomePage = () => {
         <ExploreTrips />
         <ExploreActivities />
         <ExploreHistoricalSites />
+        <ExploreTransportations/>
       </main>
 
       <footer className="bg-gray-800 text-white py-4 text-center">

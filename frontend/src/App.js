@@ -31,6 +31,7 @@ import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.j
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import EditActivity from './Advertiser/Components/EditActivity.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
+import ChangePasswordAdvertiser from './Advertiser/Components/ChangePasswordAdvertiser.js';
 //Seller Pages
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from './pages/sellerSignupConfirm.jsx';
@@ -79,6 +80,7 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
+import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -149,6 +151,7 @@ const App = () => {
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
           />
+          <Route path='/ChangePasswordAdvertiser/:advertiserId' element={<ChangePasswordAdvertiser/>}/>
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
 
@@ -173,8 +176,8 @@ const App = () => {
 
           {/* Tourist Pages */}
           <Route path="/Tourist_ProductsPage" element={<TouristProductsPage />} />
-          <Route path="/ItineraryDetails/:tripid" element={<ItineraryDetails />} />
-          <Route path="/TouristActivityDetails/:activityId" element={<TouristActivityDetails />} />
+          <Route path="/ItineraryDetails/:tripid/:id" element={<ItineraryDetails />} />
+          <Route path="/TouristActivityDetails/:activityId/:id" element={<TouristActivityDetails />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
@@ -203,6 +206,7 @@ const App = () => {
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path='/add-activity' element={<ActivityForm/>}/>
           <Route path='/activityDetails' element={<ActivityDetails/>}/>
+          <Route path='/TransportationDetails/:id' element={<TransportationDetails/>}/>
 
           {/* Path for Flight and Hotel APIs */}
           <Route path='/Flights/:touristId' element={<FlightMain/>}/>

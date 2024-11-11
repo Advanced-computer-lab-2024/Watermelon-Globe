@@ -1,7 +1,8 @@
 // models/TransportationModel.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const TransportationSchema = new mongoose.Schema({
+const TransportationSchema = new Schema({
   type: {
     type: String,
     required: true,  // E.g., "bus", "train", "flight", etc.
@@ -15,6 +16,10 @@ const TransportationSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true  // Price of the transportation ticket
+  },
+  booked:{
+    type: Boolean,
+    default: false
   },
   bookingDate: {
     type: Date,      // The date the booking was made
