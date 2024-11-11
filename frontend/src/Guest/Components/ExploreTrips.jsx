@@ -1,18 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import {
-  Search,
-  Calendar,
-  DollarSign,
-  Globe,
-  Tag,
-  Filter,
-  RefreshCw,
-  SortAsc,
-} from "lucide-react";
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import axios from 'axios';
+import { Search, Calendar, DollarSign, Globe, Tag, Filter, RefreshCw, SortAsc } from 'lucide-react';
 
 const ExploreTrips = () => {
   const navigate = useNavigate();
@@ -55,6 +47,7 @@ const ExploreTrips = () => {
     setIsLoading(true);
     setError(null);
     try {
+      // const response = await fetch('/api/Itinerary/getAllItineraries'); ///////////////////
       // change one that excludes flagged ones too
       const response = await fetch("/api/itinerary/activeItineraries");
       if (!response.ok) {
@@ -171,8 +164,8 @@ const ExploreTrips = () => {
     setSelectedPrefItinerary("");
   };
 
-  const handleTripClick = (tripId) => {
-    navigate("/tourist-signup");
+  const handleTripClick = () => {
+    navigate(`/tourist-signup`);
   };
 
   return (

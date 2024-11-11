@@ -2,27 +2,32 @@
   const router = express.Router();
 
 const {
-    createTourist,
-    getTourists,
-    getTourist,
-    deleteTourist,
-    updateTourist,
-    fileComplaint,
-    changePasswordTourist,
-    updateRating,
-    getAllProducts,
-    searchProductbyName,
-    buyProduct,
-    getPurchasedProducts,
-    getTouristComplaints,
+  createTourist,
+  getTourists,
+  getTourist,
+  deleteTourist,
+  updateTourist,
+  fileComplaint,
+  changePasswordTourist,
+  updateRating,
+  getAllProducts,
+  searchProductbyName,
+  buyProduct,
+  getPurchasedProducts,
+  requestDeletionTourist,
+  getTouristComplaints,
     getPassword,
     bookFlight,
     redeemPoints,
     addPoints,
+    bookHotel,
     BookedActivities,
     BookedItineraries,
+    updateLoyaltyPoints,
+    getHotelBookingsByTouristId,
+    getFlightBookingsByTouristId,
     deleteActivity,
-    deleteItinerary
+    deleteItinerary,
     
   } = require("../Controller/touristController");
   
@@ -59,11 +64,19 @@ router.put('/buyProduct/:touristId/:productId',buyProduct);
 
 router.get('/getPurchasedProducts/:touristId',getPurchasedProducts)
 
+router.put('/requestDeletionTourist/:id',requestDeletionTourist);
+
+
 // router.get("/myComplaints/:touristId", getTouristComplaints);
 
 router.get("/getPassword",getPassword);
 
 router.post("/bookFlight/:touristId" , bookFlight);
+
+router.post("/bookHotel/:touristId", bookHotel);
+
+router.get("/getHotelBookingsByTouristId/:touristId" , getHotelBookingsByTouristId);
+router.get("/getFlightBookingsByTouristId/:touristId" , getFlightBookingsByTouristId);
   
 
 router.get("/myComplaints/:touristId", getTouristComplaints);
@@ -74,7 +87,10 @@ router.put("/addPoints/:id",addPoints);
 router.get('/bookedActivities/:id/',BookedActivities);
 router.get('/BookedItineraries/:id/',BookedItineraries);
 
+
+router.put('/updateLoyaltyPoints/:id',updateLoyaltyPoints)
+
 router.delete('/deleteActivity/:touristId/:activityId', deleteActivity);
 router.delete('/deleteItinerary/:touristId/:itineraryId', deleteItinerary);
 
-  module.exports = router;
+module.exports = router;

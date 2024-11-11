@@ -10,10 +10,10 @@ import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 const TouristHomePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [destination, setDestination] = useState("");
-  const [dates, setDates] = useState("");
-  const [guests, setGuests] = useState("");
-  const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
+  const [destination, setDestination] = useState('');
+  const [dates, setDates] = useState('');
+  const [guests, setGuests] = useState('');
+  const [isSignedUp, setIsSignedUp] = useState(true); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -49,45 +49,14 @@ const TouristHomePage = () => {
               </Link>
             </div>
             <div className="hidden md:flex space-x-4">
-              <Link to="#" className="text-gray-600 hover:text-gray-900">
-                Hotel
-              </Link>
-              <Link
-                to={`/Flights/${id}`}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Flight
-              </Link>
-              <Link
-                to={`/MyBookings/${id}`}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                My Bookings
-              </Link>
-              <Link
-                to="/Tourist_ProductsPage"
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Products
-              </Link>
-              <Link
-                to={`/ProductTourist/${id}`}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Available products
-              </Link>
-              <Link
-                to={`/PurchasedProducts/${id}`}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Purchased Products
-              </Link>
-              <Link
-                to={`/TouristComplaints/${id}`}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Complaints
-              </Link>
+              <Link to={`/Hotels/${id}`} className="text-gray-600 hover:text-gray-900">Hotel</Link>
+              <Link to={`/Flights/${id}`} className="text-gray-600 hover:text-gray-900">Flight</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
+              <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
+              <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
+              <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
+              <Link to={`/TouristComplaints/${id}`} className="text-gray-600 hover:text-gray-900">Complaints</Link>
+
             </div>
             <div className="flex items-center space-x-2">
               <button className="px-4 py-1 border rounded">EN</button>

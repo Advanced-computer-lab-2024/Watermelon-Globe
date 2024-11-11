@@ -30,4 +30,5 @@ router.get(
   guestController.getNotAccessibleItineraries
 );
 
+
 module.exports = router;
