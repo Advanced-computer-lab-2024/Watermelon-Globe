@@ -60,7 +60,7 @@ const SortProducts = () => {
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
               }}
             >
-              <h4>{product.name}</h4>
+              <h4><strong>Name: </strong>{product.name}</h4>
               <p>
                 <strong>Price:</strong> ${product.price && product.price.$numberDecimal ? product.price.$numberDecimal : product.price}
               </p>
