@@ -97,6 +97,10 @@ export default function TouristDetails() {
         }
     };
 
+    const handleViewFlightHotelBookings = () => {
+        navigate(`/MyHotelFlightBookings/${id}`); // Navigating to the bookings page for the tourist
+    };
+
     const handleViewBookings = () => {
         navigate(`/MyBookings/${id}`); // Navigating to the bookings page for the tourist
     };
@@ -339,10 +343,17 @@ export default function TouristDetails() {
                 </div>
             </div>
             <button
+                onClick={handleViewFlightHotelBookings}
+                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
+            >
+                View My Hotel/Flight
+            </button>
+
+            <button
                 onClick={handleViewBookings}
                 className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
             >
-                View My Bookings
+                View My Itineraries/activities
             </button>
 
             <button

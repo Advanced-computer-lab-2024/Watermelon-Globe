@@ -62,7 +62,7 @@ import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
 import HotelMain from './Hotels/Pages/HotelMain.js';
-import HotelBooking from './Hotels/Components/HotelBooking.js'
+
 
 import SiteDetails from './Tourist/pages/siteDetails.js';
 import ActivityDetails from './Tourist/pages/activityDetails.js';
@@ -71,8 +71,6 @@ import Itinerary from './Admin/pages/Itinerary.js';
 import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 
-import FlightMain from './Flights/Pages/FlightMain.js';
-import HotelMain from './Hotels/Pages/HotelMain.js';
 
 import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
 //tourguide new
@@ -196,7 +194,7 @@ const App = () => {
           <Route path='/Flights/:touristId' element={<FlightMain/>}/>
           <Route path='/Hotels/:touristId' element={<HotelMain/>}/>
           <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
-          <Route path='/MyBookings/:touristId' element={<MyHotelFlightBookings/>}/>
+          <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
 
 
 
