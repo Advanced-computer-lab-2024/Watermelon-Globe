@@ -30,7 +30,7 @@ const Sidebar = ({ onProfileView, advertiser, onViewActivities, onCreateActivity
             <button onClick={onProfileView}>Profile</button>
             <button onClick={onViewActivities}>View Activities</button>
             <button onClick={onCreateActivity}>Create Activity</button>
-            {/* <button onClick={ChangePassword}>Change Password</button> */}
+            <button onClick={handleChangePassword}>Change Password</button> 
         </div>
     );
 };
