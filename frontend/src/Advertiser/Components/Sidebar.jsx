@@ -27,6 +27,7 @@ const Sidebar = ({ onEditProfile, advertiser, onViewActivities, onCreateActivity
             <button onClick={onEditProfile}>Edit Profile</button>
             <button onClick={onViewActivities}>View Activities</button>
             <button onClick={onCreateActivity}>Create Activity</button>
+            <button onClick={ChangePassword}>Change Password</button>
         </div>
     );
 };
