@@ -56,7 +56,7 @@ const ViewProfile = () => {
     }
 
     try {
-      const response = await fetch(`/api/Seller/requestDeletionSeller/${sellerId}`, {
+      const response = await fetch(`/api/Seller/requestDeletionSeller/${id}`, {
         method: 'PUT', // Using PUT for deletion request
         headers: {
           'Content-Type': 'application/json',
@@ -78,10 +78,7 @@ const ViewProfile = () => {
     }
   };
 
-  // Fetch all sellers on component mount
-  useEffect(() => {
-    getAllSellers(); // Call getAllSellers when the component mounts
-  }, []);
+
 
   return (
     <div>
@@ -100,26 +97,22 @@ const ViewProfile = () => {
           <p><strong>Name:</strong> {seller.Name}</p>
           <p><strong>Email:</strong> {seller.Email}</p>
           <p><strong>Description:</strong> {seller.Description}</p>
-          <SellerLogo id={seller._id} />
+          
+
+          {/* Add Delete Account Button */}
+          <button 
+            onClick={handleDeleteAccount}
+            style={{ backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px' }}
+          >
+            Delete Account
+          </button>
+          <SellerLogo id={seller._id}/>
         </div>
       ) : (
         !errorMessage && <p>Loading...</p>
       )}
 
-      <h3>All Sellers</h3>
-      <ul>
-        {allSellers.length > 0 ? (
-          allSellers.map((seller) => (
-            <li key={seller._id}>
-              <p><strong>ID:</strong> {seller._id}</p>
-              <p><strong>Name:</strong> {seller.Name}</p>
-              <p><strong>Email:</strong> {seller.Email}</p>
-            </li>
-          ))
-        ) : (
-          <p>No sellers found.</p>
-        )}
-      </ul>
+      
     </div>
   );
 };
