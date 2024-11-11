@@ -34,28 +34,50 @@ const SortProducts = () => {
 
   return (
     <div>
-      <h2>Sorted Products by Ratings</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Sorted Products by Ratings</h2>
 
       {/* Display error message if any */}
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {errorMessage && <p style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</p>}
 
       {/* Display the sorted products */}
       {products.length > 0 ? (
-        <ul>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)', // 4 products per row
+            gap: '20px',
+            padding: '10px',
+          }}
+        >
           {products.map((product) => (
-            <li key={product._id}>
-              <p><strong>Name:</strong> {product.name}</p>
-              {/* Handle Decimal128 conversion for price */}
-              <p><strong>Price:</strong> {product.price && product.price.$numberDecimal ? product.price.$numberDecimal : product.price}</p>
-              <p><strong>Quantity:</strong> {product.quantity}</p>
-              <p><strong>Description:</strong> {product.description}</p>
-              <p><strong>Seller:</strong> {product.seller}</p>
-              <p><strong>Ratings:</strong> {product.ratings}</p>
-            </li>
+            <div
+              key={product._id}
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                textAlign: 'center',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <h4>{product.name}</h4>
+              <p>
+                <strong>Price:</strong> ${product.price && product.price.$numberDecimal ? product.price.$numberDecimal : product.price}
+              </p>
+              <p>
+                <strong>Quantity:</strong> {product.quantity}
+              </p>
+              <p>
+                <strong>Ratings:</strong> {product.ratings}
+              </p>
+              <p>
+                <strong>Description:</strong> {product.description}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No products found.</p>
+        <p style={{ textAlign: 'center' }}>No products found.</p>
       )}
     </div>
   );
