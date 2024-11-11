@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingBag, LogOut, Calendar, MapPin, Clock, RefreshCw, AlertCircle, X, Trash2 } from 'lucide-react';
+import { ShoppingBag, LogOut, Calendar, MapPin, Clock, RefreshCw, AlertCircle, X, Trash2, Star } from 'lucide-react';
 
-export default function TouristBookings() {
+export default function MyBookings() {
   const [bookings, setBookings] = useState({ itineraries: [], activities: [] });
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,9 @@ export default function TouristBookings() {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    fetchBookings();
+    if (id) {
+      fetchBookings();
+    }
   }, [id]);
 
   const fetchBookings = async () => {
@@ -30,8 +32,13 @@ export default function TouristBookings() {
       const itineraries = await itinerariesResponse.json();
       const activities = await activitiesResponse.json();
       
-      setBookings({ itineraries, activities });
-      setFilteredBookings({ itineraries, activities });
+      const bookingsData = {
+        itineraries: Array.isArray(itineraries) ? itineraries : [],
+        activities: Array.isArray(activities) ? activities : []
+      };
+
+      setBookings(bookingsData);
+      setFilteredBookings(bookingsData);
     } catch (error) {
       console.error('Error fetching bookings:', error);
       setErrorMessage('Failed to load bookings. Please try again.');
@@ -44,12 +51,12 @@ export default function TouristBookings() {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
     const filtered = {
-      itineraries: bookings.itineraries.filter(itinerary => 
-        itinerary.name.toLowerCase().includes(term) || 
-        (itinerary.locations && itinerary.locations.some(location => location.toLowerCase().includes(term)))
+      itineraries: (bookings.itineraries || []).filter(itinerary => 
+        itinerary && itinerary.name && itinerary.name.toLowerCase().includes(term) || 
+        (itinerary.locations && Array.isArray(itinerary.locations) && itinerary.locations.some(location => location && location.toLowerCase().includes(term)))
       ),
-      activities: bookings.activities.filter(activity => 
-        activity.name.toLowerCase().includes(term) || 
+      activities: (bookings.activities || []).filter(activity => 
+        activity && activity.name && activity.name.toLowerCase().includes(term) || 
         (activity.location && activity.location.toLowerCase().includes(term))
       )
     };
@@ -65,14 +72,11 @@ export default function TouristBookings() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'confirmed':
-        return '#10B981'; // green
-      case 'pending':
-        return '#F59E0B'; // yellow
-      case 'cancelled':
-        return '#EF4444'; // red
-      default:
-        return '#6B7280'; // gray
+      case 'confirmed': return '#10B981';
+      case 'pending': return '#F59E0B';
+      case 'cancelled': return '#EF4444';
+      case 'completed': return '#3B82F6';
+      default: return '#6B7280';
     }
   };
 
@@ -87,24 +91,18 @@ export default function TouristBookings() {
         throw new Error(errorData.error || 'Failed to cancel booking');
       }
 
-      const updatedBooking = await response.json();
+      await response.json();
       setSuccessMessage(`${type} cancelled successfully`);
 
-      // Update the bookings state
-      setBookings(prevBookings => ({
+      const updateBookings = (prevBookings) => ({
         ...prevBookings,
-        [type === 'Itinerary' ? 'itineraries' : 'activities']: prevBookings[type === 'Itinerary' ? 'itineraries' : 'activities'].map(
-          booking => booking._id === bookingId ? { ...booking, status: 'cancelled' } : booking
-        )
-      }));
+        [type.toLowerCase() + 's']: (prevBookings[type.toLowerCase() + 's'] || []).map(
+          booking => booking && booking._id === bookingId ? { ...booking, status: 'cancelled' } : booking
+        ).filter(Boolean)
+      });
 
-      // Update filtered bookings as well
-      setFilteredBookings(prevFiltered => ({
-        ...prevFiltered,
-        [type === 'Itinerary' ? 'itineraries' : 'activities']: prevFiltered[type === 'Itinerary' ? 'itineraries' : 'activities'].map(
-          booking => booking._id === bookingId ? { ...booking, status: 'cancelled' } : booking
-        )
-      }));
+      setBookings(updateBookings);
+      setFilteredBookings(updateBookings);
 
     } catch (error) {
       console.error('Error cancelling booking:', error);
@@ -125,21 +123,15 @@ export default function TouristBookings() {
 
         setSuccessMessage(`${type} deleted successfully`);
 
-        // Remove the deleted booking from the state
-        setBookings(prevBookings => ({
+        const updateBookings = (prevBookings) => ({
           ...prevBookings,
-          [type === 'Itinerary' ? 'itineraries' : 'activities']: prevBookings[type === 'Itinerary' ? 'itineraries' : 'activities'].filter(
-            booking => booking._id !== bookingId
-          )
-        }));
+          [type.toLowerCase() + 's']: (prevBookings[type.toLowerCase() + 's'] || []).filter(
+            booking => booking && booking._id !== bookingId
+          ).filter(Boolean)
+        });
 
-        // Update filtered bookings as well
-        setFilteredBookings(prevFiltered => ({
-          ...prevFiltered,
-          [type === 'Itinerary' ? 'itineraries' : 'activities']: prevFiltered[type === 'Itinerary' ? 'itineraries' : 'activities'].filter(
-            booking => booking._id !== bookingId
-          )
-        }));
+        setBookings(updateBookings);
+        setFilteredBookings(updateBookings);
 
       } catch (error) {
         console.error('Error deleting booking:', error);
@@ -148,148 +140,165 @@ export default function TouristBookings() {
     }
   };
 
-  const renderBookingCard = (booking, type) => (
-    <div key={booking._id} style={{
-      backgroundColor: 'white',
-      borderRadius: '8px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      overflow: 'hidden',
-      transition: 'transform 0.3s ease-in-out',
-    }}
-    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-    >
-      <img 
-        src={booking.image || "/placeholder.svg?height=200&width=400"}
-        alt={booking.name}
-        style={{
-          width: '100%',
-          height: '200px',
-          objectFit: 'cover'
-        }}
-      />
-      <div style={{ padding: '1rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{booking.name}</h3>
-          <span style={{ 
-            backgroundColor: getStatusColor(booking.status),
-            color: 'white',
-            padding: '0.25rem 0.5rem',
-            borderRadius: '9999px',
-            fontSize: '0.75rem',
-            fontWeight: 'bold',
-            textTransform: 'capitalize'
-          }}>
-            {booking.status || 'Unknown'}
-          </span>
-        </div>
-        <p style={{ fontSize: '0.875rem', color: '#666', marginBottom: '1rem' }}>{booking.description}</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-          <Calendar size={16} style={{ color: '#00b341' }} />
-          <span>{type === 'itinerary' ? 
-            (booking.chosenDates && booking.chosenDates.length > 0 ? new Date(booking.chosenDates[0]).toLocaleDateString() : 'Date not specified') : 
-            (booking.chosenDate ? new Date(booking.chosenDate).toLocaleDateString() : 'Date not specified')}
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-          <MapPin size={16} style={{ color: '#00b341' }} />
-          <span>{type === 'itinerary' ? 
-            (booking.locations && booking.locations.length > 0 ? booking.locations.join(', ') : 'No locations specified') : 
-            (booking.location || 'Location not specified')}
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Clock size={16} style={{ color: '#00b341' }} />
-          <span>{type === 'itinerary' ? (booking.timeline || 'Timeline not specified') : (booking.duration || 'Duration not specified')}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {booking.status !== 'cancelled' && (
-            <button
-              onClick={() => cancelBooking(booking._id, type === 'itinerary' ? 'Itinerary' : 'Activity')}
-              style={{
-                backgroundColor: '#EF4444',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.875rem',
-                fontWeight: 'bold'
-              }}
-            >
-              <X size={16} />
-              Cancel {type === 'itinerary' ? 'Itinerary' : 'Activity'}
-            </button>
-          )}
-          {booking.status === 'cancelled' && (
-            <button
-              onClick={() => deleteBooking(booking._id, type === 'itinerary' ? 'Itinerary' : 'Activity')}
-              style={{
-                backgroundColor: '#6B7280',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.875rem',
-                fontWeight: 'bold'
-              }}
-            >
-              <Trash2 size={16} />
-              Delete {type === 'itinerary' ? 'Itinerary' : 'Activity'}
-            </button>
-          )}
+  const isCompleted = (booking) => {
+    if (!booking) return false;
+    const currentDate = new Date();
+    const bookingDate = new Date(booking.chosenDate || (booking.chosenDates && booking.chosenDates[0]));
+    return bookingDate < currentDate || booking.status === 'completed';
+  };
+
+  const canBeRated = (booking) => {
+    return booking && isCompleted(booking) && !booking.rating;
+  };
+
+  const handleRate = async (itineraryId, rating, type) => {
+    try {
+      const endpoint = `/api/Tourist/updateRating/${itineraryId}?rating=${rating}`;
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit rating');
+      }
+
+      await response.json();
+      setSuccessMessage('Rating submitted successfully!');
+
+      const updateBookings = (prevBookings) => ({
+        ...prevBookings,
+        [type.toLowerCase() + 's']: (prevBookings[type.toLowerCase() + 's'] || []).map(booking =>
+          booking && booking.itinerary === itineraryId ? { ...booking, rating } : booking
+        ).filter(Boolean)
+      });
+
+      setBookings(updateBookings);
+      setFilteredBookings(updateBookings);
+
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      setErrorMessage(error.message || 'Failed to submit rating. Please try again.');
+    }
+  };
+
+  const renderBookingCard = (booking, type) => {
+    if (!booking) return null;
+
+    const completed = isCompleted(booking);
+    const status = completed ? 'completed' : booking.status;
+
+    return (
+      <div key={booking._id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105">
+        <img 
+          src={booking.image || "/placeholder.svg?height=200&width=400"}
+          alt={booking.name}
+          className="w-full h-48 object-cover"
+        />
+        <div className="p-4">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-xl font-bold">{booking.name}</h3>
+            <span className="px-2 py-1 rounded-full text-xs font-bold text-white capitalize" style={{ backgroundColor: getStatusColor(status) }}>
+              {status}
+            </span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">{booking.description}</p>
+          <div className="flex items-center gap-2 mb-2">
+            <Calendar size={16} className="text-green-600" />
+            <span>
+              {type === 'itinerary' 
+                ? (booking.chosenDates && booking.chosenDates.length > 0 
+                    ? new Date(booking.chosenDates[0]).toLocaleDateString() 
+                    : 'Date not specified')
+                : (booking.chosenDate 
+                    ? new Date(booking.chosenDate).toLocaleDateString() 
+                    : 'Date not specified')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mb-2">
+            <Clock size={16} className="text-green-600" />
+            <span>
+              {type === 'itinerary'
+                ? (booking.chosenTimes && booking.chosenTimes.length > 0
+                    ? booking.chosenTimes.join(', ')
+                    : 'Time not specified')
+                : (booking.activity && booking.activity.Time
+                    ? booking.activity.Time
+                    : 'Time not specified')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mb-2">
+            <MapPin size={16} className="text-green-600" />
+            <span>{type === 'itinerary' ? 
+              (booking.locations && booking.locations.length > 0 ? booking.locations.join(', ') : 'No locations specified') : 
+              (booking.location || 'Location not specified')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mb-4">
+            <Clock size={16} className="text-green-600" />
+            <span>{type === 'itinerary' ? (booking.timeline || 'Timeline not specified') : (booking.duration || 'Duration not specified')}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            {status !== 'cancelled' && !completed && (
+              <button
+                onClick={() => cancelBooking(booking._id, type === 'itinerary' ? 'Itinerary' : 'Activity')}
+                className="bg-red-500 text-white border-none rounded px-4 py-2 cursor-pointer flex items-center gap-2 text-sm font-bold"
+              >
+                <X size={16} />
+                Cancel {type === 'itinerary' ? 'Itinerary' : 'Activity'}
+              </button>
+            )}
+            {(status === 'cancelled' || completed) && (
+              <button
+                onClick={() => deleteBooking(booking._id, type === 'itinerary' ? 'Itinerary' : 'Activity')}
+                className="bg-gray-500 text-white border-none rounded px-4 py-2 cursor-pointer flex items-center gap-2 text-sm font-bold"
+              >
+                <Trash2 size={16} />
+                Delete {type === 'itinerary' ? 'Itinerary' : 'Activity'}
+              </button>
+            )}
+            {canBeRated(booking) && (
+              <div className="flex items-center">
+                <span className="mr-2">Rate:</span>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={20}
+                    onClick={() => handleRate(booking.itinerary, star, type)}
+                    className={`cursor-pointer ${booking.rating >= star ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                  />
+                ))}
+              </div>
+            )}
+            {booking.rating && (
+              <div className="flex items-center">
+                <span className="mr-2">Rating:</span>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={20}
+                    className={`${booking.rating >= star ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
-      {/* Navigation Bar */}
-      <div style={{ 
-        backgroundColor: '#00b341',
-        padding: '1rem',
-        marginBottom: '2rem'
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <span style={{ 
-            color: 'white', 
-            fontSize: '1.5rem', 
-            fontWeight: 'bold'
-          }}>
-            Watermelon Globe
-          </span>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <Link to={`/ProductTourist/${id}`} style={{
-              color: 'white',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
+    <div className="min-h-screen bg-green-50">
+      <div className="bg-green-600 p-4 mb-8">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <span className="text-white text-2xl font-bold">Watermelon Globe</span>
+          <div className="flex gap-6">
+            <Link to={`/ProductTourist/${id}`} className="text-white no-underline flex items-center gap-2">
               <ShoppingBag size={20} />
               Products
             </Link>
-            <Link to="/signout" style={{
-              color: 'white',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
+            <Link to="/signout" className="text-white no-underline flex items-center gap-2">
               <LogOut size={20} />
               Sign Out
             </Link>
@@ -297,44 +306,19 @@ export default function TouristBookings() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
-        <h1 style={{ 
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          color: '#00b341',
-          textAlign: 'center',
-          marginBottom: '2rem'
-        }}>
-          Your Bookings
-        </h1>
+      <div className="max-w-7xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-green-600 text-center mb-8">Your Bookings</h1>
 
-        {/* Search Section */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          marginBottom: '2rem',
-          gap: '1rem'
-        }}>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="flex justify-center mb-8 gap-4">
+          <div className="flex gap-4 items-center">
             <input
               type="text"
               value={searchTerm}
               onChange={handleSearch}
               placeholder="Search bookings"
-              style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+              className="p-2 rounded border border-gray-300"
             />
-            <button onClick={handleReset} style={{
-              backgroundColor: '#f59e0b',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              padding: '0.5rem 1rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
+            <button onClick={handleReset} className="bg-yellow-500 text-white border-none rounded px-4 py-2 cursor-pointer flex items-center gap-2">
               <RefreshCw size={16} />
               Reset
             </button>
@@ -342,75 +326,70 @@ export default function TouristBookings() {
         </div>
 
         {errorMessage && (
-          <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>
-            <AlertCircle size={16} style={{ marginRight: '0.5rem', verticalAlign: 'text-bottom' }} />
+          <p className="text-red-500 text-center mb-4">
+            <AlertCircle size={16} className="inline-block mr-2 align-text-bottom" />
             {errorMessage}
           </p>
         )}
 
         {successMessage && (
-          <p style={{ color: 'green', textAlign: 'center', marginBottom: '1rem' }}>
-            <AlertCircle size={16} style={{ marginRight: '0.5rem', verticalAlign: 'text-bottom' }} />
+          <p className="text-green-500 text-center mb-4">
+            <AlertCircle size={16} className="inline-block mr-2 align-text-bottom" />
             {successMessage}
           </p>
         )}
 
         {loading ? (
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <div style={{
-              display: 'inline-block',
-              width: '50px',
-              height: '50px',
-              border: '3px solid rgba(0, 179, 65, 0.3)',
-              borderRadius: '50%',
-              borderTopColor: '#00b341',
-              animation: 'spin 1s ease-in-out infinite',
-            }} />
+          <div className="text-center mt-8">
+            <div className="inline-block w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            {/* Itineraries Column */}
-            <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#00b341', marginBottom: '1rem' }}>Booked Itineraries</h2>
-              {filteredBookings.itineraries.length > 0 ? (
-                <div style={{ 
-                  display: 'grid',
-                  gridTemplateColumns: '1fr',
-                  gap: '1rem',
-                  marginBottom: '2rem'
-                }}>
-                  {filteredBookings.itineraries.map((itinerary) => renderBookingCard(itinerary, 'itinerary'))}
+          <div className="flex gap-8">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-green-600 mb-4">Upcoming Trips</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-green-600 mb-2">Itineraries</h3>
+                  {filteredBookings.itineraries && filteredBookings.itineraries.length > 0 ? (
+                    filteredBookings.itineraries.filter(booking => booking && !isCompleted(booking)).map((itinerary) => renderBookingCard(itinerary, 'itinerary'))
+                  ) : (
+                    <p>No upcoming itineraries found.</p>
+                  )}
                 </div>
-              ) : (
-                <p style={{ textAlign: 'center', color: '#666', fontSize: '1rem', marginBottom: '2rem' }}>No booked itineraries found.</p>
-              )}
+                <div>
+                  <h3 className="text-xl font-semibold text-green-600 mb-2">Activities</h3>
+                  {filteredBookings.activities && filteredBookings.activities.length > 0 ? (
+                    filteredBookings.activities.filter(booking => booking && !isCompleted(booking)).map((activity) => renderBookingCard(activity, 'activity'))
+                  ) : (
+                    <p>No upcoming activities found.</p>
+                  )}
+                </div>
+              </div>
             </div>
-
-            {/* Activities Column */}
-            <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#00b341', marginBottom: '1rem' }}>Booked Activities</h2>
-              {filteredBookings.activities.length > 0 ? (
-                <div style={{ 
-                  display: 'grid',
-                  gridTemplateColumns: '1fr',
-                  gap: '1rem'
-                }}>
-                  {filteredBookings.activities.map((activity) => renderBookingCard(activity, 'activity'))}
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-green-600 mb-4">Completed Trips</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-green-600 mb-2">Itineraries</h3>
+                  {filteredBookings.itineraries && filteredBookings.itineraries.length > 0 ? (
+                    filteredBookings.itineraries.filter(booking => booking && isCompleted(booking)).map((itinerary) => renderBookingCard(itinerary, 'itinerary'))
+                  ) : (
+                    <p>No completed itineraries found.</p>
+                  )}
                 </div>
-              ) : (
-                <p style={{ textAlign: 'center', color: '#666', fontSize: '1rem' }}>No booked activities found.</p>
-              )}
+                <div>
+                  <h3 className="text-xl font-semibold text-green-600 mb-2">Activities</h3>
+                  {filteredBookings.activities && filteredBookings.activities.length > 0 ? (
+                    filteredBookings.activities.filter(booking => booking && isCompleted(booking)).map((activity) => renderBookingCard(activity, 'activity'))
+                  ) : (
+                    <p>No completed activities found.</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
       </div>
-      <style jsx>{`
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
   );
 }
