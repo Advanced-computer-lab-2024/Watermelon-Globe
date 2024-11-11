@@ -7,7 +7,7 @@ const SignupSeller = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [sellerId, setSellerId] = useState(null);
+  const [touristId, setTouristId] = useState(null);
   const navigate = useNavigate(); // Use navigate instead of Link
 
   const handleSubmit = async (e) => {
@@ -19,12 +19,12 @@ const SignupSeller = () => {
       return; // Stop form submission
     }
 
-    const seller = { Name, Email, Password };
+    const tourist = { Name, Email, Password };
 
     try {
-      const response = await fetch("/api/seller/CreateSeller", {
+      const response = await fetch("/api/Tourist/createTourist", {
         method: "POST",
-        body: JSON.stringify(seller),
+        body: JSON.stringify(tourist),
         headers: {
           "Content-type": "application/json",
         },

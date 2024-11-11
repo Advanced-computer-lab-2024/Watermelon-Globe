@@ -17,10 +17,15 @@ import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
 
 import "./App.css";
 
+import TermsAndConditions from "./pages/Terms&Conditions.js";
+import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
+import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
+
 import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
 //import TouristDetails from './Tourist/Components/TouristDetails.jsx';
 import SellerSignup from "./pages/SellerSignup.js";
-import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
+//import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
+import AdvertiserSignup from "./pages/ AdvertiserSignUp2.js";
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
@@ -52,7 +57,7 @@ import EditActivity from "./Advertiser/Components/EditActivity.jsx";
 import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import Complaint from "./Admin/pages/Complaint.js";
 import Itinerary from "./Admin/pages/Itinerary.js";
-
+import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 import "./App.css";
 import FlightMain from "./Flights/Pages/FlightMain.js";
 
@@ -119,6 +124,19 @@ const App = () => {
 
           {/* Signup Pages */}
           <Route path="/seller-signup" element={<SellerSignup />} />
+
+          <Route
+            path="/terms-and-conditions/:userId"
+            element={<TermsAndConditions />}
+          />
+          <Route
+            path="/terms-and-conditionsGuide/:userId"
+            element={<TermsAndConditionsGuide />}
+          />
+          <Route
+            path="/terms-and-conditionsAdvertiser/:userId"
+            element={<TermsAndConditionsAdvertiser />}
+          />
           <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
@@ -138,6 +156,7 @@ const App = () => {
             element={<PurchasedProducts />}
           />
           <Route path="/TouristPage" element={<TouristPage />} />
+          <Route path="/SelectMyPref" element={<SelectMyPref />} />
           <Route path="/TouristHomePage/:id" element={<TouristHomePage />} />
           <Route
             path="/TouristComplaints/:id"
@@ -147,6 +166,7 @@ const App = () => {
 
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
+
           <Route path="/ViewProducts" element={<ViewProducts />} />
 
           {/* Tour Guide Pages */}

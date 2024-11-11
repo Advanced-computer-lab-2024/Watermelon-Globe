@@ -62,7 +62,7 @@ const ExploreTrips = () => {
       }
       const data = await response.json();
       setItineraries(data);
-      console.log(data);
+      //console.log(data);
     } catch (error) {
       console.error("Error fetching trips:", error);
       setError("Failed to fetch trips. Please try again later.");

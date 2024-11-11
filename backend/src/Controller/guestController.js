@@ -1,10 +1,10 @@
 // #Task route solution
-const touristModel = require('../Models/touristModel');
-const tourguideModel = require('../Models/tourGuideModel');
-const sellerModel = require('../Models/SellerModel');
-const advertiserModel = require('../Models/advertiserModel');
-const itineraryModel = require('../Models/itineraryModel');
-const activityModel= require("../Models/activityModel");
+const touristModel = require("../Models/touristModel");
+const tourguideModel = require("../Models/tourGuideModel");
+const sellerModel = require("../Models/SellerModel");
+const advertiserModel = require("../Models/companyProfileModel");
+const itineraryModel = require("../Models/itineraryModel");
+const activityModel = require("../Models/activityModel");
 
 const { default: mongoose } = require("mongoose");
 
@@ -154,10 +154,10 @@ const filterItineraryRating = async (req, res) => {
 const createAdvertiser = async (req, res) => {
   try {
     // Destructure the name, email, and age from req.body
-    const { Username, Email, Password } = req.body;
+    const { Name, Email, Password } = req.body;
 
     // Validate if all fields are present
-    if (!Username || !Email || !Password) {
+    if (!Name || !Email || !Password) {
       return res
         .status(400)
         .json({ message: "All fields are required: name, email,password." });
@@ -165,7 +165,7 @@ const createAdvertiser = async (req, res) => {
 
     // Create a new user instance and save to the database
     const NewAdvertiser = advertiserModel.create({
-      Username,
+      Name,
       Email,
       Password,
     });
@@ -175,7 +175,7 @@ const createAdvertiser = async (req, res) => {
     res.status(201).json(NewAdvertiser);
   } catch (error) {
     res.status(500).json({ message: error.message });
-    console.loge(error.message); // Handle any errors
+    console.log(error.message); // Handle any errors
   }
 };
 
@@ -299,11 +299,9 @@ const filterItineraryByBudget = async (req, res) => {
     });
 
     if (itineraries.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "No itineraries found within the given budget range.",
-        });
+      return res.status(404).json({
+        message: "No itineraries found within the given budget range.",
+      });
     }
 
     res.status(200).json(itineraries);
@@ -478,6 +476,50 @@ const getNotAccessibleItineraries = async (req, res) => {
   }
 };
 
+const getActiveAndUnflaggedItineraries = async (req, res) => {
+  try {
+    // Find itineraries where accessibility is true and inappropriate is false
+    const accessibleItineraries = await itineraryModel.Itinerary.find({
+      accessibility: true,
+      inappropriate: false,
+    });
+
+    if (accessibleItineraries.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No accessible and appropriate itineraries found" });
+    }
+
+    res.status(200).json(accessibleItineraries);
+  } catch (error) {
+    res.status(500).json({
+      error: "Error retrieving accessible itineraries: " + error.message,
+    });
+  }
+};
+
+// for testing reasons
+const getInappropriateItineraries = async (req, res) => {
+  try {
+    // Find itineraries where inappropriate is true
+    const inappropriateItineraries = await itineraryModel.Itinerary.find({
+      inappropriate: true,
+    });
+
+    if (inappropriateItineraries.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No inappropriate itineraries found" });
+    }
+
+    res.status(200).json(inappropriateItineraries);
+  } catch (error) {
+    res.status(500).json({
+      error: "Error retrieving inappropriate itineraries: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   createSeller,
   createAdvertiser,
@@ -496,4 +538,6 @@ module.exports = {
   filterByLanguage,
   filterByDate,
   updateTourist,
+  getInappropriateItineraries,
+  getActiveAndUnflaggedItineraries,
 };

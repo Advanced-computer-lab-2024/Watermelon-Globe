@@ -1,8 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 //company profile imports
-const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser} = require("../Controller/companyProfileController");
+const {
+  createProfile,
+  updateProfile,
+  getProfiles,
+  changePasswordAdvertiser,
+  acceptTermsAndConditions,
+} = require("../Controller/companyProfileController");
 
 // //tags
 
@@ -11,8 +17,8 @@ const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser} = re
 router.post("/createProfile", createProfile);
 router.put("/updateProfile/:id", updateProfile);
 router.get("/profiles", getProfiles);
-router.put("/changePasswordAdvertiser:/id",changePasswordAdvertiser);
-
+router.put("/changePasswordAdvertiser:/id", changePasswordAdvertiser);
+router.put("/acceptTermsAndConditions/:id", acceptTermsAndConditions);
 
 // router.post("/addAdvertiser", createAdvertiser);
 

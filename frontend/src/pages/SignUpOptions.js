@@ -1,4 +1,4 @@
-import './SignUp.css';
+import "./SignUp.css";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -6,12 +6,21 @@ const Signup = () => {
 
   return (
     <div>
-      <button onClick={() => navigate('/seller-signup')}>Sign up as Seller</button>
-      <button onClick={() => navigate('/advertiser-signup')}>Sign up as Advertiser</button>
-      <button onClick={() => navigate('/tourist-signup')}>Sign up as Tourist</button>
-      <button onClick={() => navigate('/tourguide-signup')}>Sign up as Tourguide</button>
+      <button onClick={() => navigate("/seller-signup")}>
+        Sign up as Seller
+      </button>
+      {/* <button onClick={() => navigate('/advertiser-signup')}>Sign up as Advertiser</button> */}
+      <button onClick={() => navigate("/advertiser-signup")}>
+        Sign up as Advertiser
+      </button>
+      <button onClick={() => navigate("/tourist-signup")}>
+        Sign up as Tourist
+      </button>
+      <button onClick={() => navigate("/tourguide-signup")}>
+        Sign up as Tourguide
+      </button>
     </div>
   );
-}
+};
 
 export default Signup;

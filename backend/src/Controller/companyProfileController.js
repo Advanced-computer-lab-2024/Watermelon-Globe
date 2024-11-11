@@ -125,51 +125,74 @@ const changePasswordAdvertiser = async (req, res) => {
 
 const requestDeletionAdvertiser = async (req, res) => {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
 
-      // Find the advertiser by ID and update the deletionRequest to "Pending"
-      const advertiser = await CompanyProfileModel.findByIdAndUpdate(
-          id,
-          { deletionRequest: "Pending" },
-          { new: true } // Return the updated document
-      );
+    // Find the advertiser by ID and update the deletionRequest to "Pending"
+    const advertiser = await CompanyProfileModel.findByIdAndUpdate(
+      id,
+      { deletionRequest: "Pending" },
+      { new: true } // Return the updated document
+    );
 
-      if (!advertiser) {
-          return res.status(404).json({ message: 'Advertiser not found' });
-      }
+    if (!advertiser) {
+      return res.status(404).json({ message: "Advertiser not found" });
+    }
 
-      res.status(200).json({
-          message: 'Deletion request updated successfully',
-          data: advertiser
-      });
+    res.status(200).json({
+      message: "Deletion request updated successfully",
+      data: advertiser,
+    });
   } catch (error) {
-      console.error('Error updating deletion request:', error);
-      res.status(500).json({ message: 'Server error' });
+    console.error("Error updating deletion request:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-const getPassword = async(req,res) =>{
-  const{id}= req.query;
+const getPassword = async (req, res) => {
+  const { id } = req.query;
   console.log(id);
-  try{
+  try {
     const advertiser = await CompanyProfileModel.findById(id);
     console.log(advertiser);
-    if(!advertiser){
-      res.status(400).json({message:"advertiser is not found"});
+    if (!advertiser) {
+      res.status(400).json({ message: "advertiser is not found" });
+    } else {
+      res.status(200).json(advertiser.Password);
     }
-    else{
-      res.status(200).json(advertiser.Password)
-    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
   }
-  catch{
-    console.error('Error getting password:', error);
-      res.status(500).json({ message: 'Server error' });
+};
+
+//accept terms and conditions
+
+const acceptTermsAndConditions = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedAdvertiser = await CompanyProfileModel.findByIdAndUpdate(
+      id,
+      { termsAndConditions: true },
+      { new: true }
+    );
+
+    if (!updatedAdvertiser) {
+      return res.status(404).json({ message: "Advertiser not found" });
     }
+    res.status(200).json(updatedAdvertiser);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error updating terms and conditions: " + error.message });
   }
+};
 
 module.exports = {
   createProfile,
   getProfiles,
   updateProfile,
-  changePasswordAdvertiser,requestDeletionAdvertiser
+  changePasswordAdvertiser,
+  requestDeletionAdvertiser,
+  acceptTermsAndConditions,
 };
