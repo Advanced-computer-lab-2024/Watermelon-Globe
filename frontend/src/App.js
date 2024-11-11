@@ -115,7 +115,6 @@ const App = () => {
           />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
-          {/* <Route path="/advertiserHomePage" element={<HomeScreen />} /> */}
 
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
