@@ -1,7 +1,7 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
-const itineraryModel = require("../Models/itineraryModel");
-const Itinerary = require("../Models/itineraryModel");
+// const {itineraryModel} = require("../Models/itineraryModel");
+const {Itinerary} = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
 const Booking = require('../Models/FlightBooking');
@@ -139,7 +139,7 @@ const updateRating = async (req, res) => {
     }
 
     // Find the itinerary by ID
-    const itinerary = await itineraryModel.findById(id);
+    const itinerary = await Itinerary.findById(id);
     if (!itinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
     }
