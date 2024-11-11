@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const AdminHome = () => {
   return (
@@ -19,6 +19,9 @@ const AdminHome = () => {
         </Link>
         <Link to="/AdminProduct">
           <button className="admin-button">Products</button>
+        </Link>
+        <Link to="/AcceptRejectPage">
+          <button className="admin-button">Manage Users</button>
         </Link>
       </div>
     </div>

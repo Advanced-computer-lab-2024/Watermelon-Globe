@@ -1,12 +1,12 @@
-import { React, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import AdvertiserPage from './Components/advertiserPage';
-import TourGuidePage from './Components/tourGuidePage';
-import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
-import SignupPage from './Components/SignUp';
-import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
+import { React, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import AdvertiserPage from "./Components/advertiserPage";
+import TourGuidePage from "./Components/tourGuidePage";
+import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+import SignupPage from "./Components/SignUp";
+import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 
-import './App.css';
+import "./App.css";
 
 import TouristDetails from "./pages/TouristDetails.js";
 import SellerSignup from "./pages/SellerSignup.js";
@@ -18,31 +18,33 @@ import ItineraryDetails from "./Tourist/pages/ItineraryDetails.js";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import MainTour from "./Tourist/pages/TouristHomepage.jsx";
-import TouristPage from './TouristPage.js';
-import SellerPage from './SellerPage.js';
-import HomePage from './Components/Homepage';
-import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Components/CompanyHomepage.jsx';
-import TouristProductsPage from './Tourist/pages/TouristProduct.js';
-import ViewProducts from './Guest/pages/ViewProducts.js';
+import TouristPage from "./TouristPage.js";
+import SellerPage from "./SellerPage.js";
+import HomePage from "./Components/Homepage";
+import AppPage from "./Components/BackendReq";
+import CompanyHomepage from "./Components/CompanyHomepage.jsx";
+import TouristProductsPage from "./Tourist/pages/TouristProduct.js";
+import ViewProducts from "./Guest/pages/ViewProducts.js";
 
 // admin new
-import AdminHome from './Admin/pages/AdminHome.js';
-import ActivityCategory from './Admin/pages/ActivityCategory.js';
-import PreferenceTag from './Admin/pages/PrefenceTag.js';
-import AdminProduct from './Admin/pages/AdminProduct.js';
-import SellerProduct from './Seller/pages/SellerProduct.js';
+import AdminHome from "./Admin/pages/AdminHome.js";
+import ActivityCategory from "./Admin/pages/ActivityCategory.js";
+import PreferenceTag from "./Admin/pages/PrefenceTag.js";
+import AdminProduct from "./Admin/pages/AdminProduct.js";
+import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
+import SellerProduct from "./Seller/pages/SellerProduct.js";
+
 // import TouristProduct from './pages/TouristProduct.js';
-import Admin from './Admin/pages/Admin.js';
-import Governer from './Admin/pages/Governer.js';
-import ActivityDetails from './Components/ActivityDetails.jsx';
-import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import HomeScreen from './Advertiser/Components/CompanyHomepage.jsx';
-import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
-import EditActivity from './Advertiser/Components/EditActivity.jsx';
-import ProductTourist from './Tourist/pages/ProductsTourist.js';
-import PurchasedProducts from './Tourist/pages/PurchasedProducts.js';
-import TourGuideHome from './TourGuide/pages/TourGuideHomePage.js';
+import Admin from "./Admin/pages/Admin.js";
+import Governer from "./Admin/pages/Governer.js";
+import ActivityDetails from "./Components/ActivityDetails.jsx";
+import AccountPage from "./Advertiser/Components/AccountPage.jsx";
+import HomeScreen from "./Advertiser/Components/CompanyHomepage.jsx";
+import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
+import EditActivity from "./Advertiser/Components/EditActivity.jsx";
+import ProductTourist from "./Tourist/pages/ProductsTourist.js";
+import PurchasedProducts from "./Tourist/pages/PurchasedProducts.js";
+import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 
 //tourguide new
 
@@ -56,14 +58,13 @@ const App = () => {
   };
   const handleSignOut = () => {
     setIsSignedUp(false);
-    localStorage.removeItem('userId');
+    localStorage.removeItem("userId");
     window.location.reload();
-  }
+  };
 
   return (
-    
     <Router>
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: "20px" }}>
         {/* <h1>Navigation</h1> */}
         {/* Navigation Buttons */}
         {/* <nav style={{ marginBottom: '20px' }}>
@@ -92,19 +93,23 @@ const App = () => {
           <Route path="/TouristPage" element={<TouristPage />} />
           <Route path="/SellerPage" element={<SellerPage />} />*/}
           {/* admin new */}
-        
+
           <Route path="/AdminHome" element={<AdminHome />} />
-          
+
           <Route path="/ActivityCategory" element={<ActivityCategory />} />
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
           <Route path="/AdminProduct" element={<AdminProduct />} />
+          <Route path="/AcceptRejectPage" element={<AcceptReject />} />
           <Route path="/SellerProduct" element={<SellerProduct />} />
           {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
-          <Route path='/ViewProducts' element={<ViewProducts/>}/>
-          <Route path ='/ProductTourist/:id' element={<ProductTourist/>}/>
-          <Route path ='/PurchasedProducts/:id' element={<PurchasedProducts/>}/>
+          <Route path="/ViewProducts" element={<ViewProducts />} />
+          <Route path="/ProductTourist/:id" element={<ProductTourist />} />
+          <Route
+            path="/PurchasedProducts/:id"
+            element={<PurchasedProducts />}
+          />
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
@@ -124,35 +129,33 @@ const App = () => {
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route path="/tourism-governor" element={<TourismGovernorPage />} />
-          <Route path="/signup" element={<SignupPage onSignup={handleSignup} />} />
+          <Route
+            path="/signup"
+            element={<SignupPage onSignup={handleSignup} />}
+          />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
           <Route path="/TouristPage" element={<TouristPage />} />
           <Route path="/SellerPage" element={<SellerPage />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} />
-          <Route path="/CompanyAccount" element={<AccountPage/>}/>
-          <Route path="/advertiserHomePage" element={<HomeScreen/>}/>
-          <Route path="/editAdvertiser" element={<EditProfilePage/>}/>
-          <Route path="/editActivity/:id" element={<EditActivity/>}/>
-          <Route path='/activity/:id' element={<ActivityDetails/>}/>
+          <Route path="/CompanyAccount" element={<AccountPage />} />
+          <Route path="/advertiserHomePage" element={<HomeScreen />} />
+          <Route path="/editAdvertiser" element={<EditProfilePage />} />
+          <Route path="/editActivity/:id" element={<EditActivity />} />
+          <Route path="/activity/:id" element={<ActivityDetails />} />
 
           <Route path="/TourGuideHome" element={<TourGuideHome />} />
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
-          <Route path='/add-activity' element={<ActivityForm/>}/>
-          <Route path='/activityDetails' element={<ActivityDetails/>}/>
-
+          <Route path="/add-activity" element={<ActivityForm />} />
+          <Route path="/activityDetails" element={<ActivityDetails />} />
         </Routes>
       </div>
     </Router>
-    
   );
- 
 };
 
 export default App;
-
-
 
 // import React, { useState } from 'react';
 // import './App.css'

@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import '../pages/styles.css';
-import Navbar from '../../pages/Navbar.jsx';
-import ExploreTrips from '../Components/ExploreTrips.jsx';
-import ExploreActivities from '../../Guest/Components/ExploreActivities.jsx';
-import ExploreHistoricalSites from '../Components/ExploreHistoricalSites.jsx';
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "../pages/styles.css";
+import Navbar from "../../pages/Navbar.jsx";
+import ExploreTrips from "../Components/ExploreTrips.jsx";
+import ExploreActivities from "../../Guest/Components/ExploreActivities.jsx";
+import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 
 const HomePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [destination, setDestination] = useState('');
-  const [dates, setDates] = useState('');
-  const [guests, setGuests] = useState('');
+  const [destination, setDestination] = useState("");
+  const [dates, setDates] = useState("");
+  const [guests, setGuests] = useState("");
   const [isSignedUp, setIsSignedUp] = useState(false); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Searching for:', { destination, dates, guests });
+    console.log("Searching for:", { destination, dates, guests });
   };
 
   const handleSignOut = () => {
@@ -29,22 +29,21 @@ const HomePage = () => {
     navigate(`TouristDetails${id}`);
   };
 
-  const handleViewPurchasedDetails =()=>{
-    navigate(`/PurchasedProducts/${id}`)
-  }
+  const handleViewPurchasedDetails = () => {
+    navigate(`/PurchasedProducts/${id}`);
+  };
 
-  const handleViewProductsDetails =()=>{
-    navigate(`/ProductTourist/${id}`)
-
-  }
+  const handleViewProductsDetails = () => {
+    navigate(`/ProductTourist/${id}`);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md">
         <Navbar id={id} isSignedUp={isSignedUp} handleSignOut={handleSignOut} />
         {isSignedUp && (
-          <button 
-           // onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
+          <button
+            // onClick={() => navigate(`/api/tourist/getTourist/${id}`)}
             onClick={handleViewDetails()}
             className="px-9 py-1 bg-blue-600 text-white rounded"
           >
@@ -55,21 +54,36 @@ const HomePage = () => {
 
       <main className="flex-grow">
         <section className="relative h-[600px] flex items-center justify-center text-center text-white">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{backgroundImage: `url(/placeholder.svg?height=600&width=1200)`}}
+            style={{
+              backgroundImage: `url(/placeholder.svg?height=600&width=1200)`,
+            }}
           ></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 max-w-4xl mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Your Next Great Adventure</h1>
-            <p className="text-xl mb-8">Immerse yourself in the wonders of the world with our handpicked selection of unforgettable journeys</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Discover Your Next Great Adventure
+            </h1>
+            <p className="text-xl mb-8">
+              Immerse yourself in the wonders of the world with our handpicked
+              selection of unforgettable journeys
+            </p>
           </div>
         </section>
 
         <section className="container mx-auto px-4 -mt-16 relative z-20">
-          <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-lg p-6 flex flex-wrap gap-4">
+          <form
+            onSubmit={handleSearch}
+            className="bg-white rounded-lg shadow-lg p-6 flex flex-wrap gap-4"
+          >
             <div className="flex-1 min-w-[200px]">
-              <label htmlFor="destination" className="block text-sm font-medium text-gray-700 mb-1">Find Location</label>
+              <label
+                htmlFor="destination"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Find Location
+              </label>
               <input
                 type="text"
                 id="destination"
@@ -80,7 +94,12 @@ const HomePage = () => {
               />
             </div>
             <div className="flex-1 min-w-[200px]">
-              <label htmlFor="dates" className="block text-sm font-medium text-gray-700 mb-1">Check in and Check out date</label>
+              <label
+                htmlFor="dates"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Check in and Check out date
+              </label>
               <input
                 type="text"
                 id="dates"
@@ -91,7 +110,12 @@ const HomePage = () => {
               />
             </div>
             <div className="flex-1 min-w-[200px]">
-              <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">Special Travels</label>
+              <label
+                htmlFor="guests"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Special Travels
+              </label>
               <select
                 id="guests"
                 className="w-full p-2 border rounded"
@@ -105,26 +129,43 @@ const HomePage = () => {
                 <option value="4">4+ Guests</option>
               </select>
             </div>
-            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors"
+            >
               Search
             </button>
           </form>
         </section>
 
         <section className="container mx-auto px-4 py-12">
-          <h2 className="text-2xl font-bold mb-6">Exclusive deals just for you!</h2>
+          <h2 className="text-2xl font-bold mb-6">
+            Exclusive deals just for you!
+          </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
-              <img src="/placeholder.svg?height=200&width=400" alt="Exclusive Flight Deal" className="w-full h-48 object-cover" />
+              <img
+                src="/placeholder.svg?height=200&width=400"
+                alt="Exclusive Flight Deal"
+                className="w-full h-48 object-cover"
+              />
               <div className="p-4">
-                <h3 className="font-bold text-lg mb-2">Exclusive Flight Deals Just For You!</h3>
+                <h3 className="font-bold text-lg mb-2">
+                  Exclusive Flight Deals Just For You!
+                </h3>
                 <p className="text-blue-600 font-bold">50% Off</p>
               </div>
             </div>
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
-              <img src="/placeholder.svg?height=200&width=400" alt="Exclusive Rental Deal" className="w-full h-48 object-cover" />
+              <img
+                src="/placeholder.svg?height=200&width=400"
+                alt="Exclusive Rental Deal"
+                className="w-full h-48 object-cover"
+              />
               <div className="p-4">
-                <h3 className="font-bold text-lg mb-2">Exclusive Rental Deals Just For You!</h3>
+                <h3 className="font-bold text-lg mb-2">
+                  Exclusive Rental Deals Just For You!
+                </h3>
                 <p className="text-blue-600 font-bold">25% Off</p>
               </div>
             </div>
@@ -133,11 +174,11 @@ const HomePage = () => {
 
         <button onClick={handleViewPurchasedDetails}>
           View your purchased products
-           </button>
+        </button>
 
         <button onClick={handleViewProductsDetails}>
           View all available products
-           </button>
+        </button>
 
         <ExploreTrips />
         <ExploreActivities />
@@ -145,7 +186,10 @@ const HomePage = () => {
       </main>
 
       <footer className="bg-gray-800 text-white py-4 text-center">
-        <p>&copy; {new Date().getFullYear()} WaterMelon Globe. All rights reserved.</p>
+        <p>
+          &copy; {new Date().getFullYear()} WaterMelon Globe. All rights
+          reserved.
+        </p>
       </footer>
     </div>
   );
