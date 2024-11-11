@@ -6,6 +6,8 @@ const Product = require("../Models/productModel");
 const Booking = require('../Models/FlightBooking');
 const HotelBooking = require('../Models/HotelBooking');
 const Hotel = require('../Models/Hotel.js');
+const Transportation = require('../Models/TransportationModel');
+
 
 
 
@@ -800,6 +802,18 @@ const deleteActivity = async (req, res) => {
   }
 };
 
+// get all trips
+const getAllTransportations = async (req, res) => {
+  try {
+    // Fetch all transportation records, sorted by creation date (latest first)
+    const transportations = await Transportation.find({}).sort({ createdAt: -1 });
+    
+    res.status(200).json(transportations);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching transportation records.' });
+  }
+};
+
   
 module.exports = {
   createTourist,
@@ -830,4 +844,5 @@ module.exports = {
   getFlightBookingsByTouristId,
   deleteActivity,
   deleteItinerary,
+  getAllTransportations
 };
