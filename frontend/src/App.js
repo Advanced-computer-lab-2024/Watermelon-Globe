@@ -7,7 +7,7 @@ import TourGuidePage from './TourGuide/pages/TourGuideHomePage.js';
 import TourismGovernorPage from './Governor/Components/tourismGovernorPage.jsx';
 import SignupPage from './Components/SignUp';
 import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
-import ActivityDetails from './Components/ActivityDetails.jsx';
+
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
 import CompanyHomepage from './Components/CompanyHomepage.jsx';
@@ -30,14 +30,11 @@ import SignupOptions from "./pages/SignUpOptions.js";
 import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 import MainTour from "./Tourist/pages/TouristHomepage.jsx";
-import TouristPage from './TouristPage.js';
-import SellerPage from './SellerPage.js';
-import HomePage from './Components/Homepage';
-import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Advertiser/Components/CompanyHomepage.jsx';
+
+
 import TouristProductsPage from './Tourist/pages/TouristProduct.js';
 import ViewProducts from './Guest/pages/ViewProducts.js';
-import TouristProductsPage from './Tourist/pages/TouristProduct.js';
+
 import ProductTourist from './Tourist/pages/ProductsTourist.jsx';
 import PurchasedProducts from './Tourist/pages/PurchasedProducts.jsx';
 import TouristComplaints from './Tourist/pages/TouristComplaints.jsx'
