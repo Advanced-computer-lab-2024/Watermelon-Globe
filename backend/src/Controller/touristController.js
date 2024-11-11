@@ -1,7 +1,6 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
 const itineraryModel = require("../Models/itineraryModel");
-const Itinerary = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
 const Booking = require('../Models/FlightBooking');
@@ -135,14 +134,14 @@ const updateRating = async (req, res) => {
     console.log("Received rating:", numericRating);
 
     // Check if the rating is a valid number between 1 and 5
-    if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+    if ( numericRating < 1 || numericRating > 5) {
       return res
         .status(400)
         .json({ message: "Invalid rating. Rating should be between 1 and 5." });
     }
 
     // Find the itinerary by ID
-    const itinerary = await itineraryModel.findById(id);
+    const itinerary = await itineraryModel.Itinerary.findById(id);
     if (!itinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
     }
