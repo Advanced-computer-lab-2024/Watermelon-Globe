@@ -16,11 +16,11 @@ const ItineraryDetails = () => {
                 throw new Error('Itinerary not found');
             }
             const data = await response.json();
-            setItinerary(data); // Set the fetched itinerary data
+            setItinerary(data);
         } catch (error) {
-            setError(error.message); // Set the error message if the fetch fails
+            setError(error.message);
         } finally {
-            setLoading(false); // Set loading to false when done
+            setLoading(false);
         }
     };
 
@@ -44,11 +44,11 @@ const ItineraryDetails = () => {
                 throw new Error('Failed to submit rating');
             }
             alert('Rating submitted successfully!');
+            fetchItinerary(); // Refresh the itinerary after rating
         } catch (error) {
             console.error('Error submitting rating:', error);
             alert('Failed to submit rating. Please try again.');
         }
-        fetchItinerary();
     };
 
     // Share itinerary functionality
@@ -73,51 +73,51 @@ const ItineraryDetails = () => {
     // Render the itinerary details
     return (
         <div className="itinerary-details">
-            <h2>{itinerary.name}</h2>
+            <h2>{itinerary?.name || 'Itinerary'}</h2>
             <h3>Activities</h3>
             <ul>
-                {itinerary.activities.map((activity) => (
+                {itinerary?.activities?.map((activity) => (
                     <li key={activity.activityName}>
                         {activity.activityName} - {activity.duration}
                     </li>
-                ))}
+                )) || <p>No activities available</p>}
             </ul>
             <h3>Locations</h3>
-            <p>{itinerary.locations.join(', ')}</p>
+            <p>{itinerary?.locations ? itinerary.locations.join(', ') : 'No locations available'}</p>
             <h3>Timeline</h3>
-            <p>{itinerary.timeline}</p>
+            <p>{itinerary?.timeline || 'No timeline available'}</p>
             <h3>Language of Tour</h3>
-            <p>{itinerary.languageOfTour}</p>
+            <p>{itinerary?.languageOfTour || 'No language specified'}</p>
             <h3>Price</h3>
-            <p>${itinerary.priceOfTour}</p>
+            <p>${itinerary?.priceOfTour || 'Price not available'}</p>
             <h3>Available Dates</h3>
             <ul>
-                {itinerary.availableDates.map((date) => (
-                    <li key={date}>{new Date(date).toLocaleDateString()}</li> // Format the date
-                ))}
+                {itinerary?.availableDates?.map((date) => (
+                    <li key={date}>{new Date(date).toLocaleDateString()}</li>
+                )) || <p>No available dates</p>}
             </ul>
             <h3>Available Times</h3>
             <ul>
-                {itinerary.availableTimes.map((time) => (
+                {itinerary?.availableTimes?.map((time) => (
                     <li key={time}>{time}</li>
-                ))}
+                )) || <p>No available times</p>}
             </ul>
             <h3>Accessibility</h3>
-            <p>{itinerary.accessibility ? 'Yes' : 'No'}</p>
+            <p>{itinerary?.accessibility ? 'Yes' : 'No'}</p>
             <h3>Pickup/Drop-off Locations</h3>
             <ul>
-                {itinerary.pickupDropoffLocations.map((location, index) => (
+                {itinerary?.pickupDropoffLocations?.map((location, index) => (
                     <li key={index}>
                         Pickup: {location.pickup}, Drop-off: {location.dropoff}
                     </li>
-                ))}
+                )) || <p>No pickup/drop-off locations available</p>}
             </ul>
             <h3>Bookings Available</h3>
-            <p>{itinerary.bookings ? 'Yes' : 'No'}</p>
+            <p>{itinerary?.bookings ? 'Yes' : 'No'}</p>
 
             <h3>Average Rating</h3>
-            <p>{itinerary.rating}</p>
-
+            <p>{itinerary?.rating || 'No ratings yet'}</p>
+            
             <h3>Rate this Itinerary</h3>
             <div className="rating-container">
                 {[1, 2, 3, 4, 5].map((star) => (

@@ -1,7 +1,7 @@
-const Seller = require('../Models/SellerModel')
-const Product = require('../Models/productModel')
-const mongoose = require('mongoose')
-const { findById } = require('../Models/touristModel')
+const Seller = require("../Models/SellerModel");
+const Product = require("../Models/productModel");
+const mongoose = require("mongoose");
+const { findById } = require("../Models/touristModel");
 
 //get all sellers
 const getAllSellers = async (req, res) => {
@@ -91,13 +91,13 @@ const updateSeller = async (req, res) => {
 };
 
 const getSellerStatus = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "Seller does not exist" });
   }
 
   try {
-    const seller = await Seller.findById(id).select('status');
+    const seller = await Seller.findById(id).select("status");
     if (!seller) {
       return res.status(400).json({ error: "No such seller" });
     }
@@ -105,7 +105,7 @@ const getSellerStatus = async (req, res) => {
     res.json({ status: seller });
   } catch (error) {
     console.error(error);
-        res.status(500).json({ message: 'Error retrieving seller status' });
+    res.status(500).json({ message: "Error retrieving seller status" });
   }
 };
 
@@ -113,7 +113,16 @@ const getSellerStatus = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller, ratings, sales } = req.body;
+  const {
+    name,
+    price,
+    quantity,
+    picture,
+    description,
+    seller,
+    ratings,
+    sales,
+  } = req.body;
 
   try {
     // Create a new product with the provided details
@@ -125,7 +134,7 @@ const createProduct = async (req, res) => {
       seller: "6729244f151b6c9e346dd732",
       ratings: ratings || 0,
       sales: sales || 0,
-      archived: false // Explicitly set this as a default value
+      archived: false, // Explicitly set this as a default value
     });
 
     // Return the created product as JSON response
@@ -134,7 +143,6 @@ const createProduct = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 // Get all products
 const getAllProducts = async (req, res) => {
@@ -147,15 +155,15 @@ const getAllProducts = async (req, res) => {
 const getAllProductIds = async (req, res) => {
   try {
     // Retrieve all products, selecting only the name and _id fields
-    const products = await Product.find({}, 'name _id');
+    const products = await Product.find({}, "name _id");
 
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while retrieving products' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving products" });
   }
 };
-
-
 
 //search a product by name
 const searchProductbyName = async (req, res) => {
@@ -180,7 +188,6 @@ const searchProductbyName = async (req, res) => {
       .json({ error: "An error occurred while searching for the product" });
   }
 };
-
 
 //filter products based on price
 const filterProduct = async (req, res) => {
@@ -367,95 +374,85 @@ const changePasswordSeller = async (req, res) => {
   }
 };
 
+const reviewProduct = async (req, res) => {
+  const { ReviewerId, ProductId } = req.params;
+  const { Review } = req.query;
 
-
-  const reviewProduct =async(req,res)=>{
-    const {ReviewerId,ProductId} = req.params;
-    const {Review}=req.query;
-
-    const product = await Product.findById(ProductId);
-    if(!product){
-        res.status(400).json({message:"Product cannot be found"})
+  const product = await Product.findById(ProductId);
+  if (!product) {
+    res.status(400).json({ message: "Product cannot be found" });
+  } else {
+    try {
+      product.reviews.push({
+        reviewer: ReviewerId, // Use correct field name as per schema
+        review: Review, // Use correct field name as per schema
+      });
+      await product.save();
+      res.status(200).json({ message: "Review was added successfully" });
+    } catch {
+      console.error("Error updating reviews:", error);
+      res.status(500).json({ error: "Server error" });
     }
-    else{
-        try{
-            product.reviews.push({
-                reviewer: ReviewerId, // Use correct field name as per schema
-                review: Review        // Use correct field name as per schema
-            });
-        await product.save();
-        res.status(200).json({ message: "Review was added successfully" });
-        }
-        catch{
-            console.error("Error updating reviews:", error);
-            res.status(500).json({ error: "Server error" });
-        }
-
-    }
-
-
-
-
   }
+};
 
-  const getProductById = async (req, res) => {
-    const { id } = req.body;
-    
-    try {
-      const product = await Product.findById(id);
-      
-      if (!product) {
-        // Respond with a descriptive error message if product not found
-        return res.status(404).json({ error: "Product not found" });
-      }
-      
-      // Return the product data directly, without wrapping in an object
-      return res.status(200).json(product);
-      
-    } catch (error) {
-      // Log the error (optional, useful for debugging)
-      console.error("Error finding product:", error);
-  
-      // Respond with a 500 status and include the error message
-      return res.status(500).json({ error: error.message || "Server error" });
+const getProductById = async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const product = await Product.findById(id);
+
+    if (!product) {
+      // Respond with a descriptive error message if product not found
+      return res.status(404).json({ error: "Product not found" });
     }
-  };
-  
-  
-  const requestDeletionSeller = async (req, res) => {
-    try {
-        const { id } = req.params;
 
-        // Find the seller by ID and update the deletionRequest to "Pending"
-        const seller = await Seller.findByIdAndUpdate(
-            id,
-            { deletionRequest: "Pending" },
-            { new: true } // Return the updated document
-        );
+    // Return the product data directly, without wrapping in an object
+    return res.status(200).json(product);
+  } catch (error) {
+    // Log the error (optional, useful for debugging)
+    console.error("Error finding product:", error);
 
-        if (!seller) {
-            return res.status(404).json({ message: 'seller not found' });
-        }
+    // Respond with a 500 status and include the error message
+    return res.status(500).json({ error: error.message || "Server error" });
+  }
+};
 
-        res.status(200).json({
-            message: 'Deletion request updated successfully',
-        });
-    } catch (error) {
-        console.error('Error updating deletion request:', error);
-        res.status(500).json({ message: 'Server error' });
+const requestDeletionSeller = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the seller by ID and update the deletionRequest to "Pending"
+    const seller = await Seller.findByIdAndUpdate(
+      id,
+      { deletionRequest: "Pending" },
+      { new: true } // Return the updated document
+    );
+
+    if (!seller) {
+      return res.status(404).json({ message: "seller not found" });
     }
+
+    res.status(200).json({
+      message: "Deletion request updated successfully",
+      data: advertiser,
+    });
+  } catch (error) {
+    console.error("Error updating deletion request:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 // const getProductReviews = async (req, res) => {
 //     const { productId } = req.params;
-  
+
 //     try {
 //       const product = await Product.findById(productId);
-      
+
 //       if (!product) {
 //         return res.status(404).json({ message: 'Product not found' });
 //       }
-      
+
 //       // Return the reviews array
 //       return res.status(200).json(product.reviews);
 //     } catch (error) {
@@ -465,55 +462,56 @@ const changePasswordSeller = async (req, res) => {
 //   };
 
 const getProductReviews = async (req, res) => {
-    const { productId } = req.params;
-  
-    try {
-      const product = await Product.findById(productId).populate('reviews.reviewer', 'username'); // Populate reviewer with 'name'
-  
-      if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
-      }
-  
-      // Return the reviews array
-      return res.status(200).json(product.reviews);
-    } catch (error) {
-      console.error('Error fetching product reviews:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
+  const { productId } = req.params;
 
-
-const getPassword = async(req,res) =>{
-  const{id}= req.query;
-  console.log(id);
-  try{
-    const seller = await Seller.findById(id);
-    console.log(seller);
-    if(!seller){
-      res.status(400).json({message:"Seller is not found"});
-    }
-    else{
-      res.status(200).json(seller.Password)
-    }
-  }
-  catch{
-    console.error('Error getting password:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  }
-
-  
-  
-// view the sales & the available quantity of all products
-const getQuantity = async (req, res) => {
   try {
-      const products = await Product.find({}, 'name quantity sales').sort({ createdAt: -1 });
-      res.status(200).json(products);
+    const product = await Product.findById(productId).populate(
+      "reviews.reviewer",
+      "username"
+    ); // Populate reviewer with 'name'
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Return the reviews array
+    return res.status(200).json(product.reviews);
   } catch (error) {
-      res.status(500).json({ error: "An error occurred while retrieving product quantities." });
+    console.error("Error fetching product reviews:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
+const getPassword = async (req, res) => {
+  const { id } = req.query;
+  console.log(id);
+  try {
+    const seller = await Seller.findById(id);
+    console.log(seller);
+    if (!seller) {
+      res.status(400).json({ message: "Seller is not found" });
+    } else {
+      res.status(200).json(seller.Password);
+    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// view the sales & the available quantity of all products
+const getQuantity = async (req, res) => {
+  try {
+    const products = await Product.find({}, "name quantity sales").sort({
+      createdAt: -1,
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({
+      error: "An error occurred while retrieving product quantities.",
+    });
+  }
+};
 
 // archive a product
 const archiveProduct = async (req, res) => {
@@ -521,30 +519,28 @@ const archiveProduct = async (req, res) => {
 
   // Check if the name is provided
   if (!name) {
-      return res.status(400).json({ error: 'Product name is required' });
+    return res.status(400).json({ error: "Product name is required" });
   }
 
   try {
-      // Set the archived field to true based on the product name
-      const product = await Product.findOneAndUpdate(
-          { name: name },
-          { archived: true },
-          { new: true } // Return the updated product
-      );
+    // Set the archived field to true based on the product name
+    const product = await Product.findOneAndUpdate(
+      { name: name },
+      { archived: true },
+      { new: true } // Return the updated product
+    );
 
-      if (!product) {
-          return res.status(404).json({ error: 'Product not found' });
-      }
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
 
-      res.status(200).json({ message: 'Product archived successfully', product });
+    res.status(200).json({ message: "Product archived successfully", product });
   } catch (error) {
-      res.status(500).json({ error: 'An error occurred while archiving the product' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while archiving the product" });
   }
 };
-
-
-
-
 
 // unarchive a product
 const unarchiveProduct = async (req, res) => {
@@ -552,24 +548,28 @@ const unarchiveProduct = async (req, res) => {
 
   // Check if the name is provided
   if (!name) {
-      return res.status(400).json({ error: 'Product name is required' });
+    return res.status(400).json({ error: "Product name is required" });
   }
 
   try {
-      // Set the archived field to false based on the product name
-      const product = await Product.findOneAndUpdate(
-          { name: name },
-          { archived: false },
-          { new: true } // Return the updated product
-      );
+    // Set the archived field to false based on the product name
+    const product = await Product.findOneAndUpdate(
+      { name: name },
+      { archived: false },
+      { new: true } // Return the updated product
+    );
 
-      if (!product) {
-          return res.status(404).json({ error: 'Product not found' });
-      }
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
 
-      res.status(200).json({ message: 'Product unarchived successfully', product });
+    res
+      .status(200)
+      .json({ message: "Product unarchived successfully", product });
   } catch (error) {
-      res.status(500).json({ error: 'An error occurred while unarchiving the product' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while unarchiving the product" });
   }
 };
 
@@ -577,10 +577,9 @@ const unarchiveProduct = async (req, res) => {
 const uploadPicture = async (req, res) => {
   const { id } = req.query; // Get the product ID from the route parameters
   const { picture } = req.body; // Get the picture URL from the request body
-
   // Check if the ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid product ID' });
+    return res.status(400).json({ error: "Invalid product ID" });
   }
 
   try {
@@ -592,20 +591,44 @@ const uploadPicture = async (req, res) => {
     );
 
     if (!product) {
-      return res.status(404).json({ error: 'No product found with this ID' });
+      return res.status(404).json({ error: "No product found with this ID" });
     }
 
-    res.status(200).json({ message: 'Product picture updated successfully', product });
+    res
+      .status(200)
+      .json({ message: "Product picture updated successfully", product });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while updating the product picture' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the product picture" });
   }
 };
 
-
-
-
-module.exports = {createSeller , getAllSellers , getSeller , deleteSeller, updateSeller, getSellerStatus,
-     createProduct , getAllProducts , getAllProductIds , searchProductbyName , filterProduct , updateProduct,
-      sortProducts,updateRatingProduct,changePasswordSeller,reviewProduct, requestDeletionSeller,
-      acceptTermsAndConditions,getProductById,getProductReviews,getPassword,
-      acceptTermsAndConditions, getQuantity, archiveProduct, unarchiveProduct, uploadPicture};
+module.exports = {
+  createSeller,
+  getAllSellers,
+  getSeller,
+  deleteSeller,
+  updateSeller,
+  getSellerStatus,
+  createProduct,
+  getAllProducts,
+  getAllProductIds,
+  searchProductbyName,
+  filterProduct,
+  updateProduct,
+  sortProducts,
+  updateRatingProduct,
+  changePasswordSeller,
+  reviewProduct,
+  requestDeletionSeller,
+  acceptTermsAndConditions,
+  getProductById,
+  getProductReviews,
+  getPassword,
+  getQuantity,
+  archiveProduct,
+  unarchiveProduct,
+  //getProductImageByName,
+  uploadPicture,
+};

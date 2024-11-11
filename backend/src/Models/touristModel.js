@@ -94,4 +94,4 @@ const touristSchema = new Schema(
 );
 
 const Tourist = mongoose.model('Tourist', touristSchema);
-module.exports = Tourist
+module.exports = Tourist;

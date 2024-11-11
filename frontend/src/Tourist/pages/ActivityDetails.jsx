@@ -57,14 +57,14 @@ const ActivityDetails = () => {
     };
 
     const handleShareLink = () => {
-        const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}`;
+        const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
         navigator.clipboard.writeText(activityUrl)
           .then(() => alert('Activity link copied to clipboard!'))
           .catch(err => alert('Failed to copy link: ' + err));
       };
     
       const handleShareEmail = () => {
-        const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}`;
+        const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
         const subject = encodeURIComponent('Check out this activity!');
         const body = encodeURIComponent(`I thought you might be interested in this activity: ${activityUrl}`);
         window.location.href = `mailto:?subject=${subject}&body=${body}`;

@@ -1,32 +1,27 @@
 // src/HomePage.js
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../Components/Navbar.css';
-import Navbar from '../Components/Navbar.jsx';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "../Components/Navbar.css";
+import Navbar from "../Components/Navbar.jsx";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-
-    
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: "20px" }}>
       <Navbar />
-      
+
       <h1>Welcome to the Home Page</h1>
-      <button onClick={() => navigate('/BackendReq')}>
-        Go to App Page
-      </button>
+      <button onClick={() => navigate("/BackendReq")}>Go to App Page</button>
 
-      <button onClick={() => navigate('/GuestPage')}>
-        Go to Guest Page
-      </button>
+      <button onClick={() => navigate("/MainHome")}>Go to Guest Page</button>
+      <button onClick={() => navigate("/GuestPage")}>Go to Guest Page</button>
 
-     <button onClick={() => navigate('/SellerProduct')}>
+      <button onClick={() => navigate("/SellerProduct")}>
         Go to Seller Page
       </button>
 
-      <button onClick={() => navigate('/advertiser')}>
+      <button onClick={() => navigate("/advertiser")}>
         Go to Advertiser Page
       </button>
 
@@ -34,27 +29,15 @@ const HomePage = () => {
         Go to Tourist Page
       </button>
 
-      <button onClick={() => navigate('/TourGuideHome/67291c4a2cab8a982f09e3fd')}>
+      <button onClick={() => navigate('/TourGuideHome/670137227c5a3dade4ba11dc')}>
         Go to Tour Guide Page
       </button>
 
-      <button onClick={() => navigate('/tourism-governor')}>
+      <button onClick={() => navigate("/tourism-governor")}>
         Go to Tourism Governor Page
       </button>
 
-      <button onClick={() => navigate('/AdminHome')}>
-        Go to admin Page
-      </button>
-
-
-
-
-
-
-
-
-
-
+      <button onClick={() => navigate("/AdminHome")}>Go to admin Page</button>
     </div>
   );
 };

@@ -89,14 +89,14 @@ const ItineraryDetails = () => {
 
     // Share itinerary functionality
     const handleShareLink = () => {
-        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}`;
+        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}/${id}`;
         navigator.clipboard.writeText(itineraryUrl)
             .then(() => alert('Itinerary link copied to clipboard!'))
             .catch(err => alert('Failed to copy link: ' + err));
     };
 
     const handleShareEmail = () => {
-        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}`;
+        const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}/${id}`;
         const subject = encodeURIComponent('Check out this itinerary!');
         const body = encodeURIComponent(`I thought you might be interested in this itinerary: ${itineraryUrl}`);
         window.location.href = `mailto:?subject=${subject}&body=${body}`;

@@ -116,39 +116,14 @@ const updateTourGuide = async (req, res) => {
 };
 
 const createItinerary = async (req, res) => {
-  const {
-    name,
-    activities,
-    tag,
-    locations,
-    timeline,
-    languageOfTour,
-    priceOfTour,
-    availableDates,
-    availableTimes,
-    accessibility,
-    pickupDropoffLocations,
-    bookings,
-    guide: guideId,
-  } = req.body;
-  console.log(req.body);
-  console.log(tag);
-  try {
-    const itinerary = await itineraryModel.Itinerary.create({
-      name,
-      activities,
-      tag,
-      locations,
-      timeline,
-      languageOfTour,
-      priceOfTour,
-      availableDates,
-      availableTimes,
-      accessibility,
-      pickupDropoffLocations,
-      bookings,
-      guide: guideId,
-    });
+    const { name, activities,tag,locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+        accessibility, pickupDropoffLocations, bookings,rating, guide: guideId} = req.body;
+        console.log(req.body)
+        console.log(tag)
+        try {
+            const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
+                timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
+                pickupDropoffLocations, bookings, guide: guideId});
 
     res.status(200).json(itinerary);
   } catch (error) {
@@ -156,9 +131,11 @@ const createItinerary = async (req, res) => {
   }
 };
 const getMyItineraries = async (req, res) => {
-  const { guideID } = req.query; // Extract the Governor ID from the request parameters
+  const { guideID } = req.params; // Extract the Governor ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
+
+  console.log(guideID);
   if (!mongoose.Types.ObjectId.isValid(guideID)) {
     return res.status(400).json({ error: "Invalid guide ID" });
   }
@@ -539,7 +516,7 @@ const changePasswordTourGuide = async (req, res) => {
 
 const requestDeletionGuide = async (req, res) => {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
 
       // Find the guide by ID and update the deletionRequest to "Pending"
       const guide = await tourGuide.findByIdAndUpdate(
@@ -548,37 +525,36 @@ const requestDeletionGuide = async (req, res) => {
           { new: true } // Return the updated document
       );
 
-      if (!guide) {
-          return res.status(404).json({ message: 'Guide not found' });
-      }
+    if (!guide) {
+      return res.status(404).json({ message: "Guide not found" });
+    }
 
-      res.status(200).json({
-          message: 'Deletion request updated successfully',
-      });
+    res.status(200).json({
+      message: "Deletion request updated successfully",
+      data: advertiser,
+    });
   } catch (error) {
-      console.error('Error updating deletion request:', error);
-      res.status(500).json({ message: 'Server error' });
+    console.error("Error updating deletion request:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-const getPassword = async(req,res) =>{
-  const{id}= req.query;
+const getPassword = async (req, res) => {
+  const { id } = req.query;
   console.log(id);
-  try{
+  try {
     const tourguide = await tourGuide.findById(id);
     console.log(tourguide);
-    if(!tourguide){
-      res.status(400).json({message:"tourguide is not found"});
+    if (!tourguide) {
+      res.status(400).json({ message: "tourguide is not found" });
+    } else {
+      res.status(200).json(tourguide.password);
     }
-    else{
-      res.status(200).json(tourguide.password)
-    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
   }
-  catch{
-    console.error('Error getting password:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  }
+};
 
 module.exports = {
   createItinerary,
@@ -586,6 +562,7 @@ module.exports = {
   getItineraryById,
   updateItinerary,
   deleteItineraryById,
+
   createTourGuide,
   getTourGuide,
   getAllGuides,
@@ -600,5 +577,5 @@ module.exports = {
   deactivateItineraryAccessibility,
   acceptTermsAndConditions,
   requestDeletionGuide,
-  getPassword
+  getPassword,
 };

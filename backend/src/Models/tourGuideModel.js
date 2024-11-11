@@ -65,9 +65,34 @@ const tourGuideSchema = new Schema(
       enum: ["Pending", "Accepted", "Rejected"],
       default: null,
     },
+    ratings: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
+        rating: { type: Number, required: true, min: 1, max: 5 }
+      }
+    ],
+    rating: { type: Number, default: 0 },
+    noOfRatings: {type:Number ,required:false},
+    ratingsSum:{type:Number,required:false},// Reference to the tour guide
+    comments: [{
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tourist', // Reference to the user model
+        required: true
+      },
+      comment: {
+        type: String,
+        required: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }]
   },
   { timestamps: true }
 );
 
-const TourGuide = mongoose.models.TourGuide || mongoose.model("TourGuide", tourGuideSchema);
+
+const TourGuide = mongoose.model("TourGuide", tourGuideSchema);
 module.exports = TourGuide;
