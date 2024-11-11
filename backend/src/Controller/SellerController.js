@@ -629,6 +629,6 @@ module.exports = {
   getQuantity,
   archiveProduct,
   unarchiveProduct,
-  getProductImageByName,
+  //getProductImageByName,
   uploadPicture,
 };

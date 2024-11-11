@@ -55,18 +55,17 @@ const ExploreTrips = () => {
     setIsLoading(true);
     setError(null);
     try {
-      // change one that excludes flagged ones too
-      const response = await fetch("/api/itinerary/activeItineraries");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setItineraries(data);
-      //console.log(data);
+      const response = await axios.get("/api/itinerary/activeItineraries");
+      const appropriateItinerary = response.data.filter(
+        (itinerary) => !itinerary.inappropriate
+      );
+      setItineraries(appropriateItinerary);
+      setFilteredItineraries(appropriateItinerary);
     } catch (error) {
       console.error("Error fetching trips:", error);
       setError("Failed to fetch trips. Please try again later.");
       setItineraries([]);
+      setFilteredItineraries([]);
     } finally {
       setIsLoading(false);
     }

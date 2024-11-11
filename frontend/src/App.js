@@ -8,9 +8,9 @@ import SignupPage from "./Components/SignUp";
 import HomePage from "./Components/Homepage";
 import AppPage from "./Components/BackendReq";
 import CompanyHomepage from "./Components/CompanyHomepage.jsx";
-import TouristPage from "./TouristPage.js";
-import SellerPage from "./SellerPage.js";
-import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
+//import TouristPage from "./TouristPage.js";
+//import SellerPage from "./SellerPage.js";
+//import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
 
 import "./App.css";
 
@@ -18,13 +18,13 @@ import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
 
-import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
+//import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
 //import TouristDetails from './Tourist/Components/TouristDetails.jsx';
-import SellerSignup from "./pages/SellerSignup.js";
+//import SellerSignup from "./pages/SellerSignup.js";
 //import AdvertiserSignup from "./Advertiser/Components/SignUp.jsx";
 import AdvertiserSignup from "./pages/ AdvertiserSignUp2.js";
-import TouristSignup from "./Tourist/pages/TouristSignup.js";
-import TourguideSignup from "./pages/TourguideSignup.js";
+//import TouristSignup from "./Tourist/pages/TouristSignup.js";
+//import TourguideSignup from "./pages/TourguideSignup.js";
 import SignupOptions from "./pages/SignUpOptions.js";
 //Guest
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
@@ -42,14 +42,14 @@ import Complaint from "./Admin/pages/Complaint.js";
 import Itinerary from "./Admin/pages/Itinerary.js";
 import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 import "./App.css";
-import FlightMain from "./Flights/Pages/FlightMain.js";
+//import FlightMain from "./Flights/Pages/FlightMain.js";
 
 //tourguide new
 
 import "./App.css";
 import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 //Advertiser Pages
-import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
+//import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import AccountPage from "./Advertiser/Components/AccountPage.jsx";

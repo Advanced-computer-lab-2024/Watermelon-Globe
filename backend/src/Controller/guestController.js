@@ -164,17 +164,15 @@ const createAdvertiser = async (req, res) => {
     }
 
     // Create a new user instance and save to the database
-    const NewAdvertiser = advertiserModel.create({
+    const NewAdvertiser = await advertiserModel.create({
       Name,
       Email,
       Password,
     });
-
-    await (await NewAdvertiser).save();
-    // Send the newly created user as a response
-    res.status(201).json(NewAdvertiser);
+    NewAdvertiser.status = "pending";
+    res.status(200).json(NewAdvertiser);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
     console.log(error.message); // Handle any errors
   }
 };
