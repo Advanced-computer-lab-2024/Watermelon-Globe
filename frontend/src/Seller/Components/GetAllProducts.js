@@ -53,8 +53,8 @@ const GetAllProducts = () => {
                 style={{ width: '100%', height: 'auto', marginBottom: '10px' }}
               />
             )}
-            <h4>{product.name}</h4>
-            <p>{product.description}</p>
+            <h4>Name: {product.name}</h4>
+            <p>Description: {product.description}</p>
             <p>Price: ${formatPrice(product.price)}</p>
             <p>Quantity: {product.quantity}</p>
           </div>
