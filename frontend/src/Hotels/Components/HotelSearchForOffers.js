@@ -74,8 +74,6 @@ const BookingPage = () => {
   const handleBookClick = async (offer) => {
     const { roomType, price, currency, checkInDate, checkOutDate } = offer;
 
-
-
     try {
       const response = await axios.post(`/api/Tourist/bookHotel/${touristId}`, {
         hotelId,
@@ -90,8 +88,6 @@ const BookingPage = () => {
         amountPaid: offer?.price?.base
       });
 
-
-
       console.log('Booking successful:', response.data);
       alert(`Booking successful!\nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
     } catch (error) {
@@ -101,62 +97,84 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg p-4">
-      <h3>Book Hotel</h3>
+    <div className="bg-white rounded-lg p-6 shadow-lg max-w-xl mx-auto mt-8">
+      <h3 className="text-2xl font-semibold mb-4 text-center">Hotel Booking</h3>
+      
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <DatePicker
-          selected={checkInDate}
-          onChange={(date) => setCheckInDate(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="Check-In Date"
-          className="w-full p-3 border rounded"
-        />
-        <DatePicker
-          selected={checkOutDate}
-          onChange={(date) => setCheckOutDate(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="Check-Out Date"
-          className="w-full p-3 border rounded"
+        <div>
+          <label htmlFor="checkInDate" className="block text-sm font-medium text-gray-600">Check-In Date</label>
+          <DatePicker
+            id="checkInDate"
+            selected={checkInDate}
+            onChange={(date) => setCheckInDate(date)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select Check-In Date"
+            className="w-full p-3 border rounded mt-1"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="checkOutDate" className="block text-sm font-medium text-gray-600">Check-Out Date</label>
+          <DatePicker
+            id="checkOutDate"
+            selected={checkOutDate}
+            onChange={(date) => setCheckOutDate(date)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select Check-Out Date"
+            className="w-full p-3 border rounded mt-1"
+          />
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="adults" className="block text-sm font-medium text-gray-600">Number of Adults</label>
+        <input
+          id="adults"
+          type="number"
+          value={adults}
+          min="1"
+          onChange={(e) => setAdults(e.target.value)}
+          placeholder="Enter number of adults"
+          className="w-full p-3 border rounded mt-1"
         />
       </div>
-      <input
-        type="number"
-        placeholder="Adults"
-        value={adults}
-        min="1"
-        onChange={(e) => setAdults(e.target.value)}
-        className="w-full p-3 border rounded mb-4"
-      />
-      <input
-        type="number"
-        placeholder="Rooms"
-        value={roomQuantity}
-        min="1"
-        onChange={(e) => setRoomQuantity(e.target.value)}
-        className="w-full p-3 border rounded mb-4"
-      />
+
+      <div className="mb-4">
+        <label htmlFor="roomQuantity" className="block text-sm font-medium text-gray-600">Number of Rooms</label>
+        <input
+          id="roomQuantity"
+          type="number"
+          value={roomQuantity}
+          min="1"
+          onChange={(e) => setRoomQuantity(e.target.value)}
+          placeholder="Enter number of rooms"
+          className="w-full p-3 border rounded mt-1"
+        />
+      </div>
+
       <button
         onClick={handleSearchClick}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-600 text-white px-6 py-3 rounded-full w-full mt-4 hover:bg-blue-700"
       >
         Search Offers
       </button>
-      {loading && <p className="mt-4">Loading offers...</p>}
-      {message && <p className="mt-4">{message}</p>}
+
+      {loading && <p className="mt-4 text-center text-gray-500">Loading offers...</p>}
+      {message && <p className="mt-4 text-center text-red-500">{message}</p>}
 
       {hotelOffers.length > 0 ? (
-        <div className="mt-4">
-          <h4>Hotel Offers:</h4>
+        <div className="mt-6">
+          <h4 className="text-xl font-semibold mb-4">Hotel Offers</h4>
           {hotelOffers.map((offer, index) => (
-            <div key={index} className="border p-4 mb-4">
-              <h5>Hotel: {offer?.hotel?.name}</h5>
+            <div key={index} className="border p-4 mb-6 rounded-lg shadow-md">
+              <h5 className="font-semibold text-lg">{offer?.hotel?.name}</h5>
               <p><strong>Price:</strong> {offer?.price?.base} {offer?.price?.currency}</p>
               <p><strong>Check-In Date:</strong> {offer?.checkInDate}</p>
               <p><strong>Check-Out Date:</strong> {offer?.checkOutDate}</p>
               <p><strong>Room Type:</strong> {offer?.room?.description?.text}</p>
               <button
                 onClick={() => handleBookClick(offer)}
-                className="bg-green-600 text-white px-4 py-2 rounded mt-4"
+                className="bg-green-600 text-white px-6 py-2 rounded-full mt-4 hover:bg-green-700"
               >
                 Book Now
               </button>
@@ -164,7 +182,7 @@ const BookingPage = () => {
           ))}
         </div>
       ) : (
-        <p>No hotel offers available.</p>
+        <p className="text-center text-gray-500">No hotel offers available.</p>
       )}
     </div>
   );
