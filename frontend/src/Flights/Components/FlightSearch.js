@@ -184,7 +184,7 @@ const FlightSearch = ({ token, setFlights }) => {
 
 
 
-          <button className="bg-[#4FA52C] text-white px-8 py-2 rounded ml-auto" onClick={handleSearch}>
+          <button className="bg- text-white px-8 py-2 rounded ml-auto" onClick={handleSearch}>
             Search
           </button>
 
