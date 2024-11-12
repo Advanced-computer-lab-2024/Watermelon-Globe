@@ -62,16 +62,16 @@ const FlightSearch = ({ token, setFlights }) => {
   return (
     <div>
       <div className="bg-white rounded-lg p-4">
-      
+
 
 
 
         <div className="flex gap-4 mb-4">
           <button
-            className="px-6 py-4 bg-blue-600 text-white font-bold text-xl rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
+            className="w-full px-6 py-4 bg-blue-600 text-white font-bold text-xl rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
           >
             <Plane className="w-5 h-5" />
-              One-way Only
+            One-way Only
           </button>
         </div>
 
@@ -184,9 +184,28 @@ const FlightSearch = ({ token, setFlights }) => {
 
 
 
-          <button className="bg-[#4FA52C] text-white px-8 py-2 rounded ml-auto" onClick={handleSearch}>
+          <button
+            onClick={handleSearch}
+            style={{
+              backgroundImage: 'linear-gradient(to right, #3b82f6, #6366f1)',
+              color: 'white',
+              paddingLeft: '2rem',
+              paddingRight: '2rem',
+              paddingTop: '0.5rem',
+              paddingBottom: '0.5rem',
+              borderRadius: '0.5rem',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, background-color 0.3s ease',
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundImage = 'linear-gradient(to right, #6366f1, #3b82f6)'}
+            onMouseLeave={(e) => e.target.style.backgroundImage = 'linear-gradient(to right, #3b82f6, #6366f1)'}
+            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(75, 85, 99, 0.5)'}
+            onBlur={(e) => e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'}
+            className="w-full ml-auto transform hover:scale-105"
+          >
             Search
           </button>
+
 
           {message && <p className="text-red-500 mt-4">{message}</p>}
         </div>

@@ -1,16 +1,46 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { format } from 'date-fns'
+import { Link, useParams, useNavigate } from "react-router-dom";import { format } from 'date-fns'
 import { Plane } from "lucide-react"
+import profileIcon from "../../Assets/Profile.png";
+
 import AccessToken from '../Components/AccessToken';
 import FlightSearch from '../Components/FlightSearch';
 import FlightBooking from '../Components/FlightBooking';
+
+
 
 const FlightMain = () => {
   const [token, setToken] = useState('');
   const { touristId } = useParams();
   const [flights, setFlights] = useState([]);
   const [selectedFlight, setSelectedFlight] = useState(null);
+  const [isSignedUp, setIsSignedUp] = useState(true); // You might want to get this from a global state or context
+
+
+  const navigate = useNavigate(); // For navigation to booking page
+
+
+   // Function to go back to the previous page
+ const handleBackClick = () => {
+  navigate(-1); // This will take the user back to the previous page in the browser history
+};
+const handleSignOut = () => {
+  // Implement your sign out logic here
+  setIsSignedUp(false);
+  // You might want to clear user data, tokens, etc.
+};
+
+const handleViewDetails = () => {
+  navigate(`/TouristDetails/${touristId}`);
+};
+
+const handleViewPurchasedDetails = () => {
+  navigate(`/PurchasedProducts/${touristId}`);
+};
+
+const handleViewProductsDetails = () => {
+  navigate(`/ProductTourist/${touristId}`);
+};
 
   const getFlightDetails = (flight) => {
     const segments = flight.itineraries[0]?.segments || [];
@@ -99,11 +129,11 @@ const FlightMain = () => {
 
 
             <button
-              className="px-8 py-6 text-2xl font-bold text-white mt-10"
+              className="w-full px-8 py-6 text-2xl font-bold text-white mt-10"
               style={{ 
                 background: 'linear-gradient(to bottom right, #fc6c85, #2a9d8f)',
                 border: '2px solid #000000',
-                borderRadius: '0'              
+                borderRadius: '0%'              
               }}
             >
               Select Flight
@@ -143,6 +173,73 @@ const FlightMain = () => {
 
   return (
     <div className="min-w-full px-4 py-8">
+      <header className="bg-white shadow-md " >
+        <nav className="bg-white shadow-md"
+          style={{ marginBottom: '30px' }}
+        >
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div className="text-2xl font-bold">
+              <Link to="/Homepage" className="homeButton">
+                WaterMelon Globe
+              </Link>
+            </div>
+            <div className="hidden md:flex space-x-4">
+              <Link to={`/Hotels/${touristId}`} className="text-gray-600 hover:text-gray-900">Hotel</Link>
+              <Link to={`/Flights/${touristId}`} className="text-gray-600 hover:text-gray-900">Flight</Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
+              <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
+              <Link to={`/ProductTourist/${touristId}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
+              <Link to={`/PurchasedProducts/${touristId}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
+              <Link to={`/TouristComplaints/${touristId}`} className="text-gray-600 hover:text-gray-900">Complaints</Link>
+              <Link to={`/MyBookings/${touristId}`} className="text-gray-600 hover:text-gray-900">MyBookings</Link>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button className="px-4 py-1 border rounded">EN</button>
+              <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
+              <button
+                onClick={handleViewDetails}
+                className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              >
+                <img
+                  className="profileIcon"
+                  src={profileIcon}
+                  alt="Profile Icon"
+                  style={{ width: '20px', height: '20px', bg: 'blue' }}
+                />
+                View Profile
+              </button>
+              <Link to={`/completed-itineraries/${touristId}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+                Completed Itineraries
+              </Link>
+              <Link to={`/completed-activities/${touristId}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+                Completed Activities
+              </Link>
+            </div>
+          </div>
+        </nav>
+      </header>
+      {/* Back Button */}
+      <button
+        onClick={handleBackClick}
+        style={{
+          paddingLeft: '1.5rem',
+          paddingRight: '1.5rem',
+          paddingTop: '0.75rem',
+          paddingBottom: '0.75rem',
+          backgroundImage: 'linear-gradient(to right, #3b82f6, #6366f1)',
+          color: 'white',
+          borderRadius: '0.5rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          transition: 'transform 0.3s ease, background-color 0.3s ease',
+        }}
+        onMouseEnter={(e) => e.target.style.backgroundImage = 'linear-gradient(to right, #6366f1, #3b82f6)'}
+        onMouseLeave={(e) => e.target.style.backgroundImage = 'linear-gradient(to right, #3b82f6, #6366f1)'}
+        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(75, 85, 99, 0.5)'}
+        onBlur={(e) => e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'}
+        className="mb-8 transform hover:scale-105"
+      >
+        Back
+      </button>
       <h1 className="text-3xl font-bold text-center mb-8">Amadeus Flight Booking</h1>
 
       {!token ? (
