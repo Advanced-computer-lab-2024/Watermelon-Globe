@@ -6,29 +6,29 @@ import Sidebar from '../Components/Sidebar';
 import './HomeScreen.css';
 
 const HomeScreen = () => {
-    const [activities, setActivities] = useState ([]);
-    const [advertiser, setAdvertiser] = useState (null);
+    const [activities, setActivities] = useState([]);
+    const [advertiser, setAdvertiser] = useState(null);
     const navigate = useNavigate();
 
-    useEffect (() => {
+    useEffect(() => {
         const fetchAdvertiser = async () => {
-            try{
+            try {
                 const response = await axios.get('/api/Advertiser/lastApprovedAdvertiser');
                 setAdvertiser(response.data);
-            } catch(error){
+            } catch (error) {
                 console.error('Error fetching advertiser profile: ', error);
             }
         };
 
         const fetchActivities = async () => {
-            try{
+            try {
                 const activities = await axios.get('/api/Activities/activities');
                 setActivities(activities.data);
-            }catch (error){
+            } catch (error) {
                 console.error('Error fetching activities', error);
             }
         };
-        
+
         fetchAdvertiser();
         fetchActivities();
     }, []);
@@ -47,18 +47,51 @@ const HomeScreen = () => {
         }
     };
 
+    const handleDeleteAccount = async () => {
+        const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.');
+        if (confirmed) {
+            try {
+                
+                const response = await fetch(`/api/Advertiser/requestDeletionAdvertiser/670646ffa799826e8ac9fd1a`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    alert('Your account has been successfully deleted.');
+                    navigate('/'); // Redirect to home or login after deletion
+                } else {
+                    alert('Failed to delete account. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                alert('An error occurred while trying to delete the account.');
+            }
+        }
+    };
+
     return (
         <div className="home-screen">
             {/* Sidebar Component */}
             {advertiser && (
-                <Sidebar 
-                    advertiserId = {advertiser._id}
-                    advertiser={advertiser} 
+                <Sidebar
+                    advertiserId={advertiser._id}
+                    advertiser={advertiser}
                     onProfileView={() => navigate(`/advertiserProfile/${advertiser._id}`)}
                     onCreateActivity={() => navigate(`/add-activity/${advertiser._id}`)}
-                    // ChangePassword={() => navigate('/changeAdvertiserPassword')}
+                // ChangePassword={() => navigate('/changeAdvertiserPassword')}
                 />
             )}
+
+            <button
+                onClick={handleDeleteAccount}
+                className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
+            >
+                Delete Account
+            </button>
 
             {/* Main Content */}
             <div className="main-content">

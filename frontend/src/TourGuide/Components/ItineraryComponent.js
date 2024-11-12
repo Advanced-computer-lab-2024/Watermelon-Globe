@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ItineraryComponent.css';
 
 const ItineraryComponent = ({ guideID }) => {
+  const navigate = useNavigate();
   const [itineraries, setItineraries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteError, setDeleteError] = useState('');
+  const [deleteSuccess, setDeleteSuccess] = useState('');
 
   useEffect(() => {
     const fetchItineraries = async () => {
@@ -21,6 +25,30 @@ const ItineraryComponent = ({ guideID }) => {
 
     fetchItineraries();
   }, [guideID]);
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch(`/api/TourGuide/requestDeletionGuide/670137227c5a3dade4ba11dc`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        setDeleteError('Failed to delete account.');
+        setDeleteSuccess('');
+      } else {
+        alert('Account deleted successfully.');
+        setDeleteError('');
+        navigate('/');
+      }
+    } catch (error) {
+      setDeleteError('An error occurred while deleting the account.');
+      setDeleteSuccess('');
+      console.error('Error deleting account:', error);
+    }
+  };
 
   if (loading) return <p>Loading itineraries...</p>;
   if (error) return <p>{error}</p>;
@@ -48,6 +76,15 @@ const ItineraryComponent = ({ guideID }) => {
                 <p><strong>Booking Open:</strong> {itinerary.bookings ? "Yes" : "No"}</p>
               </div>
             </div>
+                  {/* Delete Account Button */}
+      <div className="flex justify-end">
+              <button
+                onClick={handleDeleteAccount}
+                className="px-4 py-2 mb-4 text-white rounded-md transition duration-200 bg-red-600 hover:bg-red-700"
+              >
+                Delete Account
+              </button>
+            </div>
 
             <div className="activities">
               <h3>Activities:</h3>
@@ -67,6 +104,7 @@ const ItineraryComponent = ({ guideID }) => {
                 <p key={index}>{`Pickup: ${location.pickup}, Dropoff: ${location.dropoff}`}</p>
               ))}
             </div>
+            
           </div>
         ))
       ) : (

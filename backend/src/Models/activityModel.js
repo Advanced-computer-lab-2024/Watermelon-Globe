@@ -62,17 +62,17 @@ const ActivitySchema = new Schema({
   Advertiser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CompanyProfile',
-    required: true
+    required: false
   },
   comments: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Tourist', // Reference to the user model
-      required: true
+      required: false
     },
     comment: {
       type: String,
-      required: true
+      required: false
     },
     date: {
       type: Date,

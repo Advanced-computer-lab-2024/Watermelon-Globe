@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MapPin, Clock, Calendar, DollarSign, Tag, AlertCircle, Star, Users, Percent } from 'lucide-react';
+import axios from 'axios';
 
 const ActivityDetails = () => {
     const { activityId, id } = useParams();
@@ -46,9 +47,14 @@ const ActivityDetails = () => {
                     chosenDate: activity.Date,
                 }),
             });
+            const response2 = await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
+                amountPaid: activity.Price
+              });
             if (!response.ok) {
                 throw new Error('Failed to book activity');
             }
+            alert(`You have successfully booked your Itinerary! \nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
+
             setBookingMessage('Activity booked successfully!');
         } catch (error) {
             console.error('Error booking activity:', error);

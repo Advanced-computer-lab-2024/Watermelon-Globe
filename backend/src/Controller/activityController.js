@@ -85,7 +85,13 @@ const getActivitiesNew = async (req, res) => {
 
 const createActivity = async (req, res) => {
   try {
-    const { userId, Tags, ...activityData } = req.body; // Expect userId in the request body
+    const {       Name,
+      Date,
+      Time,
+      Location,
+      Price,
+      Discount,
+      bookingOpen } = req.body; // Expect userId in the request body
 
     // Validate userId
     // if (!userId) {
@@ -118,13 +124,8 @@ const createActivity = async (req, res) => {
       Time,
       Location,
       Price,
-      priceRange,
-      Category,
-      tags,
       Discount,
-      bookingOpen,
-      Rating,
-      Advertiser,
+      bookingOpen
     });
 
     // await newActivity.save();

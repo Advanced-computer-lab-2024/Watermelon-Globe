@@ -428,7 +428,6 @@ const requestDeletionTourist = async (req, res) => {
 
     res.status(200).json({
       message: "Deletion request updated successfully",
-      data: advertiser,
     });
   } catch (error) {
     console.error("Error updating deletion request:", error);

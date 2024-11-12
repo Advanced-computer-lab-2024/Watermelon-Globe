@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Star, MapPin, Clock, Calendar, DollarSign, Languages, Accessibility, Truck, Users, AlertCircle } from 'lucide-react';
 import { FaStar } from 'react-icons/fa';
-
+import axios from 'axios';
 
 const ItineraryDetails = () => {
     const { tripid, id } = useParams();
@@ -58,9 +58,14 @@ const ItineraryDetails = () => {
                     status: "pending"
                 }),
             });
+            const response2 = await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
+                amountPaid: itinerary.priceOfTour
+              });
             if (!response.ok) {
                 throw new Error('Failed to book itinerary');
             }
+            alert(`You have successfully booked your Itinerary! \nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
+
             setBookingMessage('Itinerary booked successfully!');
         } catch (error) {
             console.error('Error booking itinerary:', error);

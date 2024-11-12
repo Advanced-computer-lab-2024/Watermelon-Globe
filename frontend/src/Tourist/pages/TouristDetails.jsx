@@ -109,7 +109,7 @@ export default function TouristDetails() {
         const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.');
         if (confirmed) {
             try {
-                const response = await fetch(`http://localhost:8000/api/Tourist/requestDeletionTourist/${id}`, {
+                const response = await fetch(`/api/Tourist/requestDeletionTourist/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
