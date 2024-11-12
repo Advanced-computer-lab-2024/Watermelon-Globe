@@ -297,11 +297,9 @@ const filterActivities = async (req, res) => {
     });
 
     if (filteredActivities.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "No activities found matching the specified criteria.",
-        });
+      return res.status(404).json({
+        message: "No activities found matching the specified criteria.",
+      });
     }
 
     return res.status(200).json(filteredActivities);
