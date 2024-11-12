@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import './ViewDocuments.css';
 const ViewDocuments = () => {
   const [documents, setDocuments] = useState({
     tourGuides: [],

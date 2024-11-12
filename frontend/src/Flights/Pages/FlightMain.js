@@ -8,7 +8,6 @@ import FlightSearch from '../Components/FlightSearch';
 import FlightBooking from '../Components/FlightBooking';
 
 
-
 const FlightMain = () => {
   const [token, setToken] = useState('');
   const { touristId } = useParams();
