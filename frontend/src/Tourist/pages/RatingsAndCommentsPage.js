@@ -66,6 +66,8 @@ const RatingsAndCommentsPage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({touristId, comment}),
         });
+        // Display success message
+        window.alert(`Rating and Comment have been added/updated to the ${type} Successfully! \n\nRating: ${rating}\nComment: ${comment} `);
     }catch (error) {
       console.error('Failed to submit rating and comment:', error);
       setError('There was an error submitting your feedback. Please try again.');
