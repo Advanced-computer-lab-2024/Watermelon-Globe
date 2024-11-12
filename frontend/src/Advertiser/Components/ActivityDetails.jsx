@@ -10,7 +10,7 @@ const ActivityDetails = () => {
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await fetch(`/api/Activities/activities/${id}`);
+                const response = await fetch(`/api/Activities/getActivityById/${id}`);
                 const data = await response.json();
                 setActivity(data);
                 console.log("Fetched activity details: ", response.data);
@@ -28,8 +28,8 @@ const ActivityDetails = () => {
 
     return (
         <div>
-            <h1>Activity Details</h1>
-            <h2>{activity.Category}</h2>
+            <h1><strong>Activity Details</strong></h1>
+            {/* <h2>{activity.Category}</h2> */}
             <p><strong>Date:</strong> {new Date(activity.Date).toLocaleDateString()}</p>
             <p><strong>Time:</strong> {activity.Time}</p>
             <p><strong>Location:</strong> {activity.Location.coordinates.join(', ')}</p>
@@ -41,8 +41,8 @@ const ActivityDetails = () => {
             <p><strong>Advertiser:</strong> {activity.Advertiser.Name || 'Unknown Advertiser'}</p>
             <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p>
             <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p>
-            <button onClick={() => navigate(`/edit-activity/${activity._id}`)}>Edit Activity</button>
-            <button onClick={() => navigate(`/CompanyHomepage`)}>Back to Activities</button>
+            <button onClick={() => navigate(`/editActivity/${activity._id}`)}>Edit Activity</button>
+            <button onClick={() => navigate(`/advertiser`)}>Back to Main Page</button>
         </div>
     );
 };

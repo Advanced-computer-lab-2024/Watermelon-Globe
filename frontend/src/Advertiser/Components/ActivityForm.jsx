@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ActivityForm = () => {
+    const {userId} = useParams();
     const [activity, setActivity] = useState({
         Name: '',
         Date: '',
@@ -15,24 +16,24 @@ const ActivityForm = () => {
         bookingOpen: false,
     });
     
-    const [tags, setTags] = useState([]); // To hold the fetched tags
-    const [selectedTags, setSelectedTags] = useState([]); // To hold selected tag IDs
+    // const [tags, setTags] = useState([]); // To hold the fetched tags
+    // const [selectedTags, setSelectedTags] = useState([]); // To hold selected tag IDs
 
     const navigate = useNavigate();
 
     // Fetch tags from the database
-    useEffect(() => {
-        const fetchTags = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/getTags'); // Adjust the URL as necessary
-                setTags(response.data); // Assuming response.data contains the list of tags
-            } catch (error) {
-                console.error('Error fetching tags:', error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchTags = async () => {
+    //         try {
+    //             const response = await axios.get('api//getTags'); // Adjust the URL as necessary
+    //             setTags(response.data); // Assuming response.data contains the list of tags
+    //         } catch (error) {
+    //             console.error('Error fetching tags:', error);
+    //         }
+    //     };
 
-        fetchTags();
-    }, []);
+    //     fetchTags();
+    // }, []);
 
     const handleChange = (e) => {
         setActivity({
@@ -41,20 +42,19 @@ const ActivityForm = () => {
         });
     };
 
-    const handleTagChange = (e) => {
-        const tagId = e.target.value;
-        if (e.target.checked) {
-            // Add the tag ID if checked
-            setSelectedTags([...selectedTags, tagId]);
-        } else {
-            // Remove the tag ID if unchecked
-            setSelectedTags(selectedTags.filter(id => id !== tagId));
-        }
-    };
+    // const handleTagChange = (e) => {
+    //     const tagId = e.target.value;
+    //     if (e.target.checked) {
+    //         // Add the tag ID if checked
+    //         setSelectedTags([...selectedTags, tagId]);
+    //     } else {
+    //         // Remove the tag ID if unchecked
+    //         setSelectedTags(selectedTags.filter(id => id !== tagId));
+    //     }
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const userId = localStorage.getItem('userId');
         console.log(userId);
 
         if (!userId) {
@@ -71,16 +71,16 @@ const ActivityForm = () => {
                 type: activity.LocationType, // Set the type to 'Point'
                 coordinates: coordinatesArray, // Use the parsed coordinates
             },
-            tags: selectedTags, // Send selected tag IDs
+            // tags: selectedTags, // Send selected tag IDs
             Advertiser: userId, // Add advertiser ID
         };
 
         console.log('Sending activity data:', activityData); 
 
         try {
-            const response = await axios.post('http://localhost:8000/newActivity', activityData);
+            const response = await axios.post('/api/Activities/newActivity', activityData);
             console.log('Activity created:', response.data);
-            navigate('/CompanyHomepage');
+            navigate('/advertiser');
         } catch (error) {
             console.error('Error creating activity:', error.response.data); // Log error response
         }
@@ -144,7 +144,7 @@ const ActivityForm = () => {
                 placeholder="Special Discounts" 
             />
 
-            <div>
+            {/* <div>
                 <h4>Select Tags:</h4>
                 {tags.map(tag => (
                     <label key={tag._id}>
@@ -153,10 +153,10 @@ const ActivityForm = () => {
                             value={tag._id} 
                             onChange={handleTagChange} 
                         />
-                        {tag.type} - {tag.historicPeriod} {/* Display tag information */}
+                        {tag.type} - {tag.historicPeriod} Display tag information
                     </label>
                 ))}
-            </div>
+            </div> */}
 
             <label>
                 Booking Open:

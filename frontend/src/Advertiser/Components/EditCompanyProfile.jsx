@@ -3,8 +3,9 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const EditProfilePage = () => {
-    const profileId = useParams();
+    const {profileId} = useParams();
     const navigate = useNavigate();
+    console.log(profileId);
 
     const [profile, setProfile] = useState({
         Name: '',
@@ -44,7 +45,7 @@ const EditProfilePage = () => {
         try {
             await axios.put(`/api/Advertiser/updateProfile/${profileId}`, updates);
             alert('Profile updated successfully!');
-            navigate('/CompanyAccount');
+            navigate('/advertiser');
         } catch (error) {
             console.error(error);
             alert('Error updating profile');

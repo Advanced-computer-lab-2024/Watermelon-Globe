@@ -8,40 +8,39 @@ const EditActivity = () => {
     const [activity, setActivity] = useState(null);
     const [newPrice, setNewPrice] = useState('');
     const [newDiscount, setNewDiscount] = useState('');
-    const [availableTags, setAvailableTags] = useState([]);
-    const [selectedTags, setSelectedTags] = useState([]);
+    // const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await axios.get(`/api/Activities/activities/${id}`);
+                const response = await axios.get(`/api/Activities/getActivityById/${id}`);
                 setActivity(response.data);
                 setNewPrice(response.data.Price);
                 setNewDiscount(response.data.Discount);
-                setSelectedTags(response.data.tags); // Set selected tags from the activity
+                // setSelectedTags(response.data.tags); // Set selected tags from the activity
             } catch (error) {
                 console.error('Error fetching activity:', error);
             }
         };
 
-        const fetchTags = async () => {
-            try {
-                const response = await axios.get('/api/Activities/getTags'); // Adjust the endpoint for fetching tags
-                setAvailableTags(response.data);
-            } catch (error) {
-                console.error('Error fetching tags:', error);
-            }
-        };
+        // const fetchTags = async () => {
+        //     try {
+        //         const response = await axios.get('/api/Activities/getTags'); // Adjust the endpoint for fetching tags
+        //         setAvailableTags(response.data);
+        //     } catch (error) {
+        //         console.error('Error fetching tags:', error);
+        //     }
+        // };
 
         fetchActivity();
-        fetchTags();
+        // fetchTags();
     }, [id]);
 
-    const handleTagToggle = (tag) => {
-        setSelectedTags((prev) => 
-            prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-        );
-    };
+    // const handleTagToggle = (tag) => {
+    //     setSelectedTags((prev) => 
+    //         prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    //     );
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,10 +48,10 @@ const EditActivity = () => {
             await axios.put(`/api/Activities/updateActivity/${id}`, {
                 Price: newPrice,
                 Discount: newDiscount,
-                tags: selectedTags
+                // tags: selectedTags
             });
             alert('Activity updated successfully');
-            navigate('/CompanyHomepage');
+            navigate('/advertiser');
         } catch (error) {
             console.error('Error updating activity:', error);
             alert('Error updating activity');
@@ -84,7 +83,7 @@ const EditActivity = () => {
                     />
                 </div>
                 <div>
-                    <label>Tags:</label>
+                    {/* <label>Tags:</label>
                     {availableTags.map(tag => (
                         <div key={tag._id}>
                             <input 
@@ -94,7 +93,7 @@ const EditActivity = () => {
                             />
                             {tag.type} ({tag.historicPeriod})
                         </div>
-                    ))}
+                    ))} */}
                 </div>
                 <button type="submit">Update Activity</button>
             </form>

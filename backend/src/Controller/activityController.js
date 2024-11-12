@@ -141,8 +141,8 @@ const createActivity = async (req, res) => {
 const getActivities = async (req, res) => {
   try {
     const activities = await ActivityModel.find({})
-      .populate("tags") // Populate the tags field with actual Tag data
-      .populate("Advertiser"); // Populate the Advertiser field with the corresponding CompanyProfile data
+      .populate("tags")
+      .populate("Advertiser");
 
     res.status(200).json(activities);
   } catch (error) {
