@@ -39,8 +39,8 @@ const TermsAndConditions = () => {
       console.log("API response:", data);
 
       // Redirect to a new page (e.g., seller dashboard or homepage) after accepting terms
-      //navigate("/TourguideSignupConfirm");
-      navigate("/TourGuideHome/67291c4a2cab8a982f09e3fd"); // Replace with your target path
+      navigate(`/TourguideSignupConfirm/${userId}`);
+      //navigate("/TourGuideHome/67291c4a2cab8a982f09e3fd"); // Replace with your target path
       //navigate(`/SellerPage/${sellerId}`); // Replace with your target path
     } catch (error) {
       console.error("Error:", error);
