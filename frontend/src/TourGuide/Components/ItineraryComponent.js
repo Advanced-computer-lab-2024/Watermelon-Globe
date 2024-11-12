@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './ItineraryComponent.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./ItineraryComponent.css";
 
 const ItineraryComponent = ({ guideID }) => {
   const [itineraries, setItineraries] = useState([]);
@@ -10,10 +10,19 @@ const ItineraryComponent = ({ guideID }) => {
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await axios.get(`/api/Itinerary/getMyItineraries/${guideID}`);
-        setItineraries(response.data); // Assuming response.data is an array of itinerary objects
+        const response = await axios.get(
+          `/api/Itinerary/getMyItineraries/${guideID}`
+        );
+        const fetchedItineraries = response.data.map((itinerary) => ({
+          ...itinerary,
+          isActive: itinerary.isActive || false, // Default to false if not provided
+          accessibility: itinerary.isActive ? "Yes" : "No", // Initialize accessibility text
+        }));
+        setItineraries(fetchedItineraries);
       } catch (err) {
-        setError(err.response ? err.response.data.error : "Error loading itineraries");
+        setError(
+          err.response ? err.response.data.error : "Error loading itineraries"
+        );
       } finally {
         setLoading(false);
       }
@@ -22,30 +31,97 @@ const ItineraryComponent = ({ guideID }) => {
     fetchItineraries();
   }, [guideID]);
 
+  const handleStatusChange = async (itineraryId, newStatus) => {
+    // Update the UI optimistically
+    setItineraries((prevItineraries) =>
+      prevItineraries.map((itinerary) =>
+        itinerary._id === itineraryId
+          ? {
+              ...itinerary,
+              isActive: newStatus,
+              accessibility: newStatus ? "Yes" : "No", // Update accessibility text based on status
+            }
+          : itinerary
+      )
+    );
+
+    try {
+      // Call the appropriate API based on the new status
+      if (newStatus) {
+        await axios.post(
+          `/api/Itinerary/updateActivateItinarary/${itineraryId}`
+        );
+      } else {
+        await axios.post(
+          `/api/Itinerary/updateDeactivateItinarary/${itineraryId}`
+        );
+      }
+    } catch (err) {
+      console.error(
+        `Failed to update status for itinerary ${itineraryId}`,
+        err
+      );
+      // Revert the UI change if the API call fails
+      setItineraries((prevItineraries) =>
+        prevItineraries.map((itinerary) =>
+          itinerary._id === itineraryId
+            ? { ...itinerary, isActive: !newStatus }
+            : itinerary
+        )
+      );
+    }
+  };
+
   if (loading) return <p>Loading itineraries...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div className="itinerary-container">
       {itineraries.length > 0 ? (
-        itineraries.map(itinerary => (
+        itineraries.map((itinerary) => (
           <div key={itinerary._id} className="itinerary-card">
             <h2>{itinerary.name}</h2>
             <div className="itinerary-details">
               <div className="itinerary-detail">
-                <p><strong>Guide Status:</strong> {itinerary.guide.status}</p>
-                <p><strong>Language:</strong> {itinerary.languageOfTour}</p>
-                <p><strong>Timeline:</strong> {itinerary.timeline}</p>
-                <p><strong>Price:</strong> ${itinerary.priceOfTour}</p>
-                <p><strong>Rating:</strong> {itinerary.rating} ({itinerary.noOfRatings} reviews)</p>
+                <p>
+                  <strong>Guide Status:</strong> {itinerary.guide.status}
+                </p>
+                <p>
+                  <strong>Language:</strong> {itinerary.languageOfTour}
+                </p>
+                <p>
+                  <strong>Timeline:</strong> {itinerary.timeline}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${itinerary.priceOfTour}
+                </p>
+                <p>
+                  <strong>Rating:</strong> {itinerary.rating} (
+                  {itinerary.noOfRatings} reviews)
+                </p>
               </div>
 
               <div className="itinerary-detail">
-                <p><strong>Locations:</strong> {itinerary.locations.join(', ')}</p>
-                <p><strong>Available Dates:</strong> {itinerary.availableDates.map(date => new Date(date).toLocaleDateString()).join(', ')}</p>
-                <p><strong>Available Times:</strong> {itinerary.availableTimes.join(', ')}</p>
-                <p><strong>Accessibility:</strong> {itinerary.accessibility ? "Yes" : "No"}</p>
-                <p><strong>Booking Open:</strong> {itinerary.bookings ? "Yes" : "No"}</p>
+                <p>
+                  <strong>Locations:</strong> {itinerary.locations.join(", ")}
+                </p>
+                <p>
+                  <strong>Available Dates:</strong>{" "}
+                  {itinerary.availableDates
+                    .map((date) => new Date(date).toLocaleDateString())
+                    .join(", ")}
+                </p>
+                <p>
+                  <strong>Available Times:</strong>{" "}
+                  {itinerary.availableTimes.join(", ")}
+                </p>
+                <p>
+                  <strong>Accessibility:</strong> {itinerary.accessibility}
+                </p>
+                <p>
+                  <strong>Booking Open:</strong>{" "}
+                  {itinerary.bookings ? "Yes" : "No"}
+                </p>
               </div>
             </div>
 
@@ -54,9 +130,15 @@ const ItineraryComponent = ({ guideID }) => {
               {itinerary.activities.map((activity, index) => (
                 <div key={index} className="activity">
                   <h4>{activity.name}</h4>
-                  <p><strong>Description:</strong> {activity.description}</p>
-                  <p><strong>Time:</strong> {activity.time}</p>
-                  <p><strong>Location:</strong> {activity.location}</p>
+                  <p>
+                    <strong>Description:</strong> {activity.description}
+                  </p>
+                  <p>
+                    <strong>Time:</strong> {activity.time}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {activity.location}
+                  </p>
                 </div>
               ))}
             </div>
@@ -64,8 +146,30 @@ const ItineraryComponent = ({ guideID }) => {
             <div className="pickup-dropoff">
               <h3>Pickup & Drop-off Locations:</h3>
               {itinerary.pickupDropoffLocations.map((location, index) => (
-                <p key={index}>{`Pickup: ${location.pickup}, Dropoff: ${location.dropoff}`}</p>
+                <p
+                  key={index}
+                >{`Pickup: ${location.pickup}, Dropoff: ${location.dropoff}`}</p>
               ))}
+            </div>
+
+            {/* Activate and Deactivate buttons */}
+            <div className="itinerary-actions">
+              <button
+                onClick={() => handleStatusChange(itinerary._id, true)}
+                className={`activate-button ${
+                  itinerary.isActive ? "active" : ""
+                }`}
+              >
+                Activate
+              </button>
+              <button
+                onClick={() => handleStatusChange(itinerary._id, false)}
+                className={`deactivate-button ${
+                  !itinerary.isActive ? "inactive" : ""
+                }`}
+              >
+                Deactivate
+              </button>
             </div>
           </div>
         ))
