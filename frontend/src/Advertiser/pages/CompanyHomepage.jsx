@@ -52,7 +52,7 @@ const HomeScreen = () => {
         if (confirmed) {
             try {
                 
-                const response = await fetch(`/api/Advertiser/requestDeletionAdvertiser/670646ffa799826e8ac9fd1a`, {
+                const response = await fetch(`/api/Advertiser/requestDeletionAdvertiser/673203c69b43b911e8048b1b`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
