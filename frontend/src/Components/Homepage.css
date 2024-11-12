@@ -1,0 +1,122 @@
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fa;
+  }
+  
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .home-heading {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  /* Buttons Styling */
+  .home-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .home-btn {
+    width: 250px;
+    padding: 15px;
+    font-size: 1.1rem;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .home-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+  }
+  
+  .home-btn:active {
+    transform: translateY(1px);
+  }
+  
+  .home-btn:focus {
+    outline: none;
+  }
+  
+  /* Specific Color Themes for Each Button */
+  .home-btn:nth-child(1) {
+    background-color: #28a745;
+  }
+  
+  .home-btn:nth-child(1):hover {
+    background-color: #218838;
+  }
+  
+  .home-btn:nth-child(2) {
+    background-color: #ffc107;
+  }
+  
+  .home-btn:nth-child(2):hover {
+    background-color: #e0a800;
+  }
+  
+  .home-btn:nth-child(3) {
+    background-color: #17a2b8;
+  }
+  
+  .home-btn:nth-child(3):hover {
+    background-color: #138496;
+  }
+  
+  .home-btn:nth-child(4) {
+    background-color: #6f42c1;
+  }
+  
+  .home-btn:nth-child(4):hover {
+    background-color: #5a32a3;
+  }
+  
+  .home-btn:nth-child(5) {
+    background-color: #007bff;
+  }
+  
+  .home-btn:nth-child(5):hover {
+    background-color: #0056b3;
+  }
+  
+  .home-btn:nth-child(6) {
+    background-color: #fd7e14;
+  }
+  
+  .home-btn:nth-child(6):hover {
+    background-color: #e76a13;
+  }
+  
+  .home-btn:nth-child(7) {
+    background-color: #6c757d;
+  }
+  
+  .home-btn:nth-child(7):hover {
+    background-color: #5a6268;
+  }
+  
+  .home-btn:nth-child(8) {
+    background-color: #343a40;
+  }
+  
+  .home-btn:nth-child(8):hover {
+    background-color: #23272b;
+  }
+  

@@ -1,42 +1,50 @@
-// src/HomePage.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../Components/Navbar.css";
 import Navbar from "../Components/Navbar.jsx";
+import "./Homepage.css";
+ 
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="home-container">
       <Navbar />
+      <h1 className="home-heading">Welcome to the Home Page</h1>
 
-      <h1>Welcome to the Home Page</h1>
-      <button onClick={() => navigate("/BackendReq")}>Go to App Page</button>
-
-      <button onClick={() => navigate("/GuestPage")}>Go to Guest Page</button>
-
-      <button onClick={() => navigate("/SellerProduct")}>
-        Go to Seller Page
-      </button>
-
-      <button onClick={() => navigate("/advertiser")}>
-        Go to Advertiser Page
-      </button>
-
-      <button onClick={() => navigate('/MainTouristPage/672f80816271465fd87bbddf')}>
-        Go to Tourist Page
-      </button>
-
-      <button onClick={() => navigate('/TourGuideHome/670137227c5a3dade4ba11dc')}>
-        Go to Tour Guide Page
-      </button>
-
-      <button onClick={() => navigate("/tourism-governor")}>
-        Go to Tourism Governor Page
-      </button>
-
-      <button onClick={() => navigate("/AdminHome")}>Go to admin Page</button>
+      <div className="home-buttons">
+        <button className="home-btn" onClick={() => navigate("/BackendReq")}>
+          Go to MS1 Saviour
+        </button>
+        <button className="home-btn" onClick={() => navigate("/GuestPage")}>
+          Go to Guest Page
+        </button>
+        <button className="home-btn" onClick={() => navigate("/SellerProduct")}>
+          Go to Seller Page
+        </button>
+        <button className="home-btn" onClick={() => navigate("/advertiser")}>
+          Go to Advertiser Page
+        </button>
+        <button
+          className="home-btn"
+          onClick={() => navigate("/MainTouristPage/672f80816271465fd87bbddf")}
+        >
+          Go to Tourist Page
+        </button>
+        <button
+          className="home-btn"
+          onClick={() => navigate("/TourGuideHome/670137227c5a3dade4ba11dc")}
+        >
+          Go to Tour Guide Page
+        </button>
+        <button className="home-btn" onClick={() => navigate("/tourism-governor")}>
+          Go to Tourism Governor Page
+        </button>
+        <button className="home-btn" onClick={() => navigate("/AdminHome")}>
+          Go to Admin Page
+        </button>
+      </div>
     </div>
   );
 };

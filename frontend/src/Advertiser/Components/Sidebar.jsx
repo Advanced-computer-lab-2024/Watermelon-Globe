@@ -3,9 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
-const Sidebar = ({ onProfileView, advertiser, onViewActivities, onCreateActivity, advertiserId }) => {
+const Sidebar = ({ onProfileView, advertiser, onCreateActivity, advertiserId }) => {
     const navigate = useNavigate();
-    console.log(advertiserId);
 
     const handleLogoClick = () => {
         navigate(`/edit-logo/${advertiserId}`);
@@ -28,7 +27,6 @@ const Sidebar = ({ onProfileView, advertiser, onViewActivities, onCreateActivity
             
             {/* Sidebar Links */}
             <button onClick={onProfileView}>Profile</button>
-            <button onClick={onViewActivities}>View Activities</button>
             <button onClick={onCreateActivity}>Create Activity</button>
             <button onClick={handleChangePassword}>Change Password</button> 
         </div>

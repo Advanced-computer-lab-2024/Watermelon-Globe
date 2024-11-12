@@ -44,9 +44,7 @@ const {
   bookTransportation
 } = require("../Controller/touristController");
 
-
 //GET all tourists
-router.get("/getTourists", getTourists);
 
 router.get("/getTourists", getTourists);
 //GET a single tourist
