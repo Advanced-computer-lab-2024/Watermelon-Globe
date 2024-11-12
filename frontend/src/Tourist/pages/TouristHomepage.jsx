@@ -6,14 +6,15 @@ import Navbar from "../../pages/Navbar.jsx";
 import ExploreTrips from "../Components/ExploreTrips.jsx";
 import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
+import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 
 const TouristHomePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [destination, setDestination] = useState('');
-  const [dates, setDates] = useState('');
-  const [guests, setGuests] = useState('');
+  const [destination, setDestination] = useState("");
+  const [dates, setDates] = useState("");
+  const [guests, setGuests] = useState("");
   const [isSignedUp, setIsSignedUp] = useState(true); // You might want to get this from a global state or context
 
   const handleSearch = (e) => {
@@ -50,35 +51,82 @@ const TouristHomePage = () => {
               </Link>
             </div>
             <div className="hidden md:flex space-x-4">
-              <Link to={`/Hotels/${id}`} className="text-gray-600 hover:text-gray-900">Hotel</Link>
-              <Link to={`/Flights/${id}`} className="text-gray-600 hover:text-gray-900">Flight</Link>
-              <Link to="#" className="text-gray-600 hover:text-gray-900">Train</Link>
-              <Link to="/Tourist_ProductsPage" className="text-gray-600 hover:text-gray-900">Products</Link>
-              <Link to={`/ProductTourist/${id}`} className="text-gray-600 hover:text-gray-900">Available products</Link>
-              <Link to={`/PurchasedProducts/${id}`} className="text-gray-600 hover:text-gray-900">Purchased Products</Link>
-              <Link to={`/TouristComplaints/${id}`} className="text-gray-600 hover:text-gray-900">Complaints</Link>
-              <Link to={`/MyBookings/${id}`} className="text-gray-600 hover:text-gray-900">MyBookings</Link>
-
-
+              <Link
+                to={`/Hotels/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Hotel
+              </Link>
+              <Link
+                to={`/Flights/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Flight
+              </Link>
+              <Link to="#" className="text-gray-600 hover:text-gray-900">
+                Train
+              </Link>
+              <Link
+                to="/Tourist_ProductsPage"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Products
+              </Link>
+              <Link
+                to={`/ProductTourist/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Available products
+              </Link>
+              <Link
+                to={`/PurchasedProducts/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Purchased Products
+              </Link>
+              <Link
+                to={`/TouristComplaints/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Complaints
+              </Link>
+              <Link
+                to={`/MyBookings/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                MyBookings
+              </Link>
             </div>
             <div className="flex items-center space-x-2">
               <button className="px-4 py-1 border rounded">EN</button>
-              <button onClick={handleSignOut} className="px-4 py-1 border rounded">Sign Out</button>
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-1 border rounded"
+              >
+                Sign Out
+              </button>
               <button
                 onClick={handleViewDetails}
                 className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-              ><img
+              >
+                <img
                   className="profileIcon"
                   src={profileIcon}
                   alt="Profile Icon"
-                  style={{ width: '20px', height: '20px', bg: 'blue' }}
+                  style={{ width: "20px", height: "20px", bg: "blue" }}
                 />
                 View Profile
               </button>
-              <Link to={`/completed-itineraries/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+              <Link
+                to={`/completed-itineraries/${id}`}
+                className="px-4 py-1 ml-2 bg-green-600 text-white rounded"
+              >
                 Completed Itineraries
               </Link>
-              <Link to={`/completed-activities/${id}`} className="px-4 py-1 ml-2 bg-green-600 text-white rounded">
+              <Link
+                to={`/completed-activities/${id}`}
+                className="px-4 py-1 ml-2 bg-green-600 text-white rounded"
+              >
                 Completed Activities
               </Link>
             </div>
@@ -205,11 +253,11 @@ const TouristHomePage = () => {
             </div>
           </div>
         </section>
-
+        <ForYou />
         <ExploreTrips />
         <ExploreActivities />
         <ExploreHistoricalSites />
-        <ExploreTransportations/>
+        <ExploreTransportations />
       </main>
 
       <footer className="bg-gray-800 text-white py-4 text-center">

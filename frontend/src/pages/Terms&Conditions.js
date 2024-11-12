@@ -39,7 +39,7 @@ const TermsAndConditions = () => {
       console.log("API response:", data);
 
       // Redirect to a new page (e.g., seller dashboard or homepage) after accepting terms
-      navigate(`/SellerProduct`); // Replace with your target path
+      navigate(`/SellerSignupConfirm/${userId}`); // Replace with your target path
       //navigate(`/SellerPage/${sellerId}`); // Replace with your target path
     } catch (error) {
       console.error("Error:", error);

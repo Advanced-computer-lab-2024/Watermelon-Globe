@@ -34,11 +34,15 @@ const TagSelection = () => {
 
   // Navigation handlers
   const handleNext = () => {
-    navigate("/MainTouristPage/672cd143a72c43a2d8fb01c0"); // Replace with the actual path for the next page
+    navigate("/MainTouristPage/672cd143a72c43a2d8fb01c0", {
+      state: { selectedTags },
+    }); // Replace with the actual path for the next page
   };
 
   const handleSkip = () => {
-    navigate("/MainTouristPage/672cd143a72c43a2d8fb01c0"); // Replace with the actual path for the skip page
+    navigate("/MainTouristPage/672cd143a72c43a2d8fb01c0", {
+      state: { selectedTags: [] },
+    }); // Replace with the actual path for the skip page
   };
 
   return (
