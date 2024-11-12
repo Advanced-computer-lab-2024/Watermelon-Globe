@@ -10,7 +10,6 @@ const AccountPage = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                console.log(profileId)
                 const response = await axios.get(`/api/Advertiser/profiles/${profileId}`);
                 setProfile(response.data);
                 setFormData({
