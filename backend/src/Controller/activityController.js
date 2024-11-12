@@ -1,4 +1,4 @@
-const ActivityModel = require("../Models/activityModel");
+const ActivityModel = require("../Models/activityModel.js");
 const Tag = require("../Models/tagModel");
 const CompanyProfile = require("../Models/companyProfileModel"); // Adjust the path if necessary
 
@@ -141,8 +141,8 @@ const createActivity = async (req, res) => {
 const getActivities = async (req, res) => {
   try {
     const activities = await ActivityModel.find({})
-      .populate("tags") // Populate the tags field with actual Tag data
-      .populate("Advertiser"); // Populate the Advertiser field with the corresponding CompanyProfile data
+      .populate("tags")
+      .populate("Advertiser");
 
     res.status(200).json(activities);
   } catch (error) {
@@ -358,18 +358,54 @@ const updateActivityRating = async (req, res) => {
   }
 };
 
-module.exports = {
-  createTags,
-  getTags,
-  createActivity,
-  getActivities,
-  getActivityById,
-  updateActivity,
-  deleteActivity,
-  sortByPriceActivity,
-  sortByRatingsActivity,
-  filterActivities,
-  updateActivityRating,
-  createActivityNew,
-  getActivitiesNew,
+const addComment = async (req, res) => {
+    try {
+        const { id } = req.params;  // Activity ID from the URL
+        const { commentText, user } = req.body; // Comment text and user info from the request body
+
+        // Find the activity by ID
+        const activity = await ActivityModel.findById(id);
+        if (!activity) {
+            return res.status(404).json({ message: 'Activity not found' });
+        }
+
+        // Add the new comment to the activity's comments array
+        const newComment = {
+            text: commentText,
+            user: user, // Assuming `user` is a string or object with user details
+            date: new Date()
+        };
+        activity.comments = activity.comments || []; // Initialize if comments field is undefined
+        activity.comments.push(newComment);
+
+        // Save the updated activity
+        await activity.save();
+
+        return res.status(200).json({
+            message: 'Comment added successfully',
+            comments: activity.comments,
+        });
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        return res.status(500).json({ message: 'Error adding comment', error: error.message });
+    }
 };
+
+  
+
+
+module.exports =    
+{createTags,
+getTags,   
+createActivity, 
+getActivities, 
+getActivityById, 
+updateActivity, 
+deleteActivity,
+sortByPriceActivity,
+sortByRatingsActivity,
+filterActivities,
+updateActivityRating,
+createActivityNew,
+getActivitiesNew,
+addComment};

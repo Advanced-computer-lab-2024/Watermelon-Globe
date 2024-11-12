@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
 
 const AccountPage = () => {
+    const {profileId} = useParams();
     const [profile, setProfile] = useState(null);
-    const profileId = localStorage.getItem('userId');
+    const [formData, setFormData] = useState({});
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/Advertiser/profiles/${profileId}`);
+                const response = await axios.get(`/api/Advertiser/profiles/${profileId}`);
                 setProfile(response.data);
+                setFormData({
+                    Name: response.data.Name,
+                    About: response.data.About,
+                    Hotline: response.data.Hotline,
+                    Link: response.data.Link
+                })
             } catch (error) {
                 console.error('Error fetching profile:', error);
             }
         };
 
         fetchProfile();
-    }, [profileId]); // Fetch data on mount and when profileId changes
+    }, [profileId]);
 
     if (!profile) return <p>No profile data available</p>;
 
@@ -26,6 +34,11 @@ const AccountPage = () => {
             <p><strong>About:</strong> {profile.About}</p>
             <p><strong>Hotline:</strong> {profile.Hotline}</p>
             <p><strong>Link:</strong> <a href={profile.Link} target="_blank" rel="noopener noreferrer">{profile.Link}</a></p>
+            <div style={{ marginTop: '20px' }}>
+                <Link to={`/editAdvertiser/${profileId}`}>
+                    <button>Edit Profile</button>
+                </Link>
+            </div>
         </div>
     );
 };

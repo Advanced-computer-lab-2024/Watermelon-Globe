@@ -142,14 +142,15 @@ const changePasswordAdvertiser = async (req, res) => {
   }
 
   try {
-    const adverstiser = await CompanyProfileModel.findOne({ _id: id });
+    // const adverstiser = await CompanyProfileModel.findOne({ _id: id });
+    const advertiser = await CompanyProfileModel.findById(id );
 
-    if (!adverstiser) {
-      return res.status(404).json({ error: "adverstiser not found" }); // Tourist not found
+    if (!advertiser) {
+      return res.status(404).json({ error: "advertiser not found" }); // Tourist not found
     }
 
     // Compare the old password directly
-    if (adverstiser.Password !== oldPassword) {
+    if (advertiser.Password !== oldPassword) {
       return res.status(401).json({ error: "Wrong old password" }); // Use 401 for unauthorized access
     }
 
@@ -161,8 +162,8 @@ const changePasswordAdvertiser = async (req, res) => {
     }
 
     // Update the password directly
-    adverstiser.Password = newPassword;
-    await adverstiser.save();
+    advertiser.Password = newPassword;
+    await advertiser.save();
 
     res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
@@ -236,12 +237,14 @@ const acceptTermsAndConditions = async (req, res) => {
   }
 };
 
+
 module.exports = {
   createProfile,
   getProfiles,
   getLastApprovedAdvertiser,
   approveAdvertiser,
   updateProfile,
+  getPassword,
   changePasswordAdvertiser,
   requestDeletionAdvertiser,
   acceptTermsAndConditions,

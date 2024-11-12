@@ -97,6 +97,51 @@ export default function TouristDetails() {
         }
     };
 
+    const handleViewFlightHotelBookings = () => {
+        navigate(`/MyHotelFlightBookings/${id}`); // Navigating to the bookings page for the tourist
+    };
+
+    const handleViewBookings = () => {
+        navigate(`/MyBookings/${id}`); // Navigating to the bookings page for the tourist
+    };
+
+    const handleDeleteAccount = async () => {
+        const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.');
+        if (confirmed) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/Tourist/requestDeletionTourist/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    alert('Your account has been successfully deleted.');
+                    navigate('/'); // Redirect to home or login after deletion
+                } else {
+                    alert('Failed to delete account. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                alert('An error occurred while trying to delete the account.');
+            }
+        }
+    };
+
+    const renderBadgeIcon = () => {
+        switch (tourist.badge) {
+          case 'Gold':
+            return <span role="img" aria-label="Gold Medal">🥇</span>; // Gold medal emoji
+          case 'Silver':
+            return <span role="img" aria-label="Silver Medal">🥈</span>; // Silver medal emoji
+          case 'Bronze':
+            return <span role="img" aria-label="Bronze Medal">🥉</span>; // Bronze medal emoji
+          default:
+            return <span>No badge</span>; // Default message if no badge
+        }
+      };
+
     if (!tourist) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#FFE4E1' }}>
@@ -120,7 +165,7 @@ export default function TouristDetails() {
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Tourist Profile</h2>
                         <h3 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{tourist.username}</h3>
                         <p style={{ color: '#666', marginBottom: '1rem' }}>Member since {new Date(tourist.createdAt).toLocaleDateString()}</p>
-                        
+
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
                             <div>
                                 <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', color: '#4CAF50' }}>
@@ -211,7 +256,12 @@ export default function TouristDetails() {
                                     <Gift style={{ marginRight: '0.5rem' }} size={16} />
                                     Points:
                                 </label>
-                                <p>{tourist.points}</p>
+                                <p>{tourist.loyaltyPoints}</p>
+                            </div>
+                            <div className="badge-display">
+                                <h3>Your Badge:</h3>
+                                <div className="badge-icon">{renderBadgeIcon()}</div>
+                                <p>{tourist.badge}</p>
                             </div>
                         </div>
                         <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
@@ -292,6 +342,27 @@ export default function TouristDetails() {
                     </div>
                 </div>
             </div>
+            <button
+                onClick={handleViewFlightHotelBookings}
+                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
+            >
+                View My Hotel/Flight
+            </button>
+
+            <button
+                onClick={handleViewBookings}
+                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
+            >
+                View My Itineraries/activities
+            </button>
+
+            <button
+                onClick={handleDeleteAccount}
+                className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
+            >
+                Delete Account
+            </button>
             {showRedeemModal && (
                 <div style={{
                     position: 'fixed',
@@ -323,6 +394,7 @@ export default function TouristDetails() {
                                 marginBottom: '1rem'
                             }}
                             placeholder="Enter points to redeem"
+                            step="10000"
                         />
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <button
@@ -355,12 +427,12 @@ export default function TouristDetails() {
                     </div>
                 </div>
             )}
-            <button onClick={() => setShowPasswordModal(true)} 
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
-          Change Password
-          </button>
-          {/* Password Change Modal */}
-        {showPasswordModal && <ChangePasswordTourist id ={id} onClose={() => setShowPasswordModal(false)} />}
+            <button onClick={() => setShowPasswordModal(true)}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                Change Password
+            </button>
+            {/* Password Change Modal */}
+            {showPasswordModal && <ChangePasswordTourist id={id} onClose={() => setShowPasswordModal(false)} />}
             <style jsx>{`
                 @keyframes spin {
                     0% { transform: rotate(0deg); }

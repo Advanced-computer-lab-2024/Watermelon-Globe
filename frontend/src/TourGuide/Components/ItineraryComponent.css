@@ -1,0 +1,53 @@
+.itinerary-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .itinerary-card {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .itinerary-card h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .itinerary-card p {
+    margin: 8px 0;
+    color: #555;
+  }
+  
+  .activities, .pickup-dropoff {
+    margin-top: 20px;
+  }
+  
+  .activities h3, .pickup-dropoff h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .activity {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .activity h4 {
+    margin: 0;
+    color: #666;
+  }
+  
+  .pickup-dropoff p {
+    padding: 5px;
+    color: #444;
+  }
+  

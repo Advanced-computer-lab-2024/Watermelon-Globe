@@ -10,7 +10,9 @@ const Itinerary = require("../Models/itineraryModel");
 const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
 const Seller = require("../Models/SellerModel");
+const Transportation = require("../Models/TransportationModel");
 const mongoose = require("mongoose");
+
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -1006,6 +1008,18 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+//create new activitycategory
+const createTransportation = async (req, res) => {
+  const { type,destination,price } = req.body;
+
+  try {
+    const transportaion = await Transportation.create({ type,destination,price });
+    res.status(200).json(transportaion);
+  } catch (error) {
+    res.status(400).json({ error: error.mssg });
+  }
+};
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -1056,4 +1070,5 @@ module.exports = {
   unarchiveProduct,
   uploadPicture,
   markItineraryInappropriate,
+  createTransportation
 };

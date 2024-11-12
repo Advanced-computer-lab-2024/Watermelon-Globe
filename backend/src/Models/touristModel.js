@@ -84,7 +84,9 @@ const touristSchema = new Schema(
         ref: 'ActivityBooking',
       },
     ],
-    
+    loyaltyPoints: { type: Number, default: 0},
+    loyaltyLevel: { type: Number, enum: [1,2,3], default: 1 },
+    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' }
   },  
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
@@ -92,4 +94,4 @@ const touristSchema = new Schema(
 );
 
 const Tourist = mongoose.model('Tourist', touristSchema);
-module.exports = Tourist
+module.exports = Tourist;

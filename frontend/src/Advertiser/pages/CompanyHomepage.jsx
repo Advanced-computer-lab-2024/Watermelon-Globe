@@ -37,7 +37,7 @@ const HomeScreen = () => {
         const confirmDelete = window.confirm('Are you sure you want to delete this activity?');
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:8000/api/Activities/deleteActivity/${id}`);
+                await axios.delete(`/api/Activities/deleteActivity/${id}`);
                 setActivities(prevActivities => prevActivities.filter(activity => activity._id !== id));
                 alert('Activity deleted successfully');
             } catch (error) {
@@ -54,11 +54,9 @@ const HomeScreen = () => {
                 <Sidebar 
                     advertiserId = {advertiser._id}
                     advertiser={advertiser} 
-                    onEditProfile={() => navigate(`/edit-profile/${advertiser._id}`)}
-                    onViewActivities={() => navigate(`/view-activities/${advertiser._id}`)}
-                    onCreateActivity={() => navigate('/add-activity')}
-                    ChangePassword={() => navigate('/changeAdvertiserPassword')
-                    }
+                    onProfileView={() => navigate(`/advertiserProfile/${advertiser._id}`)}
+                    onCreateActivity={() => navigate(`/add-activity/${advertiser._id}`)}
+                    // ChangePassword={() => navigate('/changeAdvertiserPassword')}
                 />
             )}
 
@@ -75,7 +73,7 @@ const HomeScreen = () => {
                         <p><strong>Discount:</strong> {activity.Discount}%</p>
                         <p><strong>Advertiser:</strong> {activity.Advertiser?.Name || 'Unknown Advertiser'}</p>
 
-                        <button onClick={() => navigate(`/activity/${activity._id}`)}>View Details</button>
+                        <button onClick={() => navigate(`/activityDetails/${activity._id}`)}>View Details</button>
 
                         {advertiser && activity.Advertiser?._id === advertiser._id && (
                             <>

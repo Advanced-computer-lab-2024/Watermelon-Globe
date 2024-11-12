@@ -116,39 +116,14 @@ const updateTourGuide = async (req, res) => {
 };
 
 const createItinerary = async (req, res) => {
-  const {
-    name,
-    activities,
-    tag,
-    locations,
-    timeline,
-    languageOfTour,
-    priceOfTour,
-    availableDates,
-    availableTimes,
-    accessibility,
-    pickupDropoffLocations,
-    bookings,
-    guide: guideId,
-  } = req.body;
-  console.log(req.body);
-  console.log(tag);
-  try {
-    const itinerary = await itineraryModel.Itinerary.create({
-      name,
-      activities,
-      tag,
-      locations,
-      timeline,
-      languageOfTour,
-      priceOfTour,
-      availableDates,
-      availableTimes,
-      accessibility,
-      pickupDropoffLocations,
-      bookings,
-      guide: guideId,
-    });
+    const { name, activities,tag,locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
+        accessibility, pickupDropoffLocations, bookings,rating, guide: guideId} = req.body;
+        console.log(req.body)
+        console.log(tag)
+        try {
+            const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
+                timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
+                pickupDropoffLocations, bookings, guide: guideId});
 
     res.status(200).json(itinerary);
   } catch (error) {
@@ -156,9 +131,11 @@ const createItinerary = async (req, res) => {
   }
 };
 const getMyItineraries = async (req, res) => {
-  const { guideID } = req.query; // Extract the Governor ID from the request parameters
+  const { guideID } = req.params; // Extract the Governor ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
+
+  console.log(guideID);
   if (!mongoose.Types.ObjectId.isValid(guideID)) {
     return res.status(400).json({ error: "Invalid guide ID" });
   }
@@ -541,12 +518,12 @@ const requestDeletionGuide = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the guide by ID and update the deletionRequest to "Pending"
-    const guide = await TourGuide.findByIdAndUpdate(
-      id,
-      { deletionRequest: "Pending" },
-      { new: true } // Return the updated document
-    );
+      // Find the guide by ID and update the deletionRequest to "Pending"
+      const guide = await tourGuide.findByIdAndUpdate(
+          id,
+          { deletionRequest: "Pending" },
+          { new: true } // Return the updated document
+      );
 
     if (!guide) {
       return res.status(404).json({ message: "Guide not found" });

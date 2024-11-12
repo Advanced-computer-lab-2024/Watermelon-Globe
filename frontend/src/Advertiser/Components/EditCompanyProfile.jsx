@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const EditProfilePage = () => {
-
+    const {profileId} = useParams();
     const navigate = useNavigate();
+    console.log(profileId);
 
     const [profile, setProfile] = useState({
         Name: '',
@@ -13,13 +14,11 @@ const EditProfilePage = () => {
         Link: '',
     });
 
-    const profileId = localStorage.getItem('userId');
-
     // Fetch the current profile data when the component loads
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/profiles/${profileId}`);
+                const response = await axios.get(`/api/Advertiser/profiles/${profileId}`);
                 setProfile(response.data);
             } catch (error) {
                 console.error('Error fetching profile:', error);
@@ -44,9 +43,9 @@ const EditProfilePage = () => {
         }
 
         try {
-            await axios.put(`http://localhost:8000/updateProfile/${profileId}`, updates);
+            await axios.put(`/api/Advertiser/updateProfile/${profileId}`, updates);
             alert('Profile updated successfully!');
-            navigate('/CompanyAccount');
+            navigate('/advertiser');
         } catch (error) {
             console.error(error);
             alert('Error updating profile');

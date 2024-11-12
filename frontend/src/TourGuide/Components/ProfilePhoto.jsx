@@ -9,10 +9,8 @@ const ProfilePhotoUpload = ({ id }) => {
       try {
         const response = await fetch(`/api/TourGuide/getGuide/${id}`);
         const data = await response.json();
-        console.log(data);
         if (data.photo) {
-            setPreview(`/uploads/${data.photo}`);
-            console.log(`uploads/${data.photo}`);
+          setPreview(`/uploads/${data.photo}`);
         }
       } catch (error) {
         console.error("Error fetching profile photo:", error);
@@ -57,17 +55,36 @@ const ProfilePhotoUpload = ({ id }) => {
   };
 
   return (
-    <div className="profile-photo-upload">
-      <h3>Profile Photo</h3>
-      <div className="photo-preview">
+    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+      <h3 className="text-2xl font-semibold text-center mb-4">Profile Photo</h3>
+      
+      <div className="flex justify-center mb-4">
         {preview ? (
-          <img src={preview} alt="Profile Preview" className="h-24 w-24 rounded-full object-cover" />
+          <img
+            src={preview}
+            alt="Profile Preview"
+            className="h-32 w-32 rounded-full object-cover border-4 border-blue-500"
+          />
         ) : (
-          <p>No photo available</p>
+          <div className="h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+            <p>No photo available</p>
+          </div>
         )}
       </div>
-      <input type="file" accept="image/*" onChange={handlePhotoChange} />
-      <button onClick={handlePhotoUpload}>Upload Photo</button>
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handlePhotoChange}
+        className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:bg-gray-50 hover:file:bg-gray-100 mb-4"
+      />
+
+      <button
+        onClick={handlePhotoUpload}
+        className="w-full py-2 px-4 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      >
+        Upload Photo
+      </button>
     </div>
   );
 };

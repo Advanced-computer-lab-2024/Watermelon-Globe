@@ -1,18 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import {
-  Search,
-  Calendar,
-  DollarSign,
-  Globe,
-  Tag,
-  Filter,
-  RefreshCw,
-  SortAsc,
-} from "lucide-react";
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import axios from 'axios';
+import { Search, Calendar, DollarSign, Globe, Tag, Filter, RefreshCw, SortAsc } from 'lucide-react';
 
 const ExploreTrips = () => {
   const navigate = useNavigate();
@@ -55,7 +47,7 @@ const ExploreTrips = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get("/api/itinerary/activeItineraries");
+      const response = await axios.get("/api/Itinerary/activeItineraries");
       const appropriateItinerary = response.data.filter(
         (itinerary) => !itinerary.inappropriate
       );
@@ -170,8 +162,8 @@ const ExploreTrips = () => {
     setSelectedPrefItinerary("");
   };
 
-  const handleTripClick = (tripId) => {
-    navigate("/tourist-signup");
+  const handleTripClick = () => {
+    navigate(`/tourist-signup`);
   };
 
   return (

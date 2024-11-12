@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ExploreHistoricalSites = () => {
   const [sites, setSites] = useState([]);
@@ -7,6 +8,7 @@ const ExploreHistoricalSites = () => {
   const [selectedTag, setSelectedTag] = useState('');
 
   const sitesScrollRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSites();
@@ -54,6 +56,10 @@ const ExploreHistoricalSites = () => {
     }
   };
 
+  const handleSiteClick = (id) => {
+    navigate(`/siteDetails/${id}`);
+  };
+
   return (
     <section className="container mx-auto px-4 py-12">
       <h2 className="text-2xl font-bold mb-6">Explore Historical Sites</h2>
@@ -79,7 +85,11 @@ const ExploreHistoricalSites = () => {
       <div className="relative">
         <div className="flex overflow-x-auto" ref={sitesScrollRef}>
           {sites.map((site) => (
-            <div key={site._id} className="min-w-[250px] rounded-lg overflow-hidden shadow-md mx-2 flex-shrink-0">
+            <div 
+              key={site._id} 
+              className="min-w-[250px] rounded-lg overflow-hidden shadow-md mx-2 flex-shrink-0 cursor-pointer"
+              onClick={() => handleSiteClick(site._id)} // Click handler for navigation
+            >
               <div className="p-4">
                 <h3 className="font-bold text-lg">{site.name}</h3>
                 <p className="text-gray-600">{site.location}</p>
@@ -91,5 +101,6 @@ const ExploreHistoricalSites = () => {
     </section>
   );
 };
+
 
 export default ExploreHistoricalSites;

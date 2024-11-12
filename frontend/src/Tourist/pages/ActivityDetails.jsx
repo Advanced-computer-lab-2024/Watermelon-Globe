@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { MapPin, Clock, Calendar, DollarSign, Tag, AlertCircle, Star, Users, Percent } from 'lucide-react';
 
 const ActivityDetails = () => {
-    const { activityId } = useParams();
+    const { activityId, id } = useParams();
     const [activity, setActivity] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ const ActivityDetails = () => {
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await fetch(`/api/Activities/activities/${activityId}`);
+                const response = await fetch(`/api/Activities/getActivityById/${activityId}`);
                 if (!response.ok) {
                     throw new Error('Activity not found');
                 }
@@ -42,7 +42,7 @@ const ActivityDetails = () => {
                 },
                 body: JSON.stringify({
                     activity: activityId,
-                    tourist: "672cd143a72c43a2d8fb01c0", // Replace with actual user ID
+                    tourist: id, // Replace with actual user ID
                     chosenDate: activity.Date,
                 }),
             });
@@ -55,6 +55,20 @@ const ActivityDetails = () => {
             setBookingMessage('Failed to book activity. Please try again.');
         }
     };
+
+    const handleShareLink = () => {
+        const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
+        navigator.clipboard.writeText(activityUrl)
+          .then(() => alert('Activity link copied to clipboard!'))
+          .catch(err => alert('Failed to copy link: ' + err));
+      };
+    
+      const handleShareEmail = () => {
+        const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
+        const subject = encodeURIComponent('Check out this activity!');
+        const body = encodeURIComponent(`I thought you might be interested in this activity: ${activityUrl}`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      };
 
     if (loading) return (
         <div className="flex items-center justify-center h-screen">
@@ -69,12 +83,12 @@ const ActivityDetails = () => {
     return (
         <div className="container mx-auto p-6 bg-white shadow-2xl rounded-lg mt-10 max-w-4xl">
             <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b pb-4">{activity.Name}</h2>
-            
+
             <div className="flex items-center text-gray-600 mb-8">
                 <MapPin className="mr-2" size={24} />
                 <span className="text-lg">{`${activity.Location.coordinates[1]}, ${activity.Location.coordinates[0]}`}</span>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
                 <div className="bg-gray-50 p-6 rounded-lg shadow-md">
                     <h3 className="text-2xl font-semibold text-gray-700 mb-4 flex items-center">
@@ -83,7 +97,7 @@ const ActivityDetails = () => {
                     <p className="text-gray-600 mb-2">Date: {new Date(activity.Date).toLocaleDateString()}</p>
                     <p className="text-gray-600">Time: {activity.Time}</p>
                 </div>
-                
+
                 <div className="bg-gray-50 p-6 rounded-lg shadow-md">
                     <h3 className="text-2xl font-semibold text-gray-700 mb-4 flex items-center">
                         <Tag className="mr-2" size={24} /> Category and Tags
@@ -98,31 +112,31 @@ const ActivityDetails = () => {
                     </div>
                 </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 bg-gray-100 p-6 rounded-lg shadow-inner">
                 <div>
-                
+
                     <p className="text-gray-600 text-2xl font-bold">Price: ${activity.Price}</p>
                     {/* {activity.priceRange && (
                         <p className="text-sm text-gray-500">Range: ${activity.priceRange[0]} - ${activity.priceRange[1]}</p>
                     )} */}
                 </div>
-                
+
                 <div>  <h3 className="text-xl font-semibold text-gray-700 mb-2 flex items-center">
-                       __________________
-                    </h3>
-                   
+                    __________________
+                </h3>
+
                     <p className="text-gray-600 text-2xl font-bold">Discount: {activity.Discount}%</p>
                 </div>
-                
+
                 <div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2 flex items-center">
-                       ------------------------------
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2 flex items-center">
+                        ------------------------------
                     </h3>
                     <p className="text-gray-600 text-2xl font-bold">Rating: {activity.Rating ? `${activity.Rating}/5` : 'N/A'}  <Star className="mr-2" size={20} /> </p>
                 </div>
             </div>
-            
+
             <form onSubmit={handleBooking} className="bg-gray-50 p-6 rounded-lg shadow-md mb-12">
                 <h3 className="text-2xl font-semibold text-gray-700 mb-6">Book This Activity</h3>
                 <button
@@ -141,7 +155,7 @@ const ActivityDetails = () => {
                     </div>
                 )}
             </form>
-            
+
             <div className="flex items-center justify-between bg-blue-50 p-6 rounded-lg shadow-md">
                 <div className="flex items-center">
                     <Users className="mr-2" size={24} />
@@ -150,6 +164,11 @@ const ActivityDetails = () => {
                 <span className={`px-4 py-2 rounded-full text-lg font-semibold ${activity.bookingOpen ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
                     {activity.bookingOpen ? 'Yes' : 'No'}
                 </span>
+            </div>
+            {/* Share Buttons */}
+            <div className="share-buttons mt-6">
+                <button onClick={handleShareLink} className="share-button mr-4">Copy Link</button>
+                <button onClick={handleShareEmail} className="share-button">Share via Email</button>
             </div>
         </div>
     );

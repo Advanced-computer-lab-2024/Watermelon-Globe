@@ -42,9 +42,14 @@ const ExploreTrips = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get("/api/itinerary/activeItineraries");
-      const appropriateItinerary = response.data.filter(
-        (itinerary) => !itinerary.inappropriate
+      // const response = await fetch('/api/Itinerary/getAllItineraries');//////////////
+      const response = await fetch("/api/Itinerary/activeItineraries");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const appropriateItinerary = data.filter(
+        (itineraries) => !itineraries.inappropriate
       );
       setItineraries(appropriateItinerary);
       setFilteredItineraries(appropriateItinerary);
@@ -131,7 +136,8 @@ const ExploreTrips = () => {
   };
 
   const handleTripClick = (tripId) => {
-    navigate(`/itineraryDetails/${tripId}/${id}`);
+    // navigate(`/ItineraryDetails/${tripId}`);////////////////////////////
+    navigate(`/ItineraryDetails/${tripId}/${id}`);
   };
 
   const handleSearch = (e) => {
