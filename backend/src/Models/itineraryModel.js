@@ -46,11 +46,13 @@ const itinerarySchema = new Schema(
     date: {
       type: Date,
       default: Date.now
-    },
-    inappropriate: {
-      type: Boolean,
-      default: false }
+    }
   }]
+  ,
+  inappropriate: {
+    type: Boolean,
+    default: false }
+
 }, { timestamps: true });
 
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
