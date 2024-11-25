@@ -1,3 +1,99 @@
-.profiles-display{
+.account-page {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-family: "Arial", sans-serif;
+    color: #333;
+}
+
+.account-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.account-header h1 {
+    font-size: 1.8rem;
+    color: #4caf50;
+}
+
+.account-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.account-info p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.account-info strong {
+    color: #4caf50;
+}
+
+.account-info a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.account-info a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.primary-buttons {
+    display: flex;
+    gap: 10px;
+    margin-right: auto;
+}
+
+.action-button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
     cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.action-button:hover {
+    transform: scale(1.05);
+}
+
+.action-button.secondary {
+    background-color: #007bff;
+    color: white;
+}
+
+.action-button.secondary:hover {
+    background-color: #0056b3;
+}
+
+.action-button.danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.action-button.danger:hover {
+    background-color: #d32f2f;
+}
+
+.action-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.action-button:hover {
+    background-color: #45a049;
 }

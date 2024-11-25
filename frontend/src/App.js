@@ -188,7 +188,7 @@ const App = () => {
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route path="/advertiserProfile/:profileId" element = {<AccountPage/>}/>
           <Route path="/editAdvertiser/:profileId" element={<EditProfilePage/>} />
-          <Route path="/activityDetails/:id" element={<AdvertiserActivityDetails />} />
+          <Route path="/activityDetails/:id/:profileId" element={<AdvertiserActivityDetails />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:userId" element={<ActivityForm />} />
 

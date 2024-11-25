@@ -1,34 +1,46 @@
-// Sidebar.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
-const Sidebar = ({ onProfileView, advertiser, onCreateActivity, advertiserId }) => {
+const Sidebar = ({ advertiser, advertiserId, selectedTab, setSelectedTab }) => {
     const navigate = useNavigate();
-
-    const handleLogoClick = () => {
-        navigate(`/edit-logo/${advertiserId}`);
-    };
-    const handleChangePassword=async()=>{
-            navigate(`/ChangePasswordAdvertiser/${advertiserId}`)
-    }
 
     return (
         <div className="sidebar">
-            {/* Profile Logo */}
-            <div className="profile-logo" onClick={handleLogoClick}>
-                <img 
-                    src={`/uploads/${advertiser.Logo}`} 
-                    alt="Advertiser Logo" 
+            <div className="profile-logo" onClick={() => navigate(`/edit-logo/${advertiserId}`)}>
+                <img
+                    src={`/uploads/${advertiser?.Logo}`}
+                    alt="Advertiser Logo"
                     className="logo-image"
                 />
+                <h2
+                    className="advertiser-name"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering the logo click event
+                        navigate(`/advertiserProfile/${advertiserId}`);
+                    }}
+                >
+                    {advertiser?.Name}
+                </h2>
             </div>
-            <h2>{advertiser.Name}</h2>
-            
-            {/* Sidebar Links */}
-            <button onClick={onProfileView}>Profile</button>
-            <button onClick={onCreateActivity}>Create Activity</button>
-            <button onClick={handleChangePassword}>Change Password</button> 
+            <button
+                onClick={() => setSelectedTab('addActivity')}
+                className={selectedTab === 'addActivity' ? 'active-tab' : ''}
+            >
+                Create Activity
+            </button>
+            <button
+                onClick={() => setSelectedTab('all')}
+                className={selectedTab === 'all' ? 'active-tab' : ''}
+            >
+                All Activities
+            </button>
+            <button
+                onClick={() => setSelectedTab('my')}
+                className={selectedTab === 'my' ? 'active-tab' : ''}
+            >
+                My Activities
+            </button>
         </div>
     );
 };
