@@ -1,25 +1,34 @@
 /* Wrapper for the entire page */
 .wrapper {
     display: flex;
-    flex-direction: column; /* Stack navbar and content vertically */
-    height: 100vh;
+    flex-direction: column; 
+    height: 100%;
+    width: 95%;
     overflow: hidden;
+    position: fixed;
 }
 
 /* Navbar styles */
 .navbar {
-    flex-shrink: 0; /* Ensure the navbar doesn't shrink */
-    z-index: 1000; /* Ensure it appears above other elements */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1100;
+    background-color: #f8f9fa; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Layout for Sidebar and Main Content */
 .home-screen {
     display: flex;
-    flex: 1; /* Fill the remaining space after navbar */
-    height: calc(100vh - 60px); /* Adjust height based on navbar's height */
+    margin-top: 50px;
+    flex: 1; 
+    height: calc(100vh - 50px); 
 }
 
 .sidebar {
+    z-index: 1000;
     width: 250px;
     background-color: #f4f4f4;
     padding: 20px;
@@ -33,8 +42,10 @@
 
 .main-content {
     flex: 1;
-    padding: 20px;
-    overflow-y: auto;
+    margin-left: 250px; 
+    height: calc(100vh - 150px); 
+    overflow-y: auto; 
+    box-sizing: border-box; 
 }
 
 .activity-grid {
