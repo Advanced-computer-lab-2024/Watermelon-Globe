@@ -23,7 +23,8 @@ const {
   getQuantity,
   archiveProduct,
   unarchiveProduct,
-  uploadPicture
+  uploadPicture,
+  getProductsBySeller
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -56,11 +57,12 @@ router.get('/sellerStatus/:id', getSellerStatus);
 //Get all products
 router.get("/GetAllProducts", getAllProducts);
 
+router.get("/getProductsBySeller/:sellerId",getProductsBySeller);
 //Get all products ids
 router.get("/GetProductsIDs", getAllProductIds);
 
 //post a new product
-router.post("/CreateProduct", createProduct);
+router.post("/CreateProduct/:sellerId", createProduct);
 
 //delete a product
 router.get("/searchProductName", searchProductbyName);
@@ -80,21 +82,22 @@ router.put("/reviewProduct/:ReviewerId/:ProductId", reviewProduct);
 
 router.post("/getProductById",getProductById);
 
+// router.get("/getProductById/:id",getProductById);
 router.put("/requestDeletionSeller/:id", requestDeletionSeller);
 router.get("/getProductReviews/:productId",getProductReviews);
 
 
 //archive a product
-router.put('/archiveProduct', archiveProduct)
+router.put('/archiveProduct/:id', archiveProduct)
 
 //unarchive a product
-router.put('/unarchiveProduct', unarchiveProduct)
+router.put('/unarchiveProduct/:id', unarchiveProduct)
 
 //upload product image
 router.put('/uploadPicture',uploadPicture)
 
 
 // view product's available quantity
-router.get('/getQuantity',getQuantity);
+router.get('/getQuantity/:id',getQuantity);
 
 module.exports = router;

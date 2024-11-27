@@ -1,6 +1,9 @@
 
 
   import React, { useState } from 'react';
+  import Navbar from './navbar/Navbar';
+  import Sidebar from './sidebar/Sidebar';
+import { useParams,useNavigate } from 'react-router-dom';
 
 const ChangePasswordSeller = () => {
   const [sellerId, setSellerId] = useState('');
@@ -8,8 +11,20 @@ const ChangePasswordSeller = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [sellerPassword, setSellerPassword] = useState('');
+  const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081';
+  const navigate=useNavigate();
 
-  const id = "6729244f151b6c9e346dd732";
+  const containerStyle = {
+    backgroundColor: '#FFF0F5',
+    padding: '50px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    // maxWidth: '600px',
+    margin: '0 auto',
+  };
+
+  const {id}=useParams();
 
   const handleShowPassword = async () => {
     // if (!sellerId) {
@@ -52,6 +67,7 @@ const ChangePasswordSeller = () => {
         setConfirmNewPassword('');
         setNewPassword('')
         setCurrentPassword('');
+        navigate(`/viewProfile/${id}`)
       } else {
         alert(data.error || "Failed to change password.");
         setConfirmNewPassword('');
@@ -64,11 +80,21 @@ const ChangePasswordSeller = () => {
     }
   };
 
+  const handleCancel=()=>{
+    navigate(`/viewProfile/${id}`)
+  }
+
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+    <div className="list">
+      <Sidebar />
+      <div className="listContainer">
+        <Navbar />
+        <div style={containerStyle}>
+    {/* <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"> */}
+      {/* <div className="bg-white rounded-lg shadow-lg p-6 w-96"> */}
       {/* <h3 className="text-2xl font-semibold text-gray-800 mb-4">Example id : </h3> */}
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Change Password</h2>
+        <h2 style={{color:watermelonGreen}}
+         className="text-2xl font-semibold text-800 mb-4">Change Password</h2>
         
         {/* <div className="mb-4">
           <label className="block font-medium text-gray-700">Seller ID:</label>
@@ -80,7 +106,7 @@ const ChangePasswordSeller = () => {
           />
         </div> */}
 
-        <button
+        <button  style={{background:watermelonPink}}
           onClick={handleShowPassword}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
@@ -121,15 +147,24 @@ const ChangePasswordSeller = () => {
         </div>
 
         <div className="flex justify-end">
-          <button
+          <button style={{background:watermelonGreen}}
             onClick={handleConfirmPasswordChange}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
             Confirm
           </button>
+
+          <button style={{background:watermelonPink}}
+            onClick={handleCancel}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
+    </div>
+    // </div>
   );
 };
 

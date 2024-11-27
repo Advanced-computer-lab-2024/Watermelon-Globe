@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const UploadProductPicture = () => {
-  const [productId, setProductId] = useState('');
+const UploadProductPicture = ({ id }) => { 
+   const [productId, setProductId] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -11,7 +11,7 @@ const UploadProductPicture = () => {
 
     try {
       // Make a PUT request to update the product's picture
-      const response = await fetch(`/api/Seller/uploadPicture?id=${encodeURIComponent(productId)}`, {
+      const response = await fetch(`/api/Seller/uploadPicture?id=${(id)}`, {
         method: 'PUT',
         body: JSON.stringify({ picture: pictureUrl }),
         headers: {
@@ -36,18 +36,9 @@ const UploadProductPicture = () => {
 
   return (
     <div>
-      <h2>Upload Product Picture</h2>
+      {/* <h2>Upload Product Picture</h2> */}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Product ID:</label>
-          <input
-            type="text"
-            value={productId}
-            onChange={(e) => setProductId(e.target.value)}
-            required
-            placeholder="Enter product ID"
-          />
-        </div>
+       
         <div>
           <label>Picture URL:</label>
           <input
