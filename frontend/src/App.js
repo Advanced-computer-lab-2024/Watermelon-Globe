@@ -42,11 +42,10 @@ import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 
 import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
-import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import HomeScreen from './Components/CompanyHomepage.jsx';
+import AccountPage from './Advertiser/pages/AccountPage/AccountPage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.jsx';
-import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
+import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
 
 

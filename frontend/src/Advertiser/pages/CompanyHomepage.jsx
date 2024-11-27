@@ -4,7 +4,11 @@ import axios from 'axios';
 import Sidebar from '../Components/Sidebar';
 import './HomeScreen.css';
 import ActivityForm from '../Components/ActivityForm';
-import Navbar from '../../Components/Navbar';
+import Navbar from '../Components/AdvertiserNavbar';
+import Widget from '../Components/widget/Widget';
+import Featured from "../Components/featured/Featured";
+import Chart from "../Components/chart/Chart";
+import Table from '../Components/table/Table';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
@@ -43,22 +47,41 @@ const HomeScreen = () => {
             : activities;
 
     return (
-        <div className="wrapper">
-            <Navbar />
-
-            {/* Main content area with sidebar and activities */}
-            <div className="home-screen">
-                <Sidebar
+        <div className="home">
+            <Sidebar
                     advertiser={advertiser}
                     advertiserId={advertiser?._id}
                     onCreateActivity={() => navigate(`/add-activity/${advertiser?._id}`)}
                     selectedTab={selectedTab}
                     setSelectedTab={setSelectedTab}
+            />
+            <div className="homeContainer">
+                <Navbar 
+                    advertiser={advertiser}
+                    advertiserId={advertiser?._id}
                 />
+                
                 <div className="main-content">
                     {selectedTab === 'addActivity' ? (
                         <ActivityForm userId={advertiser?._id} />
-                    ) : (
+                    ) : selectedTab === 'Dashboard' ? (
+                        <>
+                                <div className="widgets">
+                                    <Widget type="user" />
+                                    <Widget type="order" />
+                                    <Widget type="earning" />
+                                    <Widget type="balance" />
+                                </div>
+                                <div className="charts">
+                                    <Featured />
+                                    <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+                                </div>
+                                <div className="listContainer">
+                                    <div className="listTitle">Latest Transactions</div>
+                                    <Table />
+                                </div>
+                          </>
+                        ):(
                         <>
                             <h1>Activities</h1>
                             <div className="activity-grid">

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import ChangePasswordAdvertiser from "./ChangePasswordAdvertiser";
 import "./AccountPage.css";
 
 const AccountPage = () => {
     const { profileId } = useParams();
     const [profile, setProfile] = useState(null);
-    const [showChangePassword, setShowChangePassword] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {

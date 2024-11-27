@@ -1,62 +1,59 @@
-/* Wrapper for the entire page */
-.wrapper {
+.home {
     display: flex;
-    flex-direction: column; 
-    height: 100%;
-    width: 95%;
-    overflow: hidden;
+}
+
+.home.sidebar {
     position: fixed;
 }
 
-/* Navbar styles */
-.navbar {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1100;
-    background-color: #f8f9fa; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.home .homeContainer {
+    flex: 6;
 }
 
-/* Layout for Sidebar and Main Content */
-.home-screen {
+.home .homeContainer .widgets,
+.home .homeContainer .charts {
     display: flex;
-    margin-top: 50px;
-    flex: 1; 
-    height: calc(100vh - 50px); 
-}
-
-.sidebar {
-    z-index: 1000;
-    width: 250px;
-    background-color: #f4f4f4;
     padding: 20px;
-    overflow-y: auto;
-    transition: width 0.3s;
+    gap: 20px;
 }
 
-.sidebar.collapsed {
-    width: 60px;
+.home .homeContainer .charts {
+    padding: 5px 20px;
+}
+
+.home .homeContainer .listContainer {
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 20px;
+    margin: 20px;
+}
+
+.home .homeContainer .listContainer .listTitle {
+    font-weight: 500;
+    color: gray;
+    margin-bottom: 15px;
 }
 
 .main-content {
     flex: 1;
-    margin-left: 250px; 
-    height: calc(100vh - 150px); 
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 650px; 
     overflow-y: auto; 
     box-sizing: border-box; 
 }
 
 .activity-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
 }
 
-/* Activity card styling */
 .activity-card {
     background-color: #fff;
+    max-width: 500px;
+    max-height: 150px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
