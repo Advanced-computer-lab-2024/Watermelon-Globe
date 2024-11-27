@@ -4,6 +4,7 @@ import axios from 'axios';
 import Sidebar from '../Components/Sidebar';
 import './HomeScreen.css';
 import ActivityForm from '../Components/ActivityForm';
+import Navbar from '../../Components/Navbar';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
@@ -42,37 +43,43 @@ const HomeScreen = () => {
             : activities;
 
     return (
-        <div className="home-screen">
-            <Sidebar
-                advertiser={advertiser}
-                advertiserId={advertiser?._id}
-                onCreateActivity={() => navigate(`/add-activity/${advertiser?._id}`)}
-                selectedTab={selectedTab}
-                setSelectedTab={setSelectedTab}
-            />
-            <div className="main-content">
-            {selectedTab === 'addActivity' ? (
-                    <ActivityForm userId={advertiser?._id} />
-                ) : (
-                    <>
-                        <h1>Activities</h1>
-                        <div className="activity-grid">
-                            {filteredActivities.map(activity => (
-                                <div
-                                    key={activity._id}
-                                    className="activity-card"
-                                    onClick={() => {
-                                        navigate(`/activityDetails/${activity._id}/${advertiser._id}`);                                    }}
-                                >
-                                    <h3><strong>{activity.Name}</strong></h3>
-                                    <p><strong>Date:</strong> {new Date(activity.Date).toLocaleDateString()}</p>
-                                    <p><strong>Location:</strong> {activity.Location.coordinates.join(', ')}</p>
-                                    <p><strong>Price:</strong> ${activity.Price}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </>
-                )}
+        <div className="wrapper">
+            <Navbar />
+
+            {/* Main content area with sidebar and activities */}
+            <div className="home-screen">
+                <Sidebar
+                    advertiser={advertiser}
+                    advertiserId={advertiser?._id}
+                    onCreateActivity={() => navigate(`/add-activity/${advertiser?._id}`)}
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab}
+                />
+                <div className="main-content">
+                    {selectedTab === 'addActivity' ? (
+                        <ActivityForm userId={advertiser?._id} />
+                    ) : (
+                        <>
+                            <h1>Activities</h1>
+                            <div className="activity-grid">
+                                {filteredActivities.map(activity => (
+                                    <div
+                                        key={activity._id}
+                                        className="activity-card"
+                                        onClick={() => {
+                                            navigate(`/activityDetails/${activity._id}/${advertiser._id}`);
+                                        }}
+                                    >
+                                        <h3><strong>{activity.Name}</strong></h3>
+                                        <p><strong>Date:</strong> {new Date(activity.Date).toLocaleDateString()}</p>
+                                        <p><strong>Location:</strong> {activity.Location.coordinates.join(', ')}</p>
+                                        <p><strong>Price:</strong> ${activity.Price}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );
