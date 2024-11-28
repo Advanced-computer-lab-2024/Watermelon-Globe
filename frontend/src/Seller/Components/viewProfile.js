@@ -1,54 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Navbar from './navbar/Navbar';
+import Sidebar from './sidebar/Sidebar';
 import SellerLogo from './SellerLogo';
 
-const id = "6729244f151b6c9e346dd732";
 
 const ViewProfile = () => {
-  const [seller, setSeller] = useState(null); // State to store seller data
-  const [errorMessage, setErrorMessage] = useState(''); // State to store error messages
-  const [successMessage, setSuccessMessage] = useState(''); // State to store success messages
-  const [allSellers, setAllSellers] = useState([]); // State to store all sellers
+  const [seller, setSeller] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedData, setUpdatedData] = useState({});
   const navigate = useNavigate();
+  const{id}=useParams();
 
-  // Function to fetch seller profile by ID
+  const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081';
+
   const fetchSellerProfile = async () => {
     try {
-      console.log("Fetching seller profile for ID:", id);
       const response = await fetch(`/api/Seller/getSeller/${id}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       });
 
-      const json = await response.json(); // Parse the JSON response
-      console.log("API Response:", json); // Log the response
-
+      const json = await response.json();
       if (!response.ok) {
-        // Handle error response from the backend
         setErrorMessage(json.error || 'Failed to fetch seller profile.');
-        setSeller(null); // Clear previous seller data if there's an error
+        setSeller(null);
       } else {
-        // Set the seller data to state
         setSeller(json);
-        setErrorMessage(''); // Clear any error message if successful
+        setUpdatedData(json);
+        setErrorMessage('');
       }
     } catch (error) {
-      // Handle any network or unexpected errors
-      console.error("Error fetching profile:", error);
       setErrorMessage('An error occurred while fetching the profile.');
-      setSeller(null); // Clear previous seller data if there's an error
+      setSeller(null);
     }
   };
 
-  // Fetch the seller profile automatically on component mount
   useEffect(() => {
     fetchSellerProfile();
   }, []);
 
-  // Function to handle delete account request
   const handleDeleteAccount = async () => {
     if (!seller) {
       setErrorMessage('No seller profile found to delete.');
@@ -57,64 +52,193 @@ const ViewProfile = () => {
 
     try {
       const response = await fetch(`/api/Seller/requestDeletionSeller/${id}`, {
-        method: 'PUT', // Using PUT for deletion request
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
       });
       if (!response.ok) {
         setErrorMessage('Failed to delete account.');
-        setSuccessMessage(''); // Clear success message on error
+        setSuccessMessage('');
       } else {
         alert('Account deleted successfully.');
-        setErrorMessage(''); // Clear error message on success
-        setSeller(null); // Clear seller data after deletion
+        setSeller(null);
         navigate('/');
       }
     } catch (error) {
-      console.error('Error deleting account:', error);
       setErrorMessage('An error occurred while deleting the account.');
-      setSuccessMessage(''); // Clear success message on error
     }
   };
 
+  const handleUpdateProfile = async () => {
+    try {
+      const response = await fetch(`/api/Seller/UpdateSeller/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+      });
 
+      const json = await response.json();
+      if (!response.ok) {
+        setErrorMessage(json.error || 'Failed to update profile.');
+        setSuccessMessage('');
+      } else {
+        alert('Profile updated successfully.');
+        setSeller(json.seller);
+        setIsEditing(false);
+        setErrorMessage('');
+      }
+    } catch (error) {
+      alert('An error occurred while updating the profile.');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedData({ ...updatedData, [name]: value });
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setUpdatedData(seller);
+  };
+
+  const containerStyle = {
+    backgroundColor: '#FFF0F5',
+    padding: '50px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    // maxWidth: '600px',
+    margin: '0 auto',
+  };
+
+  const headingStyle = {
+    color: watermelonGreen,
+    borderBottom: `2px solid ${watermelonPink}`,
+    paddingBottom: '10px',
+    marginBottom: '20px',
+  };
+
+  const buttonStyle = {
+    backgroundColor: watermelonPink,
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    border: 'none',
+    cursor: 'pointer',
+    marginRight: '10px',
+    transition: 'background-color 0.3s',
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '8px',
+    marginBottom: '10px',
+    borderRadius: '4px',
+    border: `1px solid ${watermelonGreen}`,
+  };
 
   return (
-    <div>
-      <h2>Seller Profile</h2>
-
-      {/* Display error message if any */}
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-
-      {/* Display success message if any */}
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-
-      {/* Display the seller profile details if available */}
-      {seller ? (
-        <div>
-          <p><strong>ID:</strong> {seller._id}</p>
-          <p><strong>Name:</strong> {seller.Name}</p>
-          <p><strong>Email:</strong> {seller.Email}</p>
-          <p><strong>Description:</strong> {seller.Description}</p>
+    <div className="list">
+      <Sidebar />
+      <div className="listContainer">
+        <Navbar />
+        <div style={containerStyle}>
+          <h2 style={headingStyle}>Seller Profile</h2>
           
 
-          {/* Add Delete Account Button */}
-          <button 
-            onClick={handleDeleteAccount}
-            style={{ backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px' }}
-          >
-            Delete Account
-          </button>
-          <SellerLogo id={seller._id}/>
-        </div>
-      ) : (
-        !errorMessage && <p>Loading...</p>
-      )}
+          {seller ? (
+            <div>
+              {isEditing ? (
+                <div>
+                  <div>
+                    <label>Name: </label>
+                    <input
+                      type="text"
+                      name="Name"
+                      value={updatedData.Name || ''}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div>
+                    <label>Email: </label>
+                    <input
+                      type="email"
+                      name="Email"
+                      value={updatedData.Email || ''}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div>
+                    <label>Description: </label>
+                    <textarea
+                      name="Description"
+                      value={updatedData.Description || ''}
+                      onChange={handleInputChange}
+                      style={{...inputStyle, height: '100px'}}
+                    />
+                  </div>
+                  <button
+                    onClick={handleUpdateProfile}
+                    style={buttonStyle}
+                  >
+                    Confirm Update
+                  </button>
+                  <button
+                    onClick={handleCancelEdit}
+                    style={{...buttonStyle, backgroundColor: watermelonGreen}}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div>
+                
+                  <p><strong>ID:</strong> {seller._id}</p>
+                  <p><strong>Name:</strong> {seller.Name}</p>
+                  <p><strong>Email:</strong> {seller.Email}</p>
+                  <p><strong>Description:</strong> {seller.Description}</p>
+                 
 
-      
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    style={buttonStyle}
+                  >
+                    Update Profile
+                  </button>
+                  <button
+                    onClick={handleDeleteAccount}
+                    style={{...buttonStyle, backgroundColor: '#d32f2f'}}
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              )}
+
+              
+              <div style={{}}>
+                <SellerLogo id={seller._id} />
+              </div>
+              <button
+                onClick={() => navigate(`/ChangePasswordSeller/${id}`)}
+                style={{...buttonStyle, backgroundColor: watermelonGreen, marginTop: '20px'}}
+              >
+                Change Password
+              </button>
+             
+            </div>
+          ) : (
+            !errorMessage && <p>Loading...</p>
+          )}
+
+          {errorMessage && <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>}
+          {successMessage && <p style={{ color: 'green', marginTop: '10px' }}>{successMessage}</p>}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default ViewProfile;
+
+

@@ -20,7 +20,9 @@ const HomePage = () => {
         <button className="home-btn" onClick={() => navigate("/GuestPage")}>
           Go to Guest Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/SellerProduct")}>
+        <button className="home-btn" onClick={() => navigate("/SellerHome/6729244f151b6c9e346dd732")}>
+        {/* <button className="home-btn" onClick={() => navigate("/SellerProduct")}> */}
+
           Go to Seller Page
         </button>
         <button className="home-btn" onClick={() => navigate("/advertiser")}>

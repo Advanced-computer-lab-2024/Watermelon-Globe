@@ -32,7 +32,6 @@ import Itinerary from "./Admin/pages/Itinerary.js";
 import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
 
-
 import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 
 
@@ -47,6 +46,7 @@ import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.jsx';
 import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
+import SellerHome from './Seller/pages/SellerHomePage.jsx';
 
 
 import ChangePasswordAdvertiser from './Advertiser/Components/ChangePasswordAdvertiser.js';
@@ -58,6 +58,15 @@ import SellerPage from "./SellerPage.js";
 // import SellerProduct from './Seller/pages/SellerProduct.js';//////////////////////////////
 
 import SellerProduct from './Seller/pages/SellerProduct.jsx';
+import GetAllProducts from './Seller/Components/GetAllProducts.js';
+import CreateProduct from './Seller/Components/createProduct.js';
+import ViewQuantity from './Seller/Components/ViewAvailableQuantity.js'
+import ProductDetails from'./Seller/Components/productDetails.jsx'
+import SearchProductByName from'./Seller/Components/SearchProductByName.js'
+import SellerProfile from './Seller/Components/sellerProfile.jsx'
+import ViewProfile from './Seller/Components/viewProfile.js'
+import ChangePasswordSeller from './Seller/Components/changePasswordSeller.js'
+
 //Tour guide pages
 import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import TourguideSignup from "./pages/TourguideSignup.jsx";
@@ -131,6 +140,10 @@ const App = () => {
           <Route path="/AdminProduct" element={<AdminProduct />} />
           <Route path="/AcceptRejectPage" element={<AcceptReject />} />
           <Route path="/SellerProduct" element={<SellerProduct />} />
+          <Route path="/SellerHome/:id" element={<SellerHome />} />
+          <Route path="/SearchProductByName" element={<SearchProductByName />} />
+
+
           {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Governer" element={<Governer />} />
@@ -161,6 +174,7 @@ const App = () => {
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+
 
           {/* Guest Routes */}
           <Route path="/completed-itineraries/:id" element={<CompletedItineraries />} />
@@ -247,6 +261,17 @@ const App = () => {
 
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
+          <Route path="/GetAllProducts/:id" element={<GetAllProducts />} />
+          <Route path="/CreateProduct/:id" element={<CreateProduct />} />
+          <Route path="/ViewQuantity/:id" element={<ViewQuantity />} />
+          <Route path="/ProductDetails/:id" element={<ProductDetails />} />
+          <Route path="/sellerProfile/:id" element={<SellerProfile />} />
+          <Route path="/viewProfile/:id" element={<ViewProfile />} />
+          <Route path="/ChangePasswordSeller/:id" element={<ChangePasswordSeller />} />
+
+
+
+
 
           <Route path="/ViewProducts" element={<ViewProducts />} />
           {/* Tour Guide Pages */}

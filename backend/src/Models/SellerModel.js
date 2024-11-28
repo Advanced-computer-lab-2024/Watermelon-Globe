@@ -45,7 +45,14 @@ const sellerSchema = new Schema(
     Logo: {
         type: String,
         required: false,
-    }
+    },  
+    Products: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+        },
+      ],
+    
   },
   { timestamps: true }
 );
