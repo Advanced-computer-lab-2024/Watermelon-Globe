@@ -1312,6 +1312,197 @@ const bookTransportation = async (req, res) => {
   }
 };
 
+const addProductToCart = async (req, res) => {
+  const { id } = req.params;
+  const { productId, quantity } = req.body;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const existingItem = tourist.cart.find(
+      (item) => item.product.toString() === productId
+    );
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      tourist.cart.push({ product: productId, quantity });
+    }
+
+    await tourist.save();
+    res.status(200).json({ message: "Product added to cart", cart: tourist.cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const removeProductFromCart = async (req, res) => {
+  const { id } = req.params;
+  const { productId } = req.body;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    tourist.cart = tourist.cart.filter(
+      (item) => item.product.toString() !== productId
+    );
+
+    await tourist.save();
+    res.status(200).json({ message: "Product removed from cart", cart: tourist.cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+const changeCartItemQuantity = async (req, res) => {
+  const { id } = req.params;
+  const { productId, quantity } = req.body;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const cartItem = tourist.cart.find(
+      (item) => item.product.toString() === productId
+    );
+
+    if (!cartItem) {
+      return res.status(404).json({ error: "Product not found in cart" });
+    }
+
+    if (quantity <= 0) {
+      // Remove the item if quantity is zero or less
+      tourist.cart = tourist.cart.filter(
+        (item) => item.product.toString() !== productId
+      );
+    } else {
+      cartItem.quantity = quantity;
+    }
+
+    await tourist.save();
+    res.status(200).json({ message: "Cart item quantity updated", cart: tourist.cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const viewCart = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the tourist and populate the product details in the cart
+    const tourist = await Tourist.findById(id).populate('cart.product');
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json({ cart: tourist.cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateAddress = async (req, res) => {
+  const { id } = req.params;
+  const { index, address } = req.body;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    if (index !== undefined && tourist.addresses[index]) {
+      // Update an existing address
+      tourist.addresses[index] = address;
+    } else {
+      // Add a new address
+      tourist.addresses.push(address);
+    }
+
+    await tourist.save();
+
+    res.status(200).json({ message: "Address updated successfully", addresses: tourist.addresses });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const viewAllOrders = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(id).populate('orders.items.productId');
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json({ orders: tourist.orders });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const viewOrderDetails = async (req, res) => {
+  const { touristId, orderId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId).populate('orders.items.productId');
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const order = tourist.orders.id(orderId);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    res.status(200).json({ order });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const cancelOrder = async (req, res) => {
+  const { touristId, orderId } = req.params;
+  const { reason } = req.body;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const order = tourist.orders.id(orderId);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    if (order.status === 'Cancelled') {
+      return res.status(400).json({ error: "Order is already cancelled" });
+    }
+
+    order.status = 'Cancelled';
+    order.cancellationReason = reason;
+
+    await tourist.save();
+
+    res.status(200).json({ message: "Order cancelled successfully", order });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
   
 module.exports = {
@@ -1355,5 +1546,13 @@ module.exports = {
   commentOnActivity,
   getAllTransportations,
   getTransportation,
-  bookTransportation
+  bookTransportation,
+  addProductToCart,
+  removeProductFromCart,
+  changeCartItemQuantity,
+  viewCart,
+  updateAddress,
+  viewAllOrders,
+  viewOrderDetails,
+  cancelOrder,
 };
