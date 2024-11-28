@@ -86,8 +86,51 @@ const touristSchema = new Schema(
     ],
     loyaltyPoints: { type: Number, default: 0},
     loyaltyLevel: { type: Number, enum: [1,2,3], default: 1 },
-    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' }
+    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' },
+
+    cart: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+        },
+      },
+    ],
+
+    addresses: [
+      {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String, required: true },
+        zip: { type: String, required: true, match: [/^\d{5}(-\d{4})?$/, "Invalid ZIP code"] },
+        country: { type: String, required: true },
+      }
+    ],
+
+    orders: [
+      {
+        items: [
+          {
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+            quantity: { type: Number, required: true },
+          },
+        ],
+        totalPrice: { type: Number, required: true },
+        status: { type: String, enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'], default: 'Pending' },
+        orderDate: { type: Date, default: Date.now },
+        deliveryDate: { type: Date },
+        cancellationReason: { type: String },
+      },
+    ],
+    
   },  
+
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }

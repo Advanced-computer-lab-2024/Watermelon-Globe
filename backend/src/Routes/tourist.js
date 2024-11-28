@@ -41,7 +41,15 @@ const {
   commentOnActivity,
   getAllTransportations,
   getTransportation,
-  bookTransportation
+  bookTransportation,
+  addProductToCart,
+  removeProductFromCart,
+  changeCartItemQuantity,
+  viewCart,
+  updateAddress,
+  viewAllOrders,
+  viewOrderDetails,
+  cancelOrder,
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -125,11 +133,27 @@ router.get('/getMyCompletedActivities/:touristId', getMyCompletedActivities);
 router.post('/activities/:activityId/rate', rateActivity);
 router.post('/activities/:activityId/comment', commentOnActivity);
 
-
 router.get('/getAllTransportations', getAllTransportations);
 
 router.get('/getTransportation/:id', getTransportation);
 
 router.put('/bookTransportation/:id', bookTransportation);
+
+router.post('/addProductToCart/:id', addProductToCart);
+
+router.delete('/removeProductFromCart/:id', removeProductFromCart);
+
+router.put('/changeCartItemQuantity/:id', changeCartItemQuantity);
+
+router.get('/viewCart/:id', viewCart);
+
+router.put('/updateAddress/:id', updateAddress);
+
+router.get('/viewAllOrders/:id', viewAllOrders);
+
+router.get('/viewOrderDetails/:touristId/:orderId', viewOrderDetails);
+
+router.put('/cancelOrder/:touristId/:orderId', cancelOrder);
+
 
 module.exports = router;
