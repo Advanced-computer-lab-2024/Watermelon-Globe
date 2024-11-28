@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    /* Basic Settings */
+    "target": "ES6",                                  /* Use modern JavaScript features (ES6). */
+    "module": "ESNext",                               /* Use modern ECMAScript module system. */
+    "jsx": "react-jsx",                               /* Enable JSX transformation for React. */
+    "moduleResolution": "node",                      /* Resolve modules in Node.js style. */
+    "esModuleInterop": true,                         /* Allow compatibility with CommonJS modules. */
+    "skipLibCheck": true,                            /* Skip type checking of library declaration files. */
+    "forceConsistentCasingInFileNames": true,        /* Ensure consistent import file casing. */
+
+    /* Strict Type-Checking Options */
+    "strict": true,                                  /* Enable strict mode for type-checking. */
+    "noImplicitAny": true,                           /* Prevent 'any' type by default. */
+    "strictNullChecks": true,                        /* Make null and undefined distinct types. */
+    "strictFunctionTypes": true,                     /* Check compatibility of function parameter types. */
+    "strictBindCallApply": true,                     /* Ensure bind, call, and apply methods are correctly used. */
+    "noImplicitThis": true,                          /* Disallow implicit 'any' type for 'this'. */
+    "alwaysStrict": true,                            /* Add 'use strict' directives in output. */
+
+    /* Output Settings */
+    "outDir": "./dist",                              /* Output directory for compiled files. */
+    "sourceMap": true,                               /* Generate source maps for debugging. */
+    "removeComments": true,                          /* Remove comments from emitted JavaScript. */
+
+    /* Type Definitions */
+    "typeRoots": ["./node_modules/@types"],          /* Specify folders for type definitions. */
+
+    /* Additional Settings */
+    "resolveJsonModule": true,                       /* Allow importing .json files. */
+    "isolatedModules": true,                         /* Ensure each file is self-contained. */
+    "allowSyntheticDefaultImports": true            /* Allow default imports from modules without default exports. */
+  },
+  "include": ["src"],                                /* Include the 'src' directory. */
+  "exclude": ["node_modules", "dist"]               /* Exclude unnecessary files and directories. */
+}

@@ -92,6 +92,8 @@ import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
 import TouristActivityDetails from "./Tourist/pages/ActivityDetails.jsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+import ShoppingCart from "./Tourist/shoppingCart.tsx";
+
 
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
@@ -259,6 +261,10 @@ const App = () => {
           />
           <Route path="/MyBookings/:id" element={<MyBookings />} />
           <Route path="/SiteDetails/:id" element={<SiteDetails />} />
+
+          {/* shopping cart*/}
+          <Route path="/ShoppingCart" element={<ShoppingCart />} />
+
 
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />
