@@ -51,11 +51,11 @@
 }
 
 .activity-card {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.763);
     max-width: 500px;
     max-height: 150px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgb(160, 160, 160);
     padding: 15px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;

@@ -3,6 +3,7 @@
     border-right: 0.5px solid rgb(230, 227, 227);
     min-height: 100vh;
     background-color: white;
+    cursor: default;
 }
 
 .sidebar .top {
@@ -15,7 +16,7 @@
 .sidebar .top .logo {
     font-size: 20px;
     font-weight: bold;
-    color: #6439ff;
+    color: #ff7b7b;
 }
 
 .sidebar hr {
@@ -46,15 +47,22 @@
     align-items: center;
     padding: 5px;
     cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .sidebar .center ul li:hover {
-    background-color: #ece8ff;
+    background-color: #95e3bb;
+}
+
+.sidebar .center ul li.active-tab {
+    background-color: rgba(149, 227, 187, 0.2);
+    border-left: 3px solid #95e3bb; /* Highlight selected tab */
 }
 
 .sidebar .center ul li .icon {
-    font-size: 18px;
-    color: #7451f8;
+    font-size: 25px;
+    color: #ff7b7b;
 }
 
 .sidebar .center ul li span {
@@ -64,22 +72,22 @@
     margin-left: 10px;
 }
 
-.sidebar .bottom {
+/* .sidebar .bottom {
     display: flex;
     align-items: center;
     margin: 10px;
-}
+} */
 
-.sidebar .bottom .colorOption {
+/* .sidebar .bottom .colorOption {
     width: 20px;
     height: 20px;
     border-radius: 5px;
-    border: 1px solid #7451f8;
+    border: 1px solid #95e3bb;
     cursor: pointer;
     margin: 5px;
-}
+} */
 
-.sidebar .bottom .colorOption:nth-child(1) {
+/* .sidebar .bottom .colorOption:nth-child(1) {
     background-color: whitesmoke;
 }
 
@@ -89,4 +97,4 @@
 
 .sidebar .bottom .colorOption:nth-child(3) {
     background-color: darkblue;
-}
+} */

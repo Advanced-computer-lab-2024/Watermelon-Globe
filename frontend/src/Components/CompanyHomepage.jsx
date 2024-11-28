@@ -84,7 +84,7 @@ const HomeScreen = () => {
 
             <div>
                 {activities.map((activity) => (
-                    <div key={activity._id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
+                    <div key={activity._id} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
                         <p><strong>Date:</strong> {activity.Date}</p>
                         <p><strong>Time:</strong> {activity.Time}</p>
                         <p><strong>Location:</strong> {activity.location}</p>

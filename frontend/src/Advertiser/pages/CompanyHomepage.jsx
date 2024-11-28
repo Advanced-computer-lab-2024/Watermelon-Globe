@@ -9,11 +9,12 @@ import Widget from '../Components/widget/Widget';
 import Featured from "../Components/featured/Featured";
 import Chart from "../Components/chart/Chart";
 import Table from '../Components/table/Table';
+import AccountPage from './AccountPage/AccountPage';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
     const [advertiser, setAdvertiser] = useState(null);
-    const [selectedTab, setSelectedTab] = useState('all'); // 'all' or 'my'
+    const [selectedTab, setSelectedTab] = useState('Dashboard'); // 'all' or 'my'
 
     const navigate = useNavigate();
 
@@ -81,6 +82,10 @@ const HomeScreen = () => {
                                     <Table />
                                 </div>
                           </>
+                        ) : selectedTab === "Account" ? (
+                           <>
+                                <AccountPage advertiserId={advertiser?._id}/>
+                           </> 
                         ):(
                         <>
                             <h1>Activities</h1>

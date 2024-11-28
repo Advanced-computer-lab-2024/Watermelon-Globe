@@ -33,7 +33,7 @@ const Sidebar = ({ advertiser, advertiserId, selectedTab, setSelectedTab }) => {
                         </li>
                 </Link>
                 
-                <p className="title">Activities</p>
+                <p className="title">ACTIVITIES</p>
                 <Link
                     style={{ textDecoration: "none" }}
                     onClick={() => setSelectedTab('addActivity')}>
@@ -77,10 +77,13 @@ const Sidebar = ({ advertiser, advertiserId, selectedTab, setSelectedTab }) => {
                     <span>Settings</span>
                 </li> */}
                 <p className="title">USER</p>
-                <Link to={`/advertiserProfile/${advertiserId}`} style={{ textDecoration: "none" }}>
-                    <li>
+                <Link
+                    style={{ textDecoration: "none" }}
+                    onClick={() => setSelectedTab('Account')}
+                >
+                    <li className={selectedTab === 'Account' ? 'active-tab' : ''}>
                         <AccountCircleOutlinedIcon className="icon" />
-                        <span >Profile</span>
+                        <span>Account</span>
                     </li>
                 </Link>
                 
