@@ -220,27 +220,30 @@ const handleSubmit = async (e) => {
 
               {/* Activities */}
               <div>
-                <label className="block text-sm font-medium text-green-600">Activities</label>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {activities.map((activity) => (
-                    <button
-                      type="button"
-                      style={{backgroundColor:"#FF79A8"}}
-                      onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
-                      onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
-                      key={activity._id}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                        selectedActivities.includes(activity._id)
-                          ? "bg-pink-500 text-white"
-                          : "bg-green-200 text-green-800 hover:bg-green-300"
-                      }`}
-                      onClick={() => toggleActivity(activity._id)}
-                    >
-                      {activity.Name}
-                    </button>
+              <label className="block text-sm font-medium text-green-600">Activities</label>
+              <div className="px-2 py-1 text-xs font-medium rounded-full transition-colors w-auto">
+              {activities.map((activity) => (
+    <button
+      type="button"
+      style={{backgroundColor:"#FF79A8",
+               marginBottom:2
+            }}
+      onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
+      onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
+      key={activity._id}
+      className={`px-2 py-1 text-xs font-medium rounded-full transition-colors ${
+        selectedActivities.includes(activity._id)
+          ? "bg-pink-500 text-white"
+          : "bg-green-200 text-green-800 hover:bg-green-300"
+      }`}
+      onClick={() => toggleActivity(activity._id)}
+    >
+      {activity.Name}
+    </button>
+  ))}
+</div>
 
-                  ))}
-                </div>
+
                 <div className="mt-4">
                   {selectedActivities.length > 0 && (
                     <div>
@@ -267,7 +270,7 @@ const handleSubmit = async (e) => {
                   {tags.map((tag) => (
                     <button
                       type="button"
-                      style={{backgroundColor:"#FF79A8"}}
+                      style={{backgroundColor:"#FF79A8",marginBottom:2}}
                       onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
                       onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
                       key={tag._id}
