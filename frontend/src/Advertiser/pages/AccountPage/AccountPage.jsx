@@ -122,12 +122,12 @@ const AccountPage = ({advertiserId}) => {
                         <Link to={`/editAdvertiser/${advertiserId}`}>
                             <button className="action-button">Edit Profile</button>
                         </Link>
-                        <button
+                        {/* <button
                             onClick={() => navigate("/advertiser")}
                             className="action-button"
                         >
                             Return to Homepage
-                        </button>
+                        </button> */}
                     </div>
                     <button
                         onClick={handleChangePassword}
