@@ -46,7 +46,11 @@ const {
   removeProductFromCart,
   changeCartItemQuantity,
   viewCart,
+  getAddresses,
+  addAddress,
   updateAddress,
+  deleteAddress,
+  deleteAllAddresses,
   viewAllOrders,
   viewOrderDetails,
   cancelOrder,
@@ -147,7 +151,15 @@ router.put('/changeCartItemQuantity/:id', changeCartItemQuantity);
 
 router.get('/viewCart/:id', viewCart);
 
+router.get('/getAddresses/:touristId', getAddresses);
+
+router.post('/addAddress/:id', addAddress);
+
 router.put('/updateAddress/:id', updateAddress);
+
+router.delete('/deleteAddress/:id', deleteAddress);
+
+router.delete('/deleteAllAddresses/:id', deleteAllAddresses);
 
 router.get('/viewAllOrders/:id', viewAllOrders);
 

@@ -1411,9 +1411,100 @@ const viewCart = async (req, res) => {
   }
 };
 
+const getAddresses = async (req, res) => {
+
+  const { touristId } = req.params;
+  try {
+    
+    const tourist = await Tourist.findById(touristId).select('addresses');
+
+    if (!tourist) {
+      return res.status(404).json({ message: 'Tourist not found' });
+    }
+
+    // Return the addresses
+    res.status(200).json(tourist.addresses);
+  } catch (error) {
+    console.error('Error fetching addresses:', error);
+    res.status(500).json({ message: 'Failed to fetch addresses' });
+  }
+
+}
+
+// Add a new address
+const addAddress = async (req, res) => {
+  const { id } = req.params;
+  const { address } = req.body;
+
+  try {
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Validate the address object to ensure it's complete
+    const { street, city, state, zip, country } = address;
+    if (!street || !city || !state || !zip || !country) {
+      return res.status(400).json({ error: "Incomplete address details" });
+    }
+
+    delete address._id;
+
+    // Add the new address to the addresses array
+    tourist.addresses.push(address);
+
+    // Save the updated tourist document
+    await tourist.save();
+
+    // Return the updated addresses list
+    res.status(200).json({ message: "Address added successfully", addresses: tourist.addresses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Update an existing address
 const updateAddress = async (req, res) => {
   const { id } = req.params;
   const { index, address } = req.body;
+
+  try {
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Validate the address object to ensure it's complete
+    const { street, city, state, zip, country } = address;
+    if (!street || !city || !state || !zip || !country) {
+      return res.status(400).json({ error: "Incomplete address details" });
+    }
+
+    // If index is provided and is valid, update the existing address
+    if (index !== undefined && tourist.addresses[index]) {
+      tourist.addresses[index] = address; // Update the address at the specified index
+    } else {
+      return res.status(400).json({ error: "Invalid address index" });
+    }
+
+    // Save the updated tourist document
+    await tourist.save();
+
+    // Return the updated addresses list
+    res.status(200).json({ message: "Address updated successfully", addresses: tourist.addresses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+const deleteAddress = async (req, res) => {
+  const { id } = req.params; // Tourist ID
+  const { index } = req.body; // Index of the address to delete
 
   try {
     const tourist = await Tourist.findById(id);
@@ -1421,21 +1512,47 @@ const updateAddress = async (req, res) => {
       return res.status(404).json({ error: "Tourist not found" });
     }
 
-    if (index !== undefined && tourist.addresses[index]) {
-      // Update an existing address
-      tourist.addresses[index] = address;
-    } else {
-      // Add a new address
-      tourist.addresses.push(address);
+    // Check if the index is valid
+    if (index === undefined || index < 0 || index >= tourist.addresses.length) {
+      return res.status(400).json({ error: "Invalid index" });
     }
 
+    // Remove the address at the specified index
+    tourist.addresses.splice(index, 1); // Removes 1 address at the index
+
+    // Save the updated tourist document
     await tourist.save();
 
-    res.status(200).json({ message: "Address updated successfully", addresses: tourist.addresses });
+    res.status(200).json({ message: "Address deleted successfully", addresses: tourist.addresses });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
+const deleteAllAddresses = async (req, res) => {
+  const { id } = req.params; // Tourist ID
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Clear all addresses
+    tourist.addresses = [];
+
+    // Save the updated tourist document
+    await tourist.save();
+
+    res.status(200).json({ message: "All addresses deleted successfully", addresses: tourist.addresses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 const viewAllOrders = async (req, res) => {
   const { id } = req.params;
@@ -1502,8 +1619,6 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-
-
   
 module.exports = {
   createTourist,
@@ -1551,7 +1666,11 @@ module.exports = {
   removeProductFromCart,
   changeCartItemQuantity,
   viewCart,
+  getAddresses,
+  addAddress,
   updateAddress,
+  deleteAddress,
+  deleteAllAddresses,
   viewAllOrders,
   viewOrderDetails,
   cancelOrder,

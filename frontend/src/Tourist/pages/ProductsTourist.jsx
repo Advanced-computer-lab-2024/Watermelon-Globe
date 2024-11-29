@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, LogOut, ShoppingBag, Search, Filter, SortDesc, RefreshCw } from 'lucide-react';
+import axios from 'axios';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -8,6 +9,7 @@ const ProductList = () => {
   const [price, setPrice] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  
   const { id } = useParams();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const ProductList = () => {
       const data = await response.json();
       const activeProducts = data.filter(product => !product.archived);
       setProducts(activeProducts);
-     // setProducts(data);
+      // setProducts(data);
       setFilteredProducts(activeProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -28,37 +30,56 @@ const ProductList = () => {
     }
   };
 
-  const handleBuy = async (productId) => {
-    try {
-      const response = await fetch(`/api/tourist/buyProduct/${id}/${productId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-      });
+  // const handleBuy = async (productId) => {
+  //   try {
+  //     const response = await fetch(`/api/tourist/buyProduct/${id}/${productId}`, {
+  //       method: 'PUT',
+  //       headers: { 'Content-Type': 'application/json' },
+  //     });
 
-      if (response.ok) {
-        alert("Thank you for your purchase");
-        setProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product._id === productId
-              ? { ...product, quantity: product.quantity - 1 }
-              : product
-          )
-        );
-        setFilteredProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product._id === productId
-              ? { ...product, quantity: product.quantity - 1 }
-              : product
-          )
-        );
+  //     if (response.ok) {
+  //       alert("Thank you for your purchase");
+  //       setProducts((prevProducts) =>
+  //         prevProducts.map((product) =>
+  //           product._id === productId
+  //             ? { ...product, quantity: product.quantity - 1 }
+  //             : product
+  //         )
+  //       );
+  //       setFilteredProducts((prevProducts) =>
+  //         prevProducts.map((product) =>
+  //           product._id === productId
+  //             ? { ...product, quantity: product.quantity - 1 }
+  //             : product
+  //         )
+  //       );
+  //     } else {
+  //       alert("Failed to purchase product. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error purchasing product:', error);
+  //     alert("Failed to purchase product. Please try again.");
+  //   }
+  // };
+
+  const handleAddToCart = async (productId) => {
+    try {
+      // Define the quantity you want to add, defaulting to 1 for simplicity
+      const quantity = 1;
+
+      const response = await axios.post(`/api/Tourist/addProductToCart/${id}`, { productId, quantity });
+
+      if (response.status === 200) {
+        console.log('Item added to cart!');
       } else {
-        alert("Failed to purchase product. Please try again.");
+        alert('Failed to add product to cart. Please try again.');
       }
     } catch (error) {
-      console.error('Error purchasing product:', error);
-      alert("Failed to purchase product. Please try again.");
+      console.error('Error adding product to cart:', error);
+      alert('An error occurred while adding product to cart. Please try again.');
     }
   };
+
 
   const handleFilterByPrice = async () => {
     try {
@@ -115,7 +136,7 @@ const ProductList = () => {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
       {/* Navigation Bar */}
-      <div style={{ 
+      <div style={{
         backgroundColor: '#00b341',
         padding: '1rem',
         marginBottom: '2rem'
@@ -127,15 +148,15 @@ const ProductList = () => {
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <span style={{ 
-            color: 'white', 
-            fontSize: '1.5rem', 
+          <span style={{
+            color: 'white',
+            fontSize: '1.5rem',
             fontWeight: 'bold'
           }}>
             Watermelon Globe
           </span>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <Link to="/cart" style={{
+            <Link to={`/ShoppingCart/${id}`} style={{
               color: 'white',
               textDecoration: 'none',
               display: 'flex',
@@ -161,7 +182,7 @@ const ProductList = () => {
 
       {/* Main Content */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
-        <h1 style={{ 
+        <h1 style={{
           fontSize: '2rem',
           fontWeight: 'bold',
           color: '#00b341',
@@ -172,9 +193,9 @@ const ProductList = () => {
         </h1>
 
         {/* Search and Filter Section */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
           marginBottom: '2rem',
           flexWrap: 'wrap',
           gap: '1rem'
@@ -258,7 +279,7 @@ const ProductList = () => {
         {errorMessage && <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>{errorMessage}</p>}
 
         {/* Product Grid */}
-        <div style={{ 
+        <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(6, 1fr)',
           gap: '1rem',
@@ -276,11 +297,11 @@ const ProductList = () => {
                 flexDirection: 'column',
                 transition: 'transform 0.3s ease-in-out',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
               >
                 <div style={{ position: 'relative' }}>
-                  <img 
+                  <img
                     src={product.picture || "/placeholder.svg"}
                     alt={product.name}
                     style={{
@@ -304,14 +325,14 @@ const ProductList = () => {
                 </div>
 
                 <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <h3 style={{ 
+                  <h3 style={{
                     fontSize: '1rem',
                     fontWeight: 'bold',
                     marginBottom: '0.5rem'
                   }}>
                     {product.name}
                   </h3>
-                  <p style={{ 
+                  <p style={{
                     fontSize: '0.875rem',
                     color: '#666',
                     marginBottom: '1rem',
@@ -325,14 +346,14 @@ const ProductList = () => {
                     alignItems: 'center',
                     marginBottom: '1rem'
                   }}>
-                    <span style={{ 
+                    <span style={{
                       fontSize: '1.25rem',
                       fontWeight: 'bold',
                       color: '#00b341'
                     }}>
                       ${product.price && product.price.$numberDecimal ? product.price.$numberDecimal : product.price}
                     </span>
-                    <span style={{ 
+                    <span style={{
                       fontSize: '0.875rem',
                       color: '#666'
                     }}>
@@ -340,7 +361,7 @@ const ProductList = () => {
                     </span>
                   </div>
                   <button
-                    onClick={() => handleBuy(product._id)}
+                    onClick={() => handleAddToCart(product._id)}
                     style={{
                       backgroundColor: '#00b341',
                       color: 'white',
@@ -355,14 +376,15 @@ const ProductList = () => {
                       width: '100%',
                       fontSize: '0.875rem',
                       fontWeight: 'bold',
-                      transition: 'background-color 0.3s ease'
+                      transition: 'background-color 0.3s ease',
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#009933'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00b341'}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#009933')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#00b341')}
                   >
                     <ShoppingCart size={16} />
-                    Buy Now
+                    Add to cart
                   </button>
+
                 </div>
               </div>
             )

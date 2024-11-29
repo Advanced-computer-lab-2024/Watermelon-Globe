@@ -108,7 +108,7 @@ const touristSchema = new Schema(
         street: { type: String, required: true },
         city: { type: String, required: true },
         state: { type: String, required: true },
-        zip: { type: String, required: true, match: [/^\d{5}(-\d{4})?$/, "Invalid ZIP code"] },
+        zip: { type: String, required: true },
         country: { type: String, required: true },
       }
     ],
