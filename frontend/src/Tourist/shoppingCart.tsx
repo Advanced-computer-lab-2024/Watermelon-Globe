@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import React from 'react'
 import { Trash2, MinusCircle, PlusCircle } from 'lucide-react'
-import { Button } from "./Components/ui/button"
+import { Button } from "../Tourist/Components/ui/button"
 interface CartItem {
   id: number
   name: string
