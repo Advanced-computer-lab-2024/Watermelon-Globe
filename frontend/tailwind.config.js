@@ -8,13 +8,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-<<<<<<< Updated upstream
-        // Custom colors
-        primary: '#FF3366',
-        hover: '#E62E5C',
-        secondary: '#2E8B57',
-        secondaryHover: '#247A4B'
-=======
         // Custom colors based on provided code
         primary: '#FF3366',      // Used for buttons and links
         hover: '#E62E5C',        // Hover color for buttons
@@ -52,7 +45,6 @@ module.exports = {
         'lg': '0px 8px 16px rgba(0, 0, 0, 0.1)', // Larger shadow for more emphasis
         // You can add hover or focus shadow variations if needed
         'hover-md': '0px 4px 8px rgba(0, 0, 0, 0.2)', // Hover shadow variant
->>>>>>> Stashed changes
       },
     },
   },
