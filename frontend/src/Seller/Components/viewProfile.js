@@ -102,7 +102,7 @@ const ViewProfile = () => {
   };
 
   const containerStyle = {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F8F8F8',
     padding: '50px',
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',

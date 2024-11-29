@@ -43,10 +43,11 @@ const getTourGuide = async (req, res) => {
     const { id } = req.params;
 
     // Query the database based on search criteria
-    const retrievedTourGuide = await tourGuide.findById(id);
+    const retrievedTourGuide = await tourGuide.findById(id)
+       .populate('itineraries');
 
     // Check if results are found
-    if (retrievedTourGuide.length === 0) {
+    if (retrievedTourGuide.length ==0) {
       return res
         .status(404)
         .json({ message: "No tour guide found matching the id" });
@@ -115,15 +116,45 @@ const updateTourGuide = async (req, res) => {
   }
 };
 
+const updateTourGuideNew = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  console.log(id);
+  console.log(updateData);
+
+  try {
+    const updatedGuide = await tourGuide.findByIdAndUpdate(id, updateData, {
+      new: true, // Return the updated document
+      runValidators: true, // Ensure validation rules apply
+    });
+
+
+    if (!updatedGuide) {
+      return res.status(404).send('Tour guide not found');
+    }
+
+    res.status(200).json(updatedGuide);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).send('Error updating product');
+  }
+};
+
 const createItinerary = async (req, res) => {
+    const{id}=req.params;
     const { name, activities,tag,locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
-        accessibility, pickupDropoffLocations, bookings,rating, guide: guideId} = req.body;
+        accessibility, pickupDropoffLocations, bookings,rating} = req.body;
         console.log(req.body)
         console.log(tag)
         try {
+          const tourguide =await tourGuide.findById(id);
+
             const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
                 timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
-                pickupDropoffLocations, bookings, guide: guideId});
+                pickupDropoffLocations, bookings, guide: id});
+            tourguide.itineraries.push(itinerary._id);
+            await tourguide.save();      
+            
 
     res.status(200).json(itinerary);
   } catch (error) {
@@ -145,6 +176,7 @@ const getMyItineraries = async (req, res) => {
     const site = await itineraryModel.Itinerary.find({ guide: guideID })
       .populate("activities")
       .populate("guide");
+     
 
     // If no site is found, return a 404 error
     if (!site) {
@@ -166,6 +198,8 @@ const getAllItineraries = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate("activities")
       .populate("guide");
+      // Populate 'tag' with 'name' and 'description'
+
 
     // If no itineraries found, return a message
     if (!itineraries.length) {
@@ -577,4 +611,5 @@ module.exports = {
   acceptTermsAndConditions,
   requestDeletionGuide,
   getPassword,
+  updateTourGuideNew
 };

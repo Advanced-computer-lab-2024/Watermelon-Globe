@@ -16,7 +16,7 @@ const Navbar = () => {
   const{id}=useParams();
   const navigate=useNavigate();
   const handleViewProfile =()=>{
-    navigate(`/viewProfile/${id}`);
+    navigate(`/TourGuideProfile/${id}`);
   }
  // const { dispatch } = useContext(DarkModeContext);
 
@@ -24,8 +24,8 @@ const Navbar = () => {
     <div className="navbar">
       <div className="wrapper">
         <div className="search">
-          {/* <input type="text" placeholder="Search..." />
-          <SearchOutlinedIcon /> */}
+          <input type="text" placeholder="Search..." />
+          <SearchOutlinedIcon />
         </div>
         <div className="items">
           <div className="item">

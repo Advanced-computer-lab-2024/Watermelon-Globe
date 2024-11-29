@@ -1,0 +1,500 @@
+// // import React, { useEffect, useState } from 'react';
+// // import axios from 'axios';
+// // import './TourGuideProfile.css';
+// // import { useParams } from 'react-router-dom';
+// // import Navbar from './navbar/Navbar';
+// // import Sidebar from './sidebar/Sidebar';
+// // import ProfilePhotoUpload from './ProfilePhoto';
+
+// // const TourGuideProfile = () => {
+// //  const {id}=useParams();
+// //   const [tourGuide, setTourGuide] = useState(null);
+// //   const [loading, setLoading] = useState(true);
+// //   const [error, setError] = useState(null);
+// //   const [showUpload, setShowUpload] = useState(false);
+
+
+// //   useEffect(() => {
+// //     const fetchTourGuideDetails = async () => {
+// //       try {
+// //         const response = await axios.get(`/api/tourGuide/getGuide/${id}`);
+// //         setTourGuide(response.data);
+// //       } catch (err) {
+// //         setError(err.response ? err.response.data.error : 'Error loading tour guide details');
+// //       } finally {
+// //         setLoading(false);
+// //       }
+// //     };
+
+// //     fetchTourGuideDetails();
+// //   }, [id]);
+
+// //   if (loading) return <p>Loading tour guide details...</p>;
+// //   if (error) return <p>{error}</p>;
+
+// //   const handleUploadPicture = () => {
+// //     setShowUpload(true);
+// //   };
+  
+
+// //   return (
+// //     <div className="list">
+      
+// //     <Sidebar />
+// //     <div className="listContainer">
+// //     <Navbar/>
+// //     <div className="tour-guide-profile">
+// //       <div className="profile-header">
+
+        
+// //         <h1>{tourGuide.name}</h1>
+// //         {/* <div className="profile-photo">
+// //           <img src={tourGuide.photo || 'default-photo.jpg'} alt={`${tourGuide.name} photo`} />
+// //         </div> */}
+
+// // <div className="profile-photo">
+// //   {/* <img
+// //     src={tourGuide.photo
+// //       ? `${process.env.MONGO_URI}/uploads/${tourGuide.photo}`
+// //       : 'default-photo.jpg'}
+// //     alt={`${tourGuide.name} photo`}
+// //   /> */}
+
+// // {<ProfilePhotoUpload  id={tourGuide._id}/>}
+
+// // </div>
+
+// //       </div>
+
+// //       <div className="profile-details">
+// //         <div className="profile-detail">
+            
+       
+// //           <strong>Email:</strong> {tourGuide.email}
+// //         </div>
+// //         <div className="profile-detail">
+// //           <strong>Mobile Number:</strong> {tourGuide.mobileNumber || 'Not Provided'}
+// //         </div>
+// //         <div className="profile-detail">
+// //           <strong>Nationality:</strong> {tourGuide.nationality || 'Not Provided'}
+// //         </div>
+// //         <div className="profile-detail">
+// //           <strong>Years of Experience:</strong> {tourGuide.yearsOfExperience || 'Not Provided'}
+// //         </div>
+// //         <div className="profile-detail">
+// //           <strong>Status:</strong> <span className={`status ${tourGuide.status}`}>{tourGuide.status}</span>
+// //         </div>
+// //         <div className="profile-detail">
+// //           <strong>Rating:</strong> {tourGuide.rating} ★
+// //         </div>
+// //       </div>
+
+// //       <div className="comments-section">
+// //         <h3>Comments</h3>
+// //         {tourGuide.comments.length > 0 ? (
+// //           <ul>
+// //             {tourGuide.comments.map((comment, index) => (
+// //               <li key={index}>
+// //                 <strong>{comment.user.name}:</strong> {comment.comment}
+// //               </li>
+// //             ))}
+// //           </ul>
+// //         ) : (
+// //           <p>No comments yet.</p>
+          
+// //         )}
+        
+// //       </div>
+      
+
+// //                 {/* <button onClick={handleUploadPicture}>
+// //             Upload Profile Picture
+// //             </button> */}
+
+    
+      
+// //     </div>
+// //     </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default TourGuideProfile;
+
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import './TourGuideProfile.css';
+// import { useParams ,useNavigate} from 'react-router-dom';
+// import Navbar from './navbar/Navbar';
+// import Sidebar from './sidebar/Sidebar';
+// import ProfilePhotoUpload from './ProfilePhoto';
+
+
+// const TourGuideProfile = () => {
+//   const { id } = useParams();
+//   const [tourGuide, setTourGuide] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [showUpload, setShowUpload] = useState(false);
+//   const navigate=useNavigate();
+//   const watermelonGreen = '#4CAF50';
+//   const watermelonPink = '#FF4081';
+
+//   useEffect(() => {
+//     const fetchTourGuideDetails = async () => {
+//       try {
+//         const response = await axios.get(`/api/tourGuide/getGuide/${id}`);
+//         setTourGuide(response.data);
+//       } catch (err) {
+//         setError(err.response ? err.response.data.error : 'Error loading tour guide details');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchTourGuideDetails();
+//   }, [id]);
+
+//   if (loading) return <p>Loading tour guide details...</p>;
+//   if (error) return <p>{error}</p>;
+
+//   const handleUploadPicture = () => {
+//     setShowUpload(true);
+//   };
+//   const handleChangePassword=()=>{
+//     navigate(`/ChangePasswordTourGuide/${id}`)
+//   }
+
+//   return (
+//     <div className="list">
+//       <Sidebar />
+//       <div className="listContainer">
+//         <Navbar />
+//         <div className="tour-guide-profile">
+//           <div className="profile-header">
+//             <h1>{tourGuide?.name || 'Name not provided'}</h1>
+//             <div className="profile-photo">
+//               {<ProfilePhotoUpload id={tourGuide?._id} />}
+//             </div>
+//           </div>
+
+//           <div className="profile-details">
+//             <div className="profile-detail">
+//               <strong>Email:</strong> {tourGuide?.email || 'Not Provided'}
+//             </div>
+//             <div className="profile-detail">
+//               <strong>Mobile Number:</strong> {tourGuide?.mobileNumber || 'Not Provided'}
+//             </div>
+//             <div className="profile-detail">
+//               <strong>Nationality:</strong> {tourGuide?.nationality || 'Not Provided'}
+//             </div>
+//             <div className="profile-detail">
+//               <strong>Years of Experience:</strong> {tourGuide?.yearsOfExperience || 'Not Provided'}
+//             </div>
+//             <div className="profile-detail">
+//               <strong>Status:</strong>
+//               <span className={`status ${tourGuide?.status}`}>
+//                 {tourGuide?.status || 'Not Provided'}
+//               </span>
+//             </div>
+//             <div className="profile-detail">
+//               <strong>Rating:</strong> {tourGuide?.rating || 'No ratings yet'} ★
+//             </div>
+//             <div className="profile-detail">
+//             <strong>Trips:</strong> 
+// {tourGuide?.itineraries?.length > 0 
+//   ? tourGuide.itineraries.map((itinerary, index) => (
+//       <span key={index}>{itinerary.name}{index < tourGuide.itineraries.length - 1 ? ', ' : ''}</span>
+//     ))
+//   : 'No trips yet'}
+//             </div>
+//             <button
+//   className="rounded-md hover:shadow-lg"
+//   style={{
+//     backgroundColor: watermelonPink,
+//     color: 'white',
+//     padding: '10px 20px', // Larger padding for a bigger button
+//     fontSize: '1.2rem', // Larger text
+//     border: 'none',
+//     cursor: 'pointer',
+//     transition: 'background-color 0.3s, transform 0.3s', // Smooth transition for hover
+//   }}
+//   onMouseOver={(e) => (e.target.style.backgroundColor = '#D8326F')} // Darker pink on hover
+//   onMouseOut={(e) => (e.target.style.backgroundColor = watermelonPink)} // Revert on mouse out
+//   onClick={handleChangePassword}
+// >
+//   Change Password
+// </button>
+
+//           </div>
+
+//           <div className="comments-section">
+//             <h3>Comments</h3>
+//             {tourGuide?.comments?.length > 0 ? (
+//               <ul>
+//                 {tourGuide.comments.map((comment, index) => (
+//                   <li key={index}>
+//                     <strong>{comment.user.name}:</strong> {comment.comment}
+//                   </li>
+//                 ))}
+//               </ul>
+//             ) : (
+//               <p>No comments yet.</p>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default TourGuideProfile;
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./TourGuideProfile.css";
+import { useParams, useNavigate } from "react-router-dom";
+import Navbar from "./navbar/Navbar";
+import Sidebar from "./sidebar/Sidebar";
+import ProfilePhotoUpload from "./ProfilePhoto";
+
+const TourGuideProfile = () => {
+  const { id } = useParams();
+  const [tourGuide, setTourGuide] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showUpload, setShowUpload] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedData, setEditedData] = useState({});
+  const navigate = useNavigate();
+  const watermelonGreen = "#4CAF50";
+  const watermelonPink = "#FF4081";
+
+  useEffect(() => {
+    const fetchTourGuideDetails = async () => {
+      try {
+        const response = await axios.get(`/api/tourGuide/getGuide/${id}`);
+        setTourGuide(response.data);
+        setEditedData(response.data); // Set initial data for editing
+      } catch (err) {
+        setError(err.response ? err.response.data.error : "Error loading tour guide details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTourGuideDetails();
+  }, [id]);
+
+  if (loading) return <p>Loading tour guide details...</p>;
+  if (error) return <p>{error}</p>;
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setEditedData({ ...tourGuide }); // Reset changes
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const response = await axios.put(`/api/tourGuide/updateTourGuideNew/${id}`, editedData);
+      setTourGuide(response.data);
+      alert("Profile updated successfully!");
+      setIsEditing(false);
+    } catch (err) {
+      alert(err.response ? err.response.data.error : "Error updating profile");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedData({ ...editedData, [name]: value });
+  };
+
+  const handleUploadPicture = () => {
+    setShowUpload(true);
+  };
+
+  const handleChangePassword = () => {
+    navigate(`/ChangePasswordTourGuide/${id}`);
+  };
+
+  return (
+    <div className="list">
+      <Sidebar />
+      <div className="listContainer">
+        <Navbar />
+        <div className="tour-guide-profile">
+          <div className="profile-header">
+            <h1>{tourGuide?.name || "Name not provided"}</h1>
+            <div className="profile-photo">
+              {<ProfilePhotoUpload id={tourGuide?._id} />}
+            </div>
+          </div>
+
+          <div className="profile-details">
+            <div className="profile-detail">
+              <strong>Email:</strong>
+              {isEditing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={editedData.email || ""}
+                  onChange={handleChange}
+                  className="border border-green-500 rounded-md p-2 w-full"
+                />
+              ) : (
+                <span>{tourGuide?.email || "Not Provided"}</span>
+              )}
+            </div>
+            <div className="profile-detail">
+              <strong>Mobile Number:</strong>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  name="mobileNumber"
+                  value={editedData.mobileNumber || ""}
+                  onChange={handleChange}
+                  className="border border-green-500 rounded-md p-2 w-full"
+                />
+              ) : (
+                <span>{tourGuide?.mobileNumber || "Not Provided"}</span>
+              )}
+            </div>
+            <div className="profile-detail">
+              <strong>Nationality:</strong>
+             
+                <span>{tourGuide?.nationality || "Not Provided"}</span>
+             
+            </div>
+            <div className="profile-detail">
+              <strong>Years of Experience:</strong>
+              {isEditing ? (
+                <input
+                  type="number"
+                  name="yearsOfExperience"
+                  value={editedData.yearsOfExperience || ""}
+                  onChange={handleChange}
+                  className="border border-green-500 rounded-md p-2 w-full"
+                />
+              ) : (
+                <span>{tourGuide?.yearsOfExperience || "Not Provided"}</span>
+              )}
+            </div>
+            <div className="profile-detail">
+              <strong>Status:</strong>
+              <span >
+              
+                  {tourGuide?.status || "Not Provided"}
+             
+              </span>
+            </div>
+            <div className="profile-detail">
+            <strong>Trips:</strong> 
+{tourGuide?.itineraries?.length > 0 
+  ? tourGuide.itineraries.map((itinerary, index) => (
+      <span key={index}>{itinerary.name}{index < tourGuide.itineraries.length - 1 ? ', ' : ''}</span>
+    ))
+  : 'No trips yet'}
+  </div>
+
+            {!isEditing && (
+              <button
+                className="rounded-md hover:shadow-lg"
+                style={{
+                  backgroundColor: watermelonPink,
+                  color: "white",
+                  padding: "10px 20px",
+                  fontSize: "1.2rem",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s, transform 0.3s",
+                }}
+                onMouseOver={(e) => (e.target.style.backgroundColor = "#D8326F")}
+                onMouseOut={(e) => (e.target.style.backgroundColor = watermelonPink)}
+                onClick={handleChangePassword}
+              >
+                Change Password
+              </button>
+            )}
+
+            {isEditing ? (
+              <div className="flex gap-4 mt-4">
+                <button
+   className="rounded-md hover:shadow-lg"
+                style={{
+                  backgroundColor: watermelonPink,
+                  color: "white",
+                  padding: "10px 20px",
+                  fontSize: "1.2rem",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s, transform 0.3s",
+                }}
+                onMouseOver={(e) => (e.target.style.backgroundColor = "#D8326F")}
+                onMouseOut={(e) => (e.target.style.backgroundColor = watermelonPink)}  onClick={handleConfirm}
+                >
+                  Confirm
+                </button>
+                <button
+   className="rounded-md hover:shadow-lg"
+   style={{
+     backgroundColor: watermelonPink,
+     color: "white",
+     padding: "10px 20px",
+     fontSize: "1.2rem",
+     border: "none",
+     cursor: "pointer",
+     transition: "background-color 0.3s, transform 0.3s",
+   }}
+   onMouseOver={(e) => (e.target.style.backgroundColor = "#D8326F")}
+   onMouseOut={(e) => (e.target.style.backgroundColor = watermelonPink)}                  onClick={handleCancel}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+              className="rounded-md hover:shadow-lg"
+              style={{
+                backgroundColor: watermelonPink,
+                color: "white",
+                padding: "10px 20px",
+                fontSize: "1.2rem",
+                border: "none",
+                cursor: "pointer",
+                transition: "background-color 0.3s, transform 0.3s",
+                marginLeft: "20px"
+              }}
+              onMouseOver={(e) => (e.target.style.backgroundColor = "#D8326F")}
+              onMouseOut={(e) => (e.target.style.backgroundColor = watermelonPink)}                onClick={handleEdit}
+              >
+                Update Profile
+              </button>
+            )}
+          </div>
+
+          <div className="comments-section">
+            <h3>Comments</h3>
+            {tourGuide?.comments?.length > 0 ? (
+              <ul>
+                {tourGuide.comments.map((comment, index) => (
+                  <li key={index}>
+                    <strong>{comment.user.name}:</strong> {comment.comment}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No comments yet.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TourGuideProfile;

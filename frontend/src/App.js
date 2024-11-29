@@ -67,13 +67,23 @@ import SearchProductByName from'./Seller/Components/SearchProductByName.js'
 import SellerProfile from './Seller/Components/sellerProfile.jsx'
 import ViewProfile from './Seller/Components/viewProfile.js'
 import ChangePasswordSeller from './Seller/Components/changePasswordSeller.js'
+import GetAllProductsGeneral from './Seller/Components/GetAllProductsGeneral.jsx';
+import ProductsDetailsGeneral from './Seller/Components/ProductsDetailsGeneral.jsx';
 
 //Tour guide pages
 import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import TourguideSignup from "./pages/TourguideSignup.jsx";
 import TourguideSignupConfirm from "./pages/TourguideSignupConfirm.jsx";
 import TourGuidePage from "./Components/tourGuidePage";
-import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.js";
+import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGuide.js";
+import ItineraryTourguide from './TourGuide/Components/itineraryDetails.jsx'
+import TourguideHome from './TourGuide/pages/TourguideHome.jsx';
+import ItineraryComponent2 from './TourGuide/Components/Itineraries.jsx';
+import TourGuideProfile from './TourGuide/Components/viewProfile.jsx';
+import AllItineraries from './TourGuide/Components/AllItineraries.jsx';
+import GeneralDetails from './TourGuide/Components/AllItinerariesDetail.jsx';
+
+
 
 //Tourism governer pages
 import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
@@ -109,6 +119,7 @@ import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
+import CreateItinerary from './TourGuide/Components/CreateItinerary.jsx';
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -188,7 +199,19 @@ const App = () => {
 
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
-          <Route path="/tourism-governor" element={<TourismGovernorPage />} />
+          <Route path="/itineraryTourguide/:id" element={<ItineraryTourguide />} />
+          <Route path="/TourguideHome/:id" element={<TourguideHome />} />
+          <Route path="/ItineraryComponent2/:id" element={<ItineraryComponent2 />} />
+          <Route path="/TourGuideProfile/:id" element={<TourGuideProfile />} />
+          <Route path="/AllItineraries/:id" element={<AllItineraries />} />
+          <Route path="/GeneralDetails/:id" element={<GeneralDetails />} />
+          <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
+
+
+
+
+
+          <Route path="/tourism-governor/:id" element={<TourismGovernorPage />} />
           <Route
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
@@ -269,6 +292,9 @@ const App = () => {
           <Route path="/sellerProfile/:id" element={<SellerProfile />} />
           <Route path="/viewProfile/:id" element={<ViewProfile />} />
           <Route path="/ChangePasswordSeller/:id" element={<ChangePasswordSeller />} />
+          <Route path="/GetAllProductsGeneral/:id" element={<GetAllProductsGeneral />} />
+          <Route path="/ProductsDetailsGeneral/:id" element={<ProductsDetailsGeneral />} />
+
 
 
 

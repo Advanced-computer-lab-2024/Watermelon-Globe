@@ -32,13 +32,6 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <Link to={`/GetAllProductsGeneral/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/GetAllProductsGeneral/${id}`) ? "active" : ""}>
-              <StoreIcon className="icon" />
-              <span>All Products</span>
-            </li>
-          </Link>
-
           {/* Create New Product */}
           <Link to={`/CreateProduct/${id}`} style={{ textDecoration: "none" }}>
             <li className={isActive(`/CreateProduct/${id}`) ? "active" : ""}>

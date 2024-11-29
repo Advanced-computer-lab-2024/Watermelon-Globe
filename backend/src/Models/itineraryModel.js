@@ -58,3 +58,6 @@ const itinerarySchema = new Schema(
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 const pickup = mongoose.model("pickup", pickupDropoffSchema);
 module.exports = { Itinerary, pickup };
+
+
+ 

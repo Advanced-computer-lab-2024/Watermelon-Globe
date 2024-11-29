@@ -6,6 +6,7 @@ import StoreIcon from "@mui/icons-material/Store";
 import { Link } from "react-router-dom";
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import AddIcon from '@mui/icons-material/Add';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
 const Sidebar = () => {
   const { id } = useParams();
@@ -25,33 +26,26 @@ const Sidebar = () => {
       <div className="center">
         <ul>
           {/* My Products */}
-          <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/GetAllProducts/${id}`) ? "active" : ""}>
-              <StoreIcon className="icon" />
-              <span>My Products</span>
-            </li>
-          </Link>
-
-          <Link to={`/GetAllProductsGeneral/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/GetAllProductsGeneral/${id}`) ? "active" : ""}>
-              <StoreIcon className="icon" />
-              <span>All Products</span>
+          <Link to={`/ItineraryComponent2/${id}`} style={{ textDecoration: "none" }}>
+            <li className={isActive(`/ItineraryComponent2/${id}`) ? "active" : ""}>
+              <CelebrationIcon className="icon" />
+              <span>My Itineraries</span>
             </li>
           </Link>
 
           {/* Create New Product */}
-          <Link to={`/CreateProduct/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/CreateProduct/${id}`) ? "active" : ""}>
-              <AddIcon className="icon" />
-              <span>Create New Product</span>
+          <Link to={`/AllItineraries/${id}`} style={{ textDecoration: "none" }}>
+            <li className={isActive(`/AllItineraries/${id}`) ? "active" : ""}>
+              <CelebrationIcon className="icon" />
+              <span>All Itineraries</span>
             </li>
           </Link>
 
           {/* Sales and Available Quantities */}
-          <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/ViewQuantity/${id}`) ? "active" : ""}>
-              <ProductionQuantityLimitsIcon className="icon" />
-              <span>Sales and Available Quantities</span>
+          <Link to={`/CreateItinerary/${id}`} style={{ textDecoration: "none" }}>
+            <li className={isActive(`/CreateItinerary/${id}`) ? "active" : ""}>
+              <AddIcon className="icon" />
+              <span>Create an Itinerary</span>
             </li>
           </Link>
         </ul>
