@@ -40,61 +40,72 @@ export default function DraftHomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <header className="bg-white shadow-md">
-        <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold">
-            <Link to="/Homepage" className="homeButton">
-              WaterMelon Globe
-            </Link>
-          </div>
-          <div className="hidden md:flex space-x-8">
-            <Link
-              to={`/Hotels/${id}`}
-              className="text-gray-600 hover:text-gray-900 relative group no-underline"
-            >
-              Hotel
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb-1"></span>
-            </Link>
-            <Link
-              to={`/Flights/${id}`}
-              className="text-gray-600 hover:text-gray-900 relative group no-underline"
-            >
-              Flight
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb-1"></span>
-            </Link>
-            {/* Additional navigation links */}
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="px-4 py-1 border rounded">EN</button>
-            <button onClick={handleSignOut} className="px-4 py-1 border rounded">
-              Sign Out
-            </button>
-            <button
-              onClick={handleViewDetails}
-              className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-            >
-              <img
-                src={profileIcon}
-                alt="Profile Icon"
-                className="w-5 h-5 inline"
-              />
-              View Profile
-            </button>
-            <Link
-              to={`/completed-itineraries/${id}`}
-              className="px-4 py-1 ml-2 bg-green-600 text-white rounded"
-            >
-              Completed Itineraries
-            </Link>
-            <Link
-              to={`/completed-activities/${id}`}
-              className="px-4 py-1 ml-2 bg-green-600 text-white rounded"
-            >
-              Completed Activities
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <header className="bg-sectionBackground shadow-md">
+  <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
+    {/* Logo Section */}
+    <div className="text-3xl font-bold text-secondary">
+      <Link to="/Homepage" className="homeButton hover:text-secondaryHover">
+        WaterMelon Globe
+      </Link>
+    </div>
+    
+    {/* Navigation Links */}
+    <div className="hidden md:flex space-x-8">
+      <Link
+        to={`/Hotels/${id}`}
+        className="text-secondary hover:text-secondaryHover relative group no-underline"
+      >
+        Hotel
+        <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb-1"></span>
+      </Link>
+      <Link
+        to={`/Flights/${id}`}
+        className="text-secondary hover:text-secondaryHover relative group no-underline"
+      >
+        Flight
+        <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb-1"></span>
+      </Link>
+      {/* Add more links as needed */}
+    </div>
+    
+    {/* Actions Section */}
+    <div className="flex items-center space-x-2">
+      <button className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors">
+        EN
+      </button>
+      <button
+        onClick={handleSignOut}
+        className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors"
+      >
+        Sign Out
+      </button>
+      <button
+        onClick={handleViewDetails}
+        className="px-4 py-1 bg-primary text-white rounded hover:bg-hover transition-colors"
+      >
+        <img
+          src={profileIcon}
+          alt="Profile Icon"
+          className="w-5 h-5 inline mr-2"
+        />
+        View Profile
+      </button>
+      <Link
+        to={`/completed-itineraries/${id}`}
+        className="px-4 py-1 ml-2 bg-secondary text-white rounded hover:bg-secondaryHover"
+      >
+        Completed Itineraries
+      </Link>
+      <Link
+        to={`/completed-activities/${id}`}
+        className="px-4 py-1 ml-2 bg-secondary text-white rounded hover:bg-secondaryHover"
+      >
+        Completed Activities
+      </Link>
+    </div>
+  </nav>
+</header>
+
 
 
   
