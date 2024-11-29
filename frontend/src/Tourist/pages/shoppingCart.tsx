@@ -5,6 +5,7 @@ import React from 'react'
 import { Trash2, MinusCircle, PlusCircle } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import PaymentSummary from '../Components/PaymentSummary'
 
 interface CartItem {
   product: {
@@ -84,7 +85,7 @@ export default function ShoppingCart() {
 
   const handleProceedToCheckout = () => {
     // Redirect to the address page
-    navigate(`/AddressPage/${touristId}`) // Adjust the route as needed
+    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } }) // Adjust the route as needed
   }
 
   return (
