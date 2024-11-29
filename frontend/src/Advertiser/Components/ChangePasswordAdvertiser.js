@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const ChangePasswordAdvertiser = ({onClose }) => {
@@ -10,6 +10,7 @@ const ChangePasswordAdvertiser = ({onClose }) => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [sellerPassword, setSellerPassword] = useState('');
   const { advertiserId } = useParams();
+  const navigate = useNavigate();
 
 
 
@@ -42,6 +43,7 @@ const ChangePasswordAdvertiser = ({onClose }) => {
         setConfirmNewPassword('');
         setCurrentPassword('');
         setNewPassword('');
+        navigate(`/advertiserProfile/${advertiserId}`)
       }
       else{
         alert(data.error.message || "Failed to change password.");
