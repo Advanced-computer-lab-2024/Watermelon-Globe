@@ -92,8 +92,13 @@ import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
 import TouristActivityDetails from "./Tourist/pages/ActivityDetails.jsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+<<<<<<< Updated upstream
 import ShoppingCart from "./Tourist/pages/shoppingCart.tsx";
 import AddressPage from "./Tourist/pages/AddressPage.tsx"
+=======
+import ShoppingCart from "./Tourist/shoppingCart.tsx";
+import DraftHomePage from "./Tourist/pages/homepage.tsx"
+>>>>>>> Stashed changes
 
 
 //Flights
@@ -266,6 +271,9 @@ const App = () => {
           {/* shopping cart*/}
           <Route path="/ShoppingCart/:touristId" element={<ShoppingCart />} />
           <Route path="/AddressPage/:touristId" element={<AddressPage />} />
+
+          {/* Tourist homepage draft */}
+          <Route path="/DraftHomePage" element={<DraftHomePage />} />
 
 
           {/* Seller and Other Pages */}
