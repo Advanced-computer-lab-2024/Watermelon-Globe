@@ -41,7 +41,12 @@ const {
   commentOnActivity,
   getAllTransportations,
   getTransportation,
-  bookTransportation
+  bookTransportation,
+  bookmarkItinerary,
+  bookmarkActivity,
+  removeItineraryBookmark,
+  removeActivityBookmark,
+  getBookmarks
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -131,5 +136,13 @@ router.get('/getAllTransportations', getAllTransportations);
 router.get('/getTransportation/:id', getTransportation);
 
 router.put('/bookTransportation/:id', bookTransportation);
+
+
+router.post('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
+router.post('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
+router.put('/removeItineraryBookmark/:touristId/:itineraryId', removeItineraryBookmark);
+router.put('/removeActivityBookmark/:touristId/:activityId', removeActivityBookmark);
+router.get('/getBookmarks/:touristId', getBookmarks);
+
 
 module.exports = router;

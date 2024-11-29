@@ -1312,8 +1312,127 @@ const bookTransportation = async (req, res) => {
   }
 };
 
+//sprint 3 Hatem
 
-  
+// Add itinerary bookmark
+const bookmarkItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Check if already bookmarked
+    if (tourist.bookmarkedItineraries.includes(itineraryId)) {
+      return res.status(400).json({ error: "Itinerary already bookmarked" });
+    }
+
+    tourist.bookmarkedItineraries.push(itineraryId);
+    await tourist.save();
+
+    res.status(200).json({ message: "Itinerary bookmarked successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Add activity bookmark
+const bookmarkActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Check if already bookmarked
+    if (tourist.bookmarkedActivities.includes(activityId)) {
+      return res.status(400).json({ error: "Activity already bookmarked" });
+    }
+
+    tourist.bookmarkedActivities.push(activityId);
+    await tourist.save();
+
+    res.status(200).json({ message: "Activity bookmarked successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Remove itinerary bookmark
+const removeItineraryBookmark = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const bookmarkIndex = tourist.bookmarkedItineraries.indexOf(itineraryId);
+    if (bookmarkIndex === -1) {
+      return res.status(400).json({ error: "Itinerary not bookmarked" });
+    }
+
+    tourist.bookmarkedItineraries.splice(bookmarkIndex, 1);
+    await tourist.save();
+
+    res.status(200).json({ message: "Itinerary bookmark removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Remove activity bookmark
+const removeActivityBookmark = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const bookmarkIndex = tourist.bookmarkedActivities.indexOf(activityId);
+    if (bookmarkIndex === -1) {
+      return res.status(400).json({ error: "Activity not bookmarked" });
+    }
+
+    tourist.bookmarkedActivities.splice(bookmarkIndex, 1);
+    await tourist.save();
+
+    res.status(200).json({ message: "Activity bookmark removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get all bookmarks
+const getBookmarks = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId)
+      .populate('bookmarkedItineraries')
+      .populate('bookmarkedActivities');
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json({
+      bookmarkedItineraries: tourist.bookmarkedItineraries,
+      bookmarkedActivities: tourist.bookmarkedActivities
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   createTourist,
   getTourists,
@@ -1355,5 +1474,10 @@ module.exports = {
   commentOnActivity,
   getAllTransportations,
   getTransportation,
-  bookTransportation
+  bookTransportation,
+  bookmarkItinerary,
+  bookmarkActivity,
+  removeItineraryBookmark,
+  removeActivityBookmark,
+  getBookmarks
 };

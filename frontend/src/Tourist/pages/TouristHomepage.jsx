@@ -96,6 +96,12 @@ const TouristHomePage = () => {
               >
                 MyBookings
               </Link>
+            <Link
+                to={`/Bookmarks/${id}`}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Bookmarks
+              </Link>
             </div>
             <div className="flex items-center space-x-2">
               <button className="px-4 py-1 border rounded">EN</button>

@@ -86,7 +86,26 @@ const touristSchema = new Schema(
     ],
     loyaltyPoints: { type: Number, default: 0},
     loyaltyLevel: { type: Number, enum: [1,2,3], default: 1 },
-    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' }
+    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' },
+   
+    //sprint 3 Hatem
+
+    bookmarkedItineraries: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Itinerary', 
+        default: [],
+      },
+    ],
+    bookmarkedActivities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Activity', 
+        default: [],
+      },
+    ],
+ 
+ 
   },  
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
