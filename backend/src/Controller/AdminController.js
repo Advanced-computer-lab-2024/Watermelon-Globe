@@ -189,16 +189,16 @@ const deletePreferenceTag = async (req, res) => {
   res.status(200).json(preferencetag);
 };
 
-//uptade a preferencetag
 const updatePreferenceTag = async (req, res) => {
   const { id } = req.params;
   const { tag } = req.body;
-  console.log(id);
 
+  // Check if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: "No such tag" });
+    return res.status(400).json({ error: "Invalid tag ID" });
   }
 
+  // Check for empty fields
   let emptyFields = [];
   if (!tag) {
     emptyFields.push("tag");
@@ -209,22 +209,29 @@ const updatePreferenceTag = async (req, res) => {
       .json({ error: "Please fill in all fields", emptyFields });
   }
 
+  // Check if the new tag name already exists
   const existingTag = await PreferenceTag.findOne({ tag });
-
   if (existingTag) {
     return res.status(400).json({ error: "Tag name already exists" });
-  } else {
-    const preferencetag = await PreferenceTag.findOneAndUpdate(
+  }
+
+  try {
+    // Update the tag and return the updated document
+    const updatedTag = await PreferenceTag.findOneAndUpdate(
       { _id: id },
-      {
-        ...req.body,
-      }
+      { tag }, // Only update the tag field
+      { new: true } // Return the updated document
     );
 
-    if (!preferencetag) {
-      return res.status(400).json({ error: "No such tag" });
+    // Check if the tag exists
+    if (!updatedTag) {
+      return res.status(404).json({ error: "No such tag" });
     }
-    res.status(200).json(preferencetag);
+
+    // Respond with the updated tag
+    res.status(200).json(updatedTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -296,7 +303,7 @@ const deleteActivityCategory = async (req, res) => {
   res.status(200).json(activitycategory);
 };
 
-//uptade a activitycategory
+//update a activitycategory
 const updateActivityCategory = async (req, res) => {
   const { id } = req.params;
   const { activity } = req.body;
@@ -315,22 +322,23 @@ const updateActivityCategory = async (req, res) => {
       .json({ error: "Please fill in all fields", emptyFields });
   }
 
+  // Check if activity name already exists
   const existingActivity = await ActivityCategory.findOne({ activity });
-
   if (existingActivity) {
     return res.status(400).json({ error: "Activity name already exists" });
   } else {
-    const activitycategory = await ActivityCategory.findOneAndUpdate(
+    // Update the activity category and return the updated category
+    const updatedActivityCategory = await ActivityCategory.findOneAndUpdate(
       { _id: id },
-      {
-        ...req.body,
-      }
+      { activity }, // Only update the 'activity' field
+      { new: true } // This option ensures the updated document is returned
     );
 
-    if (!activitycategory) {
+    if (!updatedActivityCategory) {
       return res.status(400).json({ error: "No such activity" });
     }
-    res.status(200).json(activitycategory);
+
+    res.status(200).json(updatedActivityCategory); // Return the updated category
   }
 };
 

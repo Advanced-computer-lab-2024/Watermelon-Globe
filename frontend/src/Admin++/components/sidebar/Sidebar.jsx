@@ -24,41 +24,41 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div className="sidebarAdmin">
       {/* Top */}
-      <div className="top">
+      <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">Watermelon Globe </span>
+          <span className="logoAdmin">Watermelon Globe </span>
         </Link>
       </div>
 
       <hr />
 
       {/* Center */}
-      <div className="center">
+      <div className="centerAdmin">
         <ul>
-          <p className="title">MAIN</p>
+          <p className="titleAdmin">MAIN</p>
 
           <li>
-            <TbLayoutDashboardFilled className="icon" />
+            <TbLayoutDashboardFilled className="iconAdmin" />
             <span>Dashboard</span>
           </li>
 
-          <p className="title">MANAGE</p>
+          <p className="titleAdmin">MANAGE</p>
           <li onClick={toggleDropdown} style={{ cursor: "pointer" }}>
-            <FaUserCog className="icon" />
-            <span className="manage-text">
+            <FaUserCog className="iconAdmin" />
+            <span className="manage-textAdmin">
               Users
               {isDropdownOpen ? (
-                <FaAngleDown className="arrow" />
+                <FaAngleDown className="arrowAdmin" />
               ) : (
-                <FaAngleRight className="arrow" />
+                <FaAngleRight className="arrowAdmin" />
               )}
             </span>
           </li>
 
           {isDropdownOpen && (
-            <ul className="dropdown">
+            <ul className="dropdownAdmin">
               <Link to="/AddAdmins" style={{ textDecoration: "none" }}>
                 <li>
                   <span>Add Admin</span>
@@ -83,19 +83,19 @@ const Sidebar = () => {
           )}
 
           <li onClick={toggleDropdownEvent} style={{ cursor: "pointer" }}>
-            <MdEvent className="icon" />
-            <span className="manage-text">
+            <MdEvent className="iconAdmin" />
+            <span className="manage-textAdmin">
               Events & Itineraries
               {isDropdownOpenEvent ? (
-                <FaAngleDown className="arrow" />
+                <FaAngleDown className="arrowAdmin" />
               ) : (
-                <FaAngleRight className="arrow" />
+                <FaAngleRight className="arrowAdmin" />
               )}
             </span>
           </li>
 
           {isDropdownOpenEvent && (
-            <ul className="dropdown">
+            <ul className="dropdownAdmin">
               <Link to="/users/admins" style={{ textDecoration: "none" }}>
                 <li>
                   <span>View Events/Itineraries</span>
@@ -110,26 +110,26 @@ const Sidebar = () => {
           )}
           <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
-              <MdCategory className="icon" />
+              <MdCategory className="iconAdmin" />
               <span>Activity Categories</span>
             </li>
           </Link>
 
           <Link to="/Tags" style={{ textDecoration: "none" }}>
             <li>
-              <IoIosPricetags className="icon" />
+              <IoIosPricetags className="iconAdmin" />
               <span>Prefrence Tags</span>
             </li>
           </Link>
 
-          <p className="title">PRODUCTS</p>
+          <p className="titleAdmin">PRODUCTS</p>
           <li>
-            <FaCartArrowDown className="icon" />
+            <FaCartArrowDown className="iconAdmin" />
             <span>Products</span>
           </li>
 
           <li>
-            <HiQrcode className="icon" />
+            <HiQrcode className="iconAdmin" />
             <span>Promo Code</span>
           </li>
         </ul>

@@ -2,6 +2,7 @@ import "./ActiveUsers.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Datatable from "../../components/datatable/Datatable";
+import NavTabs from "../../components/navTabs/navTabs";
 
 const ActiveUsers = () => {
   return (
@@ -9,6 +10,7 @@ const ActiveUsers = () => {
       <Sidebar />
       <div className="listContainer">
         <Navbar />
+        <NavTabs />
         <Datatable />
       </div>
     </div>

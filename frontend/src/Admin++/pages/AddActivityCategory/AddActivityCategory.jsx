@@ -1,100 +1,104 @@
 import React, { useState, useEffect } from "react";
-import "./AddTag.scss";
+import "./AddActivityCategory.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
-import AddTagForm from "../../components/addTagForm/addTagForm";
+import AddActivityCategoryForm from "../../components/addActivityCategoryForm/addActivityCategoryForm";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import SellRoundedIcon from "@mui/icons-material/SellRounded";
+import CategoryIcon from "@mui/icons-material/Category"; // Use category icon
 
-const AddTag = () => {
-  const [tags, setTags] = useState([]);
+const AddActivityCategory = () => {
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentTag, setCurrentTag] = useState(null);
-  const [newTagName, setNewTagName] = useState("");
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
-  // Fetch tags
-  const fetchTags = async () => {
+  // Fetch categories
+  const fetchCategories = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/Admin/GetAllPreferenceTag");
-      if (!response.ok) throw new Error("Failed to fetch tags");
+      const response = await fetch("/api/Admin/GetAllActivityCategory/");
+      if (!response.ok) throw new Error("Failed to fetch categories");
       const data = await response.json();
-      setTags(data);
+      console.log(data);
+      setCategories(data);
     } catch (err) {
-      setError("Error loading tags");
+      setError("Error loading categories");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchTags();
+    fetchCategories();
   }, []);
 
-  // Add new tag
-  const handleTagAdded = (newTag) => {
-    setTags((prevTags) => [...prevTags, newTag]);
+  // Add new category
+  const handleCategoryAdded = (newCategory) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
   };
 
-  // Delete tag
+  // Delete category
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`/api/Admin/DeletePreferenceTag/${id}`, {
+      const response = await fetch(`/api/Admin/DeleteActivityCategory/${id}`, {
         method: "DELETE",
       });
-      if (!response.ok) throw new Error("Failed to delete tag");
-      setTags((prevTags) => prevTags.filter((tag) => tag._id !== id));
+      if (!response.ok) throw new Error("Failed to delete category");
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) => category._id !== id)
+      );
     } catch (err) {
-      console.error("Failed to delete tag:", err);
+      console.error("Failed to delete category:", err);
     }
   };
 
   // Open modal for editing
-  const handleEdit = (tag) => {
-    setCurrentTag(tag);
-    setNewTagName(tag.tag);
+  const handleEdit = (category) => {
+    setCurrentCategory(category);
+    setNewCategoryName(category.activity);
     setIsModalOpen(true);
   };
 
   // Close modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setCurrentTag(null);
-    setNewTagName("");
+    setCurrentCategory(null);
+    setNewCategoryName("");
   };
 
-  // Update tag
-  const handleUpdateTag = async () => {
-    if (!newTagName.trim()) {
-      alert("Tag name cannot be empty");
+  // Update category
+  const handleUpdateCategory = async () => {
+    if (!newCategoryName.trim()) {
+      alert("Category name cannot be empty");
       return;
     }
 
     try {
       const response = await fetch(
-        `/api/Admin/UpdatePreferenceTag/${currentTag._id}`,
+        `/api/Admin/UpdateActivityCategory/${currentCategory._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tag: newTagName }),
+          body: JSON.stringify({ activity: newCategoryName }),
         }
       );
-      if (!response.ok) throw new Error("Failed to update tag");
+      if (!response.ok) throw new Error("Failed to update category");
 
-      const updatedTag = await response.json();
-      console.log(updatedTag);
-      setTags((prevTags) =>
-        prevTags.map((tag) => (tag._id === updatedTag._id ? updatedTag : tag))
+      const updatedCategory = await response.json();
+      setCategories((prevCategories) =>
+        prevCategories.map((category) =>
+          category._id === updatedCategory._id ? updatedCategory : category
+        )
       );
       handleCloseModal();
     } catch (err) {
-      console.error("Error updating tag:", err);
+      console.error("Error updating category:", err);
     }
   };
 
@@ -102,22 +106,30 @@ const AddTag = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="listTag">
+    <div className="addActivityCategory">
       <Sidebar />
-      <div className="listContainerTag">
-        <div className="cardsContainerTag">
-          {tags.map((tag) => (
-            <Card key={tag._id} className="tagCard" sx={{ marginBottom: 2 }}>
+      <div className="listContainerActivity">
+        <div className="cardsContainerActivity">
+          {categories.map((category) => (
+            <Card
+              key={category._id}
+              className="activityCategoryCard"
+              sx={{ marginBottom: 2 }}
+            >
               <CardContent>
-                <Typography variant="h6" component="div">
-                  <SellRoundedIcon />
-                  {tag.tag}
+                <Typography
+                  variant="h6"
+                  component="div"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <CategoryIcon style={{ marginRight: "10px" }} />
+                  {category.activity}
                 </Typography>
-                <div className="cardActionsTag">
+                <div className="cardActionsActivity">
                   <Button
                     variant="contained"
                     size="small"
-                    onClick={() => handleEdit(tag)}
+                    onClick={() => handleEdit(category)}
                     sx={{
                       backgroundColor: "#91c297",
                       color: "#fff",
@@ -129,7 +141,7 @@ const AddTag = () => {
                   <Button
                     variant="contained"
                     size="small"
-                    onClick={() => handleDelete(tag._id)}
+                    onClick={() => handleDelete(category._id)}
                     sx={{
                       backgroundColor: "#d32e65",
                       color: "#fff",
@@ -144,23 +156,23 @@ const AddTag = () => {
           ))}
         </div>
 
-        {/* AddTagForm */}
-        <AddTagForm onTagAdded={handleTagAdded} />
+        {/* AddActivityCategoryForm */}
+        <AddActivityCategoryForm onCategoryAdded={handleCategoryAdded} />
       </div>
 
       {/* Modal */}
       <Modal
         open={isModalOpen}
         onClose={handleCloseModal}
-        aria-labelledby="edit-tag-modal"
-        aria-describedby="modal-to-edit-tag-name"
+        aria-labelledby="edit-category-modal"
+        aria-describedby="modal-to-edit-category-name"
       >
         <div className="modalContent">
-          <h2>Edit Tag</h2>
+          <h2>Edit Category</h2>
           <TextField
-            label="Tag Name"
-            value={newTagName}
-            onChange={(e) => setNewTagName(e.target.value)}
+            label="Category Name"
+            value={newCategoryName}
+            onChange={(e) => setNewCategoryName(e.target.value)}
             fullWidth
             sx={{
               marginBottom: 2,
@@ -182,7 +194,7 @@ const AddTag = () => {
             }}
           />
           <Button
-            onClick={handleUpdateTag}
+            onClick={handleUpdateCategory}
             color="primary"
             variant="contained"
             sx={{
@@ -195,7 +207,7 @@ const AddTag = () => {
               },
             }}
           >
-            Update Tag
+            Update Category
           </Button>
           <Button
             onClick={handleCloseModal}
@@ -218,4 +230,4 @@ const AddTag = () => {
   );
 };
 
-export default AddTag;
+export default AddActivityCategory;

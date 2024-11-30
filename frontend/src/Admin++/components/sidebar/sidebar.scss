@@ -1,31 +1,30 @@
-.sidebar {
+.sidebarAdmin {
   flex: 1;
   border-right: 0.5px solid rgb(230, 227, 227);
-  //border-right: 3px solid #91c2979b;
   min-height: 100vh;
   background-color: white;
   text-align: left;
   position: absolute;
-  left: 0;
+  left: 0; /* Adjusted to ensure correct placement */
   top: 0;
   width: 250px;
+  padding-left: 20px; /* Add padding to shift content slightly right */
 
-  .top {
+  .topAdmin {
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .logo {
+    .logoAdmin {
       font-size: 20px;
       font-weight: bold;
-      //color: #d32e65;
       color: #d688a2;
     }
 
-    .menu-icon {
+    .menu-iconAdmin {
       font-size: 30px;
-      color: #d688a2; // Set menu icon color to match other icons
+      color: #d688a2;
       cursor: pointer;
       margin-right: 10px;
     }
@@ -36,7 +35,7 @@
     border: 0.5px solid rgb(230, 227, 227);
   }
 
-  .center {
+  .centerAdmin {
     padding-left: 0px;
 
     ul {
@@ -44,18 +43,19 @@
       margin: 0;
       padding: 0;
 
-      .title {
-        font-size: 15px; // size of main and list
+      .titleAdmin {
+        font-size: 15px;
         font-weight: 600;
         color: #91c297;
         margin-top: 15px;
         margin-bottom: 5px;
+        padding-left: 10px; /* Shift titles slightly right */
       }
 
       li {
         display: flex;
         align-items: center;
-        padding: 5px; // spaces between the sections
+        padding: 5px 10px; /* Add horizontal padding */
         cursor: pointer;
 
         &:hover {
@@ -63,7 +63,7 @@
           border-radius: 8px;
         }
 
-        .icon {
+        .iconAdmin {
           font-size: 18px;
           color: #d688a2;
           transition: all 0.3s ease;
@@ -75,26 +75,28 @@
           color: #888;
           margin-left: 10px;
         }
-        .manage-text {
-          display: inline-flex; // Align text and arrow in a row
-          align-items: center; // Center vertically
+
+        .manage-textAdmin {
+          display: inline-flex;
+          align-items: center;
           font-size: 14px;
           font-weight: 500;
           color: #888;
           margin-left: 10px;
 
-          .arrow {
-            margin-left: 5px; // Add some space between the text and the arrow
-            font-size: 12px; // You can adjust the size of the arrow if needed
+          .arrowAdmin {
+            margin-left: 5px;
+            font-size: 12px;
           }
-          .dropdown {
-            padding-left: 20px; // Indent the entire dropdown list
+
+          .dropdownAdmin {
+            padding-left: 30px; /* Increase indentation for dropdown items */
             list-style: none;
 
             li {
               padding: 5px 0;
               cursor: pointer;
-              margin-left: 10px; // Add this to move text slightly to the right
+              margin-left: 10px;
 
               &:hover {
                 background-color: #f6d8e576;
@@ -107,12 +109,12 @@
     }
   }
 
-  .bottom {
+  .bottomAdmin {
     display: flex;
     align-items: center;
     margin: 10px;
 
-    .colorOption {
+    .colorOptionAdmin {
       width: 20px;
       height: 20px;
       border-radius: 5px;

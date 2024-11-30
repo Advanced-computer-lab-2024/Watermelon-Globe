@@ -3,7 +3,7 @@
   position: relative;
 }
 
-.sidebar {
+.sidebarAdmin {
   width: 240px;
   flex-shrink: 0;
   font-family: "Poppins", sans-serif;
@@ -41,17 +41,21 @@
   .MuiTypography-root {
     font-family: "Poppins", sans-serif;
     font-size: 1.1rem;
-    color: #555;
+    color: #777;
   }
+}
+.MuiSvgIcon-root {
+  font-size: 1.5rem; /* Adjust size if needed */
+  color: #d688a2; /* Set the color for the icon */
+  margin-right: 10px; /* Add space between icon and text */
 }
 
 .cardActionsTag {
-  display: flex; /* Horizontal layout */
+  display: flex;
   justify-content: flex-end; /* Align buttons to the right */
-  align-items: center; /* Center the buttons vertically */
-  position: absolute; /* Position relative to the card */
-  top: 16px;
-  right: 16px; /* Position them on the right of the card */
+  align-items: center; /* Center vertically */
+  gap: 8px; /* Space between buttons */
+  margin-top: 10px; /* Optional spacing from the content above */
 }
 
 .cardActionsTag .MuiIconButton-root {
@@ -106,7 +110,7 @@
   align-items: center;
 }
 
-.modalContent h2 {
+÷ .modalContent h2 {
   margin-bottom: 16px;
 }
 

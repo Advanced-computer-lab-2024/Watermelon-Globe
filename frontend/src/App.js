@@ -19,23 +19,23 @@ import MainHome from "./Guest/pages/GuestHomepage.jsx";
 
 import ViewProducts from "./Guest/pages/ViewProducts.js";
 //Admin Pages
-import AdminHome from "./Admin/pages/AdminHome.js";
-import AdminProduct from "./Admin/pages/AdminProduct.jsx";
-import Admin from "./Admin/pages/Admin.js";
-import Governer from "./Admin/pages/Governer.js";
-import ActivityCategory from "./Admin/pages/ActivityCategory.js";
-import PreferenceTag from "./Admin/pages/PrefenceTag.js";
-import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
-import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
-import Complaint from "./Admin/pages/Complaint.js";
-import Itinerary from "./Admin/pages/Itinerary.js";
-import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
+// import AdminHome from "./Admin/pages/AdminHome.js";
+// import AdminProduct from "./Admin/pages/AdminProduct.jsx";
+// import Admin from "./Admin/pages/Admin.js";
+// import Governer from "./Admin/pages/Governer.js";
+// import ActivityCategory from "./Admin/pages/ActivityCategory.js";
+// import PreferenceTag from "./Admin/pages/PrefenceTag.js";
+// import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
+// import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
+// import Complaint from "./Admin/pages/Complaint.js";
+// import Itinerary from "./Admin/pages/Itinerary.js";
+// import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
 //Admin++ Pages
 import AdminPlusHome from "./Admin++/pages/home/Home.jsx";
 import ActiveUsers from "./Admin++/pages/ActiveUsers/ActiveUsers.jsx";
 import PendingUsers from "./Admin++/pages/PendingUsers/PendingUsers.jsx";
-import Categories from "./Admin++/pages/ActivityCategories/ActivityCategories.jsx";
+import Categories from "./Admin++/pages/AddActivityCategory/AddActivityCategory.jsx";
 import AddAdmin from "./Admin++/pages/AddAdmin/AddAdmin.jsx";
 import AddGoverner from "./Admin++/pages/AddGoverner/AddGoverner.jsx";
 import AddTag from "./Admin++/pages/AddTag/AddTag.jsx";
@@ -53,7 +53,7 @@ import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.j
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
 import SellerHome from "./Seller/pages/SellerHomePage.jsx";
-import AdminHomePage from "./Admin/pages/home/Home.jsx";
+// import AdminHomePage from "./Admin/pages/home/Home.jsx";
 
 import ChangePasswordAdvertiser from "./Advertiser/Components/ChangePasswordAdvertiser.js";
 import EditActivity from "./Advertiser/Components/EditActivity.jsx";
@@ -108,7 +108,7 @@ import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 
 import MyHotelFlightBookings from "./Tourist/Components/MyBookings.js";
 //tourguide new
-import ViewDocuments from "./Admin/pages/ViewDocuments.jsx";
+// import ViewDocuments from "./Admin/pages/ViewDocuments.jsx";
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 
 const App = () => {
@@ -136,29 +136,30 @@ const App = () => {
           <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
-          <Route path="/AdminHomepage" element={<AdminHomePage />} />
+          {/*<Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />
           <Route path="/ActivityCategory" element={<ActivityCategory />} />
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
           <Route path="/AdminProduct" element={<AdminProduct />} />
           <Route path="/AcceptRejectPage" element={<AcceptReject />} />
           <Route path="/SellerProduct" element={<SellerProduct />} />
-          <Route path="/SellerHome/:id" element={<SellerHome />} />
+          
           <Route
             path="/SearchProductByName"
             element={<SearchProductByName />}
           />
-
+*/}
+          <Route path="/SellerHome/:id" element={<SellerHome />} />
           {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
-          <Route path="/Admin" element={<Admin />} />
-          <Route path="/Governer" element={<Governer />} />
+          {/* <Route path="/Admin" element={<Admin />} /> */}
+          {/* <Route path="/Governer" element={<Governer />} />
           <Route
             path="/ChangePasswordAdmin"
             element={<ChangePasswordAdmin />}
           />
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
-          <Route path="/AdminViewDocuments" element={<ViewDocuments />} />
+          <Route path="/AdminViewDocuments" element={<ViewDocuments />} /> */}
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
@@ -288,7 +289,7 @@ const App = () => {
             element={<PurchasedProducts />}
           />
           <Route path="/TouristPage" element={<TouristPage />} />
-          <Route path="/SelectMyPref" element={<SelectMyPref />} />
+          {/* <Route path="/SelectMyPref" element={<SelectMyPref />} /> */}
           <Route path="/TouristHomePage/:id" element={<TouristHomePage />} />
           <Route
             path="/TouristComplaints/:id"
