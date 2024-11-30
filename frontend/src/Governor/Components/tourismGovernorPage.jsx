@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ChangePasswordGovernor from './changePasswordGovernor';
+import ChangePasswordGovernor from './ChangePasswordGovernor';
 
 export default function TourismGovernorPage() {
   const [sites, setSites] = useState([]);

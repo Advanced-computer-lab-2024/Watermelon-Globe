@@ -76,7 +76,11 @@ import TourGuidePage from "./Components/tourGuidePage";
 import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.js";
 
 //Tourism governer pages
-import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
+import AddSite from "./Governor/Components/AddSite.js";
+import GetMySites from "./Governor/Components/GetMySites.js";
+import ChangePasswordGovernor from "./Governor/Components/ChangePasswordGovernor.js";
+import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
 
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
@@ -190,7 +194,7 @@ const App = () => {
 
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
-          <Route path="/tourism-governor" element={<TourismGovernorPage />} />
+          <Route path="/GovernorHomePage/:id" element={<TourismGovernorPage />} />
           <Route
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
@@ -269,6 +273,14 @@ const App = () => {
           <Route path="/sellerProfile/:id" element={<SellerProfile />} />
           <Route path="/viewProfile/:id" element={<ViewProfile />} />
           <Route path="/ChangePasswordSeller/:id" element={<ChangePasswordSeller />} />
+
+
+          {/* Governor Pages*/}
+          <Route path="/AddSite/:id" element={<AddSite />} />
+          <Route path="/GetMySites/:id" element={<GetMySites />} />
+          <Route path="/ChangePasswordGovernor/:id" element={<ChangePasswordGovernor />} />
+          <Route path="/GovernorSiteDetails/:id" element={<GovernorSiteDetails />} />
+
 
 
 
