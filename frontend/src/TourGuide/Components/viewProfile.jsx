@@ -322,6 +322,32 @@ const TourGuideProfile = () => {
     navigate(`/ChangePasswordTourGuide/${id}`);
   };
 
+   const handleRequestDeletion = async () => {
+    if (window.confirm("Are you sure you want to request account deletion? This action cannot be undone.")) {
+      try {
+        await axios.put(`/api/tourGuide/requestDeletionGuide/${id}`);
+        alert("Your account deletion request has been submitted.");
+        // Optionally, you can update the UI to reflect the pending deletion status
+        setTourGuide({ ...tourGuide, deletionRequest: "Pending" });
+      } catch (error) {
+        alert("Error requesting account deletion: " + error.response?.data?.message || error.message);
+      }
+    }
+  };
+
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+      try {
+        await axios.delete(`/api/TourGuide/deleteGuide/${id}`);
+        alert("Your account has been deleted successfully.");
+        navigate("/"); // Redirect to home page or login page
+      } catch (error) {
+        alert("Error deleting account: " + error.response?.data?.message || error.message);
+      }
+    }
+  };
+
   return (
     <div className="list">
       <Sidebar />
@@ -419,6 +445,7 @@ const TourGuideProfile = () => {
               >
                 Change Password
               </button>
+              
             )}
 
             {isEditing ? (
@@ -457,6 +484,7 @@ const TourGuideProfile = () => {
                 </button>
               </div>
             ) : (
+                <>
               <button
               className="rounded-md hover:shadow-lg"
               style={{
@@ -474,6 +502,25 @@ const TourGuideProfile = () => {
               >
                 Update Profile
               </button>
+               <button
+                  className="rounded-md hover:shadow-lg"
+                  style={{
+                    backgroundColor: "#FF4136",
+                    color: "white",
+                    padding: "10px 20px",
+                    fontSize: "1.2rem",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s, transform 0.3s",
+                    marginLeft: "20px"
+                  }}
+                  onMouseOver={(e) => (e.target.style.backgroundColor = "#E60000")}
+                  onMouseOut={(e) => (e.target.style.backgroundColor = "#FF4136")}
+                  onClick={handleRequestDeletion }
+                >
+                  Request Account Deletion
+                </button>
+              </>
             )}
           </div>
 

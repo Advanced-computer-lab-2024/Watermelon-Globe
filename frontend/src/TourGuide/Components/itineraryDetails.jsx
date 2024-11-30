@@ -67,6 +67,42 @@ const ItineraryTourguide = () => {
     setEditMode(true);
   };
 
+const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this itinerary?')) {
+      try {
+        // Fetch the latest itinerary data to check bookingsList
+        const response = await fetch(`/api/Itinerary/getItinerary/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch itinerary');
+        }
+        const currentItinerary = await response.json();
+
+        if (currentItinerary.bookingsList && currentItinerary.bookingsList.length > 0) {
+          alert('This itinerary cannot be deleted because it has active bookings.');
+          return;
+        }
+
+        // If no bookings, proceed with deletion
+        const deleteResponse = await fetch(`/api/Itinerary/deleteItinerary2/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (deleteResponse.ok) {
+          alert('Itinerary deleted successfully!');
+        } else {
+          throw new Error('Failed to delete itinerary');
+        }
+      } catch (error) {
+        if (error.message === 'Failed to fetch itinerary') {
+          alert('Itinerary not found. It may have already been deleted.');
+        } else {
+          alert('Error deleting itinerary: ' + error.message);
+        }
+        console.error('Delete itinerary error:', error);
+      }
+    }
+  };
+
   const handleActivate = async () => {
     try {
       const response = await fetch(`/api/Itinerary/updateActivateItinarary/${id}`, {
@@ -196,6 +232,13 @@ const ItineraryTourguide = () => {
                 </button>
                 <button className="rounded-md hover:bg-blue-700" style={{ backgroundColor: watermelonPink, color: 'white' }} onClick={handleActivate}>Activate</button>
                 <button  className="rounded-md hover:bg-blue-700" style={{ backgroundColor: watermelonPink, color: 'white' }} onClick={handleDeactivate}>Deactivate</button>
+                <button 
+                      className="rounded-md hover:bg-red-700" 
+                      style={{ backgroundColor: '#FF0000', color: 'white' }} 
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </button>
               </div>
             </div>
           ) : (

@@ -323,6 +323,43 @@ const deleteItineraryById = async (req, res) => {
   }
 };
 
+const deleteItinerary2 = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Check if the ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid itinerary ID" });
+    }
+
+    // Find the itinerary
+    const itinerary = await itineraryModel.Itinerary.findById(id);
+
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+
+    // Check if the itinerary has any bookings
+    if (itinerary.bookings && itinerary.bookings.length > 0) {
+      return res.status(400).json({ message: "Cannot delete itinerary with active bookings" });
+    }
+
+    // Remove the itinerary from the tour guide's itineraries array
+    await tourGuide.findByIdAndUpdate(itinerary.guide, {
+      $pull: { itineraries: id }
+    });
+
+    // Delete the itinerary
+    await itineraryModel.Itinerary.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Itinerary deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting itinerary:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
 const sortByRatings = async (req, res) => {
   try {
     // Fetch and sort itineraries by rating in descending order (highest to lowest)
@@ -589,6 +626,41 @@ const getPassword = async (req, res) => {
   }
 };
 
+const deleteTourGuide = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the tour guide
+    const guide = await tourGuide.findById(id);
+
+    if (!guide) {
+      return res.status(404).json({ message: "Tour guide not found" });
+    }
+
+    // Check if the guide has any active itineraries or bookings
+    const activeItineraries = await itineraryModel.Itinerary.find({ guide: id, bookings: { $exists: true, $not: {$size: 0} } });
+
+    if (activeItineraries.length > 0) {
+      return res.status(400).json({ message: "Cannot delete account with active itineraries or bookings" });
+    }
+
+    // Delete all itineraries associated with this guide
+    await itineraryModel.Itinerary.deleteMany({ guide: id });
+
+    // Delete the tour guide
+    await tourGuide.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Tour guide account deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting tour guide account:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {
+  deleteTourGuide,
+};
+
 module.exports = {
   createItinerary,
   getAllItineraries,
@@ -611,5 +683,7 @@ module.exports = {
   acceptTermsAndConditions,
   requestDeletionGuide,
   getPassword,
-  updateTourGuideNew
+  updateTourGuideNew,
+  deleteTourGuide,
+  deleteItinerary2
 };
