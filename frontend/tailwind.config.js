@@ -18,6 +18,7 @@ module.exports = {
         cardBackground: '#FFFFFF', // Card background
         grayText: '#A0A0A0',     // Gray text used in descriptions
         lightGray: '#F5F5F5',    // Used for inputs and borders
+        black: '#000000'
       },
       fontSize: {
         // Custom font sizes based on your design

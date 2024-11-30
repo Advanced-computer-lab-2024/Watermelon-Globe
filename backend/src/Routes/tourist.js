@@ -46,14 +46,18 @@ const {
   removeProductFromCart,
   changeCartItemQuantity,
   viewCart,
+  buyCart,
   getAddresses,
   addAddress,
   updateAddress,
+  selectAddress,
+  unselectAddress,
   deleteAddress,
   deleteAllAddresses,
   viewAllOrders,
   viewOrderDetails,
   cancelOrder,
+  updateWallet,
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -147,6 +151,8 @@ router.post('/addProductToCart/:id', addProductToCart);
 
 router.delete('/removeProductFromCart/:id', removeProductFromCart);
 
+router.put('/buyCart/:touristId', buyCart);
+
 router.put('/changeCartItemQuantity/:id', changeCartItemQuantity);
 
 router.get('/viewCart/:id', viewCart);
@@ -156,6 +162,10 @@ router.get('/getAddresses/:touristId', getAddresses);
 router.post('/addAddress/:id', addAddress);
 
 router.put('/updateAddress/:id', updateAddress);
+
+router.put('/selectAddress/:touristId', selectAddress);
+
+router.put('/unselectAddress/:touristId', unselectAddress);
 
 router.delete('/deleteAddress/:id', deleteAddress);
 
@@ -167,5 +177,6 @@ router.get('/viewOrderDetails/:touristId/:orderId', viewOrderDetails);
 
 router.put('/cancelOrder/:touristId/:orderId', cancelOrder);
 
+router.put('/updateWallet/:touristId', updateWallet);
 
 module.exports = router;

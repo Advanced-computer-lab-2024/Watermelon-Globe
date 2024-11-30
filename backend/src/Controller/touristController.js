@@ -1360,7 +1360,6 @@ const removeProductFromCart = async (req, res) => {
   }
 };
 
-
 const changeCartItemQuantity = async (req, res) => {
   const { id } = req.params;
   const { productId, quantity } = req.body;
@@ -1408,6 +1407,65 @@ const viewCart = async (req, res) => {
     res.status(200).json({ cart: tourist.cart });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const buyCart = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(touristId);
+
+    if (!tourist) {
+      return res.status(404).json({ message: 'Tourist not found' });
+    }
+
+    // Ensure that the tourist has a cart with items
+    if (!tourist.cart || tourist.cart.length === 0) {
+      return res.status(400).json({ message: 'Cart is empty' });
+    }
+
+    // Process each product in the cart
+    for (const item of tourist.cart) {
+      const productId = item.product;
+      const quantityToDecrement = item.quantity;
+
+      // Find the product by ID
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return res.status(400).json({ message: `Product with ID ${productId} not found` });
+      }
+
+      // Ensure the product has enough quantity available
+      if (product.quantity < quantityToDecrement) {
+        return res.status(400).json({ message: `Not enough quantity for product: ${product.name}` });
+      }
+
+      // Decrement the product quantity
+      product.quantity -= quantityToDecrement;
+
+      // Save the updated product quantity
+      await product.save();
+    }
+
+    // Add the products to the `products` array in the tourist's profile
+    const productsToAdd = tourist.cart.map(item => item.product);
+
+    // Add the products to the `products` array in the tourist's profile
+    tourist.products.push(...productsToAdd);
+
+    // Clear the cart after the purchase
+    tourist.cart = [];
+
+    // Save the tourist's profile with the updated products and cleared cart
+    await tourist.save();
+
+    return res.status(200).json({ message: 'Cart successfully purchased, products added to profile, and quantities updated.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Something went wrong during the purchase process.' });
   }
 };
 
@@ -1501,6 +1559,80 @@ const updateAddress = async (req, res) => {
   }
 };
 
+const selectAddress = async (req, res) => {
+  try {
+    const { touristId } = req.params; // Tourist ID from the URL params
+    const { index } = req.body; // Index of the address to select
+
+    if (index === undefined) {
+      return res.status(400).json({ message: 'Address index is required' });
+    }
+
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(touristId);
+
+    if (!tourist) {
+      return res.status(404).json({ message: 'Tourist not found' });
+    }
+
+    // Check if the index is valid
+    if (index < 0 || index >= tourist.addresses.length) {
+      return res.status(400).json({ message: 'Invalid address index' });
+    }
+
+    // Update all addresses to set `isSelected` to false
+    tourist.addresses.forEach(address => {
+      address.isSelected = false;
+    });
+
+    // Set the address at the given index to `isSelected: true`
+    tourist.addresses[index].isSelected = true;
+
+    // Save the tourist document with updated addresses
+    await tourist.save();
+
+    // Respond with the updated tourist document
+    res.status(200).json(tourist);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const unselectAddress = async (req, res) => {
+  try {
+    const { touristId } = req.params; // Tourist ID from the URL params
+    const { index } = req.body; // Index of the address to unselect
+
+    if (index === undefined) {
+      return res.status(400).json({ message: 'Address index is required' });
+    }
+
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(touristId);
+
+    if (!tourist) {
+      return res.status(404).json({ message: 'Tourist not found' });
+    }
+
+    // Check if the index is valid
+    if (index < 0 || index >= tourist.addresses.length) {
+      return res.status(400).json({ message: 'Invalid address index' });
+    }
+
+    // Unselect the address at the given index
+    tourist.addresses[index].isSelected = false;
+
+    // Save the tourist document with updated addresses
+    await tourist.save();
+
+    // Respond with the updated tourist document
+    res.status(200).json(tourist);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 const deleteAddress = async (req, res) => {
   const { id } = req.params; // Tourist ID
@@ -1619,6 +1751,38 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+const updateWallet = async (req, res) => {
+  const { touristId } = req.params;
+  const { amount } = req.body; // Expecting amount to be in the request body
+
+  if (typeof amount !== 'number' || isNaN(amount)) {
+    return res.status(400).json({ message: "Invalid amount." });
+  }
+
+  try {
+    // Find the tourist by ID and update the wallet
+    const tourist = await Tourist.findById(touristId);
+
+    if (!tourist) {
+      return res.status(404).json({ message: "Tourist not found." });
+    }
+
+    // Update wallet
+    tourist.wallet += amount; // Add the amount to the current wallet balance
+
+    // Save the updated tourist document
+    await tourist.save();
+
+    // Respond with updated tourist data
+    res.status(200).json({
+      message: "Wallet updated successfully.",
+      wallet: tourist.wallet,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating wallet." });
+  }
+}
   
 module.exports = {
   createTourist,
@@ -1666,12 +1830,16 @@ module.exports = {
   removeProductFromCart,
   changeCartItemQuantity,
   viewCart,
+  buyCart,
   getAddresses,
   addAddress,
   updateAddress,
+  selectAddress,
+  unselectAddress,
   deleteAddress,
   deleteAllAddresses,
   viewAllOrders,
   viewOrderDetails,
   cancelOrder,
+  updateWallet,
 };

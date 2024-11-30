@@ -27,7 +27,7 @@ export default function AddressPage() {
     country: '',
   })
   const [error, setError] = useState<string | null>(null)
-  const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]) // Track selected addresses
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null) // Track the selected address
   const [showAddForm, setShowAddForm] = useState<boolean>(false) // Track whether to show the add address form
 
   // Fetch existing addresses from backend
@@ -129,13 +129,22 @@ export default function AddressPage() {
     }
   }
 
-  // Handle checkbox selection for addresses
-  const handleCheckboxChange = (addressId: string) => {
-    setSelectedAddresses((prevSelected) =>
-      prevSelected.includes(addressId)
-        ? prevSelected.filter((id) => id !== addressId)
-        : [...prevSelected, addressId]
-    )
+  // Handle checkbox selection for addresses (using backend select/unselect methods)
+  const handleCheckboxChange = async (addressId: string) => {
+    try {
+      if (addressId === selectedAddress) {
+        // If the selected address is already selected, unselect it
+        await axios.put(`/api/Tourist/unselectAddress/${touristId}`, { index: addresses.findIndex((address) => address._id === addressId) })
+        setSelectedAddress(null) // Unselect address locally
+      } else {
+        // Select the new address
+        await axios.put(`/api/Tourist/selectAddress/${touristId}`, { index: addresses.findIndex((address) => address._id === addressId) })
+        setSelectedAddress(addressId) // Update selected address locally
+      }
+    } catch (error) {
+      console.error('Error selecting or unselecting address:', error)
+      setError('Failed to select or unselect address. Please try again.')
+    }
   }
 
   useEffect(() => {
@@ -144,48 +153,49 @@ export default function AddressPage() {
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-4">Delivery Addresses</h1>
 
       {/* Error message */}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Address List */}
-      <div>
-        <h2 className="text-xl font-semibold">Choose an Address</h2>
+       {/* Address List */}
+       <div>
         {addresses.length === 0 ? (
           <p>No addresses found. Please add a new one.</p>
         ) : (
           <ul className="space-y-4">
             {addresses.map((address, index) => (
-              <li key={address._id} className="flex items-center justify-between border-b pb-2">
+              <li key={address._id} className={`flex items-center justify-between border p-4 rounded-lg shadow-sm  ${selectedAddress === address._id ? 'bg-gray-100 border-primary ' : ''}`}>
                 <div>
-                  <p>{address.street}</p>
+                  <p className="font-semibold">{address.street}</p>
                   <p>{address.city}, {address.state} {address.zip}</p>
                   <p>{address.country}</p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={selectedAddresses.includes(address._id)}
-                  onChange={() => handleCheckboxChange(address._id)}
-                  className="mr-4"
-                />
-                <button
-                  onClick={() => handleEditAddress(index)}
-                  className="text-[#2E8B57] p-2"
-                >
-                  <FaEdit size={20} />
-                </button>
-                <button
-                  onClick={() => handleDeleteAddress(index)}
-                  className="text-[#FF3366] p-2"
-                >
-                  <FaTrashAlt size={20} />
-                </button>
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => handleCheckboxChange(address._id)}
+                    className={`py-2 px-4 rounded-md ${selectedAddress === address._id ? 'bg-primary text-white' : 'bg-transparent border border-primary text-primary'} hover:bg-primary hover:text-white transition`}
+                  >
+                    Select
+                  </button>
+                  <button
+                    onClick={() => handleEditAddress(index)}
+                    className="text-[#2E8B57] p-2 hover:text-[#1E6E4D]"
+                  >
+                    <FaEdit size={20} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteAddress(index)}
+                    className="text-[#FF3366] p-2 hover:text-[#FF1E4D]"
+                  >
+                    <FaTrashAlt size={20} />
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         )}
       </div>
+
 
       {/* Add New Address Button */}
       {!showAddForm && (

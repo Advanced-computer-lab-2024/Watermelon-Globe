@@ -110,6 +110,10 @@ const touristSchema = new Schema(
         state: { type: String, required: true },
         zip: { type: String, required: true },
         country: { type: String, required: true },
+        isSelected: {
+          type: Boolean,
+          default: false,  // Default to false, indicating no address is selected by default
+        },
       }
     ],
 
