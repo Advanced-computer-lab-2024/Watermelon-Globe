@@ -8,14 +8,7 @@ const GovernorSiteDetails = () => {
   const { id } = useParams(); // Extracting site ID from URL
   const [site, setSite] = useState(null); // Initial state is null
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedSite, setUpdatedSite] = useState({
-    name: "",
-    description: "",
-    location: "",
-    openingHours: "",
-    ticketPrices: "",
-  });
-  const [showUpdatePicture, setShowUpdatePicture] = useState(false); // To toggle update picture modal
+  const [updatedSite, setUpdatedSite] = useState(null); // State for editing fields
 
   const watermelonGreen = "#4CAF50";
   const watermelonPink = "#FF4081";
@@ -36,15 +29,13 @@ const GovernorSiteDetails = () => {
 
   // Handle updating the site details
   const handleUpdateSite = async () => {
-    const filteredUpdateData = Object.fromEntries(
-      Object.entries(updatedSite).filter(([key, value]) => value.trim() !== "")
-    );
-
     try {
-      const response = await axios.put(`/api/Governor/updateSite?id=${id}`, filteredUpdateData);
+      const response = await axios.put(`/api/Governor/updateSite?id=${id}`, updatedSite);
 
       if (response.status === 200) {
-        setSite({ ...site, ...filteredUpdateData }); // Update the site state
+        // Refresh site data from backend after update
+        const updatedResponse = await axios.get(`/api/Governor/getSite?id=${id}`);
+        setSite(updatedResponse.data); // Update state with new data
         setIsEditing(false); // Exit editing mode
       } else {
         console.error("Failed to update site");
@@ -99,13 +90,19 @@ const GovernorSiteDetails = () => {
         <div className="flex justify-center items-center min-h-screen p-6">
           <div style={watermelonStyle} className="w-full max-w-xl">
             <div className="flex justify-center mb-6">
-            {site.pictures && (
-                    <img
-                      src={site.pictures}
-                      alt={`Image of ${site.name}`}
-                      style={{ width: '25%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '10px' }}
-                    />
-                  )}
+              {site.pictures && (
+                <img
+                  src={site.pictures}
+                  alt={`Image of ${site.name}`}
+                  style={{
+                    width: "25%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                    marginBottom: "10px",
+                  }}
+                />
+              )}
             </div>
 
             <div className="text-center mb-6">
@@ -134,14 +131,14 @@ const GovernorSiteDetails = () => {
                 <p>
                   <strong>Opening Hours:</strong> {site.openingHours}
                 </p>
-                <button style={buttonStyle} onClick={() => setIsEditing(true)}>
-                  Update Site
-                </button>
                 <button
-                  style={{ ...buttonStyle }}
-                  onClick={() => setShowUpdatePicture(!showUpdatePicture)}
+                  style={buttonStyle}
+                  onClick={() => {
+                    setUpdatedSite(site); // Pre-fill with existing data
+                    setIsEditing(true);
+                  }}
                 >
-                  Update Picture
+                  Update Site
                 </button>
               </div>
             ) : (
@@ -149,14 +146,14 @@ const GovernorSiteDetails = () => {
                 <input
                   type="text"
                   name="name"
-                  value={updatedSite.name}
+                  value={updatedSite?.name || ""}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg"
                   placeholder="Site Name"
                 />
                 <textarea
                   name="description"
-                  value={updatedSite.description}
+                  value={updatedSite?.description || ""}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg"
                   placeholder="Description"
@@ -164,7 +161,7 @@ const GovernorSiteDetails = () => {
                 <input
                   type="text"
                   name="location"
-                  value={updatedSite.location}
+                  value={updatedSite?.location || ""}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg"
                   placeholder="Location"
@@ -172,7 +169,7 @@ const GovernorSiteDetails = () => {
                 <input
                   type="text"
                   name="openingHours"
-                  value={updatedSite.openingHours}
+                  value={updatedSite?.openingHours || ""}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg"
                   placeholder="Opening Hours"
@@ -180,7 +177,7 @@ const GovernorSiteDetails = () => {
                 <input
                   type="number"
                   name="ticketPrices"
-                  value={updatedSite.ticketPrices}
+                  value={updatedSite?.ticketPrices || ""}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-lg"
                   placeholder="Ticket Price"
@@ -201,7 +198,6 @@ const GovernorSiteDetails = () => {
                 </div>
               </div>
             )}
-            {showUpdatePicture && <UploadSitePicture id={id} />}
           </div>
         </div>
       </div>
