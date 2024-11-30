@@ -65,10 +65,11 @@
 .icon{
     width: 18px;
     height: 18px;
+    font: 30px;
 }
 
 .navbar .wrapper .items .item .icon {
-    font-size: 20px;   
+    font-size: 30px;   
 }
 
 .navbar .wrapper  .item .avatar {

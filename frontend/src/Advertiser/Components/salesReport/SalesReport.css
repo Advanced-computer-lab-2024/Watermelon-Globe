@@ -1,0 +1,54 @@
+/* SalesReportPage.css */
+.sales-report {
+padding: 20px;
+background-color: #f9f9f9;
+border-radius: 8px;
+color: #333;
+font-family: Arial, sans-serif;
+}
+
+.sales-report h1 {
+color: #ff545e;
+margin-bottom: 20px;
+}
+
+.report-summary {
+margin-bottom: 20px;
+background-color: #6ec2b1;
+padding: 10px;
+border-radius: 8px;
+color: white;
+}
+
+.report-summary h2 {
+color: white;
+}
+
+.report-details table {
+width: 100%;
+border-collapse: collapse;
+}
+
+.report-details th,
+.report-details td {
+text-align: left;
+padding: 8px;
+border: 1px solid #ddd;
+}
+
+.report-details th {
+background-color: #ff7b7b;
+color: white;
+}
+
+.report-details td {
+background-color: #fff;
+}
+
+.report-details tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+
+.report-details tr:hover {
+background-color: #95e3bb;
+}
