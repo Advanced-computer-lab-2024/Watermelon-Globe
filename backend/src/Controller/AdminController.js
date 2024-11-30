@@ -1032,6 +1032,8 @@ const markItineraryInappropriate = async (req, res) => {
     }
 
     const guide = itinerary.guide;
+    const notification=`Your Itinerary "${Itinerary.name}" with id "${Itinerary.id}"  has been flagged inappropriate`
+    guide.notifications.push(notification);
 
     // Check if guide information is complete
     if (!guide || !guide.email || !guide.name) {
