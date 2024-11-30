@@ -79,7 +79,7 @@ import ChangePasswordTourGuide from "./TourGuide/pages/changePasswordTourGuide.j
 import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
 import AddSite from "./Governor/Components/AddSite.js";
 import GetMySites from "./Governor/Components/GetMySites.js";
-import ChangePasswordGovernor from "./Governor/Components/ChangePasswordGovernor.js";
+import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
 import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
 
 //Tourist pages
