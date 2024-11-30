@@ -1,0 +1,98 @@
+.addTagForm {
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  margin-left: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif; /* Change font-family for the whole form */
+}
+
+.addTagForm form {
+  display: flex;
+  flex-direction: column;
+}
+
+.addTagForm .MuiTextField-root {
+  margin-bottom: 15px;
+}
+
+.addTagForm .MuiButton-root {
+  margin-top: 15px;
+}
+
+/* Custom button styling */
+.addTagButton {
+  background-color: #91c297; /* Set the default background color to green */
+  color: white; /* Text color */
+  font-size: 16px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #7f9d74; /* Darker green on hover */
+  }
+
+  &:active {
+    background-color: #6a8e60; /* Even darker shade when pressed */
+  }
+
+  &:focus {
+    background-color: #91c297; /* Maintain green color when focused */
+  }
+}
+
+.addTagForm .MuiTypography-root {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif; /* Change font for the Typography */
+  color: #d32e65; /* Change color to match the theme */
+}
+
+.addTagForm .error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.addTagForm .success {
+  color: green;
+  margin-bottom: 10px;
+}
+
+.addTagForm .MuiIconButton-root {
+  padding: 0;
+  font-size: 1.3rem; /* Adjust the icon size */
+}
+
+/* Custom styling for text fields when focused */
+.customTextField .MuiOutlinedInput-root {
+  &.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #91c297; /* Change border color when focused */
+  }
+}
+
+/* Change the text color of the input fields (tag name) */
+.customTextField .MuiOutlinedInput-input {
+  color: #333; /* Text color inside input fields */
+}
+
+/* Change the text color of the label (tag name) */
+.customTextField .MuiInputLabel-root {
+  color: #888; /* Label color */
+}
+
+/* Change the text color inside the text fields when they are focused */
+.customTextField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+  color: #91c297; /* Change text color to green when focused */
+}
+
+/* Focused input color */
+.customTextField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+  color: #555; /* Text color inside the input when focused */
+}
+
+/* Change the color of the label when focused */
+.customTextField .MuiInputLabel-root.Mui-focused {
+  color: #91c297; /* Change label color when focused */
+}

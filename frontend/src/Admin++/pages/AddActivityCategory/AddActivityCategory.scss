@@ -1,0 +1,120 @@
+.addActivityCategory {
+  display: flex;
+  position: relative;
+  //min-height: 100vh;
+}
+
+.sidebarAdmin {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.listContainerActivity {
+  flex: 1;
+  margin-left: 240px;
+  padding: 20px;
+  overflow: auto;
+  position: relative;
+  //padding-top: 40px;
+}
+
+.cardsContainerActivity {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  //column-gap: 8px; /* Decreases the space between columns */
+  //row-gap: 0px; /* Adjust row gap (space between rows) */
+  gap: 16px;
+  margin-right: 420px; ///!!!!!!!!! this big big bitch
+  z-index: 1;
+  //   margin-top: 80px;
+}
+
+.activityCategoryCard {
+  width: 100%; /* Cards are smaller */
+  max-width: 350px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f6f9;
+  padding: 15px;
+  color: #333;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.activityCategoryCard .MuiTypography-root {
+  font-family: "Poppins", sans-serif;
+  color: #666;
+  font-size: 1.1rem;
+  font-weight: 410;
+  display: flex;
+  align-items: center;
+}
+
+.activityCategoryCard .MuiTypography-root svg {
+  margin-right: 10px;
+  font-size: 2rem;
+}
+
+/* Hover effect on category cards */
+.activityCategoryCard:hover {
+  background-color: #f6d8e576;
+}
+
+.cardActionsActivity {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.activityCategoryCard .MuiButton-root.edit {
+  background-color: #91c297 !important;
+  color: white !important;
+  &:hover {
+    background-color: #91c297 !important;
+  }
+}
+.activityCategoryCard .MuiButton-root.delete {
+  background-color: #d32e65 !important;
+  color: white !important;
+  &:hover {
+    background-color: #d32e65 !important;
+  }
+}
+
+/* Icon styling within the Card */
+.activityCategoryCard .MuiSvgIcon-root {
+  color: #d688a2 !important;
+  &:hover {
+    color: #d688a2 !important;
+  }
+}
+
+.addActivityCategoryForm {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .cardsContainerActivity {
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+  }
+
+  .activityCategoryCard {
+    width: 90%; /* Make cards take up more width on smaller screens */
+    max-width: none; /* Remove max-width constraint for mobile */
+  }
+
+  .addActivityCategoryForm {
+    width: 100%;
+    right: 0;
+    top: 0;
+  }
+}

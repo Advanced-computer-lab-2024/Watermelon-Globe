@@ -1,15 +1,15 @@
-import { React, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import './App.css';
+import { React, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import "./App.css";
 // Importing all necessary components
-import SignupPage from './Components/SignUp';
+import SignupPage from "./Components/SignUp";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
-import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
-import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js"
-import HomePage from './Components/Homepage';
-import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Components/CompanyHomepage.jsx';
+import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
+import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
+import HomePage from "./Components/Homepage";
+import AppPage from "./Components/BackendReq";
+import CompanyHomepage from "./Components/CompanyHomepage.jsx";
 import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
@@ -19,37 +19,43 @@ import MainHome from "./Guest/pages/GuestHomepage.jsx";
 
 import ViewProducts from "./Guest/pages/ViewProducts.js";
 //Admin Pages
-import AdminHome from "./Admin/pages/AdminHome.js";
-import AdminProduct from "./Admin/pages/AdminProduct.jsx";
-import Admin from "./Admin/pages/Admin.js";
-import Governer from "./Admin/pages/Governer.js";
-import ActivityCategory from "./Admin/pages/ActivityCategory.js";
-import PreferenceTag from "./Admin/pages/PrefenceTag.js";
-import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
-import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
-import Complaint from "./Admin/pages/Complaint.js";
-import Itinerary from "./Admin/pages/Itinerary.js";
-import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
+// import AdminHome from "./Admin/pages/AdminHome.js";
+// import AdminProduct from "./Admin/pages/AdminProduct.jsx";
+// import Admin from "./Admin/pages/Admin.js";
+// import Governer from "./Admin/pages/Governer.js";
+// import ActivityCategory from "./Admin/pages/ActivityCategory.js";
+// import PreferenceTag from "./Admin/pages/PrefenceTag.js";
+// import AcceptReject from "./Admin/pages/AcceptRejectPage.js";
+// import ChangePasswordAdmin from "./Admin/pages/ChangePasswordAdmin.js";
+// import Complaint from "./Admin/pages/Complaint.js";
+// import Itinerary from "./Admin/pages/Itinerary.js";
+// import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
+//Admin++ Pages
+import AdminPlusHome from "./Admin++/pages/home/Home.jsx";
+import ActiveUsers from "./Admin++/pages/ActiveUsers/ActiveUsers.jsx";
+import PendingUsers from "./Admin++/pages/PendingUsers/PendingUsers.jsx";
+import Categories from "./Admin++/pages/AddActivityCategory/AddActivityCategory.jsx";
+import AddAdmin from "./Admin++/pages/AddAdmin/AddAdmin.jsx";
+import AddGoverner from "./Admin++/pages/AddGoverner/AddGoverner.jsx";
+import AddTag from "./Admin++/pages/AddTag/AddTag.jsx";
 
 import GuestPage from "./Guest/pages/GuestHomepage.jsx";
-
 
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
-
 import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
-import AccountPage from './Advertiser/pages/AccountPage/AccountPage.jsx';
-import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
-import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.jsx';
-import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
-import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
-import SellerHome from './Seller/pages/SellerHomePage.jsx';
+import AccountPage from "./Advertiser/pages/AccountPage/AccountPage.jsx";
+import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
+import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.jsx";
+import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
+import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
+import SellerHome from "./Seller/pages/SellerHomePage.jsx";
+// import AdminHomePage from "./Admin/pages/home/Home.jsx";
 
-
-import ChangePasswordAdvertiser from './Advertiser/Components/ChangePasswordAdvertiser.js';
+import ChangePasswordAdvertiser from "./Advertiser/Components/ChangePasswordAdvertiser.js";
 import EditActivity from "./Advertiser/Components/EditActivity.jsx";
 //Seller Pages
 import SellerSignup from "./pages/SellerSignup.jsx";
@@ -104,17 +110,13 @@ import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
-import HotelMain from './Hotels/Pages/HotelMain.js';
+import HotelMain from "./Hotels/Pages/HotelMain.js";
 
+import SiteDetails from "./Tourist/pages/siteDetails.js";
 
-import SiteDetails from './Tourist/pages/siteDetails.js';
+import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 
-
-import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
-
-
-
-import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
+import MyHotelFlightBookings from "./Tourist/Components/MyBookings.js";
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
@@ -145,30 +147,42 @@ const App = () => {
           <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
+          {/*<Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />
           <Route path="/ActivityCategory" element={<ActivityCategory />} />
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
           <Route path="/AdminProduct" element={<AdminProduct />} />
           <Route path="/AcceptRejectPage" element={<AcceptReject />} />
           <Route path="/SellerProduct" element={<SellerProduct />} />
+          
+          <Route
+            path="/SearchProductByName"
+            element={<SearchProductByName />}
+          />
+*/}
           <Route path="/SellerHome/:id" element={<SellerHome />} />
-          <Route path="/SearchProductByName" element={<SearchProductByName />} />
-
-
           {/* <Route path="/TouristProduct" element={<TouristProduct />} /> */}
-          <Route path="/Admin" element={<Admin />} />
-          <Route path="/Governer" element={<Governer />} />
+          {/* <Route path="/Admin" element={<Admin />} /> */}
+          {/* <Route path="/Governer" element={<Governer />} />
           <Route
             path="/ChangePasswordAdmin"
             element={<ChangePasswordAdmin />}
           />
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
-          <Route path="/AdminViewDocuments" element={<ViewDocuments />} />
+          <Route path="/AdminViewDocuments" element={<ViewDocuments />} /> */}
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
 
+          {/* Admin++ Routes */}
+          <Route path="/AdminHome++" element={<AdminPlusHome />} />
+          <Route path="AddAdmins" element={<AddAdmin />} />
+          <Route path="AddGoverner" element={<AddGoverner />} />
+          <Route path="ManageActive" element={<ActiveUsers />} />
+          <Route path="ManagePending" element={<PendingUsers />} />
+          <Route path="Categories" element={<Categories />} />
+          <Route path="Tags" element={<AddTag />} />
           <Route path="/" element={<MainHome />} />
 
           {/* <Route path="/" element={<Iteneraries />} />
@@ -181,20 +195,27 @@ const App = () => {
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
-          
+
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
-
+          <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
 
           {/* Guest Routes */}
-          <Route path="/completed-itineraries/:id" element={<CompletedItineraries />} />
-          <Route path="/completed-activities/:id" element={<CompletedActivities />} />
+          <Route
+            path="/completed-itineraries/:id"
+            element={<CompletedItineraries />}
+          />
+          <Route
+            path="/completed-activities/:id"
+            element={<CompletedActivities />}
+          />
           {/* <Route path="/rate-tour-guide/:id" element={<RateTourGuide />} /> */}
           {/* <Route path="/rate-itinerary/:id" element={<RateItinerary />} /> */}
           {/* <Route path="/ratingsAndCommentsPage/:relatedObjectId" element={<RatingsAndCommentsPage />} /> */}
-          <Route path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type" element={<RatingsAndCommentsPage />} />
-
+          <Route
+            path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type"
+            element={<RatingsAndCommentsPage />}
+          />
 
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
@@ -215,21 +236,32 @@ const App = () => {
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
           />
-          <Route path='/ChangePasswordAdvertiser/:advertiserId' element={<ChangePasswordAdvertiser/>}/>
+          <Route
+            path="/ChangePasswordAdvertiser/:advertiserId"
+            element={<ChangePasswordAdvertiser />}
+          />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
 
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
-          <Route path="/advertiserProfile/:profileId" element = {<AccountPage/>}/>
-          <Route path="/editAdvertiser/:profileId" element={<EditProfilePage/>} />
-          <Route path="/activityDetails/:id/:profileId" element={<AdvertiserActivityDetails />} />
+          <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route
+            path="/advertiserProfile/:profileId"
+            element={<AccountPage />}
+          />
+          <Route
+            path="/editAdvertiser/:profileId"
+            element={<EditProfilePage />}
+          />
+          <Route
+            path="/activityDetails/:id/:profileId"
+            element={<AdvertiserActivityDetails />}
+          />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:userId" element={<ActivityForm />} />
 
           {/* Signup Pages */}
-          <Route path="/seller-signup" element={<SellerSignup />} />
 
           <Route
             path="/terms-and-conditions/:userId"
@@ -247,13 +279,11 @@ const App = () => {
             path="/SellerSignupConfirm/:id"
             element={<SellerSignupConfirm />}
           />
-          <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
           <Route
             path="/advertiserSignupConfirm/:id"
             element={<AdvertiserSignupConfirm />}
           />
           <Route path="/tourist-signup" element={<TouristSignup />} />
-          <Route path="/tourguide-signup" element={<TourguideSignup />} />
           <Route
             path="/TourguideSignupConfirm/:id"
             element={<TourguideSignupConfirm />}
@@ -261,10 +291,19 @@ const App = () => {
           <Route path="/signup-options" element={<SignupOptions />} />
 
           {/* Tourist Pages */}
-          <Route path="/Tourist_ProductsPage" element={<TouristProductsPage />} />
-          <Route path="/ItineraryDetails/:tripid/:id" element={<ItineraryDetails />} />
-          <Route path="/TouristActivityDetails/:activityId/:id" element={<TouristActivityDetails />} />
-          
+          <Route
+            path="/Tourist_ProductsPage"
+            element={<TouristProductsPage />}
+          />
+          <Route
+            path="/ItineraryDetails/:tripid/:id"
+            element={<ItineraryDetails />}
+          />
+          <Route
+            path="/TouristActivityDetails/:activityId/:id"
+            element={<TouristActivityDetails />}
+          />
+
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
@@ -273,7 +312,7 @@ const App = () => {
             element={<PurchasedProducts />}
           />
           <Route path="/TouristPage" element={<TouristPage />} />
-          <Route path="/SelectMyPref" element={<SelectMyPref />} />
+          {/* <Route path="/SelectMyPref" element={<SelectMyPref />} /> */}
           <Route path="/TouristHomePage/:id" element={<TouristHomePage />} />
           <Route
             path="/TouristComplaints/:id"
@@ -308,17 +347,23 @@ const App = () => {
           />
 
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
-          <Route path='/add-activity' element={<ActivityForm/>}/>
-          <Route path='/TransportationDetails/:id' element={<TransportationDetails/>}/>
+          <Route path="/add-activity" element={<ActivityForm />} />
+          <Route
+            path="/TransportationDetails/:id"
+            element={<TransportationDetails />}
+          />
 
           {/* Path for Flight and Hotel APIs */}
-          <Route path='/Flights/:touristId' element={<FlightMain/>}/>
-          <Route path='/Hotels/:touristId' element={<HotelMain/>}/>
-          <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
-          <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
-
-          
-
+          <Route path="/Flights/:touristId" element={<FlightMain />} />
+          <Route path="/Hotels/:touristId" element={<HotelMain />} />
+          <Route
+            path="/HotelOffers/:hotelId/:touristId"
+            element={<HotelOffers />}
+          />
+          <Route
+            path="/MyHotelFlightBookings/:touristId"
+            element={<MyHotelFlightBookings />}
+          />
         </Routes>
       </div>
     </Router>

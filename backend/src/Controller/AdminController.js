@@ -14,7 +14,6 @@ const Transportation = require("../Models/TransportationModel");
 const mongoose = require("mongoose");
 const nodemailer = require('nodemailer');
 
-
 const getAllAdmin = async (req, res) => {
   try {
     const admin = await Admin.find({}).sort({ createdAt: -1 });
@@ -191,16 +190,16 @@ const deletePreferenceTag = async (req, res) => {
   res.status(200).json(preferencetag);
 };
 
-//uptade a preferencetag
 const updatePreferenceTag = async (req, res) => {
   const { id } = req.params;
   const { tag } = req.body;
-  console.log(id);
 
+  // Check if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: "No such tag" });
+    return res.status(400).json({ error: "Invalid tag ID" });
   }
 
+  // Check for empty fields
   let emptyFields = [];
   if (!tag) {
     emptyFields.push("tag");
@@ -211,22 +210,29 @@ const updatePreferenceTag = async (req, res) => {
       .json({ error: "Please fill in all fields", emptyFields });
   }
 
+  // Check if the new tag name already exists
   const existingTag = await PreferenceTag.findOne({ tag });
-
   if (existingTag) {
     return res.status(400).json({ error: "Tag name already exists" });
-  } else {
-    const preferencetag = await PreferenceTag.findOneAndUpdate(
+  }
+
+  try {
+    // Update the tag and return the updated document
+    const updatedTag = await PreferenceTag.findOneAndUpdate(
       { _id: id },
-      {
-        ...req.body,
-      }
+      { tag }, // Only update the tag field
+      { new: true } // Return the updated document
     );
 
-    if (!preferencetag) {
-      return res.status(400).json({ error: "No such tag" });
+    // Check if the tag exists
+    if (!updatedTag) {
+      return res.status(404).json({ error: "No such tag" });
     }
-    res.status(200).json(preferencetag);
+
+    // Respond with the updated tag
+    res.status(200).json(updatedTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -298,7 +304,7 @@ const deleteActivityCategory = async (req, res) => {
   res.status(200).json(activitycategory);
 };
 
-//uptade a activitycategory
+//update a activitycategory
 const updateActivityCategory = async (req, res) => {
   const { id } = req.params;
   const { activity } = req.body;
@@ -317,28 +323,30 @@ const updateActivityCategory = async (req, res) => {
       .json({ error: "Please fill in all fields", emptyFields });
   }
 
+  // Check if activity name already exists
   const existingActivity = await ActivityCategory.findOne({ activity });
-
   if (existingActivity) {
     return res.status(400).json({ error: "Activity name already exists" });
   } else {
-    const activitycategory = await ActivityCategory.findOneAndUpdate(
+    // Update the activity category and return the updated category
+    const updatedActivityCategory = await ActivityCategory.findOneAndUpdate(
       { _id: id },
-      {
-        ...req.body,
-      }
+      { activity }, // Only update the 'activity' field
+      { new: true } // This option ensures the updated document is returned
     );
 
-    if (!activitycategory) {
+    if (!updatedActivityCategory) {
       return res.status(400).json({ error: "No such activity" });
     }
-    res.status(200).json(activitycategory);
+
+    res.status(200).json(updatedActivityCategory); // Return the updated category
   }
 };
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller, ratings, sales } = req.body;
+  const { name, price, quantity, description, seller, ratings, sales } =
+    req.body;
 
   try {
     // Create a new product with the provided details
@@ -350,7 +358,7 @@ const createProduct = async (req, res) => {
       seller: "6729244f151b6c9e346dd732",
       ratings: ratings || 0,
       sales: sales || 0,
-      archived: false // Explicitly set this as a default value
+      archived: false, // Explicitly set this as a default value
     });
 
     // Return the created product as JSON response
@@ -371,11 +379,13 @@ const getAllProducts = async (req, res) => {
 const getAllProductIds = async (req, res) => {
   try {
     // Retrieve all products, selecting only the name and _id fields
-    const products = await Product.find({}, 'name _id');
+    const products = await Product.find({}, "name _id");
 
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while retrieving products' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving products" });
   }
 };
 
@@ -830,10 +840,7 @@ const getUploadedDocuments = async (req, res) => {
       {},
       "Username idProof taxationRegistryCard"
     );
-    const sellers = await Seller.find(
-      {},
-      "Name idProof taxationRegistryCard"
-    );
+    const sellers = await Seller.find({}, "Name idProof taxationRegistryCard");
 
     // Filter TourGuides who have uploaded documents (either idProof or certificates)
     const filteredTourGuides = tourGuides.filter(
@@ -961,7 +968,7 @@ const uploadPicture = async (req, res) => {
 
   // Check if the ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid product ID' });
+    return res.status(400).json({ error: "Invalid product ID" });
   }
 
   try {
@@ -973,12 +980,16 @@ const uploadPicture = async (req, res) => {
     );
 
     if (!product) {
-      return res.status(404).json({ error: 'No product found with this ID' });
+      return res.status(404).json({ error: "No product found with this ID" });
     }
 
-    res.status(200).json({ message: 'Product picture updated successfully', product });
+    res
+      .status(200)
+      .json({ message: "Product picture updated successfully", product });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while updating the product picture' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the product picture" });
   }
 };
 
@@ -1067,10 +1078,14 @@ const markItineraryInappropriate = async (req, res) => {
 
 //create new activitycategory
 const createTransportation = async (req, res) => {
-  const { type,destination,price } = req.body;
+  const { type, destination, price } = req.body;
 
   try {
-    const transportaion = await Transportation.create({ type,destination,price });
+    const transportaion = await Transportation.create({
+      type,
+      destination,
+      price,
+    });
     res.status(200).json(transportaion);
   } catch (error) {
     res.status(400).json({ error: error.mssg });
@@ -1211,5 +1226,5 @@ module.exports = {
   unarchiveProduct,
   uploadPicture,
   markItineraryInappropriate,
-  createTransportation
+  createTransportation,
 };

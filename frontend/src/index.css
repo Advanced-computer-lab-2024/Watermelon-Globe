@@ -12,9 +12,9 @@ code {
     monospace;
 } */
 
-
 /* google font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap");
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap'); */
 
 /* layout */
 :root {
@@ -41,7 +41,7 @@ header a {
   color: #333;
   text-decoration: none;
 }
-.pages{
+.pages {
   max-width: 1400px;
   padding: 20px;
   margin: 0 auto;
@@ -59,7 +59,7 @@ header a {
   margin: 20px auto;
   padding: 20px;
   position: relative;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
 .activitycategory-details h4 {
   margin: 0 0 10px 0;
@@ -83,7 +83,8 @@ header a {
 }
 
 /* new workout form */
-label, input {
+label,
+input {
   display: block;
 }
 input {
@@ -167,9 +168,8 @@ input.error {
 
 .sidebar button:hover {
   color: var(--primary);
-  background: #f1f1f1;
+  background: #f1f1f1;
 }
-
 
 /* admin home page */
 .admin-container {
@@ -189,7 +189,7 @@ input.error {
   font-size: 2rem;
   margin-bottom: 20px;
   color: #333;
-  margin-right:150px
+  margin-right: 150px;
 }
 
 /* Option list styling */
@@ -238,8 +238,6 @@ input.error {
   }
 }
 
-
-
 .complaint-page {
   display: flex;
   gap: 20px; /* Space between the complaint list and description */
@@ -254,41 +252,42 @@ input.error {
   flex: 1;
   max-width: 70%; /* Take up 50% of the screen */
   padding: 20px;
-  border-left: 1px solid #ccc;.reply-section {
+  border-left: 1px solid #ccc;
+  .reply-section {
     margin-top: 20px;
-}
+  }
 
-.reply-section h4 {
+  .reply-section h4 {
     font-size: 1.1em;
     margin-bottom: 10px;
-}
+  }
 
-.reply-section textarea {
+  .reply-section textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 10px;
-}
+  }
 
-.reply-section button {
+  .reply-section button {
     background: var(--primary);
     border: none;
     color: white;
     padding: 10px;
     cursor: pointer;
     border-radius: 4px;
-}
+  }
 
-.reply-section .error {
+  .reply-section .error {
     color: var(--error);
     margin-bottom: 10px;
-}
+  }
 
-.reply-section .success {
+  .reply-section .success {
     color: green;
     margin-bottom: 10px;
-}
+  }
 }
 
 /* Slider switch styles */
@@ -314,7 +313,7 @@ input.error {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 34px; /* Rounded corners for the slider */
 }
 
@@ -326,13 +325,13 @@ input.error {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%; /* Circular shape for the knob */
 }
 
 /* Checked state styles */
 input:checked + .slider {
-  background-color: #4CAF50; /* Green background for the active slider */
+  background-color: #4caf50; /* Green background for the active slider */
 }
 
 input:checked + .slider:before {
@@ -345,10 +344,3 @@ input:checked + .slider:before {
   align-items: center;
   margin-top: 50px;
 }
-
-
-
-
-
-
-
