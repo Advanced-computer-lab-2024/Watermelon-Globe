@@ -6,6 +6,8 @@ const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser,
 getLastApprovedAdvertiser, approveAdvertiser,getPassword,acceptTermsAndConditions,requestDeletionAdvertiser
 } = require("../Controller/companyProfileController");
 
+const { getSalesReport } = require("../Controller/companyProfileController");
+
 
 // //tags
 
@@ -21,7 +23,7 @@ router.put("/changePasswordAdvertiser/:id",changePasswordAdvertiser);
 router.get("/lastApprovedAdvertiser", getLastApprovedAdvertiser);
 router.put("/approve/:id", approveAdvertiser);
 router.get("/getPassword",getPassword);
-
+router.get('/sales-report/:advertiserId', getSalesReport);
 router.put("/requestDeletionAdvertiser/:id",requestDeletionAdvertiser);
 
 // router.post("/addAdvertiser", createAdvertiser);

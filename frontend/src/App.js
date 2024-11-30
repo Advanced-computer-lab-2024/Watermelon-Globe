@@ -9,7 +9,7 @@ import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
 import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js"
 import HomePage from './Components/Homepage';
 import AppPage from './Components/BackendReq';
-import CompanyHomepage from './Components/CompanyHomepage.jsx';
+import SalesReportPage from './Advertiser/Components/salesReport/SalesReport.jsx';
 import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
@@ -176,6 +176,7 @@ const App = () => {
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+          
 
 
           {/* Guest Routes */}
@@ -206,6 +207,7 @@ const App = () => {
           <Route path="/activityDetails/:id/:profileId" element={<AdvertiserActivityDetails />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:userId" element={<ActivityForm />} />
+          <Route path='/SalesReportPage/:advertiserId' element={<SalesReportPage/>}/>
 
           {/* Signup Pages */}
 
