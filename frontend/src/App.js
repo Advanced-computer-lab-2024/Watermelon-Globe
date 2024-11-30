@@ -47,6 +47,7 @@ import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.j
 import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
 import SellerHome from './Seller/pages/SellerHomePage.jsx';
+import AdminHomePage from './Admin/pages/home/Home.jsx'
 
 
 import ChangePasswordAdvertiser from './Advertiser/Components/ChangePasswordAdvertiser.js';
@@ -134,6 +135,7 @@ const App = () => {
           <Route path="/GuestPage" element={<GuestPage />} />
 
           {/* Admin Routes */}
+          <Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />
           <Route path="/ActivityCategory" element={<ActivityCategory />} />
           <Route path="/PreferenceTag" element={<PreferenceTag />} />
@@ -206,7 +208,6 @@ const App = () => {
           <Route path="/add-activity/:userId" element={<ActivityForm />} />
 
           {/* Signup Pages */}
-          <Route path="/seller-signup" element={<SellerSignup />} />
 
           <Route
             path="/terms-and-conditions/:userId"
@@ -224,13 +225,11 @@ const App = () => {
             path="/SellerSignupConfirm/:id"
             element={<SellerSignupConfirm />}
           />
-          <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
           <Route
             path="/advertiserSignupConfirm/:id"
             element={<AdvertiserSignupConfirm />}
           />
           <Route path="/tourist-signup" element={<TouristSignup />} />
-          <Route path="/tourguide-signup" element={<TourguideSignup />} />
           <Route
             path="/TourguideSignupConfirm/:id"
             element={<TourguideSignupConfirm />}
