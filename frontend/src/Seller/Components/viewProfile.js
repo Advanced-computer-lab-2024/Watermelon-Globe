@@ -120,12 +120,14 @@ const ViewProfile = () => {
   const buttonStyle = {
     backgroundColor: watermelonPink,
     color: 'white',
-    padding: '10px 20px',
+    padding: '5px 5px',
     borderRadius: '5px',
     border: 'none',
     cursor: 'pointer',
     marginRight: '10px',
     transition: 'background-color 0.3s',
+    display: 'inline-block' , // Prevent full-width stretching
+    textAlign: 'center',   
   };
 
   const inputStyle = {
@@ -221,7 +223,7 @@ const ViewProfile = () => {
               </div>
               <button
                 onClick={() => navigate(`/ChangePasswordSeller/${id}`)}
-                style={{...buttonStyle, backgroundColor: watermelonGreen, marginTop: '20px'}}
+               style={{...buttonStyle, backgroundColor: watermelonGreen, marginTop: '20px'}}
               >
                 Change Password
               </button>
