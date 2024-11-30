@@ -112,6 +112,41 @@ const getSellerStatus = async (req, res) => {
 //////////////// product ///////////////
 
 //create a new product
+// const createProduct = async (req, res) => {
+//   const {
+//     name,
+//     price,
+//     quantity,
+//     picture,
+//     description,
+//     seller,
+//     ratings,
+//     sales,
+//   } = req.body;
+//   const{sellerId}=req.query;
+
+//   try {
+//     // Create a new product with the provided details
+//     const product = await Product.create({
+//       name,
+//       price,
+//       quantity,
+//       description,
+//       seller: "6729244f151b6c9e346dd732",
+//       ratings: ratings || 0,
+//       sales: sales || 0,
+//       archived: false, // Explicitly set this as a default value
+//     });
+//     const seller = Seller.findById(sellerId);
+//     seller.Products.add(product._id)
+
+//     // Return the created product as JSON response
+//     res.status(200).json(product);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
 const createProduct = async (req, res) => {
   const {
     name,
@@ -119,30 +154,63 @@ const createProduct = async (req, res) => {
     quantity,
     picture,
     description,
-    seller,
     ratings,
     sales,
   } = req.body;
+  const { sellerId } = req.params;
 
   try {
+    // Ensure the seller exists
+    const seller = await Seller.findById(sellerId);
+    if (!seller) {
+      return res.status(404).json({ error: "Seller not found" });
+    }
+
     // Create a new product with the provided details
     const product = await Product.create({
       name,
       price,
       quantity,
       description,
-      seller: "6729244f151b6c9e346dd732",
+      seller: sellerId, // Use the provided sellerId
       ratings: ratings || 0,
       sales: sales || 0,
       archived: false, // Explicitly set this as a default value
     });
 
+    // Add the product ID to the seller's Products array
+    seller.Products.push(product._id);
+    await seller.save();
+
     // Return the created product as JSON response
     res.status(200).json(product);
   } catch (error) {
+    // Handle errors and send an appropriate response
     res.status(400).json({ error: error.message });
   }
 };
+
+const getProductsBySeller = async (req, res) => {
+  const { sellerId } = req.params; // Extract the seller ID from the query parameters
+
+  try {
+    // Validate that sellerId is provided
+    if (!sellerId) {
+      return res.status(400).json({ error: "Seller ID is required." });
+    }
+
+    // Fetch the products associated with the sellerId
+    const products = await Product.find({ seller: sellerId });
+
+    // Return the products as a JSON response
+    res.status(200).json(products);
+  } catch (error) {
+    // Handle errors and send an appropriate response
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 // Get all products
 const getAllProducts = async (req, res) => {
@@ -219,32 +287,53 @@ const filterProduct = async (req, res) => {
 };
 
 //Update a product
+// const updateProduct = async (req, res) => {
+//   const { id } = req.query;
+//   const { name, description, price } = req.body;
+
+//   // Check if the ID is valid
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(400).json({ error: "No such product" });
+//   }
+
+//   try {
+//     // Update only the details and price fields
+//     const product = await Product.findOneAndUpdate(
+//       { _id: id },
+//       { name, description, price },
+//       { new: true } // Return the updated product
+//     );
+
+//     if (!product) {
+//       return res.status(400).json({ error: "No such product" });
+//     }
+
+//     res.status(200).json(product);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 const updateProduct = async (req, res) => {
   const { id } = req.query;
-  const { name, description, price } = req.body;
-
-  // Check if the ID is valid
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: "No such product" });
-  }
+  const updateData = req.body;
 
   try {
-    // Update only the details and price fields
-    const product = await Product.findOneAndUpdate(
-      { _id: id },
-      { name, description, price },
-      { new: true } // Return the updated product
-    );
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+      new: true, // Return the updated document
+      runValidators: true, // Ensure validation rules apply
+    });
 
-    if (!product) {
-      return res.status(400).json({ error: "No such product" });
+    if (!updatedProduct) {
+      return res.status(404).send('Product not found');
     }
 
-    res.status(200).json(product);
+    res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Error updating product:', error);
+    res.status(500).send('Error updating product');
   }
 };
+
 // Sort products by ratings
 const sortProducts = async (req, res) => {
   try {
@@ -417,6 +506,29 @@ const getProductById = async (req, res) => {
     return res.status(500).json({ error: error.message || "Server error" });
   }
 };
+// const getProductById = async (req, res) => {
+//   const { id } = req.params; // Use `req.params` for route parameters (not `req.body`)
+
+//   try {
+//     const product = await Product.findById(id);
+
+//     if (!product) {
+//       // Respond with a descriptive error message if the product is not found
+//       return res.status(404).json({ error: "Product not found" });
+//     }
+
+//     // Return the product data directly, without wrapping it in an object
+//     return res.status(200).json(product);
+//   } catch (error) {
+//     // Log the error (optional, useful for debugging)
+//     console.error("Error finding product:", error);
+
+//     // Respond with a 500 status and include the error message
+//     return res.status(500).json({ error: error.message || "Server error" });
+//   }
+// };
+
+
 
 const requestDeletionSeller = async (req, res) => {
   try {
@@ -499,32 +611,54 @@ const getPassword = async (req, res) => {
 };
 
 // view the sales & the available quantity of all products
+// const getQuantity = async (req, res) => {
+//   const{id}=req.params;
+//   try {
+//     const products = await Product.find({}, "name quantity sales").sort({
+//       createdAt: -1,
+//     });
+//     res.status(200).json(products);
+//   } catch (error) {
+//     res.status(500).json({
+//       error: "An error occurred while retrieving product quantities.",
+//     });
+//   }
+// };
 const getQuantity = async (req, res) => {
+  const { id } = req.params; // Get the seller's ID from the URL parameter
   try {
-    const products = await Product.find({}, "name quantity sales").sort({
-      createdAt: -1,
-    });
+    // Find products where the seller's ID matches the provided seller ID
+    const products = await Product.find({ seller: id }, "name quantity sales")
+      .sort({ createdAt: -1 });
+
+    // Check if any products were found
+    if (products.length === 0) {
+      return res.status(404).json({ message: "No products found for this seller." });
+    }
+
     res.status(200).json(products);
   } catch (error) {
+    console.error("Error fetching products:", error);
     res.status(500).json({
       error: "An error occurred while retrieving product quantities.",
     });
   }
 };
 
+
 // archive a product
 const archiveProduct = async (req, res) => {
-  const { name } = req.query;
+  const { id } = req.params;
 
   // Check if the name is provided
-  if (!name) {
-    return res.status(400).json({ error: "Product name is required" });
+  if (!id) {
+    return res.status(400).json({ error: "Product id is required" });
   }
 
   try {
     // Set the archived field to true based on the product name
     const product = await Product.findOneAndUpdate(
-      { name: name },
+      { _id: id },
       { archived: true },
       { new: true } // Return the updated product
     );
@@ -543,17 +677,17 @@ const archiveProduct = async (req, res) => {
 
 // unarchive a product
 const unarchiveProduct = async (req, res) => {
-  const { name } = req.query;
+  const { id } = req.params;
 
   // Check if the name is provided
-  if (!name) {
+  if (!id) {
     return res.status(400).json({ error: "Product name is required" });
   }
 
   try {
     // Set the archived field to false based on the product name
     const product = await Product.findOneAndUpdate(
-      { name: name },
+      { _id: id },
       { archived: false },
       { new: true } // Return the updated product
     );
@@ -630,4 +764,5 @@ module.exports = {
   unarchiveProduct,
   //getProductImageByName,
   uploadPicture,
+  getProductsBySeller
 };

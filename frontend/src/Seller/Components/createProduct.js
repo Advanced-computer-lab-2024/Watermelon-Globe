@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import Navbar from './navbar/Navbar';
+import Sidebar from './sidebar/Sidebar';
+import "./actions.scss"
+import { useParams } from 'react-router-dom';
 
 const CreateProduct = () => {
   const [name, setName] = useState('');
@@ -9,6 +13,7 @@ const CreateProduct = () => {
   const [ratings, setRatings] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const {id} = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,8 +27,9 @@ const CreateProduct = () => {
       ratings: ratings || 0
     };
 
+
     try {
-      const response = await fetch('/api/Seller/createProduct', {
+      const response = await fetch(`/api/Seller/CreateProduct/${id}`, {
         method: 'POST',
         body: JSON.stringify(product),
         headers: {
@@ -52,6 +58,16 @@ const CreateProduct = () => {
 
   return (
     <div>
+       <div className="list">
+      
+      <Sidebar />
+      <div className="listContainer">
+      <Navbar/>
+      <div className="flex justify-center items-start mt-9">
+          <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+           
+            <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">Create New Product</h2>
+           
       <form onSubmit={handleSubmit}>
         <label>Product Name:</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -67,13 +83,23 @@ const CreateProduct = () => {
 
         <label>Ratings:</label>
         <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
+       
+        <div className="flex justify-center">
+  <button className="bg-green-700 text-white px-4 py-2  rounded mt-6" type="submit">
+    Create Product
+  </button>
+</div>
 
-        <button type="submit">Create Product</button>
+       
       </form>
+      </div>
+      </div>
 
       {/* Display success or error messages */}
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    </div>
+    </div>
     </div>
   );
 };
