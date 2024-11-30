@@ -1,0 +1,103 @@
+.list {
+  display: flex;
+  position: relative; /* Make the parent container a positioning context */
+}
+
+.sidebar {
+  width: 240px; /* Adjust according to your sidebar's width */
+  flex-shrink: 0;
+}
+
+.listContainer {
+  flex: 1;
+  margin-left: 290px; /* Match the width of the sidebar */
+  padding: 20px;
+  overflow: auto;
+  position: relative; /* Contain absolutely positioned elements */
+}
+
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  gap: 16px;
+  margin-right: 420px; /* Adjust this to ensure the cards don't overlap with the AddGovernorForm */
+}
+
+.governorCard {
+  width: 100%; /* Ensure cards take full width of grid cell */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif; /* Default font for the card */
+  background-color: #f4f6f9; /* Light background color for cards */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px;
+  color: #333; /* Default text color */
+  position: relative; /* Allow positioning of elements inside */
+  transition: all 0.3s ease; /* Smooth transition effect */
+}
+
+.governorCard .MuiTypography-root {
+  font-family: "Poppins", sans-serif;
+  color: #666;
+  font-size: 1.1rem;
+  font-weight: 410;
+  display: flex; /* Ensure icon and text are aligned horizontally */
+  align-items: center; /* Vertically center the content */
+}
+
+.governorCard .MuiTypography-root svg {
+  margin-right: 10px; /* Add space between the icon and the username */
+  font-size: 2rem; /* Adjust the size of the icon */
+}
+
+/* Ensure the hover effect works */
+.governorCard:hover {
+  background-color: #f6d8e576; /* Change background on hover */
+}
+
+.cardActions {
+  position: absolute; /* Position the actions at the bottom right of the card */
+  bottom: 35px;
+  right: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Button styling within the Card */
+.governorCard .MuiButton-root {
+  background-color: #d32e65 !important; /* Button background color */
+  color: white !important; /* Button text color */
+  &:hover {
+    background-color: #b22a50 !important; /* Darker color on hover */
+  }
+}
+
+/* Icon styling within the Card */
+.governorCard .MuiSvgIcon-root {
+  color: #91c297 !important; /* Icon color */
+  &:hover {
+    color: #6a8e60 !important; /* Darker color when hovering */
+  }
+}
+
+/* Position AddGovernorForm in the top-right corner */
+.addGovernorForm {
+  position: absolute;
+  top: 69px; /* Change this if you need to move the form */
+  right: 20px; /* Adjust as needed */
+  width: 300px; /* Set width to match desired size */
+  z-index: 10; /* Ensure it is above other content */
+}
+
+@media (max-width: 600px) {
+  .cardsContainer {
+    grid-template-columns: 1fr; /* Stack cards in a single column on small screens */
+    margin-right: 0; /* Remove margin on smaller screens */
+  }
+
+  .addGovernorForm {
+    width: 100%; /* Make the form full-width on small screens */
+    right: 0; /* Adjust position for mobile view */
+    top: 0;
+  }
+}

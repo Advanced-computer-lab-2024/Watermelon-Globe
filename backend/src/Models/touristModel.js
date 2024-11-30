@@ -68,30 +68,34 @@ const touristSchema = new Schema(
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
       },
     ],
-  
- bookedItineraries: [
+
+    bookedItineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChildItinerary',
+        ref: "ChildItinerary",
       },
     ],
     bookedActivities: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ActivityBooking',
+        ref: "ActivityBooking",
       },
     ],
-    loyaltyPoints: { type: Number, default: 0},
-    loyaltyLevel: { type: Number, enum: [1,2,3], default: 1 },
-    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' }
-  },  
+    loyaltyPoints: { type: Number, default: 0 },
+    loyaltyLevel: { type: Number, enum: [1, 2, 3], default: 1 },
+    badge: {
+      type: String,
+      enum: ["Bronze", "Silver", "Gold"],
+      default: "Bronze",
+    },
+  },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }
 );
 
-const Tourist = mongoose.model('Tourist', touristSchema);
+const Tourist = mongoose.model("Tourist", touristSchema);
 module.exports = Tourist;

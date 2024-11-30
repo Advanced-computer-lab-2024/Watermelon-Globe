@@ -13,7 +13,6 @@ const Seller = require("../Models/SellerModel");
 const Transportation = require("../Models/TransportationModel");
 const mongoose = require("mongoose");
 
-
 const getAllAdmin = async (req, res) => {
   try {
     const admin = await Admin.find({}).sort({ createdAt: -1 });
@@ -337,7 +336,8 @@ const updateActivityCategory = async (req, res) => {
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller, ratings, sales } = req.body;
+  const { name, price, quantity, description, seller, ratings, sales } =
+    req.body;
 
   try {
     // Create a new product with the provided details
@@ -349,7 +349,7 @@ const createProduct = async (req, res) => {
       seller: "6729244f151b6c9e346dd732",
       ratings: ratings || 0,
       sales: sales || 0,
-      archived: false // Explicitly set this as a default value
+      archived: false, // Explicitly set this as a default value
     });
 
     // Return the created product as JSON response
@@ -370,11 +370,13 @@ const getAllProducts = async (req, res) => {
 const getAllProductIds = async (req, res) => {
   try {
     // Retrieve all products, selecting only the name and _id fields
-    const products = await Product.find({}, 'name _id');
+    const products = await Product.find({}, "name _id");
 
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while retrieving products' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving products" });
   }
 };
 
@@ -829,10 +831,7 @@ const getUploadedDocuments = async (req, res) => {
       {},
       "Username idProof taxationRegistryCard"
     );
-    const sellers = await Seller.find(
-      {},
-      "Name idProof taxationRegistryCard"
-    );
+    const sellers = await Seller.find({}, "Name idProof taxationRegistryCard");
 
     // Filter TourGuides who have uploaded documents (either idProof or certificates)
     const filteredTourGuides = tourGuides.filter(
@@ -960,7 +959,7 @@ const uploadPicture = async (req, res) => {
 
   // Check if the ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid product ID' });
+    return res.status(400).json({ error: "Invalid product ID" });
   }
 
   try {
@@ -972,12 +971,16 @@ const uploadPicture = async (req, res) => {
     );
 
     if (!product) {
-      return res.status(404).json({ error: 'No product found with this ID' });
+      return res.status(404).json({ error: "No product found with this ID" });
     }
 
-    res.status(200).json({ message: 'Product picture updated successfully', product });
+    res
+      .status(200)
+      .json({ message: "Product picture updated successfully", product });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while updating the product picture' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the product picture" });
   }
 };
 
@@ -1010,10 +1013,14 @@ const markItineraryInappropriate = async (req, res) => {
 
 //create new activitycategory
 const createTransportation = async (req, res) => {
-  const { type,destination,price } = req.body;
+  const { type, destination, price } = req.body;
 
   try {
-    const transportaion = await Transportation.create({ type,destination,price });
+    const transportaion = await Transportation.create({
+      type,
+      destination,
+      price,
+    });
     res.status(200).json(transportaion);
   } catch (error) {
     res.status(400).json({ error: error.mssg });
@@ -1070,5 +1077,5 @@ module.exports = {
   unarchiveProduct,
   uploadPicture,
   markItineraryInappropriate,
-  createTransportation
+  createTransportation,
 };
