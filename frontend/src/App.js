@@ -118,7 +118,7 @@ import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 
 import MyHotelFlightBookings from "./Tourist/Components/MyBookings.js";
 //tourguide new
-import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
+// import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
 import CreateItinerary from './TourGuide/Components/CreateItinerary.jsx';
 
