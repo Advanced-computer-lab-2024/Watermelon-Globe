@@ -9,8 +9,8 @@ const Complaint = require("../Models/Complaint");
 const Itinerary = require("../Models/itineraryModel");
 const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
-const Seller = require("../Models/SellerModel");
 const Transportation = require("../Models/TransportationModel");
+const Seller = require("../Models/SellerModel");
 const mongoose = require("mongoose");
 
 
