@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import AddressPage from '../Components/AddressPage'
 import PaymentSummary from '../Components/PaymentSummary'
 import PaymentOptions from '../Components/PaymentOptions'
+import WalletComponent from '../Components/Wallet';
 
 const CheckoutPage = () => {
   const { state } = useLocation()
   const { touristId } = useParams<{ touristId: string }>()
-
+  const navigate = useNavigate()
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | 'cashOnDelivery' | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -46,10 +47,10 @@ const CheckoutPage = () => {
           alert('Payment confirmed using Wallet!')
 
           await axios.put(`/api/Tourist/buyCart/${touristId}`)
-
-          alert('Cart items successfully purchased and removed from cart.')
+          navigate(`/MainTouristPage/${touristId}`)
         } else {
           // If wallet balance is insufficient
+          await axios.put(`/api/Tourist/updateWallet/${touristId}`, { amount: +totalFromCartPage })
           setError('Insufficient wallet balance.')
         }
       } else if (paymentMethod === 'cashOnDelivery') {
@@ -78,7 +79,9 @@ const CheckoutPage = () => {
       {/* Payment Options Section */}
       <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
         <h2 className="text-3xl font-semibold text-black mb-6">Choose Your Payment Method</h2>
-        <PaymentOptions paymentMethod={paymentMethod} onPaymentMethodSelection={handlePaymentMethodSelection} />
+        <PaymentOptions paymentMethod={paymentMethod} 
+        onPaymentMethodSelection={handlePaymentMethodSelection}
+        disableCashOnDelivery={false} />
       </div>
 
       {/* Payment Summary Section */}
@@ -100,6 +103,7 @@ const CheckoutPage = () => {
           {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       )}
+      <WalletComponent /> 
     </div>
   )
 }

@@ -173,9 +173,9 @@ router.delete('/deleteAllAddresses/:id', deleteAllAddresses);
 
 router.get('/viewAllOrders/:id', viewAllOrders);
 
-router.get('/viewOrderDetails/:touristId/:orderId', viewOrderDetails);
+router.get('/viewOrderDetails/:touristId', viewOrderDetails);
 
-router.put('/cancelOrder/:touristId/:orderId', cancelOrder);
+router.put('/cancelOrder/:touristId', cancelOrder);
 
 router.put('/updateWallet/:touristId', updateWallet);
 

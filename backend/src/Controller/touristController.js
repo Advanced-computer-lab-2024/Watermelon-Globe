@@ -1415,7 +1415,7 @@ const buyCart = async (req, res) => {
 
   try {
     // Find the tourist by ID
-    const tourist = await Tourist.findById(touristId);
+    const tourist = await Tourist.findById(touristId).populate('cart.product');
 
     if (!tourist) {
       return res.status(404).json({ message: 'Tourist not found' });
@@ -1426,9 +1426,13 @@ const buyCart = async (req, res) => {
       return res.status(400).json({ message: 'Cart is empty' });
     }
 
+    let totalPrice = 0;
+    const orderItems = [];
+    const productsToAdd = [];
+
     // Process each product in the cart
     for (const item of tourist.cart) {
-      const productId = item.product;
+      const productId = item.product._id;
       const quantityToDecrement = item.quantity;
 
       // Find the product by ID
@@ -1445,29 +1449,50 @@ const buyCart = async (req, res) => {
 
       // Decrement the product quantity
       product.quantity -= quantityToDecrement;
-
-      // Save the updated product quantity
       await product.save();
-    }
 
-    // Add the products to the `products` array in the tourist's profile
-    const productsToAdd = tourist.cart.map(item => item.product);
+      // Add product to the list of products for the tourist
+      productsToAdd.push(productId);
+
+      // Add item details to the order
+      orderItems.push({
+        productId: productId,
+        quantity: quantityToDecrement,
+      });
+
+      // Calculate the total price
+      totalPrice += product.price * quantityToDecrement;
+    }
 
     // Add the products to the `products` array in the tourist's profile
     tourist.products.push(...productsToAdd);
 
+    // Create a new order
+    const newOrder = {
+      items: orderItems,
+      totalPrice,
+      status: 'Confirmed',
+      orderDate: new Date(),
+    };
+
+    // Add the new order to the tourist's orders array
+    tourist.orders.push(newOrder);
+
     // Clear the cart after the purchase
     tourist.cart = [];
 
-    // Save the tourist's profile with the updated products and cleared cart
+    // Save the updated tourist document
     await tourist.save();
 
-    return res.status(200).json({ message: 'Cart successfully purchased, products added to profile, and quantities updated.' });
+    return res.status(200).json({
+      message: 'Cart successfully purchased. Products added to profile and orders, and cart cleared.',
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Something went wrong during the purchase process.' });
   }
 };
+
 
 const getAddresses = async (req, res) => {
 
@@ -1702,7 +1727,8 @@ const viewAllOrders = async (req, res) => {
 };
 
 const viewOrderDetails = async (req, res) => {
-  const { touristId, orderId } = req.params;
+  const { touristId } = req.params;
+  const { orderId } = req.query
 
   try {
     const tourist = await Tourist.findById(touristId).populate('orders.items.productId');
@@ -1722,8 +1748,8 @@ const viewOrderDetails = async (req, res) => {
 };
 
 const cancelOrder = async (req, res) => {
-  const { touristId, orderId } = req.params;
-  const { reason } = req.body;
+  const { touristId } = req.params;
+  const { orderId, reason } = req.body;
 
   try {
     const tourist = await Tourist.findById(touristId);
