@@ -14,7 +14,6 @@ const Transportation = require('../Models/TransportationModel');
 
 //Tourist
 
-//Tourist
 
 //for frontend
 const frontendDataTable = async (req, res) => {
