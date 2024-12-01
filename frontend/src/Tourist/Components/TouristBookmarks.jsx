@@ -101,7 +101,9 @@ const TouristBookmarks = () => {
               >
                 <div style={{ padding: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#4CAF50' }}>{bookmark.name}</h3>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#4CAF50' }}>
+                      {bookmark.type === 'itinerary' ? bookmark.name : bookmark.Name}
+                    </h3>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();

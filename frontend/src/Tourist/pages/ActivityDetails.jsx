@@ -13,6 +13,7 @@ const ActivityDetails = () => {
 
 
     useEffect(() => {
+        
         const fetchActivity = async () => {
             try {
                 const response = await fetch(`/api/Activities/getActivityById/${activityId}`);
@@ -81,18 +82,18 @@ const ActivityDetails = () => {
         window.location.href = `mailto:?subject=${subject}&body=${body}`;
       };
      
-      const handleBookmark = async () => {
+     const handleBookmark = async () => {
         try {
             if (isBookmarked) {
                 await axios.put(`/api/Tourist/removeBookmarkActivity/${id}/${activityId}`);
             } else {
-                await axios.put(`/api/Tourist/addBookmarkActivity/${id}/${activityId}`);
+                await axios.put(`/api/Tourist/bookmarkActivity/${id}/${activityId}`);
             }
             setIsBookmarked(!isBookmarked);
-            alert(isBookmarked ? 'Activity removed from bookmarks' : 'Activity added to bookmarks');
+            alert(isBookmarked ? 'Itinerary removed from bookmarks' : 'Itinerary added to bookmarks');
         } catch (error) {
             console.error('Error toggling bookmark:', error);
-            alert('Failed to update bookmark. Please try again.');
+            alert(error);
         }
     };
 
@@ -109,6 +110,14 @@ const ActivityDetails = () => {
     return (
         <div className="container mx-auto p-6 bg-white shadow-2xl rounded-lg mt-10 max-w-4xl">
             <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b pb-4">{activity.Name}</h2>
+            <button 
+        onClick={handleBookmark} 
+        className={`flex items-center px-4 py-2 rounded-full ${isBookmarked ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+        aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+      >
+        <Bookmark className="mr-2" size={20} />
+        {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+      </button>
 
             <div className="flex items-center text-gray-600 mb-8">
                 <MapPin className="mr-2" size={24} />
