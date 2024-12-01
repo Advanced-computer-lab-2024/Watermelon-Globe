@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingBag, LogOut, Calendar, MapPin, Clock, RefreshCw, AlertCircle, X, Trash2, Star } from 'lucide-react';
+import axios from 'axios';
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState({ itineraries: [], activities: [] });
@@ -85,7 +86,6 @@ export default function MyBookings() {
       const response = await fetch(`/api/touristItinerary/cancel${type}Booking/${bookingId}`, {
         method: 'DELETE',
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to cancel booking');
@@ -103,6 +103,8 @@ export default function MyBookings() {
 
       setBookings(updateBookings);
       setFilteredBookings(updateBookings);
+
+      // await axios.get
 
     } catch (error) {
       console.error('Error cancelling booking:', error);
