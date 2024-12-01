@@ -99,8 +99,13 @@ import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
 import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.jsx";
 import MyBookings from "./Tourist/pages/MyBookings.jsx";
-import TouristActivityDetails from "./Tourist/pages/ActivityDetails.jsx";
+import TouristActivityDetails from "./Tourist/pages/ActivityDetails.tsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+import ShoppingCart from "./Tourist/pages/shoppingCart.tsx";
+import CheckoutPage from "./Tourist/pages/CheckoutPage.tsx"
+import DraftHomePage from "./Tourist/pages/homepage.tsx"
+import OrdersPage from "./Tourist/pages/OrdersPage.tsx"
+
 
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
@@ -282,6 +287,15 @@ const App = () => {
           />
           <Route path="/MyBookings/:id" element={<MyBookings />} />
           <Route path="/SiteDetails/:id" element={<SiteDetails />} />
+
+          {/* shopping cart*/}
+          <Route path="/ShoppingCart/:touristId" element={<ShoppingCart />} />
+          <Route path="/CheckoutPage/:touristId" element={<CheckoutPage />} />
+
+          {/* Tourist homepage draft */}
+          <Route path="/DraftHomePage" element={<DraftHomePage />} />
+
+          <Route path="/OrdersPage/:touristId" element={<OrdersPage />} />
 
           {/* Seller and Other Pages */}
           <Route path="/SellerPage" element={<SellerPage />} />

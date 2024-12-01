@@ -42,11 +42,27 @@ const {
   getAllTransportations,
   getTransportation,
   bookTransportation,
-  bookmarkItinerary,
-  bookmarkActivity,
-  removeItineraryBookmark,
-  removeActivityBookmark,
-  getBookmarks
+  addProductToCart,
+  removeProductFromCart,
+  changeCartItemQuantity,
+  viewCart,
+  buyCart,
+  getAddresses,
+  addAddress,
+  updateAddress,
+  selectAddress,
+  unselectAddress,
+  deleteAddress,
+  deleteAllAddresses,
+  viewAllOrders,
+  viewOrderDetails,
+  cancelOrder,
+  updateWallet,
+  stripePayIntentFlight,
+  stripePayIntentHotel,
+  stripePayIntentItinerary,
+  stripePayIntentActivity,
+  stripePayIntentProduct
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -130,7 +146,6 @@ router.get('/getMyCompletedActivities/:touristId', getMyCompletedActivities);
 router.post('/activities/:activityId/rate', rateActivity);
 router.post('/activities/:activityId/comment', commentOnActivity);
 
-
 router.get('/getAllTransportations', getAllTransportations);
 
 router.get('/getTransportation/:id', getTransportation);
@@ -145,5 +160,46 @@ router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookm
 router.get('/getBookmarks/:touristId', getBookmarks);
 router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
 router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
+
+router.post('/addProductToCart/:id', addProductToCart);
+
+router.delete('/removeProductFromCart/:id', removeProductFromCart);
+
+router.put('/buyCart/:touristId', buyCart);
+
+router.put('/changeCartItemQuantity/:id', changeCartItemQuantity);
+
+router.get('/viewCart/:id', viewCart);
+
+router.get('/getAddresses/:touristId', getAddresses);
+
+router.post('/addAddress/:id', addAddress);
+
+router.put('/updateAddress/:id', updateAddress);
+
+router.put('/selectAddress/:touristId', selectAddress);
+
+router.put('/unselectAddress/:touristId', unselectAddress);
+
+router.delete('/deleteAddress/:id', deleteAddress);
+
+router.delete('/deleteAllAddresses/:id', deleteAllAddresses);
+
+router.get('/viewAllOrders/:id', viewAllOrders);
+
+router.get('/viewOrderDetails/:touristId', viewOrderDetails);
+
+router.put('/cancelOrder/:touristId', cancelOrder);
+
+router.put('/updateWallet/:touristId', updateWallet);
+
+
+//Stripe Methods
+router.post('/payFlight',stripePayIntentFlight)
+router.post('/payHotel',stripePayIntentHotel)
+router.post('/payItinerary',stripePayIntentItinerary)
+router.post('/payActivity',stripePayIntentActivity)
+router.post('/payProduct',stripePayIntentProduct)
+
 
 module.exports = router;
