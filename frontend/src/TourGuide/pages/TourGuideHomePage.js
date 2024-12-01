@@ -6,6 +6,7 @@ import ItineraryComponent from "../Components/ItineraryComponent.js";
 import TourGuideSettings from "./TourGuideSettings.js";
 import ProfilePhotoUpload from "../Components/ProfilePhoto.jsx";
 import { useParams, useNavigate } from "react-router-dom";
+import ItineraryComponent2 from "../Components/Itineraries.jsx";
 
 export default function YourMainPage() {
   const { id } = useParams();
@@ -30,7 +31,9 @@ export default function YourMainPage() {
         </div>
         {/* Main Content */}
         <main className="flex-1 p-6">
-          <ItineraryComponent guideID ={id} />
+          <ItineraryComponent2 guideID ={id} />
+          {/* <ItineraryComponent guideID ={id}/> */}
+          
         </main>
       </div>
     </div>

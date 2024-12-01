@@ -4,10 +4,9 @@ import axios from 'axios';
 import UploadProductPicture from './UploadImage'; // Assuming you have this component
 import Navbar from './navbar/Navbar';
 import Sidebar from './sidebar/Sidebar';
-import { AlignCenter } from 'lucide-react';
 // import "./actions.scss"
 
-const ProductDetails = () => {
+const ProductsDetailsGeneral = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -100,7 +99,6 @@ const handleUpdateProduct = async () => {
     borderRadius: '5px',
     cursor: 'pointer',
     marginRight: '10px',
-    marginBottom:10,
     
   };
 
@@ -154,14 +152,8 @@ const handleUpdateProduct = async () => {
 
             {/* <div className="flex justify-center space-x-4 mt-6"> */}
              
-            <button style={buttonStyle} onClick={() => setIsEditing(true)}>
-              
-                Update Product
-              </button>
-              <button style={{...buttonStyle}} onClick={() => setShowUpdatePicture(!showUpdatePicture)}>
-
-                Update Picture
-              </button>
+           
+             
             {/* </div> */}
           </div>
         ) : (
@@ -219,5 +211,5 @@ const handleUpdateProduct = async () => {
   );
 };
 
-export default ProductDetails;
+export default ProductsDetailsGeneral;
 

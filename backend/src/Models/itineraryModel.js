@@ -51,10 +51,19 @@ const itinerarySchema = new Schema(
   ,
   inappropriate: {
     type: Boolean,
-    default: false }
+    default: false },
+    
+    bookingsList: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
+      }
+    ],
 
 }, { timestamps: true });
 
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 const pickup = mongoose.model("pickup", pickupDropoffSchema);
 module.exports = { Itinerary, pickup };
+
+
+ 

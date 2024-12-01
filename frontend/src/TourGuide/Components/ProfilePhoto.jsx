@@ -1,3 +1,4 @@
+import { colors } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
 const ProfilePhotoUpload = ({ id }) => {
@@ -54,8 +55,19 @@ const ProfilePhotoUpload = ({ id }) => {
     }
   };
 
+    
+  const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081';
+
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <div style={{
+      borderRadius: 10,
+      borderColor: watermelonGreen,
+      
+      borderWidth: 2,
+      borderStyle: "solid", // Ensures the border appears
+    }}
+     className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
       <h3 className="text-2xl font-semibold text-center mb-4">Profile Photo</h3>
       
       <div className="flex justify-center mb-4">
@@ -80,8 +92,8 @@ const ProfilePhotoUpload = ({ id }) => {
       />
 
       <button
-        onClick={handlePhotoUpload}
-        className="w-full py-2 px-4 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        onClick={handlePhotoUpload} style={{backgroundColor:watermelonGreen}}
+        className="w-full py-2 px-4  text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
       >
         Upload Photo
       </button>

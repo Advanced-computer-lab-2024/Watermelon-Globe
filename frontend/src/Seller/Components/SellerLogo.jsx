@@ -54,6 +54,21 @@ const SellerLogo = ({ id }) => {
     }
   };
 
+  const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081';
+
+  const buttonStyle = {
+    backgroundColor: watermelonPink,
+    width:"25%",
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    border: 'none',
+    cursor: 'pointer',
+    marginRight: '10px',
+    transition: 'background-color 0.3s',
+  };
+
   return (
     <div className="logo-upload">
       <h3>Logo</h3>
@@ -65,7 +80,7 @@ const SellerLogo = ({ id }) => {
         )}
       </div>
       <input type="file" accept="image/*" onChange={handleLogoChange} />
-      <button onClick={handleLogoUpload}>Upload Photo</button>
+      <button  style = {buttonStyle}onClick={handleLogoUpload}>Upload Photo</button>
     </div>
   );
 };

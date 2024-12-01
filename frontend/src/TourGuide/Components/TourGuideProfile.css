@@ -1,0 +1,97 @@
+.tour-guide-profile {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9; /* Watermelon Pink */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+  }
+  
+  /* const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081'; */
+  .profile-header h1 {
+    font-size: 2.5rem;
+    color: #4CAF50; /* Watermelon Green */
+  }
+  
+  .profile-photo img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #4CAF50; /* Watermelon Green */
+    margin-top: 15px;
+  }
+  
+  .profile-details {
+    margin-bottom: 30px;
+  }
+  
+  .profile-detail {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: #555;
+  }
+  
+  .profile-detail strong {
+    color: #555; /* Watermelon Green */
+  }
+  
+  .status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 5px;
+    text-transform: capitalize;
+  }
+  
+  .status.pending {
+    background-color: #ffd700; /* Pending status color */
+    color: #000;
+  }
+  
+  .status.accepted {
+    background-color: #32cd32; /* Accepted status color */
+    color: #fff;
+  }
+  
+  .status.rejected {
+    background-color: #dc143c; /* Rejected status color */
+    color: #fff;
+  }
+  
+  .comments-section {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .comments-section h3 {
+    font-size: 1.5rem;
+    color: #4CAF50; /* Watermelon Green */
+  }
+  
+  .comments-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .comments-section li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #ffebcd; /* Light watermelon pink */
+    border-radius: 8px;
+  }
+  
+  .comments-section li strong {
+    color: #FF4081; /* Watermelon Green */
+  }
+  

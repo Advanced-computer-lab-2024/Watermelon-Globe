@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const tourGuideUpload = require("../Models/tourGuideModel");
 const advertiserUpload = require("../Models/companyProfileModel");
-const sellerUpload = require("../Models/sellerModel");
+const sellerUpload = require("../Models/SellerModel");
 
 const router = express.Router();
 

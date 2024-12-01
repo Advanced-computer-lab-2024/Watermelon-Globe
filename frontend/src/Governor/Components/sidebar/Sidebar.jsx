@@ -18,7 +18,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">Seller</span>
+          <span className="logo">lamadmin</span>
         </Link>
       </div>
       <hr />
@@ -29,13 +29,6 @@ const Sidebar = () => {
             <li className={isActive(`/GetAllProducts/${id}`) ? "active" : ""}>
               <StoreIcon className="icon" />
               <span>My Products</span>
-            </li>
-          </Link>
-
-          <Link to={`/GetAllProductsGeneral/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/GetAllProductsGeneral/${id}`) ? "active" : ""}>
-              <StoreIcon className="icon" />
-              <span>All Products</span>
             </li>
           </Link>
 

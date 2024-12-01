@@ -2,7 +2,40 @@ const governorModel = require("../Models/tourismGovernorModel");
 const siteModel = require("../Models/tourismSiteModel");
 const { default: mongoose } = require("mongoose");
 
+// const createSite = async (req, res) => {
+//   const{id}=req.params;
+//   const {
+//     name,
+//     description,
+//     pictures,
+//     location,
+//     openingHours,
+//     ticketPrices,
+//     tag,
+   
+//   } = req.body;
+//   try {
+//     const governor = governorModel.findById(id);
+//     const site = await siteModel.create({
+//       name,
+//       description,
+//       pictures,
+//       location,
+//       openingHours,
+//       ticketPrices,
+//       tag,
+//       tourismGovernor:id,
+//     });
+//     governor.tourismSite.push(site._id);
+//     await governorModel.save();
+//     res.status(200).json(site);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
 const createSite = async (req, res) => {
+  const { id } = req.params; // tourismGovernor ID
   const {
     name,
     description,
@@ -11,9 +44,16 @@ const createSite = async (req, res) => {
     openingHours,
     ticketPrices,
     tag,
-    tourismGovernor,
   } = req.body;
+
   try {
+    // Find the governor by ID and validate its existence
+    const governor = await governorModel.findById(id);
+    if (!governor) {
+      return res.status(404).json({ error: "Tourism Governor not found" });
+    }
+
+    // Create the site
     const site = await siteModel.create({
       name,
       description,
@@ -22,9 +62,16 @@ const createSite = async (req, res) => {
       openingHours,
       ticketPrices,
       tag,
-      tourismGovernor,
+      tourismGovernor: id, // Link to the governor
     });
 
+    // Add the site to the governor's tourismSite array
+    governor.tourismSite.push(site._id);
+
+    // Save the governor document
+    await governor.save();
+
+    // Return the newly created site
     res.status(200).json(site);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -67,7 +114,7 @@ const getAllSites = async (req, res) => {
 };
 
 const getMySites = async (req, res) => {
-  const { governorID } = req.query; // Extract the Governor ID from the request parameters
+  const { governorID } = req.params; // Extract the Governor ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(governorID)) {

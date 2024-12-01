@@ -10,7 +10,7 @@ import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import Tooltip from "@mui/material/Tooltip";
 
 
-const GetAllProducts = () => {
+const GetAllProductsGeneral = () => {
   const [products, setProducts] = useState([]); // Ensure default state is an array
   const [filteredProducts, setFilteredProducts] = useState([]); // Ensure default state is an array
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,7 +25,7 @@ const GetAllProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`/api/Seller/getProductsBySeller/${id}`);
+      const response = await fetch(`/api/Seller/GetAllProducts`);
       const data = await response.json();
       console.log(data);
 
@@ -82,7 +82,7 @@ const GetAllProducts = () => {
   };
 
   const handleProductClick = (productId) => {
-    navigate(`/ProductDetails/${productId}/`);
+    navigate(`/ProductsDetailsGeneral/${productId}/`);
   };
 
   const resetFilters = () => {
@@ -109,13 +109,13 @@ const GetAllProducts = () => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
-    width:"25%",
     color: 'white',
     padding: '10px 15px',
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
     transition: 'background-color 0.3s',
+    width:"25%"
   };
 
   const productCardStyle = {
@@ -188,7 +188,7 @@ const GetAllProducts = () => {
         <div className="listContainer">
           <Navbar />
           <div style={cardStyle}>
-            <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>My Products</h2>
+            <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>All Products</h2>
 
             <div style={{ marginBottom: '20px' }}>
               <input
@@ -265,7 +265,7 @@ const GetAllProducts = () => {
                  { product.description &&<p style={{ fontSize: '0.9em', color: '#666' }}>{product.description}</p>}
                  { <p style={{ fontWeight: 'bold', color: watermelonPink }}>${formatPrice(product.price)}</p>}
                  {product.quantity && <p>Quantity: {product.quantity}</p>}
-                 <p style={{ fontWeight: 'bold', color: watermelonGreen }}>
+                 {/* <p style={{ fontWeight: 'bold', color: watermelonGreen }}>
                       Archived: {product.archived ? 'Yes' : 'No'}
                     </p>
 
@@ -281,7 +281,7 @@ const GetAllProducts = () => {
                               />
                             </Tooltip>
                             <Tooltip title="Unarchive" arrow>
-                  <UnarchiveIcon onClick={(e)=>{e.stopPropagation();handleUnArchive(product._id)}}  style={{ color: watermelonGreen, cursor:"pointer"}} /> </Tooltip> 
+                  <UnarchiveIcon onClick={(e)=>{e.stopPropagation();handleUnArchive(product._id)}}  style={{ color: watermelonGreen, cursor:"pointer"}} /> </Tooltip>  */}
                 </div>
               ))}
             </div>
@@ -292,6 +292,6 @@ const GetAllProducts = () => {
   );
 };
 
-export default GetAllProducts;
+export default GetAllProductsGeneral;
 
 
