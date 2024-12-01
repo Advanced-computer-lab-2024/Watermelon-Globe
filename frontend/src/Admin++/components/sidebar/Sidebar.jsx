@@ -24,29 +24,29 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebarAdmin">
+    <div className="sidebar">
       {/* Top */}
-      <div className="topAdmin">
+      <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Watermelon Globe </span>
+          <span className="logoadmin">Watermelon Globe </span>
         </Link>
       </div>
 
       <hr />
 
       {/* Center */}
-      <div className="centerAdmin">
+      <div className="center">
         <ul>
-          <p className="titleAdmin">MAIN</p>
+          <p className="titleadmin">MAIN</p>
 
           <li>
-            <TbLayoutDashboardFilled className="iconAdmin" />
+            <TbLayoutDashboardFilled className="iconadmin" />
             <span>Dashboard</span>
           </li>
 
-          <p className="titleAdmin">MANAGE</p>
+          <p className="titleadmin">MANAGE</p>
           <li onClick={toggleDropdown} style={{ cursor: "pointer" }}>
-            <FaUserCog className="iconAdmin" />
+            <FaUserCog className="iconadmin" />
             <span className="manage-textAdmin">
               Users
               {isDropdownOpen ? (
@@ -83,7 +83,7 @@ const Sidebar = () => {
           )}
 
           <li onClick={toggleDropdownEvent} style={{ cursor: "pointer" }}>
-            <MdEvent className="iconAdmin" />
+            <MdEvent className="iconadmin" />
             <span className="manage-textAdmin">
               Events & Itineraries
               {isDropdownOpenEvent ? (
@@ -110,26 +110,26 @@ const Sidebar = () => {
           )}
           <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
-              <MdCategory className="iconAdmin" />
-              <span>Activity Categories</span>
+              <MdCategory className="iconadmin" />
+              <span >Activity Categories</span>
             </li>
           </Link>
 
           <Link to="/Tags" style={{ textDecoration: "none" }}>
             <li>
-              <IoIosPricetags className="iconAdmin" />
+              <IoIosPricetags className="iconadmin" />
               <span>Prefrence Tags</span>
             </li>
           </Link>
 
-          <p className="titleAdmin">PRODUCTS</p>
+          <p className="titleadmin">PRODUCTS</p>
           <li>
-            <FaCartArrowDown className="iconAdmin" />
+            <FaCartArrowDown className="iconadmin" />
             <span>Products</span>
           </li>
 
           <li>
-            <HiQrcode className="iconAdmin" />
+            <HiQrcode className="iconadmin" />
             <span>Promo Code</span>
           </li>
         </ul>
