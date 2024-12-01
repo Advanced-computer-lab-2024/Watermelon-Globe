@@ -10,6 +10,7 @@ import Featured from "../Components/featured/Featured";
 import Chart from "../Components/chart/Chart";
 import Table from '../Components/table/Table';
 import AccountPage from './AccountPage/AccountPage';
+import SalesReportPage from '../Components/salesReport/SalesReport';
 
 const HomeScreen = () => {
     const [activities, setActivities] = useState([]);
@@ -86,6 +87,8 @@ const HomeScreen = () => {
                            <>
                                 <AccountPage advertiserId={advertiser?._id}/>
                            </> 
+                        ): selectedTab === "salesReport"? (
+                            <SalesReportPage advertiserId={advertiser?._id}/>
                         ):(
                         <>
                             <h1>Activities</h1>

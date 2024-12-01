@@ -79,7 +79,7 @@ const createSite = async (req, res) => {
 };
 
 const getSite = async (req, res) => {
-  const { id } = req.params; // Extract the site ID from the request parameters
+  const { id } = req.query; // Extract the site ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -114,16 +114,16 @@ const getAllSites = async (req, res) => {
 };
 
 const getMySites = async (req, res) => {
-  const { governorID } = req.params; // Extract the Governor ID from the request parameters
+  const { id } = req.params; // Extract the Governor ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
-  if (!mongoose.Types.ObjectId.isValid(governorID)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "Invalid governor ID" });
   }
 
   try {
     // Find the tourism site by ID and populate the tourismGovernor field
-    const site = await siteModel.find({ tourismGovernor: governorID });
+    const site = await siteModel.find({ tourismGovernor: id });
 
     // If no site is found, return a 404 error
     if (!site) {
@@ -139,7 +139,7 @@ const getMySites = async (req, res) => {
 };
 
 const updateSite = async (req, res) => {
-  const { id } = req.params; // Extracting the site ID from request parameters
+  const { id } = req.query; // Extracting the site ID from request parameters
   const { name, description, pictures, location, openingHours, ticketPrices } =
     req.body; // Extracting the updated fields from request body
 
@@ -220,7 +220,7 @@ const filterByTags = async (req, res) => {
 
 const changePasswordGovernor = async (req, res) => {
   const { id } = req.params;
-  const { oldPassword, newPassword, newPasswordConfirmed } = req.query; // Changed to req.body
+  const { oldPassword, newPassword, newPasswordConfirmed } = req.body; // Changed to req.body
 
   console.log(id, oldPassword, newPassword);
 

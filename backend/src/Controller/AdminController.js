@@ -4,15 +4,20 @@ const Tourist = require("../Models/touristModel");
 const Company = require("../Models/companyProfileModel");
 const PreferenceTag = require("../Models/PreferenceTagModel");
 const ActivityCategory = require("../Models/ActivityCategoryModel");
-const Product = require("../Models/productModel");
+const Product = require("../Models/ProductModel");
 const Complaint = require("../Models/Complaint");
 const Itinerary = require("../Models/itineraryModel");
 const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
-const Seller = require("../Models/SellerModel");
 const Transportation = require("../Models/TransportationModel");
+const Seller = require("../Models/SellerModel");
+const bookedItinerary = require("../Models/touristItineraryModel")
+const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
 const nodemailer = require('nodemailer');
+const Activity = require("../Models/activityModel");
+
+
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -1075,8 +1080,34 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+// Controller function to mark an activity as inappropriate
+const markActivityInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
 
-//create new activitycategory
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: true }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    );
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+
+    // Send the updated activity as a response
+    res
+      .status(200)
+      .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//create new transportation
 const createTransportation = async (req, res) => {
   const { type, destination, price } = req.body;
 
@@ -1170,10 +1201,186 @@ const sendEmail = async (to, subject, text, html) => {
     console.error("Error sending email: ", error);
     return { success: false, message: "Failed to send email.", error };
   }
+}
+// Function to calculate total revenue from purchased products
+const totalProductRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their purchased products
+    const tourists = await Tourist.find().populate('products');
+    
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their purchased products
+    tourists.forEach((tourist) => {
+      tourist.products.forEach((product) => {
+        // Step 4: Add of each product's price to the total revenue
+        totalRevenue += product.price;
+      });
+    });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error.message,
+    });
+  }
+};
+
+// Function to calculate total revenue from booked itinerary (10% of their price)
+const totalItineraryRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their booked itineraries
+    const itinerary = await bookedItinerary.find({});
+    
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their booked itineraries
+    itinerary.forEach(itinerary => {
+      if (itinerary.totalPrice){
+      totalRevenue += itinerary.totalPrice * 0.10; // Taking 10% of the product price
+      }
+  });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error.message,
+    });
+  }
 };
 
 
 module.exports = sendEmail;
+// Function to calculate total revenue from booked activity (10% of their price)
+const totalActivityRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their booked activities
+    const activity = await bookedActivity.find({});
+    
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their booked acitivites
+    activity.forEach(activity => {
+      if (activity.totalPrice){
+      totalRevenue += activity.totalPrice * 0.10; // Taking 10% of the product price
+      }
+  });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error.message,
+    });
+  }
+};
+
+
+const countTotalUsers = async (req, res) => {
+  try {
+    // Count the total number of users in each collection
+    const touristCount = await Tourist.countDocuments();
+    const sellerCount = await Seller.countDocuments();
+    const advertiserCount = await Advertiser.countDocuments();
+    const tourGuideCount = await TourGuide.countDocuments();
+
+    // Calculate the total users from all collections
+    const totalUsers = touristCount + sellerCount + advertiserCount + tourGuideCount;
+
+    // Send the response back to the client
+    res.status(200).json({
+      totalUsers,
+      details: {
+        tourists: touristCount,
+        sellers: sellerCount,
+        advertisers: advertiserCount,
+        tourGuides: tourGuideCount,
+      },
+    });
+  } catch (error) {
+    console.error("Error counting users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getUsersPerMonth = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+
+    // Helper function to count users created in each month
+    const countUsersPerMonth = async (Model) => {
+      const monthlyCounts = await Model.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: new Date(`${currentYear}-01-01`),
+              $lt: new Date(`${currentYear + 1}-01-01`)
+            }
+          }
+        },
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { "_id": 1 } // Sort by month
+        }
+      ]);
+      return monthlyCounts;
+    };
+
+    // Get counts for each type of user
+    const touristsCount = await countUsersPerMonth(Tourist);
+    const sellersCount = await countUsersPerMonth(Seller);
+    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const tourGuidesCount = await countUsersPerMonth(TourGuide);
+
+    // Combine results from all user types
+    const totalUsersPerMonth = Array.from({ length: 12 }, (_, i) => {
+      const month = i + 1;
+      const tourists = touristsCount.find((item) => item._id === month)?.count || 0;
+      const sellers = sellersCount.find((item) => item._id === month)?.count || 0;
+      const advertisers = advertisersCount.find((item) => item._id === month)?.count || 0;
+      const tourGuides = tourGuidesCount.find((item) => item._id === month)?.count || 0;
+
+      // Sum all user types for the total
+      const totalUsers = tourists + sellers + advertisers + tourGuides;
+
+      return {
+        month,
+        totalUsers, // Combine all into a single totalUsers field
+      };
+    });
+
+    res.status(200).json(totalUsersPerMonth);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch user counts" });
+  }
+};
+
 
 
 module.exports = {
@@ -1227,4 +1434,11 @@ module.exports = {
   uploadPicture,
   markItineraryInappropriate,
   createTransportation,
+  markActivityInappropriate,
+  createTransportation,
+  totalProductRevenue,
+  totalItineraryRevenue,
+  totalActivityRevenue,
+  countTotalUsers,
+  getUsersPerMonth
 };

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import "./chart.scss";
 import {
   AreaChart,
@@ -7,17 +8,43 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { name: "January", Total: 1200 },
-  { name: "February", Total: 2100 },
-  { name: "March", Total: 800 },
-  { name: "April", Total: 1600 },
-  { name: "May", Total: 900 },
-  { name: "June", Total: 1700 },
-];
+import axios from "axios";
 
 const Chart = ({ aspect, title }) => {
+  const [data, setData] = useState([]);
+
+  // Function to fetch user data per month from the backend
+  const fetchUsersPerMonth = async () => {
+    try {
+      const response = await axios.get("/api/Admin/getUsersPerMonth");
+      const usersData = response.data;
+
+      // Map the response data to match the chart format
+      const formattedData = usersData.map((monthData) => ({
+        name: getMonthName(monthData.month), // Convert numeric month to month name
+        Total: monthData.totalUsers, // Sum of tourists, sellers, advertisers, and tour guides
+      }));
+
+      setData(formattedData);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  // Helper function to convert month number to month name
+  const getMonthName = (monthNumber) => {
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December",
+    ];
+    return monthNames[monthNumber - 1]; // Since monthNumber is 1-based
+  };
+
+  // Use useEffect to call the function on component mount
+  useEffect(() => {
+    fetchUsersPerMonth();
+  }, []);
+
   return (
     <div className="chart">
       <div className="title">{title}</div>

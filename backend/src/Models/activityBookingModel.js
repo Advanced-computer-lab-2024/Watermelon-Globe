@@ -21,6 +21,10 @@ const ActivityBookingSchema = new Schema({
     enum: ['pending', 'confirmed', 'cancelled'],
     default: 'pending'
   },
+  totalPrice: {
+    type: Number,
+    required: false
+  },
   paymentStatus: {
     type: String,
     enum: ['unpaid', 'paid', 'refunded'],
@@ -44,6 +48,10 @@ ActivityBookingSchema.pre('save', async function (next) {
     if (this.status === 'confirmed' && this.chosenDate < currentDate) {
       this.completed = true;
     }
+
+    // Set 'totalPrice' to the price of the booked activity
+    this.totalPrice = activity.Price;
+
     next();
   } catch (error) {
     next(error);

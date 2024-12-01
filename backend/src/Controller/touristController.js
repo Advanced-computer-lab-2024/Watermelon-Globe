@@ -2,15 +2,17 @@ const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
 const itineraryModel = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
-const Product = require("../Models/productModel");
-const Booking = require("../Models/FlightBooking");
-const HotelBooking = require("../Models/HotelBooking");
-const Hotel = require("../Models/Hotel.js");
-const ChildItinerary = require("../Models/touristItineraryModel");
-const Activity = require("../Models/activityModel");
-const TourGuide = require("../Models/tourGuideModel"); // Adjust path if needed
-const ActivityBooking = require("../Models/activityBookingModel");
-const Transportation = require("../Models/TransportationModel");
+const Product = require("../Models/ProductModel.js");
+const Booking = require('../Models/FlightBooking');
+const HotelBooking = require('../Models/HotelBooking');
+const Hotel = require('../Models/Hotel.js');
+const ChildItinerary = require ("../Models/touristItineraryModel");
+const Activity = require('../Models/activityModel');
+const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
+const ActivityBooking = require('../Models/activityBookingModel');
+const Transportation = require('../Models/TransportationModel');
+
+//Tourist
 
 //Tourist
 

@@ -5,10 +5,11 @@ import "./App.css";
 import SignupPage from "./Components/SignUp";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
-import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
-import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
-import HomePage from "./Components/Homepage";
-import AppPage from "./Components/BackendReq";
+import CompletedActivities from "./Tourist/pages/CompletedActivities.js"
+import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js"
+import HomePage from './Components/Homepage';
+import AppPage from './Components/BackendReq';
+import SalesReportPage from './Advertiser/Components/salesReport/SalesReport.jsx';
 import CompanyHomepage from "./Components/CompanyHomepage.jsx";
 import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
@@ -91,7 +92,11 @@ import GeneralDetails from './TourGuide/Components/AllItinerariesDetail.jsx';
 
 
 //Tourism governer pages
-import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
+import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
+import AddSite from "./Governor/Components/AddSite.js";
+import GetMySites from "./Governor/Components/GetMySites.js";
+import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
+import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
 
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
@@ -198,7 +203,9 @@ const App = () => {
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
+          
+
 
           {/* Guest Routes */}
           <Route
@@ -232,6 +239,7 @@ const App = () => {
 
 
           <Route path="/tourism-governor/:id" element={<TourismGovernorPage />} />
+          <Route path="/GovernorHomePage/:id" element={<TourismGovernorPage />} />
           <Route
             path="/signup"
             element={<SignupPage onSignup={handleSignup} />}
@@ -260,6 +268,7 @@ const App = () => {
           />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:userId" element={<ActivityForm />} />
+          <Route path='/SalesReportPage/:advertiserId' element={<SalesReportPage/>}/>
 
           {/* Signup Pages */}
 
@@ -332,6 +341,14 @@ const App = () => {
           <Route path="/ChangePasswordSeller/:id" element={<ChangePasswordSeller />} />
           <Route path="/GetAllProductsGeneral/:id" element={<GetAllProductsGeneral />} />
           <Route path="/ProductsDetailsGeneral/:id" element={<ProductsDetailsGeneral />} />
+
+
+
+          {/* Governor Pages*/}
+          <Route path="/AddSite/:id" element={<AddSite />} />
+          <Route path="/GetMySites/:id" element={<GetMySites />} />
+          <Route path="/ChangePasswordGovernor/:id" element={<ChangePasswordGovernor />} />
+          <Route path="/GovernorSiteDetails/:id" element={<GovernorSiteDetails />} />
 
 
 

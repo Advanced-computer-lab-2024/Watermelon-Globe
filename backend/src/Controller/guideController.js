@@ -588,6 +588,83 @@ const getPassword = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const filterSalesReport = async (req, res) => {
+  const { guideId, activity, itinerary, startDate, endDate, month } = req.query;
+  
+  try {
+    const guide = await tourGuide.findById(guideId).populate('sales.itinerary');
+    if (!guide) {
+      return res.status(404).json({ message: 'Tour guide not found' });
+    }
+
+    let filteredSales = guide.sales;
+
+    if (activity) {
+      filteredSales = filteredSales.filter(sale => sale.activity === activity);
+    }
+
+    if (itinerary) {
+      filteredSales = filteredSales.filter(sale => sale.itinerary && sale.itinerary._id.toString() === itinerary);
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      filteredSales = filteredSales.filter(sale => sale.date >= start && sale.date <= end);
+    } else if (month) {
+      const [year, monthIndex] = month.split('-');
+      filteredSales = filteredSales.filter(sale => {
+        const saleDate = new Date(sale.date);
+        return saleDate.getFullYear() === parseInt(year) && saleDate.getMonth() === parseInt(monthIndex) - 1;
+      });
+    }
+
+    const totalSales = filteredSales.reduce((sum, sale) => sum + sale.amount, 0);
+
+    res.status(200).json({ filteredSales, totalSales });
+  } catch (error) {
+    res.status(500).json({ message: 'Error filtering sales report', error: error.message });
+  }
+};
+
+const filterTouristNumbers = async (req, res) => {
+  const { guideId, activity, itinerary, startDate, endDate, month } = req.query;
+  
+  try {
+    const guide = await tourGuide.findById(guideId).populate('touristCounts.itinerary');
+    if (!guide) {
+      return res.status(404).json({ message: 'Tour guide not found' });
+    }
+
+    let filteredCounts = guide.touristCounts;
+
+    if (activity) {
+      filteredCounts = filteredCounts.filter(count => count.activity === activity);
+    }
+
+    if (itinerary) {
+      filteredCounts = filteredCounts.filter(count => count.itinerary && count.itinerary._id.toString() === itinerary);
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      filteredCounts = filteredCounts.filter(count => count.date >= start && count.date <= end);
+    } else if (month) {
+      const [year, monthIndex] = month.split('-');
+      filteredCounts = filteredCounts.filter(count => {
+        const countDate = new Date(count.date);
+        return countDate.getFullYear() === parseInt(year) && countDate.getMonth() === parseInt(monthIndex) - 1;
+      });
+    }
+
+    const totalTourists = filteredCounts.reduce((sum, count) => sum + count.count, 0);
+
+    res.status(200).json({ filteredCounts, totalTourists });
+  } catch (error) {
+    res.status(500).json({ message: 'Error filtering tourist numbers', error: error.message });
+  }
+};
 
 const getNotificationsGuide=async(req,res)=>{
   const{ id }=req.params;
@@ -630,5 +707,7 @@ module.exports = {
   requestDeletionGuide,
   getPassword,
   updateTourGuideNew,
-  getNotificationsGuide
+  getNotificationsGuide,
+  filterSalesReport,
+  filterTouristNumbers
 };
