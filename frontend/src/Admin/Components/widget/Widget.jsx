@@ -1,4 +1,5 @@
 import "./widget.css";
+import { useEffect, useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
@@ -6,11 +7,65 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
 const Widget = ({ type }) => {
-  let data;
+  const [productRevenue, setProductRevenue] = useState(0); // State for product revenue
+  const [itineraryRevenue, setItineraryRevenue] = useState(0); // State for itinerary revenue
+  const [activityRevenue, setActivityRevenue] = useState(0); // State for activity revenue
 
-  //temporary
-  const amount = 100;
-  const diff = 20;
+  // Fetch product revenue from the backend API
+  useEffect(() => {
+    if (type === "product") {
+      const fetchProductRevenue = async () => {
+        try {
+          const response = await fetch("/api/Admin/productrevenue/");
+          const data = await response.json();
+          setProductRevenue(data.totalRevenue); // Update the state with the fetched revenue
+        } catch (error) {
+          console.error("Error fetching product revenue:", error);
+        }
+      };
+
+      fetchProductRevenue();
+    }
+  }, [type]);
+
+
+  // Fetch itinerary revenue from the backend API
+  useEffect(() => {
+    if (type === "itinerary") {
+      const fetchItineraryRevenue = async () => {
+        try {
+          const response = await fetch("/api/Admin/itineraryrevenue/");
+          const data = await response.json();
+          setItineraryRevenue(data.totalRevenue); // Update the state with the fetched revenue
+        } catch (error) {
+          console.error("Error fetching itinerary revenue:", error);
+        }
+      };
+
+      fetchItineraryRevenue();
+    }
+  }, [type]);
+
+
+  // Fetch itinerary revenue from the backend API
+  useEffect(() => {
+    if (type === "activity") {
+      const fetchActivityRevenue = async () => {
+        try {
+          const response = await fetch("/api/Admin/activityrevenue/");
+          const data = await response.json();
+          setActivityRevenue(data.totalRevenue); // Update the state with the fetched revenue
+        } catch (error) {
+          console.error("Error fetching itinerary revenue:", error);
+        }
+      };
+
+      fetchActivityRevenue();
+    }
+  }, [type]);
+
+  let data;
+  const diff = 20; // Placeholder for the difference (adjust as needed)
 
   switch (type) {
     case "user":
@@ -29,10 +84,10 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "order":
+    case "product":
       data = {
-        title: "ORDERS",
-        isMoney: false,
+        title: "PRODUCT REVENUE",
+        isMoney: true,
         link: "View all orders",
         icon: (
           <ShoppingCartOutlinedIcon
@@ -45,9 +100,9 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "earning":
+    case "itinerary":
       data = {
-        title: "EARNINGS",
+        title: "ITINERARY REVENUE",
         isMoney: true,
         link: "View net earnings",
         icon: (
@@ -58,9 +113,9 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "balance":
+    case "activity":
       data = {
-        title: "BALANCE",
+        title: "ACTIVITY REVENUE",
         isMoney: true,
         link: "See details",
         icon: (
@@ -83,7 +138,9 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {amount}
+          {data.isMoney && "$"} {type === "product" ? productRevenue : //Show fetched product revenue
+                                 type === "itinerary" ? itineraryRevenue : //Show fetched activity revenue
+                                 type === "activity" ? activityRevenue : 100} {/* Show fetched itinerary revenue */}
         </span>
         <span className="link">{data.link}</span>
       </div>

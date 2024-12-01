@@ -11,7 +11,10 @@ const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
 const Transportation = require("../Models/TransportationModel");
 const Seller = require("../Models/SellerModel");
+const bookedItinerary = require("../Models/touristItineraryModel")
+const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
+
 
 
 const getAllAdmin = async (req, res) => {
@@ -1008,7 +1011,7 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
-//create new activitycategory
+//create new transportation
 const createTransportation = async (req, res) => {
   const { type,destination,price } = req.body;
 
@@ -1019,6 +1022,99 @@ const createTransportation = async (req, res) => {
     res.status(400).json({ error: error.mssg });
   }
 };
+
+// Function to calculate total revenue from purchased products
+const totalProductRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their purchased products
+    const tourists = await Tourist.find().populate('products');
+    
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their purchased products
+    tourists.forEach((tourist) => {
+      tourist.products.forEach((product) => {
+        // Step 4: Add of each product's price to the total revenue
+        totalRevenue += product.price;
+      });
+    });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error.message,
+    });
+  }
+};
+
+// Function to calculate total revenue from booked itinerary (10% of their price)
+const totalItineraryRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their booked itineraries
+    const itinerary = await bookedItinerary.find({});
+    
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their booked itineraries
+    itinerary.forEach(itinerary => {
+      if (itinerary.totalPrice){
+      totalRevenue += itinerary.totalPrice * 0.10; // Taking 10% of the product price
+      }
+  });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error.message,
+    });
+  }
+};
+
+
+// Function to calculate total revenue from booked activity (10% of their price)
+const totalActivityRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their booked activities
+    const activity = await bookedActivity.find({});
+    
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their booked acitivites
+    activity.forEach(activity => {
+      if (activity.totalPrice){
+      totalRevenue += activity.totalPrice * 0.10; // Taking 10% of the product price
+      }
+  });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully',
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating total revenue',
+      error: error.message,
+    });
+  }
+};
+
 
 module.exports = {
   createAdmin,
@@ -1070,5 +1166,8 @@ module.exports = {
   unarchiveProduct,
   uploadPicture,
   markItineraryInappropriate,
-  createTransportation
+  createTransportation,
+  totalProductRevenue,
+  totalItineraryRevenue,
+  totalActivityRevenue
 };

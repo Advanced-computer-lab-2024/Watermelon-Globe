@@ -47,7 +47,10 @@ const {
     unarchiveProduct,
     uploadPicture,
     markItineraryInappropriate,
-    createTransportation
+    createTransportation,
+    totalProductRevenue,
+    totalItineraryRevenue,
+    totalActivityRevenue
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -134,5 +137,14 @@ router.put('/markItineraryInappropriate/:id', markItineraryInappropriate)
 
 //post a new transportation
 router.post("/createTransportation", createTransportation);
+
+//products revenue
+router.get('/productrevenue', totalProductRevenue);
+
+//itineray revenue
+router.get('/itineraryrevenue', totalItineraryRevenue);
+
+//itineray revenue
+router.get('/activityrevenue', totalActivityRevenue);
 
 module.exports = router;
