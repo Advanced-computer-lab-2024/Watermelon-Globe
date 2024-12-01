@@ -106,7 +106,7 @@ const ChangePasswordSeller = () => {
           />
         </div> */}
 
-        <button  style={{background:watermelonPink}}
+        <button  style={{background:watermelonPink , width:"25%"}}
           onClick={handleShowPassword}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
@@ -147,14 +147,14 @@ const ChangePasswordSeller = () => {
         </div>
 
         <div className="flex justify-end">
-          <button style={{background:watermelonGreen}}
+          <button style={{background:watermelonGreen, width:"15%" , marginRight:10}}
             onClick={handleConfirmPasswordChange}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
             Confirm
           </button>
 
-          <button style={{background:watermelonPink}}
+          <button style={{background:watermelonPink , width:"15%" }}
             onClick={handleCancel}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
