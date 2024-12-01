@@ -50,12 +50,16 @@ const Navbar = () => {
           content: (
             <div
               style={{
-                backgroundColor: "#ff69b4", // Pink background
-                color: "#fff", // White text
-                padding: "10px",
+                position:"absolute",
+                backgroundColor: "#f1e9ed", 
+                color: "#000", // White text
+                padding: "20px",
                 borderRadius: "5px",
-                marginRight:100,
-                position:"absolute"
+                borderWidth:"2px",
+                borderColor:"#46975a",
+                 top: "20px", // Adjust top position
+                right: "230px"
+
               }}
             >
               {notification}
