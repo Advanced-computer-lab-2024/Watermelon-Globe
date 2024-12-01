@@ -62,7 +62,12 @@ const {
   stripePayIntentHotel,
   stripePayIntentItinerary,
   stripePayIntentActivity,
-  stripePayIntentProduct
+  stripePayIntentProduct,
+  bookmarkItinerary,
+  bookmarkActivity,
+  removeItineraryBookmark,
+  removeActivityBookmark,
+  getBookmarks
 } = require("../Controller/touristController");
 
 //GET all tourists

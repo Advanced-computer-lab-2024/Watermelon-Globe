@@ -88,6 +88,23 @@ const touristSchema = new Schema(
     loyaltyLevel: { type: Number, enum: [1,2,3], default: 1 },
     badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' },
 
+    bookmarkedItineraries: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Itinerary', 
+        default: [],
+      },
+    ],
+    bookmarkedActivities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Activity', 
+        default: [],
+      },
+    ],
+ 
+ 
+    
     cart: [
       {
         product: {

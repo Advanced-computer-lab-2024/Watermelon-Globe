@@ -1315,7 +1315,6 @@ const bookTransportation = async (req, res) => {
 //sprint 3 Hatem
 
 // Add itinerary bookmark
-// Add itinerary bookmark
 const bookmarkItinerary = async (req, res) => {
   const { touristId, itineraryId } = req.params;
 
@@ -2218,5 +2217,12 @@ module.exports = {
   stripePayIntentHotel,
   stripePayIntentItinerary,
   stripePayIntentActivity,
-  stripePayIntentProduct
+  stripePayIntentProduct,
+  checkBookmarkActivity,
+  checkBookmarkItinerary,
+  getBookmarks,
+  removeActivityBookmark,
+  removeItineraryBookmark,
+  bookmarkActivity,
+  bookmarkItinerary
 };
