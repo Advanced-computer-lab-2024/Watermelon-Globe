@@ -12,6 +12,7 @@ const Advertiser = require("../Models/advertiserModel");
 const Seller = require("../Models/SellerModel");
 const Transportation = require("../Models/TransportationModel");
 const mongoose = require("mongoose");
+const nodemailer = require('nodemailer');
 
 
 const getAllAdmin = async (req, res) => {
@@ -982,6 +983,38 @@ const uploadPicture = async (req, res) => {
 };
 
 // Controller function to mark an itinerary as inappropriate
+// const markItineraryInappropriate = async (req, res) => {
+//   const { id } = req.params; // Get the itinerary ID from request parameters
+
+//   try {
+//     // Find the itinerary by its ID and update the inappropriate field
+//     const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+//       id,
+//       { inappropriate: true }, // Set the inappropriate field to true
+//       { new: true } // Return the updated document
+//     )
+//     .populate("guide");
+//     const guide = itinerary.guide;
+//     const guideEmail = guide.email;
+//     const emailMessage="Dear "+guide.name+" We are sorry to inform you that your itinerary "+itinerary.name+" with id "+itinerary.id+" has been flagged innapropriate , please review it and if you have any inqueries don't hesitate to contact us"
+//     sendEmail(guideEmail,"innapropriate itinerary",emailMessage,"");
+//     console.log(guide);
+
+//     // If the itinerary is not found, send a 404 error response
+//     if (!itinerary) {
+//       return res.status(404).json({ error: "Itinerary not found" });
+//     }
+
+//     // Send the updated itinerary as a response
+//     res
+//       .status(200)
+//       .json({ message: "Itinerary marked as inappropriate", itinerary });
+//   } catch (error) {
+//     // Handle any errors during the process
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 const markItineraryInappropriate = async (req, res) => {
   const { id } = req.params; // Get the itinerary ID from request parameters
 
@@ -991,11 +1024,34 @@ const markItineraryInappropriate = async (req, res) => {
       id,
       { inappropriate: true }, // Set the inappropriate field to true
       { new: true } // Return the updated document
-    );
+    ).populate("guide");
 
     // If the itinerary is not found, send a 404 error response
     if (!itinerary) {
       return res.status(404).json({ error: "Itinerary not found" });
+    }
+
+    const guide = itinerary.guide;
+    const notification=`Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`
+    guide.notifications.push(notification);
+    await guide.save();
+
+
+    // Check if guide information is complete
+    if (!guide || !guide.email || !guide.name) {
+      return res.status(400).json({ error: "Guide information is incomplete." });
+    }
+
+    const guideEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+
+    // Attempt to send the email
+    try {
+      await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+      console.log("Email sent to:", guideEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
     }
 
     // Send the updated itinerary as a response
@@ -1008,6 +1064,7 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+
 //create new activitycategory
 const createTransportation = async (req, res) => {
   const { type,destination,price } = req.body;
@@ -1019,6 +1076,90 @@ const createTransportation = async (req, res) => {
     res.status(400).json({ error: error.mssg });
   }
 };
+
+
+// const sendEmail = async (to, subject, text, html) => {
+//   try {
+//     const testAccount = await nodemailer.createTestAccount();
+
+//     // Create a transporter
+//     const transporter = nodemailer.createTransport({
+
+//         host: "smtp.ethereal.email",
+//         port: 587,
+//         secure: false, // Use TLS
+//         auth: {
+//           user: testAccount.user, // Replace with generated user
+//           pass: testAccount.pass, // Replace with generated password
+//         },
+//       });
+//     console.log(transporter);
+ 
+
+
+    
+
+//     // Email options
+//     const mailOptions = {
+//       from: '"Watermelom Globe" <watermelonglobe@gmail.com>', // Sender's address
+//       to,
+//       subject, // Subject of the email
+//       text, // Plain text content
+//       html, // HTML content (optional)
+//     };
+
+//     // Send the email
+//     const info = await transporter.sendMail(mailOptions);
+//     console.log('Email sent: ', info.response);
+//     return { success: true, message: 'Email sent successfully!' };
+//   } catch (error) {
+//     console.error('Error sending email: ', error);
+//     return { success: false, message: 'Failed to send email.', error };
+//   }
+// };
+
+
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Generate a test Ethereal account
+    const testAccount = await nodemailer.createTestAccount();
+
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: testAccount.user, // Generated user
+        pass: testAccount.pass, // Generated password
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <no-reply@watermelonglobe.com>', // Sender's address
+      to,
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+
+    // Log the preview URL for Ethereal
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    return { success: true, message: "Email sent successfully!", previewURL: nodemailer.getTestMessageUrl(info) };
+  } catch (error) {
+    console.error("Error sending email: ", error);
+    return { success: false, message: "Failed to send email.", error };
+  }
+};
+
+
+module.exports = sendEmail;
+
 
 module.exports = {
   createAdmin,

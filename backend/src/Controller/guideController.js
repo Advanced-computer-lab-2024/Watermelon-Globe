@@ -657,6 +657,24 @@ const deleteTourGuide = async (req, res) => {
   }
 };
 
+const getNotificationsGuide=async(req,res)=>{
+  const{ id }=req.params;
+  try{
+    const tourguide = await tourGuide.findById(id);
+    if (!tourguide) {
+      res.status(400).json({ message: "tourguide is not found" });
+    } else {
+      res.status(200).json(tourguide.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+  
+
+
+}
+
 module.exports = {
   deleteTourGuide,
 };
@@ -685,5 +703,7 @@ module.exports = {
   getPassword,
   updateTourGuideNew,
   deleteTourGuide,
-  deleteItinerary2
+  deleteItinerary2,
+  getNotificationsGuide
+
 };

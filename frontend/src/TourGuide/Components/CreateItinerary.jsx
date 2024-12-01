@@ -516,7 +516,9 @@ const handleSubmit = async (e) => {
 
               <div className="flex justify-center mt-8">
                 <button
-                style={{width:"50%"}}
+                style={{width:"30%" , 
+                  marginTop:10
+                }}
                   type="submit"
                   className="px-8 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600"
                 >
