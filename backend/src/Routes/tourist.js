@@ -186,11 +186,11 @@ router.put('/updateWallet/:touristId', updateWallet);
 
 
 //Stripe Methods
-router.post('/payFlight',stripePayIntentFlight)
-router.post('/payHotel',stripePayIntentHotel)
-router.post('/payItinerary',stripePayIntentItinerary)
-router.post('/payActivity',stripePayIntentActivity)
-router.post('/payProduct',stripePayIntentProduct)
+router.post('/payFlight',stripePayIntentFlight);
+router.post('/payHotel',stripePayIntentHotel);
+router.post('/payItinerary',stripePayIntentItinerary);
+router.post('/payActivity',stripePayIntentActivity);
+router.post('/payProduct',stripePayIntentProduct);
 
 
 module.exports = router;

@@ -6,6 +6,8 @@ import profileIcon from "../../Assets/Profile.png";
 import AccessToken from '../Components/AccessToken';
 import FlightSearch from '../Components/FlightSearch';
 import FlightBooking from '../Components/FlightBooking';
+import WalletComponent from '../../Tourist/Components/Wallet';
+
 
 
 const FlightMain = () => {
@@ -279,6 +281,8 @@ const handleViewProductsDetails = () => {
           )}
         </>
       )}
+
+<WalletComponent touristId={touristId} />
     </div>
   );
 };

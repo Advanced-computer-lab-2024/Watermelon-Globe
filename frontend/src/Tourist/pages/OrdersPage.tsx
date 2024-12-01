@@ -201,7 +201,7 @@ const OrdersPage = () => {
                     )}
                 </div>
             )}
-            <WalletComponent />
+            <WalletComponent touristId={touristId} />
         </div>
     );
 };

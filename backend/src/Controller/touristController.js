@@ -1,5 +1,6 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
+const stripe = require('stripe')(process.env.SECRET_KEY); // Replace with your Stripe secret key
 const itineraryModel = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
@@ -1817,6 +1818,8 @@ const stripePayIntentFlight = async (req, res) => {
 
     // Find the booking in the database
     const booking = await Booking.findById(bookingId);
+
+    console.log(booking);
 
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' });
