@@ -85,7 +85,7 @@ const CreateProduct = () => {
         <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
        
         <div className="flex justify-center">
-  <button className="bg-green-700 text-white px-4 py-2  rounded mt-6" type="submit">
+  <button  style={{width:"25%", marginTop:10}} className="bg-green-700 text-white px-4 py-2  rounded mt-6" type="submit">
     Create Product
   </button>
 </div>

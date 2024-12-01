@@ -119,6 +119,7 @@ const ViewProfile = () => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
+    width:"25%",
     color: 'white',
     padding: '10px 20px',
     borderRadius: '5px',
@@ -208,7 +209,7 @@ const ViewProfile = () => {
                   </button>
                   <button
                     onClick={handleDeleteAccount}
-                    style={{...buttonStyle, backgroundColor: '#d32f2f'}}
+                    style={{...buttonStyle, backgroundColor: watermelonPink}}
                   >
                     Delete Account
                   </button>

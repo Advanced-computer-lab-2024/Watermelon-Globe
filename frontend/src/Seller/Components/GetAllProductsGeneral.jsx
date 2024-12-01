@@ -115,6 +115,7 @@ const GetAllProductsGeneral = () => {
     borderRadius: '5px',
     cursor: 'pointer',
     transition: 'background-color 0.3s',
+    width:"25%"
   };
 
   const productCardStyle = {

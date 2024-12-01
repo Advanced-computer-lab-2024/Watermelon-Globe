@@ -109,6 +109,7 @@ const GetAllProducts = () => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
+    width:"25%",
     color: 'white',
     padding: '10px 15px',
     border: 'none',
