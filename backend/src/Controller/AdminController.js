@@ -1171,6 +1171,65 @@ const countTotalUsers = async (req, res) => {
   }
 };
 
+const getUsersPerMonth = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+
+    // Helper function to count users created in each month
+    const countUsersPerMonth = async (Model) => {
+      const monthlyCounts = await Model.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: new Date(`${currentYear}-01-01`),
+              $lt: new Date(`${currentYear + 1}-01-01`)
+            }
+          }
+        },
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { "_id": 1 } // Sort by month
+        }
+      ]);
+      return monthlyCounts;
+    };
+
+    // Get counts for each type of user
+    const touristsCount = await countUsersPerMonth(Tourist);
+    const sellersCount = await countUsersPerMonth(Seller);
+    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const tourGuidesCount = await countUsersPerMonth(TourGuide);
+
+    // Combine results from all user types
+    const totalUsersPerMonth = Array.from({ length: 12 }, (_, i) => {
+      const month = i + 1;
+      const tourists = touristsCount.find((item) => item._id === month)?.count || 0;
+      const sellers = sellersCount.find((item) => item._id === month)?.count || 0;
+      const advertisers = advertisersCount.find((item) => item._id === month)?.count || 0;
+      const tourGuides = tourGuidesCount.find((item) => item._id === month)?.count || 0;
+
+      // Sum all user types for the total
+      const totalUsers = tourists + sellers + advertisers + tourGuides;
+
+      return {
+        month,
+        totalUsers, // Combine all into a single totalUsers field
+      };
+    });
+
+    res.status(200).json(totalUsersPerMonth);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch user counts" });
+  }
+};
+
+
 
 module.exports = {
   createAdmin,
@@ -1227,5 +1286,6 @@ module.exports = {
   totalProductRevenue,
   totalItineraryRevenue,
   totalActivityRevenue,
-  countTotalUsers
+  countTotalUsers,
+  getUsersPerMonth
 };

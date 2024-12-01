@@ -10,6 +10,7 @@ const Widget = ({ type }) => {
   const [productRevenue, setProductRevenue] = useState(0); // State for product revenue
   const [itineraryRevenue, setItineraryRevenue] = useState(0); // State for itinerary revenue
   const [activityRevenue, setActivityRevenue] = useState(0); // State for activity revenue
+  const [totalUsers, setTotalUsers] = useState(0); // State for total users
 
   // Fetch product revenue from the backend API
   useEffect(() => {
@@ -56,11 +57,28 @@ const Widget = ({ type }) => {
           const data = await response.json();
           setActivityRevenue(data.totalRevenue); // Update the state with the fetched revenue
         } catch (error) {
-          console.error("Error fetching itinerary revenue:", error);
+          console.error("Error fetching activity revenue:", error);
         }
       };
 
       fetchActivityRevenue();
+    }
+  }, [type]);
+
+    // Fetch itinerary revenue from the backend API
+  useEffect(() => {
+    if (type === "user") {
+      const fetchTotalUsers = async () => {
+        try {
+          const response = await fetch("/api/Admin/countUsers/");
+          const data = await response.json();
+          setTotalUsers(data.totalUsers); // Update the state with the fetched users
+        } catch (error) {
+          console.error("Error fetching total users:", error);
+        }
+      };
+
+      fetchTotalUsers();
     }
   }, [type]);
 
@@ -140,7 +158,8 @@ const Widget = ({ type }) => {
         <span className="counter">
           {data.isMoney && "$"} {type === "product" ? productRevenue : //Show fetched product revenue
                                  type === "itinerary" ? itineraryRevenue : //Show fetched activity revenue
-                                 type === "activity" ? activityRevenue : 100} {/* Show fetched itinerary revenue */}
+                                 type === "activity" ? activityRevenue : ""} {/* Show fetched itinerary revenue */}
+          {!data.isMoney} {type === "user" ? totalUsers : ""}
         </span>
         <span className="link">{data.link}</span>
       </div>

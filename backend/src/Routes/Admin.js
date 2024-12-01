@@ -51,7 +51,9 @@ const {
     totalProductRevenue,
     totalItineraryRevenue,
     totalActivityRevenue,
-    markActivityInappropriate
+    markActivityInappropriate,
+    countTotalUsers,
+    getUsersPerMonth
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -150,5 +152,11 @@ router.get('/itineraryrevenue', totalItineraryRevenue);
 
 //itineray revenue
 router.get('/activityrevenue', totalActivityRevenue);
+
+//count users
+router.get('/countUsers', countTotalUsers);
+
+//count users per month
+router.get('/getUsersPerMonth', getUsersPerMonth);
 
 module.exports = router;
