@@ -226,7 +226,9 @@ const handleSubmit = async (e) => {
     <button
       type="button"
       style={{backgroundColor:"#FF79A8",
-               marginBottom:2
+               marginBottom:2,
+               width:"20%"
+               
             }}
       onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
       onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
@@ -270,11 +272,11 @@ const handleSubmit = async (e) => {
                   {tags.map((tag) => (
                     <button
                       type="button"
-                      style={{backgroundColor:"#FF79A8",marginBottom:2}}
+                      style={{backgroundColor:"#FF79A8",marginBottom:2,width:"10%"}}
                       onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
                       onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
                       key={tag._id}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      className={`px-2 py-2 rounded-full text-sm font-medium transition-colors ${
                         selectedTags.includes(tag._id)
                           ? "bg-pink-500 text-white"
                           : "bg-green-200 text-green-800 hover:bg-green-300"
@@ -406,6 +408,7 @@ const handleSubmit = async (e) => {
                     className="mt-1 block w-full px-3 py-2 bg-green-50 border border-green-300 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                   />
                   <button
+                  style={{width:"25%"}}
                     type="button"
                     onClick={() => {
                       const dateInput = document.querySelector('input[type="date"]');
@@ -442,6 +445,7 @@ const handleSubmit = async (e) => {
                     className="mt-1 block w-full px-3 py-2 bg-green-50 border border-green-300 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                   />
                   <button
+                  style={{width:"25%"}}
                     type="button"
                     onClick={() => {
                       const timeInput = document.querySelector('input[type="time"]');
@@ -488,6 +492,7 @@ const handleSubmit = async (e) => {
                     className="px-3 py-2 bg-green-50 border border-green-300 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                   />
                   <button
+                  style={{width:"25%"}}
                     type="button"
                     onClick={addPickupDropoff}
                     className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors"
@@ -511,6 +516,7 @@ const handleSubmit = async (e) => {
 
               <div className="flex justify-center mt-8">
                 <button
+                style={{width:"50%"}}
                   type="submit"
                   className="px-8 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600"
                 >
