@@ -14,6 +14,7 @@ const Seller = require("../Models/SellerModel");
 const bookedItinerary = require("../Models/touristItineraryModel")
 const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
+const Activity = require("../Models/activityModel");
 
 
 
@@ -1011,6 +1012,33 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+// Controller function to mark an activity as inappropriate
+const markActivityInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: true }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    );
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+
+    // Send the updated activity as a response
+    res
+      .status(200)
+      .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
 //create new transportation
 const createTransportation = async (req, res) => {
   const { type,destination,price } = req.body;
@@ -1116,6 +1144,34 @@ const totalActivityRevenue = async (req, res) => {
 };
 
 
+const countTotalUsers = async (req, res) => {
+  try {
+    // Count the total number of users in each collection
+    const touristCount = await Tourist.countDocuments();
+    const sellerCount = await Seller.countDocuments();
+    const advertiserCount = await Advertiser.countDocuments();
+    const tourGuideCount = await TourGuide.countDocuments();
+
+    // Calculate the total users from all collections
+    const totalUsers = touristCount + sellerCount + advertiserCount + tourGuideCount;
+
+    // Send the response back to the client
+    res.status(200).json({
+      totalUsers,
+      details: {
+        tourists: touristCount,
+        sellers: sellerCount,
+        advertisers: advertiserCount,
+        tourGuides: tourGuideCount,
+      },
+    });
+  } catch (error) {
+    console.error("Error counting users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -1166,8 +1222,10 @@ module.exports = {
   unarchiveProduct,
   uploadPicture,
   markItineraryInappropriate,
+  markActivityInappropriate,
   createTransportation,
   totalProductRevenue,
   totalItineraryRevenue,
-  totalActivityRevenue
+  totalActivityRevenue,
+  countTotalUsers
 };
