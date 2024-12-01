@@ -105,6 +105,7 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 
 import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
+import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
@@ -291,7 +292,9 @@ const App = () => {
           <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
           <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
 
-          
+
+          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
+
 
         </Routes>
       </div>

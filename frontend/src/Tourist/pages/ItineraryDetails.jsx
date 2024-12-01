@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Star, MapPin, Clock, Calendar, DollarSign, Languages, Accessibility, Truck, Users, AlertCircle } from 'lucide-react';
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
+import { Bookmark } from 'lucide-react';
+
 
 const ItineraryDetails = () => {
     const { tripid, id } = useParams();
@@ -13,6 +15,8 @@ const ItineraryDetails = () => {
     const [selectedTime, setSelectedTime] = useState(null);
     const [bookingMessage, setBookingMessage] = useState(null);
     const [rating, setRating] = useState(0);
+    const [isBookmarked, setIsBookmarked] = useState(false);
+
 
  
         const fetchItinerary = async () => {
@@ -23,6 +27,8 @@ const ItineraryDetails = () => {
                 }
                 const data = await response.json();
                 setItinerary(data);
+                 const bookmarkResponse = await axios.get(`/api/Tourist/checkBookmarkItinerary/${id}/${tripid}`);
+                setIsBookmarked(bookmarkResponse.data.isBookmarked);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -92,6 +98,21 @@ const ItineraryDetails = () => {
         }
     };
 
+    const handleBookmark = async () => {
+        try {
+            if (isBookmarked) {
+                await axios.put(`/api/Tourist/removeBookmarkItinerary/${id}/${tripid}`);
+            } else {
+                await axios.put(`/api/Tourist/bookmarkItinerary/${id}/${tripid}`);
+            }
+            setIsBookmarked(!isBookmarked);
+            alert(isBookmarked ? 'Itinerary removed from bookmarks' : 'Itinerary added to bookmarks');
+        } catch (error) {
+            console.error('Error toggling bookmark:', error);
+            alert(error);
+        }
+    };
+
     // Share itinerary functionality
     const handleShareLink = () => {
         const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}/${id}`;
@@ -121,6 +142,12 @@ const ItineraryDetails = () => {
         <div className="container mx-auto p-6 bg-white shadow-2xl rounded-lg mt-10 max-w-4xl">
             <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b pb-4">{itinerary.name}</h2>
             
+            {/* Bookmark button */}
+            <button onClick={handleBookmark} className="bookmark-button">
+                <Bookmark className={isBookmarked ? 'filled' : ''} />
+                {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+            </button>
+
             <div className="flex items-center text-gray-600 mb-8">
                 <MapPin className="mr-2" size={24} />
                 <span className="text-lg">{itinerary.locations.join(', ')}</span>

@@ -138,11 +138,12 @@ router.get('/getTransportation/:id', getTransportation);
 router.put('/bookTransportation/:id', bookTransportation);
 
 
-router.post('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
-router.post('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
-router.put('/removeItineraryBookmark/:touristId/:itineraryId', removeItineraryBookmark);
-router.put('/removeActivityBookmark/:touristId/:activityId', removeActivityBookmark);
+router.put('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
+router.put('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
+router.put('/removeBookmarkItinerary/:touristId/:itineraryId', removeItineraryBookmark);
+router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookmark);
 router.get('/getBookmarks/:touristId', getBookmarks);
-
+router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
+router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
 
 module.exports = router;

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { User, Mail, Phone, Flag, Calendar, Briefcase, DollarSign, Edit2, Check, X, Gift } from 'lucide-react';
+import { User, Mail, Phone, Flag, Calendar, Briefcase, DollarSign, Edit2, Check, X, Gift, Bookmark } from 'lucide-react';
 import ChangePasswordTourist from '../Components/changePasswordTourist'
 
 export default function TouristDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [showPasswordModal, setShowPasswordModal] = useState(false); // Toggle for password modal
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
 
     const [tourist, setTourist] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -98,11 +98,15 @@ export default function TouristDetails() {
     };
 
     const handleViewFlightHotelBookings = () => {
-        navigate(`/MyHotelFlightBookings/${id}`); // Navigating to the bookings page for the tourist
+        navigate(`/MyHotelFlightBookings/${id}`);
     };
 
     const handleViewBookings = () => {
-        navigate(`/MyBookings/${id}`); // Navigating to the bookings page for the tourist
+        navigate(`/MyBookings/${id}`);
+    };
+
+    const handleViewBookmarks = () => {
+        navigate(`/TouristBookmarks/${id}`);
     };
 
     const handleDeleteAccount = async () => {
@@ -118,7 +122,7 @@ export default function TouristDetails() {
 
                 if (response.ok) {
                     alert('Your account has been successfully deleted.');
-                    navigate('/'); // Redirect to home or login after deletion
+                    navigate('/');
                 } else {
                     alert('Failed to delete account. Please try again.');
                 }
@@ -132,15 +136,15 @@ export default function TouristDetails() {
     const renderBadgeIcon = () => {
         switch (tourist.badge) {
           case 'Gold':
-            return <span role="img" aria-label="Gold Medal">🥇</span>; // Gold medal emoji
+            return <span role="img" aria-label="Gold Medal">🥇</span>;
           case 'Silver':
-            return <span role="img" aria-label="Silver Medal">🥈</span>; // Silver medal emoji
+            return <span role="img" aria-label="Silver Medal">🥈</span>;
           case 'Bronze':
-            return <span role="img" aria-label="Bronze Medal">🥉</span>; // Bronze medal emoji
+            return <span role="img" aria-label="Bronze Medal">🥉</span>;
           default:
-            return <span>No badge</span>; // Default message if no badge
+            return <span>No badge</span>;
         }
-      };
+    };
 
     if (!tourist) {
         return (
@@ -342,27 +346,44 @@ export default function TouristDetails() {
                     </div>
                 </div>
             </div>
-            <button
-                onClick={handleViewFlightHotelBookings}
-                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
-            >
-                View My Hotel/Flight
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
+                <button
+                    onClick={handleViewFlightHotelBookings}
+                    className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
+                >
+                    View My Hotel/Flight
+                </button>
 
-            <button
-                onClick={handleViewBookings}
-                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
-            >
-                View My Itineraries/activities
-            </button>
+                <button
+                    onClick={handleViewBookings}
+                    className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition duration-200"
+                >
+                    View My Itineraries/activities
+                </button>
 
-            <button
-                onClick={handleDeleteAccount}
-                className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
-                style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
-            >
-                Delete Account
-            </button>
+                <button
+                    onClick={handleViewBookmarks}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
+                >
+                    <Bookmark size={18} className="inline-block mr-2" />
+                    View Bookmarks
+                </button>
+
+                <button
+                    onClick={handleDeleteAccount}
+                    className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+                    style={{ backgroundColor: 'rgb(220, 38, 38)', hover: { backgroundColor: 'rgb(185, 28, 28)' } }}
+                >
+                    Delete Account
+                </button>
+
+                <button
+                    onClick={() => setShowPasswordModal(true)}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+                >
+                    Change Password
+                </button>
+            </div>
             {showRedeemModal && (
                 <div style={{
                     position: 'fixed',
@@ -427,11 +448,6 @@ export default function TouristDetails() {
                     </div>
                 </div>
             )}
-            <button onClick={() => setShowPasswordModal(true)}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
-                Change Password
-            </button>
-            {/* Password Change Modal */}
             {showPasswordModal && <ChangePasswordTourist id={id} onClose={() => setShowPasswordModal(false)} />}
             <style jsx>{`
                 @keyframes spin {

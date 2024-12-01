@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MapPin, Clock, Calendar, DollarSign, Tag, AlertCircle, Star, Users, Percent } from 'lucide-react';
+import { MapPin, Clock, Calendar, DollarSign, Tag, AlertCircle, Star, Users, Percent,Bookmark  } from 'lucide-react';
 import axios from 'axios';
 
 const ActivityDetails = () => {
@@ -9,6 +9,8 @@ const ActivityDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [bookingMessage, setBookingMessage] = useState(null);
+    const [isBookmarked, setIsBookmarked] = useState(false);
+
 
     useEffect(() => {
         const fetchActivity = async () => {
@@ -19,6 +21,9 @@ const ActivityDetails = () => {
                 }
                 const data = await response.json();
                 setActivity(data);
+               // Check if the activity is bookmarked
+                const bookmarkResponse = await axios.get(`/api/Tourist/checkBookmarkActivity/${id}/${activityId}`);
+                setIsBookmarked(bookmarkResponse.data.isBookmarked);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -75,6 +80,21 @@ const ActivityDetails = () => {
         const body = encodeURIComponent(`I thought you might be interested in this activity: ${activityUrl}`);
         window.location.href = `mailto:?subject=${subject}&body=${body}`;
       };
+     
+      const handleBookmark = async () => {
+        try {
+            if (isBookmarked) {
+                await axios.put(`/api/Tourist/removeBookmarkActivity/${id}/${activityId}`);
+            } else {
+                await axios.put(`/api/Tourist/addBookmarkActivity/${id}/${activityId}`);
+            }
+            setIsBookmarked(!isBookmarked);
+            alert(isBookmarked ? 'Activity removed from bookmarks' : 'Activity added to bookmarks');
+        } catch (error) {
+            console.error('Error toggling bookmark:', error);
+            alert('Failed to update bookmark. Please try again.');
+        }
+    };
 
     if (loading) return (
         <div className="flex items-center justify-center h-screen">
@@ -93,6 +113,7 @@ const ActivityDetails = () => {
             <div className="flex items-center text-gray-600 mb-8">
                 <MapPin className="mr-2" size={24} />
                 <span className="text-lg">{`${activity.Location.coordinates[1]}, ${activity.Location.coordinates[0]}`}</span>
+                
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">

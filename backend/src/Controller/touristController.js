@@ -1315,6 +1315,7 @@ const bookTransportation = async (req, res) => {
 //sprint 3 Hatem
 
 // Add itinerary bookmark
+// Add itinerary bookmark
 const bookmarkItinerary = async (req, res) => {
   const { touristId, itineraryId } = req.params;
 
@@ -1334,7 +1335,7 @@ const bookmarkItinerary = async (req, res) => {
 
     res.status(200).json({ message: "Itinerary bookmarked successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error bookmarking itinerary", details: error.message });
   }
 };
 
@@ -1358,9 +1359,10 @@ const bookmarkActivity = async (req, res) => {
 
     res.status(200).json({ message: "Activity bookmarked successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error bookmarking activity", details: error.message });
   }
 };
+
 
 // Remove itinerary bookmark
 const removeItineraryBookmark = async (req, res) => {
@@ -1433,6 +1435,42 @@ const getBookmarks = async (req, res) => {
 };
 
 
+// Check if an itinerary is bookmarked
+const checkBookmarkItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const isBookmarked = tourist.bookmarkedItineraries.includes(itineraryId);
+    res.status(200).json({ isBookmarked });
+  } catch (error) {
+    res.status(500).json({ error: "Error checking itinerary bookmark status", details: error.message });
+  }
+};
+
+// Check if an activity is bookmarked
+const checkBookmarkActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const isBookmarked = tourist.bookmarkedActivities.includes(activityId);
+    res.status(200).json({ isBookmarked });
+  } catch (error) {
+    res.status(500).json({ error: "Error checking activity bookmark status", details: error.message });
+  }
+};
+
+
+
 module.exports = {
   createTourist,
   getTourists,
@@ -1479,5 +1517,7 @@ module.exports = {
   bookmarkActivity,
   removeItineraryBookmark,
   removeActivityBookmark,
-  getBookmarks
+  getBookmarks,
+  checkBookmarkItinerary,
+  checkBookmarkActivity
 };
