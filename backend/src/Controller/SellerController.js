@@ -1,5 +1,5 @@
 const Seller = require("../Models/SellerModel");
-const Product = require("../Models/productModel");
+const Product = require("../Models/ProductModel");
 const mongoose = require("mongoose");
 const { findById } = require("../Models/touristModel");
 
