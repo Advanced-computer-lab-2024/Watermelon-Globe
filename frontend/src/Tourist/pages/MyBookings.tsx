@@ -6,9 +6,9 @@ import WalletComponent from '../Components/Wallet';
 const MyBookings: React.FC = () => {
   const { id } = useParams(); // Get the tourist ID from the URL params
   const navigate = useNavigate();
-  const [itineraryBookings, setItineraryBookings] = useState<Booking[]>([]); 
-  const [activities, setActivities] = useState<Activity[]>([]); 
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [itineraryBookings, setItineraryBookings] = useState<Booking[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   interface Itinerary {
     accessibility: boolean;
@@ -181,8 +181,12 @@ const MyBookings: React.FC = () => {
             <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
               <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
               <p>Status: completed</p>
-              <p>Total Price: ${booking.totalPrice}</p>
-              <p>Chosen Dates: {booking.chosenDates.join(', ')}</p>
+              <p>
+                Itinerary Date:
+                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
+              </p>
+              <p>Itinerary Time: {booking.chosenTimes}</p>
+              <p>Price: ${booking.totalPrice}</p>
               <button
                 onClick={() => redirectToRatingsPageItinerary(booking._id, 'itinerary')}
                 className="mt-4 bg-primary text-white p-2 mr-8 rounded-lg hover:bg-hover"
@@ -208,8 +212,12 @@ const MyBookings: React.FC = () => {
             <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
               <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
               <p>Status: {booking.status}</p>
-              <p>Total Price: ${booking.totalPrice}</p>
-              <p>Chosen Dates: {booking.chosenDates.join(', ')}</p>
+              <p>
+                Itinerary Date:
+                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
+              </p>
+              <p>Itinerary Time: {booking.chosenTimes}</p>
+              <p>Price: ${booking.totalPrice}</p>
               <button
                 onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
                 className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"

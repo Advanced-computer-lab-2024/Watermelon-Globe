@@ -15,7 +15,7 @@ import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
 import AdvertiserSignup from "./pages/ AdvertiserSignUp2.js";
 import SignupOptions from "./pages/SignUpOptions.js";
-import MainHome from "./Guest/pages/GuestHomepage.jsx";
+import MainHome from "./Guest/pages/GuestHomepage.tsx";
 
 import ViewProducts from "./Guest/pages/ViewProducts.js";
 //Admin Pages
@@ -32,7 +32,7 @@ import Itinerary from "./Admin/pages/Itinerary.js";
 import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
 
-import GuestPage from "./Guest/pages/GuestHomepage.jsx";
+import GuestPage from "./Guest/pages/GuestHomepage.tsx";
 
 
 //Advertiser Pages
@@ -84,7 +84,7 @@ import MainTouristPage from "./Tourist/pages/homepage.tsx";
 import MainTour from "./Tourist/pages/TouristHomepage.jsx";
 import TouristPage from "./TouristPage.js";
 import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
-import TouristDetails from "./Tourist/pages/TouristDetails.jsx";
+import TouristDetails from "./Tourist/pages/TouristDetails.tsx";
 import TouristProductsPage from "./Tourist/pages/TouristProduct.js";
 import ProductTourist from "./Tourist/pages/ProductsTourist.jsx";
 import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";

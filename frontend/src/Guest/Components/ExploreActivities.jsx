@@ -67,7 +67,7 @@ export default function ExploreActivities() {
   ]);
 
   const handleActivityClick = (activityId) => {
-    navigate(`/TouristActivityDetails/${activityId}/${id}`);
+    navigate(`/tourist-signup`);
   };
 
   const fetchActivities = async () => {

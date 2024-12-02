@@ -82,7 +82,7 @@ const WalletComponent = ({ touristId }: WalletComponentProps) => {
 
                 <div className="mt-6">
                   <p className="text-xl font-semibold">Loyalty Points:</p>
-                  <p className="text-2xl font-bold text-primary">{loyaltyPoints?.toFixed(2) || 0}</p>
+                  <p className="text-2xl font-bold text-primary">{loyaltyPoints?.toFixed(0) || 0}</p>
                 </div>
 
                 <div className="mt-6">

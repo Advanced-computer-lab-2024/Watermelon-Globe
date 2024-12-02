@@ -27,22 +27,20 @@ export default function DraftHomePage() {
     console.log("Searching for:", { destination, dates, guests });
   };
 
-  const handleSignOut = () => {
-    setIsSignedUp(false);
-    navigate(`/`);
-    // Clear user data or perform sign-out logic if necessary.
+  const handleSignUp = () => {
+    navigate(`/tourist-signup`);
   };
 
   const handleViewDetails = () => {
-    navigate(`/TouristDetails/${id}`);
+    navigate(`/tourist-signup`);
   };
 
   const handleViewPurchasedDetails = () => {
-    navigate(`/PurchasedProducts/${id}`);
+    navigate(`/tourist-signup`);
   };
 
   const handleViewProductsDetails = () => {
-    navigate(`/ProductTourist/${id}`);
+    navigate(`/tourist-signup`);
   };
 
   return (
@@ -59,34 +57,27 @@ export default function DraftHomePage() {
           {/* Navigation Links */}
           <div className="hidden md:flex space-x-4">
             <Link
-              to={`/Hotels/${id}`}
+              to={`/tourist-signup`}
               className="text-secondary hover:text-secondaryHover relative group no-underline"
             >
               Hotel
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
             <Link
-              to={`/Flights/${id}`}
+              to={`/tourist-signup`}
               className="text-secondary hover:text-secondaryHover relative group no-underline"
             >
               Flight
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
             <Link
-              to={`/ProductTourist/${id}`}
+              to={`/tourist-signup`}
               className="text-secondary hover:text-secondaryHover relative group no-underline"
             >
               Products
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
-            <Link
-              to={`/PurchasedProducts/${id}`}
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Purchased Products
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
 
-            </Link>
           </div>
 
           {/* Actions Section */}
@@ -95,13 +86,19 @@ export default function DraftHomePage() {
               EN
             </button>
             <button
-              onClick={handleSignOut}
+              onClick={handleSignUp}
               className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors"
             >
-              Sign Out
+              Login
+            </button>
+            <button
+              onClick={handleSignUp}
+              className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors"
+            >
+              Sign Up
             </button>
             {/* Profile Button */}
-            <button
+            {/* <button
               onClick={handleViewDetails}
               className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-white hover:border-secondary transition-colors"
             >
@@ -110,7 +107,7 @@ export default function DraftHomePage() {
                 alt="Profile Icon"
                 className="w-6 h-6 rounded-full object-cover"
               />
-            </button>
+            </button> */}
           </div>
         </nav>
       </header>

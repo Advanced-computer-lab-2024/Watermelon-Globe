@@ -70,9 +70,9 @@ const BookingsPage = () => {
               <div key={booking._id} className="booking-card p-6 border rounded-lg shadow-lg bg-cardBackground hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                 <p className="text-lg font-semibold text-primary">{`Hotel: ${booking.hotelId}`}</p>
                 <p className="text-lg font-semibold text-primary mb-2">{`Room: ${booking.roomType}`}</p>
-                <p className="text-black">{`Price: ${booking.currency} ${booking.price}`}</p>
-                <p className="text-black">{`Check-in: ${new Date(booking.checkInDate).toLocaleDateString()}`}</p>
-                <p className="text-black">{`Check-out: ${new Date(booking.checkOutDate).toLocaleDateString()}`}</p>
+                <p className="text-grayText">{`Price: ${booking.currency} ${booking.price}`}</p>
+                <p className="text-gray-600">{`Check-in: ${new Date(booking.checkInDate).toLocaleDateString()}`}</p>
+                <p className="text-gray-600">{`Check-out: ${new Date(booking.checkOutDate).toLocaleDateString()}`}</p>
               </div>
             ))}
           </div>
@@ -89,7 +89,7 @@ const BookingsPage = () => {
             {flightBookings.map((booking) => (
               <div key={booking._id} className="booking-card p-6 border rounded-lg shadow-lg bg-cardBackground hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                 <p className="text-lg font-semibold text-primary mb-2">{`Flight: ${booking.flightNumber1} | Airline: ${booking.airline}`}</p>
-                <p className="text-gray-600">{`Price: ${booking.currency} ${booking.price}`}</p>
+                <p className="text-grayText">{`Price: ${booking.currency} ${booking.price}`}</p>
                 <p className="text-gray-600">{`Departure: ${new Date(booking.departure1).toLocaleString()}`}</p>
                 <p className="text-gray-600">{`Arrival: ${new Date(booking.arrival1).toLocaleString()}`}</p>
               </div>
