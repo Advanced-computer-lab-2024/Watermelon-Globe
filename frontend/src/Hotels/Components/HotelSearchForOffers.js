@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import HotelBooking from '../Components/HotelBooking';
+import WalletComponent from '../../Tourist/Components/Wallet';
 import { fetchAccessToken, getHotelOffersById } from '../api';
 
 const BookingPage = () => {
-  const { hotelId, touristId } = useParams();
+  const { hotelId, touristId, hotelName } = useParams();
 
   const [checkInDate, setCheckInDate] = useState(new Date());
   const [checkOutDate, setCheckOutDate] = useState(new Date());
@@ -167,23 +169,29 @@ const BookingPage = () => {
           <h4 className="text-xl font-semibold mb-4">Hotel Offers</h4>
           {hotelOffers.map((offer, index) => (
             <div key={index} className="border p-4 mb-6 rounded-lg shadow-md">
-              <h5 className="font-semibold text-lg">{offer?.hotel?.name}</h5>
+              <h5 className="font-semibold text-lg">{hotelName}</h5>
               <p><strong>Price:</strong> {offer?.price?.base} {offer?.price?.currency}</p>
               <p><strong>Check-In Date:</strong> {offer?.checkInDate}</p>
               <p><strong>Check-Out Date:</strong> {offer?.checkOutDate}</p>
               <p><strong>Room Type:</strong> {offer?.room?.description?.text}</p>
-              <button
+              <HotelBooking hotel={offer} touristId={touristId} hotelName={hotelName}/>
+              
+              {/* <button
                 onClick={() => handleBookClick(offer)}
                 className="bg-green-600 text-white px-6 py-2 rounded-full mt-4 hover:bg-green-700"
               >
                 Book Now
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
       ) : (
         <p className="text-center text-gray-500">No hotel offers available.</p>
       )}
+
+
+<WalletComponent touristId={touristId} />
+
     </div>
   );
 };

@@ -303,7 +303,7 @@ const App = () => {
           {/* Path for Flight and Hotel APIs */}
           <Route path='/Flights/:touristId' element={<FlightMain/>}/>
           <Route path='/Hotels/:touristId' element={<HotelMain/>}/>
-          <Route path='/HotelOffers/:hotelId/:touristId' element={<HotelOffers/>}/>
+          <Route path='/HotelOffers/:hotelId/:touristId/:hotelName' element={<HotelOffers/>}/>
           <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
 
           
