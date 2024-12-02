@@ -136,8 +136,9 @@ const deleteChildItineraryById = async (req, res) => {
 };
 // Create a new activity booking
 const createActivityBooking = async (req, res) => {
-  const { activity, tourist, chosenDate, status, paymentStatus } = req.body;
+  const { activity, tourist, chosenDate, status } = req.body;
   try {
+    const paymentStatus = 'paid';
     // Validate if the provided activity ID is valid
     if (!mongoose.Types.ObjectId.isValid(activity)) {
       return res.status(400).json({ error: 'Invalid activity ID' });

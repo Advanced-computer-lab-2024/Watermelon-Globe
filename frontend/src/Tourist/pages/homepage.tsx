@@ -72,17 +72,10 @@ export default function DraftHomePage() {
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
             <Link
-              to="/Tourist_ProductsPage"
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Products
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
-            </Link>
-            <Link
               to={`/ProductTourist/${id}`}
               className="text-secondary hover:text-secondaryHover relative group no-underline"
             >
-              Available products
+              Products
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
             <Link

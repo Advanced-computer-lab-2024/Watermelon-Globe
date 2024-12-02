@@ -80,7 +80,7 @@ import TourismGovernorPage from "./Governor/Components/tourismGovernorPage.jsx";
 
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
-import MainTouristPage from "./Tourist/pages/TouristHomepage.jsx";
+import MainTouristPage from "./Tourist/pages/homepage.tsx";
 import MainTour from "./Tourist/pages/TouristHomepage.jsx";
 import TouristPage from "./TouristPage.js";
 import TouristHomePage from "./Tourist/pages/TouristHomepage.jsx";
@@ -94,7 +94,7 @@ import TouristActivityDetails from "./Tourist/pages/ActivityDetails.tsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 import ShoppingCart from "./Tourist/pages/shoppingCart.tsx";
 import CheckoutPage from "./Tourist/pages/CheckoutPage.tsx"
-import DraftHomePage from "./Tourist/pages/homepage.tsx"
+import DraftHomePage from "./Tourist/pages/TouristHomepage.jsx"
 import OrdersPage from "./Tourist/pages/OrdersPage.tsx"
 
 
@@ -110,7 +110,7 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 
 
-import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
+import MyHotelFlightBookings from './Tourist/Components/HotelFlightBookings.tsx'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
@@ -270,7 +270,7 @@ const App = () => {
           <Route path="/CheckoutPage/:touristId" element={<CheckoutPage />} />
 
           {/* Tourist homepage draft */}
-          <Route path="/DraftHomePage" element={<DraftHomePage />} />
+          <Route path="/Draft/:touristId" element={<DraftHomePage />} />
 
           <Route path="/OrdersPage/:touristId" element={<OrdersPage />} />
 

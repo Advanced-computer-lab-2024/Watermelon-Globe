@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import WalletComponent from '../Components/Wallet';
 
 const MyBookings: React.FC = () => {
   const { id } = useParams(); // Get the tourist ID from the URL params
-  const [itineraryBookings, setItineraryBookings] = useState<Booking[]>([]); // Store the list of bookings
-  const [activities, setActivities] = useState<Activity[]>([]); // Store the list of activities
-  const [loading, setLoading] = useState<boolean>(true); // Set loading to true initially
+  const navigate = useNavigate();
+  const [itineraryBookings, setItineraryBookings] = useState<Booking[]>([]); 
+  const [activities, setActivities] = useState<Activity[]>([]); 
+  const [loading, setLoading] = useState<boolean>(true); 
 
   interface Itinerary {
     accessibility: boolean;
@@ -115,6 +116,18 @@ const MyBookings: React.FC = () => {
   const completedActivities = filteredActivities.filter((activity) => activity.completed);
   const upcomingActivities = filteredActivities.filter((activity) => !activity.completed);
 
+  const redirectToRatingsPageItinerary = (itineraryId: string, type: string) => {
+    navigate(`/ratingsAndCommentsPage/${itineraryId}/${id}/${type}`);
+  };
+
+  const redirectToRatingsPageGuide = (guideId: string, type: string) => {
+    navigate(`/ratingsAndCommentsPage/${guideId}/${id}/${type}`);
+  };
+
+  const redirectToRatingsPageActivity = (activityId: string, type: string) => {
+    navigate(`/ratingsAndCommentsPage/${activityId}/${id}/${type}`);
+  };
+
   // Cancel itinerary function
   const cancelItinerary = async (itineraryId: string, orderTotal: number) => {
     try {
@@ -167,14 +180,21 @@ const MyBookings: React.FC = () => {
           completedItineraries.map((booking) => (
             <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
               <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
-              <p>Status: {booking.status}</p>
+              <p>Status: completed</p>
               <p>Total Price: ${booking.totalPrice}</p>
               <p>Chosen Dates: {booking.chosenDates.join(', ')}</p>
               <button
-                onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
-                className="mt-4 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                onClick={() => redirectToRatingsPageItinerary(booking._id, 'itinerary')}
+                className="mt-4 bg-primary text-white p-2 mr-8 rounded-lg hover:bg-hover"
               >
-                Cancel Itinerary
+                Rate Itinerary
+              </button>
+
+              <button
+                onClick={() => redirectToRatingsPageGuide(booking.itinerary.guide, 'guide')}
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
+              >
+                Rate Guide
               </button>
             </div>
           ))
@@ -192,7 +212,7 @@ const MyBookings: React.FC = () => {
               <p>Chosen Dates: {booking.chosenDates.join(', ')}</p>
               <button
                 onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
-                className="mt-4 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
               >
                 Cancel Itinerary
               </button>
@@ -211,15 +231,15 @@ const MyBookings: React.FC = () => {
           completedActivities.map((activity) => (
             <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
               <p className="text-secondary font-semibold">Name: {activity.activity.Name}</p>
-              <p>Status: {activity.status} </p>
+              <p>Status: completed </p>
               <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
               <p>Activity Time: {activity.activity.Time}</p>
               <p>Price: ${activity.activity.Price}</p>
               <button
-                onClick={() => cancelActivity(activity._id, activity.activity.Price)}
-                className="mt-4 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                onClick={() => redirectToRatingsPageActivity(activity._id, 'activity')}
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
               >
-                Cancel Activity
+                Rate Activity
               </button>
 
             </div>
@@ -239,7 +259,7 @@ const MyBookings: React.FC = () => {
               <p>Price: ${activity.activity.Price}</p>
               <button
                 onClick={() => cancelActivity(activity._id, activity.activity.Price)}
-                className="mt-4 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
               >
                 Cancel Activity
               </button>

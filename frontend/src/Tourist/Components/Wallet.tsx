@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaWallet } from 'react-icons/fa';
+import GoldMedal from '../../images/GoldMedal.jpg';
+import SilverMedal from '../../images/SilverMedal.png';
+import BronzeMedal from '../../images/BronzeMedal.png';
+
 
 type WalletComponentProps = {
   touristId: string | undefined;
@@ -9,6 +13,8 @@ type WalletComponentProps = {
 const WalletComponent = ({ touristId }: WalletComponentProps) => {
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [walletAmount, setWalletAmount] = useState<number | null>(null);
+  const [loyaltyPoints, setLoyaltyPoints] = useState<number | null>(null);
+  const [loyaltyBadge, setLoyaltyBadge] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,7 +23,9 @@ const WalletComponent = ({ touristId }: WalletComponentProps) => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/Tourist/getTourist/${touristId}`);
-      setWalletAmount(response.data.wallet); // Assuming 'wallet' is the field for wallet balance
+      setWalletAmount(response.data.wallet);
+      setLoyaltyPoints(response.data.loyaltyPoints);
+      setLoyaltyBadge(response.data.badge); 
       setError(null);
     } catch (err) {
       console.error(err);
@@ -71,6 +79,36 @@ const WalletComponent = ({ touristId }: WalletComponentProps) => {
               <div className="text-center">
                 <p className="text-xl font-semibold">Wallet Amount:</p>
                 <p className="text-2xl font-bold text-primary">${walletAmount?.toFixed(2) || 0}</p>
+
+                <div className="mt-6">
+                  <p className="text-xl font-semibold">Loyalty Points:</p>
+                  <p className="text-2xl font-bold text-primary">{loyaltyPoints?.toFixed(2) || 0}</p>
+                </div>
+
+                <div className="mt-6">
+                  <p className="text-xl font-semibold">Loyalty Badge:</p>
+                  {loyaltyBadge === 'Gold' && (
+                    <img
+                      src= {GoldMedal}
+                      alt="Gold Medal"
+                      className="w-20 h-20 mx-auto"
+                    />
+                  )}
+                  {loyaltyBadge === 'Silver' && (
+                    <img
+                      src= {SilverMedal}
+                      alt="Silver Medal"
+                      className="w-20 h-20 mx-auto"
+                    />
+                  )}
+                  {loyaltyBadge === 'Bronze' && (
+                    <img
+                      src= {BronzeMedal}
+                      alt="Bronze Medal"
+                      className="w-20 h-20 mx-auto"
+                    />
+                  )}
+                </div>
               </div>
             )}
 

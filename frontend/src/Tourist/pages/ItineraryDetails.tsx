@@ -64,7 +64,7 @@ const ItineraryDetails = () => {
                     alert('Payment confirmed using Wallet!');
 
                     // Create booking
-                    const bookResponse = await axios.post('/api/TouristItinerary/createChildItinerary', {
+                    await axios.post('/api/TouristItinerary/createChildItinerary', {
                         itinerary: tripid,
                         buyer: id,
                         chosenDates: [selectedDate],
@@ -72,8 +72,6 @@ const ItineraryDetails = () => {
                         totalPrice: itinerary.priceOfTour,
                         status: 'pending',
                     });
-
-                    
 
                     // Update loyalty points
                     await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
