@@ -183,9 +183,9 @@ const GetAllProducts = () => {
 
   return (
     <div>
-      <div className="list">
+      <div className="listSeller">
         <Sidebar />
-        <div className="listContainer">
+        <div className="listContainerSeller">
           <Navbar />
           <div style={cardStyle}>
             <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>My Products</h2>

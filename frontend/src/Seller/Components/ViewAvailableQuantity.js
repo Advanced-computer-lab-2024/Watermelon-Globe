@@ -30,12 +30,12 @@ const ViewQuantity = () => {
 
   return (
     <div>
-      <div className="list">
+      <div className="listSeller">
       
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
       <Navbar/>
-      <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+      <div className="w-full max-w-md bg-white p-6 rounded-lg ">
       <h2 style={{ color:'#4CAF50' ,textAlign: 'center', marginBottom: '20px' }}> Quantities and Sales</h2>
 
       {errorMessage && <p style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</p>}

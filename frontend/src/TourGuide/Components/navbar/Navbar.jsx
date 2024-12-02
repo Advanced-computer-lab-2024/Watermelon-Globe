@@ -83,25 +83,25 @@ const Navbar = () => {
   return (
     <>
       <ReactNotifications /> {/* Ensure this is placed at the top */}
-      <div className="navbar">
-        <div className="wrapper">
-          <div className="search">
+      <div className="navbar-guide">
+        <div className="navbar-guide-wrapper">
+          <div className="navbar-guide-search">
             <input type="text" placeholder="Search..." />
             <SearchOutlinedIcon />
           </div>
-          <div className="items">
-            <div className="item">
-              <div className="icon-container" onClick={handleNotificationsClick}>
-                <NotificationsNoneOutlinedIcon className="icon" />
-                <div className="counter">{notifications.length}</div>
+          <div className="navbar-guide-items">
+            <div className="navbar-guide-item">
+              <div className="navbar-guide-icon-container" onClick={handleNotificationsClick}>
+                <NotificationsNoneOutlinedIcon className="navbar-guide-icon" />
+                <div className="navbar-guide-counter">{notifications.length}</div>
               </div>
             </div>
-            <div className="item">
+            <div className="navbar-guide-item">
               <img
                 onClick={handleViewProfile}
                 src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                alt=""
-                className="avatar"
+                alt="Profile"
+                className="navbar-guide-avatar"
               />
             </div>
           </div>

@@ -16,12 +16,12 @@ const ChangePasswordSeller = () => {
   const navigate=useNavigate();
 
   const containerStyle = {
-    // backgroundColor: '#FFF0F5',
-    padding: '50px',
+    backgroundColor: '#F8F8F8',
+    padding: '20px',  // Increased padding for better visual separation
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    // maxWidth: '600px',
-    margin: '0 auto',
+    marginTop: '20px', // Add margin-top for better spacing
+    width: '100%',
   };
 
   const {id}=useParams();
@@ -85,9 +85,9 @@ const ChangePasswordSeller = () => {
   }
 
   return (
-    <div className="list">
+    <div className="listSeller">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
         <Navbar />
         <div style={containerStyle}>
     {/* <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"> */}

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Navbar from './navbar/Navbar';
 import Sidebar from './sidebar/Sidebar';
 import { useParams,useNavigate } from 'react-router-dom';
+import"./guide.scss"
 
 const ChangePasswordTourGuide = () => {
 const [sellerId, setSellerId] = useState('');
@@ -22,6 +23,7 @@ const containerStyle = {
   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   // maxWidth: '600px',
   margin: '0 auto',
+  width:'100%'
 };
 
 const {id}=useParams();
@@ -85,9 +87,9 @@ const handleCancel=()=>{
 }
 
 return (
-  <div className="list">
+  <div className="listGuide">
     <Sidebar />
-    <div className="listContainer">
+    <div className="listContainerGuide">
       <Navbar />
       <div style={containerStyle}>
   {/* <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"> */}

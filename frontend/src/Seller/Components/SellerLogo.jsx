@@ -59,7 +59,7 @@ const SellerLogo = ({ id }) => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
-    width:"25%",
+    width:"15%",
     color: 'white',
     padding: '10px 20px',
     borderRadius: '5px',
@@ -67,6 +67,7 @@ const SellerLogo = ({ id }) => {
     cursor: 'pointer',
     marginRight: '10px',
     transition: 'background-color 0.3s',
+    marginTop:10
   };
 
   return (

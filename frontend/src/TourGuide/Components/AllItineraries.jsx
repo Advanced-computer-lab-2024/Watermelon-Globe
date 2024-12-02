@@ -4,6 +4,7 @@ import axios from 'axios';
 import './ItineraryComponent.css';
 import Sidebar from './sidebar/Sidebar';
 import Navbar from './navbar/Navbar';
+import "./guide.scss"
 
 const AllItineraries = () => {
 const {id}=useParams();
@@ -80,12 +81,12 @@ const {id}=useParams();
 
 
   return (
-    <div className="list">
+    <div className="listGuide">
     <Sidebar />
-    <div className="listContainer">
+    <div className="listContainerGuide">
       <Navbar />
     <div className="itinerary-container">
-    <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>My Itineraries</h2>
+    <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>All Itineraries</h2>
         <div style={{ marginBottom: '20px' }}>
     
         {itineraries.map((itinerary) => (
