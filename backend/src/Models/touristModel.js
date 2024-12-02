@@ -72,7 +72,7 @@ const touristSchema = new Schema(
       },
     ],
   
- bookedItineraries: [
+    bookedItineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChildItinerary',

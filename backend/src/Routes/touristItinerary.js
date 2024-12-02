@@ -11,8 +11,8 @@ router.delete('/deleteChildItinerary/:id', touristItineraryController.deleteChil
 
 //create activity booking
 router.post('/createActivityBooking', touristItineraryController.createActivityBooking);
-router.delete('/cancelActivityBooking/:id', touristItineraryController.cancelActivityBooking);
+router.put('/cancelActivityBooking/:id', touristItineraryController.cancelActivityBooking);
 
-router.delete('/cancelItineraryBooking/:id', touristItineraryController.cancelChildItinerary);
+router.put('/cancelItineraryBooking/:id', touristItineraryController.cancelChildItinerary);
 
 module.exports = router;

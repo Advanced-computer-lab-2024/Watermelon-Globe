@@ -1123,17 +1123,22 @@ const BookedItineraries = async (req, res) => {
   }
 
   try {
-    const tourist = await Tourist.findById(id).populate("bookedItineraries");
+    const tourist = await Tourist.findById(id)
+      .populate({
+        path: 'bookedItineraries',
+        populate: {
+          path: 'itinerary',  // Populate the actual itinerary details
+          model: 'Itinerary', // Ensure the model is correct for your Itinerary
+        }
+      });
 
     if (!tourist) {
       return res.status(404).json({ error: "Tourist not found" });
     }
 
-    res.status(200).json(tourist.bookedItineraries);
+    res.status(200).json(tourist.bookedItineraries); // Send populated itinerary details
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching booked itineraries" });
+    res.status(500).json({ error: "An error occurred while fetching booked itineraries" });
   }
 };
 
@@ -1145,19 +1150,25 @@ const BookedActivities = async (req, res) => {
   }
 
   try {
-    const tourist = await Tourist.findById(id).populate("bookedActivities");
+    const tourist = await Tourist.findById(id)
+      .populate({
+        path: 'bookedActivities',
+        populate: {
+          path: 'activity',  // Populate the actual activity details
+          model: 'Activity', // Ensure the model is correct for your Activity
+        }
+      });
 
     if (!tourist) {
       return res.status(404).json({ error: "Tourist not found" });
     }
 
-    res.status(200).json(tourist.bookedActivities);
+    res.status(200).json(tourist.bookedActivities); // Send populated activity details
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching booked activities" });
+    res.status(500).json({ error: "An error occurred while fetching booked activities" });
   }
 };
+
 
 const updateLoyaltyPoints = async (req, res) => {
   const { id } = req.params;

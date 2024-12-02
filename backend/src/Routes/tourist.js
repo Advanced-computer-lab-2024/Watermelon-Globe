@@ -113,8 +113,8 @@ router.get("/myComplaints/:touristId", getTouristComplaints);
 router.put("/redeemPoints/:id", redeemPoints);
 router.put("/addPoints/:id", addPoints);
 
-router.get('/bookedActivities/:id/', BookedActivities);
-router.get('/BookedItineraries/:id/', BookedItineraries);
+router.get('/BookedActivities/:id', BookedActivities);
+router.get('/BookedItineraries/:id', BookedItineraries);
 
 
 router.put('/updateLoyaltyPoints/:id', updateLoyaltyPoints)

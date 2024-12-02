@@ -1,58 +1,70 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { MapPin, Calendar, Clock, Tag, Star, AlertCircle } from 'lucide-react';
 import axios from 'axios';
-import PaymentOptions from '../Components/PaymentOptions'; // Assuming the file is in the same directory
+import PaymentOptions2 from '../Components/PaymentOptions2';
+import { MapPin, Calendar, Clock, Tag, Star, Share2, Mail } from 'lucide-react';
+import WalletComponent from '../Components/Wallet';
 
 interface Tag {
+  _id: string;
   name: string;
 }
 
 interface Category {
+  _id: string;
   name: string;
 }
 
 interface Location {
-  coordinates: [number, number]; // [latitude, longitude]
+  type: string;
+  coordinates: [number, number];
+}
+
+interface Rating {
+  user: string;
+  rating: number;
+}
+
+interface Comment {
+  user: string;
+  comment: string;
+  date: string;
 }
 
 interface Activity {
+  _id: string;
   Name: string;
-  Location: Location;
   Date: string;
   Time: string;
+  Location: Location;
   Price: number;
+  priceRange: number[];
   Category: Category | null;
   tags: Tag[];
   Discount: number;
-  Rating: number | null;
   bookingOpen: boolean;
-}
-
-interface ActivityDetailsParams {
-  activityId: string;
-  id: string;
+  ratings: Rating[];
+  rating: number;
+  noOfRatings: number;
+  Advertiser: string | null;
+  comments: Comment[];
 }
 
 const ActivityDetails: React.FC = () => {
-  const { activityId, id } = useParams<{ activityId: string, id: string }>();
+  const { activityId, id } = useParams<{ activityId: string; id: string }>();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [bookingMessage, setBookingMessage] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | 'cashOnDelivery' | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | null>(null);
+  const [bookingInProgress, setBookingInProgress] = useState(false);
 
   useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await fetch(`/api/Activities/getActivityById/${activityId}`);
-        if (!response.ok) {
-          throw new Error('Activity not found');
-        }
-        const data: Activity = await response.json();
-        setActivity(data);
-      } catch (error) {
-        setError((error as Error).message);
+        const response = await axios.get(`/api/Activities/getActivityById/${activityId}`);
+        setActivity(response.data);
+      } catch (err) {
+        setError('Failed to load activity details. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -60,45 +72,6 @@ const ActivityDetails: React.FC = () => {
 
     fetchActivity();
   }, [activityId]);
-
-  const handleBooking = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!activity?.bookingOpen) {
-      setBookingMessage("Sorry, this activity is not available for booking at the moment.");
-      return;
-    }
-    if (!paymentMethod) {
-      setBookingMessage("Please select a payment method.");
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/TouristItinerary/createActivityBooking', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          activity: activityId,
-          tourist: id, // Replace with actual user ID
-          chosenDate: activity.Date,
-          paymentMethod,
-        }),
-      });
-      const response2 = await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-        amountPaid: activity.Price
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to book activity');
-      }
-      alert(`You have successfully booked your Itinerary! \nLoyalty Points: ${response2.data.loyaltyPoints}\nBadge: ${response2.data.badge}`);
-      setBookingMessage('Activity booked successfully!');
-    } catch (error) {
-      console.error('Error booking activity:', error);
-      setBookingMessage('Failed to book activity. Please try again.');
-    }
-  };
 
   const handleShareLink = () => {
     const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
@@ -114,51 +87,159 @@ const ActivityDetails: React.FC = () => {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
-  if (loading) return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
-  );
+  const handleBooking = async () => {
+    if (!paymentMethod || !activity) {
+      alert('Please select a payment method before booking.');
+      return;
+    }
+  
+    setBookingInProgress(true); // Show loading state
+    setError(null); // Clear previous errors
+  
+    try {
+      if (paymentMethod === 'wallet') {
+        // Check and update wallet balance
+        const walletResponse = await axios.put(`/api/Tourist/updateWallet/${id}`, {
+          amount: -activity.Price,
+        });
+  
+        if (walletResponse.data.wallet >= 0) {
+          // Wallet payment successful
+          alert('Payment confirmed using Wallet!');
+  
+          // Create booking
+          await axios.post('/api/TouristItinerary/createActivityBooking', {
+            activity: activityId,
+            tourist: id,
+            chosenDate: activity.Date,
+          });
+  
+          // Update loyalty points
+          await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
+            amountPaid: activity.Price,
+          });
+  
+          // Redirect or notify booking success
+          alert('Activity booked successfully!');
+        } else {
+          // Insufficient balance, rollback wallet
+          await axios.put(`/api/Tourist/updateWallet/${id}`, { amount: +activity.Price });
+          alert('Insufficient wallet balance.');
+        }
+      } else if (paymentMethod === 'creditCard') {
+        // Implement Stripe payment logic here
+        alert('Proceeding with credit card payment (Stripe)...');
+  
+        // Assuming Stripe payment succeeds:
+        await axios.post('/api/TouristItinerary/createActivityBooking', {
+          activity: activityId,
+          tourist: id,
+          chosenDate: activity.Date,
+        });
+  
+        // Update loyalty points
+        await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
+          amountPaid: activity.Price,
+        });
+  
+        alert('Activity booked successfully!');
+      }
+    } catch (err) {
+      console.error('Error during booking:', err);
+      alert('An error occurred while processing the booking. Please try again later.');
+    } finally {
+      setBookingInProgress(false); // Hide loading state
+    }
+  };
+  
 
-  if (error) return <div className="text-red-500 text-center text-xl mt-10">Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
 
-  if (!activity) return null;
+  if (error) {
+    return <div className="text-red-500 text-center text-xl mt-10">{error}</div>;
+  }
+
+  if (!activity) {
+    return <div className="text-gray-700 text-center text-xl mt-10">No activity found.</div>;
+  }
+
 
   return (
-    <div className="container mx-auto p-6 bg-white shadow-2xl rounded-lg mt-10 max-w-4xl">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b pb-4">{activity.Name}</h2>
+    <div className="container mx-auto px-6 py-8 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">{activity.Name}</h1>
 
-      {/* Payment Options Component */}
-      <PaymentOptions
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="space-y-4">
+          <p className="flex items-center text-gray-700 space-x-2">
+            <MapPin className="text-primary-500" />
+            <span>{`Latitude: ${activity.Location.coordinates[1]}, Longitude: ${activity.Location.coordinates[0]}`}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Calendar className="text-primary-500" />
+            <span>{new Date(activity.Date).toLocaleDateString()}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Clock className="text-primary-500" />
+            <span>{activity.Time}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Star className="text-yellow-500" />
+            <span>{activity.rating ? `${activity.rating.toFixed(1)} / 5 (${activity.noOfRatings} ratings)` : 'No Ratings Yet'}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Tag className="text-primary-500" />
+            <span>{activity.tags.map(tag => tag.name).join(', ') || 'No Tags'}</span>
+          </p>
+          <p className="text-gray-800 font-medium">
+            <strong>Price:</strong> ${activity.Price}
+            {activity.Discount > 0 && (
+              <span className="text-green-500 ml-2">{`(${activity.Discount}% Off)`}</span>
+            )}
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <button
+            onClick={handleShareLink}
+            className="flex items-center justify-center w-full px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none"
+          >
+            <Share2 className="mr-2" />
+            Share Link
+          </button>
+          <button
+            onClick={handleShareEmail}
+            className="flex items-center justify-center w-full px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none"
+          >
+            <Mail className="mr-2" />
+            Share via Email
+          </button>
+        </div>
+      </div>
+
+      <PaymentOptions2
         paymentMethod={paymentMethod}
         onPaymentMethodSelection={setPaymentMethod}
-        disableCashOnDelivery={true}  // Disable Cash on Delivery option
       />
 
-      {/* Rest of the Activity Details and Booking Form */}
-      <form onSubmit={handleBooking} className="bg-gray-50 p-6 rounded-lg shadow-md mb-12">
-        <h3 className="text-2xl font-semibold text-gray-700 mb-6">Book This Activity</h3>
+
+      <div className="mt-6">
         <button
-          type="submit"
-          className="w-full px-6 py-3 rounded-lg text-white font-semibold transition duration-300 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          onClick={handleBooking}
+          className={`w-full px-4 py-2 text-white rounded-lg ${
+            bookingInProgress ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary-dark'
+          }`}
+          disabled={bookingInProgress}
         >
-          Book Activity
+          {bookingInProgress ? 'Booking...' : 'Book Activity'}
         </button>
-
-        {bookingMessage && (
-          <div className={`mt-4 p-4 rounded-lg ${bookingMessage.includes('successfully') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-            <p className="flex items-center">
-              <AlertCircle className="mr-2" size={18} />
-              {bookingMessage}
-            </p>
-          </div>
-        )}
-      </form>
-
-      <div className="flex justify-center space-x-4">
-        <button onClick={handleShareLink} className="text-blue-500 hover:underline">Share Link</button>
-        <button onClick={handleShareEmail} className="text-blue-500 hover:underline">Share via Email</button>
       </div>
+      <WalletComponent touristId={id} />
     </div>
   );
 };
