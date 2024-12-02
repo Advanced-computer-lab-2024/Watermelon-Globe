@@ -24,9 +24,9 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div className="sidebarAdmin">
       {/* Top */}
-      <div className="top">
+      <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
           <span className="logoadmin">Watermelon Globe </span>
         </Link>
@@ -35,7 +35,7 @@ const Sidebar = () => {
       <hr />
 
       {/* Center */}
-      <div className="center">
+      <div className="centerAdmin">
         <ul>
           <p className="titleadmin">MAIN</p>
 
@@ -111,7 +111,7 @@ const Sidebar = () => {
           <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
               <MdCategory className="iconadmin" />
-              <span >Activity Categories</span>
+              <span>Activity Categories</span>
             </li>
           </Link>
 
