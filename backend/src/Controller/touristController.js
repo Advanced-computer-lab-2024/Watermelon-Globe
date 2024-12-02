@@ -1,5 +1,6 @@
 const Tourist = require("../Models/touristModel");
 const mongoose = require("mongoose");
+const stripe = require('stripe')(process.env.SECRET_KEY); // Replace with your Stripe secret key
 const itineraryModel = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
 const Product = require("../Models/productModel");
@@ -1820,6 +1821,197 @@ const updateWallet = async (req, res) => {
     res.status(500).json({ message: "Error updating wallet." });
   }
 }
+
+// Create Payment Intent For Flights
+const stripePayIntentFlight = async (req, res) => {
+  try {
+    const { bookingId } = req.body; // Receive the booking ID in the request
+
+    // Find the booking in the database
+    const booking = await Booking.findById(bookingId);
+
+    console.log(booking);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Extract price and currency from the booking
+    const amount = booking.price * 100; // Convert to cents (e.g., $10.00 -> 1000 cents)
+    const currency = booking.currency;
+
+    // Create the payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency,
+      metadata: { bookingId: booking._id.toString() }, // Optionally add metadata
+    });
+
+    // Respond with the client secret
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error('Error creating payment intent:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+// Create Payment Intent For Hotels
+const stripePayIntentHotel = async (req, res) => {
+  try {
+    const { bookingId } = req.body; // Receive the booking ID in the request
+
+    // Find the hotel booking in the database
+    const booking = await HotelBooking.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Hotel booking not found' });
+    }
+
+    // Extract price and currency from the booking
+    const amount = booking.price * 100; // Convert to cents (e.g., $10.00 -> 1000 cents)
+    const currency = booking.currency;
+
+    // Create the payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency,
+      metadata: { bookingId: booking._id.toString() }, // Optionally add metadata
+    });
+
+    // Respond with the client secret
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error('Error creating payment intent:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const stripePayIntentActivity = async (req, res) => {
+  try {
+    const { activityId } = req.body; // Receive the activity ID in the request
+
+    // Find the activity in the database
+    const activity = await Activity.findById(activityId);
+
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    if (!activity.bookingOpen) {
+      return res.status(400).json({ error: 'Booking for this activity is closed.' });
+    }
+
+    // Calculate the amount considering discounts (if any)
+    const basePrice = activity.Price;
+    const discount = activity.Discount;
+    const finalPrice = basePrice - (basePrice * (discount / 100));
+
+    const amount = Math.round(finalPrice * 100); // Convert to cents (e.g., $10.00 -> 1000 cents)
+    const currency = 'usd'; // Set a default or configurable currency
+
+    // Create the payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency,
+      metadata: { activityId: activity._id.toString() }, // Optionally add metadata
+    });
+
+    // Respond with the client secret
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error('Error creating payment intent:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const stripePayIntentItinerary = async (req, res) => {
+  try {
+    const { childItineraryId } = req.body; // Receive child itinerary ID in the request
+
+    // Fetch the child itinerary from the database
+    const childItinerary = await ChildItinerary.findById(childItineraryId).populate('itinerary');
+
+    if (!childItinerary) {
+      return res.status(404).json({ error: 'Child Itinerary not found' });
+    }
+
+    if (childItinerary.status !== 'pending') {
+      return res.status(400).json({ error: 'Payment is only allowed for pending itineraries.' });
+    }
+
+    // Validate the chosen dates against the parent itinerary's available dates
+    const parentItinerary = childItinerary.itinerary;
+    const availableDatesSet = new Set(parentItinerary.availableDates.map(date => date.toISOString()));
+    const allDatesAvailable = childItinerary.chosenDates.every(date => availableDatesSet.has(date.toISOString()));
+
+    if (!allDatesAvailable) {
+      return res.status(400).json({ error: 'One or more chosen dates are not available in the parent itinerary.' });
+    }
+
+    // Calculate the payment amount
+    const amount = Math.round(childItinerary.totalPrice * 100); // Convert to cents
+    const currency = 'usd'; // Default currency
+
+    // Create the payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency,
+      metadata: {
+        childItineraryId: childItinerary._id.toString(),
+        buyerId: childItinerary.buyer.toString(),
+      },
+    });
+
+    // Respond with the client secret
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error('Error creating payment intent:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const stripePayIntentProduct = async (req, res) => {
+  try {
+    const { productId, quantity } = req.body; // Receive product ID and quantity in the request
+
+    // Fetch the product from the database
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    if (product.quantity < quantity) {
+      return res.status(400).json({ error: 'Not enough stock available' });
+    }
+
+    // Calculate the total price for the given quantity
+    const totalAmount = product.price * quantity; // Total amount for the product
+
+    // Convert the amount to cents (Stripe requires amounts in the smallest currency unit)
+    const amount = Math.round(totalAmount * 100); // Amount in cents
+    const currency = 'usd'; // Default currency
+
+    // Create the payment intent with the calculated amount
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency,
+      metadata: {
+        productId: product._id.toString(),
+        quantity: quantity,
+      },
+    });
+
+    // Respond with the client secret for the frontend to complete the payment
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error('Error creating payment intent:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
   
 module.exports = {
   createTourist,
@@ -1879,4 +2071,9 @@ module.exports = {
   viewOrderDetails,
   cancelOrder,
   updateWallet,
+  stripePayIntentFlight,
+  stripePayIntentHotel,
+  stripePayIntentItinerary,
+  stripePayIntentActivity,
+  stripePayIntentProduct
 };

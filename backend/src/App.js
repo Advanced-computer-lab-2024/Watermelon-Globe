@@ -21,6 +21,7 @@ const TouristItinerary = require("./Routes/touristItinerary");
 
 // App variables
 const app = express();
+const stripe = require('stripe')(process.env.SECRET_KEY); // Replace with your Stripe secret key
 const MongoURI = process.env.MONGO_URI;
 const cors = require("cors");
 const port = "8000";
