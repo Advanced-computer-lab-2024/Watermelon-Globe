@@ -6,6 +6,7 @@ import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlin
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
 
@@ -13,42 +14,44 @@ const Navbar = () => {
   // const { dispatch } = useContext(DarkModeContext);
 
   return (
-    <div className="navbar">
-      <div className="wrapper">
-        <div className="search">
-          <input type="text" placeholder="Search..." />
-          <SearchOutlinedIcon />
-        </div>
-        <div className="items">
-          <div className="item">
-            <LanguageOutlinedIcon className="icon" />
-            English
+    <div className="navbarAdmin">
+      <div className="wrapperAdmin">
+        <div className="searchAdmin">
+          {/* <input type="text" placeholder="Search..." />
+          <SearchOutlinedIcon /> */}
+          <div className="itemAdmin">
+            <ListOutlinedIcon className="iconAdmin" />
           </div>
+        </div>
+
+        <div className="itemsAdmin">
+          {/* <div className="itemAdmin">
+            <LanguageOutlinedIcon className="iconAdmin" />
+            English
+          </div> */}
           {/* <div className="item">
             <DarkModeOutlinedIcon
               className="icon"
               onClick={() => dispatch({ type: "TOGGLE" })}
             />
           </div> */}
-          <div className="item">
-            <FullscreenExitOutlinedIcon className="icon" />
+          {/* <div className="itemAdmin">
+            <FullscreenExitOutlinedIcon className="iconAdmin" />
+          </div> */}
+          <div className="itemAdmin">
+            <NotificationsIcon className="iconAdmin" />
+            <div className="counterAdmin">1</div>
           </div>
-          <div className="item">
-            <NotificationsNoneOutlinedIcon className="icon" />
-            <div className="counter">1</div>
+          <div className="itemAdmin">
+            <ChatBubbleOutlineOutlinedIcon className="iconAdmin" />
+            <div className="counterAdmin">2</div>
           </div>
-          <div className="item">
-            <ChatBubbleOutlineOutlinedIcon className="icon" />
-            <div className="counter">2</div>
-          </div>
-          <div className="item">
-            <ListOutlinedIcon className="icon" />
-          </div>
-          <div className="item">
+
+          <div className="itemAdmin">
             <img
               src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
               alt=""
-              className="avatar"
+              className="avatarAdmin"
             />
           </div>
         </div>

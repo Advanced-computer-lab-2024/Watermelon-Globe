@@ -29,7 +29,6 @@ const Widget = ({ type }) => {
     }
   }, [type]);
 
-
   // Fetch itinerary revenue from the backend API
   useEffect(() => {
     if (type === "itinerary") {
@@ -46,7 +45,6 @@ const Widget = ({ type }) => {
       fetchItineraryRevenue();
     }
   }, [type]);
-
 
   // Fetch itinerary revenue from the backend API
   useEffect(() => {
@@ -65,7 +63,7 @@ const Widget = ({ type }) => {
     }
   }, [type]);
 
-    // Fetch itinerary revenue from the backend API
+  // Fetch itinerary revenue from the backend API
   useEffect(() => {
     if (type === "user") {
       const fetchTotalUsers = async () => {
@@ -156,9 +154,15 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {type === "product" ? productRevenue : //Show fetched product revenue
-                                 type === "itinerary" ? itineraryRevenue : //Show fetched activity revenue
-                                 type === "activity" ? activityRevenue : ""} {/* Show fetched itinerary revenue */}
+          {data.isMoney && "$"}{" "}
+          {type === "product"
+            ? productRevenue //Show fetched product revenue
+            : type === "itinerary"
+              ? itineraryRevenue //Show fetched activity revenue
+              : type === "activity"
+                ? activityRevenue
+                : ""}{" "}
+          {/* Show fetched itinerary revenue */}
           {!data.isMoney} {type === "user" ? totalUsers : ""}
         </span>
         <span className="link">{data.link}</span>

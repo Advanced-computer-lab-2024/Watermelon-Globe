@@ -54,6 +54,9 @@ const {
   markActivityInappropriate,
   countTotalUsers,
   getUsersPerMonth,
+  createPromoCode,
+  getAllPromoCodes,
+  deletePromoCode,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -133,7 +136,6 @@ router.get("/getQuantity", getQuantity);
 
 //mark Itinerary Inappropriate
 router.put("/markItineraryInappropriate/:id", markItineraryInappropriate);
-router.put("/markActivityInappropriate/:id", markActivityInappropriate);
 
 //mark Itinerary Inappropriate
 router.put("/markActivityInappropriate/:id", markActivityInappropriate);
@@ -155,5 +157,10 @@ router.get("/countUsers", countTotalUsers);
 
 //count users per month
 router.get("/getUsersPerMonth", getUsersPerMonth);
+
+//promoCode
+router.get("/getPromoCodes", getAllPromoCodes);
+router.post("/createPromoCode", createPromoCode);
+router.delete("/deletePromoCode/:id", deletePromoCode);
 
 module.exports = router;

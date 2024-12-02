@@ -6,12 +6,14 @@ import NavTabs from "../../components/navTabs/navTabs";
 
 const ActiveUsers = () => {
   return (
-    <div className="list">
+    <div className="listActiveUsers">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerActiveUsers">
         <Navbar />
-        <NavTabs />
-        <Datatable />
+        <div className="navTabsAndTable">
+          <NavTabs />
+          <Datatable />
+        </div>
       </div>
     </div>
   );

@@ -34,8 +34,18 @@ const Chart = ({ aspect, title }) => {
   // Helper function to convert month number to month name
   const getMonthName = (monthNumber) => {
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     return monthNames[monthNumber - 1]; // Since monthNumber is 1-based
   };
@@ -57,8 +67,10 @@ const Chart = ({ aspect, title }) => {
         >
           <defs>
             <linearGradient id="total" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#ff7b7b" stopOpacity={0.8} /> {/* Green */}
-              <stop offset="95%" stopColor="#ff7b7b" stopOpacity={0} /> {/* Green */}
+              <stop offset="5%" stopColor="#e89bb5" stopOpacity={0.8} />{" "}
+              {/* Green */}
+              <stop offset="95%" stopColor="#e89bb5" stopOpacity={0} />{" "}
+              {/* Green */}
             </linearGradient>
           </defs>
           <XAxis dataKey="name" stroke="gray" />

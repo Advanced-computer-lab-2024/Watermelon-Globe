@@ -11,12 +11,12 @@ const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
 const Transportation = require("../Models/TransportationModel");
 const Seller = require("../Models/SellerModel");
-const bookedItinerary = require("../Models/touristItineraryModel")
+const bookedItinerary = require("../Models/touristItineraryModel");
 const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const Activity = require("../Models/activityModel");
-
+const PromoCode = require("../Models/promoCodes");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -1030,36 +1030,6 @@ const uploadPicture = async (req, res) => {
 //   }
 // };
 
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',  // Use Gmail as the email service
-      auth: {
-        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
-        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
-      },
-    });
-
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
-      to,  // Recipient's email address
-      subject,  // Subject of the email
-      text,  // Plain text content
-      html,  // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', info.response);
-    return { success: true, message: 'Email sent successfully!' };
-  } catch (error) {
-    console.error('Error sending email: ', error);
-    return { success: false, message: 'Failed to send email.', error };
-  }
-};
-
 const markItineraryInappropriate = async (req, res) => {
   const { id } = req.params; // Get the itinerary ID from request parameters
 
@@ -1077,14 +1047,15 @@ const markItineraryInappropriate = async (req, res) => {
     }
 
     const guide = itinerary.guide;
-    const notification=`Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`
+    const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
     guide.notifications.push(notification);
     await guide.save();
 
-
     // Check if guide information is complete
     if (!guide || !guide.email || !guide.name) {
-      return res.status(400).json({ error: "Guide information is incomplete." });
+      return res
+        .status(400)
+        .json({ error: "Guide information is incomplete." });
     }
 
     const guideEmail = "shodimatar@gmail.com";
@@ -1110,35 +1081,33 @@ const markItineraryInappropriate = async (req, res) => {
 };
 
 // Controller function to mark an activity as inappropriate
-// const markActivityInappropriate = async (req, res) => {
-//   const { id } = req.params; // Get the activity ID from request parameters
+const markActivityInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
 
-//   try {
-//     // Find the itinerary by its ID and update the inappropriate field
-//     const activity = await Activity.findByIdAndUpdate(
-//       id,
-//       { inappropriate: true }, // Set the inappropriate field to true
-//       { new: true } // Return the updated document
-//     );
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: true }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    );
 
-//     // If the actvity is not found, send a 404 error response
-//     if (!activity) {
-//       return res.status(404).json({ error: "activity not found" });
-//     }
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
 
-//     // Send the updated activity as a response
-//     res
-//       .status(200)
-//       .json({ message: "activity marked as inappropriate", activity });
-//   } catch (error) {
-//     // Handle any errors during the process
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+    // Send the updated activity as a response
+    res
+      .status(200)
+      .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
 
 //create new transportation
-
-//create new activitycategory
 const createTransportation = async (req, res) => {
   const { type, destination, price } = req.body;
 
@@ -1153,7 +1122,6 @@ const createTransportation = async (req, res) => {
     res.status(400).json({ error: error.mssg });
   }
 };
-
 
 // const sendEmail = async (to, subject, text, html) => {
 //   try {
@@ -1171,10 +1139,6 @@ const createTransportation = async (req, res) => {
 //         },
 //       });
 //     console.log(transporter);
- 
-
-
-    
 
 //     // Email options
 //     const mailOptions = {
@@ -1195,14 +1159,53 @@ const createTransportation = async (req, res) => {
 //   }
 // };
 
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Generate a test Ethereal account
+    const testAccount = await nodemailer.createTestAccount();
 
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: testAccount.user, // Generated user
+        pass: testAccount.pass, // Generated password
+      },
+    });
 
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <no-reply@watermelonglobe.com>', // Sender's address
+      to,
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+
+    // Log the preview URL for Ethereal
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    return {
+      success: true,
+      message: "Email sent successfully!",
+      previewURL: nodemailer.getTestMessageUrl(info),
+    };
+  } catch (error) {
+    console.error("Error sending email: ", error);
+    return { success: false, message: "Failed to send email.", error };
+  }
+};
 // Function to calculate total revenue from purchased products
 const totalProductRevenue = async (req, res) => {
   try {
     // Step 1: Retrieve all tourists and populate their purchased products
-    const tourists = await Tourist.find().populate('products');
-    
+    const tourists = await Tourist.find().populate("products");
+
     // Step 2: Initialize total revenue
     let totalRevenue = 0;
 
@@ -1216,13 +1219,13 @@ const totalProductRevenue = async (req, res) => {
 
     // Step 5: Send the total revenue as a response
     res.status(200).json({
-      message: 'Total revenue calculated successfully',
+      message: "Total revenue calculated successfully",
       totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
     });
   } catch (error) {
     // Handle any errors
     res.status(500).json({
-      message: 'Error calculating total revenue',
+      message: "Error calculating total revenue",
       error: error.message,
     });
   }
@@ -1233,31 +1236,30 @@ const totalItineraryRevenue = async (req, res) => {
   try {
     // Step 1: Retrieve all tourists and populate their booked itineraries
     const itinerary = await bookedItinerary.find({});
-    
+
     // Step 2: Initialize total revenue
     let totalRevenue = 0;
 
     // Step 3: Loop through all tourists and their booked itineraries
-    itinerary.forEach(itinerary => {
-      if (itinerary.totalPrice){
-      totalRevenue += itinerary.totalPrice * 0.10; // Taking 10% of the product price
+    itinerary.forEach((itinerary) => {
+      if (itinerary.totalPrice) {
+        totalRevenue += itinerary.totalPrice * 0.1; // Taking 10% of the product price
       }
-  });
+    });
 
     // Step 5: Send the total revenue as a response
     res.status(200).json({
-      message: 'Total revenue calculated successfully',
+      message: "Total revenue calculated successfully",
       totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
     });
   } catch (error) {
     // Handle any errors
     res.status(500).json({
-      message: 'Error calculating total revenue',
+      message: "Error calculating total revenue",
       error: error.message,
     });
   }
 };
-
 
 module.exports = sendEmail;
 // Function to calculate total revenue from booked activity (10% of their price)
@@ -1265,31 +1267,30 @@ const totalActivityRevenue = async (req, res) => {
   try {
     // Step 1: Retrieve all tourists and populate their booked activities
     const activity = await bookedActivity.find({});
-    
+
     // Step 2: Initialize total revenue
     let totalRevenue = 0;
 
     // Step 3: Loop through all tourists and their booked acitivites
-    activity.forEach(activity => {
-      if (activity.totalPrice){
-      totalRevenue += activity.totalPrice * 0.10; // Taking 10% of the product price
+    activity.forEach((activity) => {
+      if (activity.totalPrice) {
+        totalRevenue += activity.totalPrice * 0.1; // Taking 10% of the product price
       }
-  });
+    });
 
     // Step 5: Send the total revenue as a response
     res.status(200).json({
-      message: 'Total revenue calculated successfully',
+      message: "Total revenue calculated successfully",
       totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
     });
   } catch (error) {
     // Handle any errors
     res.status(500).json({
-      message: 'Error calculating total revenue',
+      message: "Error calculating total revenue",
       error: error.message,
     });
   }
 };
-
 
 const countTotalUsers = async (req, res) => {
   try {
@@ -1300,7 +1301,8 @@ const countTotalUsers = async (req, res) => {
     const tourGuideCount = await TourGuide.countDocuments();
 
     // Calculate the total users from all collections
-    const totalUsers = touristCount + sellerCount + advertiserCount + tourGuideCount;
+    const totalUsers =
+      touristCount + sellerCount + advertiserCount + tourGuideCount;
 
     // Send the response back to the client
     res.status(200).json({
@@ -1329,19 +1331,19 @@ const getUsersPerMonth = async (req, res) => {
           $match: {
             createdAt: {
               $gte: new Date(`${currentYear}-01-01`),
-              $lt: new Date(`${currentYear + 1}-01-01`)
-            }
-          }
+              $lt: new Date(`${currentYear + 1}-01-01`),
+            },
+          },
         },
         {
           $group: {
             _id: { $month: "$createdAt" },
-            count: { $sum: 1 }
-          }
+            count: { $sum: 1 },
+          },
         },
         {
-          $sort: { "_id": 1 } // Sort by month
-        }
+          $sort: { _id: 1 }, // Sort by month
+        },
       ]);
       return monthlyCounts;
     };
@@ -1355,10 +1357,14 @@ const getUsersPerMonth = async (req, res) => {
     // Combine results from all user types
     const totalUsersPerMonth = Array.from({ length: 12 }, (_, i) => {
       const month = i + 1;
-      const tourists = touristsCount.find((item) => item._id === month)?.count || 0;
-      const sellers = sellersCount.find((item) => item._id === month)?.count || 0;
-      const advertisers = advertisersCount.find((item) => item._id === month)?.count || 0;
-      const tourGuides = tourGuidesCount.find((item) => item._id === month)?.count || 0;
+      const tourists =
+        touristsCount.find((item) => item._id === month)?.count || 0;
+      const sellers =
+        sellersCount.find((item) => item._id === month)?.count || 0;
+      const advertisers =
+        advertisersCount.find((item) => item._id === month)?.count || 0;
+      const tourGuides =
+        tourGuidesCount.find((item) => item._id === month)?.count || 0;
 
       // Sum all user types for the total
       const totalUsers = tourists + sellers + advertisers + tourGuides;
@@ -1374,66 +1380,49 @@ const getUsersPerMonth = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch user counts" });
   }
-}
-
-// Controller function to mark an activity as inappropriate
-const markActivityInappropriate = async (req, res) => {
-  const { id } = req.params; // Get the activity ID from request parameters
-
-  try {
-    // Find the itinerary by its ID and update the inappropriate field
-    const activity = await Activity.findByIdAndUpdate(
-      id,
-      { inappropriate: true }, // Set the inappropriate field to true
-      { new: true } // Return the updated document
-    )
-    .populate("Advertiser");
-
-    // If the actvity is not found, send a 404 error response
-    if (!activity) {
-      return res.status(404).json({ error: "activity not found" });
-    }
-    const advertiser = activity.Advertiser;
-    const notification=`Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`
-    advertiser.notifications.push(notification);
-    await advertiser.save();
-
-    if (!advertiser || !advertiser.Email || !advertiser.Name) {
-      return res.status(400).json({ error: "advertiser information is incomplete." });
-    }
-
-    const advertiserEmail = "shodimatar@gmail.com";
-    const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
-
-    // Attempt to send the email
-    try {
-      await sendEmail(advertiserEmail, "Inappropriate Activity", emailMessage, "");
-      console.log("Email sent to:", advertiserEmail);
-    } catch (emailError) {
-      console.error("Error sending email:", emailError);
-      // Continue marking the itinerary as inappropriate even if the email fails
-    }
-
-    // Send the updated activity as a response
-    res
-      .status(200)
-      .json({ message: "activity marked as inappropriate", activity });
-  } catch (error) {
-    // Handle any errors during the process
-    res.status(500).json({ error: error.message });
-  }
 };
 
+//PromoCode
 
-  
+const createPromoCode = async (req, res) => {
+  const { code, discountValue } = req.body;
+  try {
+    const newCode = await PromoCode.create({ code, discountValue });
 
+    res.status(200).json(newCode);
+  } catch (error) {
+    res.status(400).json({ error: error.mssg });
+  }
+};
 
+const getAllPromoCodes = async (req, res) => {
+  const allCodes = await PromoCode.find({}).sort({ createdAt: -1 });
 
+  res.status(200).json(allCodes);
+};
 
+const deletePromoCode = async (req, res) => {
+  const { id } = req.params;
 
-module.exports = sendEmail;
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such promocode" });
+  }
 
+  try {
+    // Find and delete the seller, and return the deleted document
+    const code = await PromoCode.findOneAndDelete({ _id: id });
 
+    // Check if the seller exists
+    if (!code) {
+      return res.status(400).json({ error: "No such promo code" });
+    }
+
+    res.status(200).json({ message: "Promo code deleted successfully", code });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -1491,5 +1480,8 @@ module.exports = {
   totalItineraryRevenue,
   totalActivityRevenue,
   countTotalUsers,
-  getUsersPerMonth
+  getUsersPerMonth,
+  createPromoCode,
+  getAllPromoCodes,
+  deletePromoCode,
 };

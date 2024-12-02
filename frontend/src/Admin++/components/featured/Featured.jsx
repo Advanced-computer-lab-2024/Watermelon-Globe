@@ -47,10 +47,30 @@ const Featured = () => {
       </div>
       <div className="bottom">
         <div className="featuredChart">
-          <CircularProgressbar value={70} text={"70%"} strokeWidth={5} />
+          <CircularProgressbar
+            value={70}
+            text={"70%"}
+            strokeWidth={5}
+            styles={{
+              path: {
+                // Change the color of the progress path
+                stroke: "#91c297", // Green color
+              },
+              text: {
+                // Change the color of the text
+                fill: " #d32e65", // Dark text color
+                fontSize: "22px", // Optional: Adjust font size
+              },
+              trail: {
+                // Change the color of the background circle
+                stroke: "#e6e6e6", // Light gray color
+              },
+            }}
+          />
         </div>
         <p className="title">Total sales made today</p>
-        <p className="amount">${totalRevenue.toFixed(2)}</p> {/* Display the real total revenue here */}
+        <p className="amount">${totalRevenue.toFixed(2)}</p>{" "}
+        {/* Display the real total revenue here */}
         <p className="desc">
           Previous transactions processing. Last payments may not be included.
         </p>

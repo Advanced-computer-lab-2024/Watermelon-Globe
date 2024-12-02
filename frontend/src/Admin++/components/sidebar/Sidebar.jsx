@@ -11,9 +11,13 @@ import { IoIosPricetags } from "react-icons/io";
 import { MdEvent } from "react-icons/md";
 import { TbSettingsCode } from "react-icons/tb";
 import { HiQrcode } from "react-icons/hi";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
 const Sidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenEvent, setIsDropdownOpenEvent] = useState(false);
+  const [isDropdownOpenProductView, setIsDropdownProductView] = useState(false);
+  const [isDropdownOpenProductAdd, setIsDropdownProductAdd] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -23,30 +27,39 @@ const Sidebar = () => {
     setIsDropdownOpenEvent(!isDropdownOpenEvent);
   };
 
+  const toggleDropdownProductView = () => {
+    setIsDropdownProductView(!isDropdownOpenProductView);
+  };
+  const toggleDropdownProductAdd = () => {
+    setIsDropdownProductAdd(!isDropdownOpenProductAdd);
+  };
+
   return (
     <div className="sidebarAdmin">
       {/* Top */}
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoadmin">Watermelon Globe </span>
+          <span className="logoAdmin">Watermelon Globe </span>
         </Link>
       </div>
 
-      <hr />
+      {/* <hr /> */}
 
       {/* Center */}
       <div className="centerAdmin">
         <ul>
-          <p className="titleadmin">MAIN</p>
+          <p className="titleAdmin">MAIN</p>
 
-          <li>
-            <TbLayoutDashboardFilled className="iconadmin" />
-            <span>Dashboard</span>
-          </li>
+          <Link to="/AdminHome++" style={{ textDecoration: "none" }}>
+            <li>
+              <TbLayoutDashboardFilled className="iconAdmin" />
+              <span>Dashboard</span>
+            </li>
+          </Link>
 
-          <p className="titleadmin">MANAGE</p>
+          <p className="titleAdmin">MANAGE</p>
           <li onClick={toggleDropdown} style={{ cursor: "pointer" }}>
-            <FaUserCog className="iconadmin" />
+            <FaUserCog className="iconAdmin" />
             <span className="manage-textAdmin">
               Users
               {isDropdownOpen ? (
@@ -83,7 +96,7 @@ const Sidebar = () => {
           )}
 
           <li onClick={toggleDropdownEvent} style={{ cursor: "pointer" }}>
-            <MdEvent className="iconadmin" />
+            <MdEvent className="iconAdmin" />
             <span className="manage-textAdmin">
               Events & Itineraries
               {isDropdownOpenEvent ? (
@@ -108,30 +121,81 @@ const Sidebar = () => {
               </Link>
             </ul>
           )}
+
           <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
-              <MdCategory className="iconadmin" />
+              <MdCategory className="iconAdmin" />
               <span>Activity Categories</span>
             </li>
           </Link>
 
           <Link to="/Tags" style={{ textDecoration: "none" }}>
             <li>
-              <IoIosPricetags className="iconadmin" />
+              <IoIosPricetags className="iconAdmin" />
               <span>Prefrence Tags</span>
             </li>
           </Link>
 
-          <p className="titleadmin">PRODUCTS</p>
-          <li>
-            <FaCartArrowDown className="iconadmin" />
-            <span>Products</span>
+          <p className="titleAdmin">PRODUCTS</p>
+
+          <li onClick={toggleDropdownProductView} style={{ cursor: "pointer" }}>
+            <FaCartArrowDown className="iconAdmin" />
+            <span className="manage-textAdmin">
+              View Products
+              {isDropdownOpenProductView ? (
+                <FaAngleDown className="arrowAdmin" />
+              ) : (
+                <FaAngleRight className="arrowAdmin" />
+              )}
+            </span>
           </li>
 
-          <li>
-            <HiQrcode className="iconadmin" />
-            <span>Promo Code</span>
+          {isDropdownOpenProductView && (
+            <ul className="dropdownAdmin">
+              <Link to="/viewAllProducts" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>View All Products</span>
+                </li>
+              </Link>
+              <Link to="/viewMyProducts" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>View My Products</span>
+                </li>
+              </Link>
+              <Link to="/viewSaleQuantities" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>View Sales & Quantites</span>
+                </li>
+              </Link>
+            </ul>
+          )}
+
+          <li onClick={toggleDropdownProductAdd} style={{ cursor: "pointer" }}>
+            <AddCircleIcon className="iconAdmin" />
+            <span className="manage-textAdmin">
+              Add Products & Promo Code
+              {isDropdownOpenProductAdd ? (
+                <FaAngleDown className="arrowAdmin" />
+              ) : (
+                <FaAngleRight className="arrowAdmin" />
+              )}
+            </span>
           </li>
+
+          {isDropdownOpenProductAdd && (
+            <ul className="dropdownAdmin">
+              <Link to="/adminAddProduct" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>Add Product</span>
+                </li>
+              </Link>
+              <Link to="/adminAddPromoCode" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>Add Promo Code</span>
+                </li>
+              </Link>
+            </ul>
+          )}
         </ul>
       </div>
     </div>

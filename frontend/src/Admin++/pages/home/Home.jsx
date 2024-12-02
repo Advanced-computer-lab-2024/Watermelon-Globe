@@ -8,23 +8,23 @@ import Table from "../../components/table/Table";
 
 const Home = () => {
   return (
-    <div className="home">
+    <div className="homeAdmin">
       <Sidebar />
-      <div className="homeContainer">
+      <div className="homeContainerAdmin">
         <Navbar />
-        <div className="widgets">
+        <div className="widgetsAdminHome">
           <Widget type="user" />
           <Widget type="product" />
           <Widget type="itinerary" />
           <Widget type="activity" />
         </div>
-        <div className="charts">
+        <div className="chartsAdminHome">
           <Featured />
           <Chart title="Total Users per Month" aspect={2 / 1} />
         </div>
-        <div className="listContainer">
-          <div className="listTitle">Latest Transactions</div>
-          <Table />
+        <div className="listContainerAdminHome">
+          <div className="listTitleAdminHome">Latest Transactions</div>
+          {/* <Table /> */}
         </div>
       </div>
     </div>

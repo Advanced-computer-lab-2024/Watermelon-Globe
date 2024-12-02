@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AddAdmin.scss";
+import "./AddPromoCode.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Card from "@mui/material/Card";
@@ -7,23 +7,24 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import AddAdminForm from "../../components/addAdminForm/addAdminForm"; // Import the updated form component
+import AddPromoCodeForm from "../../components/addPromoCodeForm/addPromoCodeForm"; // Import the updated form component
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
 
-const AddAdmin = () => {
-  const [admins, setAdmins] = useState([]); // State to hold admin data
+const AddPromoCode = () => {
+  const [codes, setCodes] = useState([]); // State to hold admin data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
-  // Fetch admins from API
+  // Fetch codes from API
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get("/api/Admin/GetAllAdmin"); // Replace with your API endpoint
-        setAdmins(response.data);
+        const response = await axios.get("/api/Admin/getPromoCodes"); // Replace with your API endpoint
+        setCodes(response.data);
         setLoading(false);
       } catch (err) {
-        setError("Failed to fetch admins");
+        setError("Failed to fetch codes");
         setLoading(false);
       }
     };
@@ -33,14 +34,14 @@ const AddAdmin = () => {
 
   // Handle new admin added
   const handleAdminAdded = (newAdmin) => {
-    setAdmins((prevAdmins) => [...prevAdmins, newAdmin]); // Add new admin to the list
+    setCodes((prevAdmins) => [...prevAdmins, newAdmin]); // Add new admin to the list
   };
 
   // Delete admin handler
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/Admin/DeleteAdmin/${id}`); // Replace with your delete API endpoint
-      setAdmins(admins.filter((admin) => admin._id !== id)); // Remove from UI
+      await axios.delete(`/api/Admin/deletePromoCode/${id}`); // Replace with your delete API endpoint
+      setCodes(codes.filter((admin) => admin._id !== id)); // Remove from UI
     } catch (err) {
       console.error("Failed to delete admin:", err);
     }
@@ -51,21 +52,25 @@ const AddAdmin = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="listAddAdmin">
+    <div className="listAddPromo">
       <Sidebar />
-      <div className="listContainerAddAdmin">
+      <div className="listContainerAddPromo">
         {/* <Navbar /> */}
-        <div className="cardsContainer">
-          {admins.map((admin) => (
+        <div className="cardsContainerAddPromo">
+          {codes.map((admin) => (
             <Card
               key={admin._id}
               className="adminCard"
               sx={{ marginBottom: 2 }}
             >
               <CardContent>
+                <QrCode2Icon />
                 <Typography variant="h6" component="div">
-                  <AccountCircleRoundedIcon />
-                  {admin.username}
+                  {/* <AccountCircleRoundedIcon /> */}
+                  {admin.code}
+                </Typography>
+                <Typography variant="h1" component="div">
+                  {admin.discountValue}%
                 </Typography>
                 <div className="cardActions">
                   <Button
@@ -82,10 +87,10 @@ const AddAdmin = () => {
           ))}
         </div>
         {/* AddAdminForm component to add a new admin */}
-        <AddAdminForm onAdminAdded={handleAdminAdded} />
+        <AddPromoCodeForm onAdminAdded={handleAdminAdded} />
       </div>
     </div>
   );
 };
 
-export default AddAdmin;
+export default AddPromoCode;
