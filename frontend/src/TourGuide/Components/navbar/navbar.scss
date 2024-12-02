@@ -1,93 +1,194 @@
-.navbar {
+// .navbar {
+//   height: 50px;
+//   border-bottom: 0.5px solid rgb(231, 228, 228);
+//   display: flex;
+//   align-items: center;
+//   font-size: 14px;
+//   color: #555;
+//   position:relative;
+
+
+//   .wrapper {
+//     width: 100%;
+//     padding: 20px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+
+//     .search {
+//       display: flex;
+//       align-items: center;
+//       border: 0.5px solid lightgray;
+//       padding: 3px;
+
+//       input {
+//         border: none;
+//         outline: none;
+//         background: transparent;
+
+//         &::placeholder {
+//           font-size: 12px;
+//         }
+//       }
+//     }
+
+//     .items {
+//       display: flex;
+//       align-items: center;
+
+//       .item {
+//         display: flex;
+//         align-items: center;
+//         margin-right: 20px;
+//         position: relative;
+
+//         .icon {
+//           font-size: 20px;
+//         }
+
+//         .avatar {
+//           width: 30px;
+//           height: 30px;
+//           border-radius: 50%;
+//         }
+
+//         .counter {
+//           width: 15px;
+//           height: 15px;
+//           background-color: red;
+//           border-radius: 50%;
+//           color: white;
+//           display: flex;
+//           align-items: center;
+//           justify-content: center;
+//           font-size: 10px;
+//           font-weight: bold;
+//           position: absolute;
+//           top: -5px;
+//           right: -5px;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// // Global styles for notification container
+// // .notification-container.top-right {
+// //   right: 20px !important; // Adjust this value to control positioning
+// //   margin-right: 100px  !important ;// Add additional spacing
+// // }
+
+// // Ensure this targets the correct class
+// .notification-container {
+//   &.top-right {
+//     right: 20px !important; // Adjust this to move it horizontally
+//     margin-right: 10px; // Add space
+//     top: 20px !important; // Adjust vertical position
+//   }
+  
+//   .notification-item {
+//     margin-bottom: 10px; // Add spacing between notifications
+//     background-color: #b4efed !important; // Ensure pink background
+//     color: #fff !important; // Ensure white text
+//     border-radius: 5px; // Rounded corners
+//     padding: 10px;
+//   }
+// }
+// .notification-container.top-right {
+//   border: 2px solid blue !important; // Helps visualize the container
+// }
+
+.navbar-guide {
   height: 50px;
   border-bottom: 0.5px solid rgb(231, 228, 228);
   display: flex;
   align-items: center;
   font-size: 14px;
   color: #555;
+  position: relative;
+}
 
-  .wrapper {
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.navbar-guide-wrapper {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .search {
-      display: flex;
-      align-items: center;
-      border: 0.5px solid lightgray;
-      padding: 3px;
+.navbar-guide-search {
+  display: flex;
+  align-items: center;
+  border: 0.5px solid lightgray;
+  padding: 3px;
+}
 
-      input {
-        border: none;
-        outline: none;
-        background: transparent;
+.navbar-guide-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+}
 
-        &::placeholder {
-          font-size: 12px;
-        }
-      }
-    }
+.navbar-guide-search input::placeholder {
+  font-size: 12px;
+}
 
-    .items {
-      display: flex;
-      align-items: center;
+.navbar-guide-items {
+  display: flex;
+  align-items: center;
+}
 
-      .item {
-        display: flex;
-        align-items: center;
-        margin-right: 20px;
-        position: relative;
+.navbar-guide-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  position: relative;
+}
 
-        .icon {
-          font-size: 20px;
-        }
+.navbar-guide-icon {
+  font-size: 20px;
+}
 
-        .avatar {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-        }
+.navbar-guide-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
 
-        .counter {
-          width: 15px;
-          height: 15px;
-          background-color: red;
-          border-radius: 50%;
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 10px;
-          font-weight: bold;
-          position: absolute;
-          top: -5px;
-          right: -5px;
-        }
-      }
-    }
+.navbar-guide-counter {
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+/* Global styles for notification container for guide */
+.notification-container-guide {
+  &.top-right {
+    right: 20px !important; /* Adjust this to move it horizontally */
+    margin-right: 10px; /* Add space */
+    top: 20px !important; /* Adjust vertical position */
   }
 
-  /* Notification container positioning */
-  .notification-container-top-right {
-    top: 55px !important; /* Adjust top margin */
-    right: 20px !important; /* Adjust right margin */
-    position: fixed !important; /* Ensure it's fixed at the top-right */
-    max-width: 300px; /* Limit the width */
-    z-index: 9999 !important; /* Ensure it's on top of other elements */
-  }
-
-  /* Custom Notification Styles */
   .notification-item {
-    background-color: #FFC0CB !important; /* Pink background */
-    border-left: 8px solid #FF69B4 !important; /* Pink border */
-    color: black !important; /* Set text color to black */
-  }
-
-  /* Title and Message color customization */
-  .notification-item .notification-title,
-  .notification-item .notification-message {
-    color: black !important; /* Ensure text is readable */
+    margin-bottom: 10px; /* Add spacing between notifications */
+    background-color: #b4efed !important; /* Ensure pink background */
+    color: #fff !important; /* Ensure white text */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px;
   }
 }
+
+.notification-container-guide.top-right {
+  border: 2px solid blue !important; /* Helps visualize the container */
+}
+

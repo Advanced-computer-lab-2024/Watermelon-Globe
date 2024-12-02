@@ -10,26 +10,51 @@ const TourGuide = require('../Models/tourGuideModel.js');
 
 // Create a new child itinerary (booking)
 const createChildItinerary = async (req, res) => {
-  const { itinerary, buyer, chosenDates, chosenTimes, totalPrice, status } = req.body;
+  const { itinerary, buyer, chosenDates, chosenTimes, status } = req.body;
 
-  console.log(itinerary);
   try {
-    // Validate if the provided itinerary ID is valid
+    // Validate itinerary ID
     if (!mongoose.Types.ObjectId.isValid(itinerary)) {
       return res.status(400).json({ error: 'Invalid itinerary ID' });
     }
 
-    // Validate if the itinerary exists
+    // Validate buyer ID
+    if (!mongoose.Types.ObjectId.isValid(buyer)) {
+      return res.status(400).json({ error: 'Invalid buyer ID' });
+    }
+
+    // Find parent itinerary
     const parentItinerary = await itineraryModel.Itinerary.findById(itinerary);
     if (!parentItinerary) {
       return res.status(404).json({ error: 'Parent itinerary not found' });
     }
 
-    // Save the child itinerary (this will also calculate the total price)
-    const savedChildItinerary = await ChildItinerary.create({itinerary, buyer, chosenDates, chosenTimes, totalPrice, status});
-    savedChildItinerary.totalPrice = parentItinerary.priceOfTour;
+    // Validate chosen dates
+    const availableDatesSet = new Set(parentItinerary.availableDates.map(date => date.toISOString()));
+    const allDatesAvailable = chosenDates.every(date => availableDatesSet.has(new Date(date).toISOString()));
+    if (!allDatesAvailable) {
+      return res.status(400).json({ error: 'One or more chosen dates are not available' });
+    }
 
-    // Add the booked itinerary to the tourist's document
+    // Calculate total price
+    const totalPrice = parentItinerary.priceOfTour * chosenDates.length;
+
+    // Create child itinerary
+    const savedChildItinerary = await ChildItinerary.create({
+      itinerary,
+      buyer,
+      chosenDates,
+      chosenTimes,
+      totalPrice,
+      status
+    });
+
+    // Update parent itinerary's bookings list
+    await itineraryModel.Itinerary.findByIdAndUpdate(itinerary, {
+      $push: { bookingsList: { user: buyer } }
+    });
+
+    // Update the buyer's booked itineraries
     await Tourist.findByIdAndUpdate(buyer, {
       $push: { bookedItineraries: savedChildItinerary._id }
     });
@@ -39,6 +64,7 @@ const createChildItinerary = async (req, res) => {
     res.status(500).json({ error: 'Error creating child itinerary: ' + error.message });
   }
 };
+
 
 // Get a child itinerary by ID
 const getChildItineraryById = async (req, res) => {

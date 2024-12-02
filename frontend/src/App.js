@@ -226,6 +226,7 @@ const App = () => {
 
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
+          <Route path="/GovernorHomePage/:id" element={<TourismGovernorPage />} />
           <Route path="/itineraryTourguide/:id" element={<ItineraryTourguide />} />
           <Route path="/TourguideHome/:id" element={<TourguideHome />} />
           <Route path="/ItineraryComponent2/:id" element={<ItineraryComponent2 />} />

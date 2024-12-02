@@ -5,6 +5,7 @@ import axios from 'axios';
 import './ItineraryDetails.css';
 import Sidebar from './sidebar/Sidebar';
 import Navbar from './navbar/Navbar';
+import "./guide.scss"
 
 const GeneralDetails = () => {
   const { id } = useParams();
@@ -91,9 +92,9 @@ const GeneralDetails = () => {
   };
   
   return (
-    <div className="list">
+    <div className="listGuide">
     <Sidebar />
-    <div className="listContainer">
+    <div className="listContainerGuide">
       <Navbar />
     <div className="itinerary-details-container">
       <h1 style={{ color: watermelonGreen }}>{itinerary.name}</h1>

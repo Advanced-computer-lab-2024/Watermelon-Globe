@@ -51,7 +51,13 @@ const itinerarySchema = new Schema(
   ,
   inappropriate: {
     type: Boolean,
-    default: false }
+    default: false },
+    
+    bookingsList: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
+      }
+    ],
 
 }, { timestamps: true });
 

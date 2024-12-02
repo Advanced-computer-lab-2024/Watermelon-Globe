@@ -88,9 +88,7 @@ const tourGuideSchema = new Schema(
         type: Date,
         default: Date.now
       }
-      
     }],
-
     notifications :[{
       type:String,
       required: false}

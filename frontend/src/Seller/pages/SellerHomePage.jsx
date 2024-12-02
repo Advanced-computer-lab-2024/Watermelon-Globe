@@ -1,6 +1,6 @@
 import Sidebar from "../Components/sidebar/Sidebar";
 import Navbar from "../Components/navbar/Navbar";
-import "./home.scss";
+import "./homeSeller.scss";
 import { useParams } from "react-router-dom";
 
 
@@ -8,9 +8,9 @@ const SellerHome = () => {
   const { id } = useParams();
   return (
 
-    <div className="home">
+    <div className="home-seller">
       <Sidebar  />
-      <div className="homeContainer">
+      <div className="homeContainer-seller">
         <Navbar />
       
       </div>

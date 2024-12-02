@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
+import "./guide.scss"
 
 const CreateItinerary = () => {
   const { id } = useParams();
@@ -193,13 +194,13 @@ const handleSubmit = async (e) => {
   };
   
   return (
-    <div className="list">
+    <div className="listGuide">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerGuide">
         <Navbar />
         <div className="min-h-screen bg-gradient-to-b from-green-100 via-pink-50 to-green-200 py-10">
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-            <h2 style={{color:'#4CAF50'}} className="text-3xl font-bold text-center text-pink-500 mb-6">
+             <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">
               Create Itinerary
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -226,7 +227,9 @@ const handleSubmit = async (e) => {
     <button
       type="button"
       style={{backgroundColor:"#FF79A8",
-               marginBottom:2
+               marginBottom:2,
+               width:"20%"
+               
             }}
       onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
       onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
@@ -270,11 +273,11 @@ const handleSubmit = async (e) => {
                   {tags.map((tag) => (
                     <button
                       type="button"
-                      style={{backgroundColor:"#FF79A8",marginBottom:2}}
+                      style={{backgroundColor:"#FF79A8",marginBottom:2,width:"10%"}}
                       onMouseOver={(e) => (e.target.style.backgroundColor = "#FF4081")} // Hover color
                       onMouseOut={(e) => (e.target.style.backgroundColor = "#FF79A8")}
                       key={tag._id}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      className={`px-2 py-2 rounded-full text-sm font-medium transition-colors ${
                         selectedTags.includes(tag._id)
                           ? "bg-pink-500 text-white"
                           : "bg-green-200 text-green-800 hover:bg-green-300"
@@ -406,6 +409,7 @@ const handleSubmit = async (e) => {
                     className="mt-1 block w-full px-3 py-2 bg-green-50 border border-green-300 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                   />
                   <button
+                  style={{width:"25%"}}
                     type="button"
                     onClick={() => {
                       const dateInput = document.querySelector('input[type="date"]');
@@ -442,6 +446,7 @@ const handleSubmit = async (e) => {
                     className="mt-1 block w-full px-3 py-2 bg-green-50 border border-green-300 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                   />
                   <button
+                  style={{width:"25%"}}
                     type="button"
                     onClick={() => {
                       const timeInput = document.querySelector('input[type="time"]');
@@ -488,6 +493,7 @@ const handleSubmit = async (e) => {
                     className="px-3 py-2 bg-green-50 border border-green-300 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                   />
                   <button
+                  style={{width:"25%"}}
                     type="button"
                     onClick={addPickupDropoff}
                     className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors"
@@ -511,6 +517,9 @@ const handleSubmit = async (e) => {
 
               <div className="flex justify-center mt-8">
                 <button
+                style={{width:"30%" , 
+                  marginTop:10
+                }}
                   type="submit"
                   className="px-8 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600"
                 >

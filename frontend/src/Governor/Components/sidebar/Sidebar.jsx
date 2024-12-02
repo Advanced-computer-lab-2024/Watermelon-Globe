@@ -1,14 +1,12 @@
-
-
 import "./sidebar.scss";
 import { useParams, useLocation } from "react-router-dom";
 import StoreIcon from "@mui/icons-material/Store";
 import { Link } from "react-router-dom";
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
-import AddIcon from '@mui/icons-material/Add';
+import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
+import AddIcon from "@mui/icons-material/Add";
 
 const Sidebar = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Extract the id from the URL
   const location = useLocation();
 
   // Function to determine if the menu item is active
@@ -18,33 +16,34 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">lamadmin</span>
+          <span className="logo">Home</span>
         </Link>
       </div>
       <hr />
       <div className="center">
         <ul>
-          {/* My Products */}
-          <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/GetAllProducts/${id}`) ? "active" : ""}>
+          {/* My Sites */}
+          <Link to={`/GetMySites/${id}`} style={{ textDecoration: "none" }}>
+            <li className={isActive(`/GetMySites/${id}`) ? "active" : ""}>
               <StoreIcon className="icon" />
-              <span>My Products</span>
+              <span>My Sites</span>
             </li>
           </Link>
 
-          {/* Create New Product */}
-          <Link to={`/CreateProduct/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/CreateProduct/${id}`) ? "active" : ""}>
+
+          {/* Add New Site */}
+          <Link to={`/AddSite/${id}`} style={{ textDecoration: "none" }}>
+            <li className={isActive(`/AddSite/${id}`) ? "active" : ""}>
               <AddIcon className="icon" />
-              <span>Create New Product</span>
+              <span>Add New Site</span>
             </li>
           </Link>
 
-          {/* Sales and Available Quantities */}
-          <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
-            <li className={isActive(`/ViewQuantity/${id}`) ? "active" : ""}>
+          {/* Change Password */}
+          <Link to={`/ChangePasswordGovernor/${id}`} style={{ textDecoration: "none" }}>
+            <li className={isActive(`/ChangePasswordGovernor/${id}`) ? "active" : ""}>
               <ProductionQuantityLimitsIcon className="icon" />
-              <span>Sales and Available Quantities</span>
+              <span>Change Password</span>
             </li>
           </Link>
         </ul>
