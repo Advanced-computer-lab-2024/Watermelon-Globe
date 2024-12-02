@@ -36,7 +36,7 @@ const tourGuideSchema = new Schema(
     itineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "itinerary", // References the Itinerary model
+        ref: "Itinerary", // References the Itinerary model
       },
     ],
     status: {
@@ -88,7 +88,12 @@ const tourGuideSchema = new Schema(
         type: Date,
         default: Date.now
       }
-    }]
+    }],
+    notifications :[{
+      type:String,
+      required: false}
+    ]
+
   },
   { timestamps: true }
 );

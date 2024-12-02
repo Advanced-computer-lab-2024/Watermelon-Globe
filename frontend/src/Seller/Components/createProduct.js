@@ -58,13 +58,13 @@ const CreateProduct = () => {
 
   return (
     <div>
-       <div className="list">
+       <div className="listSeller">
       
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
       <Navbar/>
-      <div className="flex justify-center items-start mt-9">
-          <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+      {/* <div className="flex justify-center items-start mt-9"> */}
+          <div className=" bg-white p-6 rounded-lg ">
            
             <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">Create New Product</h2>
            
@@ -85,14 +85,14 @@ const CreateProduct = () => {
         <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
        
         <div className="flex justify-center">
-  <button className="bg-green-700 text-white px-4 py-2  rounded mt-6" type="submit">
+  <button  style={{width:"25%", marginTop:10}} className="bg-green-700 text-white px-4 py-2  rounded mt-6" type="submit">
     Create Product
   </button>
 </div>
 
        
       </form>
-      </div>
+      {/* </div> */}
       </div>
 
       {/* Display success or error messages */}

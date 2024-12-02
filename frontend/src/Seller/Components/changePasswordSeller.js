@@ -16,12 +16,12 @@ const ChangePasswordSeller = () => {
   const navigate=useNavigate();
 
   const containerStyle = {
-    backgroundColor: '#FFF0F5',
-    padding: '50px',
+    backgroundColor: '#F8F8F8',
+    padding: '20px',  // Increased padding for better visual separation
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    // maxWidth: '600px',
-    margin: '0 auto',
+    marginTop: '20px', // Add margin-top for better spacing
+    width: '100%',
   };
 
   const {id}=useParams();
@@ -85,9 +85,9 @@ const ChangePasswordSeller = () => {
   }
 
   return (
-    <div className="list">
+    <div className="listSeller">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
         <Navbar />
         <div style={containerStyle}>
     {/* <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"> */}
@@ -106,7 +106,7 @@ const ChangePasswordSeller = () => {
           />
         </div> */}
 
-        <button  style={{background:watermelonPink}}
+        <button  style={{background:watermelonPink , width:"25%"}}
           onClick={handleShowPassword}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
@@ -147,14 +147,14 @@ const ChangePasswordSeller = () => {
         </div>
 
         <div className="flex justify-end">
-          <button style={{background:watermelonGreen}}
+          <button style={{background:watermelonGreen, width:"15%" , marginRight:10}}
             onClick={handleConfirmPasswordChange}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
             Confirm
           </button>
 
-          <button style={{background:watermelonPink}}
+          <button style={{background:watermelonPink , width:"15%" }}
             onClick={handleCancel}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >

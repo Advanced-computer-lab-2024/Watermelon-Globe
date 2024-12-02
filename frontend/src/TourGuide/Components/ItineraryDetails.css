@@ -1,0 +1,32 @@
+.itinerary-details-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .itinerary-details-container h1 {
+    font-size: 2.5em;
+    color: #333;
+  }
+  
+  .itinerary-details-container p {
+    margin: 10px 0;
+    color: #555;
+  }
+  
+  .activities .activity {
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+  }
+  
+  .pickup-dropoff p {
+    padding: 5px 0;
+    color: #444;
+  }
+  

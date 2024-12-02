@@ -1,16 +1,16 @@
 import Sidebar from "../Components/sidebar/Sidebar";
 import Navbar from "../Components/navbar/Navbar";
-import "./homeSeller.scss";
+import "./homeGuide.scss";
 import { useParams } from "react-router-dom";
 
 
-const SellerHome = () => {
+const TourguideHome = () => {
   const { id } = useParams();
   return (
 
-    <div className="home-seller">
+    <div className="home-guide">
       <Sidebar  />
-      <div className="homeContainer-seller">
+      <div className="homeContainer-guide">
         <Navbar />
       
       </div>
@@ -18,4 +18,4 @@ const SellerHome = () => {
   );
 };
 
-export default SellerHome;
+export default TourguideHome;

@@ -137,6 +137,7 @@ router.get('/getQuantity',getQuantity);
 
 //mark Itinerary Inappropriate
 router.put('/markItineraryInappropriate/:id', markItineraryInappropriate)
+router.put('/markActivityInappropriate/:id', markActivityInappropriate)
 
 //mark Itinerary Inappropriate
 router.put('/markActivityInappropriate/:id', markActivityInappropriate)

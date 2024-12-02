@@ -10,6 +10,11 @@ router.put("/updateGuide/:id", guideController.updateTourGuide);
 router.put("/changePasswordTourGuide/:id",guideController.changePasswordTourGuide);
 router.put("/requestDeletionGuide/:id",guideController.requestDeletionGuide);
 router.get("/getPassword",guideController.getPassword);
+router.put("/updateTourGuideNew/:id",guideController.updateTourGuideNew);
+router.delete("/deleteGuide/:id", guideController.deleteTourGuide);
+router.get("/getNotificationsGuide/:id",guideController.getNotificationsGuide)
+
+
 
 //accept terms and conditions
 router.put(
