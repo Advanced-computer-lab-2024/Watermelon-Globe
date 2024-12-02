@@ -70,9 +70,9 @@ const GovernorSiteDetails = () => {
 
   if (!site) {
     return (
-      <div className="list">
+      <div className="listGovernor">
         <Sidebar />
-        <div className="listContainer">
+        <div className="listContainerGovernor">
           <Navbar />
           <div className="flex justify-center items-center min-h-screen">
             <p>Loading site details...</p>

@@ -44,14 +44,16 @@ const ChangePasswordGovernor = () => {
   const containerStyle = {
     display: "flex",
     minHeight: "100vh",
+    width:"100%"
   };
 
   const mainContentStyle = {
-    flex: 1,
+     flex: 1,
     padding: "20px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    width:"100%"
   };
 
   const cardStyle = {
@@ -84,10 +86,12 @@ const ChangePasswordGovernor = () => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div className= "listGovernor" >
       <Sidebar id={id} />
-      <div style={mainContentStyle}>
+      <div  className ="listContainerGovernor" >
         <Navbar />
+        <div style={containerStyle}>
+        <div style={mainContentStyle}>
         <div style={cardStyle}>
           <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
             Change Password
@@ -135,6 +139,8 @@ const ChangePasswordGovernor = () => {
           )}
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

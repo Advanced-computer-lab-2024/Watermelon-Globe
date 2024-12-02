@@ -1030,6 +1030,36 @@ const uploadPicture = async (req, res) => {
 //   }
 // };
 
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',  // Use Gmail as the email service
+      auth: {
+        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
+        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
+      to,  // Recipient's email address
+      subject,  // Subject of the email
+      text,  // Plain text content
+      html,  // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ', info.response);
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error('Error sending email: ', error);
+    return { success: false, message: 'Failed to send email.', error };
+  }
+};
+
 const markItineraryInappropriate = async (req, res) => {
   const { id } = req.params; // Get the itinerary ID from request parameters
 
@@ -1166,43 +1196,7 @@ const createTransportation = async (req, res) => {
 // };
 
 
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    // Generate a test Ethereal account
-    const testAccount = await nodemailer.createTestAccount();
 
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // Use TLS
-      auth: {
-        user: testAccount.user, // Generated user
-        pass: testAccount.pass, // Generated password
-      },
-    });
-
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <no-reply@watermelonglobe.com>', // Sender's address
-      to,
-      subject, // Subject of the email
-      text, // Plain text content
-      html, // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-
-    // Log the preview URL for Ethereal
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-    return { success: true, message: "Email sent successfully!", previewURL: nodemailer.getTestMessageUrl(info) };
-  } catch (error) {
-    console.error("Error sending email: ", error);
-    return { success: false, message: "Failed to send email.", error };
-  }
-}
 // Function to calculate total revenue from purchased products
 const totalProductRevenue = async (req, res) => {
   try {
@@ -1430,35 +1424,7 @@ const markActivityInappropriate = async (req, res) => {
   }
 };
 
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',  // Use Gmail as the email service
-      auth: {
-        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
-        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
-      },
-    });
 
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
-      to,  // Recipient's email address
-      subject,  // Subject of the email
-      text,  // Plain text content
-      html,  // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', info.response);
-    return { success: true, message: 'Email sent successfully!' };
-  } catch (error) {
-    console.error('Error sending email: ', error);
-    return { success: false, message: 'Failed to send email.', error };
-  }
-};
   
 
 

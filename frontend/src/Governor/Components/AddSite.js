@@ -94,9 +94,9 @@ const CreateSite = () => {
 
   return (
     <div>
-      <div className="list">
+      <div className="listGovernor">
         <Sidebar id={id} />
-        <div className="listContainer">
+        <div className="listContainerGovernor">
           <Navbar />
           <div style={cardStyle}>
             <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>
