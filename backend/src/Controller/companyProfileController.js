@@ -1,3 +1,4 @@
+const CompanyProfile = require("../Models/companyProfileModel");
 const CompanyProfileModel = require("../Models/companyProfileModel");
 
 const createProfile = async (req, res) => {
@@ -236,6 +237,23 @@ const acceptTermsAndConditions = async (req, res) => {
   }
 };
 
+const getNotificationsAdvertiser=async(req,res)=>{
+  const{ id }=req.params;
+  try{
+    const adverstiser = await CompanyProfileModel.findById(id);
+    if (!adverstiser) {
+      res.status(400).json({ message: "adverstiser is not found" });
+    } else {
+      res.status(200).json(adverstiser.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+  
+
+
+}
 
 module.exports = {
   createProfile,
@@ -247,4 +265,5 @@ module.exports = {
   changePasswordAdvertiser,
   requestDeletionAdvertiser,
   acceptTermsAndConditions,
+  getNotificationsAdvertiser
 };

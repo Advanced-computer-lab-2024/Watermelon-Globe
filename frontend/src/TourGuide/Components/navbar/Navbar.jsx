@@ -31,39 +31,41 @@ const Navbar = () => {
       const fetchedNotifications = await fetchNotifications();
       setNotifications(fetchedNotifications);
       setShowNotifications(true);
-
-      fetchedNotifications.forEach((notification, index) => {
-        Store.addNotification({
-          id: `notification-${index}`,
-          title: "New Notification",
-          message: notification,
-          type: "info",
-          insert: "top",
-          container: "top-right", // Ensure container is top-right
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 0,
-            showIcon: true,
-            click: true,
-          },
-          content: (
-            <div
-              style={{
-                position:"absolute",
-                backgroundColor: "#f1e9ed", 
-                color: "#000", // White text
-                padding: "20px",
-                borderRadius: "5px",
-                borderWidth:"2px",
-                borderColor:"#46975a",
-                 top: "20px", // Adjust top position
-                right: "230px"
-
-              }}
-            >
-              {notification}
-            </div>)
+    
+     fetchedNotifications.forEach((notification, index) => {
+    Store.addNotification({
+        id: `notification-${index}`,
+        title: "New Notification",
+        message: notification,
+        type: "info",
+        insert: "top",
+        container: "top-right", // Ensure container is top-right
+        animationIn: ["animate__animated", "animate__slideInRight"], // Sliding in from right
+        animationOut: ["animate__animated", "animate__slideOutRight"], // Sliding out to right
+        dismiss: {
+          duration: 0,
+          showIcon: true,
+          click: true,
+        },
+        content: (
+          <div
+            style={{
+              position: "absolute",
+              backgroundColor: "#f1e9ed",
+              color: "#000", // Text color
+              padding: "5px", // Smaller padding
+              fontSize: "12px", // Smaller font size
+              borderRadius: "5px",
+              borderWidth: "1px",
+              borderColor: "#46975a",
+              top: "20px",
+              right: "230px",
+              width: "400px", // Smaller width
+              
+            }}
+          >
+            {notification}
+          </div> )
         });
       });
     }
@@ -73,6 +75,7 @@ const Navbar = () => {
     try {
       const response = await fetch(`/api/tourGuide/getNotificationsGuide/${id}`);
       const data = await response.json();
+      setNotifications(data);
       return data;
     } catch (error) {
       console.error("Error fetching notifications:", error);

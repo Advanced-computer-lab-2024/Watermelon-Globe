@@ -3,7 +3,7 @@ const router = express.Router();
 
 //company profile imports
 const { createProfile, updateProfile, getProfiles,changePasswordAdvertiser,
-getLastApprovedAdvertiser, approveAdvertiser,getPassword,acceptTermsAndConditions,requestDeletionAdvertiser
+getLastApprovedAdvertiser, approveAdvertiser,getPassword,acceptTermsAndConditions,requestDeletionAdvertiser,getNotificationsAdvertiser
 } = require("../Controller/companyProfileController");
 
 
@@ -23,6 +23,7 @@ router.put("/approve/:id", approveAdvertiser);
 router.get("/getPassword",getPassword);
 
 router.put("/requestDeletionAdvertiser/:id",requestDeletionAdvertiser);
+router.get("/getNotificationsAdvertiser/:id",getNotificationsAdvertiser);
 
 // router.post("/addAdvertiser", createAdvertiser);
 

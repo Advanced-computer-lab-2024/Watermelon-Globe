@@ -86,7 +86,7 @@ const {id}=useParams();
     <div className="listContainerGuide">
       <Navbar />
     <div className="itinerary-container">
-    <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>My Itineraries</h2>
+    <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">My Itineraries</h2>
         <div style={{ marginBottom: '20px' }}>
       {itineraries.length > 0 ? (
         itineraries.map((itinerary) => (

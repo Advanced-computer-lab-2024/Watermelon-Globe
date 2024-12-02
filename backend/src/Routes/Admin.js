@@ -47,7 +47,8 @@ const {
     unarchiveProduct,
     uploadPicture,
     markItineraryInappropriate,
-    createTransportation
+    createTransportation,
+    markActivityInappropriate
 } = require('../Controller/AdminController')
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -131,6 +132,7 @@ router.get('/getQuantity',getQuantity);
 
 //mark Itinerary Inappropriate
 router.put('/markItineraryInappropriate/:id', markItineraryInappropriate)
+router.put('/markActivityInappropriate/:id', markActivityInappropriate)
 
 //post a new transportation
 router.post("/createTransportation", createTransportation);

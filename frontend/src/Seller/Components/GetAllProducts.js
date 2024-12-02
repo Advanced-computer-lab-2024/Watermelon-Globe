@@ -188,7 +188,7 @@ const GetAllProducts = () => {
         <div className="listContainerSeller">
           <Navbar />
           <div style={cardStyle}>
-            <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>My Products</h2>
+          <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">My Products</h2>
 
             <div style={{ marginBottom: '20px' }}>
               <input

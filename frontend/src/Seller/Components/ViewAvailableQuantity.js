@@ -35,8 +35,8 @@ const ViewQuantity = () => {
       <Sidebar />
       <div className="listContainerSeller">
       <Navbar/>
-      <div className="w-full max-w-md bg-white p-6 rounded-lg ">
-      <h2 style={{ color:'#4CAF50' ,textAlign: 'center', marginBottom: '20px' }}> Quantities and Sales</h2>
+      <div className=" bg-white p-6 rounded-lg ">
+      <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6"> Quantities and Sales</h2>
 
       {errorMessage && <p style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</p>}
 
