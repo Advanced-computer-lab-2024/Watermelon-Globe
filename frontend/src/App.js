@@ -14,7 +14,7 @@ import CompanyHomepage from "./Components/CompanyHomepage.jsx";
 import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
-import AdvertiserSignup from "./pages/ AdvertiserSignUp2.js";
+import AdvertiserSignup from "./pages/AdvertiserSignUp2.js";
 import SignupOptions from "./pages/SignUpOptions.js";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 
