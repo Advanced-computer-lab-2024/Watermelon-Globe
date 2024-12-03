@@ -20,7 +20,7 @@
   transition: all 0.3s ease;
 
   &.Mui-selected {
-    color: #d32e65; // Active tab text color
+    color: #d32e65 !important; // Active tab text color
     background-color: #f6d8e576; // Light background for active tab
     border-radius: 4px;
   }

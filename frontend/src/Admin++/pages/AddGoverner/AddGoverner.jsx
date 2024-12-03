@@ -52,9 +52,9 @@ const AddGoverner = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="list">
+    <div className="listAddGoverner">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerAddGoverner">
         {/* <Navbar /> */}
         <div className="cardsContainer">
           {governors.map((governor) => (

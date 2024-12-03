@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { Link } from "react-router-dom";
+
 import "./navTabs.scss"; // Make sure the path is correct
 
 // Function to check if the click is on the same page link
@@ -24,7 +26,8 @@ function samePageLinkNavigation(event) {
 function LinkTab(props) {
   return (
     <Tab
-      component="a"
+      component={Link} // Use Link component from react-router-dom
+      to={props.href} // Use `to` instead of `href` for navigation
       onClick={(event) => {
         // Prevent the default action if it's a same-page navigation
         if (samePageLinkNavigation(event)) {
@@ -42,9 +45,8 @@ LinkTab.propTypes = {
 };
 
 export default function NavTabs() {
-  const [value, setValue] = React.useState(0); // State to manage the selected tab
+  const [value, setValue] = React.useState(0);
 
-  // Handle tab change and set the new selected tab value
   const handleChange = (event, newValue) => {
     // Only change the tab on click or when it’s the same page link
     if (
@@ -59,13 +61,14 @@ export default function NavTabs() {
     <Box sx={{ width: "100%" }}>
       <Tabs
         value={value}
-        onChange={handleChange} // Handler to change the selected tab
-        aria-label="nav tabs example" // Accessibility label for the tabs
-        role="navigation" // Role for the navigation
+        onChange={handleChange}
+        aria-label="nav tabs example"
+        role="navigation"
       >
-        <LinkTab label="Page One" href="/drafts" />
-        <LinkTab label="Page Two" href="/trash" />
-        <LinkTab label="Page Three" href="/spam" />
+        <LinkTab label="View Tourists" to="/tourists" />
+        <LinkTab label="View Sellers" to="/sellers" />
+        <LinkTab label="View Advertisers" to="/advertisers" />
+        <LinkTab label="View Tour Guides" to="/tour-guides" />
       </Tabs>
     </Box>
   );

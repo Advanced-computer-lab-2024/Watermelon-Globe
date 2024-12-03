@@ -1,14 +1,9 @@
-.list {
+.listAddAdmin {
   display: flex;
-  position: relative; /* Make the parent container a positioning context */
+  width: 100%;
 }
 
-.sidebar {
-  width: 240px; /* Adjust according to your sidebar's width */
-  flex-shrink: 0;
-}
-
-.listContainer {
+.listContainerAddAdmin {
   flex: 1;
   margin-left: 290px; /* Match the width of the sidebar */
   padding: 20px;

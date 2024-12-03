@@ -1,6 +1,6 @@
-.list {
+.listAddGoverner {
   display: flex;
-  position: relative; /* Make the parent container a positioning context */
+  width: 100%;
 }
 
 .sidebar {
@@ -8,7 +8,7 @@
   flex-shrink: 0;
 }
 
-.listContainer {
+.listContainerAddGoverner {
   flex: 1;
   margin-left: 290px; /* Match the width of the sidebar */
   padding: 20px;
