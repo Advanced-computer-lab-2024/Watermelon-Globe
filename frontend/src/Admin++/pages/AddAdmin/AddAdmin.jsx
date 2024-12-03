@@ -51,9 +51,9 @@ const AddAdmin = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="list">
+    <div className="listAddAdmin">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerAddAdmin">
         {/* <Navbar /> */}
         <div className="cardsContainer">
           {admins.map((admin) => (

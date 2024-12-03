@@ -47,7 +47,9 @@ const TagSelection = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Choose up to {maxSelection} prefrences</h2>
+      <h2 style={styles.title}>✨ Help us customize your feed ✨</h2>
+      <h4 style={styles.subtitle}>Choose up to {maxSelection} preferences</h4>
+
       <div style={styles.tagGrid}>
         {tags.map((tag) => (
           <button
@@ -56,8 +58,8 @@ const TagSelection = () => {
             style={{
               ...styles.tag,
               backgroundColor: selectedTags.includes(tag.tag)
-                ? "#4CAF50"
-                : "#333",
+                ? "#d32e65 "
+                : "#e89bb5",
             }}
           >
             {tag.tag}
@@ -83,11 +85,11 @@ const styles = {
     maxWidth: "1200px",
     margin: "20px auto",
     padding: "60px",
-    backgroundColor: "#222",
+    backgroundColor: "#fff",
     borderRadius: "16px",
-    color: "#fff",
+    color: "#91c297",
     textAlign: "center",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "Poppins, sans-serif",
     height: "auto",
     position: "relative",
   },
@@ -96,9 +98,15 @@ const styles = {
     fontSize: "32px",
     fontWeight: "bold",
   },
+  subtitle: {
+    fontSize: "18px",
+    fontWeight: "normal",
+    color: "#555",
+    marginBottom: "20px",
+  },
   tagGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+    gridTemplateColumns: "repeat(4, minmax(140px, 1fr))",
     gap: "16px",
   },
   tag: {
@@ -117,16 +125,17 @@ const styles = {
     bottom: "20px",
     right: "20px",
     width: "calc(100% - 40px)",
+    fontFamily: "Poppins, sans-serif",
   },
   skipText: {
-    color: "#888",
+    color: " #d688a2",
     fontSize: "16px",
     cursor: "pointer",
     textDecoration: "underline",
     marginRight: "auto",
   },
   nextText: {
-    color: "#4CAF50",
+    color: "#91c297",
     fontSize: "16px",
     cursor: "pointer",
     textDecoration: "underline",

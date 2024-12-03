@@ -1,0 +1,13 @@
+.listAdminProduct {
+  display: flex;
+  width: 100%;
+
+  .listContainerAdminProduct {
+    flex: 6;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-left: 250px; /* Adjust to match the sidebar width */
+  }
+}

@@ -1,18 +1,18 @@
 .addActivityCategory {
   display: flex;
-  position: relative;
+  width: 100%;
   //min-height: 100vh;
 }
 
-.sidebarAdmin {
-  width: 240px;
-  flex-shrink: 0;
-}
+// .sidebarAdmin {
+//   width: 240px;
+//   flex-shrink: 0;
+// }
 
 .listContainerActivity {
   flex: 1;
   margin-left: 240px;
-  padding: 20px;
+  padding: 30px;
   overflow: auto;
   position: relative;
   //padding-top: 40px;
@@ -23,7 +23,7 @@
   grid-template-columns: repeat(2, 1fr); /* Two cards per row */
   //column-gap: 8px; /* Decreases the space between columns */
   //row-gap: 0px; /* Adjust row gap (space between rows) */
-  gap: 16px;
+  gap: 26px;
   margin-right: 420px; ///!!!!!!!!! this big big bitch
   z-index: 1;
   //   margin-top: 80px;
@@ -36,7 +36,7 @@
   border-radius: 8px;
   font-family: "Poppins", sans-serif;
   background-color: #f4f6f9;
-  padding: 15px;
+  padding: 20px;
   color: #333;
   position: relative;
   transition: all 0.3s ease;
@@ -88,9 +88,9 @@
 
 /* Icon styling within the Card */
 .activityCategoryCard .MuiSvgIcon-root {
-  color: #d688a2 !important;
+  color: #e89bb5 !important;
   &:hover {
-    color: #d688a2 !important;
+    color: #e89bb5 !important;
   }
 }
 

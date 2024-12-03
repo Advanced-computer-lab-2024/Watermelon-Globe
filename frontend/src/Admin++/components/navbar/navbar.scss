@@ -1,23 +1,25 @@
-.navbar {
+.navbarAdmin {
   height: 50px;
   //border-bottom: 3px solid #91c2979b;
   display: flex;
   align-items: center;
+  background-color: white;
   font-size: 14px;
   color: #d688a2;
-  //background-color: white;
+  left: 250; /* Adjusted to ensure correct placement */
+  top: 0;
 
-  .wrapper {
+  .wrapperAdmin {
     width: 100%;
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    .search {
+    .searchAdmin {
       display: flex;
       align-items: center;
-      border: 0.5px solid lightgray;
+      // border: 0.5px solid lightgray;
       padding: 3px;
 
       input {
@@ -31,27 +33,27 @@
       }
     }
 
-    .items {
+    .itemsAdmin {
       display: flex;
       align-items: center;
 
-      .item {
+      .itemAdmin {
         display: flex;
         align-items: center;
         margin-right: 20px;
         position: relative;
 
-        .icon {
-          font-size: 20px;
+        .iconAdmin {
+          font-size: 25px;
         }
 
-        .avatar {
+        .avatarAdmin {
           width: 30px;
           height: 30px;
           border-radius: 50%;
         }
 
-        .counter {
+        .counterAdmin {
           width: 15px;
           height: 15px;
           //background-color: rgba(78, 192, 129, 0.721);
