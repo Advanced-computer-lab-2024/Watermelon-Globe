@@ -1423,6 +1423,49 @@ const deletePromoCode = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+const filterRevenueByProduct = async (req, res) => {
+  try {
+    const { productId } = req.params; // Assuming the product ID is passed as a URL parameter
+
+    // Step 1: Validate the product ID
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({
+        message: 'Invalid product ID',
+      });
+    }
+
+    // Step 2: Find the product to ensure it exists and get its price and sales
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: 'Product not found',
+      });
+    }
+
+    // Step 3: Calculate the total revenue for this product
+    const totalRevenue = product.sales * product.price;
+
+    // Step 4: Send the response
+    res.status(200).json({
+      message: 'Total revenue calculated successfully for the product',
+      productName: product.name,
+      totalSales: product.sales,
+      price: product.price,
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: 'Error calculating revenue for the product',
+      error: error.message,
+    });
+  }
+};
+
+
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -1484,4 +1527,5 @@ module.exports = {
   createPromoCode,
   getAllPromoCodes,
   deletePromoCode,
+  filterRevenueByProduct
 };

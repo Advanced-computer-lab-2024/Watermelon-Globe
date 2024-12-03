@@ -57,6 +57,7 @@ const {
   createPromoCode,
   getAllPromoCodes,
   deletePromoCode,
+  filterRevenueByProduct
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -162,5 +163,10 @@ router.get("/getUsersPerMonth", getUsersPerMonth);
 router.get("/getPromoCodes", getAllPromoCodes);
 router.post("/createPromoCode", createPromoCode);
 router.delete("/deletePromoCode/:id", deletePromoCode);
+
+//count users per month
+router.get("/filterRevenueByProduct/:productId", filterRevenueByProduct);
+
+
 
 module.exports = router;

@@ -34,18 +34,18 @@ const Chart = ({ aspect, title }) => {
   // Helper function to convert month number to month name
   const getMonthName = (monthNumber) => {
     const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
       "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     return monthNames[monthNumber - 1]; // Since monthNumber is 1-based
   };
