@@ -1081,7 +1081,82 @@ const markItineraryInappropriate = async (req, res) => {
 };
 
 // Controller function to mark an activity as inappropriate
+const markActivityInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
 
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: true }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    )
+    .populate("Advertiser");
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+    const advertiser = activity.Advertiser;
+    const notification=`Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`
+    advertiser.notifications.push(notification);
+    await advertiser.save();
+
+    if (!advertiser || !advertiser.Email || !advertiser.Name) {
+      return res.status(400).json({ error: "advertiser information is incomplete." });
+    }
+
+    const advertiserEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+
+    // Attempt to send the email
+    try {
+      await sendEmail(advertiserEmail, "Inappropriate Activity", emailMessage, "");
+      console.log("Email sent to:", advertiserEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
+    }
+
+    // Send the updated activity as a response
+    res
+      .status(200)
+      .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',  // Use Gmail as the email service
+      auth: {
+        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
+        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
+      to,  // Recipient's email address
+      subject,  // Subject of the email
+      text,  // Plain text content
+      html,  // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ', info.response);
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error('Error sending email: ', error);
+    return { success: false, message: 'Failed to send email.', error };
+  }
+};
 
 
 //create new transportation
