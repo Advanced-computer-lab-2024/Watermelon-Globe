@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-    /* Basic Settings */
     "noEmit": true,
     "target": "ES6",
     "module": "ESNext",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-
-    /* Strict Type-Checking Options */
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -19,27 +15,29 @@
     "strictBindCallApply": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-
-    /* Output Settings */
     "outDir": "./dist",
     "sourceMap": true,
     "removeComments": true,
-
-    /* Type Definitions */
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-
-    /* Additional Settings */
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-
-    /* Alias Configuration */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@/lib/*": ["src/lib/*"]
-    }
+    "baseUrl": "src",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true
   },
-  "include": ["src", "node_modules/react-scripts/lib/react-app.d.ts"],
-  "exclude": ["dist"]
+  "include": [
+    "src",
+    "node_modules/react-scripts/lib/react-app.d.ts"
+  ],
+  "exclude": [
+    "dist"
+  ]
 }
