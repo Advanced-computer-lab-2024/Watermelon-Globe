@@ -1081,31 +1081,8 @@ const markItineraryInappropriate = async (req, res) => {
 };
 
 // Controller function to mark an activity as inappropriate
-const markActivityInappropriate = async (req, res) => {
-  const { id } = req.params; // Get the activity ID from request parameters
 
-  try {
-    // Find the itinerary by its ID and update the inappropriate field
-    const activity = await Activity.findByIdAndUpdate(
-      id,
-      { inappropriate: true }, // Set the inappropriate field to true
-      { new: true } // Return the updated document
-    );
 
-    // If the actvity is not found, send a 404 error response
-    if (!activity) {
-      return res.status(404).json({ error: "activity not found" });
-    }
-
-    // Send the updated activity as a response
-    res
-      .status(200)
-      .json({ message: "activity marked as inappropriate", activity });
-  } catch (error) {
-    // Handle any errors during the process
-    res.status(500).json({ error: error.message });
-  }
-};
 
 //create new transportation
 const createTransportation = async (req, res) => {
@@ -1122,8 +1099,8 @@ const createTransportation = async (req, res) => {
     res.status(400).json({ error: error.mssg });
   }
 };
+//x
 
-// const sendEmail = async (to, subject, text, html) => {
 //   try {
 //     const testAccount = await nodemailer.createTestAccount();
 
@@ -1159,47 +1136,7 @@ const createTransportation = async (req, res) => {
 //   }
 // };
 
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    // Generate a test Ethereal account
-    const testAccount = await nodemailer.createTestAccount();
 
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // Use TLS
-      auth: {
-        user: testAccount.user, // Generated user
-        pass: testAccount.pass, // Generated password
-      },
-    });
-
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <no-reply@watermelonglobe.com>', // Sender's address
-      to,
-      subject, // Subject of the email
-      text, // Plain text content
-      html, // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-
-    // Log the preview URL for Ethereal
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-    return {
-      success: true,
-      message: "Email sent successfully!",
-      previewURL: nodemailer.getTestMessageUrl(info),
-    };
-  } catch (error) {
-    console.error("Error sending email: ", error);
-    return { success: false, message: "Failed to send email.", error };
-  }
-};
 // Function to calculate total revenue from purchased products
 const totalProductRevenue = async (req, res) => {
   try {
