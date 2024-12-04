@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../Components/ui/tabs"
 import { Calendar, MapPin, Hotel, Plane, Search, Star } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa"; // Import icons from react-icons
 import profileIcon from "../../Assets/Profile.png";
-import ExploreTrips from "../Components/ExploreTrips.tsx";
+import ExploreTrips from "../Components/ExploreTrips";
 import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 import ForYou from "../Components/ForYou.jsx";
