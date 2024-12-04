@@ -106,12 +106,9 @@ const Widget = ({ type }) => {
         isMoney: true,
         link: "View all orders",
         icon: (
-          <ShoppingCartOutlinedIcon
+          <MonetizationOnOutlinedIcon
             className="icon"
-            style={{
-              backgroundColor: "rgba(218, 165, 32, 0.2)",
-              color: "goldenrod",
-            }}
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
           />
         ),
       };
@@ -135,12 +132,9 @@ const Widget = ({ type }) => {
         isMoney: true,
         link: "See details",
         icon: (
-          <AccountBalanceWalletOutlinedIcon
+          <MonetizationOnOutlinedIcon
             className="icon"
-            style={{
-              backgroundColor: "rgba(128, 0, 128, 0.2)",
-              color: "purple",
-            }}
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
           />
         ),
       };
