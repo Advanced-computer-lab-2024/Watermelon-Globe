@@ -148,10 +148,10 @@ export default function TouristDetails() {
         })
 
         if (response.ok) {
-          alert('Your account has been successfully deleted.')
+          alert('Request to delete account sent successfully.')
           navigate('/')
         } else {
-          alert('Failed to delete account. Please try again.')
+          alert('Failed to send deletion request. Please try again.')
         }
       } catch (error) {
         console.error('Error deleting account:', error)
@@ -183,7 +183,7 @@ export default function TouristDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background p-8" style = {{margin: "-20px"}}>
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary">Watermelon Globe</h1>
@@ -200,6 +200,12 @@ export default function TouristDetails() {
                 <p className="text-white opacity-75">
                   Member since {new Date(tourist.createdAt).toLocaleDateString()}
                 </p>
+                <button
+                    onClick={handleUpdate}
+                    className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
+                  >
+                    <FaEdit className="mr-2" size="1em" />
+                  </button>
               </div>
             </div>
           </div>
@@ -327,13 +333,6 @@ export default function TouristDetails() {
               ) : (
                 <>
                   <button
-                    onClick={handleUpdate}
-                    className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-                  >
-                    <FaEdit className="mr-2" size="1em" />
-                    Update Profile
-                  </button>
-                  <button
                     onClick={() => setShowRedeemModal(true)}
                     className="flex items-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
                   >
@@ -354,32 +353,11 @@ export default function TouristDetails() {
         </div>
         <div className="mt-8 flex flex-col space-y-4">
           <button
-            onClick={handleViewFlightHotelBookings}
-            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-          >
-            <FaPlane className="mr-2" size="1em" />
-            View My Hotel/Flight Bookings
-          </button>
-          <button
-            onClick={handleViewBookings}
-            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-          >
-            <FaCompass className="mr-2" size="1em" />
-            View My Itineraries/Activities
-          </button>
-          <button
-            onClick={handleViewProducts}
-            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-          >
-            <FaShoppingBasket className="mr-2" size="1em" />
-            View My Product Orders
-          </button>
-          <button
             onClick={handleDeleteAccount}
             className="w-full flex items-center justify-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
           >
             <FaTrash className="mr-2" size="1em" />
-            Delete Account
+            Request Account Deletion
           </button>
         </div>
       </div>
