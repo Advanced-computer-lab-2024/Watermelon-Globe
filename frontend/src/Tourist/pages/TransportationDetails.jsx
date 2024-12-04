@@ -47,67 +47,76 @@ export default function TransportationDetails() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-primary"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Error</h2>
-          <p className="text-center text-gray-600">{error}</p>
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="bg-white p-8 rounded-lg shadow-lg">
+          <XCircle className="w-16 h-16 text-primary mx-auto mb-4" />
+          <h2 className="text-3xl font-bold text-center text-secondary mb-4">Error</h2>
+          <p className="text-center text-grayText">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="bg-blue-600 px-4 py-5 sm:px-6">
-            <h2 className="text-2xl font-bold text-white">Transportation Details</h2>
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto bg-cardBackground shadow-lg rounded-lg overflow-hidden">
+        <div className="bg-primary px-6 py-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-white hover:text-secondaryHover transition duration-200"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <h2 className="text-3xl font-bold text-white mt-2">Transportation Details</h2>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center mb-6">
+            <Calendar className="w-6 h-6 text-primary mr-2" />
+            <h3 className="text-2xl font-semibold text-secondary">{transportation.type}</h3>
           </div>
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center mb-4">
-              <Calendar className="w-6 h-6 text-blue-600 mr-2" />
-              <h3 className="text-xl font-semibold text-gray-800">{transportation.type}</h3>
-            </div>
-            <div className="flex items-center mb-4">
-              <MapPin className="w-6 h-6 text-blue-600 mr-2" />
-              <p className="text-gray-600">Destination: {transportation.destination}</p>
-            </div>
-            <div className="flex items-center mb-6">
-              <CreditCard className="w-6 h-6 text-blue-600 mr-2" />
-              <p className="text-gray-600">Price: ${transportation.price}</p>
-            </div>
-            {transportation.booked ? (
-              <div className="bg-green-100 border-l-4 border-green-500 p-4 mb-6">
-                <div className="flex items-center">
-                  <CheckCircle className="w-6 h-6 text-green-500 mr-2" />
-                  <p className="text-green-700 font-semibold">This transportation is already booked.</p>
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={handleBooking}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              >
-                Book Now
-              </button>
-            )}
-            {bookingStatus && (
-              <div className={`mt-4 p-4 rounded-md ${bookingStatus.includes('failed') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                <p className="font-semibold">{bookingStatus}</p>
-              </div>
-            )}
+          <div className="flex items-center mb-6">
+            <MapPin className="w-6 h-6 text-primary mr-2" />
+            <p className="text-lg text-grayText">Destination: {transportation.destination}</p>
           </div>
+          <div className="flex items-center mb-6">
+            <CreditCard className="w-6 h-6 text-primary mr-2" />
+            <p className="text-lg text-grayText">Price: ${transportation.price}</p>
+          </div>
+          {transportation.booked ? (
+            <div className="bg-green-100 border-l-4 border-green-500 p-4 mb-6 rounded-lg">
+              <div className="flex items-center">
+                <CheckCircle className="w-6 h-6 text-green-500 mr-2" />
+                <p className="text-green-700 font-semibold">This transportation is already booked.</p>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={handleBooking}
+              className="w-full bg-primary hover:bg-hover text-white font-bold py-3 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-hover"
+            >
+              Book Now
+            </button>
+          )}
+          {bookingStatus && (
+            <div
+              className={`mt-4 p-4 rounded-lg text-lg font-medium ${
+                bookingStatus.includes('failed') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+              }`}
+            >
+              {bookingStatus}
+            </div>
+          )}
         </div>
       </div>
+
     </div>
   );
 }

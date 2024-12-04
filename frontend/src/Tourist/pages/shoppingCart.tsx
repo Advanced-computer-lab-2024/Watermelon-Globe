@@ -6,6 +6,7 @@ import { Trash2, MinusCircle, PlusCircle } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import PaymentSummary from '../Components/PaymentSummary'
+import WalletComponent from '../Components/Wallet';
 
 interface CartItem {
   product: {
@@ -155,6 +156,7 @@ export default function ShoppingCart() {
           </div>
         </>
       )}
+      <WalletComponent touristId={touristId} />
     </div>
   )
 }

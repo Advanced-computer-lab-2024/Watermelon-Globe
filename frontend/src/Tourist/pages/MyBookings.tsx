@@ -36,23 +36,7 @@ const MyBookings: React.FC = () => {
 
   interface Activity {
     _id: string;
-    activity: {
-      _id: string;
-      Name: string;
-      Date: string;
-      Time: string;
-      Price: number;
-      tags: any[];
-      Discount: number;
-      bookingOpen: boolean;
-      rating: number;
-      Advertiser: string;
-      ratings: any[];
-      comments: any[];
-      createdAt: string;
-      updatedAt: string;
-      __v: number;
-    };
+    activity: Activities;
     tourist: string;
     chosenDate: string;
     status: string;
@@ -73,6 +57,24 @@ const MyBookings: React.FC = () => {
     itinerary: Itinerary;
     status: string;
     totalPrice: number;
+    updatedAt: string;
+    __v: number;
+  }
+
+  interface Activities {
+    _id: string;
+    Name: string;
+    Date: string;
+    Time: string;
+    Price: number;
+    tags: any[];
+    Discount: number;
+    bookingOpen: boolean;
+    rating: number;
+    Advertiser: string;
+    ratings: any[];
+    comments: any[];
+    createdAt: string;
     updatedAt: string;
     __v: number;
   }
@@ -173,8 +175,80 @@ const MyBookings: React.FC = () => {
     <div className="p-6 bg-gradient-to-r from-primary/25 to-secondary/20" style={{ margin: '-20px' }}>
       <h1 className="text-4xl p-3 font-bold mb-8 text-center text-black bg-lightGray shadow-md rounded-lg">My Bookings</h1>
 
-      {/* Itineraries Section */}
+      {/* upcoming Section */}
       <section className="mb-8">
+        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Activities</h2>
+        {upcomingActivities.length > 0 ? (
+          upcomingActivities.map((activity) => (
+            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
+              <p className="text-secondary font-semibold">Name: {activity.activity.Name }</p>
+              <p>Status: {activity.status}</p>
+              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
+              <p>Activity Time: {activity.activity.Time}</p>
+              <p>Price: ${activity.activity.Price}</p>
+              <button
+                onClick={() => cancelActivity(activity._id, activity.activity.Price)}
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
+              >
+                Cancel Activity
+              </button>
+
+            </div>
+          ))
+        ) : (
+          <p className="text-grayText">No upcoming activities.</p>
+        )}
+
+        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Itineraries</h2>
+        {upcomingItineraries.length > 0 ? (
+          upcomingItineraries.map((booking) => (
+            <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
+              <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
+              <p>Status: {booking.status}</p>
+              <p>
+                Itinerary Date:
+                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
+              </p>
+              <p>Itinerary Time: {booking.chosenTimes}</p>
+              <p>Price: ${booking.totalPrice}</p>
+              <button
+                onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
+              >
+                Cancel Itinerary
+              </button>
+
+            </div>
+          ))
+        ) : (
+          <p className="text-grayText">No upcoming itineraries.</p>
+        )}
+      </section>
+
+      {/* completed Section */}
+      <section className="mb-8">
+        <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Activities</h2>
+        {completedActivities.length > 0 ? (
+          completedActivities.map((activity) => (
+            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
+              <p className="text-secondary font-semibold">Name: {activity.activity.Name}</p>
+              <p>Status: completed </p>
+              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
+              <p>Activity Time: {activity.activity.Time}</p>
+              <p>Price: ${activity.activity.Price}</p>
+              <button
+                onClick={() => redirectToRatingsPageActivity(activity._id, 'activity')}
+                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
+              >
+                Rate Activity
+              </button>
+
+            </div>
+          ))
+        ) : (
+          <p className="text-grayText">No completed activities.</p>
+        )}
+
         <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Itineraries</h2>
         {completedItineraries.length > 0 ? (
           completedItineraries.map((booking) => (
@@ -206,77 +280,7 @@ const MyBookings: React.FC = () => {
           <p className="text-grayText">No completed itineraries.</p>
         )}
 
-        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Itineraries</h2>
-        {upcomingItineraries.length > 0 ? (
-          upcomingItineraries.map((booking) => (
-            <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
-              <p>Status: {booking.status}</p>
-              <p>
-                Itinerary Date:
-                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
-              </p>
-              <p>Itinerary Time: {booking.chosenTimes}</p>
-              <p>Price: ${booking.totalPrice}</p>
-              <button
-                onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Cancel Itinerary
-              </button>
 
-            </div>
-          ))
-        ) : (
-          <p className="text-grayText">No upcoming itineraries.</p>
-        )}
-      </section>
-
-      {/* Activities Section */}
-      <section className="mb-8">
-        <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Activities</h2>
-        {completedActivities.length > 0 ? (
-          completedActivities.map((activity) => (
-            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {activity.activity.Name}</p>
-              <p>Status: completed </p>
-              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
-              <p>Activity Time: {activity.activity.Time}</p>
-              <p>Price: ${activity.activity.Price}</p>
-              <button
-                onClick={() => redirectToRatingsPageActivity(activity._id, 'activity')}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Rate Activity
-              </button>
-
-            </div>
-          ))
-        ) : (
-          <p className="text-grayText">No completed activities.</p>
-        )}
-
-        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Activities</h2>
-        {upcomingActivities.length > 0 ? (
-          upcomingActivities.map((activity) => (
-            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {activity.activity.Name}</p>
-              <p>Status: {activity.status}</p>
-              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
-              <p>Activity Time: {activity.activity.Time}</p>
-              <p>Price: ${activity.activity.Price}</p>
-              <button
-                onClick={() => cancelActivity(activity._id, activity.activity.Price)}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Cancel Activity
-              </button>
-
-            </div>
-          ))
-        ) : (
-          <p className="text-grayText">No upcoming activities.</p>
-        )}
       </section>
       <WalletComponent touristId={id} />
     </div>

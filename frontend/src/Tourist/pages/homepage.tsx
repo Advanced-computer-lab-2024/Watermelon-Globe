@@ -12,6 +12,7 @@ import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
+import WalletComponent from '../Components/Wallet';
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -300,8 +301,7 @@ export default function DraftHomePage() {
           <p>&copy; {new Date().getFullYear()} Watermelon Globe. All rights reserved.</p>
         </div>
       </footer>
-
-
+      <WalletComponent touristId={id} />
     </div>
   )
 }

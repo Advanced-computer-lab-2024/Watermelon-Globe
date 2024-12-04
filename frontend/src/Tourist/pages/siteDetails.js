@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './siteDetails.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const SiteDetails = () => {
   const { id } = useParams();
   const [site, setSite] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSiteDetails = async () => {
@@ -22,13 +23,13 @@ const SiteDetails = () => {
     fetchSiteDetails();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!site) return <div>Site not found</div>;
+  if (loading) return <div className="text-center text-primary mt-8">Loading...</div>;
+  if (!site) return <div className="text-center text-red-500 mt-8">Site not found</div>;
 
-  // Share functionality
   const handleShareLink = () => {
     const siteUrl = `${window.location.origin}/siteDetails/${id}`;
-    navigator.clipboard.writeText(siteUrl)
+    navigator.clipboard
+      .writeText(siteUrl)
       .then(() => alert('Site link copied to clipboard!'))
       .catch(err => alert('Failed to copy link: ' + err));
   };
@@ -41,18 +42,48 @@ const SiteDetails = () => {
   };
 
   return (
-    <div className="site-details">
-      <h1>{site.name}</h1>
-      <p>{site.description}</p>
-      <img src={site.pictures[0]} alt={site.name} />
-      <p>Location: {site.location}</p>
-      <p>Opening Hours: {site.openingHours}</p>
-      <p>Ticket Prices: ${site.ticketPrices}</p>
+    <div className="min-h-screen bg-background py-8">
 
-      {/* Share Buttons */}
-      <div className="share-buttons">
-        <button onClick={handleShareLink} className="share-button">Copy Link</button>
-        <button onClick={handleShareEmail} className="share-button">Share via Email</button>
+      <div className="max-w-4xl mx-auto bg-cardBackground shadow-md rounded-lg p-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-primary hover:text-secondaryHover transition duration-200"
+        >
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+        <h1 className="text-secondary text-4xl font-bold mb-4">{site.name}</h1>
+        <p className="text-grayText text-lg mb-6">{site.description}</p>
+        <img
+          src={site.pictures[0]}
+          alt={site.name}
+          className="w-full h-64 object-cover rounded-lg shadow-lg mb-6"
+        />
+        <div className="text-grayText text-lg space-y-2">
+          <p>
+            <span className="font-semibold text-secondary">Location:</span> {site.location}
+          </p>
+          <p>
+            <span className="font-semibold text-secondary">Opening Hours:</span> {site.openingHours}
+          </p>
+          <p>
+            <span className="font-semibold text-secondary">Ticket Prices:</span> ${site.ticketPrices}
+          </p>
+        </div>
+
+        <div className="mt-6 flex gap-4">
+          <button
+            onClick={handleShareLink}
+            className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-hover transition duration-200"
+          >
+            Copy Link
+          </button>
+          <button
+            onClick={handleShareEmail}
+            className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-hover transition duration-200"
+          >
+            Share via Email
+          </button>
+        </div>
       </div>
     </div>
   );

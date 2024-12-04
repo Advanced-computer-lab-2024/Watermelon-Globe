@@ -1461,6 +1461,7 @@ const buyCart = async (req, res) => {
 
       // Decrement the product quantity
       product.quantity -= quantityToDecrement;
+      product.sales++;
       await product.save();
 
       // Add product to the list of products for the tourist

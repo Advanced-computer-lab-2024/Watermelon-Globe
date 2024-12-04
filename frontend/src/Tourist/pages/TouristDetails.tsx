@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { FaUser, FaEnvelope, FaPhone, FaFlag, FaCalendar, FaBriefcase, FaDollarSign, FaEdit, FaCheck, FaTimes, FaGift, FaSignOutAlt, FaMapMarkerAlt, FaPlane, FaCompass } from 'react-icons/fa'
+import {
+  FaUser, FaEnvelope, FaPhone, FaFlag, FaCalendar, FaBriefcase, FaDollarSign,
+  FaEdit, FaCheck, FaTimes, FaGift, FaTrash, FaPlane, FaCompass, FaKey, FaShoppingBasket
+} from 'react-icons/fa'
 import ChangePasswordTourist from '../Components/changePasswordTourist.js'
 
 interface Tourist {
@@ -127,6 +130,10 @@ export default function TouristDetails() {
 
   const handleViewBookings = () => {
     navigate(`/MyBookings/${id}`)
+  }
+
+  const handleViewProducts = () => {
+    navigate(`/OrdersPage/${id}`);
   }
 
   const handleDeleteAccount = async () => {
@@ -333,12 +340,19 @@ export default function TouristDetails() {
                     <FaGift className="mr-2" size="1em" />
                     Redeem Points
                   </button>
+                  <button
+                    onClick={() => setShowPasswordModal(true)}
+                    className="flex items-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
+                  >
+                    <FaKey className="mr-2" size="1em" />
+                    Change Password
+                  </button>
                 </>
               )}
             </div>
           </div>
         </div>
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mt-8 flex flex-col space-y-4">
           <button
             onClick={handleViewFlightHotelBookings}
             className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
@@ -354,17 +368,17 @@ export default function TouristDetails() {
             View My Itineraries/Activities
           </button>
           <button
-            onClick={() => setShowPasswordModal(true)}
-            className="w-full flex items-center justify-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+            onClick={handleViewProducts}
+            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
           >
-            <FaMapMarkerAlt className="mr-2" size="1em" />
-            Change Password
+            <FaShoppingBasket className="mr-2" size="1em" />
+            View My Product Orders
           </button>
           <button
             onClick={handleDeleteAccount}
-            className="w-full flex items-center justify-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+            className="w-full flex items-center justify-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
           >
-            <FaSignOutAlt className="mr-2" size="1em" />
+            <FaTrash className="mr-2" size="1em" />
             Delete Account
           </button>
         </div>
@@ -384,14 +398,16 @@ export default function TouristDetails() {
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setShowRedeemModal(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
-              >
+                className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                >
+                  <FaTimes className="mr-2" size="1em" />
                 Cancel
               </button>
               <button
                 onClick={handleRedeemPoints}
-                className="px-4 py-2 bg-primary text-white rounded hover:bg-hover"
-              >
+                className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
+                >
+                  <FaCheck className="mr-2" size="1em" />
                 Confirm
               </button>
             </div>
