@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     /* Basic Settings */
+    "noEmit": true,
     "target": "ES6",
     "module": "ESNext",
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
