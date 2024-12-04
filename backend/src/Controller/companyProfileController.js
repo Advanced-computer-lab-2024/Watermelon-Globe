@@ -1,4 +1,7 @@
+const CompanyProfile = require("../Models/companyProfileModel");
 const CompanyProfileModel = require("../Models/companyProfileModel");
+const ActivityBooking = require("../Models/activityBookingModel");
+const Activity = require("../Models/activityModel");
 
 const createProfile = async (req, res) => {
   try {
@@ -236,6 +239,62 @@ const acceptTermsAndConditions = async (req, res) => {
   }
 };
 
+const getSalesReport = async (req, res) => {
+  const { advertiserId } = req.params;
+  try {
+    const advertiser = await CompanyProfileModel.findById(advertiserId);
+    if(!advertiser){
+      return res.status(404).json({ success: false, message: "Advertiser not found" });
+    }
+
+    const activities = await Activity.find({ Advertiser : advertiserId});
+    const activityIds = activities.map(activity => activity._id);
+
+    const bookings = await ActivityBooking.find({
+      activity: { $in: activityIds },
+      status: 'confirmed',
+      paymentStatus: 'paid'
+    }).populate('activity');
+
+    const report = activities.map(activity => {
+      const activityBookings = bookings.filter(booking => booking.activity._id.equals(activity._id));
+      const totalRevenue = activityBookings.reduce((sum, booking) => sum + activity.Price, 0);
+      return {
+          activityName: activity.Name,
+          totalRevenue,
+          bookingCount: activityBookings.length
+      };
+    });
+
+    const totalRevenue = report.reduce((sum, item) => sum + item.totalRevenue, 0);
+    const totalBookings = report.reduce((sum, item) => sum + item.bookingCount, 0);
+
+    res.status(200).json({
+      success: true,
+      data: { totalRevenue, totalBookings, breakdown: report }
+    });
+  } catch (error){
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Error fetching sales report' });
+  }
+};
+const getNotificationsAdvertiser=async(req,res)=>{
+  const{ id }=req.params;
+  try{
+    const adverstiser = await CompanyProfileModel.findById(id);
+    if (!adverstiser) {
+      res.status(400).json({ message: "adverstiser is not found" });
+    } else {
+      res.status(200).json(adverstiser.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+  
+
+
+}
 
 module.exports = {
   createProfile,
@@ -247,4 +306,6 @@ module.exports = {
   changePasswordAdvertiser,
   requestDeletionAdvertiser,
   acceptTermsAndConditions,
+  getSalesReport,
+  getNotificationsAdvertiser
 };

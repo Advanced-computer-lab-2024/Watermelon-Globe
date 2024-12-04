@@ -1,0 +1,51 @@
+.homeAdmin {
+  display: flex;
+  font-family: "Poppins", sans-serif;
+
+  .homeContainerAdmin {
+    flex: 1; // Ensures the container takes up the remaining space
+    display: flex;
+    flex-direction: column; // Align widgets, charts, and list vertically
+    padding: 20px 20px 20px 270px; // Add padding to the left to make space for the sidebar (adjust width)
+    width: calc(
+      100% - 250px
+    ); // Ensure it takes up the available space excluding the sidebar width
+
+    .widgetsAdminHome,
+    .chartsAdminHome {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+      flex-wrap: wrap; // Allows wrapping of widgets to the next row
+    }
+
+    .chartsAdminHome {
+      padding: 5px 20px;
+    }
+
+    .listContainerAdminHome {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 20px;
+      margin: 20px;
+      flex-grow: 1; // Ensure it grows to fill the available space
+
+      .listTitleAdminHome {
+        font-weight: 500;
+        color: gray;
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  .sidebar {
+    width: 250px; // Sidebar width
+    position: fixed; // Fix the sidebar to the left side of the screen
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 10; // Ensure sidebar is above other elements
+  }
+}

@@ -41,7 +41,7 @@ const TermsAndConditions = () => {
 
       // Redirect to a new page (e.g., seller dashboard or homepage) after accepting terms
       // navigate("/advertiser"); // Replace with your target path
-      navigate(`/TourguideSignupConfirm/${userId}`);
+      navigate(`/AdvertiserSignupConfirm/${userId}`);
       //navigate(`/SellerPage/${sellerId}`); // Replace with your target path
     } catch (error) {
       console.error("Error:", error);

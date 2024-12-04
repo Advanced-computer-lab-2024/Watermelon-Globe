@@ -4,6 +4,7 @@ import axios from 'axios';
 import UploadProductPicture from './UploadImage'; // Assuming you have this component
 import Navbar from './navbar/Navbar';
 import Sidebar from './sidebar/Sidebar';
+import { AlignCenter } from 'lucide-react';
 // import "./actions.scss"
 
 const ProductDetails = () => {
@@ -92,19 +93,22 @@ const handleUpdateProduct = async () => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
+    width:"25%",
     color: 'white',
     border: 'none',
     padding: '10px 20px',
     borderRadius: '5px',
     cursor: 'pointer',
     marginRight: '10px',
+    marginBottom:10,
+    
   };
 
   return (
-    <div className="list">
+    <div className="listSeller">
       
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
       <Navbar/>
       <div className="flex justify-center items-center min-h-screen p-6">
           <div style={watermelonStyle} className="w-full max-w-xl">

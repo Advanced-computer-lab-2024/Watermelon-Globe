@@ -43,10 +43,11 @@ const getTourGuide = async (req, res) => {
     const { id } = req.params;
 
     // Query the database based on search criteria
-    const retrievedTourGuide = await tourGuide.findById(id);
+    const retrievedTourGuide = await tourGuide.findById(id)
+       .populate('itineraries');
 
     // Check if results are found
-    if (retrievedTourGuide.length === 0) {
+    if (retrievedTourGuide.length ==0) {
       return res
         .status(404)
         .json({ message: "No tour guide found matching the id" });
@@ -115,15 +116,45 @@ const updateTourGuide = async (req, res) => {
   }
 };
 
+const updateTourGuideNew = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  console.log(id);
+  console.log(updateData);
+
+  try {
+    const updatedGuide = await tourGuide.findByIdAndUpdate(id, updateData, {
+      new: true, // Return the updated document
+      runValidators: true, // Ensure validation rules apply
+    });
+
+
+    if (!updatedGuide) {
+      return res.status(404).send('Tour guide not found');
+    }
+
+    res.status(200).json(updatedGuide);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).send('Error updating product');
+  }
+};
+
 const createItinerary = async (req, res) => {
+    const{id}=req.params;
     const { name, activities,tag,locations, timeline, languageOfTour, priceOfTour, availableDates, availableTimes,
-        accessibility, pickupDropoffLocations, bookings,rating, guide: guideId} = req.body;
+        accessibility, pickupDropoffLocations, bookings,rating} = req.body;
         console.log(req.body)
         console.log(tag)
         try {
+          const tourguide =await tourGuide.findById(id);
+
             const itinerary = await itineraryModel.Itinerary.create({ name, activities, tag, locations,
                 timeline, languageOfTour, priceOfTour, availableDates, availableTimes, accessibility, 
-                pickupDropoffLocations, bookings, guide: guideId});
+                pickupDropoffLocations, bookings, guide: id});
+            tourguide.itineraries.push(itinerary._id);
+            await tourguide.save();      
+            
 
     res.status(200).json(itinerary);
   } catch (error) {
@@ -145,6 +176,7 @@ const getMyItineraries = async (req, res) => {
     const site = await itineraryModel.Itinerary.find({ guide: guideID })
       .populate("activities")
       .populate("guide");
+     
 
     // If no site is found, return a 404 error
     if (!site) {
@@ -166,6 +198,8 @@ const getAllItineraries = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate("activities")
       .populate("guide");
+      // Populate 'tag' with 'name' and 'description'
+
 
     // If no itineraries found, return a message
     if (!itineraries.length) {
@@ -288,6 +322,43 @@ const deleteItineraryById = async (req, res) => {
     res.status(500).json({ message: "Error deleting itinerary", error });
   }
 };
+
+const deleteItinerary2 = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Check if the ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid itinerary ID" });
+    }
+
+    // Find the itinerary
+    const itinerary = await itineraryModel.Itinerary.findById(id);
+
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+
+    // Check if the itinerary has any bookings
+    if (itinerary.bookings && itinerary.bookings.length > 0) {
+      return res.status(400).json({ message: "Cannot delete itinerary with active bookings" });
+    }
+
+    // Remove the itinerary from the tour guide's itineraries array
+    await tourGuide.findByIdAndUpdate(itinerary.guide, {
+      $pull: { itineraries: id }
+    });
+
+    // Delete the itinerary
+    await itineraryModel.Itinerary.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Itinerary deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting itinerary:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 
 const sortByRatings = async (req, res) => {
   try {
@@ -554,6 +625,136 @@ const getPassword = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const filterSalesReport = async (req, res) => {
+  const { guideId, activity, itinerary, startDate, endDate, month } = req.query;
+  
+  try {
+    const guide = await tourGuide.findById(guideId).populate('sales.itinerary');
+    if (!guide) {
+      return res.status(404).json({ message: 'Tour guide not found' });
+    }
+
+    let filteredSales = guide.sales;
+
+    if (activity) {
+      filteredSales = filteredSales.filter(sale => sale.activity === activity);
+    }
+
+    if (itinerary) {
+      filteredSales = filteredSales.filter(sale => sale.itinerary && sale.itinerary._id.toString() === itinerary);
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      filteredSales = filteredSales.filter(sale => sale.date >= start && sale.date <= end);
+    } else if (month) {
+      const [year, monthIndex] = month.split('-');
+      filteredSales = filteredSales.filter(sale => {
+        const saleDate = new Date(sale.date);
+        return saleDate.getFullYear() === parseInt(year) && saleDate.getMonth() === parseInt(monthIndex) - 1;
+      });
+    }
+
+    const totalSales = filteredSales.reduce((sum, sale) => sum + sale.amount, 0);
+
+    res.status(200).json({ filteredSales, totalSales });
+  } catch (error) {
+    res.status(500).json({ message: 'Error filtering sales report', error: error.message });
+  }
+};
+
+const filterTouristNumbers = async (req, res) => {
+  const { guideId, activity, itinerary, startDate, endDate, month } = req.query;
+  
+  try {
+    const guide = await tourGuide.findById(guideId).populate('touristCounts.itinerary');
+    if (!guide) {
+      return res.status(404).json({ message: 'Tour guide not found' });
+    }
+
+    let filteredCounts = guide.touristCounts;
+
+    if (activity) {
+      filteredCounts = filteredCounts.filter(count => count.activity === activity);
+    }
+
+    if (itinerary) {
+      filteredCounts = filteredCounts.filter(count => count.itinerary && count.itinerary._id.toString() === itinerary);
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      filteredCounts = filteredCounts.filter(count => count.date >= start && count.date <= end);
+    } else if (month) {
+      const [year, monthIndex] = month.split('-');
+      filteredCounts = filteredCounts.filter(count => {
+        const countDate = new Date(count.date);
+        return countDate.getFullYear() === parseInt(year) && countDate.getMonth() === parseInt(monthIndex) - 1;
+      });
+    }
+
+    const totalTourists = filteredCounts.reduce((sum, count) => sum + count.count, 0);
+
+    res.status(200).json({ filteredCounts, totalTourists });
+  } catch (error) {
+    res.status(500).json({ message: 'Error filtering tourist numbers', error: error.message });
+  }
+};
+
+const deleteTourGuide = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the tour guide
+    const guide = await tourGuide.findById(id);
+
+    if (!guide) {
+      return res.status(404).json({ message: "Tour guide not found" });
+    }
+
+    // Check if the guide has any active itineraries or bookings
+    const activeItineraries = await itineraryModel.Itinerary.find({ guide: id, bookings: { $exists: true, $not: {$size: 0} } });
+
+    if (activeItineraries.length > 0) {
+      return res.status(400).json({ message: "Cannot delete account with active itineraries or bookings" });
+    }
+
+    // Delete all itineraries associated with this guide
+    await itineraryModel.Itinerary.deleteMany({ guide: id });
+
+    // Delete the tour guide
+    await tourGuide.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Tour guide account deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting tour guide account:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getNotificationsGuide=async(req,res)=>{
+  const{ id }=req.params;
+  try{
+    const tourguide = await tourGuide.findById(id);
+    if (!tourguide) {
+      res.status(400).json({ message: "tourguide is not found" });
+    } else {
+      res.status(200).json(tourguide.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+  
+
+
+}
+
+module.exports = {
+  deleteTourGuide,
+};
 
 module.exports = {
   createItinerary,
@@ -577,4 +778,11 @@ module.exports = {
   acceptTermsAndConditions,
   requestDeletionGuide,
   getPassword,
+  filterSalesReport,
+  filterTouristNumbers,
+  updateTourGuideNew,
+  deleteTourGuide,
+  deleteItinerary2,
+  getNotificationsGuide
+
 };

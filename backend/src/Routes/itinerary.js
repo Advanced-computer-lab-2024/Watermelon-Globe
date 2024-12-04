@@ -5,12 +5,13 @@ const guideController = require("../Controller/guideController");
 const guestController = require("../Controller/guestController");
 const touristController = require('../Controller/touristController');
 
-router.post("/createItinerary", guideController.createItinerary); // Create a new itinerary
+router.post("/createItinerary/:id", guideController.createItinerary); // Create a new itinerary
 router.get("/getAllItineraries", guideController.getAllItineraries); // Get all itineraries
 router.get("/getItinerary/:id", guideController.getItineraryById); // Get a single itinerary by ID
 router.put("/updateItinerary/:id", guideController.updateItinerary); // Update an itinerary
-router.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
+// router.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
 router.get("/getMyItineraries/:guideID", guideController.getMyItineraries);
+router.delete("/deleteItinerary2/:id", guideController.deleteItinerary2);
 
 
 

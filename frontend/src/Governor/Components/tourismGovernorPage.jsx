@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ChangePasswordGovernor from './changePasswordGovernor';
+import { useParams } from 'react-router-dom';
 
 export default function TourismGovernorPage() {
   const [sites, setSites] = useState([]);
@@ -18,7 +19,7 @@ export default function TourismGovernorPage() {
   const [success, setSuccess] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 const [showPasswordModal, setShowPasswordModal] = useState(false); // Toggle for password modal
-
+const{id}=useParams();
 
   // const changePassword=() =>{
   //   <ChangePasswordGovernor/>
@@ -47,7 +48,7 @@ const [showPasswordModal, setShowPasswordModal] = useState(false); // Toggle for
         setSites([response.data]);
       } else {
         setSuccess('Operation completed successfully');
-        handleRequest('/api/Governor/getAllSites');
+        handleRequest(`/api/Governor/getMySites/${id}`);
       }
 
       clearForm();
@@ -226,7 +227,7 @@ const [showPasswordModal, setShowPasswordModal] = useState(false); // Toggle for
               </button>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => handleRequest('/api/Governor/getAllSites')} className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
+              <button onClick={() => handleRequest('/api/Governor/getMySites')} className="px-4 py-2 mb-4 text-white rounded-md transition duration-200"
                 style={{ backgroundColor: 'rgb(38, 38, 220)', hover: { backgroundColor: 'rgb(28, 28, 185)' } }}>
                 Get All Sites
               </button>

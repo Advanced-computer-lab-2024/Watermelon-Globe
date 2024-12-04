@@ -78,7 +78,10 @@ const ActivitySchema = new Schema({
       type: Date,
       default: Date.now
     }
-  }]
+  }],
+  inappropriate: {
+    type: Boolean,
+    default: false }
 }, { timestamps: true });
 
 ActivitySchema.index({ Location: '2dsphere' });

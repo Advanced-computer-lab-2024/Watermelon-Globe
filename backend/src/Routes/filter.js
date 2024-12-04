@@ -5,6 +5,8 @@ const { filterActivities } = require("../Controller/activityController");
 const {
   filterItineraries,
   filterByPreferenceItineraries,
+  filterSalesReport,
+  filterTouristNumbers,
 } = require("../Controller/guideController");
 const { filterByTags } = require("../Controller/governorController");
 const { filterProduct } = require("../Controller/AdminController");
@@ -27,5 +29,9 @@ router.get("/itineraryFilterBudget", filterItineraryByBudget);
 router.get("/itineraryFilter", filterItineraries);
 router.get("/filterByPreferenceItineraries/:id", filterByPreferenceItineraries);
 router.get("/filterByTags/:id", filterByTags);
+
+//new ones
+router.get("/sales-report", filterSalesReport);
+router.get("/tourist-numbers", filterTouristNumbers);
 
 module.exports = router;

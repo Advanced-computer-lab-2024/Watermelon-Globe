@@ -62,9 +62,11 @@ const {
   stripePayIntentHotel,
   stripePayIntentItinerary,
   stripePayIntentActivity,
-  stripePayIntentProduct
+  stripePayIntentProduct,
+  frontendDataTable,
 } = require("../Controller/touristController");
 
+router.get("/frontendInfo", frontendDataTable);
 //GET all tourists
 
 router.get("/getTourists", getTourists);
@@ -89,17 +91,16 @@ router.put("/changePasswordTourist/:id", changePasswordTourist);
 router.put("/updateRating/:id", updateRating);
 
 //Get all products
-router.get('/GetAllProducts', getAllProducts)
+router.get("/GetAllProducts", getAllProducts);
 
-//search a product 
-router.get('/searchProductName', searchProductbyName)
+//search a product
+router.get("/searchProductName", searchProductbyName);
 
-router.put('/buyProduct/:touristId/:productId', buyProduct);
+router.put("/buyProduct/:touristId/:productId", buyProduct);
 
-router.get('/getPurchasedProducts/:touristId', getPurchasedProducts)
+router.get("/getPurchasedProducts/:touristId", getPurchasedProducts);
 
-router.put('/requestDeletionTourist/:id', requestDeletionTourist);
-
+router.put("/requestDeletionTourist/:id", requestDeletionTourist);
 
 // router.get("/myComplaints/:touristId", getTouristComplaints);
 
@@ -109,9 +110,14 @@ router.post("/bookFlight/:touristId", bookFlight);
 
 router.post("/bookHotel/:touristId", bookHotel);
 
-router.get("/getHotelBookingsByTouristId/:touristId", getHotelBookingsByTouristId);
-router.get("/getFlightBookingsByTouristId/:touristId", getFlightBookingsByTouristId);
-
+router.get(
+  "/getHotelBookingsByTouristId/:touristId",
+  getHotelBookingsByTouristId
+);
+router.get(
+  "/getFlightBookingsByTouristId/:touristId",
+  getFlightBookingsByTouristId
+);
 
 router.get("/myComplaints/:touristId", getTouristComplaints);
 
@@ -121,36 +127,35 @@ router.put("/addPoints/:id", addPoints);
 router.get('/BookedActivities/:id', BookedActivities);
 router.get('/BookedItineraries/:id', BookedItineraries);
 
+router.put("/updateLoyaltyPoints/:id", updateLoyaltyPoints);
 
-router.put('/updateLoyaltyPoints/:id', updateLoyaltyPoints)
-
-router.delete('/deleteActivity/:touristId/:activityId', deleteActivity);
-router.delete('/deleteItinerary/:touristId/:itineraryId', deleteItinerary);
+router.delete("/deleteActivity/:touristId/:activityId", deleteActivity);
+router.delete("/deleteItinerary/:touristId/:itineraryId", deleteItinerary);
 
 //sprint 2
-router.get('/getMyCompletedItineraries/:buyerId', getMyCompletedItineraries);
+router.get("/getMyCompletedItineraries/:buyerId", getMyCompletedItineraries);
 
-router.post('/itineraries/:itineraryId/rate', rateItinerary);
-router.post('/itineraries/:itineraryId/comment', commentOnItinerary);
+router.post("/itineraries/:itineraryId/rate", rateItinerary);
+router.post("/itineraries/:itineraryId/comment", commentOnItinerary);
 
 // Route to rate a tour guide
-router.post('/tourGuide/:tourGuideId/rate', rateTourGuide);
+router.post("/tourGuide/:tourGuideId/rate", rateTourGuide);
 
 // Route to comment on a tour guide
-router.post('/tourGuide/:tourGuideId/comment', commentOnTourGuide);
+router.post("/tourGuide/:tourGuideId/comment", commentOnTourGuide);
 
-router.post('/createActivityBooking', createActivityBooking);
-router.get('/getAllActivityBookings', getAllActivityBookings);
-router.get('/getMyCompletedActivities/:touristId', getMyCompletedActivities);
+router.post("/createActivityBooking", createActivityBooking);
+router.get("/getAllActivityBookings", getAllActivityBookings);
+router.get("/getMyCompletedActivities/:touristId", getMyCompletedActivities);
 
-router.post('/activities/:activityId/rate', rateActivity);
-router.post('/activities/:activityId/comment', commentOnActivity);
+router.post("/activities/:activityId/rate", rateActivity);
+router.post("/activities/:activityId/comment", commentOnActivity);
 
-router.get('/getAllTransportations', getAllTransportations);
+router.get("/getAllTransportations", getAllTransportations);
 
-router.get('/getTransportation/:id', getTransportation);
+router.get("/getTransportation/:id", getTransportation);
 
-router.put('/bookTransportation/:id', bookTransportation);
+router.put("/bookTransportation/:id", bookTransportation);
 
 router.post('/addProductToCart/:id', addProductToCart);
 

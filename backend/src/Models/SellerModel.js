@@ -52,6 +52,7 @@ const sellerSchema = new Schema(
           ref: 'Product',
         },
       ],
+      
     
   },
   { timestamps: true }

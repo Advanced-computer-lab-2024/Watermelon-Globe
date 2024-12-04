@@ -33,6 +33,20 @@ const UploadProductPicture = ({ id }) => {
       setSuccessMessage('');
     }
   };
+  const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081';
+
+  const buttonStyle = {
+    backgroundColor: watermelonPink,
+    width:"25%",
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    border: 'none',
+    cursor: 'pointer',
+    marginRight: '10px',
+    transition: 'background-color 0.3s',
+  };
 
   return (
     <div>
@@ -49,7 +63,7 @@ const UploadProductPicture = ({ id }) => {
             placeholder="Enter picture URL"
           />
         </div>
-        <button type="submit">Upload Picture</button>
+        <button style= {buttonStyle} type="submit">Upload Picture</button>
       </form>
 
       {/* Display success or error messages */}

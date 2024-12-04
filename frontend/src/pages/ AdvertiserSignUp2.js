@@ -1,95 +1,78 @@
-import "./SignUp.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const SignupAdvertiser = () => {
-  const [Name, setUsername] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [advertiserId, setAdvertiserId] = useState(null);
-  const navigate = useNavigate(); // Use navigate instead of Link
+const SignupAdvertiser = ({ onSignup }) => {
+    const [Name, setUsername] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Password, setPassword] = useState("");
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const advertiser = { Name, Email, Password };
+        const response = await fetch('/api/Advertiser/createProfile', {
+            method: 'POST',
+            body: JSON.stringify(advertiser),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const json = await response.json();
+        if (response.ok) {
+            setUsername('');
+            setEmail('');
+            setPassword('');
+            setError(null);
+            console.log("New Advertiser added", json);
+            navigate(`/advertiserSignupConfirm/${json.profile._id}`);
+        }
+    };
 
-    // Check if all fields are filled
-    if (!Name || !Email || !Password) {
-      setError("Please fill in all fields.");
-      return; // Stop form submission
-    }
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-[#ffffff] to-[#e4fae4]">
+            <form className="bg-[#fbd4d4] shadow-lg rounded-lg px-8 py-10 max-w-md w-full" onSubmit={handleSubmit}>
+                <h3 className="text-2xl font-semibold text-center text-[#ee9b9b] mb-6">Sign Up as Advertiser</h3>
 
-    const advertiser = { Name, Email, Password };
+                <div className="mb-4">
+                    <label className="block text-[#ee9b9b] font-bold mb-2">Username:</label>
+                    <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-[#e3d2d2] rounded focus:outline-none focus:ring-2 focus:ring-[#ee9b9b]"
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={Name}
+                        placeholder="Enter your username"
+                    />
+                </div>
 
-    try {
-      const response = await fetch("/api/guest/addAdvertiser", {
-        method: "POST",
-        body: JSON.stringify(advertiser),
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
+                <div className="mb-4">
+                    <label className="block text-[#ee9b9b] font-bold mb-2">Email:</label>
+                    <input
+                        type="email"
+                        className="w-full px-4 py-2 border border-[#e3d2d2] rounded focus:outline-none focus:ring-2 focus:ring-[#ee9b9b]"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={Email}
+                        placeholder="Enter your email"
+                    />
+                </div>
 
-      const json = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          json.error || "Signup failed most probably due to dup data"
-        );
-      }
+                <div className="mb-6">
+                    <label className="block text-[#ee9b9b] font-bold mb-2">Password:</label>
+                    <input
+                        type="password"
+                        className="w-full px-4 py-2 border border-[#e3d2d2] rounded focus:outline-none focus:ring-2 focus:ring-[#ee9b9b]"
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={Password}
+                        placeholder="Enter your password"
+                    />
+                </div>
 
-      //alert("Sign up as seller was successful");
-      setAdvertiserId(json._id);
-      console.log(json);
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setError(null);
-
-      // Redirect to terms and conditions after successful signup
-      navigate(`/terms-and-conditionsAdvertiser/${json._id}`);
-    } catch (error) {
-      //console.error("Error signing up:", error);
-      setError(error.message);
-    }
-  };
-
-  return (
-    <div>
-      <form className="create" onSubmit={handleSubmit}>
-        <h3>Sign up</h3>
-        <label>
-          Username:
-          <input
-            type="text"
-            onChange={(e) => setUsername(e.target.value)}
-            value={Name}
-          />
-        </label>
-
-        <label>
-          Email:
-          <input
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={Email}
-          />
-        </label>
-
-        <label>
-          Password:
-          <input
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={Password}
-          />
-        </label>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        <button type="submit">Sign up as Advertiser</button>
-      </form>
-    </div>
-  );
+                <button className="w-full bg-[#ee9b9b] text-white font-bold py-2 px-4 rounded hover:bg-[#fbd4d4] transition-colors duration-300">
+                    Sign up as Advertiser
+                </button>
+            </form>
+        </div>
+    );
 };
 
 export default SignupAdvertiser;

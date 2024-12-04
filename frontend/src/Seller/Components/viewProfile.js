@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from './navbar/Navbar';
 import Sidebar from './sidebar/Sidebar';
 import SellerLogo from './SellerLogo';
+import "./actions.scss"
 
 
 const ViewProfile = () => {
@@ -101,15 +102,24 @@ const ViewProfile = () => {
     setUpdatedData(seller);
   };
 
+  // const containerStyle = {
+  //   backgroundColor: '#F8F8F8',
+  //   padding: '10px',
+  //   borderRadius: '10px',
+  //   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  //   // maxWidth: '600px',
+  //   margin: '0 auto',
+  // };
+
   const containerStyle = {
-    backgroundColor: '#FFF0F5',
-    padding: '50px',
+    backgroundColor: '#F8F8F8',
+    padding: '20px',  // Increased padding for better visual separation
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    // maxWidth: '600px',
-    margin: '0 auto',
+    marginTop: '20px', // Add margin-top for better spacing
+    width: '100%',
   };
-
+   
   const headingStyle = {
     color: watermelonGreen,
     borderBottom: `2px solid ${watermelonPink}`,
@@ -119,13 +129,16 @@ const ViewProfile = () => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
+    width:"20%",
     color: 'white',
-    padding: '10px 20px',
+    padding: '5px 5px',
     borderRadius: '5px',
     border: 'none',
     cursor: 'pointer',
     marginRight: '10px',
     transition: 'background-color 0.3s',
+    display: 'inline-block' , // Prevent full-width stretching
+    textAlign: 'center',   
   };
 
   const inputStyle = {
@@ -137,9 +150,9 @@ const ViewProfile = () => {
   };
 
   return (
-    <div className="list">
+    <div className="listSeller">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
         <Navbar />
         <div style={containerStyle}>
           <h2 style={headingStyle}>Seller Profile</h2>
@@ -208,10 +221,16 @@ const ViewProfile = () => {
                   </button>
                   <button
                     onClick={handleDeleteAccount}
-                    style={{...buttonStyle, backgroundColor: '#d32f2f'}}
+                    style={{...buttonStyle, backgroundColor: watermelonPink}}
                   >
                     Delete Account
                   </button>
+                  <button
+                onClick={() => navigate(`/ChangePasswordSeller/${id}`)}
+                style={{...buttonStyle, backgroundColor: watermelonGreen, marginTop: '20px'}}
+              >
+                Change Password
+              </button>
                 </div>
               )}
 
@@ -219,12 +238,7 @@ const ViewProfile = () => {
               <div style={{}}>
                 <SellerLogo id={seller._id} />
               </div>
-              <button
-                onClick={() => navigate(`/ChangePasswordSeller/${id}`)}
-                style={{...buttonStyle, backgroundColor: watermelonGreen, marginTop: '20px'}}
-              >
-                Change Password
-              </button>
+             
              
             </div>
           ) : (

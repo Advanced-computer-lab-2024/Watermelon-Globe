@@ -1,0 +1,94 @@
+.navbar {
+    height: 50px;
+    border-bottom: 0.5px solid rgb(231, 228, 228);
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.profile-logo {
+    margin: 20px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+    transition: transform 0.3s;
+}
+
+.wrapper {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    border: 0.5px solid lightgray;
+    padding: 3px;
+}
+
+.search input {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.search input::placeholder {
+    font-size: 12px;
+}
+
+.items {
+    display: flex;
+    align-items: center;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    position: relative;
+}
+
+.icon{
+    width: 25px;
+    height: 25px;
+}
+
+.navbar .wrapper .items .item .icon {
+    font-size: 30px;   
+}
+
+.navbar .wrapper  .item .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.navbar .wrapper .items .item .counter {
+    width: 18px;
+    height: 18px;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}

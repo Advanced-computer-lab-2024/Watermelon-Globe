@@ -85,20 +85,22 @@ const getActivitiesNew = async (req, res) => {
 
 const createActivity = async (req, res) => {
   try {
-    const {       Name,
+    const {       
+      Name,
       Date,
       Time,
       Location,
       Price,
       Discount,
-      bookingOpen } = req.body; // Expect userId in the request body
+      bookingOpen,
+      Advertiser } = req.body; // Expect userId in the request body
 
     // Validate userId
-    // if (!userId) {
-    //     return res.status(400).json({ message: 'User ID is required' });
-    // }
+    if (!Advertiser) {
+        return res.status(400).json({ message: 'Advertiser is required' });
+    }
 
-    // // Find the user profile based on the user ID
+    // Find the user profile based on the user ID
     // const userProfile = await CompanyProfile.findById(userId);
 
     // if (!userProfile) {
@@ -125,7 +127,8 @@ const createActivity = async (req, res) => {
       Location,
       Price,
       Discount,
-      bookingOpen
+      bookingOpen,
+      Advertiser
     });
 
     // await newActivity.save();
@@ -157,13 +160,16 @@ const getActivities = async (req, res) => {
 const getActivityById = async (req, res) => {
   try {
     const { id } = req.params;
-    const activity = await ActivityModel.findById(id);
+    const activity = await ActivityModel.findById(id).populate('Advertiser');
+
     if (!activity) {
       return res.status(404).json({
         message: "Activity not found",
       });
     }
+
     res.status(200).json(activity);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({

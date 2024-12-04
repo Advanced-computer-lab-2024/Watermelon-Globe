@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const stripe = require('stripe')(process.env.SECRET_KEY); // Replace with your Stripe secret key
 const itineraryModel = require("../Models/itineraryModel");
 const Complaint = require("../Models/Complaint");
-const Product = require("../Models/productModel");
+const Product = require("../Models/ProductModel.js");
 const Booking = require('../Models/FlightBooking');
 const HotelBooking = require('../Models/HotelBooking');
 const Hotel = require('../Models/Hotel.js');
@@ -13,10 +13,40 @@ const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const ActivityBooking = require('../Models/activityBookingModel');
 const Transportation = require('../Models/TransportationModel');
 
-
-
-
 //Tourist
+
+
+//for frontend
+const frontendDataTable = async (req, res) => {
+  try {
+    const tourists = await Tourist.find({}, "username email status dob");
+    const formattedData = tourists.map((tourist) => {
+      // Calculate age based on date of birth
+      const today = new Date();
+      const birthDate = new Date(tourist.dob);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+      return {
+        id: tourist._id,
+        username: tourist.username,
+        email: tourist.email,
+        status: tourist.status,
+        age,
+      };
+    });
+
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching tourists" });
+  }
+};
 
 //create a new tourist -- basically while signing up
 const createTourist = async (req, res) => {
@@ -141,7 +171,7 @@ const updateRating = async (req, res) => {
     console.log("Received rating:", numericRating);
 
     // Check if the rating is a valid number between 1 and 5
-    if ( numericRating < 1 || numericRating > 5) {
+    if (numericRating < 1 || numericRating > 5) {
       return res
         .status(400)
         .json({ message: "Invalid rating. Rating should be between 1 and 5." });
@@ -442,42 +472,36 @@ const getMyCompletedItineraries = async (req, res) => {
     const currentDate = new Date();
 
     // Step 1: Refresh the 'completed' status for all ChildItineraries with status 'confirmed'
-    await ChildItinerary.updateMany(
-      { status: 'confirmed' },
-      [
-        {
-          $set: {
-            completed: {
-              $and: [
-                { $ne: ['$chosenDates', []] }, // Ensure there are chosen dates
-                { $not: { $gt: ['$chosenDates', currentDate] } } // All dates have passed
-              ],
-            },
+    await ChildItinerary.updateMany({ status: "confirmed" }, [
+      {
+        $set: {
+          completed: {
+            $and: [
+              { $ne: ["$chosenDates", []] }, // Ensure there are chosen dates
+              { $not: { $gt: ["$chosenDates", currentDate] } }, // All dates have passed
+            ],
           },
         },
-      ]
-    );
+      },
+    ]);
 
     // Step 2: Fetch all itineraries where 'completed' is true and buyer matches the current buyer ID
     const completedItineraries = await ChildItinerary.find({
       completed: true,
       buyer: buyerId,
-    })
-      .populate({
-        path: 'itinerary', // Populate the itinerary field
-        populate: { path: 'activities' } // Populate nested activities if needed
-      });
+    }).populate({
+      path: "itinerary", // Populate the itinerary field
+      populate: { path: "activities" }, // Populate nested activities if needed
+    });
 
     // Step 3: Send the populated itineraries to the client
     res.status(200).json(completedItineraries);
   } catch (error) {
-    console.error('Error fetching completed itineraries:', error);
+    console.error("Error fetching completed itineraries:", error);
     res.status(500).json({ message: error.message });
-    throw new Error('Failed to retrieve completed itineraries');
+    throw new Error("Failed to retrieve completed itineraries");
   }
 };
-
-
 
 // const rateItinerary = async (req, res) => {
 //   const { itineraryId } = req.params;
@@ -542,13 +566,17 @@ const rateItinerary = async (req, res) => {
     // Save the updated itinerary
     await itinerary.save();
 
-    res.status(200).json({ message: "Rating submitted successfully", itinerary });
+    res
+      .status(200)
+      .json({ message: "Rating submitted successfully", itinerary });
   } catch (error) {
     console.error("Error adding rating to itinerary:", error);
-    res.status(500).json({ error: "Error adding rating to itinerary", details: error.message });
+    res.status(500).json({
+      error: "Error adding rating to itinerary",
+      details: error.message,
+    });
   }
 };
-
 
 const commentOnItinerary = async (req, res) => {
   const { itineraryId } = req.params;
@@ -559,7 +587,7 @@ const commentOnItinerary = async (req, res) => {
     const itinerary = await Itinerary.findById(itineraryId);
 
     if (!itinerary) {
-      return res.status(404).json({ error: 'Itinerary not found' });
+      return res.status(404).json({ error: "Itinerary not found" });
     }
 
     // Check if the tourist has already commented
@@ -583,12 +611,17 @@ const commentOnItinerary = async (req, res) => {
     // Save changes
     await itinerary.save();
 
-    res.status(200).json({ message: 'Comment added/updated successfully', comments: itinerary.comments });
+    res.status(200).json({
+      message: "Comment added/updated successfully",
+      comments: itinerary.comments,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error adding/updating comment to itinerary', details: error.message });
+    res.status(500).json({
+      error: "Error adding/updating comment to itinerary",
+      details: error.message,
+    });
   }
 };
-
 
 // const rateTourGuide = async (req, res) => {
 //   const { tourGuideId } = req.params;
@@ -625,11 +658,13 @@ const rateTourGuide = async (req, res) => {
   try {
     const tourGuide = await TourGuide.findById(tourGuideId);
     if (!tourGuide) {
-      return res.status(404).json({ error: 'Tour guide not found' });
+      return res.status(404).json({ error: "Tour guide not found" });
     }
 
     // Update or add the rating
-    const existingRating = tourGuide.ratings.find(r => r.user.toString() === touristId);
+    const existingRating = tourGuide.ratings.find(
+      (r) => r.user.toString() === touristId
+    );
     if (existingRating) {
       existingRating.rating = rating;
     } else {
@@ -637,7 +672,10 @@ const rateTourGuide = async (req, res) => {
     }
 
     // Calculate the new average rating
-    tourGuide.ratingsSum = tourGuide.ratings.reduce((sum, r) => sum + r.rating, 0);
+    tourGuide.ratingsSum = tourGuide.ratings.reduce(
+      (sum, r) => sum + r.rating,
+      0
+    );
     tourGuide.noOfRatings = tourGuide.ratings.length;
     tourGuide.rating = tourGuide.ratingsSum / tourGuide.noOfRatings;
 
@@ -652,9 +690,14 @@ const rateTourGuide = async (req, res) => {
       }
     );
 
-    res.status(200).json({ message: 'Rating added/updated successfully', rating: tourGuide.rating });
+    res.status(200).json({
+      message: "Rating added/updated successfully",
+      rating: tourGuide.rating,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error rating tour guide', details: error.message });
+    res
+      .status(500)
+      .json({ error: "Error rating tour guide", details: error.message });
   }
 };
 
@@ -690,25 +733,36 @@ const commentOnTourGuide = async (req, res) => {
   try {
     const tourGuide = await TourGuide.findById(tourGuideId);
     if (!tourGuide) {
-      return res.status(404).json({ error: 'Tour guide not found' });
+      return res.status(404).json({ error: "Tour guide not found" });
     }
 
-    const existingComment = tourGuide.comments.find(c => c.user.toString() === touristId);
+    const existingComment = tourGuide.comments.find(
+      (c) => c.user.toString() === touristId
+    );
     if (existingComment) {
       existingComment.comment = comment; // Ensure the correct field name `comment`
       existingComment.date = new Date(); // Update the date
     } else {
       // Use the correct field names when pushing a new comment
-      tourGuide.comments.push({ user: touristId, comment: comment, date: new Date() });
+      tourGuide.comments.push({
+        user: touristId,
+        comment: comment,
+        date: new Date(),
+      });
     }
 
     await tourGuide.save();
-    res.status(200).json({ message: 'Comment added/updated successfully', comments: tourGuide.comments });
+    res.status(200).json({
+      message: "Comment added/updated successfully",
+      comments: tourGuide.comments,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error commenting on tour guide', details: error.message });
+    res.status(500).json({
+      error: "Error commenting on tour guide",
+      details: error.message,
+    });
   }
 };
-
 
 const createActivityBooking = async (req, res) => {
   const { activityId, touristId, chosenDate, status, paymentStatus } = req.body;
@@ -716,7 +770,9 @@ const createActivityBooking = async (req, res) => {
   try {
     // Check if the required fields are provided
     if (!activityId || !touristId || !chosenDate) {
-      return res.status(400).json({ error: 'Activity ID, Tourist ID, and Chosen Date are required' });
+      return res.status(400).json({
+        error: "Activity ID, Tourist ID, and Chosen Date are required",
+      });
     }
 
     // Create a new activity booking
@@ -724,15 +780,21 @@ const createActivityBooking = async (req, res) => {
       activity: activityId,
       tourist: touristId,
       chosenDate: new Date(chosenDate), // Convert chosenDate to Date object if needed
-      status: status || 'pending',
-      paymentStatus: paymentStatus || 'unpaid'
+      status: status || "pending",
+      paymentStatus: paymentStatus || "unpaid",
     });
 
     // Save the booking to the database
     await newBooking.save();
-    res.status(201).json({ message: 'Activity booking created successfully', booking: newBooking });
+    res.status(201).json({
+      message: "Activity booking created successfully",
+      booking: newBooking,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error creating activity booking', details: error.message });
+    res.status(500).json({
+      error: "Error creating activity booking",
+      details: error.message,
+    });
   }
 };
 
@@ -740,12 +802,18 @@ const getAllActivityBookings = async (req, res) => {
   try {
     // Fetch all activity bookings, populating related fields for activity and tourist details
     const bookings = await ActivityBooking.find()
-      .populate('activity')
-      .populate('tourist');
+      .populate("activity")
+      .populate("tourist");
 
-    res.status(200).json({ message: 'All activity bookings retrieved successfully', bookings });
+    res.status(200).json({
+      message: "All activity bookings retrieved successfully",
+      bookings,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error retrieving activity bookings', details: error.message });
+    res.status(500).json({
+      error: "Error retrieving activity bookings",
+      details: error.message,
+    });
   }
 };
 
@@ -755,15 +823,20 @@ const getMyCompletedActivities = async (req, res) => {
   try {
     const completedActivities = await ActivityBooking.find({
       tourist: touristId,
-      completed: true
-    }).populate('activity');
+      completed: true,
+    }).populate("activity");
 
-    res.status(200).json({ message: 'Completed activities retrieved successfully', completedActivities });
+    res.status(200).json({
+      message: "Completed activities retrieved successfully",
+      completedActivities,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error retrieving completed activities', details: error.message });
+    res.status(500).json({
+      error: "Error retrieving completed activities",
+      details: error.message,
+    });
   }
 };
-
 
 const rateActivity = async (req, res) => {
   const { activityId } = req.params;
@@ -773,15 +846,18 @@ const rateActivity = async (req, res) => {
     const activity = await Activity.findById(activityId);
 
     if (!activity) {
-      return res.status(404).json({ error: 'Activity not found' });
+      return res.status(404).json({ error: "Activity not found" });
     }
 
     // Check if the user has already rated, if so, update the rating
-    const existingRating = activity.ratings.find(r => r.user.toString() === touristId);
+    const existingRating = activity.ratings.find(
+      (r) => r.user.toString() === touristId
+    );
 
     if (existingRating) {
       // Update the existing rating
-      activity.ratingsSum = activity.ratingsSum - existingRating.rating + rating;
+      activity.ratingsSum =
+        activity.ratingsSum - existingRating.rating + rating;
       existingRating.rating = rating;
     } else {
       // Add a new rating
@@ -791,7 +867,8 @@ const rateActivity = async (req, res) => {
     }
 
     // Update average rating
-    activity.rating = activity.noOfRatings > 0 ? activity.ratingsSum / activity.noOfRatings : 0;
+    activity.rating =
+      activity.noOfRatings > 0 ? activity.ratingsSum / activity.noOfRatings : 0;
 
     //await activity.save();
 
@@ -804,9 +881,14 @@ const rateActivity = async (req, res) => {
         rating: activity.rating,
       }
     );
-    res.status(200).json({ message: 'Rating added successfully', rating: activity.rating });
+    res
+      .status(200)
+      .json({ message: "Rating added successfully", rating: activity.rating });
   } catch (error) {
-    res.status(500).json({ error: 'Error adding rating to activity', details: error.message });
+    res.status(500).json({
+      error: "Error adding rating to activity",
+      details: error.message,
+    });
   }
 };
 
@@ -843,7 +925,6 @@ const rateActivity = async (req, res) => {
 //   }
 // };
 
-
 const commentOnActivity = async (req, res) => {
   const { activityId } = req.params;
   const { touristId, comment } = req.body;
@@ -852,20 +933,22 @@ const commentOnActivity = async (req, res) => {
     const activity = await Activity.findById(activityId);
 
     if (!activity) {
-      return res.status(404).json({ error: 'Activity not found' });
+      return res.status(404).json({ error: "Activity not found" });
     }
 
     // Check if the user has already commented
-    const existingComment = activity.comments.find(c => c.user.toString() === touristId);
+    const existingComment = activity.comments.find(
+      (c) => c.user.toString() === touristId
+    );
 
     if (existingComment) {
       // Update the existing comment
       await Activity.updateOne(
-        { _id: activityId, 'comments.user': touristId },
+        { _id: activityId, "comments.user": touristId },
         {
           $set: {
-            'comments.$.comment': comment,
-            'comments.$.date': new Date(),
+            "comments.$.comment": comment,
+            "comments.$.date": new Date(),
           },
         }
       );
@@ -886,11 +969,20 @@ const commentOnActivity = async (req, res) => {
     }
 
     // Fetch the updated comments array to return in response
-    const updatedActivity = await Activity.findById(activityId).populate('comments.user', 'name'); // Populate user name if needed
+    const updatedActivity = await Activity.findById(activityId).populate(
+      "comments.user",
+      "name"
+    ); // Populate user name if needed
 
-    res.status(200).json({ message: 'Comment added successfully', comments: updatedActivity.comments });
+    res.status(200).json({
+      message: "Comment added successfully",
+      comments: updatedActivity.comments,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error adding comment to activity', details: error.message });
+    res.status(500).json({
+      error: "Error adding comment to activity",
+      details: error.message,
+    });
   }
 };
 
@@ -911,163 +1003,185 @@ const getPassword = async (req, res) => {
   }
 };
 
-  const bookFlight = async (req, res) => {
-    try {
-      const { airline, flightNumber1, departure1, arrival1, flightNumber2, departure2, arrival2, price, currency } = req.body;
-  
-      // Create the booking
-      const newBooking = new Booking({
-        touristId: req.params.touristId, // Get the touristId from the URL parameter
-        airline,
-        flightNumber1,
-        departure1,
-        arrival1,
-        flightNumber2,
-        departure2,
-        arrival2,
-        price,
-        currency,
-      });
-  
-      // Save the booking
-      const savedBooking = await newBooking.save();
-      
-      // Send a success response
-      res.status(201).json({
-        message: 'Flight successfully booked!',
-        booking: savedBooking,
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred while booking the flight.', error: err.message });
-    }
-  };
+const bookFlight = async (req, res) => {
+  try {
+    const {
+      airline,
+      flightNumber1,
+      departure1,
+      arrival1,
+      flightNumber2,
+      departure2,
+      arrival2,
+      price,
+      currency,
+    } = req.body;
 
+    // Create the booking
+    const newBooking = new Booking({
+      touristId: req.params.touristId, // Get the touristId from the URL parameter
+      airline,
+      flightNumber1,
+      departure1,
+      arrival1,
+      flightNumber2,
+      departure2,
+      arrival2,
+      price,
+      currency,
+    });
 
-const redeemPoints = async (req, res) => {
-    const { id } = req.params;
-    const { pointsToRedeem } = req.body;
+    // Save the booking
+    const savedBooking = await newBooking.save();
 
-    // Validate if pointsToRedeem is a number, at least 10,000, and in exact increments of 10,000
-    if (!Number.isInteger(pointsToRedeem) || pointsToRedeem < 10000 || pointsToRedeem % 10000 !== 0) {
-        return res.status(400).json({ 
-            error: "Invalid amount of points. Points must be at least 10,000 and in exact increments of 10,000." 
-        });
-    }
-
-    try {
-        // Find the tourist by ID
-        const tourist = await Tourist.findById(id);
-        if (!tourist) {
-            return res.status(404).json({ error: "Tourist not found." });
-        }
-
-        // Check if the tourist has enough points
-        if (tourist.loyaltyPoints < pointsToRedeem) {
-            return res.status(400).json({ error: "Insufficient points for redemption." });
-        }
-
-        // Deduct points from the tourist's balance
-        tourist.loyaltyPoints -= pointsToRedeem;
-
-        // Calculate the equivalent currency to add to the wallet
-        const currencyToAdd = (pointsToRedeem / 10000) * 100;
-        tourist.wallet += currencyToAdd;
-
-        // Save the updated tourist
-        await tourist.save();
-
-        // Respond with the updated points and wallet balance
-        res.status(200).json({
-            message: "Points redeemed successfully",
-            pointsRemaining: tourist.loyaltyPoints,
-            walletBalance: tourist.walletBalance
-        });
-    } catch (error) {
-        res.status(500).json({ error: "An error occurred while redeeming points." });
-    }
+    // Send a success response
+    res.status(201).json({
+      message: "Flight successfully booked!",
+      booking: savedBooking,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "An error occurred while booking the flight.",
+      error: err.message,
+    });
+  }
 };
 
-  const bookHotel = async (req, res) => {
-    try {
-      const { touristId } = req.params;
-      const { hotelId, roomType, price, currency, checkInDate, checkOutDate } = req.body;
-  
-      // Check if tourist exists
-      const tourist = await Tourist.findById(touristId);
-      if (!tourist) {
-        return res.status(404).json({ message: 'Tourist not found' });
-      }
-  
-      // Create new hotel booking
-      const newBooking = new HotelBooking({
-        touristId: req.params.touristId, // Get the touristId from the URL parameter
-        hotelId,
-        roomType,
-        price,
-        currency,
-        checkInDate,
-        checkOutDate,
-      });
-  
-      // Save the booking
-      await newBooking.save();
-  
-      return res.status(201).json({
-        message: 'Hotel booked successfully',
-        booking: newBooking,
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Server error' });
-    }
-  };
+const redeemPoints = async (req, res) => {
+  const { id } = req.params;
+  const { pointsToRedeem } = req.body;
 
-  const getHotelBookingsByTouristId = async (req, res) => {
-    try {
-      const { touristId } = req.params;
-  
-      // Find all hotel bookings by touristId
-      const bookings = await HotelBooking.find({ touristId });
-  
-      if (!bookings.length) {
-        return res.status(404).json({ message: 'No hotel bookings found for this tourist' });
-      }
-  
-      return res.status(200).json({
-        message: 'Hotel bookings fetched successfully',
-        bookings,
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Server error' });
-    }
-  };
+  // Validate if pointsToRedeem is a number, at least 10,000, and in exact increments of 10,000
+  if (
+    !Number.isInteger(pointsToRedeem) ||
+    pointsToRedeem < 10000 ||
+    pointsToRedeem % 10000 !== 0
+  ) {
+    return res.status(400).json({
+      error:
+        "Invalid amount of points. Points must be at least 10,000 and in exact increments of 10,000.",
+    });
+  }
 
-  const getFlightBookingsByTouristId = async (req, res) => {
-    try {
-      const { touristId } = req.params;
-  
-      // Find all flight bookings by touristId
-      const bookings = await Booking.find({ touristId });
-  
-      if (!bookings.length) {
-        return res.status(404).json({ message: 'No flight bookings found for this tourist' });
-      }
-  
-      return res.status(200).json({
-        message: 'Flight bookings fetched successfully',
-        bookings,
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Server error' });
+  try {
+    // Find the tourist by ID
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found." });
     }
-  };
-  
-  
-  
 
+    // Check if the tourist has enough points
+    if (tourist.loyaltyPoints < pointsToRedeem) {
+      return res
+        .status(400)
+        .json({ error: "Insufficient points for redemption." });
+    }
+
+    // Deduct points from the tourist's balance
+    tourist.loyaltyPoints -= pointsToRedeem;
+
+    // Calculate the equivalent currency to add to the wallet
+    const currencyToAdd = (pointsToRedeem / 10000) * 100;
+    tourist.wallet += currencyToAdd;
+
+    // Save the updated tourist
+    await tourist.save();
+
+    // Respond with the updated points and wallet balance
+    res.status(200).json({
+      message: "Points redeemed successfully",
+      pointsRemaining: tourist.loyaltyPoints,
+      walletBalance: tourist.walletBalance,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while redeeming points." });
+  }
+};
+
+const bookHotel = async (req, res) => {
+  try {
+    const { touristId } = req.params;
+    const { hotelId, roomType, price, currency, checkInDate, checkOutDate } =
+      req.body;
+
+    // Check if tourist exists
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ message: "Tourist not found" });
+    }
+
+    // Create new hotel booking
+    const newBooking = new HotelBooking({
+      touristId: req.params.touristId, // Get the touristId from the URL parameter
+      hotelId,
+      roomType,
+      price,
+      currency,
+      checkInDate,
+      checkOutDate,
+    });
+
+    // Save the booking
+    await newBooking.save();
+
+    return res.status(201).json({
+      message: "Hotel booked successfully",
+      booking: newBooking,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getHotelBookingsByTouristId = async (req, res) => {
+  try {
+    const { touristId } = req.params;
+
+    // Find all hotel bookings by touristId
+    const bookings = await HotelBooking.find({ touristId });
+
+    if (!bookings.length) {
+      return res
+        .status(404)
+        .json({ message: "No hotel bookings found for this tourist" });
+    }
+
+    return res.status(200).json({
+      message: "Hotel bookings fetched successfully",
+      bookings,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getFlightBookingsByTouristId = async (req, res) => {
+  try {
+    const { touristId } = req.params;
+
+    // Find all flight bookings by touristId
+    const bookings = await Booking.find({ touristId });
+
+    if (!bookings.length) {
+      return res
+        .status(404)
+        .json({ message: "No flight bookings found for this tourist" });
+    }
+
+    return res.status(200).json({
+      message: "Flight bookings fetched successfully",
+      bookings,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 const addPoints = async (req, res) => {
   const { id } = req.params;
@@ -1191,35 +1305,37 @@ const updateLoyaltyPoints = async (req, res) => {
         pointsToAdd = amountPaid * 1.5;
         break;
       default:
-        return res.status(400).json({ error: 'Invalid loyalty level' });
+        return res.status(400).json({ error: "Invalid loyalty level" });
     }
 
     // Update loyalty points
     tourist.loyaltyPoints += pointsToAdd;
 
     // Update loyalty level based on points and assign badge
-    if (tourist.loyaltyPoints <= 100000 ) {
+    if (tourist.loyaltyPoints <= 100000) {
       tourist.loyaltyLevel = 1;
-      tourist.badge = 'Bronze';
+      tourist.badge = "Bronze";
     } else if (tourist.loyaltyPoints <= 500000) {
       tourist.loyaltyLevel = 2;
-      tourist.badge = 'Silver';
+      tourist.badge = "Silver";
     } else {
       tourist.loyaltyLevel = 3;
-      tourist.badge = 'Gold';
+      tourist.badge = "Gold";
     }
 
     await tourist.save();
 
     res.json({
-      message: 'Loyalty points and badge updated successfully',
+      message: "Loyalty points and badge updated successfully",
       loyaltyPoints: tourist.loyaltyPoints,
       loyaltyLevel: tourist.loyaltyLevel,
-      badge: tourist.badge
+      badge: tourist.badge,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while updating loyalty points and badge' });
+    res.status(500).json({
+      error: "An error occurred while updating loyalty points and badge",
+    });
   }
 };
 const deleteItinerary = async (req, res) => {
@@ -1283,11 +1399,15 @@ const deleteActivity = async (req, res) => {
 const getAllTransportations = async (req, res) => {
   try {
     // Fetch all transportation records, sorted by creation date (latest first)
-    const transportations = await Transportation.find({}).sort({ createdAt: -1 });
-    
+    const transportations = await Transportation.find({}).sort({
+      createdAt: -1,
+    });
+
     res.status(200).json(transportations);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching transportation records.' });
+    res.status(500).json({
+      error: "An error occurred while fetching transportation records.",
+    });
   }
 };
 
@@ -1314,11 +1434,9 @@ const bookTransportation = async (req, res) => {
     const transportaion = await Transportation.findOneAndUpdate(
       { _id: id },
       { booked: true },
-      { new: true } 
+      { new: true }
     );
-    res
-      .status(200)
-      .json({ message: "Booked successfully", transportaion });
+    res.status(200).json({ message: "Booked successfully", transportaion });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -2076,5 +2194,6 @@ module.exports = {
   stripePayIntentHotel,
   stripePayIntentItinerary,
   stripePayIntentActivity,
-  stripePayIntentProduct
+  stripePayIntentProduct,
+  frontendDataTable,
 };
