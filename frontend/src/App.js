@@ -14,7 +14,7 @@ import CompanyHomepage from "./Components/CompanyHomepage.jsx";
 import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
-import AdvertiserSignup from "./pages/AdvertiserSignUp2.js";
+// import AdvertiserSignup from "./pages/AdvertiserSignUp2.js";
 import SignupOptions from "./pages/SignUpOptions.js";
 import MainHome from "./Guest/pages/GuestHomepage.jsx";
 
@@ -44,6 +44,7 @@ import ViewMyProducts from "./Admin++/pages/Products/ViewMyProducts.jsx";
 import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.jsx";
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
 import GuestPage from "./Guest/pages/GuestHomepage.jsx";
+import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
 
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
@@ -194,13 +195,14 @@ const App = () => {
           <Route path="/ViewMyProducts" element={<ViewMyProducts />} />
           <Route path="/ViewSaleQuantities" element={<ViewSalesQuantities />} />
           <Route path="/adminAddPromoCode" element={<AddPromoCode />} />
+          <Route path="/Tourists" element={<AllTourists />} />
 
           <Route path="/" element={<MainHome />} />
 
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
           <Route path="/seller-signup" element={<SellerSignup />} />
-          <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
+          {/* <Route path="/advertiser-signup" element={<AdvertiserSignup />} /> */}
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
 
