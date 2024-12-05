@@ -6,6 +6,7 @@ import NavTabs from "../../components/navTabs/navTabs";
 import React, { useState } from "react";
 import DatatableSeller from "../../components/Seller/dataTableSeller/dataTableSeller";
 import DatatableAdvertiser from "../../components/Advertiser/dataTableAdvertiser/dataTableAdvertiser";
+import DatatableGuide from "../../components/Tour Guide/dataTableGuide/dataTableGuide";
 const ActiveUsers = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -15,10 +16,9 @@ const ActiveUsers = () => {
         return <DatatableSeller />;
       case 1:
         return <DatatableAdvertiser />;
-      // case 2:
-      //   return <AdvertisersTable />;
-      // case 3:
-      //   return <TourGuidesTable />;
+      case 2:
+        return <DatatableGuide />;
+
       // // default:
       // return <DatatableSeller />;
     }

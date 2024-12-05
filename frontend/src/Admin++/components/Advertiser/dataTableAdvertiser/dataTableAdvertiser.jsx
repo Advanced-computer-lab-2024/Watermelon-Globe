@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const userColumns = [
   {
@@ -98,6 +99,7 @@ const DatatableAdvertiser = () => {
                 },
               }}
               onClick={() => handleDelete(params.row.id)}
+              startIcon={<DeleteIcon sx={{ color: "#fff" }} />}
             >
               Delete
             </Button>
@@ -114,7 +116,7 @@ const DatatableAdvertiser = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        View Active Sellers
+        View Active Advertisers
         {/* <Link to="/users/new" className="link">
           Add New
         </Link> */}

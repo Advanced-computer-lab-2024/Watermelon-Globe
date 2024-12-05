@@ -13,7 +13,7 @@ const Home = () => {
       <div className="homeContainerAdmin">
         <Navbar />
         <div className="widgetsAdminHome">
-          <Widget type="user" />
+          {/* <Widget type="user" /> */}
           <Widget type="product" />
           <Widget type="itinerary" />
           <Widget type="activity" />

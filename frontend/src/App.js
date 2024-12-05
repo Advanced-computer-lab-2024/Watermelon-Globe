@@ -45,6 +45,7 @@ import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
 import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
+import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
 
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
@@ -196,6 +197,8 @@ const App = () => {
           <Route path="/ViewSaleQuantities" element={<ViewSalesQuantities />} />
           <Route path="/adminAddPromoCode" element={<AddPromoCode />} />
           <Route path="/Tourists" element={<AllTourists />} />
+
+          <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
 
           <Route path="/" element={<MainHome />} />
 

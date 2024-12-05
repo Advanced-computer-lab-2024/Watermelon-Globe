@@ -57,6 +57,7 @@ const {
   createPromoCode,
   getAllPromoCodes,
   deletePromoCode,
+  getUploadedDocumentsByID,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -112,6 +113,7 @@ router.get("/ComplaintsFilterByStatus", filterComplaintsByStatus);
 
 //view uploaded documents
 router.get("/uploaded-documents", getUploadedDocuments);
+router.get("/uploaded-documents-by-id/:id", getUploadedDocumentsByID);
 
 // accept or reject user
 router.put("/acceptAdvertiser/:id", acceptAdvertiser);

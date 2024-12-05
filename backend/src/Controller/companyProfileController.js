@@ -2,11 +2,12 @@ const CompanyProfile = require("../Models/companyProfileModel");
 const CompanyProfileModel = require("../Models/companyProfileModel");
 const ActivityBooking = require("../Models/activityBookingModel");
 const Activity = require("../Models/activityModel");
+const mongoose = require("mongoose");
 
 const frontendAdvertiserTable = async (req, res) => {
   try {
     // Fetch only sellers with 'accepted' status from the database
-    const sellers = await Seller.find(
+    const sellers = await CompanyProfileModel.find(
       { status: "accepted" },
       "Name Email status"
     );
@@ -23,13 +24,13 @@ const frontendAdvertiserTable = async (req, res) => {
     res.status(200).json(formattedData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching advertiser" });
+    res.status(400).json({ message: "Error fetching advertiser" });
   }
 };
 const frontendPendingAdvertiserTable = async (req, res) => {
   try {
     // Fetch only sellers with 'pending' status from the database
-    const sellers = await Seller.find(
+    const sellers = await CompanyProfileModel.find(
       { status: "pending" },
       "Name Email status"
     );
@@ -46,7 +47,7 @@ const frontendPendingAdvertiserTable = async (req, res) => {
     res.status(200).json(formattedData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching pending advertiser" });
+    res.status(400).json({ message: "Error fetching pending advertiser" });
   }
 };
 const createProfile = async (req, res) => {
@@ -69,6 +70,28 @@ const createProfile = async (req, res) => {
     console.error(error);
     res.status(500).json({
       message: "Error creating profile",
+      error: error.message,
+    });
+  }
+};
+const getAllProfiles = async (req, res) => {
+  try {
+    // Fetch all profiles from the database
+    const profiles = await CompanyProfileModel.find({});
+
+    // If no profiles are found
+    if (!profiles || profiles.length === 0) {
+      return res.status(404).json({ message: "No profiles found" });
+    }
+
+    // Send the profiles in the response
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.error("Error fetching company profiles:", error.message);
+
+    // Send error response
+    res.status(500).json({
+      message: "Error fetching company profiles",
       error: error.message,
     });
   }
@@ -402,4 +425,5 @@ module.exports = {
   frontendPendingAdvertiserTable,
   frontendAdvertiserTable,
   deleteProfile,
+  getAllProfiles,
 };

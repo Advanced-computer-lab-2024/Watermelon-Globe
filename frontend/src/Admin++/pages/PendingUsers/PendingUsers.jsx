@@ -6,7 +6,8 @@ import NavTabs from "../../components/navTabs/navTabs";
 import React, { useState } from "react";
 import DatatableSeller from "../../components/Seller/dataTableSellerPending/dataTableSellerPending";
 import NavTabsPending from "../../components/navTabsPending/navTabsPending";
-
+import DatatableAdvertiserPending from "../../components/Advertiser/dataTableAdvertiserPending/dataTableAdvertiserPending";
+import DatatableGuidePending from "../../components/Tour Guide/dataTableGuidePending/dataTableGuidePending";
 const PendingUsers = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -15,13 +16,9 @@ const PendingUsers = () => {
       case 0:
         return <DatatableSeller />;
       case 1:
-        return <DatatableSeller />;
-        // case 2:
-        //   return <AdvertisersTable />;
-        // case 3:
-        //   return <TourGuidesTable />;
-        // default:
-        return <Datatable />;
+        return <DatatableAdvertiserPending />;
+      case 2:
+        return <DatatableGuidePending />;
     }
   };
 

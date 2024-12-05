@@ -678,7 +678,7 @@ const acceptAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "accepted" },
       { new: true } // Return the updated document
@@ -740,7 +740,7 @@ const rejectAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "rejected" },
       { new: true } // Return the updated document
@@ -869,6 +869,85 @@ const getUploadedDocuments = async (req, res) => {
       advertisers: filteredAdvertisers,
       sellers: filteredSellers,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocumentsByID = async (req, res) => {
+  try {
+    const { id } = req.params; // Retrieve the userId from the request parameters
+
+    // Fetch the user (TourGuide, Advertiser, Seller) based on the userId
+    const tourGuide = await TourGuide.findOne(
+      { _id: id },
+      "username idProof certificates"
+    );
+    const advertiser = await Advertiser.findOne(
+      { _id: id },
+      "Username idProof taxationRegistryCard"
+    );
+    const seller = await Seller.findOne(
+      { _id: id },
+      "Name idProof taxationRegistryCard"
+    );
+
+    // Check if the user is a TourGuide and has uploaded documents
+    if (tourGuide) {
+      if (
+        tourGuide.idProof ||
+        (tourGuide.certificates && tourGuide.certificates.length > 0)
+      ) {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is an Advertiser and has uploaded documents
+    if (advertiser) {
+      if (advertiser.idProof || advertiser.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is a Seller and has uploaded documents
+    if (seller) {
+      if (seller.idProof || seller.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // If no user is found
+    return res.status(404).json({ message: "User not found" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1484,4 +1563,5 @@ module.exports = {
   createPromoCode,
   getAllPromoCodes,
   deletePromoCode,
+  getUploadedDocumentsByID,
 };

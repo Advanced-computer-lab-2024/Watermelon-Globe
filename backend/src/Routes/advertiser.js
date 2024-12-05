@@ -16,6 +16,7 @@ const {
   frontendPendingAdvertiserTable,
   frontendAdvertiserTable,
   deleteProfile,
+  getAllProfiles,
 } = require("../Controller/companyProfileController");
 
 const { getSalesReport } = require("../Controller/companyProfileController");
@@ -33,6 +34,7 @@ router.delete("/deleteProfile/:id", deleteProfile);
 
 router.put("/acceptTermsAndConditions/:id", acceptTermsAndConditions);
 router.get("/profiles/:id?", getProfiles);
+router.get("/AllProfiles", getAllProfiles);
 router.put("/changePasswordAdvertiser/:id", changePasswordAdvertiser);
 router.get("/lastApprovedAdvertiser", getLastApprovedAdvertiser);
 router.put("/approve/:id", approveAdvertiser);
