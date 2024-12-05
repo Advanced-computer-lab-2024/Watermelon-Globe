@@ -13,6 +13,7 @@ const SiteDetails = () => {
       try {
         const response = await fetch(`/api/Governor/getSite/${id}`);
         const data = await response.json();
+        console.log(data);
         setSite(data);
       } catch (error) {
         console.error('Error fetching site details:', error);
