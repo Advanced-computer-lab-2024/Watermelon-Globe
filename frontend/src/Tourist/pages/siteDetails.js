@@ -49,6 +49,7 @@ const SiteDetails = () => {
         <button
           onClick={() => navigate(-1)}
           className="text-primary hover:text-secondaryHover transition duration-200 focus:outline-none focus-visible:outline-none focus:ring-0 active:outline-none"
+          style={{ backgroundColor: 'transparent' }}
           >
           <ArrowLeft className="w-6 h-6" />
         </button>
