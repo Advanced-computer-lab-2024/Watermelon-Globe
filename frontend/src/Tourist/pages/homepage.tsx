@@ -6,13 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "../Components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../Components/ui/tabs";
 import { Calendar, MapPin, Hotel, Plane, Search, Star } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa"; // Import icons from react-icons
-import profileIcon from "../../Assets/Profile.png";
 import ExploreTrips from "../Components/ExploreTrips.jsx";
 import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 import WalletComponent from '../Components/Wallet';
+import TouristNavbar from "../Components/TouristNavBar.tsx";
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -28,15 +28,7 @@ export default function DraftHomePage() {
     console.log("Searching for:", { destination, dates, guests });
   };
 
-  const handleSignOut = () => {
-    setIsSignedUp(false);
-    navigate(`/`);
-    // Clear user data or perform sign-out logic if necessary.
-  };
 
-  const handleViewDetails = () => {
-    navigate(`/TouristDetails/${id}`);
-  };
 
   const handleViewPurchasedDetails = () => {
     navigate(`/PurchasedProducts/${id}`);
@@ -48,78 +40,7 @@ export default function DraftHomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background" style={{ margin: '-20px' }}>
-      <header className="bg-sectionBackground shadow-md">
-        <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-          {/* Logo Section */}
-          <div className="text-3xl font-bold text-secondary">
-            <Link to="/Homepage" className="homeButton hover:text-secondaryHover">
-              WaterMelon Globe
-            </Link>
-          </div>
-
-          {/* Navigation Links */}
-          <div className="hidden md:flex space-x-4">
-            <Link
-              to={`/Hotels/${id}`}
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Hotel
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
-            </Link>
-            <Link
-              to={`/Flights/${id}`}
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Flight
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
-            </Link>
-            <Link
-              to={`/ProductTourist/${id}`}
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Products
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
-            </Link>
-            <Link
-              to={`/PurchasedProducts/${id}`}
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Purchased Products
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
-
-            </Link>
-          </div>
-
-          {/* Actions Section */}
-          <div className="flex items-center space-x-2">
-            <button className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors">
-              EN
-            </button>
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors"
-            >
-              Sign Out
-            </button>
-            {/* Profile Button */}
-            <button
-              onClick={handleViewDetails}
-              className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-white hover:border-secondary transition-colors"
-            >
-              <img
-                src={profileIcon}
-                alt="Profile Icon"
-                className="w-6 h-6 rounded-full object-cover"
-              />
-            </button>
-          </div>
-        </nav>
-      </header>
-
-
-
-
-
+      <TouristNavbar id={id}/>
       <main className="flex-grow">
         <section className="bg-gradient-to-r from-primary/10 to-secondary/10 py-20">
           <div className="container mx-auto">
