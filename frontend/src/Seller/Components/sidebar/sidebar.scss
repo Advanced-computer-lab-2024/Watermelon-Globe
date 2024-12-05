@@ -1,22 +1,28 @@
 
-.sidebar-seller {
+.sidebarAdmin {
   flex: 1;
-
   border-right: 0.5px solid rgb(230, 227, 227);
-  min-height: 100vh;
+  height: 100vh; /* Makes the sidebar height fill the viewport */
   background-color: white;
+  text-align: left;
+  position: fixed; /* Fixed position so it stays in place while scrolling */
+  left: 0; /* Ensures it stays on the left side */
+  top: 10; /* Ensures it starts at the top of the page */
+  width: 250px;
+  padding-left: 20px; /* Add padding to shift content slightly right */
+  overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
   
 
-  .top-seller {
+  .topAdmin {
       height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
 
-      .logo-seller {
-          font-size: 23px;
-          font-weight: bold;
-          color: #FF3366;
+      .logoAdmin {
+        font-size: 20px;
+        font-weight: bold;
+        color: #e89bb5;
       }
   }
 
@@ -25,7 +31,7 @@
       border: 0.5px solid rgb(230, 227, 227);
   }
 
-  .center-seller {
+  .centerAdmin {
       padding-left: 10px;
       padding-right: 20px;
 
@@ -34,7 +40,7 @@
           margin: 0;
           padding: 0;
 
-          .title-seller {
+          .titleAdmin {
               font-size: 20px;
               font-weight: bold;
               color: #999;
@@ -53,7 +59,7 @@
                   background-color: #d4ffea;
               }
 
-              .icon-seller {
+              .iconAdmin {
                   font-size: 18px;
                   color: #FF3366;
               }

@@ -68,6 +68,7 @@ import StoreIcon from "@mui/icons-material/Store";
 import { Link } from "react-router-dom";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import AddIcon from "@mui/icons-material/Add";
+import { TbLayoutDashboardFilled } from "react-icons/tb";
 
 const Sidebar = () => {
   const { id } = useParams();
@@ -77,21 +78,33 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="sidebar-seller">
-      <div className="top-seller">
+    <div className="sidebarAdmin">
+      <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo-seller">Seller</span>
+          <span className="logoAdmin">Seller</span>
         </Link>
       </div>
       <hr />
-      <div className="center-seller">
+      <div className="centerAdmin">
         <ul>
+
+        <p className="titleAdmin">MAIN</p>
+
+        <Link to="/SellerHome/6729244f151b6c9e346dd732" style={{ textDecoration: "none" }}>
+            <li>
+              <TbLayoutDashboardFilled className="iconAdmin" />
+              <span>Dashboard</span>
+            </li>
+          </Link>
+
+          <p className="titleAdmin">MANAGE</p>
+
           {/* My Products */}
           <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
             <li
               className={isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""}
             >
-              <StoreIcon className="icon-seller" />
+              <StoreIcon className="iconAdmin" />
               <span>My Products</span>
             </li>
           </Link>
@@ -108,7 +121,7 @@ const Sidebar = () => {
                   : ""
               }
             >
-              <StoreIcon className="icon-seller" />
+              <StoreIcon className="iconAdmin" />
               <span>All Products</span>
             </li>
           </Link>
@@ -120,7 +133,7 @@ const Sidebar = () => {
                 isActive(`/CreateProduct/${id}`) ? "active-seller" : ""
               }
             >
-              <AddIcon className="icon-seller" />
+              <AddIcon className="iconAdmin" />
               <span>Create New Product</span>
             </li>
           </Link>
@@ -132,7 +145,7 @@ const Sidebar = () => {
                 isActive(`/ViewQuantity/${id}`) ? "active-seller" : ""
               }
             >
-              <ProductionQuantityLimitsIcon className="icon-seller" />
+              <ProductionQuantityLimitsIcon className="iconAdmin" />
               <span>Sales and Available Quantities</span>
             </li>
           </Link>

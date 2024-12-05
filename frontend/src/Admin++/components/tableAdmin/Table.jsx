@@ -9,8 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const List = () => {
- 
+const List = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -26,12 +25,17 @@ const List = () => {
     fetchProducts();
   }, []);
 
+  // Filter products by name based on the search term
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <TableContainer component={Paper} className="table">
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer component={Paper} className="tableContainer">
+      <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell className="tableCell">ProductID</TableCell>
+            {/* <TableCell className="tableCell">ProductID</TableCell> */}
             <TableCell className="tableCell">Product</TableCell>
             <TableCell className="tableCell">Quantity</TableCell>
             <TableCell className="tableCell">Price</TableCell>
@@ -41,13 +45,13 @@ const List = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-        {products.map((product) => (
+          {filteredProducts.map((product) => (
             <TableRow key={product._id}>
-              <TableCell className="tableCell">{product._id}</TableCell>
+              {/* <TableCell className="tableCell">{product._id}</TableCell> */}
               <TableCell className="tableCell">
                 <div className="cellWrapper">
-                <img src={product.picture} alt={product.name} className="image" />
-                {product.name}
+                <img src={product.picture} className="image" style={{ width: '32px', height: '32px' }} />
+                  {product.name}
                 </div>
               </TableCell>
               <TableCell className="tableCell">{product.quantity}</TableCell>
@@ -55,9 +59,16 @@ const List = () => {
               <TableCell className="tableCell">{product.sales}</TableCell>
               <TableCell className="tableCell">${(product.sales * product.price).toFixed(2)}</TableCell>
               <TableCell className="tableCell">
-              <span className={`status ${product.quantity > 0 ? 'InStock' : 'OutofStock'}`}>
-                  {product.quantity > 0 ? 'InStock' : 'OutofStock'}
-                </span>
+              <span
+                style={{
+                  padding: '5px',
+                  borderRadius: '5px',
+                  color: product.quantity > 0 ? 'green' : 'rgb(238, 155, 155)',
+                  backgroundColor: product.quantity > 0 ? 'rgba(0, 128, 0, 0.151)' : 'rgb(227, 210, 210)',
+                }}
+              >
+                {product.quantity > 0 ? 'InStock' : 'OutofStock'}
+              </span>
               </TableCell>
             </TableRow>
           ))}

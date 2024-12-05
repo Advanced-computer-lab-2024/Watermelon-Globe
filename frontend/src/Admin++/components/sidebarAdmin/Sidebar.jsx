@@ -43,9 +43,8 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      {/* <hr /> */}
-
-      {/* Center */}
+      <hr />
+      
       <div className="centerAdmin">
         <ul>
           <p className="titleAdmin">MAIN</p>

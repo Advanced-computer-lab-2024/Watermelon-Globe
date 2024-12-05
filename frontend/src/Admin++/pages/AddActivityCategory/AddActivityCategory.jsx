@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AddActivityCategory.scss";
-import Sidebar from "../../components/sidebar/Sidebar";
+import Sidebar from "../../components/sidebarAdmin/Sidebar";
 import AddActivityCategoryForm from "../../components/addActivityCategoryForm/addActivityCategoryForm";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";

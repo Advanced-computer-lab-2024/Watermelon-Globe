@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AddGoverner.scss"; // Import the appropriate styling
-import Sidebar from "../../components/sidebar/Sidebar";
-import Navbar from "../../components/navbar/Navbar";
+import Sidebar from "../../components/sidebarAdmin/Sidebar";
+import Navbar from "../../components/navbarAdmin/Navbar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";

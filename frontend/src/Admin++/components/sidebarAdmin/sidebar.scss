@@ -1,14 +1,15 @@
 .sidebarAdmin {
   flex: 1;
   border-right: 0.5px solid rgb(230, 227, 227);
-  min-height: 135vh;
+  height: 100vh; /* Makes the sidebar height fill the viewport */
   background-color: white;
   text-align: left;
-  position: absolute;
-  left: 0; /* Adjusted to ensure correct placement */
-  top: 70;
+  position: fixed; /* Fixed position so it stays in place while scrolling */
+  left: 0; /* Ensures it stays on the left side */
+  top: 10; /* Ensures it starts at the top of the page */
   width: 250px;
   padding-left: 20px; /* Add padding to shift content slightly right */
+  overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
 
   .topAdmin {
     height: 50px;
@@ -19,7 +20,7 @@
     .logoAdmin {
       font-size: 20px;
       font-weight: bold;
-      color: #d32e65;
+      color: #e89bb5;
     }
   }
 
