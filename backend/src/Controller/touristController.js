@@ -12,6 +12,7 @@ const Activity = require('../Models/activityModel');
 const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const ActivityBooking = require('../Models/activityBookingModel');
 const Transportation = require('../Models/TransportationModel');
+const Admin = require("../Models/AdminModel.js");
 
 //Tourist
 
@@ -380,33 +381,97 @@ const fileComplaint = async (req, res) => {
   }
 };
 
+
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',  // Use Gmail as the email service
+      auth: {
+        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
+        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
+      to,  // Recipient's email address
+      subject,  // Subject of the email
+      text,  // Plain text content
+      html,  // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ', info.response);
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error('Error sending email: ', error);
+    return { success: false, message: 'Failed to send email.', error };
+  }
+};
+
+
+
 const buyProduct = async (req, res) => {
   const { touristId, productId } = req.params;
 
-  console.log(touristId);
   try {
     const tourist = await Tourist.findById(touristId);
     if (!tourist) {
       return res.status(400).json({ error: "Tourist not found" });
     }
+
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
+
     if (product.quantity > 0) {
-      // Add the product ID to the tourist's products and save
+      // Add the product ID to the tourist's products and update product
       tourist.products.push(productId);
       product.quantity--;
       product.sales++;
+      
+      await tourist.save();
+      await product.save();
+    } else {
+      return res.status(400).json({ error: "Product is out of stock" });
     }
-    // Assuming `products` is an array field in your model
-    await tourist.save();
-    await product.save();
+
+    if (product.quantity === 0) {
+      const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+      if (admin) {
+        const notification = `Product ${product.name} is out of stock.`;
+        admin.notifications.push(notification);
+
+        await admin.save();
+
+        // Send email notification
+        const emailResult = await sendEmail(
+          'omarhseif04@gmail.com',
+          'Low Stock Alert',
+          notification,
+          `<h1>Low Stock Alert</h1><p>${notification}</p>`
+        );
+
+        if (!emailResult.success) {
+          console.error('Failed to send email notification for product:', product._id);
+        }
+      } else {
+        console.error('Admin not found to send low stock notification');
+      }
+    }
+
     res.status(200).json("Product was purchased successfully");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
 const getTouristComplaints = async (req, res) => {
   try {
     const { touristId } = req.params;

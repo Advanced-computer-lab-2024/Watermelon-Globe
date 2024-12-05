@@ -187,7 +187,7 @@ const App = () => {
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
 
           {/* Admin++ Routes */}
-          <Route path="/AdminHome++" element={<AdminPlusHome />} />
+          <Route path="/AdminHome++/:id" element={<AdminPlusHome />} />
           <Route path="AddAdmins" element={<AddAdmin />} />
           <Route path="AddGoverner" element={<AddGoverner />} />
           <Route path="ManageActive" element={<ActiveUsers />} />

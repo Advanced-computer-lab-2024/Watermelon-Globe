@@ -1476,6 +1476,23 @@ const filterRevenueByProduct = async (req, res) => {
   }
 };
 
+const getNotificationsAdmin=async(req,res)=>{
+  try{
+    const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+    if (!admin) {
+      res.status(400).json({ message: "admin is not found" });
+    } else {
+      res.status(200).json(admin.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+  
+
+
+}
+
 
 
 module.exports = {
@@ -1539,5 +1556,6 @@ module.exports = {
   createPromoCode,
   getAllPromoCodes,
   deletePromoCode,
-  filterRevenueByProduct
+  filterRevenueByProduct,
+  getNotificationsAdmin
 };
