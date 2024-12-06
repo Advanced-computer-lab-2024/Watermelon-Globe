@@ -8,7 +8,6 @@ const EditActivity = () => {
     const [activity, setActivity] = useState(null);
     const [newPrice, setNewPrice] = useState('');
     const [newDiscount, setNewDiscount] = useState('');
-    // const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(() => {
         const fetchActivity = async () => {
@@ -17,38 +16,20 @@ const EditActivity = () => {
                 setActivity(response.data);
                 setNewPrice(response.data.Price);
                 setNewDiscount(response.data.Discount);
-                // setSelectedTags(response.data.tags); // Set selected tags from the activity
             } catch (error) {
                 console.error('Error fetching activity:', error);
             }
         };
 
-        // const fetchTags = async () => {
-        //     try {
-        //         const response = await axios.get('/api/Activities/getTags'); // Adjust the endpoint for fetching tags
-        //         setAvailableTags(response.data);
-        //     } catch (error) {
-        //         console.error('Error fetching tags:', error);
-        //     }
-        // };
-
         fetchActivity();
-        // fetchTags();
     }, [id]);
-
-    // const handleTagToggle = (tag) => {
-    //     setSelectedTags((prev) => 
-    //         prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    //     );
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.put(`/api/Activities/updateActivity/${id}`, {
                 Price: newPrice,
-                Discount: newDiscount,
-                // tags: selectedTags
+                Discount: newDiscount
             });
             alert('Activity updated successfully');
             navigate('/advertiser');
@@ -81,19 +62,6 @@ const EditActivity = () => {
                         value={newDiscount}
                         onChange={(e) => setNewDiscount(e.target.value)}
                     />
-                </div>
-                <div>
-                    {/* <label>Tags:</label>
-                    {availableTags.map(tag => (
-                        <div key={tag._id}>
-                            <input 
-                                type="checkbox" 
-                                checked={selectedTags.includes(tag._id)} 
-                                onChange={() => handleTagToggle(tag._id)} 
-                            />
-                            {tag.type} ({tag.historicPeriod})
-                        </div>
-                    ))} */}
                 </div>
                 <button type="submit">Update Activity</button>
             </form>

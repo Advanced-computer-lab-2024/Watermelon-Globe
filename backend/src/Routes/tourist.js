@@ -63,6 +63,11 @@ const {
   stripePayIntentItinerary,
   stripePayIntentActivity,
   stripePayIntentProduct
+  bookmarkItinerary,
+  bookmarkActivity,
+  removeItineraryBookmark,
+  removeActivityBookmark,
+  getBookmarks
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -192,5 +197,13 @@ router.post('/payItinerary',stripePayIntentItinerary);
 router.post('/payActivity',stripePayIntentActivity);
 router.post('/payProduct',stripePayIntentProduct);
 
+
+router.put('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
+router.put('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
+router.put('/removeBookmarkItinerary/:touristId/:itineraryId', removeItineraryBookmark);
+router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookmark);
+router.get('/getBookmarks/:touristId', getBookmarks);
+router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
+router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
 
 module.exports = router;

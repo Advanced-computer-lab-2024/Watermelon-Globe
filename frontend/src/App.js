@@ -41,11 +41,10 @@ import GuestPage from "./Guest/pages/GuestHomepage.tsx";
 
 import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
-import AccountPage from './Advertiser/Components/AccountPage.jsx';
-import HomeScreen from './Components/CompanyHomepage.jsx';
+import AccountPage from './Advertiser/pages/AccountPage/AccountPage.jsx';
 import EditProfilePage from './Advertiser/Components/EditCompanyProfile.jsx';
 import AdvertiserActivityDetails from './Advertiser/Components/ActivityDetails.jsx';
-import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
+import ActivityForm from './Advertiser/Components/ActivityForm.jsx';
 import AdvertiserLogo from './Advertiser/Components/AdvertiserLogo.jsx';
 import SellerHome from './Seller/pages/SellerHomePage.jsx';
 
@@ -111,6 +110,8 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 
 import MyHotelFlightBookings from './Tourist/Components/HotelFlightBookings.tsx'
+import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
+import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from './Tourist/pages/TransportationDetails.jsx';
@@ -207,7 +208,7 @@ const App = () => {
           <Route path ="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route path="/advertiserProfile/:profileId" element = {<AccountPage/>}/>
           <Route path="/editAdvertiser/:profileId" element={<EditProfilePage/>} />
-          <Route path="/activityDetails/:id" element={<AdvertiserActivityDetails />} />
+          <Route path="/activityDetails/:id/:profileId" element={<AdvertiserActivityDetails />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:userId" element={<ActivityForm />} />
 
@@ -306,7 +307,9 @@ const App = () => {
           <Route path='/HotelOffers/:hotelId/:touristId/:hotelName' element={<HotelOffers/>}/>
           <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
 
-          
+
+          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
+
 
         </Routes>
       </div>
