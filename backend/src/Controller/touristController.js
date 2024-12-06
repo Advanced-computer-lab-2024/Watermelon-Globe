@@ -2210,6 +2210,36 @@ const getNotificationsTourist = async (req, res) => {
   }
 };
 
+const loginTourist = async (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if both username and password are provided
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and Password are required" });
+  }
+
+  try {
+    // Find the tourist by username
+    const tourist = await Tourist.findOne({ username });
+
+    // Check if the tourist exists
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Validate the password
+    if (tourist.password !== password) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Login successful, return the tourist's ID
+    res.status(200).json({ id: tourist._id });
+  } catch (error) {
+    console.error("Error during tourist login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
   
 module.exports = {
   createTourist,
@@ -2276,4 +2306,5 @@ module.exports = {
   stripePayIntentProduct,
   frontendDataTable,
   getNotificationsTourist,
+  loginTourist
 };

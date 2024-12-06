@@ -29,3 +29,73 @@
       }
     }
   }
+  .seller-login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .seller-login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .login-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #4caf50;
+  }
+
+
+  .login-label {
+    font-size: 1rem;
+    color: #ff4081;
+    text-align: left;
+  }
+
+  
+  .seller-login-form {
+    display: flex;
+    flex-direction: column;
+    font-weight: 400;
+  }
+  
+  .seller-login-form label {
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+  
+  .seller-login-form input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .seller-login-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .seller-login-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .error-message {
+    font-size: 14px;
+    color: red;
+  }
+  
+  

@@ -11,7 +11,7 @@ const frontendSellersTable = async (req, res) => {
       { status: "accepted" },
       "Name Email status"
     );
-
+  
     // Format the data
     const formattedData = sellers.map((seller) => ({
       id: seller._id,
@@ -777,6 +777,35 @@ const uploadPicture = async (req, res) => {
   }
 };
 
+const loginSeller = async (req, res) => {
+  const { Email, Password } = req.body;
+
+  if (!Email || !Password) {
+    return res.status(400).json({ error: "Email and Password are required" });
+  }
+
+  try {
+    // Find the seller by email
+    const seller = await Seller.findOne({ Email });
+
+    if (!seller) {
+      return res.status(404).json({ error: "Seller not found" });
+    }
+
+    // Check if the password matches
+    if (seller.Password !== Password) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Return the seller's ID if login is successful
+    res.status(200).json({ id: seller._id });
+  } catch (error) {
+    console.error("Error during seller login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
 module.exports = {
   createSeller,
   getAllSellers,
@@ -807,4 +836,5 @@ module.exports = {
   getProductsBySeller,
   frontendSellersTable,
   frontendPendingSellersTable,
+  loginSeller
 };

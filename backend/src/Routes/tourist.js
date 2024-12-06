@@ -64,12 +64,15 @@ const {
   stripePayIntentActivity,
   stripePayIntentProduct,
   frontendDataTable,
+  loginTourist
 } = require("../Controller/touristController");
 
 router.get("/frontendInfo", frontendDataTable);
-//GET all tourists
 
+
+//GET all tourists
 router.get("/getTourists", getTourists);
+
 //GET a single tourist
 router.get("/getTourist/:id", getTourist);
 
@@ -188,6 +191,9 @@ router.get('/viewOrderDetails/:touristId', viewOrderDetails);
 router.put('/cancelOrder/:touristId', cancelOrder);
 
 router.put('/updateWallet/:touristId', updateWallet);
+
+
+router.post('/loginTourist', loginTourist)
 
 
 //Stripe Methods

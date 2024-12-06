@@ -27,11 +27,15 @@ const {
   getProductsBySeller,
   frontendSellersTable,
   frontendPendingSellersTable,
+  loginSeller,
 } = require("../Controller/SellerController");
 
 const router = express.Router();
 
 //////////////// Seller ////////////////
+
+router.post("/loginSeller", loginSeller);
+
 router.get("/frontendDatatable", frontendSellersTable);
 router.get("/frontendPendingSellersTable", frontendPendingSellersTable);
 //Get all sellers
@@ -100,5 +104,6 @@ router.put("/uploadPicture", uploadPicture);
 
 // view product's available quantity
 router.get("/getQuantity/:id", getQuantity);
+
 
 module.exports = router;
