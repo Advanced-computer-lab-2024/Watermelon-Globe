@@ -36,14 +36,14 @@ const Sidebar = () => {
 
   return (
     <div className="sidebarAdmin">
-      {/* Top */}
+      {/* Top
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
           <span className="logoAdmin">Watermelon Globe </span>
         </Link>
-      </div>
+      </div> */}
 
-      <hr />
+      {/* <hr /> */}
 
       <div className="centerAdmin">
         <ul>
