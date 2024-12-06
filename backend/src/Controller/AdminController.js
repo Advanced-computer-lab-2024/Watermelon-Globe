@@ -678,7 +678,7 @@ const acceptAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "accepted" },
       { new: true } // Return the updated document
@@ -740,7 +740,7 @@ const rejectAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "rejected" },
       { new: true } // Return the updated document
@@ -869,6 +869,85 @@ const getUploadedDocuments = async (req, res) => {
       advertisers: filteredAdvertisers,
       sellers: filteredSellers,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocumentsByID = async (req, res) => {
+  try {
+    const { id } = req.params; // Retrieve the userId from the request parameters
+
+    // Fetch the user (TourGuide, Advertiser, Seller) based on the userId
+    const tourGuide = await TourGuide.findOne(
+      { _id: id },
+      "username idProof certificates"
+    );
+    const advertiser = await Advertiser.findOne(
+      { _id: id },
+      "Username idProof taxationRegistryCard"
+    );
+    const seller = await Seller.findOne(
+      { _id: id },
+      "Name idProof taxationRegistryCard"
+    );
+
+    // Check if the user is a TourGuide and has uploaded documents
+    if (tourGuide) {
+      if (
+        tourGuide.idProof ||
+        (tourGuide.certificates && tourGuide.certificates.length > 0)
+      ) {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is an Advertiser and has uploaded documents
+    if (advertiser) {
+      if (advertiser.idProof || advertiser.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is a Seller and has uploaded documents
+    if (seller) {
+      if (seller.idProof || seller.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // If no user is found
+    return res.status(404).json({ message: "User not found" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1090,20 +1169,21 @@ const markActivityInappropriate = async (req, res) => {
       id,
       { inappropriate: true }, // Set the inappropriate field to true
       { new: true } // Return the updated document
-    )
-    .populate("Advertiser");
+    ).populate("Advertiser");
 
     // If the actvity is not found, send a 404 error response
     if (!activity) {
       return res.status(404).json({ error: "activity not found" });
     }
     const advertiser = activity.Advertiser;
-    const notification=`Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`
+    const notification = `Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`;
     advertiser.notifications.push(notification);
     await advertiser.save();
 
     if (!advertiser || !advertiser.Email || !advertiser.Name) {
-      return res.status(400).json({ error: "advertiser information is incomplete." });
+      return res
+        .status(400)
+        .json({ error: "advertiser information is incomplete." });
     }
 
     const advertiserEmail = "shodimatar@gmail.com";
@@ -1111,7 +1191,12 @@ const markActivityInappropriate = async (req, res) => {
 
     // Attempt to send the email
     try {
-      await sendEmail(advertiserEmail, "Inappropriate Activity", emailMessage, "");
+      await sendEmail(
+        advertiserEmail,
+        "Inappropriate Activity",
+        emailMessage,
+        ""
+      );
       console.log("Email sent to:", advertiserEmail);
     } catch (emailError) {
       console.error("Error sending email:", emailError);
@@ -1124,40 +1209,39 @@ const markActivityInappropriate = async (req, res) => {
       .json({ message: "activity marked as inappropriate", activity });
   } catch (error) {
     // Handle any errors during the process
-    res.status(500).json({ error: error.message });
-  }
+    res.status(500).json({ error: error.message });
+  }
 };
 
 const sendEmail = async (to, subject, text, html) => {
   try {
     // Create a transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',  // Use Gmail as the email service
+      service: "gmail", // Use Gmail as the email service
       auth: {
-        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
-        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
+        user: "watermelonglobe@gmail.com", // Replace with your Gmail address
+        pass: "tzve vdjr usit evdu", // Use your generated Gmail app password here
       },
     });
 
     // Email options
     const mailOptions = {
       from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
-      to,  // Recipient's email address
-      subject,  // Subject of the email
-      text,  // Plain text content
-      html,  // HTML content (optional)
+      to, // Recipient's email address
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
     };
 
     // Send the email
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', info.response);
-    return { success: true, message: 'Email sent successfully!' };
+    console.log("Email sent: ", info.response);
+    return { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    console.error('Error sending email: ', error);
-    return { success: false, message: 'Failed to send email.', error };
+    console.error("Error sending email: ", error);
+    return { success: false, message: "Failed to send email.", error };
   }
 };
-
 
 //create new transportation
 const createTransportation = async (req, res) => {
@@ -1210,7 +1294,6 @@ const createTransportation = async (req, res) => {
 //     return { success: false, message: 'Failed to send email.', error };
 //   }
 // };
-
 
 // Function to calculate total revenue from purchased products
 const totalProductRevenue = async (req, res) => {
@@ -1443,7 +1526,7 @@ const filterRevenueByProduct = async (req, res) => {
     // Step 1: Validate the product ID
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
-        message: 'Invalid product ID',
+        message: "Invalid product ID",
       });
     }
 
@@ -1451,7 +1534,7 @@ const filterRevenueByProduct = async (req, res) => {
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({
-        message: 'Product not found',
+        message: "Product not found",
       });
     }
 
@@ -1460,24 +1543,23 @@ const filterRevenueByProduct = async (req, res) => {
 
     // Step 4: Send the response
     res.status(200).json({
-      message: 'Total revenue calculated successfully for the product',
+      message: "Total revenue calculated successfully for the product",
       productName: product.name,
       totalSales: product.sales,
       price: product.price,
       totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
     });
-
   } catch (error) {
     // Handle any errors
     res.status(500).json({
-      message: 'Error calculating revenue for the product',
+      message: "Error calculating revenue for the product",
       error: error.message,
     });
   }
 };
 
-const getNotificationsAdmin=async(req,res)=>{
-  try{
+const getNotificationsAdmin = async (req, res) => {
+  try {
     const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
     if (!admin) {
       res.status(400).json({ message: "admin is not found" });
@@ -1488,12 +1570,7 @@ const getNotificationsAdmin=async(req,res)=>{
     console.error("Error getting notifications:", error);
     res.status(500).json({ message: "Server error" });
   }
-  
-
-
-}
-
-
+};
 
 module.exports = {
   createAdmin,
@@ -1557,5 +1634,6 @@ module.exports = {
   getAllPromoCodes,
   deletePromoCode,
   filterRevenueByProduct,
-  getNotificationsAdmin
+  getNotificationsAdmin,
+  getUploadedDocumentsByID,
 };

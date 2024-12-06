@@ -58,7 +58,8 @@ const {
   getAllPromoCodes,
   deletePromoCode,
   filterRevenueByProduct,
-  getNotificationsAdmin
+  getNotificationsAdmin,
+  getUploadedDocumentsByID,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -114,6 +115,7 @@ router.get("/ComplaintsFilterByStatus", filterComplaintsByStatus);
 
 //view uploaded documents
 router.get("/uploaded-documents", getUploadedDocuments);
+router.get("/uploaded-documents-by-id/:id", getUploadedDocumentsByID);
 
 // accept or reject user
 router.put("/acceptAdvertiser/:id", acceptAdvertiser);
@@ -169,7 +171,5 @@ router.delete("/deletePromoCode/:id", deletePromoCode);
 router.get("/filterRevenueByProduct/:productId", filterRevenueByProduct);
 
 router.get("/getNotificationsAdmin", getNotificationsAdmin);
-
-
 
 module.exports = router;

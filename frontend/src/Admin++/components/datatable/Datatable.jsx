@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const userColumns = [
   {
     field: "username",
@@ -68,7 +68,7 @@ const Datatable = () => {
         return (
           <div className="cellAction">
             <Link
-              to={`/users/${params.row.id}`}
+              to={`/TouristDetails/${params.row.id}`}
               style={{ textDecoration: "none" }}
             >
               <Button
@@ -82,7 +82,7 @@ const Datatable = () => {
                   },
                 }}
               >
-                View
+                View Details
               </Button>
             </Link>
             <Button
@@ -96,6 +96,7 @@ const Datatable = () => {
                 },
               }}
               onClick={() => handleDelete(params.row.id)}
+              startIcon={<DeleteIcon sx={{ color: "#fff" }} />}
             >
               Delete
             </Button>

@@ -14,7 +14,7 @@ import CompanyHomepage from "./Components/CompanyHomepage.jsx";
 import TermsAndConditions from "./pages/Terms&Conditions.js";
 import TermsAndConditionsGuide from "./pages/Terms&ConditionsGuide.js";
 import TermsAndConditionsAdvertiser from "./pages/Terms&ConditionsAdvertiser.js";
-import AdvertiserSignup from "./pages/ AdvertiserSignUp2.js";
+// import AdvertiserSignup from "./pages/AdvertiserSignUp2.js";
 import SignupOptions from "./pages/SignUpOptions.js";
 import MainHome from "./Guest/pages/GuestHomepage.tsx";
 
@@ -44,6 +44,9 @@ import ViewAllProducts from "./Admin++/pages/Products/ViewAllProducts.jsx";
 import ViewMyProducts from "./Admin++/pages/Products/ViewMyProducts.jsx";
 import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.jsx";
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
+import GuestPage from "./Guest/pages/GuestHomepage.jsx";
+import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
+import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
 
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
@@ -113,9 +116,9 @@ import MyBookings from "./Tourist/pages/MyBookings.tsx";
 import TouristActivityDetails from "./Tourist/pages/ActivityDetails.tsx";
 import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
 import ShoppingCart from "./Tourist/pages/shoppingCart.tsx";
-import CheckoutPage from "./Tourist/pages/CheckoutPage.tsx"
-import DraftHomePage from "./Tourist/pages/TouristHomepage.jsx"
-import OrdersPage from "./Tourist/pages/OrdersPage.tsx"
+import CheckoutPage from "./Tourist/pages/CheckoutPage.tsx";
+import DraftHomePage from "./Tourist/pages/TouristHomepage.jsx";
+import OrdersPage from "./Tourist/pages/OrdersPage.tsx";
 
 import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
@@ -127,7 +130,7 @@ import SiteDetails from "./Tourist/pages/siteDetails.js";
 
 import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 
-import MyHotelFlightBookings from './Tourist/Components/HotelFlightBookings.tsx'
+import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx";
 //tourguide new
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
@@ -198,13 +201,16 @@ const App = () => {
           <Route path="/ViewMyProducts" element={<ViewMyProducts />} />
           <Route path="/ViewSaleQuantities" element={<ViewSalesQuantities />} />
           <Route path="/adminAddPromoCode" element={<AddPromoCode />} />
+          <Route path="/Tourists" element={<AllTourists />} />
+
+          <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
 
           <Route path="/" element={<MainHome />} />
 
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
           <Route path="/seller-signup" element={<SellerSignup />} />
-          <Route path="/advertiser-signup" element={<AdvertiserSignup />} />
+          {/* <Route path="/advertiser-signup" element={<AdvertiserSignup />} /> */}
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
 
@@ -412,13 +418,16 @@ const App = () => {
           />
 
           {/* Path for Flight and Hotel APIs */}
-          <Route path='/Flights/:touristId' element={<FlightMain/>}/>
-          <Route path='/Hotels/:touristId' element={<HotelMain/>}/>
-          <Route path='/HotelOffers/:hotelId/:touristId/:hotelName' element={<HotelOffers/>}/>
-          <Route path='/MyHotelFlightBookings/:touristId' element={<MyHotelFlightBookings/>}/>
-
-          
-
+          <Route path="/Flights/:touristId" element={<FlightMain />} />
+          <Route path="/Hotels/:touristId" element={<HotelMain />} />
+          <Route
+            path="/HotelOffers/:hotelId/:touristId/:hotelName"
+            element={<HotelOffers />}
+          />
+          <Route
+            path="/MyHotelFlightBookings/:touristId"
+            element={<MyHotelFlightBookings />}
+          />
         </Routes>
       </div>
     </Router>

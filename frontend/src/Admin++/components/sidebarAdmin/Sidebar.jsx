@@ -81,6 +81,11 @@ const Sidebar = () => {
                   <span>Add Governor</span>
                 </li>
               </Link>
+              <Link to="/Tourists" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>View All Tourists</span>
+                </li>
+              </Link>
               <Link to="/ManageActive" style={{ textDecoration: "none" }}>
                 <li>
                   <span>View Active Users</span>
