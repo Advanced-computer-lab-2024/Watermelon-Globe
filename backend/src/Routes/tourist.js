@@ -67,7 +67,14 @@ const {
   bookmarkActivity,
   removeItineraryBookmark,
   removeActivityBookmark,
-  getBookmarks
+  getBookmarks,
+  requestNotifyActivity,
+  requestNotifyItinerary,
+  getNotifications,
+  getNotificationCount,
+  markNotificationAsRead
+
+
 } = require("../Controller/touristController");
 
 //GET all tourists
@@ -205,5 +212,11 @@ router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookm
 router.get('/getBookmarks/:touristId', getBookmarks);
 router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
 router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
+router.post('/requestNotifyActivity/:touristId/:activityId', requestNotifyActivity);
+router.post('/requestNotifyItinerary/:touristId/:itineraryId', requestNotifyItinerary);
+router.get('/notifications/:id',getNotifications);
+router.get('/notificationsCount/:id',getNotificationCount);
+router.put('/markNotifications/:touristId/:notificationId',markNotificationAsRead);
+
 
 module.exports = router;

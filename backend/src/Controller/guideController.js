@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const itineraryModel = require("../Models/itineraryModel.js");
 const tourGuide = require("../Models/tourGuideModel.js");
+const Tourist = require('../Models/touristModel'); 
+
 
 const createTourGuide = async (req, res) => {
   const {
@@ -404,11 +406,22 @@ const activateItineraryAccessibility = async (req, res) => {
       id,
       { accessibility: true },
       { new: true }
-    );
+    ).populate('notifyRequests');
 
     if (!updatedItinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
     }
+
+    // Add notification to all tourists who requested to be notified
+    const notificationMessage = `The itinerary "${updatedItinerary.name}" is now available for booking.`;
+    const notificationPromises = updatedItinerary.notifyRequests.map(touristId => 
+      Tourist.findByIdAndUpdate(touristId, 
+        { $push: { notifications: notificationMessage } },
+        { new: true }
+      )
+    );
+
+    await Promise.all(notificationPromises);
 
     res.status(200).json(updatedItinerary);
   } catch (error) {

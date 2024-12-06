@@ -2170,6 +2170,113 @@ const stripePayIntentProduct = async (req, res) => {
   }
 };
 
+const requestNotifyActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const activity = await Activity.findById(activityId);
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    if (activity.notifyRequests.includes(touristId)) {
+      return res.status(400).json({ error: 'Tourist already in notify list for this activity' });
+    }
+
+    activity.notifyRequests.push(touristId);
+    await activity.save();
+
+    res.status(200).json({ message: 'Notification request added successfully for activity' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding notification request for activity', details: error.message });
+  }
+};
+
+const requestNotifyItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+  const Itinerary = itineraryModel.Itinerary;
+
+  try {
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+
+    if (itinerary.notifyRequests.includes(touristId)) {
+      return res.status(400).json({ error: 'Tourist already in notify list for this itinerary' });
+    }
+
+    itinerary.notifyRequests.push(touristId);
+    await itinerary.save();
+
+    res.status(200).json({ message: 'Notification request added successfully for itinerary' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding notification request for itinerary', details: error.message });
+  }
+};
+
+
+// Fetch all notifications for a tourist
+const getNotifications = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    res.status(200).json({ notifications: tourist.notifications });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching notifications', details: error.message });
+  }
+};
+
+// Get the count of unread notifications for a tourist
+const getNotificationCount = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    const unreadCount = tourist.notifications.filter(notification => !notification.read).length;
+    res.status(200).json({ count: unreadCount });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching notification count', details: error.message });
+  }
+};
+
+// Mark a notification as read
+const markNotificationAsRead = async (req, res) => {
+  const { touristId, notificationId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    const notification = tourist.notifications.id(notificationId);
+    if (!notification) {
+      return res.status(404).json({ error: 'Notification not found' });
+    }
+
+    notification.read = true;
+    await tourist.save();
+
+    res.status(200).json({ message: 'Notification marked as read' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error marking notification as read', details: error.message });
+  }
+};
+
+
+
+
+
 
 module.exports = {
   createTourist,
@@ -2240,5 +2347,11 @@ module.exports = {
   removeActivityBookmark,
   getBookmarks,
   checkBookmarkItinerary,
-  checkBookmarkActivity
+  checkBookmarkActivity,
+  requestNotifyActivity,
+  requestNotifyItinerary,
+  getNotifications,
+  getNotificationCount,
+  markNotificationAsRead
+
 };

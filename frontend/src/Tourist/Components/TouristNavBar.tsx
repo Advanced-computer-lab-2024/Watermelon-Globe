@@ -1,29 +1,36 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import profileIcon from "../../Assets/Profile.png";
+import { Bell } from "lucide-react";
+import NotificationsBox from "./NotificationsBox";
 
 interface TouristNavbarProps {
   id: string | undefined;
 }
 
 const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown visibility state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
-  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown container
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSignOut = () => {
-    navigate("/"); // Redirect to home or login page
+    navigate("/");
   };
 
   const handleNavigation = (path: string) => {
-    navigate(path); // Navigate to the provided path
+    navigate(path);
   };
 
   const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev); // Toggle dropdown visibility
+    setIsDropdownOpen((prev) => !prev);
   };
 
-  // Close the dropdown if clicking outside of it
+  const toggleNotifications = () => {
+    setIsNotificationsOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -39,6 +46,21 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      try {
+        // Replace this with your actual API call
+        const response = await fetch(`/api/notifications/count/${id}`);
+        const data = await response.json();
+        setNotificationCount(data.count);
+      } catch (error) {
+        console.error("Error fetching notification count:", error);
+      }
+    };
+
+    fetchNotificationCount();
+  }, [id]);
 
   return (
     <header className="bg-sectionBackground shadow-md">
@@ -93,6 +115,27 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
           >
             Sign Out
           </button>
+
+          {/* Notifications Bell */}
+          <div className="relative">
+            <button
+              onClick={toggleNotifications}
+              className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+            >
+              <Bell className="w-6 h-6 text-secondary" />
+              {notificationCount > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
+                  {notificationCount}
+                </span>
+              )}
+            </button>
+            <NotificationsBox
+              id={id}
+              isOpen={isNotificationsOpen}
+              onClose={() => setIsNotificationsOpen(false)}
+            />
+          </div>
+
           {/* Profile Button */}
           <button
             onClick={toggleDropdown}

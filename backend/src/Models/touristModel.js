@@ -150,7 +150,13 @@ const touristSchema = new Schema(
         default: [],
       },
     ],
- 
+     notifications: [
+      {
+        type: String,
+        required: true,
+        default: [],
+      },
+    ],
  
   },  
 

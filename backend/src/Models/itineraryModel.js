@@ -51,7 +51,12 @@ const itinerarySchema = new Schema(
   ,
   inappropriate: {
     type: Boolean,
-    default: false }
+    default: false },
+    
+  notifyRequests: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tourist'
+  }]
 
 }, { timestamps: true });
 
