@@ -44,7 +44,7 @@ import ViewAllProducts from "./Admin++/pages/Products/ViewAllProducts.jsx";
 import ViewMyProducts from "./Admin++/pages/Products/ViewMyProducts.jsx";
 import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.jsx";
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
-import GuestPage from "./Guest/pages/GuestHomepage.jsx";
+// import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
 import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
 
