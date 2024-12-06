@@ -29,9 +29,9 @@ const HotelSearch = ({ token }) => {
     }
   };
 
-  const handleHotelClick = (hotelId) => {
+  const handleHotelClick = (hotelId,hotelName) => {
     // Redirect to the hotel offers page with the selected hotel ID and tourist ID
-    navigate(`/HotelOffers/${hotelId}/${touristId}`);
+    navigate(`/HotelOffers/${hotelId}/${touristId}/${hotelName}`);
   };
 
   return (
@@ -65,7 +65,7 @@ const HotelSearch = ({ token }) => {
               <div
                 key={hotel.hotelId}
                 className="hotel-item"
-                onClick={() => handleHotelClick(hotel.id)}  // Call handleHotelClick with the hotel ID
+                onClick={() => handleHotelClick(hotel.id,hotel.name)}  // Call handleHotelClick with the hotel ID
               >
                 <h4 className="hotel-name">{hotelDetails.name}</h4>
                 <p className="hotel-location"><strong>Location:</strong> {hotelDetails.location}</p>

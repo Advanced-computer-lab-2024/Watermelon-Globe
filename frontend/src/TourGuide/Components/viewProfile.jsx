@@ -7,6 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
 import ProfilePhotoUpload from "./ProfilePhoto";
+import "./guide.scss"
 
 const TourGuideProfile = () => {
   const { id } = useParams();
@@ -99,9 +100,9 @@ const TourGuideProfile = () => {
   };
 
   return (
-    <div className="list">
+    <div  className="listGuide">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerGuide">
         <Navbar />
         <div className="tour-guide-profile">
           <div className="profile-header">
@@ -111,7 +112,7 @@ const TourGuideProfile = () => {
             </div>
           </div>
 
-          <div className="profile-details">
+          <div  className="profile-details">
             <div className="profile-detail">
               <strong>Email:</strong>
               {isEditing ? (

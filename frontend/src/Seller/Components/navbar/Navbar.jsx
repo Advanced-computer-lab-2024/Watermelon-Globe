@@ -1,3 +1,72 @@
+// import "./navbar.scss";
+// import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+// import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+// import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+// import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
+// import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+// import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+// import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+// // import { DarkModeContext } from "../../context/darkModeContext";
+// import { useContext } from "react";
+// import { Navigate, useNavigate, useParams } from "react-router-dom";
+
+
+
+// const Navbar = () => {
+//   const{id}=useParams();
+//   const navigate=useNavigate();
+//   const handleViewProfile =()=>{
+//     navigate(`/viewProfile/${id}`);
+//   }
+//  // const { dispatch } = useContext(DarkModeContext);
+
+//   return (
+//     <div className="navbar">
+//       <div className="wrapper">
+//         <div className="search">
+//           {/* <input type="text" placeholder="Search..." />
+//           <SearchOutlinedIcon /> */}
+//         </div>
+//         <div className="items">
+//           <div className="item">
+//             {/* <LanguageOutlinedIcon className="icon" />
+//             English */}
+//           </div>
+//           {/* <div className="item">
+//             <DarkModeOutlinedIcon
+//               className="icon"
+//               onClick={() => dispatch({ type: "TOGGLE" })}
+//             />
+//           </div> */}
+//           <div className="item">
+//             {/* <FullscreenExitOutlinedIcon className="icon" /> */}
+//           </div>
+//           <div className="item">
+//             <NotificationsNoneOutlinedIcon className="icon" />
+//             <div className="counter">1</div>
+//           </div>
+//           <div className="item">
+//             <ChatBubbleOutlineOutlinedIcon className="icon" />
+//             <div className="counter">2</div>
+//           </div>
+//           <div className="item">
+//             <ListOutlinedIcon className="icon" />
+//           </div>
+//           <div className="item">
+//             <img onClick={()=>{handleViewProfile()}}
+//               src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+//               alt=""
+//               className="avatar"
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Navbar;
+
 import "./navbar.scss";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
@@ -8,55 +77,54 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 // import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-
-
+import { useNavigate, useParams } from "react-router-dom";
 
 const Navbar = () => {
-  const{id}=useParams();
-  const navigate=useNavigate();
-  const handleViewProfile =()=>{
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const handleViewProfile = () => {
     navigate(`/viewProfile/${id}`);
-  }
- // const { dispatch } = useContext(DarkModeContext);
+  };
 
   return (
-    <div className="navbar">
-      <div className="wrapper">
-        <div className="search">
+    <div className="navbar-seller">
+      <div className="wrapper-seller">
+        <div className="search-seller">
           {/* <input type="text" placeholder="Search..." />
           <SearchOutlinedIcon /> */}
         </div>
-        <div className="items">
-          <div className="item">
-            {/* <LanguageOutlinedIcon className="icon" />
+        <div className="items-seller">
+          <div className="item-seller">
+            {/* <LanguageOutlinedIcon className="icon-seller" />
             English */}
           </div>
-          {/* <div className="item">
+          {/* <div className="item-seller">
             <DarkModeOutlinedIcon
-              className="icon"
+              className="icon-seller"
               onClick={() => dispatch({ type: "TOGGLE" })}
             />
           </div> */}
-          <div className="item">
-            {/* <FullscreenExitOutlinedIcon className="icon" /> */}
+          <div className="item-seller">
+            {/* <FullscreenExitOutlinedIcon className="icon-seller" /> */}
           </div>
-          <div className="item">
-            <NotificationsNoneOutlinedIcon className="icon" />
-            <div className="counter">1</div>
+          <div className="item-seller">
+            <NotificationsNoneOutlinedIcon className="icon-seller" />
+            <div className="counter-seller">1</div>
           </div>
-          <div className="item">
-            <ChatBubbleOutlineOutlinedIcon className="icon" />
-            <div className="counter">2</div>
+          <div className="item-seller">
+            <ChatBubbleOutlineOutlinedIcon className="icon-seller" />
+            <div className="counter-seller">2</div>
           </div>
-          <div className="item">
-            <ListOutlinedIcon className="icon" />
+          <div className="item-seller">
+            <ListOutlinedIcon className="icon-seller" />
           </div>
-          <div className="item">
-            <img onClick={()=>{handleViewProfile()}}
+          <div className="item-seller">
+            <img
+              onClick={handleViewProfile}
               src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
               alt=""
-              className="avatar"
+              className="avatar-seller"
             />
           </div>
         </div>

@@ -68,20 +68,20 @@ const touristSchema = new Schema(
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
       },
     ],
   
- bookedItineraries: [
+    bookedItineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChildItinerary',
+        ref: "ChildItinerary",
       },
     ],
     bookedActivities: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ActivityBooking',
+        ref: "ActivityBooking",
       },
     ],
     loyaltyPoints: { type: Number, default: 0},
@@ -157,5 +157,5 @@ const touristSchema = new Schema(
   }
 );
 
-const Tourist = mongoose.model('Tourist', touristSchema);
+const Tourist = mongoose.model("Tourist", touristSchema);
 module.exports = Tourist;

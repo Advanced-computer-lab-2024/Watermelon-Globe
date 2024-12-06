@@ -1,60 +1,64 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
-const productSchema = new Schema({
+const productSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     price: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     quantity: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     description: {
-        type: String, // Product description
-        required: true
+      type: String, // Product description
+      required: true,
     },
     seller: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Seller',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seller",
+      required: true,
     },
 
     sales: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     archived: {
-        type: Boolean,
-        required: true
-    },
+      type: Boolean,
+      required: true,
+    },
 
     picture: {
-    type: String, // URL or file path for the product image
-    required:false
-    },
+      type: String, // URL or file path for the product image
+      default: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
+      required: false,
+    },
 
     rating: { type: Number, required: false },
-    noOfRatings: {type:Number ,required:false},
-    ratingsSum:{type:Number,required:false},
+    noOfRatings: { type: Number, required: false, default: 0 },
+    ratingsSum: { type: Number, required: false },
 
     reviews: [
-        {
-            reviewer: {     
-            type: mongoose.Schema.Types.ObjectId,
-             ref: 'Tourist', // Reference to the Buyer model (assuming there's a Buyer model)
-            required: false},
-            
-            review: { type: String,required:false }, // Review content
-            
-        }
-    ]
-}, {timestamps: true})
+      {
+        reviewer: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tourist", // Reference to the Buyer model (assuming there's a Buyer model)
+          required: false,
+        },
 
-const Product = mongoose.model('Product', productSchema)
-module.exports = Product
+        review: { type: String, required: false }, // Review content
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
+const Product = mongoose.model("Product", productSchema);
+module.exports = Product;

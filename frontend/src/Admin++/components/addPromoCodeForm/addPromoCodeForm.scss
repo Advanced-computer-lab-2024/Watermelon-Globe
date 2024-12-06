@@ -1,0 +1,95 @@
+.addAdminForm {
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  margin-left: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif; /* Change font-family for the whole form */
+}
+
+.addAdminForm form {
+  display: flex;
+  flex-direction: column;
+}
+
+.addAdminForm .MuiTextField-root {
+  margin-bottom: 15px;
+}
+
+.addAdminForm .MuiButton-root {
+  margin-top: 15px;
+}
+
+/* Custom button styling */
+.addAdminButton {
+  background-color: #d32e65; /* Set the default button background color to pink */
+  color: white; /* Text color */
+  font-size: 16px;
+  font-weight: bold;
+  &:hover {
+    background-color: #b22a50; /* Darker shade of pink on hover */
+  }
+  &:active {
+    background-color: #9a1f40; /* Even darker shade when the button is pressed */
+  }
+  &:focus {
+    background-color: #d32e65; /* Maintain the same color when focused */
+  }
+}
+
+.addAdminForm .MuiTypography-root {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif; /* Change font for the Typography */
+  color: #d32e65;
+}
+
+.addAdminForm .error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.addAdminForm .success {
+  color: green;
+  margin-bottom: 10px;
+}
+
+.addAdminForm .MuiIconButton-root {
+  padding: 0;
+  font-size: 1.3rem; /* Adjust the icon size */
+}
+
+/* Custom styling for text fields when focused */
+.customTextField .MuiOutlinedInput-root {
+  &.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #d32e65; /* Change border color when focused */
+  }
+}
+
+/* Change the text color of the input fields (username and password) */
+.customTextField .MuiOutlinedInput-input {
+  color: #333; /* Text color inside input fields */
+}
+
+/* Change the text color of the label (username and password) */
+.customTextField .MuiInputLabel-root {
+  color: #888; /* Label color */
+}
+
+/* Change the text color inside the text fields when they are focused */
+.customTextField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+  color: #d32e65; /* Change text color to blue when focused */
+}
+
+/* Focused input color */
+.customTextField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+  color: #555; /* Text color inside the input when focused */
+}
+
+/* Change the color of the label when focused */
+.customTextField .MuiInputLabel-root.Mui-focused {
+  color: #d32e65; /* Change label color when focused */
+}

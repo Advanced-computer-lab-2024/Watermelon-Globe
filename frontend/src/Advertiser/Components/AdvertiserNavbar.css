@@ -63,12 +63,12 @@
 }
 
 .icon{
-    width: 18px;
-    height: 18px;
+    width: 25px;
+    height: 25px;
 }
 
 .navbar .wrapper .items .item .icon {
-    font-size: 20px;   
+    font-size: 30px;   
 }
 
 .navbar .wrapper  .item .avatar {

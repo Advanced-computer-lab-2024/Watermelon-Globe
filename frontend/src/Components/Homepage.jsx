@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "../Components/Navbar.css";
 import Navbar from "../Components/Navbar.jsx";
 import "./Homepage.css";
- 
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -42,11 +41,15 @@ const HomePage = () => {
         >
           Go to Tour Guide Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/tourism-governor/67065e1683d5a647b45c2142")}>
+        <button className="home-btn" onClick={() => navigate("/GovernorHomePage/67475d9cf7b8b43827b99e08")}>
           Go to Tourism Governor Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/AdminHome")}>
+        <button className="home-btn" onClick={() => navigate("/AdminHomepage")}>
           Go to Admin Page
+        </button>
+
+        <button className="home-btn" onClick={() => navigate("/AdminHome++/674f760ed6b7ba513c4ea84d")}>
+          Go to Admin++ Page
         </button>
       </div>
     </div>

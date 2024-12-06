@@ -53,7 +53,12 @@ const companyProfileSchema = new Schema(
       type: String,
       required: false,
     },
+    notifications :[{
+      type:String,
+      required: false}
+    ]
   },
+  
   { timestamps: true }
 );
 

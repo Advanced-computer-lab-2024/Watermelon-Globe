@@ -1,0 +1,130 @@
+.sidebarAdmin {
+  flex: 1;
+  border-right: 0.5px solid rgb(230, 227, 227);
+  height: 100vh; /* Makes the sidebar height fill the viewport */
+  background-color: white;
+  text-align: left;
+  position: fixed; /* Fixed position so it stays in place while scrolling */
+  left: 0; /* Ensures it stays on the left side */
+  top: 10; /* Ensures it starts at the top of the page */
+  width: 250px;
+  padding-left: 20px; /* Add padding to shift content slightly right */
+  overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
+
+  .topAdmin {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .logoAdmin {
+      font-size: 20px;
+      font-weight: bold;
+      color: #e89bb5;
+    }
+  }
+
+  hr {
+    height: 0;
+    border: 0.5px solid rgb(230, 227, 227);
+  }
+
+  .centerAdmin {
+    padding-left: 0px;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      .titleAdmin {
+        font-size: 15px;
+        font-weight: 600;
+        color: #91c297;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        padding-left: 10px; /* Shift titles slightly right */
+      }
+
+      li {
+        display: flex;
+        align-items: center;
+        padding: 9px 10px; /* Add horizontal padding */
+        cursor: pointer;
+
+        &:hover {
+          background-color: #f6d8e576;
+          border-radius: 8px;
+        }
+
+        .iconAdmin {
+          font-size: 22px;
+          color: #d32e65;
+          transition: all 0.3s ease;
+        }
+
+        span {
+          font-size: 14px;
+          font-weight: 500;
+          color: #888;
+          margin-left: 10px;
+        }
+
+        .manage-textAdmin {
+          display: inline-flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 500;
+          color: #888;
+          margin-left: 10px;
+
+          .arrowAdmin {
+            margin-left: 5px;
+            font-size: 12px;
+          }
+
+          .dropdownAdmin {
+            padding-left: 30px; /* Increase indentation for dropdown items */
+            list-style: none;
+
+            li {
+              padding: 5px 0;
+              cursor: pointer;
+              margin-left: 10px;
+
+              &:hover {
+                background-color: #f6d8e576;
+                border-radius: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .bottomAdmin {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+
+    .colorOptionAdmin {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 1px solid #d32e65;
+      cursor: pointer;
+      margin: 5px;
+
+      &:nth-child(1) {
+        background-color: whitesmoke;
+      }
+      &:nth-child(2) {
+        background-color: #333;
+      }
+      &:nth-child(3) {
+        background-color: darkblue;
+      }
+    }
+  }
+}

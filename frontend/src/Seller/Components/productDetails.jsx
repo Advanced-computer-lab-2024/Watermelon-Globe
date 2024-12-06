@@ -105,10 +105,10 @@ const handleUpdateProduct = async () => {
   };
 
   return (
-    <div className="list">
+    <div className="listSeller">
       
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerSeller">
       <Navbar/>
       <div className="flex justify-center items-center min-h-screen p-6">
           <div style={watermelonStyle} className="w-full max-w-xl">

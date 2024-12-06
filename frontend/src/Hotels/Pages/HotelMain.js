@@ -4,6 +4,8 @@ import profileIcon from "../../Assets/Profile.png";
 
 import AccessToken from '../Components/AccessToken';
 import HotelSearch from '../Components/HotelSearch'; // For hotel search functionality
+import WalletComponent from '../../Tourist/Components/Wallet';
+
 
 const HotelMain = () => {
   const [token, setToken] = useState('');
@@ -176,6 +178,9 @@ const HotelMain = () => {
           )}
         </>
       )}
+
+<WalletComponent touristId={touristId} />
+
     </div>
   );
 };

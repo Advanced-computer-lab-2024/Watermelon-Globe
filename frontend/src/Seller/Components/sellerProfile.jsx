@@ -276,7 +276,7 @@ const SellerProfile = () => {
 
               <button
                 onClick={handleDeleteAccount}
-                style={{ backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '5px' }}
+                style={{ backgroundColor: 'red', color: 'white', padding: '2px', borderRadius: '5px' }}
               >
                 Delete Account
               </button>

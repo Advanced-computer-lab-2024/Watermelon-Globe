@@ -96,6 +96,7 @@ const tourGuideSchema = new Schema(
 
   },
   { timestamps: true }
+
 );
 
 

@@ -4,6 +4,17 @@ mongoose.set("strictQuery", false);
 require("dotenv").config();
 const uploadRoute = require("./Routes/Upload");
 
+const cron = require("node-cron");
+const checkBirthdaysAndSendPromos = require("./Utils/birthdayPromo.js");
+
+// //Birthday check
+
+// // Schedule the birthday check task to run daily at midnight
+// cron.schedule("0 0 * * *", async () => {
+//   console.log("Running birthday promo check...");
+//   await checkBirthdaysAndSendPromos();
+// });
+
 //Routes
 //const Admin = require('./Routes/admin');
 const admin = require("./Routes/Admin");
@@ -21,7 +32,7 @@ const TouristItinerary = require("./Routes/touristItinerary");
 
 // App variables
 const app = express();
-const stripe = Stripe(process.env.SECRET_KEY); // Replace with your Secret Key
+const stripe = require('stripe')(process.env.SECRET_KEY); // Replace with your Stripe secret key
 const MongoURI = process.env.MONGO_URI;
 const cors = require("cors");
 const port = "8000";
@@ -47,7 +58,6 @@ app.use((req, res, next) => {
   console.log(req.method, req.path);
   next();
 });
-
 
 //APIs
 app.use("/api/Admin", admin);

@@ -1,7 +1,55 @@
 const Seller = require("../Models/SellerModel");
-const Product = require("../Models/productModel");
+const Product = require("../Models/ProductModel");
 const mongoose = require("mongoose");
 const { findById } = require("../Models/touristModel");
+
+//for frontend
+const frontendSellersTable = async (req, res) => {
+  try {
+    // Fetch only sellers with 'accepted' status from the database
+    const sellers = await Seller.find(
+      { status: "accepted" },
+      "Name Email status"
+    );
+
+    // Format the data
+    const formattedData = sellers.map((seller) => ({
+      id: seller._id,
+      name: seller.Name,
+      email: seller.Email,
+      status: seller.status,
+    }));
+
+    // Send the response
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching sellers" });
+  }
+};
+const frontendPendingSellersTable = async (req, res) => {
+  try {
+    // Fetch only sellers with 'pending' status from the database
+    const sellers = await Seller.find(
+      { status: "pending" },
+      "Name Email status"
+    );
+
+    // Format the data
+    const formattedData = sellers.map((seller) => ({
+      id: seller._id,
+      name: seller.Name,
+      email: seller.Email,
+      status: seller.status,
+    }));
+
+    // Send the response
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching pending sellers" });
+  }
+};
 
 //get all sellers
 const getAllSellers = async (req, res) => {
@@ -148,15 +196,8 @@ const getSellerStatus = async (req, res) => {
 // };
 
 const createProduct = async (req, res) => {
-  const {
-    name,
-    price,
-    quantity,
-    picture,
-    description,
-    ratings,
-    sales,
-  } = req.body;
+  const { name, price, quantity, picture, description, ratings, sales } =
+    req.body;
   const { sellerId } = req.params;
 
   try {
@@ -209,8 +250,6 @@ const getProductsBySeller = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 // Get all products
 const getAllProducts = async (req, res) => {
@@ -324,13 +363,13 @@ const updateProduct = async (req, res) => {
     });
 
     if (!updatedProduct) {
-      return res.status(404).send('Product not found');
+      return res.status(404).send("Product not found");
     }
 
     res.status(200).json(updatedProduct);
   } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).send('Error updating product');
+    console.error("Error updating product:", error);
+    res.status(500).send("Error updating product");
   }
 };
 
@@ -528,8 +567,6 @@ const getProductById = async (req, res) => {
 //   }
 // };
 
-
-
 const requestDeletionSeller = async (req, res) => {
   try {
     const { id } = req.params;
@@ -628,12 +665,16 @@ const getQuantity = async (req, res) => {
   const { id } = req.params; // Get the seller's ID from the URL parameter
   try {
     // Find products where the seller's ID matches the provided seller ID
-    const products = await Product.find({ seller: id }, "name quantity sales")
-      .sort({ createdAt: -1 });
+    const products = await Product.find(
+      { seller: id },
+      "name quantity sales"
+    ).sort({ createdAt: -1 });
 
     // Check if any products were found
     if (products.length === 0) {
-      return res.status(404).json({ message: "No products found for this seller." });
+      return res
+        .status(404)
+        .json({ message: "No products found for this seller." });
     }
 
     res.status(200).json(products);
@@ -644,7 +685,6 @@ const getQuantity = async (req, res) => {
     });
   }
 };
-
 
 // archive a product
 const archiveProduct = async (req, res) => {
@@ -764,5 +804,7 @@ module.exports = {
   unarchiveProduct,
   //getProductImageByName,
   uploadPicture,
-  getProductsBySeller
+  getProductsBySeller,
+  frontendSellersTable,
+  frontendPendingSellersTable,
 };

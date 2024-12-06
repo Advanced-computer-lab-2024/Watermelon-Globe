@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
+import "./guide.scss"
 
 const CreateItinerary = () => {
   const { id } = useParams();
@@ -193,13 +194,13 @@ const handleSubmit = async (e) => {
   };
   
   return (
-    <div className="list">
+    <div className="listGuide">
       <Sidebar />
-      <div className="listContainer">
+      <div className="listContainerGuide">
         <Navbar />
         <div className="min-h-screen bg-gradient-to-b from-green-100 via-pink-50 to-green-200 py-10">
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-            <h2 style={{color:'#4CAF50'}} className="text-3xl font-bold text-center text-pink-500 mb-6">
+             <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">
               Create Itinerary
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">

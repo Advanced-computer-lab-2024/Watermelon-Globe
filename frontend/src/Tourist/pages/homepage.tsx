@@ -12,6 +12,7 @@ import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
+import WalletComponent from '../Components/Wallet';
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +30,7 @@ export default function DraftHomePage() {
 
   const handleSignOut = () => {
     setIsSignedUp(false);
+    navigate(`/`);
     // Clear user data or perform sign-out logic if necessary.
   };
 
@@ -72,17 +74,10 @@ export default function DraftHomePage() {
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
             <Link
-              to="/Tourist_ProductsPage"
-              className="text-secondary hover:text-secondaryHover relative group no-underline"
-            >
-              Products
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
-            </Link>
-            <Link
               to={`/ProductTourist/${id}`}
               className="text-secondary hover:text-secondaryHover relative group no-underline"
             >
-              Available products
+              Products
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
             </Link>
             <Link
@@ -306,8 +301,7 @@ export default function DraftHomePage() {
           <p>&copy; {new Date().getFullYear()} Watermelon Globe. All rights reserved.</p>
         </div>
       </footer>
-
-
+      <WalletComponent touristId={id} />
     </div>
   )
 }

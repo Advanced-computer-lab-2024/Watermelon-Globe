@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import WalletComponent from '../Components/Wallet';
 
 const OrdersPage = () => {
-    const { touristId } = useParams(); // Extract touristId from the URL parameters
-    const [orders, setOrders] = useState<Order[]>([]); // Ensure it's an empty array by default
+    const { touristId } = useParams<{ touristId: string }>();
+    const [orders, setOrders] = useState<Order[]>([]); 
 
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
@@ -201,7 +201,7 @@ const OrdersPage = () => {
                     )}
                 </div>
             )}
-            <WalletComponent />
+            <WalletComponent touristId={touristId} />
         </div>
     );
 };

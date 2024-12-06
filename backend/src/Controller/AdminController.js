@@ -4,16 +4,19 @@ const Tourist = require("../Models/touristModel");
 const Company = require("../Models/companyProfileModel");
 const PreferenceTag = require("../Models/PreferenceTagModel");
 const ActivityCategory = require("../Models/ActivityCategoryModel");
-const Product = require("../Models/productModel");
+const Product = require("../Models/ProductModel");
 const Complaint = require("../Models/Complaint");
 const Itinerary = require("../Models/itineraryModel");
 const TourGuide = require("../Models/tourGuideModel");
 const Advertiser = require("../Models/advertiserModel");
-const Seller = require("../Models/SellerModel");
 const Transportation = require("../Models/TransportationModel");
+const Seller = require("../Models/SellerModel");
+const bookedItinerary = require("../Models/touristItineraryModel");
+const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
-const nodemailer = require('nodemailer');
-
+const nodemailer = require("nodemailer");
+const Activity = require("../Models/activityModel");
+const PromoCode = require("../Models/promoCodes");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -191,16 +194,16 @@ const deletePreferenceTag = async (req, res) => {
   res.status(200).json(preferencetag);
 };
 
-//uptade a preferencetag
 const updatePreferenceTag = async (req, res) => {
   const { id } = req.params;
   const { tag } = req.body;
-  console.log(id);
 
+  // Check if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: "No such tag" });
+    return res.status(400).json({ error: "Invalid tag ID" });
   }
 
+  // Check for empty fields
   let emptyFields = [];
   if (!tag) {
     emptyFields.push("tag");
@@ -211,22 +214,29 @@ const updatePreferenceTag = async (req, res) => {
       .json({ error: "Please fill in all fields", emptyFields });
   }
 
+  // Check if the new tag name already exists
   const existingTag = await PreferenceTag.findOne({ tag });
-
   if (existingTag) {
     return res.status(400).json({ error: "Tag name already exists" });
-  } else {
-    const preferencetag = await PreferenceTag.findOneAndUpdate(
+  }
+
+  try {
+    // Update the tag and return the updated document
+    const updatedTag = await PreferenceTag.findOneAndUpdate(
       { _id: id },
-      {
-        ...req.body,
-      }
+      { tag }, // Only update the tag field
+      { new: true } // Return the updated document
     );
 
-    if (!preferencetag) {
-      return res.status(400).json({ error: "No such tag" });
+    // Check if the tag exists
+    if (!updatedTag) {
+      return res.status(404).json({ error: "No such tag" });
     }
-    res.status(200).json(preferencetag);
+
+    // Respond with the updated tag
+    res.status(200).json(updatedTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -298,7 +308,7 @@ const deleteActivityCategory = async (req, res) => {
   res.status(200).json(activitycategory);
 };
 
-//uptade a activitycategory
+//update a activitycategory
 const updateActivityCategory = async (req, res) => {
   const { id } = req.params;
   const { activity } = req.body;
@@ -317,28 +327,30 @@ const updateActivityCategory = async (req, res) => {
       .json({ error: "Please fill in all fields", emptyFields });
   }
 
+  // Check if activity name already exists
   const existingActivity = await ActivityCategory.findOne({ activity });
-
   if (existingActivity) {
     return res.status(400).json({ error: "Activity name already exists" });
   } else {
-    const activitycategory = await ActivityCategory.findOneAndUpdate(
+    // Update the activity category and return the updated category
+    const updatedActivityCategory = await ActivityCategory.findOneAndUpdate(
       { _id: id },
-      {
-        ...req.body,
-      }
+      { activity }, // Only update the 'activity' field
+      { new: true } // This option ensures the updated document is returned
     );
 
-    if (!activitycategory) {
+    if (!updatedActivityCategory) {
       return res.status(400).json({ error: "No such activity" });
     }
-    res.status(200).json(activitycategory);
+
+    res.status(200).json(updatedActivityCategory); // Return the updated category
   }
 };
 
 //create a new product
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, seller, ratings, sales } = req.body;
+  const { name, price, quantity, description, seller, ratings, sales } =
+    req.body;
 
   try {
     // Create a new product with the provided details
@@ -350,7 +362,7 @@ const createProduct = async (req, res) => {
       seller: "6729244f151b6c9e346dd732",
       ratings: ratings || 0,
       sales: sales || 0,
-      archived: false // Explicitly set this as a default value
+      archived: false, // Explicitly set this as a default value
     });
 
     // Return the created product as JSON response
@@ -371,11 +383,13 @@ const getAllProducts = async (req, res) => {
 const getAllProductIds = async (req, res) => {
   try {
     // Retrieve all products, selecting only the name and _id fields
-    const products = await Product.find({}, 'name _id');
+    const products = await Product.find({}, "name _id");
 
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while retrieving products' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving products" });
   }
 };
 
@@ -664,7 +678,7 @@ const acceptAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "accepted" },
       { new: true } // Return the updated document
@@ -726,7 +740,7 @@ const rejectAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "rejected" },
       { new: true } // Return the updated document
@@ -830,10 +844,7 @@ const getUploadedDocuments = async (req, res) => {
       {},
       "Username idProof taxationRegistryCard"
     );
-    const sellers = await Seller.find(
-      {},
-      "Name idProof taxationRegistryCard"
-    );
+    const sellers = await Seller.find({}, "Name idProof taxationRegistryCard");
 
     // Filter TourGuides who have uploaded documents (either idProof or certificates)
     const filteredTourGuides = tourGuides.filter(
@@ -858,6 +869,85 @@ const getUploadedDocuments = async (req, res) => {
       advertisers: filteredAdvertisers,
       sellers: filteredSellers,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocumentsByID = async (req, res) => {
+  try {
+    const { id } = req.params; // Retrieve the userId from the request parameters
+
+    // Fetch the user (TourGuide, Advertiser, Seller) based on the userId
+    const tourGuide = await TourGuide.findOne(
+      { _id: id },
+      "username idProof certificates"
+    );
+    const advertiser = await Advertiser.findOne(
+      { _id: id },
+      "Username idProof taxationRegistryCard"
+    );
+    const seller = await Seller.findOne(
+      { _id: id },
+      "Name idProof taxationRegistryCard"
+    );
+
+    // Check if the user is a TourGuide and has uploaded documents
+    if (tourGuide) {
+      if (
+        tourGuide.idProof ||
+        (tourGuide.certificates && tourGuide.certificates.length > 0)
+      ) {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is an Advertiser and has uploaded documents
+    if (advertiser) {
+      if (advertiser.idProof || advertiser.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is a Seller and has uploaded documents
+    if (seller) {
+      if (seller.idProof || seller.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // If no user is found
+    return res.status(404).json({ message: "User not found" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -961,7 +1051,7 @@ const uploadPicture = async (req, res) => {
 
   // Check if the ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'Invalid product ID' });
+    return res.status(400).json({ error: "Invalid product ID" });
   }
 
   try {
@@ -973,12 +1063,16 @@ const uploadPicture = async (req, res) => {
     );
 
     if (!product) {
-      return res.status(404).json({ error: 'No product found with this ID' });
+      return res.status(404).json({ error: "No product found with this ID" });
     }
 
-    res.status(200).json({ message: 'Product picture updated successfully', product });
+    res
+      .status(200)
+      .json({ message: "Product picture updated successfully", product });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while updating the product picture' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the product picture" });
   }
 };
 
@@ -1032,14 +1126,15 @@ const markItineraryInappropriate = async (req, res) => {
     }
 
     const guide = itinerary.guide;
-    const notification=`Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`
+    const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
     guide.notifications.push(notification);
     await guide.save();
 
-
     // Check if guide information is complete
     if (!guide || !guide.email || !guide.name) {
-      return res.status(400).json({ error: "Guide information is incomplete." });
+      return res
+        .status(400)
+        .json({ error: "Guide information is incomplete." });
     }
 
     const guideEmail = "shodimatar@gmail.com";
@@ -1064,21 +1159,107 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
-
-//create new activitycategory
-const createTransportation = async (req, res) => {
-  const { type,destination,price } = req.body;
+// Controller function to mark an activity as inappropriate
+const markActivityInappropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
 
   try {
-    const transportaion = await Transportation.create({ type,destination,price });
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: true }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("Advertiser");
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+    const advertiser = activity.Advertiser;
+    const notification = `Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`;
+    advertiser.notifications.push(notification);
+    await advertiser.save();
+
+    if (!advertiser || !advertiser.Email || !advertiser.Name) {
+      return res
+        .status(400)
+        .json({ error: "advertiser information is incomplete." });
+    }
+
+    const advertiserEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+
+    // Attempt to send the email
+    try {
+      await sendEmail(
+        advertiserEmail,
+        "Inappropriate Activity",
+        emailMessage,
+        ""
+      );
+      console.log("Email sent to:", advertiserEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
+    }
+
+    // Send the updated activity as a response
+    res
+      .status(200)
+      .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // Use Gmail as the email service
+      auth: {
+        user: "watermelonglobe@gmail.com", // Replace with your Gmail address
+        pass: "tzve vdjr usit evdu", // Use your generated Gmail app password here
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
+      to, // Recipient's email address
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent: ", info.response);
+    return { success: true, message: "Email sent successfully!" };
+  } catch (error) {
+    console.error("Error sending email: ", error);
+    return { success: false, message: "Failed to send email.", error };
+  }
+};
+
+//create new transportation
+const createTransportation = async (req, res) => {
+  const { type, destination, price } = req.body;
+
+  try {
+    const transportaion = await Transportation.create({
+      type,
+      destination,
+      price,
+    });
     res.status(200).json(transportaion);
   } catch (error) {
     res.status(400).json({ error: error.mssg });
   }
 };
+//x
 
-
-// const sendEmail = async (to, subject, text, html) => {
 //   try {
 //     const testAccount = await nodemailer.createTestAccount();
 
@@ -1094,10 +1275,6 @@ const createTransportation = async (req, res) => {
 //         },
 //       });
 //     console.log(transporter);
- 
-
-
-    
 
 //     // Email options
 //     const mailOptions = {
@@ -1118,48 +1295,282 @@ const createTransportation = async (req, res) => {
 //   }
 // };
 
-
-const sendEmail = async (to, subject, text, html) => {
+// Function to calculate total revenue from purchased products
+const totalProductRevenue = async (req, res) => {
   try {
-    // Generate a test Ethereal account
-    const testAccount = await nodemailer.createTestAccount();
+    // Step 1: Retrieve all tourists and populate their purchased products
+    const tourists = await Tourist.find().populate("products");
 
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // Use TLS
-      auth: {
-        user: testAccount.user, // Generated user
-        pass: testAccount.pass, // Generated password
-      },
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their purchased products
+    tourists.forEach((tourist) => {
+      tourist.products.forEach((product) => {
+        // Step 4: Add of each product's price to the total revenue
+        totalRevenue += product.price;
+      });
     });
 
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <no-reply@watermelonglobe.com>', // Sender's address
-      to,
-      subject, // Subject of the email
-      text, // Plain text content
-      html, // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-
-    // Log the preview URL for Ethereal
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-    return { success: true, message: "Email sent successfully!", previewURL: nodemailer.getTestMessageUrl(info) };
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: "Total revenue calculated successfully",
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
   } catch (error) {
-    console.error("Error sending email: ", error);
-    return { success: false, message: "Failed to send email.", error };
+    // Handle any errors
+    res.status(500).json({
+      message: "Error calculating total revenue",
+      error: error.message,
+    });
   }
 };
 
+// Function to calculate total revenue from booked itinerary (10% of their price)
+const totalItineraryRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their booked itineraries
+    const itinerary = await bookedItinerary.find({});
+
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their booked itineraries
+    itinerary.forEach((itinerary) => {
+      if (itinerary.totalPrice) {
+        totalRevenue += itinerary.totalPrice * 0.1; // Taking 10% of the product price
+      }
+    });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: "Total revenue calculated successfully",
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: "Error calculating total revenue",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = sendEmail;
+// Function to calculate total revenue from booked activity (10% of their price)
+const totalActivityRevenue = async (req, res) => {
+  try {
+    // Step 1: Retrieve all tourists and populate their booked activities
+    const activity = await bookedActivity.find({});
 
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all tourists and their booked acitivites
+    activity.forEach((activity) => {
+      if (activity.totalPrice) {
+        totalRevenue += activity.totalPrice * 0.1; // Taking 10% of the product price
+      }
+    });
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: "Total revenue calculated successfully",
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: "Error calculating total revenue",
+      error: error.message,
+    });
+  }
+};
+
+const countTotalUsers = async (req, res) => {
+  try {
+    // Count the total number of users in each collection
+    const touristCount = await Tourist.countDocuments();
+    const sellerCount = await Seller.countDocuments();
+    const advertiserCount = await Advertiser.countDocuments();
+    const tourGuideCount = await TourGuide.countDocuments();
+
+    // Calculate the total users from all collections
+    const totalUsers =
+      touristCount + sellerCount + advertiserCount + tourGuideCount;
+
+    // Send the response back to the client
+    res.status(200).json({
+      totalUsers,
+      details: {
+        tourists: touristCount,
+        sellers: sellerCount,
+        advertisers: advertiserCount,
+        tourGuides: tourGuideCount,
+      },
+    });
+  } catch (error) {
+    console.error("Error counting users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getUsersPerMonth = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+
+    // Helper function to count users created in each month
+    const countUsersPerMonth = async (Model) => {
+      const monthlyCounts = await Model.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: new Date(`${currentYear}-01-01`),
+              $lt: new Date(`${currentYear + 1}-01-01`),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { _id: 1 }, // Sort by month
+        },
+      ]);
+      return monthlyCounts;
+    };
+
+    // Get counts for each type of user
+    const touristsCount = await countUsersPerMonth(Tourist);
+    const sellersCount = await countUsersPerMonth(Seller);
+    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const tourGuidesCount = await countUsersPerMonth(TourGuide);
+
+    // Combine results from all user types
+    const totalUsersPerMonth = Array.from({ length: 12 }, (_, i) => {
+      const month = i + 1;
+      const tourists =
+        touristsCount.find((item) => item._id === month)?.count || 0;
+      const sellers =
+        sellersCount.find((item) => item._id === month)?.count || 0;
+      const advertisers =
+        advertisersCount.find((item) => item._id === month)?.count || 0;
+      const tourGuides =
+        tourGuidesCount.find((item) => item._id === month)?.count || 0;
+
+      // Sum all user types for the total
+      const totalUsers = tourists + sellers + advertisers + tourGuides;
+
+      return {
+        month,
+        totalUsers, // Combine all into a single totalUsers field
+      };
+    });
+
+    res.status(200).json(totalUsersPerMonth);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch user counts" });
+  }
+};
+
+//PromoCode
+
+const createPromoCode = async (req, res) => {
+  const { code, discountValue } = req.body;
+  try {
+    const newCode = await PromoCode.create({ code, discountValue });
+
+    res.status(200).json(newCode);
+  } catch (error) {
+    res.status(400).json({ error: error.mssg });
+  }
+};
+
+const getAllPromoCodes = async (req, res) => {
+  const allCodes = await PromoCode.find({}).sort({ createdAt: -1 });
+
+  res.status(200).json(allCodes);
+};
+
+const deletePromoCode = async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such promocode" });
+  }
+
+  try {
+    // Find and delete the seller, and return the deleted document
+    const code = await PromoCode.findOneAndDelete({ _id: id });
+
+    // Check if the seller exists
+    if (!code) {
+      return res.status(400).json({ error: "No such promo code" });
+    }
+
+    res.status(200).json({ message: "Promo code deleted successfully", code });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const filterRevenueByProduct = async (req, res) => {
+  try {
+    const { productId } = req.params; // Assuming the product ID is passed as a URL parameter
+
+    // Step 1: Validate the product ID
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({
+        message: "Invalid product ID",
+      });
+    }
+
+    // Step 2: Find the product to ensure it exists and get its price and sales
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    // Step 3: Calculate the total revenue for this product
+    const totalRevenue = product.sales * product.price;
+
+    // Step 4: Send the response
+    res.status(200).json({
+      message: "Total revenue calculated successfully for the product",
+      productName: product.name,
+      totalSales: product.sales,
+      price: product.price,
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: "Error calculating revenue for the product",
+      error: error.message,
+    });
+  }
+};
+
+const getNotificationsAdmin = async (req, res) => {
+  try {
+    const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+    if (!admin) {
+      res.status(400).json({ message: "admin is not found" });
+    } else {
+      res.status(200).json(admin.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   createAdmin,
@@ -1211,5 +1622,18 @@ module.exports = {
   unarchiveProduct,
   uploadPicture,
   markItineraryInappropriate,
-  createTransportation
+  createTransportation,
+  markActivityInappropriate,
+  createTransportation,
+  totalProductRevenue,
+  totalItineraryRevenue,
+  totalActivityRevenue,
+  countTotalUsers,
+  getUsersPerMonth,
+  createPromoCode,
+  getAllPromoCodes,
+  deletePromoCode,
+  filterRevenueByProduct,
+  getNotificationsAdmin,
+  getUploadedDocumentsByID,
 };

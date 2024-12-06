@@ -1,126 +1,148 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import Sidebar from "./sidebar/Sidebar";
+import Navbar from "./navbar/Navbar";
 
-const ChangePasswordGovernor = ({ onClose }) => {
-  const [sellerId, setSellerId] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [sellerPassword, setSellerPassword] = useState('');
+const ChangePasswordGovernor = () => {
+  const { id } = useParams(); // Governor ID from the URL
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirmed, setNewPasswordConfirmed] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleShowPassword = async () => {
-    if (!sellerId) {
-      alert("Please enter a seller ID.");
-      return;
-    }
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
     try {
-      const response = await fetch(`/api/governor/getPassword?id=${sellerId}`);
+      const response = await fetch(`/api/Governor/changePasswordGovernor/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ oldPassword, newPassword, newPasswordConfirmed }),
+      });
+
       const data = await response.json();
-      setSellerPassword(response.ok ? data : 'Password not available');
+
+      if (!response.ok) {
+        setErrorMessage(data.error || "Failed to change password.");
+        setSuccessMessage("");
+      } else {
+        setSuccessMessage("Password changed successfully!");
+        setErrorMessage("");
+        setOldPassword("");
+        setNewPassword("");
+        setNewPasswordConfirmed("");
+      }
     } catch (error) {
-      alert("An error occurred while retrieving the password.");
+      setErrorMessage("An error occurred: " + error.message);
+      setSuccessMessage("");
     }
   };
 
-  const handleConfirmPasswordChange = async () => {
-    if (newPassword !== confirmNewPassword) {
-      alert("New password and confirm password do not match.");
-      return;
-    }
-    try {
-        const response = await fetch(`/api/governor/changePasswordGovernor/${sellerId}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`, {
-            method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ oldPassword: currentPassword, newPassword }),
-      });
-      const data = await response.json();
-      if(response.ok){
-        alert("Password changed successfully.");
-        setConfirmNewPassword('');
-        setCurrentPassword('');
-        setNewPassword('');
-      }
-      else{
-        alert(data.error|| "Failed to change password.");
-      }
+  const containerStyle = {
+    display: "flex",
+    minHeight: "100vh",
+    width:"100%"
+  };
 
-    } catch (error) {
-      alert("An error occurred while changing the password.");
-    }
+  const mainContentStyle = {
+     flex: 1,
+    padding: "20px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width:"100%"
+  };
+
+  const cardStyle = {
+    backgroundColor: "white",
+    borderRadius: "15px",
+    padding: "20px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    maxWidth: "500px",
+    width: "100%",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "10px",
+    marginBottom: "15px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  };
+
+  const buttonStyle = {
+    backgroundColor: "#4CAF50",
+    color: "white",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    display: "block",
+    width: "100%",
+    marginTop: "10px",
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Example id : 67065e1683d5a647b45c2142</h3>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Change Password</h2>
-        
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Governor ID:</label>
-          <input
-            type="text"
-            value={sellerId}
-            onChange={(e) => setSellerId(e.target.value)}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+    <div className= "listGovernor" >
+      <Sidebar id={id} />
+      <div  className ="listContainerGovernor" >
+        <Navbar />
+        <div style={containerStyle}>
+        <div style={mainContentStyle}>
+        <div style={cardStyle}>
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+            Change Password
+          </h2>
+          <form onSubmit={handleChangePassword}>
+            <label>Old Password:</label>
+            <input
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              style={inputStyle}
+              required
+            />
 
-        <button
-          onClick={handleShowPassword}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-          >
-          Show Password
-        </button>
-        {sellerPassword && (
-          <p className="text-gray-700 mb-4"><strong>Governor Password:</strong> {sellerPassword}</p>
-        )}
+            <label>New Password:</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              style={inputStyle}
+              required
+            />
 
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Current Password:</label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+            <label>Confirm New Password:</label>
+            <input
+              type="password"
+              value={newPasswordConfirmed}
+              onChange={(e) => setNewPasswordConfirmed(e.target.value)}
+              style={inputStyle}
+              required
+            />
 
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">New Password:</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+            <button type="submit" style={buttonStyle}>
+              Change Password
+            </button>
+          </form>
 
-        <div className="mb-4">
-          <label className="block font-medium text-gray-700">Confirm New Password:</label>
-          <input
-            type="password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          {successMessage && (
+            <p style={{ color: "green", marginTop: "15px" }}>
+              {successMessage}
+            </p>
+          )}
+          {errorMessage && (
+            <p style={{ color: "red", marginTop: "15px" }}>{errorMessage}</p>
+          )}
         </div>
-
-        <div className="flex justify-end">
-          <button
-            onClick={handleConfirmPasswordChange}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-          >
-            Confirm
-          </button>
-        </div>
-        <button onClick={onClose}>Close</button>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
 
 export default ChangePasswordGovernor;
-
-
-
-
-

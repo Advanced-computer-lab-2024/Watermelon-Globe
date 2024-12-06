@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from './sidebar/Sidebar';
 import Navbar from './navbar/Navbar';
+import"./guide.scss"
 
 const ItineraryTourguide = () => {
   const { id } = useParams();
@@ -180,9 +181,9 @@ const handleDelete = async () => {
   };
 
   return (
-    <div className="list">
+    <div className="listGuide">
        <Sidebar />
-       <div className="listContainer">
+       <div className="listContainerGuide">
        <Navbar />
         <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
           {/* Displaying Data */}
