@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Bell, X } from "lucide-react";
 
 interface NotificationsBoxProps {
   id: string | undefined;
@@ -17,7 +18,6 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        // Replace this with your actual API call
         const response = await fetch(`/api/tourist/notifications/${id}`);
         const data = await response.json();
         setNotifications(data.notifications);
@@ -52,23 +52,44 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
   return (
     <div
       ref={boxRef}
-      className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg z-20"
+      className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-20 border border-gray-200"
       style={{ top: "100%" }}
     >
-      <div className="py-2 px-4 bg-gray-100 font-semibold border-b">
-        Notifications
+      <div className="py-3 px-4 bg-[#FF3366] text-white font-semibold rounded-t-lg flex justify-between items-center">
+        <div className="flex items-center">
+          <Bell className="w-5 h-5 mr-2" />
+          Notifications
+        </div>
+        <button
+          onClick={onClose}
+          className="text-white hover:bg-[#E62E5C] p-1 rounded"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
-      <ul className="py-2 max-h-64 overflow-y-auto">
+      <div className="max-h-80 overflow-y-auto">
         {notifications.length > 0 ? (
           notifications.map((notification, index) => (
-            <li key={index} className="px-4 py-2 hover:bg-gray-100">
-              {notification}
-            </li>
+            <div
+              key={index}
+              className="px-4 py-3 border-b border-gray-200 hover:bg-[#FFF0F5] transition-colors duration-150 ease-in-out"
+            >
+              <p className="text-sm text-gray-800">{notification}</p>
+            </div>
           ))
         ) : (
-          <li className="px-4 py-2 text-gray-500">No new notifications</li>
+          <div className="px-4 py-3 text-sm text-gray-500">
+            No new notifications
+          </div>
         )}
-      </ul>
+      </div>
+      {notifications.length > 0 && (
+        <div className="py-2 px-4 bg-gray-50 rounded-b-lg">
+          <button className="text-sm text-green-600 hover:text-green-800 font-medium">
+            Mark all as read
+          </button>
+        </div>
+      )}
     </div>
   );
 };
