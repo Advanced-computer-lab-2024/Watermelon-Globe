@@ -273,7 +273,6 @@ const ItineraryDetails = () => {
           <span>Share via Email</span>
         </button>
       </div>
-      <WalletComponent touristId={id} />
     </div>
   );
 };

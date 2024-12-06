@@ -239,7 +239,6 @@ const ActivityDetails: React.FC = () => {
           {bookingInProgress ? 'Booking...' : 'Book Activity'}
         </button>
       </div>
-      <WalletComponent touristId={id} />
     </div>
   );
 };

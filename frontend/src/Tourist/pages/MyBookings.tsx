@@ -1,290 +1,208 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import WalletComponent from '../Components/Wallet';
 
-const MyBookings: React.FC = () => {
-  const { id } = useParams(); // Get the tourist ID from the URL params
-  const navigate = useNavigate();
-  const [itineraryBookings, setItineraryBookings] = useState<Booking[]>([]);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const OrdersPage = () => {
+    const { touristId } = useParams<{ touristId: string }>();
+    const [orders, setOrders] = useState<Order[]>([]); 
 
-  interface Itinerary {
-    accessibility: boolean;
-    activities: string[]; // Array of activity IDs
-    availableDates: string[];
-    availableTimes: string[];
-    bookings: boolean;
-    comments: string[];
-    createdAt: string;
-    guide: string;
-    inappropriate: boolean;
-    languageOfTour: string;
-    locations: string[];
-    name: string;
-    pickupDropoffLocations: any[]; // Adjust as needed
-    priceOfTour: number;
-    rating: number;
-    ratings: any[]; // Adjust as needed
-    tag: any[]; // Adjust as needed
-    timeline: string;
-    updatedAt: string;
-    status: string;
-    totalPrice: number;
-  }
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [cancelReason, setCancelReason] = useState<string>(''); // For storing the cancellation reason
 
-  interface Activity {
-    _id: string;
-    activity: Activities;
-    tourist: string;
-    chosenDate: string;
-    status: string;
-    paymentStatus: string;
-    completed: boolean;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  }
+    interface Order {
+        _id: string;
+        orderDate: string;
+        status: string;
+        totalPrice: number;
+        deliveryDate?: string;
+        items: { productId: { name: string }; quantity: number }[]; // More item details can be added as needed
+    }
 
-  interface Booking {
-    _id: string;
-    buyer: string;
-    chosenDates: string[];
-    chosenTimes: string[];
-    completed: boolean;
-    createdAt: string;
-    itinerary: Itinerary;
-    status: string;
-    totalPrice: number;
-    updatedAt: string;
-    __v: number;
-  }
-
-  interface Activities {
-    _id: string;
-    Name: string;
-    Date: string;
-    Time: string;
-    Price: number;
-    tags: any[];
-    Discount: number;
-    bookingOpen: boolean;
-    rating: number;
-    Advertiser: string;
-    ratings: any[];
-    comments: any[];
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  }
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchBookings = async () => {
-      try {
-        // Fetch itineraries
-        const itineraryResponse = await axios.get<Booking[]>(`/api/Tourist/BookedItineraries/${id}`);
-        setItineraryBookings(itineraryResponse.data);
-
-        // Fetch activities
-        const activityResponse = await axios.get<Activity[]>(`/api/Tourist/BookedActivities/${id}`);
-        setActivities(activityResponse.data);
-
-        setLoading(false); // Set loading to false after data is fetched
-      } catch (error) {
-        console.error(error);
-        setLoading(false); // Ensure loading is set to false even on error
-      }
+    // Fetch all orders
+    const fetchOrders = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`/api/Tourist/viewAllOrders/${touristId}`);
+            console.log('Orders API Response:', response.data); // Log the response
+            setOrders(response.data.orders); // Access the orders array
+            setError(null);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch orders. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    fetchBookings();
-  }, [id]);
+    const fetchOrderDetails = async (orderId: string) => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`/api/Tourist/viewOrderDetails/${touristId}`, {
+                params: { orderId } // Pass orderId as query parameter
+            });
+            setSelectedOrder(response.data.order); // Assuming order is returned as part of the response
+            setError(null);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch order details. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+    // Cancel an order
+    const cancelOrder = async (orderId: string, reason: string) => {
+        if (!selectedOrder) {
+            alert('No order selected for cancellation');
+            return;
+        }
 
-  // Filter out itineraries and activities with status 'cancelled'
-  const filteredItineraryBookings = itineraryBookings.filter(booking => booking.status !== 'cancelled');
-  const filteredActivities = activities.filter(activity => activity.status !== 'cancelled');
+        try {
+            const response = await axios.put(`/api/Tourist/cancelOrder/${touristId}`, { orderId, reason });
+            alert('Order successfully cancelled.');
 
-  // Split itineraries into completed and upcoming
-  const completedItineraries = filteredItineraryBookings.filter(booking => booking.completed);
-  const upcomingItineraries = filteredItineraryBookings.filter(booking => !booking.completed);
+            // Add the amount from the canceled order back to the wallet
+            const orderTotal = selectedOrder.totalPrice; // Get the total price from the canceled order
+            await axios.put(`/api/Tourist/updateWallet/${touristId}`, { amount: orderTotal });
 
-  // Split activities into completed and upcoming
-  const completedActivities = filteredActivities.filter((activity) => activity.completed);
-  const upcomingActivities = filteredActivities.filter((activity) => !activity.completed);
+            // Refresh the orders list
+            fetchOrders();
 
-  const redirectToRatingsPageItinerary = (itineraryId: string, type: string) => {
-    navigate(`/ratingsAndCommentsPage/${itineraryId}/${id}/${type}`);
-  };
+            // Update the status of the canceled order
+            if (selectedOrder._id === orderId) {
+                setSelectedOrder({ ...selectedOrder, status: 'Cancelled' });
+            }
 
-  const redirectToRatingsPageGuide = (guideId: string, type: string) => {
-    navigate(`/ratingsAndCommentsPage/${guideId}/${id}/${type}`);
-  };
+            // Clear the cancel reason input
+            setCancelReason('');
+        } catch (err) {
+            console.error(err);
+            setError('Failed to cancel the order. Please try again later.');
+        }
+    };
 
-  const redirectToRatingsPageActivity = (activityId: string, type: string) => {
-    navigate(`/ratingsAndCommentsPage/${activityId}/${id}/${type}`);
-  };
+    // Split the orders into current and past orders
+    const splitOrders = (orders: Order[]) => {
+        const currentOrders = orders.filter(order => order.status === 'Confirmed');
+        const pastOrders = orders.filter(order => order.status === 'Delivered' || order.status === 'Cancelled');
+        return { currentOrders, pastOrders };
+    };
 
-  // Cancel itinerary function
-  const cancelItinerary = async (itineraryId: string, orderTotal: number) => {
-    try {
-      const response = await fetch(`/api/TouristItinerary/cancelItineraryBooking/${itineraryId}`, {
-        method: 'PUT',
-      });
+    useEffect(() => {
+        fetchOrders();
+    }, [touristId]);
 
-      if (response.ok) {
-        alert('Itinerary cancelled successfully!');
-        await axios.put(`/api/Tourist/updateWallet/${id}`, { amount: orderTotal });
-        await axios.delete(`/api/Tourist/deleteItinerary/${id}/${itineraryId}`);
-        setItineraryBookings(itineraryBookings.filter(booking => booking._id !== itineraryId));
-      } else {
-        alert('Failed to cancel itinerary.');
-      }
-    } catch (error) {
-      console.error('Error cancelling itinerary:', error);
-    }
-  };
+    const { currentOrders, pastOrders } = splitOrders(orders);
 
-  // Cancel activity function
-  const cancelActivity = async (activityId: string, orderTotal: number) => {
-    try {
-      const response = await fetch(`/api/TouristItinerary/cancelActivityBooking/${activityId}`, {
-        method: 'PUT',
-      });
+    return (
+        <div className="p-6 bg-gradient-to-r from-primary/25 to-secondary/20" style={{ margin: '-20px' }}>
+            <h1 className="text-4xl p-3 font-bold mb-8 text-center text-black bg-lightGray shadow-md rounded-lg">
+                My Orders
+            </h1>
 
-      if (response.ok) {
-        alert('Activity cancelled successfully!');
-        await axios.put(`/api/Tourist/updateWallet/${id}`, { amount: orderTotal });
-        await axios.delete(`/api/Tourist/deleteActivity/${id}/${activityId}`);
-        setActivities(activities.filter(activity => activity._id !== activityId));
-      } else {
-        alert('Failed to cancel activity.');
-      }
-    } catch (error) {
-      console.error('Error cancelling activity:', error);
-    }
-  };
+            {loading && <p className="text-center text-grayText">Loading orders...</p>}
+            {error && <p className="text-red-500 text-center">{error}</p>}
 
-
-  return (
-    <div className="p-6 bg-gradient-to-r from-primary/25 to-secondary/20" style={{ margin: '-20px' }}>
-      <h1 className="text-4xl p-3 font-bold mb-8 text-center text-black bg-lightGray shadow-md rounded-lg">My Bookings</h1>
-
-      {/* upcoming Section */}
-      <section className="mb-8">
-        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Activities</h2>
-        {upcomingActivities.length > 0 ? (
-          upcomingActivities.map((activity) => (
-            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {activity.activity.Name }</p>
-              <p>Status: {activity.status}</p>
-              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
-              <p>Activity Time: {activity.activity.Time}</p>
-              <p>Price: ${activity.activity.Price}</p>
-              <button
-                onClick={() => cancelActivity(activity._id, activity.activity.Price)}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Cancel Activity
-              </button>
-
+            {/* Current Orders */}
+            <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
+                <h2 className="text-3xl font-semibold text-black mb-6">Current Orders</h2>
+                {currentOrders.length === 0 ? (
+                    <p className="text-grayText text-center">No current orders.</p>
+                ) : (
+                    <ul>
+                        {currentOrders.map((order) => (
+                            <li
+                                key={order._id}
+                                className="p-4 mb-4 border rounded-lg hover:shadow-md cursor-pointer transition"
+                                onClick={() => fetchOrderDetails(order._id)}
+                            >
+                                <div className="flex justify-between">
+                                    <span className="text-secondary font-bold">Order #{order._id}</span>
+                                    <span className="text-grayText">{new Date(order.orderDate).toLocaleDateString()}</span>
+                                </div>
+                                <div className="text-grayText">Status: {order.status}</div>
+                                <div className="text-grayText">Total: ${order.totalPrice.toFixed(2)}</div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
-          ))
-        ) : (
-          <p className="text-grayText">No upcoming activities.</p>
-        )}
 
-        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Itineraries</h2>
-        {upcomingItineraries.length > 0 ? (
-          upcomingItineraries.map((booking) => (
-            <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
-              <p>Status: {booking.status}</p>
-              <p>
-                Itinerary Date:
-                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
-              </p>
-              <p>Itinerary Time: {booking.chosenTimes}</p>
-              <p>Price: ${booking.totalPrice}</p>
-              <button
-                onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Cancel Itinerary
-              </button>
-
+            {/* Past Orders */}
+            <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
+                <h2 className="text-3xl font-semibold text-black mb-6">Past Orders</h2>
+                {pastOrders.length === 0 ? (
+                    <p className="text-grayText text-center">No past orders.</p>
+                ) : (
+                    <ul>
+                        {pastOrders.map((order) => (
+                            <li
+                                key={order._id}
+                                className="p-4 mb-4 border rounded-lg hover:shadow-md cursor-pointer transition"
+                                onClick={() => fetchOrderDetails(order._id)}
+                            >
+                                <div className="flex justify-between">
+                                    <span className="text-secondary font-bold">Order #{order._id}</span>
+                                    <span className="text-grayText">{new Date(order.orderDate).toLocaleDateString()}</span>
+                                </div>
+                                <div className="text-grayText">Status: {order.status}</div>
+                                <div className="text-grayText">Total: ${order.totalPrice.toFixed(2)}</div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
-          ))
-        ) : (
-          <p className="text-grayText">No upcoming itineraries.</p>
-        )}
-      </section>
 
-      {/* completed Section */}
-      <section className="mb-8">
-        <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Activities</h2>
-        {completedActivities.length > 0 ? (
-          completedActivities.map((activity) => (
-            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {activity.activity.Name}</p>
-              <p>Status: completed </p>
-              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
-              <p>Activity Time: {activity.activity.Time}</p>
-              <p>Price: ${activity.activity.Price}</p>
-              <button
-                onClick={() => redirectToRatingsPageActivity(activity._id, 'activity')}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Rate Activity
-              </button>
+            {/* Order Details */}
+            {selectedOrder && (
+                <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
+                    <h2 className="text-3xl font-semibold text-black mb-6">Order Details</h2>
+                    <p className="text-black font-semibold">Order ID: {selectedOrder._id}</p>
+                    <p className="text-grayText">Status: {selectedOrder.status}</p>
+                    <p className="text-grayText">
+                        Order Date: {new Date(selectedOrder.orderDate).toLocaleDateString()}
+                    </p>
+                    <p className="text-grayText">
+                        Delivery Date:{' '}
+                        {selectedOrder.deliveryDate
+                            ? new Date(selectedOrder.deliveryDate).toLocaleDateString()
+                            : 'N/A'}
+                    </p>
+                    <p className="text-black font-semibold">Items:</p>
+                    <ul className="mb-4">
+                        {selectedOrder?.items.map((item: { productId: { name: string }; quantity: number }) => (
+                            <li key={item.productId.name} className="text-grayText">
+                                {item.productId.name} : {item.quantity} pcs
+                            </li>
+                        ))}
+                    </ul>
+                    <p className="text-grayText">Total Price: ${selectedOrder.totalPrice.toFixed(2)}</p>
 
-            </div>
-          ))
-        ) : (
-          <p className="text-grayText">No completed activities.</p>
-        )}
-
-        <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Itineraries</h2>
-        {completedItineraries.length > 0 ? (
-          completedItineraries.map((booking) => (
-            <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
-              <p>Status: completed</p>
-              <p>
-                Itinerary Date:
-                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
-              </p>
-              <p>Itinerary Time: {booking.chosenTimes}</p>
-              <p>Price: ${booking.totalPrice}</p>
-              <button
-                onClick={() => redirectToRatingsPageItinerary(booking._id, 'itinerary')}
-                className="mt-4 bg-primary text-white p-2 mr-8 rounded-lg hover:bg-hover"
-              >
-                Rate Itinerary
-              </button>
-
-              <button
-                onClick={() => redirectToRatingsPageGuide(booking.itinerary.guide, 'guide')}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Rate Guide
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-grayText">No completed itineraries.</p>
-        )}
-
-
-      </section>
-      <WalletComponent touristId={id} />
-    </div>
-  );
+                    {selectedOrder.status === 'Confirmed' && (
+                        <div>
+                            {/* Reason Input */}
+                            <textarea
+                                value={cancelReason}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                                placeholder="Enter cancellation reason..."
+                                className="w-full p-3 mt-4 border rounded-lg"
+                            />
+                            <button
+                                onClick={() => cancelOrder(selectedOrder._id, cancelReason)}
+                                className="w-full p-4 mt-4 bg-primary text-white rounded-lg hover:bg-hover transition"
+                                disabled={!cancelReason.trim()}
+                            >
+                                Cancel Order
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
 };
 
-export default MyBookings;
+export default OrdersPage;

@@ -9,10 +9,11 @@ module.exports = {
     extend: {
       colors: {
         // Custom colors based on provided code
-        primary: '#FF3366',      // Used for buttons and links
-        hover: '#E62E5C',        // Hover color for buttons
-        secondary: '#2E8B57',    // Used for header and main text
-        secondaryHover: '#247A4B', // Hover color for secondary elements
+        primary: '#d32e65',      // Used for buttons and links PINK
+        hover: '#f6d8e576',        // Hover color for buttons PINK HOVER
+        secondary: '#91c297',    // Used for header and main text GREEN 
+        secondaryHover: '#247A4B', // Hover color for secondary elements GREEN HOVER
+        lightHover: '#d32e651a',
         background: '#FCFCFC',   // Background color for the main page
         sectionBackground: '#F6F6F6', // Background color for sections
         cardBackground: '#FFFFFF', // Card background

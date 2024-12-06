@@ -12,7 +12,7 @@ import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 import WalletComponent from '../Components/Wallet';
-import TouristNavbar from "../Components/TouristNavBar.tsx";
+import TouristNavbar from "../Components/TouristNavBar";
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -222,7 +222,6 @@ export default function DraftHomePage() {
           <p>&copy; {new Date().getFullYear()} Watermelon Globe. All rights reserved.</p>
         </div>
       </footer>
-      <WalletComponent touristId={id} />
     </div>
   )
 }

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import WalletComponent from '../Components/Wallet';
+import { FaCalendar, FaDollarSign, FaCheckCircle, FaTimesCircle, FaUser } from 'react-icons/fa';
+import TouristNavbar from '../Components/TouristNavBar';
 
 const OrdersPage = () => {
     const { touristId } = useParams<{ touristId: string }>();
-    const [orders, setOrders] = useState<Order[]>([]); 
-
+    const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [cancelReason, setCancelReason] = useState<string>(''); // For storing the cancellation reason
+    const [cancelReason, setCancelReason] = useState<string>('');
 
     interface Order {
         _id: string;
@@ -18,190 +18,148 @@ const OrdersPage = () => {
         status: string;
         totalPrice: number;
         deliveryDate?: string;
-        items: { productId: { name: string }; quantity: number }[]; // More item details can be added as needed
+        items: { productId: { name: string }; quantity: number }[];
     }
 
-    // Fetch all orders
-    const fetchOrders = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`/api/Tourist/viewAllOrders/${touristId}`);
-            console.log('Orders API Response:', response.data); // Log the response
-            setOrders(response.data.orders); // Access the orders array
-            setError(null);
-        } catch (err) {
-            console.error(err);
-            setError('Failed to fetch orders. Please try again later.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get(`/api/Tourist/viewAllOrders/${touristId}`);
+                setOrders(response.data.orders);
+                setError(null);
+            } catch (err) {
+                setError('Failed to fetch orders. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const fetchOrderDetails = async (orderId: string) => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`/api/Tourist/viewOrderDetails/${touristId}`, {
-                params: { orderId } // Pass orderId as query parameter
-            });
-            setSelectedOrder(response.data.order); // Assuming `order` is returned as part of the response
-            setError(null);
-        } catch (err) {
-            console.error(err);
-            setError('Failed to fetch order details. Please try again later.');
-        } finally {
-            setLoading(false);
-        }
-    };
+        fetchOrders();
+    }, [touristId]);
 
-    // Cancel an order
-    const cancelOrder = async (orderId: string, reason: string) => {
-        if (!selectedOrder) {
-            alert('No order selected for cancellation');
+    const cancelOrder = async (orderId: string) => {
+        if (!cancelReason.trim()) {
+            alert('Please provide a reason for cancellation.');
             return;
         }
 
         try {
-            const response = await axios.put(`/api/Tourist/cancelOrder/${touristId}`, { orderId, reason });
+            await axios.put(`/api/Tourist/cancelOrder/${touristId}`, { orderId, reason: cancelReason });
             alert('Order successfully cancelled.');
-
-            // Add the amount from the canceled order back to the wallet
-            const orderTotal = selectedOrder.totalPrice; // Get the total price from the canceled order
-            await axios.put(`/api/Tourist/updateWallet/${touristId}`, { amount: orderTotal });
-
-            // Refresh the orders list
-            fetchOrders();
-
-            // Update the status of the canceled order
-            if (selectedOrder._id === orderId) {
-                setSelectedOrder({ ...selectedOrder, status: 'Cancelled' });
-            }
-
-            // Clear the cancel reason input
+            setOrders((prev) =>
+                prev.map((order) =>
+                    order._id === orderId ? { ...order, status: 'Cancelled' } : order
+                )
+            );
             setCancelReason('');
         } catch (err) {
-            console.error(err);
             setError('Failed to cancel the order. Please try again later.');
         }
     };
 
-    // Split the orders into current and past orders
     const splitOrders = (orders: Order[]) => {
         const currentOrders = orders.filter(order => order.status === 'Confirmed');
-        const pastOrders = orders.filter(order => order.status === 'Delivered' || order.status === 'Cancelled');
+        const pastOrders = orders.filter(order => order.status !== 'Confirmed');
         return { currentOrders, pastOrders };
     };
 
-    useEffect(() => {
-        fetchOrders();
-    }, [touristId]);
-
     const { currentOrders, pastOrders } = splitOrders(orders);
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen bg-background">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
     return (
-        <div className="p-6 bg-gradient-to-r from-primary/25 to-secondary/20" style={{ margin: '-20px' }}>
-            <h1 className="text-4xl p-3 font-bold mb-8 text-center text-black bg-lightGray shadow-md rounded-lg">
-                My Orders
-            </h1>
+        <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+            <TouristNavbar id={touristId} />
 
-            {loading && <p className="text-center text-grayText">Loading orders...</p>}
-            {error && <p className="text-red-500 text-center">{error}</p>}
-
-            {/* Current Orders */}
-            <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
-                <h2 className="text-3xl font-semibold text-black mb-6">Current Orders</h2>
-                {currentOrders.length === 0 ? (
-                    <p className="text-grayText text-center">No current orders.</p>
-                ) : (
-                    <ul>
-                        {currentOrders.map((order) => (
-                            <li
-                                key={order._id}
-                                className="p-4 mb-4 border rounded-lg hover:shadow-md cursor-pointer transition"
-                                onClick={() => fetchOrderDetails(order._id)}
-                            >
-                                <div className="flex justify-between">
-                                    <span className="text-secondary font-bold">Order #{order._id}</span>
-                                    <span className="text-grayText">{new Date(order.orderDate).toLocaleDateString()}</span>
-                                </div>
-                                <div className="text-grayText">Status: {order.status}</div>
-                                <div className="text-grayText">Total: ${order.totalPrice.toFixed(2)}</div>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-
-            {/* Past Orders */}
-            <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
-                <h2 className="text-3xl font-semibold text-black mb-6">Past Orders</h2>
-                {pastOrders.length === 0 ? (
-                    <p className="text-grayText text-center">No past orders.</p>
-                ) : (
-                    <ul>
-                        {pastOrders.map((order) => (
-                            <li
-                                key={order._id}
-                                className="p-4 mb-4 border rounded-lg hover:shadow-md cursor-pointer transition"
-                                onClick={() => fetchOrderDetails(order._id)}
-                            >
-                                <div className="flex justify-between">
-                                    <span className="text-secondary font-bold">Order #{order._id}</span>
-                                    <span className="text-grayText">{new Date(order.orderDate).toLocaleDateString()}</span>
-                                </div>
-                                <div className="text-grayText">Status: {order.status}</div>
-                                <div className="text-grayText">Total: ${order.totalPrice.toFixed(2)}</div>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-
-            {/* Order Details */}
-            {selectedOrder && (
-                <div className="bg-cardBackground shadow-md rounded-lg p-6 mb-6">
-                    <h2 className="text-3xl font-semibold text-black mb-6">Order Details</h2>
-                    <p className="text-black font-semibold">Order ID: {selectedOrder._id}</p>
-                    <p className="text-grayText">Status: {selectedOrder.status}</p>
-                    <p className="text-grayText">
-                        Order Date: {new Date(selectedOrder.orderDate).toLocaleDateString()}
-                    </p>
-                    <p className="text-grayText">
-                        Delivery Date:{' '}
-                        {selectedOrder.deliveryDate
-                            ? new Date(selectedOrder.deliveryDate).toLocaleDateString()
-                            : 'N/A'}
-                    </p>
-                    <p className="text-black font-semibold">Items:</p>
-                    <ul className="mb-4">
-                        {selectedOrder?.items.map((item: { productId: { name: string }; quantity: number }) => (
-                            <li key={item.productId.name} className="text-grayText">
-                                {item.productId.name} : {item.quantity} pcs
-                            </li>
-                        ))}
-                    </ul>
-                    <p className="text-grayText">Total Price: ${selectedOrder.totalPrice.toFixed(2)}</p>
-
-                    {selectedOrder.status === 'Confirmed' && (
-                        <div>
-                            {/* Reason Input */}
-                            <textarea
-                                value={cancelReason}
-                                onChange={(e) => setCancelReason(e.target.value)}
-                                placeholder="Enter cancellation reason..."
-                                className="w-full p-3 mt-4 border rounded-lg"
-                            />
-                            <button
-                                onClick={() => cancelOrder(selectedOrder._id, cancelReason)}
-                                className="w-full p-4 mt-4 bg-primary text-white rounded-lg hover:bg-hover transition"
-                                disabled={!cancelReason.trim()}
-                            >
-                                Cancel Order
-                            </button>
+            <div className="max-w-4xl mx-auto">
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <p>hello</p>
+                    <div className="bg-primary p-5 relative">
+                        <div className="flex items-center space-x-4">
+                            <div className="bg-white rounded-full p-2">
+                                <FaUser className="h-16 w-16 text-primary" />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl font-bold text-white">My Orders</h2>
+                                <p className="text-white opacity-75">
+                                    Manage your Orders
+                                </p>
+                            </div>
                         </div>
-                    )}
+                    </div>
+                    <div className="p-6 space-y-12">
+                        {/* Current Orders */}
+                        <div>
+                            <h3 className="text-2xl font-semibold text-black mb-4">
+                                Current Orders
+                            </h3>
+                            <div className="space-y-4">
+                                {currentOrders.map((order) => (
+                                    <div key={order._id} 
+                                    className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out"
+                                    >
+                                        <div className="flex justify-between">
+                                            <p className="text-lg font-semibold">
+                                                <FaCalendar className="inline-block text-primary mr-2" />
+                                                {new Date(order.orderDate).toLocaleDateString()}
+                                            </p>
+                                            <p className="flex items-center">
+                                            <FaDollarSign className="mr-2 text-primary" />
+                                                {order.totalPrice.toFixed(2)}</p>
+                                        </div>
+                                        <p className="text-grayText">Status: {order.status}</p>
+                                        <button
+                                            onClick={() => cancelOrder(order._id)}
+                                            className="mt-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                                        >
+                                            Cancel Order
+                                        </button>
+                                    </div>
+                                ))}
+                                {currentOrders.length === 0 && (
+                                    <p className="text-gray-500 italic">No current orders.</p>
+                                )}
+
+                            </div>
+                        </div>
+
+                        {/* Past Orders */}
+                        <div className="bg-white shadow-md rounded-lg p-6">
+                            <h2 className="text-2xl font-semibold text-primary">Past Orders</h2>
+                            {pastOrders.length > 0 ? (
+                                pastOrders.map((order) => (
+                                    <div key={order._id} className="p-4 mb-4 bg-lightGray rounded-lg shadow-sm">
+                                        <div className="flex justify-between">
+                                            <p className="text-lg font-semibold">
+                                                <FaCalendar className="inline-block text-primary mr-2" />
+                                                {new Date(order.orderDate).toLocaleDateString()}
+                                            </p>
+                                            <p className="text-secondary font-bold">Total: ${order.totalPrice.toFixed(2)}</p>
+                                        </div>
+                                        <p className="text-grayText">
+                                            Status:{' '}
+                                            {order.status === 'Cancelled' ? (
+                                                <FaTimesCircle className="inline-block text-red-500" />
+                                            ) : (
+                                                <FaCheckCircle className="inline-block text-green-500" />
+                                            )}
+                                        </p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-500 italic">No past orders.</p>
+                            )}
+                        </div>
+                    </div>
                 </div>
-            )}
-            <WalletComponent touristId={touristId} />
+            </div>
         </div>
     );
 };

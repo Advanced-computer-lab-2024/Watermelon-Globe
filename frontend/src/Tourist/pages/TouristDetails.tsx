@@ -8,7 +8,8 @@ import {
   FaEdit, FaCheck, FaTimes, FaGift, FaTrash, FaPlane, FaCompass, FaKey, FaShoppingBasket
 } from 'react-icons/fa'
 import ChangePasswordTourist from '../Components/changePasswordTourist.js'
-import TouristNavbar from "../Components/TouristNavBar.tsx";
+import TouristNavbar from "../Components/TouristNavBar";
+import { Margin } from "@mui/icons-material";
 
 
 interface Tourist {
@@ -186,23 +187,21 @@ export default function TouristDetails() {
 
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
-            <TouristNavbar id={id}/>
+      <TouristNavbar id={id} />
 
       <div className="max-w-4xl mx-auto">
-        
-        <div className="text-center mb-8">
-          <p className="text-xl text-secondary">Your Travel Companion</p>
-        </div>
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-primary p-6 relative">
+          <p>hello</p>
+          <div className="bg-primary p-5 relative">
             <div className="absolute top-4 right-4">
               <button
                 onClick={handleUpdate}
-                className="flex items-center px-3 py-1 bg-white text-primary hover:bg-primary/10 rounded shadow"
+                className="flex items-center px-3 py-1 bg-white text-primary hover:bg-hover/90 rounded shadow"
               >
                 <FaEdit className="mr-1" size="1em" />
                 Edit
               </button>
+
             </div>
             <div className="flex items-center space-x-4">
               <div className="bg-white rounded-full p-2">
@@ -319,9 +318,9 @@ export default function TouristDetails() {
               </div>
             </div>
             <div className="border-t border-gray-200 my-6"></div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center" >
               {isEditing ? (
-                <div className="flex space-x-4">
+                <div className="flex space-x-4" style={{ marginLeft: "610px" }}>
                   <button
                     onClick={handleConfirm}
                     className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
@@ -339,17 +338,17 @@ export default function TouristDetails() {
                 </div>
               ) : (
                 <>
-                  <div className="flex space-x-4">
+                  <div className="flex space-x-4" style={{ marginRight: "236px" }}>
                     <button
                       onClick={() => setShowRedeemModal(true)}
-                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
                     >
                       <FaGift className="mr-2" size="1em" />
                       Redeem Points
                     </button>
                     <button
                       onClick={() => setShowPasswordModal(true)}
-                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
                     >
                       <FaKey className="mr-2" size="1em" />
                       Change Password
@@ -357,7 +356,7 @@ export default function TouristDetails() {
                   </div>
                   <button
                     onClick={handleDeleteAccount}
-                    className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+                    className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded whitespace-nowrap"
                   >
                     <FaTrash className="mr-2" size="1em" />
                     Request Account Deletion
