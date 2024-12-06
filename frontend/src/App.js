@@ -134,7 +134,6 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 
 
-import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
 import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
 import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx";
 //tourguide new
