@@ -2195,6 +2195,20 @@ const stripePayIntentProduct = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getNotificationsTourist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      res.status(404).json({ message: "Tourist not found" });
+    } else {
+      res.status(200).json(tourist.notifications);
+    }
+  } catch (error) {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
   
 module.exports = {
@@ -2261,4 +2275,5 @@ module.exports = {
   stripePayIntentActivity,
   stripePayIntentProduct,
   frontendDataTable,
+  getNotificationsTourist,
 };
