@@ -29,11 +29,15 @@ const {
   frontendPendingSellersTable,
   getProducts,
   deleteProductById,
+  loginSeller,
 } = require("../Controller/SellerController");
 
 const router = express.Router();
 
 //////////////// Seller ////////////////
+
+router.post("/loginSeller", loginSeller);
+
 router.get("/frontendDatatable", frontendSellersTable);
 router.get("/frontendPendingSellersTable", frontendPendingSellersTable);
 //Get all sellers
