@@ -11,6 +11,7 @@ import {
   Truck,
   Users,
   AlertCircle,
+  Bookmark,
 } from "lucide-react";
 import axios from "axios";
 import PaymentOptions2 from "../Components/PaymentOptions2";
@@ -28,6 +29,7 @@ const ItineraryDetails = () => {
   >(null);
   const [bookingMessage, setBookingMessage] = useState<string | null>(null);
   const [bookingInProgress, setBookingInProgress] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // Fetch itinerary details
   const fetchItinerary = async () => {
@@ -49,6 +51,21 @@ const ItineraryDetails = () => {
     fetchItinerary();
   }, [tripid]);
 
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      try {
+        const bookmarkResponse = await axios.get(
+          `/api/Tourist/checkBookmarkItinerary/${id}/${tripid}`
+        );
+        setIsBookmarked(bookmarkResponse.data.isBookmarked);
+      } catch (error) {
+        console.error("Error checking bookmark status:", error);
+      }
+    };
+
+    checkBookmarkStatus();
+  }, [id, tripid]);
+
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -62,12 +79,11 @@ const ItineraryDetails = () => {
       return;
     }
 
-    setBookingInProgress(true); // Show loading state
-    setError(null); // Clear previous errors
+    setBookingInProgress(true);
+    setError(null);
 
     try {
       if (paymentMethod === "wallet") {
-        // Check and update wallet balance
         const walletResponse = await axios.put(
           `/api/Tourist/updateWallet/${id}`,
           {
@@ -76,10 +92,8 @@ const ItineraryDetails = () => {
         );
 
         if (walletResponse.data.wallet >= 0) {
-          // Wallet payment successful
           alert("Payment confirmed using Wallet!");
 
-          // Create booking
           await axios.post("/api/TouristItinerary/createChildItinerary", {
             itinerary: tripid,
             buyer: id,
@@ -89,25 +103,20 @@ const ItineraryDetails = () => {
             status: "pending",
           });
 
-          // Update loyalty points
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
             amountPaid: itinerary.priceOfTour,
           });
 
-          // Notify booking success
           alert("Itinerary booked successfully!");
         } else {
-          // Insufficient balance, rollback wallet
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
             amount: +itinerary.priceOfTour,
           });
           alert("Insufficient wallet balance.");
         }
       } else if (paymentMethod === "creditCard") {
-        // Implement Stripe payment logic here
         alert("Proceeding with credit card payment (Stripe)...");
 
-        // Assuming Stripe payment succeeds:
         await axios.post("/api/TouristItinerary/createChildItinerary", {
           itinerary: tripid,
           buyer: id,
@@ -117,7 +126,6 @@ const ItineraryDetails = () => {
           status: "pending",
         });
 
-        // Update loyalty points
         await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
           amountPaid: itinerary.priceOfTour,
         });
@@ -130,11 +138,10 @@ const ItineraryDetails = () => {
         "An error occurred while processing the booking. Please try again later."
       );
     } finally {
-      setBookingInProgress(false); // Hide loading state
+      setBookingInProgress(false);
     }
   };
 
-  // Share itinerary functionality
   const handleShareLink = () => {
     const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}/${id}`;
     navigator.clipboard
@@ -150,6 +157,25 @@ const ItineraryDetails = () => {
       `I thought you might be interested in this itinerary: ${itineraryUrl}`
     );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
+  const handleBookmark = async () => {
+    try {
+      if (isBookmarked) {
+        await axios.put(`/api/Tourist/removeBookmarkItinerary/${id}/${tripid}`);
+      } else {
+        await axios.put(`/api/Tourist/bookmarkItinerary/${id}/${tripid}`);
+      }
+      setIsBookmarked(!isBookmarked);
+      alert(
+        isBookmarked
+          ? "Itinerary removed from bookmarks"
+          : "Itinerary added to bookmarks"
+      );
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+      alert("Error toggling bookmark. Please try again.");
+    }
   };
 
   if (loading)
@@ -236,7 +262,6 @@ const ItineraryDetails = () => {
         </div>
       </div>
 
-      {/* Display the Rating */}
       <div className="bg-gray-50 p-6 rounded-lg shadow-md mb-12">
         <h3 className="text-2xl font-semibold text-gray-700 mb-4 flex items-center">
           <Star className="mr-2" size={24} /> Average Rating
@@ -318,19 +343,33 @@ const ItineraryDetails = () => {
         </div>
       </form>
 
-      <div className="flex justify-between mb-8">
+      <div className="flex flex-col space-y-4 mb-8">
         <button
-          className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md"
-          onClick={handleShareLink}
+          onClick={handleBookmark}
+          className={`flex items-center justify-center px-4 py-2 rounded-md ${
+            isBookmarked
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-800"
+          }`}
+          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
         >
-          <span>Share Link</span>
+          <Bookmark className="mr-2" size={20} />
+          {isBookmarked ? "Bookmarked" : "Bookmark"}
         </button>
-        <button
-          className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md"
-          onClick={handleShareEmail}
-        >
-          <span>Share via Email</span>
-        </button>
+        <div className="flex justify-between">
+          <button
+            className="flex-1 mr-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            onClick={handleShareLink}
+          >
+            <span>Share Link</span>
+          </button>
+          <button
+            className="flex-1 ml-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+            onClick={handleShareEmail}
+          >
+            <span>Share via Email</span>
+          </button>
+        </div>
       </div>
       <WalletComponent touristId={id} />
     </div>
