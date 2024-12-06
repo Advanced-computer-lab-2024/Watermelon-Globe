@@ -54,7 +54,7 @@ const AddAdmin = () => {
     <div className="listAddAdmin">
       <Sidebar />
       <div className="listContainerAddAdmin">
-        {/* <Navbar /> */}
+        <Navbar />
         <div className="cardsContainer">
           {admins.map((admin) => (
             <Card

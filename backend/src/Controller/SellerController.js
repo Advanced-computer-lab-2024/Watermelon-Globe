@@ -51,6 +51,19 @@ const frontendPendingSellersTable = async (req, res) => {
   }
 };
 
+// Get all products (unarchived)
+const getProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ archived: false }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Error fetching products" });
+  }
+};
+
 //get all sellers
 const getAllSellers = async (req, res) => {
   const seller = await Seller.find({}).sort({ createdAt: -1 });
@@ -777,6 +790,27 @@ const uploadPicture = async (req, res) => {
   }
 };
 
+// Delete product by ID
+const deleteProductById = async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL params
+
+  try {
+    // Find the product by ID and delete it
+    const product = await Product.findByIdAndDelete(id);
+
+    // Check if the product exists
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // If deletion is successful
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Error deleting product" });
+  }
+};
+
 module.exports = {
   createSeller,
   getAllSellers,
@@ -807,4 +841,6 @@ module.exports = {
   getProductsBySeller,
   frontendSellersTable,
   frontendPendingSellersTable,
+  getProducts,
+  deleteProductById,
 };

@@ -27,6 +27,8 @@ const {
   getProductsBySeller,
   frontendSellersTable,
   frontendPendingSellersTable,
+  getProducts,
+  deleteProductById,
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -57,6 +59,7 @@ router.get("/sellerStatus/:id", getSellerStatus);
 
 //////////////// Products ////////////////
 
+router.get("/getProducts", getProducts);
 //Get all products
 router.get("/GetAllProducts", getAllProducts);
 
@@ -67,6 +70,7 @@ router.get("/GetProductsIDs", getAllProductIds);
 //post a new product
 router.post("/CreateProduct/:sellerId", createProduct);
 
+router.delete("/deleteProductById/:id", deleteProductById);
 //delete a product
 router.get("/searchProductName", searchProductbyName);
 

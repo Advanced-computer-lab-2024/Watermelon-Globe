@@ -8,13 +8,14 @@ import DatatableSeller from "../../components/Seller/dataTableSellerPending/data
 import NavTabsPending from "../../components/navTabsPending/navTabsPending";
 import DatatableAdvertiserPending from "../../components/Advertiser/dataTableAdvertiserPending/dataTableAdvertiserPending";
 import DatatableGuidePending from "../../components/Tour Guide/dataTableGuidePending/dataTableGuidePending";
+import DatatableSellerPending from "../../components/Seller/dataTableSellerPending/dataTableSellerPending";
 const PendingUsers = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const renderComponent = () => {
     switch (selectedTab) {
       case 0:
-        return <DatatableSeller />;
+        return <DatatableSellerPending />;
       case 1:
         return <DatatableAdvertiserPending />;
       case 2:

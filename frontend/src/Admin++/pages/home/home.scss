@@ -1,6 +1,8 @@
 .homeAdmin {
   display: flex;
   font-family: "Poppins", sans-serif;
+  height: 100vh;
+  background-color: white;
 
   .homeContainerAdmin {
     flex: 1; // Ensures the container takes up the remaining space
@@ -10,7 +12,7 @@
     width: calc(
       100% - 250px
     ); // Ensure it takes up the available space excluding the sidebar width
-
+    margin-top: 50px;
     .widgetsAdminHome,
     .chartsAdminHome {
       display: flex;
