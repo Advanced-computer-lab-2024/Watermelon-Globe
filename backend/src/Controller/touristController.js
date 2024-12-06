@@ -2209,8 +2209,77 @@ const getNotificationsTourist = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const checkUpcomingEvents = async (req, res) => {
+  try {
+    const now = new Date();
+    const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
 
-  
+    const tourists = await Tourist.find()
+      .populate({
+        path: 'bookedItineraries',
+        populate: {
+          path: 'itinerary',
+          select: 'name'
+        }
+      })
+      .populate({
+        path: 'bookedActivities',
+        populate: {
+          path: 'activity',
+          select: 'name'
+        }
+      });
+
+    for (const tourist of tourists) {
+      let notificationsAdded = false;
+
+      // Check itineraries
+      for (const booking of tourist.bookedItineraries) {
+        if (booking.chosenDates && booking.chosenDates[0]) {
+          const eventDate = new Date(booking.chosenDates[0]);
+          if (eventDate > now && eventDate <= threeDaysFromNow) {
+            const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+            const notification = {
+              message: `Upcoming itinerary "${booking.itinerary.name}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`,
+              date: now,
+              read: false
+            };
+            tourist.notifications.push(notification);
+            notificationsAdded = true;
+          }
+        }
+      }
+
+      // Check activities
+      for (const booking of tourist.bookedActivities) {
+        if (booking.chosenDate) {
+          const eventDate = new Date(booking.chosenDate);
+          if (eventDate > now && eventDate <= threeDaysFromNow) {
+            const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+            const notification = {
+              message: `Upcoming activity "${booking.activity.name}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`,
+              date: now,
+              read: false
+            };
+            tourist.notifications.push(notification);
+            notificationsAdded = true;
+          }
+        }
+      }
+
+      // Save if notifications were added
+      if (notificationsAdded) {
+        await tourist.save();
+      }
+    }
+
+    res.status(200).json({ message: "Upcoming events checked and notifications added." });
+  } catch (error) {
+    console.error("Error checking upcoming events:", error);
+    res.status(500).json({ message: "Server error while checking upcoming events.", error: error.message });
+  }
+};
+
 module.exports = {
   createTourist,
   getTourists,
@@ -2276,4 +2345,5 @@ module.exports = {
   stripePayIntentProduct,
   frontendDataTable,
   getNotificationsTourist,
+  checkUpcomingEvents,
 };
