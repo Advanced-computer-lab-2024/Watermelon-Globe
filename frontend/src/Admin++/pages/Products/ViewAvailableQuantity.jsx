@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import Sidebar from "../../components/sidebarAdmin/Sidebar";
+import Sidebar from "../../components/sidebar/Sidebar";
 import "./actions.scss";
 
 const ViewQuantity = () => {

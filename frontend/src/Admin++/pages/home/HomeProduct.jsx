@@ -1,5 +1,5 @@
-import Sidebar from "../../components/sidebarAdmin/Sidebar";
-import Navbar from "../../components/navbarAdmin/Navbar";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";

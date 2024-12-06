@@ -44,12 +44,15 @@ const Sidebar = () => {
       </div>
 
       <hr />
-      
+
       <div className="centerAdmin">
         <ul>
           <p className="titleAdmin">MAIN</p>
 
-          <Link to="/AdminHome++/674f760ed6b7ba513c4ea84d" style={{ textDecoration: "none" }}>
+          <Link
+            to="/AdminHome++/674f760ed6b7ba513c4ea84d"
+            style={{ textDecoration: "none" }}
+          >
             <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>

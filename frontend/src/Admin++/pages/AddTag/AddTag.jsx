@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AddTag.scss";
-import Sidebar from "../../components/sidebarAdmin/Sidebar";
-import Navbar from "../../components/navbarAdmin/Navbar";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
 import AddTagForm from "../../components/addTagForm/addTagForm";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";

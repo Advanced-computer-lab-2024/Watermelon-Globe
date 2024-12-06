@@ -1,116 +1,114 @@
+// .sidebarAdmin {
+//   flex: 1;
+//   border-right: 0.5px solid rgb(230, 227, 227);
+//   height: 100vh; /* Makes the sidebar height fill the viewport */
+//   background-color: white;
+//   text-align: left;
+//   position: fixed; /* Fixed position so it stays in place while scrolling */
+//   left: 0; /* Ensures it stays on the left side */
+//   top: 10; /* Ensures it starts at the top of the page */
+//   width: 250px;
+//   padding-left: 20px; /* Add padding to shift content slightly right */
+//   overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
 
-.sidebarAdmin {
-  flex: 1;
-  border-right: 0.5px solid rgb(230, 227, 227);
-  height: 100vh; /* Makes the sidebar height fill the viewport */
-  background-color: white;
-  text-align: left;
-  position: fixed; /* Fixed position so it stays in place while scrolling */
-  left: 0; /* Ensures it stays on the left side */
-  top: 10; /* Ensures it starts at the top of the page */
-  width: 250px;
-  padding-left: 20px; /* Add padding to shift content slightly right */
-  overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
-  
+//   .topAdmin {
+//       height: 50px;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
 
-  .topAdmin {
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+//       .logoAdmin {
+//         font-size: 20px;
+//         font-weight: bold;
+//         color: #e89bb5;
+//       }
+//   }
 
-      .logoAdmin {
-        font-size: 20px;
-        font-weight: bold;
-        color: #e89bb5;
-      }
-  }
+//   hr {
+//       height: 0;
+//       border: 0.5px solid rgb(230, 227, 227);
+//   }
 
-  hr {
-      height: 0;
-      border: 0.5px solid rgb(230, 227, 227);
-  }
+//   .centerAdmin {
+//       padding-left: 10px;
+//       padding-right: 20px;
 
-  .centerAdmin {
-      padding-left: 10px;
-      padding-right: 20px;
+//       ul {
+//           list-style: none;
+//           margin: 0;
+//           padding: 0;
 
-      ul {
-          list-style: none;
-          margin: 0;
-          padding: 0;
+//           .titleAdmin {
+//               font-size: 20px;
+//               font-weight: bold;
+//               color: #999;
+//               margin-top: 15px;
+//               margin-bottom: 5px;
+//           }
 
-          .titleAdmin {
-              font-size: 20px;
-              font-weight: bold;
-              color: #999;
-              margin-top: 15px;
-              margin-bottom: 5px;
-          }
+//           li {
+//             width: 200px;
+//               display: flex;
+//               align-items: center;
+//               padding: 5px;
+//               cursor: pointer;
 
-          li {
-            width: 200px;
-              display: flex;
-              align-items: center;
-              padding: 5px;
-              cursor: pointer;
+//               &:hover {
+//                   background-color: #d4ffea;
+//               }
 
-              &:hover {
-                  background-color: #d4ffea;
-              }
+//               .iconAdmin {
+//                   font-size: 18px;
+//                   color: #FF3366;
+//               }
 
-              .iconAdmin {
-                  font-size: 18px;
-                  color: #FF3366;
-              }
+//               span {
 
-              span {
-                
-                align-items: center;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #888;
-                  margin-left: 10px;
-                  margin-bottom: 10px;
-              }
+//                 align-items: center;
+//                   font-size: 13px;
+//                   font-weight: 600;
+//                   color: #888;
+//                   margin-left: 10px;
+//                   margin-bottom: 10px;
+//               }
 
-              .sidebar-seller ul li.active-seller {
-                  background-color: #d1e7dd; /* Light green */
-                  color: #0f5132; /* Dark green text */
-                  font-weight: bold;
-              }
-          }
-      }
-  }
+//               .sidebar-seller ul li.active-seller {
+//                   background-color: #d1e7dd; /* Light green */
+//                   color: #0f5132; /* Dark green text */
+//                   font-weight: bold;
+//               }
+//           }
+//       }
+//   }
 
-  .bottom-seller {
-      display: flex;
-      align-items: center;
-      margin: 10px;
+//   .bottom-seller {
+//       display: flex;
+//       align-items: center;
+//       margin: 10px;
 
-      .colorOption-seller {
-          width: 20px;
-          height: 20px;
-          border-radius: 5px;
-          border: 1px solid #7451f8;
-          cursor: pointer;
-          margin: 5px;
+//       .colorOption-seller {
+//           width: 20px;
+//           height: 20px;
+//           border-radius: 5px;
+//           border: 1px solid #7451f8;
+//           cursor: pointer;
+//           margin: 5px;
 
-          &:nth-child(1) {
-              background-color: whitesmoke;
-          }
-          &:nth-child(2) {
-              background-color: #333;
-          }
-          &:nth-child(3) {
-              background-color: darkblue;
-          }
-      }
-  }
-}
+//           &:nth-child(1) {
+//               background-color: whitesmoke;
+//           }
+//           &:nth-child(2) {
+//               background-color: #333;
+//           }
+//           &:nth-child(3) {
+//               background-color: darkblue;
+//           }
+//       }
+//   }
+// }
 
-.sidebar-seller ul li.active-seller {
-  background-color: #d1e7dd; /* Light green */
-  color: #0f5132; /* Dark green text */
-  font-weight: bold;
-}
+// .sidebar-seller ul li.active-seller {
+//   background-color: #d1e7dd; /* Light green */
+//   color: #0f5132; /* Dark green text */
+//   font-weight: bold;
+// }
