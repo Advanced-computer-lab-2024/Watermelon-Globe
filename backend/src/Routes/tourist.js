@@ -68,7 +68,14 @@ const {
   removeItineraryBookmark,
   removeActivityBookmark,
   getBookmarks,
-  frontendDataTable
+  frontendDataTable,
+  requestNotifyActivity,
+  requestNotifyItinerary,
+  getNotifications,
+  getNotificationCount,
+  markNotificationAsRead
+
+
 } = require("../Controller/touristController");
 
 router.get("/frontendInfo", frontendDataTable);
@@ -162,15 +169,6 @@ router.get("/getTransportation/:id", getTransportation);
 
 router.put("/bookTransportation/:id", bookTransportation);
 
-
-router.put('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
-router.put('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
-router.put('/removeBookmarkItinerary/:touristId/:itineraryId', removeItineraryBookmark);
-router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookmark);
-router.get('/getBookmarks/:touristId', getBookmarks);
-router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
-router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
-
 router.post('/addProductToCart/:id', addProductToCart);
 
 router.delete('/removeProductFromCart/:id', removeProductFromCart);
@@ -210,6 +208,20 @@ router.post('/payHotel',stripePayIntentHotel);
 router.post('/payItinerary',stripePayIntentItinerary);
 router.post('/payActivity',stripePayIntentActivity);
 router.post('/payProduct',stripePayIntentProduct);
+
+
+router.put('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
+router.put('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
+router.put('/removeBookmarkItinerary/:touristId/:itineraryId', removeItineraryBookmark);
+router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookmark);
+router.get('/getBookmarks/:touristId', getBookmarks);
+router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
+router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
+router.post('/requestNotifyActivity/:touristId/:activityId', requestNotifyActivity);
+router.post('/requestNotifyItinerary/:touristId/:itineraryId', requestNotifyItinerary);
+router.get('/notifications/:id',getNotifications);
+router.get('/notificationsCount/:id',getNotificationCount);
+router.put('/markNotifications/:touristId/:notificationId',markNotificationAsRead);
 
 
 module.exports = router;

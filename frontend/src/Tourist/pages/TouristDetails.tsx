@@ -8,6 +8,8 @@ import {
   FaEdit, FaCheck, FaTimes, FaGift, FaTrash, FaPlane, FaCompass, FaKey, FaShoppingBasket
 } from 'react-icons/fa'
 import ChangePasswordTourist from '../Components/changePasswordTourist.js'
+import TouristNavbar from "../Components/TouristNavBar.tsx";
+
 
 interface Tourist {
   id: string
@@ -148,10 +150,10 @@ export default function TouristDetails() {
         })
 
         if (response.ok) {
-          alert('Your account has been successfully deleted.')
+          alert('Request to delete account sent successfully.')
           navigate('/')
         } else {
-          alert('Failed to delete account. Please try again.')
+          alert('Failed to send deletion request. Please try again.')
         }
       } catch (error) {
         console.error('Error deleting account:', error)
@@ -183,14 +185,25 @@ export default function TouristDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+            <TouristNavbar id={id}/>
+
       <div className="max-w-4xl mx-auto">
+        
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary">Watermelon Globe</h1>
           <p className="text-xl text-secondary">Your Travel Companion</p>
         </div>
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-primary p-6">
+          <div className="bg-primary p-6 relative">
+            <div className="absolute top-4 right-4">
+              <button
+                onClick={handleUpdate}
+                className="flex items-center px-3 py-1 bg-white text-primary hover:bg-primary/10 rounded shadow"
+              >
+                <FaEdit className="mr-1" size="1em" />
+                Edit
+              </button>
+            </div>
             <div className="flex items-center space-x-4">
               <div className="bg-white rounded-full p-2">
                 <FaUser className="h-16 w-16 text-primary" />
@@ -306,9 +319,9 @@ export default function TouristDetails() {
               </div>
             </div>
             <div className="border-t border-gray-200 my-6"></div>
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-between items-center">
               {isEditing ? (
-                <>
+                <div className="flex space-x-4">
                   <button
                     onClick={handleConfirm}
                     className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
@@ -323,64 +336,37 @@ export default function TouristDetails() {
                     <FaTimes className="mr-2" size="1em" />
                     Cancel
                   </button>
-                </>
+                </div>
               ) : (
                 <>
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={() => setShowRedeemModal(true)}
+                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                    >
+                      <FaGift className="mr-2" size="1em" />
+                      Redeem Points
+                    </button>
+                    <button
+                      onClick={() => setShowPasswordModal(true)}
+                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                    >
+                      <FaKey className="mr-2" size="1em" />
+                      Change Password
+                    </button>
+                  </div>
                   <button
-                    onClick={handleUpdate}
-                    className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
+                    onClick={handleDeleteAccount}
+                    className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
                   >
-                    <FaEdit className="mr-2" size="1em" />
-                    Update Profile
-                  </button>
-                  <button
-                    onClick={() => setShowRedeemModal(true)}
-                    className="flex items-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
-                  >
-                    <FaGift className="mr-2" size="1em" />
-                    Redeem Points
-                  </button>
-                  <button
-                    onClick={() => setShowPasswordModal(true)}
-                    className="flex items-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
-                  >
-                    <FaKey className="mr-2" size="1em" />
-                    Change Password
+                    <FaTrash className="mr-2" size="1em" />
+                    Request Account Deletion
                   </button>
                 </>
               )}
             </div>
+
           </div>
-        </div>
-        <div className="mt-8 flex flex-col space-y-4">
-          <button
-            onClick={handleViewFlightHotelBookings}
-            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-          >
-            <FaPlane className="mr-2" size="1em" />
-            View My Hotel/Flight Bookings
-          </button>
-          <button
-            onClick={handleViewBookings}
-            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-          >
-            <FaCompass className="mr-2" size="1em" />
-            View My Itineraries/Activities
-          </button>
-          <button
-            onClick={handleViewProducts}
-            className="w-full flex items-center justify-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-          >
-            <FaShoppingBasket className="mr-2" size="1em" />
-            View My Product Orders
-          </button>
-          <button
-            onClick={handleDeleteAccount}
-            className="w-full flex items-center justify-center px-4 py-2 bg-primary hover:bg-hover text-white rounded"
-          >
-            <FaTrash className="mr-2" size="1em" />
-            Delete Account
-          </button>
         </div>
       </div>
       {showRedeemModal && (
@@ -399,15 +385,15 @@ export default function TouristDetails() {
               <button
                 onClick={() => setShowRedeemModal(false)}
                 className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
-                >
-                  <FaTimes className="mr-2" size="1em" />
+              >
+                <FaTimes className="mr-2" size="1em" />
                 Cancel
               </button>
               <button
                 onClick={handleRedeemPoints}
                 className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-                >
-                  <FaCheck className="mr-2" size="1em" />
+              >
+                <FaCheck className="mr-2" size="1em" />
                 Confirm
               </button>
             </div>

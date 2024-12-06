@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import PaymentOptions2 from '../Components/PaymentOptions2';
-import { MapPin, Calendar, Clock, Tag, Star, Share2, Mail } from 'lucide-react';
-import WalletComponent from '../Components/Wallet';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import PaymentOptions2 from "../Components/PaymentOptions2";
+import {
+  MapPin,
+  Calendar,
+  Clock,
+  Tag,
+  Star,
+  Share2,
+  Mail,
+  Bookmark,
+} from "lucide-react";
+import WalletComponent from "../Components/Wallet";
 
 interface Tag {
   _id: string;
@@ -55,16 +64,21 @@ const ActivityDetails: React.FC = () => {
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<
+    "wallet" | "creditCard" | null
+  >(null);
   const [bookingInProgress, setBookingInProgress] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(`/api/Activities/getActivityById/${activityId}`);
+        const response = await axios.get(
+          `/api/Activities/getActivityById/${activityId}`
+        );
         setActivity(response.data);
       } catch (err) {
-        setError('Failed to load activity details. Please try again.');
+        setError("Failed to load activity details. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -73,85 +87,121 @@ const ActivityDetails: React.FC = () => {
     fetchActivity();
   }, [activityId]);
 
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      try {
+        const bookmarkResponse = await axios.get(
+          `/api/Tourist/checkBookmarkActivity/${id}/${activityId}`
+        );
+        setIsBookmarked(bookmarkResponse.data.isBookmarked);
+      } catch (error) {
+        console.error("Error checking bookmark status:", error);
+      }
+    };
+
+    checkBookmarkStatus();
+  }, [id, activityId]);
+
   const handleShareLink = () => {
     const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
-    navigator.clipboard.writeText(activityUrl)
-      .then(() => alert('Activity link copied to clipboard!'))
-      .catch(err => alert('Failed to copy link: ' + err));
+    navigator.clipboard
+      .writeText(activityUrl)
+      .then(() => alert("Activity link copied to clipboard!"))
+      .catch((err) => alert("Failed to copy link: " + err));
   };
 
   const handleShareEmail = () => {
     const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
-    const subject = encodeURIComponent('Check out this activity!');
-    const body = encodeURIComponent(`I thought you might be interested in this activity: ${activityUrl}`);
+    const subject = encodeURIComponent("Check out this activity!");
+    const body = encodeURIComponent(
+      `I thought you might be interested in this activity: ${activityUrl}`
+    );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
+  const handleBookmark = async () => {
+    try {
+      if (isBookmarked) {
+        await axios.put(
+          `/api/Tourist/removeBookmarkActivity/${id}/${activityId}`
+        );
+      } else {
+        await axios.put(`/api/Tourist/bookmarkActivity/${id}/${activityId}`);
+      }
+      setIsBookmarked(!isBookmarked);
+      alert(
+        isBookmarked
+          ? "Activity removed from bookmarks"
+          : "Activity added to bookmarks"
+      );
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+      alert("Error toggling bookmark. Please try again.");
+    }
   };
 
   const handleBooking = async () => {
     if (!paymentMethod || !activity) {
-      alert('Please select a payment method before booking.');
+      alert("Please select a payment method before booking.");
       return;
     }
-  
-    setBookingInProgress(true); // Show loading state
-    setError(null); // Clear previous errors
-  
+
+    setBookingInProgress(true);
+    setError(null);
+
     try {
-      if (paymentMethod === 'wallet') {
-        // Check and update wallet balance
-        const walletResponse = await axios.put(`/api/Tourist/updateWallet/${id}`, {
-          amount: -activity.Price,
-        });
-  
+      if (paymentMethod === "wallet") {
+        const walletResponse = await axios.put(
+          `/api/Tourist/updateWallet/${id}`,
+          {
+            amount: -activity.Price,
+          }
+        );
+
         if (walletResponse.data.wallet >= 0) {
-          // Wallet payment successful
-          alert('Payment confirmed using Wallet!');
-  
-          // Create booking
-          await axios.post('/api/TouristItinerary/createActivityBooking', {
+          alert("Payment confirmed using Wallet!");
+
+          await axios.post("/api/TouristItinerary/createActivityBooking", {
             activity: activityId,
             tourist: id,
             chosenDate: activity.Date,
           });
-  
-          // Update loyalty points
+
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
             amountPaid: activity.Price,
           });
-  
-          // Redirect or notify booking success
-          alert('Activity booked successfully!');
+
+          alert("Activity booked successfully!");
         } else {
-          // Insufficient balance, rollback wallet
-          await axios.put(`/api/Tourist/updateWallet/${id}`, { amount: +activity.Price });
-          alert('Insufficient wallet balance.');
+          await axios.put(`/api/Tourist/updateWallet/${id}`, {
+            amount: +activity.Price,
+          });
+          alert("Insufficient wallet balance.");
         }
-      } else if (paymentMethod === 'creditCard') {
-        // Implement Stripe payment logic here
-        alert('Proceeding with credit card payment (Stripe)...');
-  
-        // Assuming Stripe payment succeeds:
-        await axios.post('/api/TouristItinerary/createActivityBooking', {
+      } else if (paymentMethod === "creditCard") {
+        alert("Proceeding with credit card payment (Stripe)...");
+
+        await axios.post("/api/TouristItinerary/createActivityBooking", {
           activity: activityId,
           tourist: id,
           chosenDate: activity.Date,
         });
-  
-        // Update loyalty points
+
         await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
           amountPaid: activity.Price,
         });
-  
-        alert('Activity booked successfully!');
+
+        alert("Activity booked successfully!");
       }
     } catch (err) {
-      console.error('Error during booking:', err);
-      alert('An error occurred while processing the booking. Please try again later.');
+      console.error("Error during booking:", err);
+      alert(
+        "An error occurred while processing the booking. Please try again later."
+      );
     } finally {
-      setBookingInProgress(false); // Hide loading state
+      setBookingInProgress(false);
     }
   };
-  
 
   if (loading) {
     return (
@@ -162,13 +212,18 @@ const ActivityDetails: React.FC = () => {
   }
 
   if (error) {
-    return <div className="text-red-500 text-center text-xl mt-10">{error}</div>;
+    return (
+      <div className="text-red-500 text-center text-xl mt-10">{error}</div>
+    );
   }
 
   if (!activity) {
-    return <div className="text-gray-700 text-center text-xl mt-10">No activity found.</div>;
+    return (
+      <div className="text-gray-700 text-center text-xl mt-10">
+        No activity found.
+      </div>
+    );
   }
-
 
   return (
     <div className="container mx-auto px-6 py-8 bg-white shadow-lg rounded-lg">
@@ -190,11 +245,19 @@ const ActivityDetails: React.FC = () => {
           </p>
           <p className="flex items-center text-gray-700 space-x-2">
             <Star className="text-yellow-500" />
-            <span>{activity.rating ? `${activity.rating.toFixed(1)} / 5 (${activity.noOfRatings} ratings)` : 'No Ratings Yet'}</span>
+            <span>
+              {activity.rating
+                ? `${activity.rating.toFixed(1)} / 5 (${
+                    activity.noOfRatings
+                  } ratings)`
+                : "No Ratings Yet"}
+            </span>
           </p>
           <p className="flex items-center text-gray-700 space-x-2">
             <Tag className="text-primary-500" />
-            <span>{activity.tags.map(tag => tag.name).join(', ') || 'No Tags'}</span>
+            <span>
+              {activity.tags.map((tag) => tag.name).join(", ") || "No Tags"}
+            </span>
           </p>
           <p className="text-gray-800 font-medium">
             <strong>Price:</strong> ${activity.Price}
@@ -227,16 +290,29 @@ const ActivityDetails: React.FC = () => {
         onPaymentMethodSelection={setPaymentMethod}
       />
 
-
       <div className="mt-6">
+        <button
+          onClick={handleBookmark}
+          className={`w-full px-4 py-2 mb-4 text-sm font-semibold rounded-lg ${
+            isBookmarked
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-800"
+          }`}
+          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+        >
+          <Bookmark className="mr-2 inline-block" size={20} />
+          {isBookmarked ? "Bookmarked" : "Bookmark"}
+        </button>
         <button
           onClick={handleBooking}
           className={`w-full px-4 py-2 text-white rounded-lg ${
-            bookingInProgress ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary-dark'
+            bookingInProgress
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-primary hover:bg-primary-dark"
           }`}
           disabled={bookingInProgress}
         >
-          {bookingInProgress ? 'Booking...' : 'Book Activity'}
+          {bookingInProgress ? "Booking..." : "Book Activity"}
         </button>
       </div>
       <WalletComponent touristId={id} />
