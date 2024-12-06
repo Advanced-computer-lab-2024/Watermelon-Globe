@@ -67,6 +67,7 @@ import EditActivity from "./Advertiser/Components/EditActivity.jsx";
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from "./pages/sellerSignupConfirm.jsx";
 import SellerPage from "./SellerPage.js";
+import SellerLogin from "./Seller/pages/SellerLogin"
 // import SellerProduct from './Seller/pages/SellerProduct.js';//////////////////////////////
 
 import SellerProduct from "./Seller/pages/SellerProduct.jsx";
@@ -100,9 +101,11 @@ import AddSite from "./Governor/Components/AddSite.js";
 import GetMySites from "./Governor/Components/GetMySites.js";
 import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
 import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
+import GovernorLogin from "./Governor/pages/GovernorLogin.jsx";
 
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
+import TouristLogin from "./Tourist/pages/TouristLogin.jsx";
 import MainTouristPage from "./Tourist/pages/homepage.tsx";
 import MainTour from "./Tourist/pages/TouristHomepage.jsx";
 import TouristPage from "./TouristPage.js";
@@ -343,6 +346,9 @@ const App = () => {
             element={<TouristActivityDetails />}
           />
 
+
+          <Route path="/TouristLogin" element={<TouristLogin />} /> 
+
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
@@ -370,6 +376,7 @@ const App = () => {
           <Route path="/OrdersPage/:touristId" element={<OrdersPage />} />
 
           {/* Seller and Other Pages */}
+          <Route path="/SellerLogin" element={<SellerLogin />} />
           <Route path="/SellerPage" element={<SellerPage />} />
           <Route path="/GetAllProducts/:id" element={<GetAllProducts />} />
           <Route path="/CreateProduct/:id" element={<CreateProduct />} />
@@ -400,6 +407,11 @@ const App = () => {
           <Route
             path="/GovernorSiteDetails/:id"
             element={<GovernorSiteDetails />}
+          />
+
+<Route
+            path="/GovernorLogin"
+            element={<GovernorLogin />}
           />
 
           <Route path="/ViewProducts" element={<ViewProducts />} />

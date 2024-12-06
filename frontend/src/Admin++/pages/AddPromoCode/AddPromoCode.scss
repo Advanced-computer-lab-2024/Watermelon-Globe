@@ -1,10 +1,13 @@
 .listAddPromo {
   display: flex;
   width: 100%;
+  height: 100vh;
+  background-color: white;
 }
 
 .listContainerAddPromo {
   flex: 1;
+  margin-top: 50px;
   margin-left: 290px; /* Match the width of the sidebar */
   padding: 20px;
   overflow: auto;
