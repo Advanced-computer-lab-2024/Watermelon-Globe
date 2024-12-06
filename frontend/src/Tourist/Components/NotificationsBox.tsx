@@ -55,7 +55,7 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
       className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-20 border border-gray-200"
       style={{ top: "100%" }}
     >
-      <div className="py-3 px-4 bg-[#FF3366] text-white font-semibold rounded-t-lg flex justify-between items-center">
+      <div className="py-3 px-4 bg-[#d688a2] text-white font-semibold rounded-t-lg flex justify-between items-center">
         <div className="flex items-center">
           <Bell className="w-5 h-5 mr-2" />
           Notifications
