@@ -62,7 +62,7 @@ const {
   stripePayIntentHotel,
   stripePayIntentItinerary,
   stripePayIntentActivity,
-  stripePayIntentProduct
+  stripePayIntentProduct,
   bookmarkItinerary,
   bookmarkActivity,
   removeItineraryBookmark,

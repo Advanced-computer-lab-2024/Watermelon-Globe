@@ -110,7 +110,7 @@ import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
 
 
 import MyHotelFlightBookings from './Tourist/Components/HotelFlightBookings.tsx'
-import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
+// import MyHotelFlightBookings from './Tourist/Components/MyBookings.js'
 import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
 //tourguide new
 import ViewDocuments from './Admin/pages/ViewDocuments.jsx';

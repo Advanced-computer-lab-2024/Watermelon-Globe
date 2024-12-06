@@ -126,7 +126,9 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
                 </li>
                 <li>
                   <button
-                    onClick={() => handleNavigation(`/MyHotelFlightBookings/${id}`)}
+                    onClick={() =>
+                      handleNavigation(`/MyHotelFlightBookings/${id}`)
+                    }
                     className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                   >
                     Hotel/Flight Bookings
@@ -138,6 +140,14 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
                     className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                   >
                     Orders
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleNavigation(`/TouristBookmarks/${id}`)}
+                    className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                  >
+                    Bookmarks
                   </button>
                 </li>
                 <li>
