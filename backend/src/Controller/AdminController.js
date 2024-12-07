@@ -678,7 +678,7 @@ const acceptAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "accepted" },
       { new: true } // Return the updated document
@@ -740,7 +740,7 @@ const rejectAdvertiser = async (req, res) => {
 
   try {
     // Find advertiser by ID and update the status to "accepted"
-    const updatedAdvertiser = await Advertiser.findByIdAndUpdate(
+    const updatedAdvertiser = await Company.findByIdAndUpdate(
       id,
       { status: "rejected" },
       { new: true } // Return the updated document
@@ -869,6 +869,85 @@ const getUploadedDocuments = async (req, res) => {
       advertisers: filteredAdvertisers,
       sellers: filteredSellers,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUploadedDocumentsByID = async (req, res) => {
+  try {
+    const { id } = req.params; // Retrieve the userId from the request parameters
+
+    // Fetch the user (TourGuide, Advertiser, Seller) based on the userId
+    const tourGuide = await TourGuide.findOne(
+      { _id: id },
+      "username idProof certificates"
+    );
+    const advertiser = await Advertiser.findOne(
+      { _id: id },
+      "Username idProof taxationRegistryCard"
+    );
+    const seller = await Seller.findOne(
+      { _id: id },
+      "Name idProof taxationRegistryCard"
+    );
+
+    // Check if the user is a TourGuide and has uploaded documents
+    if (tourGuide) {
+      if (
+        tourGuide.idProof ||
+        (tourGuide.certificates && tourGuide.certificates.length > 0)
+      ) {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "TourGuide",
+          user: tourGuide,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is an Advertiser and has uploaded documents
+    if (advertiser) {
+      if (advertiser.idProof || advertiser.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Advertiser",
+          user: advertiser,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // Check if the user is a Seller and has uploaded documents
+    if (seller) {
+      if (seller.idProof || seller.taxationRegistryCard) {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "Documents uploaded",
+        });
+      } else {
+        return res.status(200).json({
+          userType: "Seller",
+          user: seller,
+          message: "No documents uploaded",
+        });
+      }
+    }
+
+    // If no user is found
+    return res.status(404).json({ message: "User not found" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1046,34 +1125,84 @@ const markItineraryInappropriate = async (req, res) => {
       return res.status(404).json({ error: "Itinerary not found" });
     }
 
-    const guide = itinerary.guide;
-    const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
-    guide.notifications.push(notification);
-    await guide.save();
+    // const guide = itinerary.guide;
+    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
+    // guide.notifications.push(notification);
+    // await guide.save();
 
-    // Check if guide information is complete
-    if (!guide || !guide.email || !guide.name) {
-      return res
-        .status(400)
-        .json({ error: "Guide information is incomplete." });
-    }
+    // // Check if guide information is complete
+    // if (!guide || !guide.email || !guide.name) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Guide information is incomplete." });
+    // }
 
-    const guideEmail = "shodimatar@gmail.com";
-    const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+    // const guideEmail = "shodimatar@gmail.com";
+    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
 
-    // Attempt to send the email
-    try {
-      await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
-      console.log("Email sent to:", guideEmail);
-    } catch (emailError) {
-      console.error("Error sending email:", emailError);
-      // Continue marking the itinerary as inappropriate even if the email fails
-    }
+    // // Attempt to send the email
+    // try {
+    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+    //   console.log("Email sent to:", guideEmail);
+    // } catch (emailError) {
+    //   console.error("Error sending email:", emailError);
+    //   // Continue marking the itinerary as inappropriate even if the email fails
+    // }
 
     // Send the updated itinerary as a response
     res
       .status(200)
       .json({ message: "Itinerary marked as inappropriate", itinerary });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const markItineraryAppropriate = async (req, res) => {
+  const { id } = req.params; // Get the itinerary ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+      id,
+      { inappropriate: false }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("guide");
+
+    // If the itinerary is not found, send a 404 error response
+    if (!itinerary) {
+      return res.status(404).json({ error: "Itinerary not found" });
+    }
+
+    // const guide = itinerary.guide;
+    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
+    // guide.notifications.push(notification);
+    // await guide.save();
+
+    // // Check if guide information is complete
+    // if (!guide || !guide.email || !guide.name) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Guide information is incomplete." });
+    // }
+
+    // const guideEmail = "shodimatar@gmail.com";
+    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+
+    // // Attempt to send the email
+    // try {
+    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+    //   console.log("Email sent to:", guideEmail);
+    // } catch (emailError) {
+    //   console.error("Error sending email:", emailError);
+    //   // Continue marking the itinerary as inappropriate even if the email fails
+    // }
+
+    // Send the updated itinerary as a response
+    res
+      .status(200)
+      .json({ message: "Itinerary marked as appropriate", itinerary });
   } catch (error) {
     // Handle any errors during the process
     res.status(500).json({ error: error.message });
@@ -1090,33 +1219,39 @@ const markActivityInappropriate = async (req, res) => {
       id,
       { inappropriate: true }, // Set the inappropriate field to true
       { new: true } // Return the updated document
-    )
-    .populate("Advertiser");
+    ).populate("Advertiser");
 
     // If the actvity is not found, send a 404 error response
     if (!activity) {
       return res.status(404).json({ error: "activity not found" });
     }
-    const advertiser = activity.Advertiser;
-    const notification=`Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`
-    advertiser.notifications.push(notification);
-    await advertiser.save();
+    // const advertiser = activity.Advertiser;
+    // const notification = `Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`;
+    // advertiser.notifications.push(notification);
+    // await advertiser.save();
 
-    if (!advertiser || !advertiser.Email || !advertiser.Name) {
-      return res.status(400).json({ error: "advertiser information is incomplete." });
-    }
+    // if (!advertiser || !advertiser.Email || !advertiser.Name) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "advertiser information is incomplete." });
+    // }
 
-    const advertiserEmail = "shodimatar@gmail.com";
-    const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+    // const advertiserEmail = "shodimatar@gmail.com";
+    // const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
 
-    // Attempt to send the email
-    try {
-      await sendEmail(advertiserEmail, "Inappropriate Activity", emailMessage, "");
-      console.log("Email sent to:", advertiserEmail);
-    } catch (emailError) {
-      console.error("Error sending email:", emailError);
-      // Continue marking the itinerary as inappropriate even if the email fails
-    }
+    // // Attempt to send the email
+    // try {
+    //   await sendEmail(
+    //     advertiserEmail,
+    //     "Inappropriate Activity",
+    //     emailMessage,
+    //     ""
+    //   );
+    //   console.log("Email sent to:", advertiserEmail);
+    // } catch (emailError) {
+    //   console.error("Error sending email:", emailError);
+    //   // Continue marking the itinerary as inappropriate even if the email fails
+    // }
 
     // Send the updated activity as a response
     res
@@ -1124,40 +1259,65 @@ const markActivityInappropriate = async (req, res) => {
       .json({ message: "activity marked as inappropriate", activity });
   } catch (error) {
     // Handle any errors during the process
-    res.status(500).json({ error: error.message });
-  }
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Controller function to mark an activity as inappropriate
+const markActivityAppropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: false }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("Advertiser");
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "activity marked as appropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
 };
 
 const sendEmail = async (to, subject, text, html) => {
   try {
     // Create a transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',  // Use Gmail as the email service
+      service: "gmail", // Use Gmail as the email service
       auth: {
-        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
-        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
+        user: "watermelonglobe@gmail.com", // Replace with your Gmail address
+        pass: "tzve vdjr usit evdu", // Use your generated Gmail app password here
       },
     });
 
     // Email options
     const mailOptions = {
       from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
-      to,  // Recipient's email address
-      subject,  // Subject of the email
-      text,  // Plain text content
-      html,  // HTML content (optional)
+      to, // Recipient's email address
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
     };
 
     // Send the email
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', info.response);
-    return { success: true, message: 'Email sent successfully!' };
+    console.log("Email sent: ", info.response);
+    return { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    console.error('Error sending email: ', error);
-    return { success: false, message: 'Failed to send email.', error };
+    console.error("Error sending email: ", error);
+    return { success: false, message: "Failed to send email.", error };
   }
 };
-
 
 //create new transportation
 const createTransportation = async (req, res) => {
@@ -1211,35 +1371,34 @@ const createTransportation = async (req, res) => {
 //   }
 // };
 
-
-// Function to calculate total revenue from purchased products
 const totalProductRevenue = async (req, res) => {
   try {
-    // Step 1: Retrieve all tourists and populate their purchased products
-    const tourists = await Tourist.find().populate("products");
+    const result = await Tourist.aggregate([
+      { $unwind: "$orders" },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$orders.totalPrice" },
+        },
+      },
+    ]);
 
-    // Step 2: Initialize total revenue
-    let totalRevenue = 0;
-
-    // Step 3: Loop through all tourists and their purchased products
-    tourists.forEach((tourist) => {
-      tourist.products.forEach((product) => {
-        // Step 4: Add of each product's price to the total revenue
-        totalRevenue += product.price;
+    if (result.length === 0) {
+      return res.status(200).json({
+        message: "No orders found or all orders are pending/cancelled",
+        totalRevenue: 0,
       });
-    });
+    }
 
-    // Step 5: Send the total revenue as a response
+    const totalRevenue = result[0].totalRevenue;
+
     res.status(200).json({
-      message: "Total revenue calculated successfully",
-      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+      message: "Total product revenue calculated successfully",
+      totalRevenue: totalRevenue.toFixed(2),
     });
   } catch (error) {
-    // Handle any errors
-    res.status(500).json({
-      message: "Error calculating total revenue",
-      error: error.message,
-    });
+    console.error("Error calculating total product revenue:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -1443,7 +1602,7 @@ const filterRevenueByProduct = async (req, res) => {
     // Step 1: Validate the product ID
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
-        message: 'Invalid product ID',
+        message: "Invalid product ID",
       });
     }
 
@@ -1451,7 +1610,7 @@ const filterRevenueByProduct = async (req, res) => {
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({
-        message: 'Product not found',
+        message: "Product not found",
       });
     }
 
@@ -1460,24 +1619,23 @@ const filterRevenueByProduct = async (req, res) => {
 
     // Step 4: Send the response
     res.status(200).json({
-      message: 'Total revenue calculated successfully for the product',
+      message: "Total revenue calculated successfully for the product",
       productName: product.name,
       totalSales: product.sales,
       price: product.price,
       totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
     });
-
   } catch (error) {
     // Handle any errors
     res.status(500).json({
-      message: 'Error calculating revenue for the product',
+      message: "Error calculating revenue for the product",
       error: error.message,
     });
   }
 };
 
-const getNotificationsAdmin=async(req,res)=>{
-  try{
+const getNotificationsAdmin = async (req, res) => {
+  try {
     const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
     if (!admin) {
       res.status(400).json({ message: "admin is not found" });
@@ -1488,12 +1646,196 @@ const getNotificationsAdmin=async(req,res)=>{
     console.error("Error getting notifications:", error);
     res.status(500).json({ message: "Server error" });
   }
-  
+};
 
+const getMonthlyRevenue = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1); // January 1st of current year
+    const endDate = new Date(currentYear, 11, 31); // December 31st of current year
 
-}
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: "$orders" },
+      {
+        $match: {
+          "orders.orderDate": { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$orders.orderDate" } },
+          totalRevenue: { $sum: "$orders.totalPrice" },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
 
+    const itineraryRevenue = await bookedItinerary.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
 
+    const activityRevenue = await bookedActivity.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
+
+    // Initialize an array for all 12 months
+    const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      productRevenue: 0,
+      itineraryRevenue: 0,
+      activityRevenue: 0,
+      totalRevenue: 0,
+    }));
+
+    // Combine revenues
+    [
+      { data: productRevenue, key: "productRevenue" },
+      { data: itineraryRevenue, key: "itineraryRevenue" },
+      { data: activityRevenue, key: "activityRevenue" },
+    ].forEach(({ data, key }) => {
+      data.forEach((entry) => {
+        const monthIndex = entry._id.month - 1;
+        monthlyRevenue[monthIndex][key] = entry.totalRevenue;
+        monthlyRevenue[monthIndex].totalRevenue += entry.totalRevenue;
+      });
+    });
+
+    // Add month names and format numbers
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const formattedRevenue = monthlyRevenue.map((item) => ({
+      ...item,
+      monthName: monthNames[item.month - 1],
+      productRevenue: Number(item.productRevenue.toFixed(2)),
+      itineraryRevenue: Number(item.itineraryRevenue.toFixed(2)),
+      activityRevenue: Number(item.activityRevenue.toFixed(2)),
+      totalRevenue: Number(item.totalRevenue.toFixed(2)),
+    }));
+
+    res.status(200).json({
+      message: "Yearly revenue calculated successfully",
+      year: currentYear,
+      data: formattedRevenue,
+    });
+  } catch (error) {
+    console.error("Error calculating yearly revenue:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterRevenueByDate = async (req, res) => {
+  try {
+    const { date } = req.query;
+
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: "$orders" },
+      {
+        $match: {
+          "orders.orderDate": { $gte: selectedDate, $lt: nextDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$orders.totalPrice" },
+        },
+      },
+    ]);
+
+    const itineraryRevenue = await bookedItinerary.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: selectedDate, $lt: nextDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
+    ]);
+
+    const activityRevenue = await bookedActivity.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: selectedDate, $lt: nextDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
+    ]);
+
+    const totalProductRevenue =
+      productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
+    const totalItineraryRevenue =
+      itineraryRevenue.length > 0 ? itineraryRevenue[0].totalRevenue : 0;
+    const totalActivityRevenue =
+      activityRevenue.length > 0 ? activityRevenue[0].totalRevenue : 0;
+
+    const totalRevenue =
+      totalProductRevenue + totalItineraryRevenue + totalActivityRevenue;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully",
+      date: selectedDate.toISOString().split("T")[0],
+      productRevenue: Number(totalProductRevenue.toFixed(2)),
+      itineraryRevenue: Number(totalItineraryRevenue.toFixed(2)),
+      activityRevenue: Number(totalActivityRevenue.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed(2)),
+    });
+  } catch (error) {
+    console.error("Error filtering revenue by date:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   createAdmin,
@@ -1557,5 +1899,10 @@ module.exports = {
   getAllPromoCodes,
   deletePromoCode,
   filterRevenueByProduct,
-  getNotificationsAdmin
+  getNotificationsAdmin,
+  getUploadedDocumentsByID,
+  markActivityAppropriate,
+  markItineraryAppropriate,
+  getMonthlyRevenue,
+  filterRevenueByDate,
 };

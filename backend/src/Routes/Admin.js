@@ -58,7 +58,12 @@ const {
   getAllPromoCodes,
   deletePromoCode,
   filterRevenueByProduct,
-  getNotificationsAdmin
+  getNotificationsAdmin,
+  getUploadedDocumentsByID,
+  markActivityAppropriate,
+  markItineraryAppropriate,
+  getMonthlyRevenue,
+  filterRevenueByDate,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -114,6 +119,7 @@ router.get("/ComplaintsFilterByStatus", filterComplaintsByStatus);
 
 //view uploaded documents
 router.get("/uploaded-documents", getUploadedDocuments);
+router.get("/uploaded-documents-by-id/:id", getUploadedDocumentsByID);
 
 // accept or reject user
 router.put("/acceptAdvertiser/:id", acceptAdvertiser);
@@ -138,10 +144,10 @@ router.get("/getQuantity", getQuantity);
 
 //mark Itinerary Inappropriate
 router.put("/markItineraryInappropriate/:id", markItineraryInappropriate);
-
+router.put("/markItineraryAppropriate/:id", markItineraryAppropriate);
 //mark Itinerary Inappropriate
 router.put("/markActivityInappropriate/:id", markActivityInappropriate);
-
+router.put("/markActivityAppropriate/:id", markActivityAppropriate);
 //post a new transportation
 router.post("/createTransportation", createTransportation);
 
@@ -170,6 +176,8 @@ router.get("/filterRevenueByProduct/:productId", filterRevenueByProduct);
 
 router.get("/getNotificationsAdmin", getNotificationsAdmin);
 
+router.get("/getMonthlyRevenue", getMonthlyRevenue);
 
+router.get("/filterRevenueByDate", filterRevenueByDate);
 
 module.exports = router;

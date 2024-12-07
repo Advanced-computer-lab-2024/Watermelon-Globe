@@ -286,6 +286,36 @@ const getPassword = async(req,res) =>{
     }
   }
 
+  const loginGovernor = async (req, res) => {
+    const { Username, Password } = req.body;
+  
+    if (!Username || !Password) {
+      return res.status(400).json({ error: "Username and Password are required" });
+    }
+  
+    try {
+      // Find the governor by username
+      const governor = await governorModel.findOne({ username: Username });
+  
+      if (!governor) {
+        return res.status(404).json({ error: "Governor not found" });
+      }
+  
+      // Check if the password matches
+      if (governor.password !== Password) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+  
+      // Return the governor's ID if login is successful
+      res.status(200).json({ id: governor._id });
+    } catch (error) {
+      console.error("Error during governor login:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  };
+  
+  
+
 module.exports = {
   createSite,
   getSite,
@@ -295,5 +325,6 @@ module.exports = {
   getMySites,
   filterByTags,
   changePasswordGovernor,
-  getPassword
+  getPassword,
+  loginGovernor
 };

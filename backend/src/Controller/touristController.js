@@ -13,6 +13,7 @@ const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const ActivityBooking = require('../Models/activityBookingModel');
 const Transportation = require('../Models/TransportationModel');
 const Admin = require("../Models/AdminModel.js");
+const nodemailer = require("nodemailer");
 
 //Tourist
 
@@ -382,35 +383,7 @@ const fileComplaint = async (req, res) => {
 };
 
 
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',  // Use Gmail as the email service
-      auth: {
-        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
-        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
-      },
-    });
 
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
-      to,  // Recipient's email address
-      subject,  // Subject of the email
-      text,  // Plain text content
-      html,  // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', info.response);
-    return { success: true, message: 'Email sent successfully!' };
-  } catch (error) {
-    console.error('Error sending email: ', error);
-    return { success: false, message: 'Failed to send email.', error };
-  }
-};
 
 
 
@@ -2195,6 +2168,165 @@ const stripePayIntentProduct = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getNotificationsTourist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      res.status(404).json({ message: "Tourist not found" });
+    } else {
+      res.status(200).json(tourist.notifications);
+    }
+  } catch (error) {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: "watermelonglobe@gmail.com", // Replace with your Gmail address
+        pass: "tzve vdjr usit evdu", // Use your generated Gmail app password here
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <watermelonglobe@gmail.com>',
+      to, // Recipient's email address
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ', info.response);
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error('Error sending email: ', error);
+    return { success: false, message: 'Failed to send email.', error };
+  }
+};
+
+const checkUpcomingEvents = async (req, res) => {
+  try {
+    const now = new Date();
+    const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+    const tourists = await Tourist.find()
+      .populate({
+        path: 'bookedItineraries',
+        populate: {
+          path: 'itinerary',
+          select: 'name'
+        }
+      })
+      .populate({
+        path: 'bookedActivities',
+        populate: {
+          path: 'activity',
+          select: 'name'
+        }
+      });
+
+    for (const tourist of tourists) {
+      let notificationsAdded = false;
+
+      // Check itineraries
+      for (const booking of tourist.bookedItineraries) {
+        if (booking.chosenDates && booking.chosenDates[0]) {
+          const eventDate = new Date(booking.chosenDates[0]);
+          if (eventDate > now && eventDate <= threeDaysFromNow) {
+            const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+            const notification = {
+              message: `Upcoming itinerary "${booking.itinerary.name}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`,
+              date: now,
+              read: false
+            };
+            tourist.notifications.push(notification);
+            notificationsAdded = true;
+
+            // Send email notification
+            const emailSubject = 'Upcoming Itinerary Reminder';
+            const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your itinerary "${booking.itinerary.name}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your trip!`;
+            const emailHtml = `<h1>Upcoming Itinerary Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your itinerary <strong>"${booking.itinerary.name}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your trip!</p>`;
+
+            await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
+          }
+        }
+      }
+
+      // Check activities
+      for (const booking of tourist.bookedActivities) {
+        if (booking.chosenDate) {
+          const eventDate = new Date(booking.chosenDate);
+          if (eventDate > now && eventDate <= threeDaysFromNow) {
+            const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+            const notification = {
+              message: `Upcoming activity "${booking.activity.name}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`,
+              date: now,
+              read: false
+            };
+            tourist.notifications.push(notification);
+            notificationsAdded = true;
+
+            // Send email notification
+            const emailSubject = 'Upcoming Activity Reminder';
+            const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your activity "${booking.activity.name}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your activity!`;
+            const emailHtml = `<h1>Upcoming Activity Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your activity <strong>"${booking.activity.name}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your activity!</p>`;
+
+            await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
+          }
+        }
+      }
+
+      // Save if notifications were added
+      if (notificationsAdded) {
+        await tourist.save();
+      }
+    }
+
+    res.status(200).json({ message: "Upcoming events checked and notifications added." });
+  } catch (error) {
+    console.error("Error checking upcoming events:", error);
+    res.status(500).json({ message: "Server error while checking upcoming events.", error: error.message });
+  }
+};
+
+const loginTourist = async (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if both username and password are provided
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and Password are required" });
+  }
+
+  try {
+    // Find the tourist by username
+    const tourist = await Tourist.findOne({ username });
+
+    // Check if the tourist exists
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Validate the password
+    if (tourist.password !== password) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Login successful, return the tourist's ID
+    res.status(200).json({ id: tourist._id });
+  } catch (error) {
+    console.error("Error during tourist login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
   
 module.exports = {
@@ -2261,4 +2393,8 @@ module.exports = {
   stripePayIntentActivity,
   stripePayIntentProduct,
   frontendDataTable,
+  getNotificationsTourist,
+  checkUpcomingEvents,
+  sendEmail,
+  loginTourist
 };

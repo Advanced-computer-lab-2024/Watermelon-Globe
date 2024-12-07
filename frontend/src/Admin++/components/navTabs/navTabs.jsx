@@ -22,18 +22,11 @@ function samePageLinkNavigation(event) {
   return true;
 }
 
-// Custom Tab component to handle navigation and prevent default behavior for same-page links
 function LinkTab(props) {
   return (
     <Tab
       component={Link} // Use Link component from react-router-dom
       to={props.href} // Use `to` instead of `href` for navigation
-      onClick={(event) => {
-        // Prevent the default action if it's a same-page navigation
-        if (samePageLinkNavigation(event)) {
-          event.preventDefault();
-        }
-      }}
       aria-current={props.selected && "page"}
       {...props}
     />
@@ -44,32 +37,49 @@ LinkTab.propTypes = {
   selected: PropTypes.bool,
 };
 
-export default function NavTabs() {
+function NavTabs({ onTabChange }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    // Only change the tab on click or when it’s the same page link
-    if (
-      event.type !== "click" ||
-      (event.type === "click" && samePageLinkNavigation(event))
-    ) {
-      setValue(newValue);
+    setValue(newValue);
+    if (onTabChange) {
+      onTabChange(newValue); // Notify the parent component
     }
   };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="nav tabs example"
-        role="navigation"
-      >
-        <LinkTab label="View Tourists" to="/tourists" />
-        <LinkTab label="View Sellers" to="/sellers" />
-        <LinkTab label="View Advertisers" to="/advertisers" />
-        <LinkTab label="View Tour Guides" to="/tour-guides" />
+      <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
+        <Tab label="View Active Sellers" />
+        <Tab label="View Active Advertisers" />
+        <Tab label="View Active Tour Guides" />
       </Tabs>
     </Box>
   );
 }
+
+export default NavTabs;
+
+// export default function NavTabs() {
+//   const [value, setValue] = React.useState(0);
+
+//   const handleChange = (event, newValue) => {
+//     setValue(newValue);
+//   };
+
+//   return (
+//     <Box sx={{ width: "100%" }}>
+//       <Tabs
+//         value={value}
+//         onChange={handleChange}
+//         aria-label="nav tabs example"
+//         role="navigation"
+//       >
+//         <LinkTab label="View Tourists" href="/tourists" />
+//         <LinkTab label="View Sellers" href="/sellers" />
+//         <LinkTab label="View Advertisers" href="/advertisers" />
+//         <LinkTab label="View Tour Guides" href="/tour-guides" />
+//       </Tabs>
+//     </Box>
+//   );
+// }

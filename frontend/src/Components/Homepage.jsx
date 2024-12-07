@@ -19,9 +19,7 @@ const HomePage = () => {
         <button className="home-btn" onClick={() => navigate("/GuestPage")}>
           Go to Guest Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/SellerHome/6729244f151b6c9e346dd732")}>
-        {/* <button className="home-btn" onClick={() => navigate("/SellerProduct")}> */}
-
+        <button className="home-btn" onClick={() => navigate("/SellerLogin")}>
           Go to Seller Page
         </button>
         <button className="home-btn" onClick={() => navigate("/advertiser")}>
@@ -29,27 +27,29 @@ const HomePage = () => {
         </button>
         <button
           className="home-btn"
-          onClick={() => navigate("/MainTouristPage/672f80816271465fd87bbddf")}
+          onClick={() => navigate("/TouristLogin")}
         >
           Go to Tourist Page
         </button>
         <button
           className="home-btn"
-          // onClick={() => navigate("/TourGuideHome/670137227c5a3dade4ba11dc")}
-           onClick={() => navigate("/TourguideHome/670137227c5a3dade4ba11dc")}
-
+          onClick={() => navigate("/TourguideHome/670137227c5a3dade4ba11dc")}
         >
           Go to Tour Guide Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/GovernorHomePage/67475d9cf7b8b43827b99e08")}>
+        <button
+          className="home-btn"
+          onClick={() =>
+            navigate("/GovernorLogin")
+          }
+        >
           Go to Tourism Governor Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/AdminHomepage")}>
+        <button
+          className="home-btn"
+          onClick={() => navigate("/AdminSales/674f760ed6b7ba513c4ea84d")}
+        >
           Go to Admin Page
-        </button>
-
-        <button className="home-btn" onClick={() => navigate("/AdminHome++/674f760ed6b7ba513c4ea84d")}>
-          Go to Admin++ Page
         </button>
       </div>
     </div>

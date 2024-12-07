@@ -106,6 +106,7 @@ const AddTag = () => {
     <div className="listTag">
       <Sidebar />
       <div className="listContainerTag">
+        <Navbar />
         <div className="cardsContainerTag">
           {tags.map((tag) => (
             <Card key={tag._id} className="tagCard" sx={{ marginBottom: 2 }}>

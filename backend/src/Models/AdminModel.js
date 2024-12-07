@@ -10,8 +10,16 @@ const AdminSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    notifications :[{
+        type:String,
+        required: false}
+      ]
+
+      
 }, {timestamps: true})
+
+
 
 const Admin = mongoose.model('Admin',AdminSchema)
 module.exports = Admin

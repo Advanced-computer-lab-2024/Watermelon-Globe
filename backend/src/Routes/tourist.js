@@ -64,12 +64,17 @@ const {
   stripePayIntentActivity,
   stripePayIntentProduct,
   frontendDataTable,
+  checkUpcomingEvents,
+  getNotificationsTourist,
+  loginTourist,
 } = require("../Controller/touristController");
 
 router.get("/frontendInfo", frontendDataTable);
-//GET all tourists
 
+
+//GET all tourists
 router.get("/getTourists", getTourists);
+
 //GET a single tourist
 router.get("/getTourist/:id", getTourist);
 
@@ -190,12 +195,20 @@ router.put('/cancelOrder/:touristId', cancelOrder);
 router.put('/updateWallet/:touristId', updateWallet);
 
 
+router.post('/loginTourist', loginTourist)
+
+
 //Stripe Methods
 router.post('/payFlight',stripePayIntentFlight);
 router.post('/payHotel',stripePayIntentHotel);
 router.post('/payItinerary',stripePayIntentItinerary);
 router.post('/payActivity',stripePayIntentActivity);
 router.post('/payProduct',stripePayIntentProduct);
+
+
+router.get('/checkUpcomingEvents', checkUpcomingEvents);
+
+router.get('/getNotificationsTourist/:id', getNotificationsTourist);
 
 
 module.exports = router;

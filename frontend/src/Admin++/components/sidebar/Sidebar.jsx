@@ -13,7 +13,7 @@ import { TbSettingsCode } from "react-icons/tb";
 import { HiQrcode } from "react-icons/hi";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
-const Sidebar = () => {
+const Sidebar = (selectedTab, setSelectedTab) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenEvent, setIsDropdownOpenEvent] = useState(false);
   const [isDropdownOpenProductView, setIsDropdownProductView] = useState(false);
@@ -36,22 +36,22 @@ const Sidebar = () => {
 
   return (
     <div className="sidebarAdmin">
-      {/* Top */}
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Watermelon Globe </span>
+          <span className="logoAdmin">Hello, </span>
         </Link>
       </div>
-
       {/* <hr /> */}
-
-      {/* Center */}
       <div className="centerAdmin">
         <ul>
           <p className="titleAdmin">MAIN</p>
 
-          <Link to="/AdminHome++" style={{ textDecoration: "none" }}>
-            <li>
+          <Link
+            to="/AdminSales/674f760ed6b7ba513c4ea84d"
+            style={{ textDecoration: "none" }}
+            onClick={() => setSelectedTab("Dashboard")}
+          >
+            <li className={selectedTab === "Dashboard" ? "active-tab" : ""}>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
@@ -82,6 +82,11 @@ const Sidebar = () => {
                   <span>Add Governor</span>
                 </li>
               </Link>
+              <Link to="/Tourists" style={{ textDecoration: "none" }}>
+                <li>
+                  <span>View All Tourists</span>
+                </li>
+              </Link>
               <Link to="/ManageActive" style={{ textDecoration: "none" }}>
                 <li>
                   <span>View Active Users</span>
@@ -109,7 +114,10 @@ const Sidebar = () => {
 
           {isDropdownOpenEvent && (
             <ul className="dropdownAdmin">
-              <Link to="/users/admins" style={{ textDecoration: "none" }}>
+              <Link
+                to="/ViewItinerariesEvents"
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View Events/Itineraries</span>
                 </li>

@@ -1,9 +1,37 @@
-.list {
+.listActiveUsers {
   display: flex;
   width: 100%;
-  font-family: "Poppins", sans-serif;
+  // background-color: white;
+  // height: 100vh;
+}
 
-  .listContainer {
-    flex: 6;
+.listContainerActiveUsers {
+  flex: 1; /* This allows the container to take up the remaining space */
+  margin-left: 250px; /* Adjust this value to match the width of your sidebar */
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Align items vertically */
+}
+
+.navTabsAndTable {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align elements to the left */
+  gap: 20px; /* Space between NavTabs and Datatable */
+  width: 100%; /* Ensure it takes up full width available */
+  justify-content: flex-start; /* Align to the left */
+}
+
+.navTabs {
+  width: 100%; /* Ensure NavTabs takes full width */
+}
+
+.datatable {
+  width: 100%; /* Ensure Datatable takes full width */
+}
+
+@media (max-width: 768px) {
+  .listContainerActiveUsers {
+    margin-left: 0; /* Adjust margin on smaller screens */
   }
 }

@@ -1,5 +1,3 @@
-
-
 // import "./sidebar.scss";
 // import { useParams, useLocation } from "react-router-dom";
 // import StoreIcon from "@mui/icons-material/Store";
@@ -68,30 +66,63 @@ import StoreIcon from "@mui/icons-material/Store";
 import { Link } from "react-router-dom";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import AddIcon from "@mui/icons-material/Add";
-
+import { TbLayoutDashboardFilled } from "react-icons/tb";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 const Sidebar = () => {
   const { id } = useParams();
   const location = useLocation();
+  const [user, setUser] = useState(""); // State to store user details
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        // Make an API call to fetch user details using the ID
+        const response = await axios.get(`/api/Seller/GetSeller/${id}`);
+        setUser(response.data); // Update state with the user details
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [id]);
 
   // Function to determine if the menu item is active
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="sidebar-seller">
-      <div className="top-seller">
+    <div className="sidebarAdmin">
+      <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo-seller">Seller</span>
+          <span className="logoAdmin">Hello , {user.Name} </span>
         </Link>
       </div>
-      <hr />
-      <div className="center-seller">
+      {/* <hr /> */}
+      <div className="centerAdmin">
         <ul>
+          <p className="titleAdmin">MAIN</p>
+
+          <Link
+            to="/SellerHome/6729244f151b6c9e346dd732"
+            style={{ textDecoration: "none" }}
+          >
+            <li>
+              <TbLayoutDashboardFilled className="iconAdmin" />
+              <span>Dashboard</span>
+            </li>
+          </Link>
+
+          <p className="titleAdmin">MANAGE</p>
+
           {/* My Products */}
           <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
             <li
-              className={isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""}
+              className={
+                isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""
+              }
             >
-              <StoreIcon className="icon-seller" />
+              <StoreIcon className="iconAdmin" />
               <span>My Products</span>
             </li>
           </Link>
@@ -103,12 +134,10 @@ const Sidebar = () => {
           >
             <li
               className={
-                isActive(`/GetAllProductsGeneral/${id}`)
-                  ? "active-seller"
-                  : ""
+                isActive(`/GetAllProductsGeneral/${id}`) ? "active-seller" : ""
               }
             >
-              <StoreIcon className="icon-seller" />
+              <StoreIcon className="iconAdmin" />
               <span>All Products</span>
             </li>
           </Link>
@@ -120,7 +149,7 @@ const Sidebar = () => {
                 isActive(`/CreateProduct/${id}`) ? "active-seller" : ""
               }
             >
-              <AddIcon className="icon-seller" />
+              <AddIcon className="iconAdmin" />
               <span>Create New Product</span>
             </li>
           </Link>
@@ -128,11 +157,9 @@ const Sidebar = () => {
           {/* Sales and Available Quantities */}
           <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
             <li
-              className={
-                isActive(`/ViewQuantity/${id}`) ? "active-seller" : ""
-              }
+              className={isActive(`/ViewQuantity/${id}`) ? "active-seller" : ""}
             >
-              <ProductionQuantityLimitsIcon className="icon-seller" />
+              <ProductionQuantityLimitsIcon className="iconAdmin" />
               <span>Sales and Available Quantities</span>
             </li>
           </Link>

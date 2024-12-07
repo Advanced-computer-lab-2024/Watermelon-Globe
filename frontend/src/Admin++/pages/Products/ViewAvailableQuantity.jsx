@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "./actions.scss";
 
@@ -12,7 +12,7 @@ const ViewQuantity = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`/api/Seller/getQuantity/${id}`);
+        const response = await fetch(`/api/Admin/getQuantity`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch products");
@@ -32,8 +32,8 @@ const ViewQuantity = () => {
     <div>
       <div className="listAdminProduct">
         <Sidebar />
-        <div className="listAdminProduct">
-          {/* <Navbar /> */}
+        <div className="listContainerAdminProduct">
+          <Navbar />
           <div className=" bg-white p-6 rounded-lg ">
             <h2
               style={{ color: "#2E8B57" }}

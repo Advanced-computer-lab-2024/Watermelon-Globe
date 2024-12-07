@@ -3,6 +3,67 @@ const Product = require("../Models/ProductModel");
 const mongoose = require("mongoose");
 const { findById } = require("../Models/touristModel");
 
+//for frontend
+const frontendSellersTable = async (req, res) => {
+  try {
+    // Fetch only sellers with 'accepted' status from the database
+    const sellers = await Seller.find(
+      { status: "accepted" },
+      "Name Email status"
+    );
+
+    // Format the data
+    const formattedData = sellers.map((seller) => ({
+      id: seller._id,
+      name: seller.Name,
+      email: seller.Email,
+      status: seller.status,
+    }));
+
+    // Send the response
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching sellers" });
+  }
+};
+const frontendPendingSellersTable = async (req, res) => {
+  try {
+    // Fetch only sellers with 'pending' status from the database
+    const sellers = await Seller.find(
+      { status: "pending" },
+      "Name Email status"
+    );
+
+    // Format the data
+    const formattedData = sellers.map((seller) => ({
+      id: seller._id,
+      name: seller.Name,
+      email: seller.Email,
+      status: seller.status,
+    }));
+
+    // Send the response
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching pending sellers" });
+  }
+};
+
+// Get all products (unarchived)
+const getProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ archived: false }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Error fetching products" });
+  }
+};
+
 //get all sellers
 const getAllSellers = async (req, res) => {
   const seller = await Seller.find({}).sort({ createdAt: -1 });
@@ -148,15 +209,8 @@ const getSellerStatus = async (req, res) => {
 // };
 
 const createProduct = async (req, res) => {
-  const {
-    name,
-    price,
-    quantity,
-    picture,
-    description,
-    ratings,
-    sales,
-  } = req.body;
+  const { name, price, quantity, picture, description, ratings, sales } =
+    req.body;
   const { sellerId } = req.params;
 
   try {
@@ -209,8 +263,6 @@ const getProductsBySeller = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 // Get all products
 const getAllProducts = async (req, res) => {
@@ -324,13 +376,13 @@ const updateProduct = async (req, res) => {
     });
 
     if (!updatedProduct) {
-      return res.status(404).send('Product not found');
+      return res.status(404).send("Product not found");
     }
 
     res.status(200).json(updatedProduct);
   } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).send('Error updating product');
+    console.error("Error updating product:", error);
+    res.status(500).send("Error updating product");
   }
 };
 
@@ -528,8 +580,6 @@ const getProductById = async (req, res) => {
 //   }
 // };
 
-
-
 const requestDeletionSeller = async (req, res) => {
   try {
     const { id } = req.params;
@@ -628,12 +678,16 @@ const getQuantity = async (req, res) => {
   const { id } = req.params; // Get the seller's ID from the URL parameter
   try {
     // Find products where the seller's ID matches the provided seller ID
-    const products = await Product.find({ seller: id }, "name quantity sales")
-      .sort({ createdAt: -1 });
+    const products = await Product.find(
+      { seller: id },
+      "name quantity sales"
+    ).sort({ createdAt: -1 });
 
     // Check if any products were found
     if (products.length === 0) {
-      return res.status(404).json({ message: "No products found for this seller." });
+      return res
+        .status(404)
+        .json({ message: "No products found for this seller." });
     }
 
     res.status(200).json(products);
@@ -644,7 +698,6 @@ const getQuantity = async (req, res) => {
     });
   }
 };
-
 
 // archive a product
 const archiveProduct = async (req, res) => {
@@ -737,6 +790,55 @@ const uploadPicture = async (req, res) => {
   }
 };
 
+// Delete product by ID
+const deleteProductById = async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL params
+
+  try {
+    // Find the product by ID and delete it
+    const product = await Product.findByIdAndDelete(id);
+
+    // Check if the product exists
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // If deletion is successful
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Error deleting product" });
+  }
+};
+
+const loginSeller = async (req, res) => {
+  const { Email, Password } = req.body;
+
+  if (!Email || !Password) {
+    return res.status(400).json({ error: "Email and Password are required" });
+  }
+
+  try {
+    // Find the seller by email
+    const seller = await Seller.findOne({ Email });
+
+    if (!seller) {
+      return res.status(404).json({ error: "Seller not found" });
+    }
+
+    // Check if the password matches
+    if (seller.Password !== Password) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Return the seller's ID if login is successful
+    res.status(200).json({ id: seller._id });
+  } catch (error) {
+    console.error("Error during seller login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   createSeller,
   getAllSellers,
@@ -764,5 +866,10 @@ module.exports = {
   unarchiveProduct,
   //getProductImageByName,
   uploadPicture,
-  getProductsBySeller
+  getProductsBySeller,
+  frontendSellersTable,
+  frontendPendingSellersTable,
+  getProducts,
+  deleteProductById,
+  loginSeller,
 };

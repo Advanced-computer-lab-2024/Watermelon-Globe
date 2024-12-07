@@ -1,31 +1,65 @@
-.home-seller {
+.homeAdmin {
+  display: flex;
+  font-family: "Poppins", sans-serif;
+  height: 150vh;
+  background-color: white;
+
+  .homeContainerAdmin {
+    flex: 1; // Ensures the container takes up the remaining space
     display: flex;
-  
-    .homeContainer-seller {
-      flex: 6;
-  
-      .widgets,
-      .charts {
-        display: flex;
-        padding: 20px;
-        gap: 20px;
-      }
-  
-      .charts {
-        padding: 5px 20px;
-      }
-  
-      .listContainer {
-        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-        padding: 20px;
-        margin: 20px;
-  
-        .listTitle {
-          font-weight: 500;
-          color: gray;
-          margin-bottom: 15px;
-        }
+    flex-direction: column; // Align widgets, charts, and list vertically
+    padding: 20px 20px 20px 270px; // Add padding to the left to make space for the sidebar (adjust width)
+    width: calc(
+      100% - 250px
+    ); // Ensure it takes up the available space excluding the sidebar width
+    margin-top: 50px;
+    .widgetsAdminHome,
+    .chartsAdminHome {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+      flex-wrap: wrap; // Allows wrapping of widgets to the next row
+    }
+
+    .chartsAdminHome {
+      padding: 5px 20px;
+    }
+
+    .listContainerAdminHome {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 20px;
+      margin: 20px;
+      flex-grow: 1; // Ensure it grows to fill the available space
+
+      .listTitleAdminHome {
+        font-weight: 500;
+        color: #91c297;
+        margin-bottom: 15px;
       }
     }
   }
+
+  .sidebar {
+    width: 250px; // Sidebar width
+    position: fixed; // Fix the sidebar to the left side of the screen
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 10; // Ensure sidebar is above other elements
+  }
+}
+
+.searchBar {
+  color: black; // Ensures the text color is black
+  padding: 8px; // Adjust padding for better appearance
+  border: 1px solid #ccc; // Optional: gives a border to the input
+  border-radius: 4px; // Optional: gives slightly rounded corners
+  outline: none; // Removes the default outline on focus
+
+  &:focus {
+    border-color: #888; // Optional: changes the border color when focused
+  }
+}
