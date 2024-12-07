@@ -4,7 +4,7 @@ import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";
-import Chart from "../../components/chart/Chart2";
+import Chart from "../../components/chartAdmin/Chart2";
 import Table from "../../components/tableAdmin/Table";
 import { Link } from "react-router-dom";
 

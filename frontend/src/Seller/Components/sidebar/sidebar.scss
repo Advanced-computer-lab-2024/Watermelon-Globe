@@ -1,114 +1,151 @@
-// .sidebarAdmin {
-//   flex: 1;
-//   border-right: 0.5px solid rgb(230, 227, 227);
-//   height: 100vh; /* Makes the sidebar height fill the viewport */
-//   background-color: white;
-//   text-align: left;
-//   position: fixed; /* Fixed position so it stays in place while scrolling */
-//   left: 0; /* Ensures it stays on the left side */
-//   top: 10; /* Ensures it starts at the top of the page */
-//   width: 250px;
-//   padding-left: 20px; /* Add padding to shift content slightly right */
-//   overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
-
-//   .topAdmin {
-//       height: 50px;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-
-//       .logoAdmin {
-//         font-size: 20px;
-//         font-weight: bold;
-//         color: #e89bb5;
-//       }
-//   }
-
-//   hr {
-//       height: 0;
-//       border: 0.5px solid rgb(230, 227, 227);
-//   }
-
-//   .centerAdmin {
-//       padding-left: 10px;
-//       padding-right: 20px;
-
-//       ul {
-//           list-style: none;
-//           margin: 0;
-//           padding: 0;
-
-//           .titleAdmin {
-//               font-size: 20px;
-//               font-weight: bold;
-//               color: #999;
-//               margin-top: 15px;
-//               margin-bottom: 5px;
-//           }
-
-//           li {
-//             width: 200px;
-//               display: flex;
-//               align-items: center;
-//               padding: 5px;
-//               cursor: pointer;
-
-//               &:hover {
-//                   background-color: #d4ffea;
-//               }
-
-//               .iconAdmin {
-//                   font-size: 18px;
-//                   color: #FF3366;
-//               }
-
-//               span {
-
-//                 align-items: center;
-//                   font-size: 13px;
-//                   font-weight: 600;
-//                   color: #888;
-//                   margin-left: 10px;
-//                   margin-bottom: 10px;
-//               }
-
-//               .sidebar-seller ul li.active-seller {
-//                   background-color: #d1e7dd; /* Light green */
-//                   color: #0f5132; /* Dark green text */
-//                   font-weight: bold;
-//               }
-//           }
-//       }
-//   }
-
-//   .bottom-seller {
-//       display: flex;
-//       align-items: center;
-//       margin: 10px;
-
-//       .colorOption-seller {
-//           width: 20px;
-//           height: 20px;
-//           border-radius: 5px;
-//           border: 1px solid #7451f8;
-//           cursor: pointer;
-//           margin: 5px;
-
-//           &:nth-child(1) {
-//               background-color: whitesmoke;
-//           }
-//           &:nth-child(2) {
-//               background-color: #333;
-//           }
-//           &:nth-child(3) {
-//               background-color: darkblue;
-//           }
-//       }
-//   }
-// }
-
-// .sidebar-seller ul li.active-seller {
-//   background-color: #d1e7dd; /* Light green */
-//   color: #0f5132; /* Dark green text */
-//   font-weight: bold;
-// }
+.sidebarAdmin {
+    flex: 1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    //border-right: 5px solid #91c2979b;
+    height: 100vh; /* Makes the sidebar height fill the viewport */
+    //background-color: white;
+    background-color: #f4eaef76;
+    text-align: left;
+    position: fixed; /* Fixed position so it stays in place while scrolling */
+    left: 0; /* Ensures it stays on the left side */
+    top: 10; /* Ensures it starts at the top of the page */
+    width: 250px;
+    padding-left: 20px; /* Add padding to shift content slightly right */
+    overflow-y: auto; /* Ensures it can scroll vertically if content exceeds height */
+    margin-top: 50px; /* 70px navbar height + 20px padding for spacing */
+    .topAdmin {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      .logoAdmin {
+        font-size: 20px;
+        font-weight: bold;
+        color: #e89bb5;
+      }
+    }
+  
+    hr {
+      height: 0;
+      border: 0.5px solid rgb(230, 227, 227);
+    }
+  
+    .centerAdmin {
+      padding-left: 0px;
+  
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+  
+        .titleAdmin {
+          font-size: 15px;
+          font-weight: 600;
+          color: #91c297;
+          margin-top: 15px;
+          margin-bottom: 5px;
+          padding-left: 10px; /* Shift titles slightly right */
+        }
+  
+        li {
+          display: flex;
+          align-items: center;
+          padding: 9px 10px; /* Add horizontal padding */
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #f6d8e576;
+            border-radius: 8px;
+          }
+  
+          .sidebarAdmin .center ul li {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: background-color 0.3s, border-color 0.3s;
+          }
+  
+          .sidebarAdmin .center ul li:hover {
+            background-color: #95e3bb;
+          }
+  
+          .sidebarAdmin .center ul li.active-tab {
+            background-color: rgba(149, 227, 187, 0.2);
+            border-left: 3px solid #95e3bb; /* Highlight selected tab */
+          }
+  
+          .iconAdmin {
+            font-size: 22px;
+            color: #d32e65;
+            transition: all 0.3s ease;
+          }
+  
+          span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #888;
+            margin-left: 10px;
+          }
+  
+          .manage-textAdmin {
+            display: inline-flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #888;
+            margin-left: 10px;
+  
+            .arrowAdmin {
+              margin-left: 5px;
+              font-size: 12px;
+            }
+  
+            .dropdownAdmin {
+              padding-left: 30px; /* Increase indentation for dropdown items */
+              list-style: none;
+  
+              li {
+                padding: 5px 0;
+                cursor: pointer;
+                margin-left: 10px;
+  
+                &:hover {
+                  background-color: #f6d8e576;
+                  border-radius: 8px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  
+    .bottomAdmin {
+      display: flex;
+      align-items: center;
+      margin: 10px;
+  
+      .colorOptionAdmin {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        border: 1px solid #d32e65;
+        cursor: pointer;
+        margin: 5px;
+  
+        &:nth-child(1) {
+          background-color: whitesmoke;
+        }
+        &:nth-child(2) {
+          background-color: #333;
+        }
+        &:nth-child(3) {
+          background-color: darkblue;
+        }
+      }
+    }
+  }
+  

@@ -3,7 +3,7 @@ import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";
-import Chart from "../../components/chart/Chart";
+import Chart from "../../components/chartAdmin/Chart";
 // import Table from "../../components/tableAdmin/Table";
 
 
