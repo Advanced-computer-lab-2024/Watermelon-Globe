@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity,
-    createTags, getTags, updateActivityRating,createActivityNew,getActivitiesNew } = require ("../Controller/activityController");
+    updateActivityRating,createActivityNew,getActivitiesNew, 
+    getAllTags} = require ("../Controller/activityController");
 
 router.post('/newActivity', createActivity); //duplicate
 router.get('/activities', getActivities); //duplicate
@@ -13,8 +14,9 @@ router.put('/updateActivity/:id', updateActivity);
 router.delete('/deleteActivity/:id', deleteActivity);
 router.post("/createActivityNew",createActivityNew); //duplicate
 router.get("/getActivitiesNew",getActivitiesNew); //duplicate
-router.post('/createHistoricalTags',createTags);
-router.get('/getHistoricalTags',getTags);
+// router.post('/createHistoricalTags',createTags);
+// router.get('/getHistoricalTags',getTags);
+router.get('/getAllTags',getAllTags);
 
 
 module.exports = router;

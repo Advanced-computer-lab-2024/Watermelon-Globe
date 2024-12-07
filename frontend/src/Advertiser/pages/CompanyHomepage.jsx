@@ -52,6 +52,7 @@ const HomeScreen = () => {
         <div className="home">
             <Sidebar
                     advertiser={advertiser}
+                    advertiserName = {advertiser?.Name}
                     advertiserId={advertiser?._id}
                     onCreateActivity={() => navigate(`/add-activity/${advertiser?._id}`)}
                     selectedTab={selectedTab}
@@ -65,7 +66,9 @@ const HomeScreen = () => {
                 
                 <div className="main-content">
                     {selectedTab === 'addActivity' ? (
-                        <ActivityForm userId={advertiser?._id} />
+                        <div className='full-width-form'>
+                            <ActivityForm userId={advertiser?._id} />
+                        </div>
                     ) : selectedTab === 'Dashboard' ? (
                         <>
                                 <div className="widgets">
