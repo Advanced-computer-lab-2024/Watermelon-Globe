@@ -72,9 +72,16 @@ const itinerarySchema = new Schema(
       default: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
       required: false,
     },
+     notifyRequests: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tourist'
+  }]
+
   },
   { timestamps: true }
 );
+ 
+ 
 
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 const pickup = mongoose.model("pickup", pickupDropoffSchema);

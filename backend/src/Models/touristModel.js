@@ -140,6 +140,31 @@ const touristSchema = new Schema(
     ],
 
     
+   
+    //sprint 3 Hatem
+
+    bookmarkedItineraries: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Itinerary', 
+        default: [],
+      },
+    ],
+    bookmarkedActivities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Activity', 
+        default: [],
+      },
+    ],
+     notifications: [
+      {
+        type: String,
+        required: true,
+        default: [],
+      },
+    ],
+ 
   },  
   
 
