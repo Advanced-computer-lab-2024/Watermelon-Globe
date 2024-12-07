@@ -4,21 +4,26 @@ import "./home.scss";
 import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";
 import Chart from "../../components/chart/Chart";
+// import Table from "../../components/tableAdmin/Table";
+
+
+import { Link } from "react-router-dom";
 // import Table from "../../components/table/Table";
 
-const Home = () => {
+const HomeUser = () => {
   return (
-    <div className="home">
+    <div className="homeAdmin">
       <Sidebar />
-      <div className="homeContainer">
+      <div className="homeContainerAdmin">
         <Navbar />
-        <div className="widgets">
-          <Widget type="user" />
+        <div className="widgetsAdminHome">
+        {/* <Link to={"/AdminUsers/674f760ed6b7ba513c4ea84d"}>  </Link> */}
+          <Widget type="user" />  
           <Widget type="product" />
           <Widget type="itinerary" />
           <Widget type="activity" />
         </div>
-        <div className="charts">
+        <div className="chartsAdminHome">
           <Featured />
           <Chart title="Total Users per Month" aspect={2 / 1} />
         </div>
@@ -31,4 +36,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeUser;

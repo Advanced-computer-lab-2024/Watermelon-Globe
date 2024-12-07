@@ -6,8 +6,9 @@ import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";
 import Chart from "../../components/chart/Chart2";
 import Table from "../../components/tableAdmin/Table";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+const HomeSales = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Handle change in search input
@@ -50,4 +51,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeSales;
