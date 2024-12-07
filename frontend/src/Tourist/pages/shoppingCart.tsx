@@ -156,7 +156,6 @@ export default function ShoppingCart() {
           </div>
         </>
       )}
-      <WalletComponent touristId={touristId} />
     </div>
   )
 }

@@ -371,7 +371,6 @@ const ItineraryDetails = () => {
           </button>
         </div>
       </div>
-      <WalletComponent touristId={id} />
     </div>
   );
 };

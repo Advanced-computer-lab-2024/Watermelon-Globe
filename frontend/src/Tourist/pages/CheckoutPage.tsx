@@ -102,7 +102,6 @@ const CheckoutPage = () => {
           {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       )}
-      <WalletComponent touristId={touristId} />
     </div>
   );
 };

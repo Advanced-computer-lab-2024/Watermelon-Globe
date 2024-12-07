@@ -35,8 +35,9 @@ import ExploreActivities from "../Components/ExploreActivities.jsx";
 import ExploreHistoricalSites from "../Components/ExploreHistoricalSites.jsx";
 import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
-import WalletComponent from "../Components/Wallet";
 import NotificationsBox from "../Components/NotificationsBox";
+import WalletComponent from '../Components/Wallet';
+import TouristNavbar from "../Components/TouristNavBar";
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -427,7 +428,6 @@ export default function DraftHomePage() {
           </p>
         </div>
       </footer>
-      <WalletComponent touristId={id} />
     </div>
   );
 }
