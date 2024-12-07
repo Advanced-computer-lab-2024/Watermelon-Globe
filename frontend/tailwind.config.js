@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       colors: {
         // Custom colors based on provided code
-        primary: '#d32e65',      // Used for buttons and links PINK
+        primary: '#e89bb5',      // Used for buttons and links PINK
         hover: '#f6d8e576',        // Hover color for buttons PINK HOVER
         secondary: '#91c297',    // Used for header and main text GREEN 
         secondaryHover: '#247A4B', // Hover color for secondary elements GREEN HOVER
