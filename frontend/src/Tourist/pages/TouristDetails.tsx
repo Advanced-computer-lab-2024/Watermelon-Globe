@@ -1,195 +1,216 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
-  FaUser, FaEnvelope, FaPhone, FaFlag, FaCalendar, FaBriefcase, FaDollarSign,
-  FaEdit, FaCheck, FaTimes, FaGift, FaTrash, FaPlane, FaCompass, FaKey, FaShoppingBasket
-} from 'react-icons/fa'
-import ChangePasswordTourist from '../Components/changePasswordTourist.js'
-import TouristNavbar from "../Components/TouristNavBar.tsx";
-
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaFlag,
+  FaCalendar,
+  FaBriefcase,
+  FaDollarSign,
+  FaEdit,
+  FaCheck,
+  FaTimes,
+  FaGift,
+  FaTrash,
+  FaPlane,
+  FaCompass,
+  FaKey,
+  FaShoppingBasket,
+} from "react-icons/fa";
+import ChangePasswordTourist from "../Components/changePasswordTourist.js";
+import TouristNavbar from "../Components/TouristNavBar";
 
 interface Tourist {
-  id: string
-  username: string
-  email: string
-  mobileNumber: string
-  nationality: string
-  dob: string
-  status: string
-  wallet: number
-  loyaltyPoints: number
-  badge: string
-  createdAt: string
+  id: string;
+  username: string;
+  email: string;
+  mobileNumber: string;
+  nationality: string;
+  dob: string;
+  status: string;
+  wallet: number;
+  loyaltyPoints: number;
+  badge: string;
+  createdAt: string;
 }
 
 interface FormData {
-  email: string
-  mobileNumber: string
-  nationality: string
-  status: string
+  email: string;
+  mobileNumber: string;
+  nationality: string;
+  status: string;
 }
 
 export default function TouristDetails() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [tourist, setTourist] = useState<Tourist | null>(null)
-  const [isEditing, setIsEditing] = useState(false)
-  const [showRedeemModal, setShowRedeemModal] = useState(false)
-  const [pointsToRedeem, setPointsToRedeem] = useState('')
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [tourist, setTourist] = useState<Tourist | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showRedeemModal, setShowRedeemModal] = useState(false);
+  const [pointsToRedeem, setPointsToRedeem] = useState("");
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    mobileNumber: '',
-    nationality: '',
-    status: '',
-  })
+    email: "",
+    mobileNumber: "",
+    nationality: "",
+    status: "",
+  });
 
   useEffect(() => {
     const fetchTourist = async () => {
       try {
-        console.log(`Fetching details for tourist ID: ${id}`)
-        const response = await fetch(`/api/Tourist/getTourist/${id}`)
+        console.log(`Fetching details for tourist ID: ${id}`);
+        const response = await fetch(`/api/Tourist/getTourist/${id}`);
 
         if (!response.ok) {
-          throw new Error(`Error: ${response.status}`)
+          throw new Error(`Error: ${response.status}`);
         }
-        const data = await response.json()
-        setTourist(data)
+        const data = await response.json();
+        setTourist(data);
         setFormData({
           email: data.email,
           mobileNumber: data.mobileNumber,
           nationality: data.nationality,
           status: data.status,
-        })
+        });
       } catch (error) {
-        console.error('Error fetching tourist details:', error)
-        alert('Failed to fetch tourist details. Please try again.')
+        console.error("Error fetching tourist details:", error);
+        alert("Failed to fetch tourist details. Please try again.");
       }
-    }
+    };
 
-    fetchTourist()
-  }, [id])
+    fetchTourist();
+  }, [id]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleUpdate = () => {
-    setIsEditing(true)
-  }
+    setIsEditing(true);
+  };
 
   const handleConfirm = async () => {
-    setIsEditing(false)
+    setIsEditing(false);
     try {
-      await axios.put(`/api/Tourist/updateTourist/${id}`, formData)
-      alert('Tourist details updated successfully!')
-      const response = await fetch(`/api/Tourist/getTourist/${id}`)
-      const updatedData = await response.json()
-      setTourist(updatedData)
+      await axios.put(`/api/Tourist/updateTourist/${id}`, formData);
+      alert("Tourist details updated successfully!");
+      const response = await fetch(`/api/Tourist/getTourist/${id}`);
+      const updatedData = await response.json();
+      setTourist(updatedData);
     } catch (error) {
-      console.error('Error updating tourist details:', error)
-      alert('Failed to update tourist details. Please try again.')
+      console.error("Error updating tourist details:", error);
+      alert("Failed to update tourist details. Please try again.");
     }
-  }
+  };
 
   const handleCancel = () => {
-    setIsEditing(false)
+    setIsEditing(false);
     if (tourist) {
       setFormData({
         email: tourist.email,
         mobileNumber: tourist.mobileNumber,
         nationality: tourist.nationality,
         status: tourist.status,
-      })
+      });
     }
-  }
+  };
 
   const handleRedeemPoints = async () => {
     try {
-      const response = await axios.put(`/api/Tourist/redeemPoints/${id}`, { pointsToRedeem: Number(pointsToRedeem) })
-      alert(response.data.message)
-      const updatedData = await fetch(`/api/Tourist/getTourist/${id}`)
-      const newTouristData = await updatedData.json()
-      setTourist(newTouristData)
-      setShowRedeemModal(false)
-      setPointsToRedeem('')
+      const response = await axios.put(`/api/Tourist/redeemPoints/${id}`, {
+        pointsToRedeem: Number(pointsToRedeem),
+      });
+      alert(response.data.message);
+      const updatedData = await fetch(`/api/Tourist/getTourist/${id}`);
+      const newTouristData = await updatedData.json();
+      setTourist(newTouristData);
+      setShowRedeemModal(false);
+      setPointsToRedeem("");
     } catch (error) {
-      console.error('Error redeeming points:', error)
-      alert('Failed to redeem points. Please try again.')
+      console.error("Error redeeming points:", error);
+      alert("Failed to redeem points. Please try again.");
     }
-  }
+  };
 
   const handleViewFlightHotelBookings = () => {
-    navigate(`/MyHotelFlightBookings/${id}`)
-  }
+    navigate(`/MyHotelFlightBookings/${id}`);
+  };
 
   const handleViewBookings = () => {
-    navigate(`/MyBookings/${id}`)
-  }
+    navigate(`/MyBookings/${id}`);
+  };
 
   const handleViewProducts = () => {
     navigate(`/OrdersPage/${id}`);
-  }
+  };
 
   const handleDeleteAccount = async () => {
-    const confirmed = window.confirm('Are you sure you want to delete your account? This action is irreversible.')
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your account? This action is irreversible."
+    );
     if (confirmed) {
       try {
-        const response = await fetch(`/api/Tourist/requestDeletionTourist/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        const response = await fetch(
+          `/api/Tourist/requestDeletionTourist/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.ok) {
-          alert('Request to delete account sent successfully.')
-          navigate('/')
+          alert("Request to delete account sent successfully.");
+          navigate("/");
         } else {
-          alert('Failed to send deletion request. Please try again.')
+          alert("Failed to send deletion request. Please try again.");
         }
       } catch (error) {
-        console.error('Error deleting account:', error)
-        alert('An error occurred while trying to delete the account.')
+        console.error("Error deleting account:", error);
+        alert("An error occurred while trying to delete the account.");
       }
     }
-  }
+  };
 
   const renderBadgeIcon = () => {
-    if (!tourist) return '🏅'
+    if (!tourist) return "🏅";
     switch (tourist.badge) {
-      case 'Gold':
-        return '🥇'
-      case 'Silver':
-        return '🥈'
-      case 'Bronze':
-        return '🥉'
+      case "Gold":
+        return "🥇";
+      case "Silver":
+        return "🥈";
+      case "Bronze":
+        return "🥉";
       default:
-        return '🏅'
+        return "🏅";
     }
-  }
+  };
 
   if (!tourist) {
     return (
       <div className="flex justify-center items-center h-screen bg-background">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
-            <TouristNavbar id={id}/>
+      <TouristNavbar id={id} />
 
       <div className="max-w-4xl mx-auto">
-        
         <div className="text-center mb-8">
           <p className="text-xl text-secondary">Your Travel Companion</p>
         </div>
@@ -209,9 +230,12 @@ export default function TouristDetails() {
                 <FaUser className="h-16 w-16 text-primary" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-white">{tourist.username}</h2>
+                <h2 className="text-3xl font-bold text-white">
+                  {tourist.username}
+                </h2>
                 <p className="text-white opacity-75">
-                  Member since {new Date(tourist.createdAt).toLocaleDateString()}
+                  Member since{" "}
+                  {new Date(tourist.createdAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
@@ -274,7 +298,9 @@ export default function TouristDetails() {
                   <FaCalendar className="mr-2 text-primary" size="1em" />
                   Date of Birth:
                 </label>
-                <p className="text-gray-700">{new Date(tourist.dob).toLocaleDateString()}</p>
+                <p className="text-gray-700">
+                  {new Date(tourist.dob).toLocaleDateString()}
+                </p>
               </div>
               <div>
                 <label className="flex items-center text-secondary mb-2">
@@ -307,7 +333,9 @@ export default function TouristDetails() {
                   <FaGift className="mr-2 text-primary" size="1em" />
                   Loyalty Points:
                 </label>
-                <p className="text-gray-700">{tourist.loyaltyPoints.toFixed(0)}</p>
+                <p className="text-gray-700">
+                  {tourist.loyaltyPoints.toFixed(0)}
+                </p>
               </div>
               <div>
                 <label className="flex items-center text-secondary mb-2">
@@ -365,7 +393,6 @@ export default function TouristDetails() {
                 </>
               )}
             </div>
-
           </div>
         </div>
       </div>
@@ -400,8 +427,12 @@ export default function TouristDetails() {
           </div>
         </div>
       )}
-      {showPasswordModal && <ChangePasswordTourist id={id} onClose={() => setShowPasswordModal(false)} />}
+      {showPasswordModal && (
+        <ChangePasswordTourist
+          id={id}
+          onClose={() => setShowPasswordModal(false)}
+        />
+      )}
     </div>
-  )
+  );
 }
-
