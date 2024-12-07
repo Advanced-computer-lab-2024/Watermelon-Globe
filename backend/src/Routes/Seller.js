@@ -31,7 +31,8 @@ const {
   deleteProductById,
   loginSeller,
   totalProductRevenueForSeller,
-  SellerMonthlyRevenue
+  SellerMonthlyRevenue,
+  filterRevenueByDateSeller
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -116,5 +117,7 @@ router.get("/totalProductRevenueForSeller/:sellerId", totalProductRevenueForSell
 
 // view totalProductRevenueForSeller
 router.get("/SellerMonthlyRevenue/:sellerId", SellerMonthlyRevenue);
+
+router.get("/filterRevenueByDateSeller/:sellerId", filterRevenueByDateSeller);
 
 module.exports = router;

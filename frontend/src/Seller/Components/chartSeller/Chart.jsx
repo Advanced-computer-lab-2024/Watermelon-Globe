@@ -14,12 +14,12 @@ import { useParams } from "react-router-dom";
 
 const Chart = ({ aspect, title }) => {
   const [data, setData] = useState([]);
-  const {sellerId} = useParams();
+  const {id} = useParams();
 
   // Function to fetch yearly revenue data from the backend
-  const fetchYearlyRevenue = async () => {
+  const fetchYearlyRevenue = async () => { 
     try {
-      const response = await axios.get(`/api/Seller/SellerMonthlyRevenue/${sellerId}`);
+      const response = await axios.get(`/api/Seller/SellerMonthlyRevenue/${id}`);
       const revenueData = response.data.data;
 
       // The data is already formatted correctly from the backend, so we can use it directly

@@ -979,6 +979,66 @@ const SellerMonthlyRevenue = async (req, res) => {
   }
 };
 
+const filterRevenueByDateSeller = async (req, res) => {
+  try {
+    const { date } = req.query;
+    const { sellerId } = req.params; // sellerId passed as a route parameter
+
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    if (!sellerId) {
+      return res.status(400).json({ message: "Seller ID is required" });
+    }
+
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: "$orders" }, // Unwind the orders array
+      { $unwind: "$orders.items" }, // Unwind the items within each order
+      {
+        $lookup: {
+          from: "products", // Lookup products collection
+          localField: "orders.items.productId", // Match by productId from the orders
+          foreignField: "_id", // Match to product's _id
+          as: "product", // Store matched product data
+        },
+      },
+      { $unwind: "$product" }, // Unwind the product data after lookup
+      {
+        $match: {
+          "product.seller": new mongoose.Types.ObjectId(sellerId), // Filter by sellerId
+          "orders.orderDate": { $gte: selectedDate, $lt: nextDate }, // Filter by the selected date
+        },
+      },
+      {
+        $group: {
+          _id: null, // Grouping to calculate total revenue
+          totalRevenue: { $sum: { $multiply: ['$orders.items.quantity', '$product.price'] } }, // Sum up the total price for orders
+        },
+      },
+    ]);
+
+    const totalProductRevenue =
+      productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
+
+    const totalRevenue = totalProductRevenue;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully",
+      date: selectedDate.toISOString().split("T")[0],
+      productRevenue: Number(totalProductRevenue.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed(2)),
+    });
+  } catch (error) {
+    console.error("Error filtering revenue by date:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 
@@ -1017,5 +1077,6 @@ module.exports = {
   deleteProductById,
   loginSeller,
   totalProductRevenueForSeller,
-  SellerMonthlyRevenue
+  SellerMonthlyRevenue,
+  filterRevenueByDateSeller
 };
