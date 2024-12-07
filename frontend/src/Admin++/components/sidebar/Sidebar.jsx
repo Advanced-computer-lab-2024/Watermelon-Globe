@@ -1,6 +1,6 @@
 import "./sidebar.scss";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { FaUserCog } from "react-icons/fa";
@@ -34,6 +34,8 @@ const Sidebar = (selectedTab, setSelectedTab) => {
     setIsDropdownProductAdd(!isDropdownOpenProductAdd);
   };
 
+  const {id} = useParams();
+
   return (
     <div className="sidebarAdmin">
       <div className="topAdmin">
@@ -47,7 +49,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
           <p className="titleAdmin">MAIN</p>
 
           <Link
-            to="/AdminSales/674f760ed6b7ba513c4ea84d"
+            to={`/AdminSales/${id}`}
             style={{ textDecoration: "none" }}
             onClick={() => setSelectedTab("Dashboard")}
           >

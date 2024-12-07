@@ -91,6 +91,7 @@ const Sidebar = () => {
   // Function to determine if the menu item is active
   const isActive = (path) => location.pathname === path;
 
+
   return (
     <div className="sidebarAdmin">
       <div className="topAdmin">
@@ -104,7 +105,7 @@ const Sidebar = () => {
           <p className="titleAdmin">MAIN</p>
 
           <Link
-            to="/SellerHome/6729244f151b6c9e346dd732"
+            to={`/SellerHome/${id}`}
             style={{ textDecoration: "none" }}
           >
             <li>

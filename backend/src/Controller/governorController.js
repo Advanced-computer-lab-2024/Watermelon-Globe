@@ -79,7 +79,7 @@ const createSite = async (req, res) => {
 };
 
 const getSite = async (req, res) => {
-  const { id } = req.query; // Extract the site ID from the request parameters
+  const { id } = req.params; // Extract the site ID from the request parameters
 
   // Validate if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
