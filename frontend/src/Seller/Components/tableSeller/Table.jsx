@@ -8,14 +8,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useParams } from 'react-router-dom';
 
 const List = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
+  const {id} = useParams();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/api/Admin/GetAllProducts');
+        const response = await axios.get(`/api/Seller/getProductsBySeller/${id}`);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);

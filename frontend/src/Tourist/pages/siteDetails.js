@@ -13,6 +13,7 @@ const SiteDetails = () => {
       try {
         const response = await fetch(`/api/Governor/getSite/${id}`);
         const data = await response.json();
+        console.log(data);
         setSite(data);
       } catch (error) {
         console.error('Error fetching site details:', error);
@@ -47,8 +48,9 @@ const SiteDetails = () => {
       <div className="max-w-4xl mx-auto bg-cardBackground shadow-md rounded-lg p-6">
         <button
           onClick={() => navigate(-1)}
-          className="text-primary hover:text-secondaryHover transition duration-200"
-        >
+          className="text-primary hover:text-secondaryHover transition duration-200 focus:outline-none focus-visible:outline-none focus:ring-0 active:outline-none"
+          style={{ backgroundColor: 'transparent' }}
+          >
           <ArrowLeft className="w-6 h-6" />
         </button>
         <h1 className="text-secondary text-4xl font-bold mb-4">{site.name}</h1>

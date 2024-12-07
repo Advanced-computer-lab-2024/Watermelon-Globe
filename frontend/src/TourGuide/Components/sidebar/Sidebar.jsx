@@ -113,7 +113,7 @@
 import "./sidebar.scss";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useParams, useLocation } from "react-router-dom";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { FaUserCog } from "react-icons/fa";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
@@ -135,7 +135,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
   const [isDropdownOpenEvent, setIsDropdownOpenEvent] = useState(false);
   const [isDropdownOpenProductView, setIsDropdownProductView] = useState(false);
   const [isDropdownOpenProductAdd, setIsDropdownProductAdd] = useState(false);
-
+  const { id } = useParams();
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -155,7 +155,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
     <div className="sidebarAdmin">
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Hello, </span>
+          <span className="logoAdmin">Hello,{} </span>
         </Link>
       </div>
       {/* <hr /> */}

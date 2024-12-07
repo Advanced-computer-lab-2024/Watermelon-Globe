@@ -46,34 +46,32 @@
     }
 
     .summary {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .item {
-        text-align: center;
-
-        .itemTitle {
-          font-size: 14px;
-          color: gray;
+      .date-picker-container {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+  
+        .calendar-button {
+          background-color: #f0f0f0;
+          color: #333;
+          &:hover {
+            background-color: #91c297;
+          }
         }
-
-        .itemResult {
-          display: flex;
-          align-items: center;
-          margin-top: 10px;
-          font-size: 14px;
-
-          &.positive {
-            color: #91c297;
-          }
-
-          &.negative {
-            color: #d32e65;
-          }
+      }
+  
+      .reset-button {
+        margin-top: 10px;
+        background-color: #f0f0f0;
+        color: #333;
+        &:hover {
+          background-color: #91c297;
         }
       }
     }
   }
+}
+
+.MuiPickersPopper-root {
+  z-index: 9999;
 }
