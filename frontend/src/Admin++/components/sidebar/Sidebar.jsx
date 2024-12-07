@@ -47,7 +47,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
           <p className="titleAdmin">MAIN</p>
 
           <Link
-            to="/AdminHome++/674f760ed6b7ba513c4ea84d"
+            to="/AdminSales/674f760ed6b7ba513c4ea84d"
             style={{ textDecoration: "none" }}
             onClick={() => setSelectedTab("Dashboard")}
           >

@@ -1,23 +1,67 @@
+// .navbarAdmin {
+//   height: 100px;
+//   //border-bottom: 3px solid #91c2979b;
+//   display: flex;
+//   align-items: center;
+//   background-color: white;
+//   font-size: 14px;
+//   color: #d688a2;
+//   left: 0; /* Adjusted to ensure correct placement */
+//   top: 0;
+//   background-color: #f4eaef76;
+//   width: 100%;
 
-.navbar-seller {
-  height: 50px;
-  border-bottom: 0.5px solid rgb(231, 228, 228);
+.navbarAdmin {
+  width: 100%; /* Makes the navbar take the full width of the page */
+  height: 70px;
   display: flex;
   align-items: center;
+  background-color: #f4eaef76; /* Your desired background color */
   font-size: 14px;
-  color: #555;
+  color: #d688a2;
+  position: fixed; /* Ensures the navbar stays at the top while scrolling */
+  left: 0;
+  top: 0;
+  z-index: 1000; /* Keeps the navbar above other elements */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  // border-bottom: 5px solid #91c297;
 
-  .wrapper-seller {
+  // .navbarBorder {
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 58.5%; /* Start from the middle */
+  //   width: 84%; /* Adjust width as needed */
+  //   height: 5px;
+  //   background-color: #91c2979b;
+  //   transform: translateX(-50%); /* Align to the middle */
+  // }
+
+  .topAdmin {
+    height: 50px;
+    display: flex;
+    //padding-left: 200px;
+    width: 100%; /* Ensure full width */
+
+    .logoAdmin {
+      font-size: 25px;
+      font-weight: bold;
+      color: #d32e65;
+    }
+  }
+
+  .wrapperAdmin {
     width: 100%;
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    .search-seller {
+    .searchAdmin {
       display: flex;
       align-items: center;
-      border: 0.5px solid lightgray;
+      // border: 0.5px solid lightgray;
       padding: 3px;
 
       input {
@@ -31,32 +75,31 @@
       }
     }
 
-    .items-seller {
+    .itemsAdmin {
       display: flex;
       align-items: center;
 
-      .item-seller {
+      .itemAdmin {
         display: flex;
         align-items: center;
         margin-right: 20px;
         position: relative;
-        color:black
 
-        .icon-seller {
-          font-size: 20px;
-          color:black
+        .iconAdmin {
+          font-size: 25px;
         }
 
-        .avatar-seller {
+        .avatarAdmin {
           width: 30px;
           height: 30px;
           border-radius: 50%;
         }
 
-        .counter-seller {
+        .counterAdmin {
           width: 15px;
           height: 15px;
-          background-color: red;
+          //background-color: rgba(78, 192, 129, 0.721);
+          background-color: #91c297;
           border-radius: 50%;
           color: white;
           display: flex;

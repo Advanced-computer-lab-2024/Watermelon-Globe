@@ -45,15 +45,11 @@ const HomePage = () => {
         >
           Go to Tourism Governor Page
         </button>
-        <button className="home-btn" onClick={() => navigate("/AdminHomepage")}>
-          Go to Admin Page
-        </button>
-
         <button
           className="home-btn"
-          onClick={() => navigate("/AdminHome++/674f760ed6b7ba513c4ea84d")}
+          onClick={() => navigate("/AdminSales/674f760ed6b7ba513c4ea84d")}
         >
-          Go to Admin++ Page
+          Go to Admin Page
         </button>
       </div>
     </div>

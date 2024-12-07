@@ -62,6 +62,8 @@ const {
   getUploadedDocumentsByID,
   markActivityAppropriate,
   markItineraryAppropriate,
+  getMonthlyRevenue,
+  filterRevenueByDate,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -173,5 +175,9 @@ router.delete("/deletePromoCode/:id", deletePromoCode);
 router.get("/filterRevenueByProduct/:productId", filterRevenueByProduct);
 
 router.get("/getNotificationsAdmin", getNotificationsAdmin);
+
+router.get("/getMonthlyRevenue", getMonthlyRevenue);
+
+router.get("/filterRevenueByDate", filterRevenueByDate);
 
 module.exports = router;

@@ -4,10 +4,11 @@ import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";
-import Chart from "../../components/chart/Chart";
+import Chart from "../../components/chartAdmin/Chart2";
 import Table from "../../components/tableAdmin/Table";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+const HomeSales = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Handle change in search input
@@ -28,7 +29,7 @@ const Home = () => {
         </div>
         <div className="chartsAdminHome">
           <Featured />
-          <Chart title="Total Users per Month" aspect={2 / 1} />
+          <Chart title="Total Sales per Month" aspect={2 / 1} />
         </div>
         <div className="listContainerAdminHome">
           <div className="listTitleAdminHome">
@@ -50,4 +51,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeSales;

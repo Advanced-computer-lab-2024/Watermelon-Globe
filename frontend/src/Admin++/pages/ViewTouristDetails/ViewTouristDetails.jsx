@@ -1,7 +1,7 @@
 import "./ViewTouristDetails.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import Chart from "../../components/chart/Chart";
+import Chart from "../../components/chartAdmin/Chart";
 import List from "../../components/tableAdmin/Table";
 
 const ViewTouristDetails = () => {
