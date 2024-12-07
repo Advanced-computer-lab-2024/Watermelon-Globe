@@ -2604,6 +2604,62 @@ const markNotificationAsRead = async (req, res) => {
   }
 };
 
+const addToWishList= async(req,res) => {
+  const{touristId,productId}=req.params;
+  try{
+    const tourist = await Tourist.findById(touristId);
+    tourist.WishList.push(productId);
+    await tourist.save();
+  
+  res.status(200).json({ message: 'Product added to wish list' });
+  }
+  catch(error){
+    res.status(500).json({ error: 'Error adding product to wish list', details: error.message });
+  }
+
+}
+
+const getWishList = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tourist = await Tourist.findById(id); // Correct method for fetching a document by ID
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+    res.status(200).json({ wishList: tourist.WishList }); // Correctly referencing wishList
+  } catch (error) {
+    res.status(500).json({ error: "Error getting wish list", details: error.message });
+  }
+};
+
+const deleteFromWishlist = async (req, res) => {
+  const{touristId,productId}=req.params;
+
+  try {
+    // Find the tourist
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Check if the wishlist item exists
+    const wishlistItemIndex = tourist.WishList.findIndex(item => item._id.toString() === productId);
+    if (wishlistItemIndex === -1) {
+      return res.status(404).json({ error: "Wishlist item not found" });
+    }
+
+    // Remove the item from the wishlist
+    tourist.WishList.splice(wishlistItemIndex, 1); // Remove the item by its index
+    await tourist.save();
+
+    res.status(200).json({ message: "Item successfully removed from wishlist" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting item from wishlist", details: error.message });
+  }
+};
+
+
+
 
 
 
@@ -2695,6 +2751,9 @@ module.exports = {
   requestNotifyItinerary,
   getNotifications,
   getNotificationCount,
-  markNotificationAsRead
+  markNotificationAsRead,
+  addToWishList,
+  getWishList,
+  deleteFromWishlist,
 
 };
