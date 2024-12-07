@@ -52,6 +52,13 @@ const sellerSchema = new Schema(
           ref: 'Product',
         },
       ],
+      notifications: [
+        {
+          type: String,
+          required: true,
+          default: [],
+        },
+      ],
       
     
   },

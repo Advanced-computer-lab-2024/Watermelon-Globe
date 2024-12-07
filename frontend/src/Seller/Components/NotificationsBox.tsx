@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Bell, X } from "lucide-react";
 
@@ -18,11 +19,18 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`/api/tourist/notifications/${id}`);
+        const response = await fetch(`/api/Seller/getNotificationsSeller/${id}`);
         const data = await response.json();
-        setNotifications(data.notifications);
+
+        if (Array.isArray(data.notifications)) {
+          setNotifications(data.notifications);
+        } else {
+          console.warn("Invalid notifications data:", data.notifications);
+          setNotifications([]);
+        }
       } catch (error) {
         console.error("Error fetching notifications:", error);
+        setNotifications([]); // Fallback to empty array in case of error
       }
     };
 
@@ -77,7 +85,7 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
 
       </div>
       <div className="max-h-80 overflow-y-auto">
-        {notifications.length > 0 ? (
+        {notifications?.length > 0 ? (
           notifications.map((notification, index) => (
             <div
               key={index}
@@ -92,7 +100,7 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
           </div>
         )}
       </div>
-      {notifications.length > 0 && (
+      {notifications?.length > 0 && (
         <div className="py-2 px-4 bg-gray-50 rounded-b-lg">
           <button className="text-sm text-green-600 hover:text-green-800 font-medium">
             Mark all as read

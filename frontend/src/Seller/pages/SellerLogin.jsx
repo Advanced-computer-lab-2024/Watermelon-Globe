@@ -31,7 +31,7 @@ const SellerLogin = () => {
 
       if (response.status === 200) {
         const sellerId = response.data.id;
-        navigate(`/SellerHome/:id${sellerId}`); // Redirect to Seller Product page with seller ID
+        navigate(`/SellerHome/${sellerId}`); // Redirect to Seller Product page with seller ID
       } else {
         setErrorMessage("Login failed. Please try again.");
       }

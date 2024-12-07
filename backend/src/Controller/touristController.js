@@ -396,7 +396,8 @@ const buyProduct = async (req, res) => {
       return res.status(400).json({ error: "Tourist not found" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId)
+    .populate("seller");
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
@@ -414,12 +415,15 @@ const buyProduct = async (req, res) => {
     }
 
     if (product.quantity === 0) {
-      const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+      const admin = await Admin.findById("674a3e827a6dcbe8e5bd8069");
       if (admin) {
         const notification = `Product ${product.name} is out of stock.`;
         admin.notifications.push(notification);
 
         await admin.save();
+
+        const seller= product.seller;
+        seller.notifications.push(notification);
 
         // Send email notification
         const emailResult = await sendEmail(
@@ -428,6 +432,19 @@ const buyProduct = async (req, res) => {
           notification,
           `<h1>Low Stock Alert</h1><p>${notification}</p>`
         );
+
+        const emailResult2 = await sendEmail(
+          'omarhseif04@gmail.com',
+          'Low Stock Alert',
+          notification,
+          `<h1>Low Stock Alert</h1><p>${notification}</p>`
+        );
+
+        if (!emailResult2.success) {
+          console.error('Failed to send email notification for product for seller:', product._id);
+        }
+
+
 
         if (!emailResult.success) {
           console.error('Failed to send email notification for product:', product._id);
