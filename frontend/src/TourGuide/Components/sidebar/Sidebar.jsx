@@ -111,51 +111,40 @@
 // export default Sidebar;
 
 import "./sidebar.scss";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
-import { FaUserCog } from "react-icons/fa";
-import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
-import { FaCartArrowDown } from "react-icons/fa";
-import { MdCategory } from "react-icons/md";
 import { IoIosPricetags } from "react-icons/io";
-import { MdEvent } from "react-icons/md";
-import { TbSettingsCode } from "react-icons/tb";
-import { HiQrcode } from "react-icons/hi";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
 import { MdOutlineTravelExplore } from "react-icons/md";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
-import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
-const Sidebar = (selectedTab, setSelectedTab) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isDropdownOpenEvent, setIsDropdownOpenEvent] = useState(false);
-  const [isDropdownOpenProductView, setIsDropdownProductView] = useState(false);
-  const [isDropdownOpenProductAdd, setIsDropdownProductAdd] = useState(false);
+
+import axios from "axios";
+const Sidebar = () => {
   const { id } = useParams();
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const [user, setUser] = useState(""); // State to store user details
 
-  const toggleDropdownEvent = () => {
-    setIsDropdownOpenEvent(!isDropdownOpenEvent);
-  };
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        // Make an API call to fetch user details using the ID
+        const response = await axios.get(`/api/TourGuide/getGuide/${id}`);
+        setUser(response.data); // Update state with the user details
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
 
-  const toggleDropdownProductView = () => {
-    setIsDropdownProductView(!isDropdownOpenProductView);
-  };
-  const toggleDropdownProductAdd = () => {
-    setIsDropdownProductAdd(!isDropdownOpenProductAdd);
-  };
+    fetchUserDetails();
+  }, [id]);
 
   return (
     <div className="sidebarAdmin">
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Hello,{} </span>
+          <span className="logoAdmin">Hello, {user.username} </span>
         </Link>
       </div>
       {/* <hr /> */}
@@ -164,17 +153,18 @@ const Sidebar = (selectedTab, setSelectedTab) => {
           <p className="titleAdmin">MAIN</p>
 
           <Link
-            to="/AdminSales/674f760ed6b7ba513c4ea84d"
+            to="/TourguideHome/67013950229bd3b168a94dde"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedTab("Dashboard")}
+            // onClick={() => setSelectedTab("Dashboard")}
           >
-            <li className={selectedTab === "Dashboard" ? "active-tab" : ""}>
+            {/* <li className={selectedTab === "Dashboard" ? "active-tab" : ""}> */}
+            <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
           </Link>
 
-          <p className="titleAdmin">Itinearies</p>
+          <p className="titleAdmin">ITINERARIES</p>
 
           <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
@@ -190,7 +180,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
             </li>
           </Link>
 
-          <p className="titleAdmin">Manage Account</p>
+          <p className="titleAdmin">MANAGE ACCOUNT</p>
           <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />

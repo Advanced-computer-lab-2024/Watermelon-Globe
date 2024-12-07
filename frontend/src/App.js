@@ -132,13 +132,9 @@ import HotelMain from "./Hotels/Pages/HotelMain.js";
 
 import SiteDetails from "./Tourist/pages/siteDetails.js";
 
+import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 
-
-import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
-
-
-
-import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
+import TouristBookmarks from "./Tourist/Components/TouristBookmarks.jsx";
 import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx";
 //tourguide new
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
@@ -201,21 +197,24 @@ const App = () => {
           {/* Admin++ Routes */}
           <Route path="/AdminSales/:id" element={<AdminSales />} />
           <Route path="/AdminUsers/:id" element={<AdminUsers />} />
-          <Route path="AddAdmins" element={<AddAdmin />} />
-          <Route path="AddGoverner" element={<AddGoverner />} />
-          <Route path="ManageActive" element={<ActiveUsers />} />
-          <Route path="ManagePending" element={<PendingUsers />} />
-          <Route path="Categories" element={<Categories />} />
-          <Route path="Tags" element={<AddTag />} />
-          <Route path="/ViewAllProducts" element={<ViewAllProducts />} />
-          <Route path="/ViewMyProducts" element={<ViewMyProducts />} />
-          <Route path="/ViewSaleQuantities" element={<ViewSalesQuantities />} />
-          <Route path="/adminAddPromoCode" element={<AddPromoCode />} />
-          <Route path="/Tourists" element={<AllTourists />} />
+          <Route path="AddAdmins/:id" element={<AddAdmin />} />
+          <Route path="AddGoverner/:id" element={<AddGoverner />} />
+          <Route path="ManageActive/:id" element={<ActiveUsers />} />
+          <Route path="ManagePending/:id" element={<PendingUsers />} />
+          <Route path="Categories/:id" element={<Categories />} />
+          <Route path="Tags/:id" element={<AddTag />} />
+          <Route path="/ViewAllProducts/:id" element={<ViewAllProducts />} />
+          <Route path="/ViewMyProducts/:id" element={<ViewMyProducts />} />
+          <Route
+            path="/ViewSaleQuantities/:id"
+            element={<ViewSalesQuantities />}
+          />
+          <Route path="/adminAddPromoCode/:id" element={<AddPromoCode />} />
+          <Route path="/Tourists/:id" element={<AllTourists />} />
 
           <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
           <Route
-            path="/ViewItinerariesEvents"
+            path="/ViewItinerariesEvents/:id"
             element={<ViewItinerariesEvents />}
           />
           <Route path="/" element={<MainHome />} />
