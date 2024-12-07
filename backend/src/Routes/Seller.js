@@ -30,6 +30,8 @@ const {
   getProducts,
   deleteProductById,
   loginSeller,
+  totalProductRevenueForSeller,
+  SellerMonthlyRevenue
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -108,5 +110,11 @@ router.put("/uploadPicture", uploadPicture);
 
 // view product's available quantity
 router.get("/getQuantity/:id", getQuantity);
+
+// view totalProductRevenueForSeller
+router.get("/totalProductRevenueForSeller/:sellerId", totalProductRevenueForSeller);
+
+// view totalProductRevenueForSeller
+router.get("/SellerMonthlyRevenue/:sellerId", SellerMonthlyRevenue);
 
 module.exports = router;
