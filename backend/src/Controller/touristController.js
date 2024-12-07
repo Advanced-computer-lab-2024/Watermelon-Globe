@@ -396,7 +396,8 @@ const buyProduct = async (req, res) => {
       return res.status(400).json({ error: "Tourist not found" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId)
+    .populate("seller");
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
@@ -414,12 +415,15 @@ const buyProduct = async (req, res) => {
     }
 
     if (product.quantity === 0) {
-      const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+      const admin = await Admin.findById("674a3e827a6dcbe8e5bd8069");
       if (admin) {
         const notification = `Product ${product.name} is out of stock.`;
         admin.notifications.push(notification);
 
         await admin.save();
+
+        const seller= product.seller;
+        seller.notifications.push(notification);
 
         // Send email notification
         const emailResult = await sendEmail(
@@ -428,6 +432,19 @@ const buyProduct = async (req, res) => {
           notification,
           `<h1>Low Stock Alert</h1><p>${notification}</p>`
         );
+
+        const emailResult2 = await sendEmail(
+          'omarhseif04@gmail.com',
+          'Low Stock Alert',
+          notification,
+          `<h1>Low Stock Alert</h1><p>${notification}</p>`
+        );
+
+        if (!emailResult2.success) {
+          console.error('Failed to send email notification for product for seller:', product._id);
+        }
+
+
 
         if (!emailResult.success) {
           console.error('Failed to send email notification for product:', product._id);
@@ -1480,6 +1497,162 @@ const bookTransportation = async (req, res) => {
   }
 };
 
+//sprint 3 Hatem
+
+// Add itinerary bookmark
+const bookmarkItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Check if already bookmarked
+    if (tourist.bookmarkedItineraries.includes(itineraryId)) {
+      return res.status(400).json({ error: "Itinerary already bookmarked" });
+    }
+
+    tourist.bookmarkedItineraries.push(itineraryId);
+    await tourist.save();
+
+    res.status(200).json({ message: "Itinerary bookmarked successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error bookmarking itinerary", details: error.message });
+  }
+};
+
+// Add activity bookmark
+const bookmarkActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Check if already bookmarked
+    if (tourist.bookmarkedActivities.includes(activityId)) {
+      return res.status(400).json({ error: "Activity already bookmarked" });
+    }
+
+    tourist.bookmarkedActivities.push(activityId);
+    await tourist.save();
+
+    res.status(200).json({ message: "Activity bookmarked successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error bookmarking activity", details: error.message });
+  }
+};
+
+
+// Remove itinerary bookmark
+const removeItineraryBookmark = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const bookmarkIndex = tourist.bookmarkedItineraries.indexOf(itineraryId);
+    if (bookmarkIndex === -1) {
+      return res.status(400).json({ error: "Itinerary not bookmarked" });
+    }
+
+    tourist.bookmarkedItineraries.splice(bookmarkIndex, 1);
+    await tourist.save();
+
+    res.status(200).json({ message: "Itinerary bookmark removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Remove activity bookmark
+const removeActivityBookmark = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const bookmarkIndex = tourist.bookmarkedActivities.indexOf(activityId);
+    if (bookmarkIndex === -1) {
+      return res.status(400).json({ error: "Activity not bookmarked" });
+    }
+
+    tourist.bookmarkedActivities.splice(bookmarkIndex, 1);
+    await tourist.save();
+
+    res.status(200).json({ message: "Activity bookmark removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get all bookmarks
+const getBookmarks = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId)
+      .populate('bookmarkedItineraries')
+      .populate('bookmarkedActivities');
+
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    res.status(200).json({
+      bookmarkedItineraries: tourist.bookmarkedItineraries,
+      bookmarkedActivities: tourist.bookmarkedActivities
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+// Check if an itinerary is bookmarked
+const checkBookmarkItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const isBookmarked = tourist.bookmarkedItineraries.includes(itineraryId);
+    res.status(200).json({ isBookmarked });
+  } catch (error) {
+    res.status(500).json({ error: "Error checking itinerary bookmark status", details: error.message });
+  }
+};
+
+// Check if an activity is bookmarked
+const checkBookmarkActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    const isBookmarked = tourist.bookmarkedActivities.includes(activityId);
+    res.status(200).json({ isBookmarked });
+  } catch (error) {
+    res.status(500).json({ error: "Error checking activity bookmark status", details: error.message });
+  }
+};
+
 const addProductToCart = async (req, res) => {
   const { id } = req.params;
   const { productId, quantity } = req.body;
@@ -2328,7 +2501,114 @@ const loginTourist = async (req, res) => {
   }
 };
 
-  
+const requestNotifyActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const activity = await Activity.findById(activityId);
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    if (activity.notifyRequests.includes(touristId)) {
+      return res.status(400).json({ error: 'Tourist already in notify list for this activity' });
+    }
+
+    activity.notifyRequests.push(touristId);
+    await activity.save();
+
+    res.status(200).json({ message: 'Notification request added successfully for activity' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding notification request for activity', details: error.message });
+  }
+};
+
+const requestNotifyItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+  const Itinerary = itineraryModel.Itinerary;
+
+  try {
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+
+    if (itinerary.notifyRequests.includes(touristId)) {
+      return res.status(400).json({ error: 'Tourist already in notify list for this itinerary' });
+    }
+
+    itinerary.notifyRequests.push(touristId);
+    await itinerary.save();
+
+    res.status(200).json({ message: 'Notification request added successfully for itinerary' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding notification request for itinerary', details: error.message });
+  }
+};
+
+
+// Fetch all notifications for a tourist
+const getNotifications = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    res.status(200).json({ notifications: tourist.notifications });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching notifications', details: error.message });
+  }
+};
+
+// Get the count of unread notifications for a tourist
+const getNotificationCount = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(id);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    const unreadCount = tourist.notifications.filter(notification => !notification.read).length;
+    res.status(200).json({ count: unreadCount });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching notification count', details: error.message });
+  }
+};
+
+// Mark a notification as read
+const markNotificationAsRead = async (req, res) => {
+  const { touristId, notificationId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    const notification = tourist.notifications.id(notificationId);
+    if (!notification) {
+      return res.status(404).json({ error: 'Notification not found' });
+    }
+
+    notification.read = true;
+    await tourist.save();
+
+    res.status(200).json({ message: 'Notification marked as read' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error marking notification as read', details: error.message });
+  }
+};
+
+
+
+
+
+
 module.exports = {
   createTourist,
   getTourists,
@@ -2392,9 +2672,29 @@ module.exports = {
   stripePayIntentItinerary,
   stripePayIntentActivity,
   stripePayIntentProduct,
+  checkBookmarkActivity,
+  checkBookmarkItinerary,
+  getBookmarks,
+  removeActivityBookmark,
+  removeItineraryBookmark,
+  bookmarkActivity,
+  bookmarkItinerary,
   frontendDataTable,
   getNotificationsTourist,
   checkUpcomingEvents,
   sendEmail,
-  loginTourist
+  loginTourist,
+  bookmarkItinerary,
+  bookmarkActivity,
+  removeItineraryBookmark,
+  removeActivityBookmark,
+  getBookmarks,
+  checkBookmarkItinerary,
+  checkBookmarkActivity,
+  requestNotifyActivity,
+  requestNotifyItinerary,
+  getNotifications,
+  getNotificationCount,
+  markNotificationAsRead
+
 };

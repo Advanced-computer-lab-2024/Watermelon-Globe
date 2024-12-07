@@ -1,136 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-import WalletComponent from '../Components/Wallet';
+'use client'
 
-const MyBookings: React.FC = () => {
-  const { id } = useParams(); // Get the tourist ID from the URL params
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {
+  FaUser, FaCalendar, FaClock, FaDollarSign, FaCheck, FaTimes, FaStar
+} from 'react-icons/fa';
+import TouristNavbar from "../Components/TouristNavBar";
+
+interface Itinerary {
+  name: string;
+  guide: string;
+}
+
+interface Activity {
+  _id: string;
+  activity: {
+    Name: string;
+    Time: string;
+    Price: number;
+  };
+  tourist: string;
+  chosenDate: string;
+  status: string;
+  paymentStatus: string;
+  completed: boolean;
+}
+
+interface Booking {
+  _id: string;
+  buyer: string;
+  chosenDates: string[];
+  chosenTimes: string[];
+  completed: boolean;
+  itinerary: Itinerary;
+  status: string;
+  totalPrice: number;
+}
+
+export default function MyBookings() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [itineraryBookings, setItineraryBookings] = useState<Booking[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  interface Itinerary {
-    accessibility: boolean;
-    activities: string[]; // Array of activity IDs
-    availableDates: string[];
-    availableTimes: string[];
-    bookings: boolean;
-    comments: string[];
-    createdAt: string;
-    guide: string;
-    inappropriate: boolean;
-    languageOfTour: string;
-    locations: string[];
-    name: string;
-    pickupDropoffLocations: any[]; // Adjust as needed
-    priceOfTour: number;
-    rating: number;
-    ratings: any[]; // Adjust as needed
-    tag: any[]; // Adjust as needed
-    timeline: string;
-    updatedAt: string;
-    status: string;
-    totalPrice: number;
-  }
-
-  interface Activity {
-    _id: string;
-    activity: Activities;
-    tourist: string;
-    chosenDate: string;
-    status: string;
-    paymentStatus: string;
-    completed: boolean;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  }
-
-  interface Booking {
-    _id: string;
-    buyer: string;
-    chosenDates: string[];
-    chosenTimes: string[];
-    completed: boolean;
-    createdAt: string;
-    itinerary: Itinerary;
-    status: string;
-    totalPrice: number;
-    updatedAt: string;
-    __v: number;
-  }
-
-  interface Activities {
-    _id: string;
-    Name: string;
-    Date: string;
-    Time: string;
-    Price: number;
-    tags: any[];
-    Discount: number;
-    bookingOpen: boolean;
-    rating: number;
-    Advertiser: string;
-    ratings: any[];
-    comments: any[];
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  }
-
   useEffect(() => {
-    if (!id) return;
-
     const fetchBookings = async () => {
       try {
-        // Fetch itineraries
         const itineraryResponse = await axios.get<Booking[]>(`/api/Tourist/BookedItineraries/${id}`);
-        setItineraryBookings(itineraryResponse.data);
-
-        // Fetch activities
         const activityResponse = await axios.get<Activity[]>(`/api/Tourist/BookedActivities/${id}`);
+        setItineraryBookings(itineraryResponse.data);
         setActivities(activityResponse.data);
-
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false);
       } catch (error) {
         console.error(error);
-        setLoading(false); // Ensure loading is set to false even on error
+        setLoading(false);
       }
     };
 
-    fetchBookings();
+    if (id) {
+      fetchBookings();
+    }
   }, [id]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  // Filter out itineraries and activities with status 'cancelled'
-  const filteredItineraryBookings = itineraryBookings.filter(booking => booking.status !== 'cancelled');
-  const filteredActivities = activities.filter(activity => activity.status !== 'cancelled');
-
-  // Split itineraries into completed and upcoming
-  const completedItineraries = filteredItineraryBookings.filter(booking => booking.completed);
-  const upcomingItineraries = filteredItineraryBookings.filter(booking => !booking.completed);
-
-  // Split activities into completed and upcoming
-  const completedActivities = filteredActivities.filter((activity) => activity.completed);
-  const upcomingActivities = filteredActivities.filter((activity) => !activity.completed);
-
-  const redirectToRatingsPageItinerary = (itineraryId: string, type: string) => {
-    navigate(`/ratingsAndCommentsPage/${itineraryId}/${id}/${type}`);
-  };
-
-  const redirectToRatingsPageGuide = (guideId: string, type: string) => {
-    navigate(`/ratingsAndCommentsPage/${guideId}/${id}/${type}`);
-  };
-
-  const redirectToRatingsPageActivity = (activityId: string, type: string) => {
-    navigate(`/ratingsAndCommentsPage/${activityId}/${id}/${type}`);
-  };
-
-  // Cancel itinerary function
   const cancelItinerary = async (itineraryId: string, orderTotal: number) => {
     try {
       const response = await fetch(`/api/TouristItinerary/cancelItineraryBooking/${itineraryId}`, {
@@ -150,7 +83,6 @@ const MyBookings: React.FC = () => {
     }
   };
 
-  // Cancel activity function
   const cancelActivity = async (activityId: string, orderTotal: number) => {
     try {
       const response = await fetch(`/api/TouristItinerary/cancelActivityBooking/${activityId}`, {
@@ -170,121 +102,191 @@ const MyBookings: React.FC = () => {
     }
   };
 
+  const redirectToRatingsPage = (itemId: string, type: string) => {
+    navigate(`/ratingsAndCommentsPage/${itemId}/${id}/${type}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  const upcomingActivities = activities.filter(activity => !activity.completed && activity.status !== 'cancelled');
+  const upcomingItineraries = itineraryBookings.filter(booking => !booking.completed && booking.status !== 'cancelled');
+  const completedActivities = activities.filter(activity => activity.completed);
+  const completedItineraries = itineraryBookings.filter(booking => booking.completed);
 
   return (
-    <div className="p-6 bg-gradient-to-r from-primary/25 to-secondary/20" style={{ margin: '-20px' }}>
-      <h1 className="text-4xl p-3 font-bold mb-8 text-center text-black bg-lightGray shadow-md rounded-lg">My Bookings</h1>
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+      <TouristNavbar id={id} />
 
-      {/* upcoming Section */}
-      <section className="mb-8">
-        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Activities</h2>
-        {upcomingActivities.length > 0 ? (
-          upcomingActivities.map((activity) => (
-            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {activity.activity.Name }</p>
-              <p>Status: {activity.status}</p>
-              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
-              <p>Activity Time: {activity.activity.Time}</p>
-              <p>Price: ${activity.activity.Price}</p>
-              <button
-                onClick={() => cancelActivity(activity._id, activity.activity.Price)}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Cancel Activity
-              </button>
-
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <p>hello</p>
+          <div className="bg-primary p-5 relative">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white rounded-full p-2">
+                <FaUser className="h-16 w-16 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-white">My Bookings</h2>
+                <p className="text-white opacity-75">
+                  Manage your itineraries and activities
+                </p>
+              </div>
             </div>
-          ))
-        ) : (
-          <p className="text-grayText">No upcoming activities.</p>
-        )}
-
-        <h2 className="text-3xl font-semibold text-secondary mt-8 mb-4">Upcoming Itineraries</h2>
-        {upcomingItineraries.length > 0 ? (
-          upcomingItineraries.map((booking) => (
-            <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
-              <p>Status: {booking.status}</p>
-              <p>
-                Itinerary Date:
-                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
-              </p>
-              <p>Itinerary Time: {booking.chosenTimes}</p>
-              <p>Price: ${booking.totalPrice}</p>
-              <button
-                onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Cancel Itinerary
-              </button>
-
+          </div>
+          <div className="p-6 space-y-12">
+            <div>
+            <h3 className="text-2xl font-semibold text-black mb-4">
+                Upcoming Itineraries
+              </h3>
+            {/* Upcoming Activities */}
+            <div className="space-y-4">
+              {upcomingActivities.map((activity) => (
+                <div
+                  key={activity._id}
+                  className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out"
+                >
+                  <h4 className="text-lg font-semibold text-secondary">{activity.activity.Name}</h4>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <p className="flex items-center">
+                      <FaCalendar className="mr-2 text-primary" /> {new Date(activity.chosenDate).toLocaleDateString()}
+                    </p>
+                    <p className="flex items-center">
+                      <FaClock className="mr-2 text-primary" /> {activity.activity.Time}
+                    </p>
+                    <p className="flex items-center">
+                      <FaDollarSign className="mr-2 text-primary" /> {activity.activity.Price.toFixed(2)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => cancelActivity(activity._id, activity.activity.Price)}
+                    className="mt-3 bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-700 transition duration-200 inline-block"
+                    style={{ width: 'auto' }}
+                  >
+                    Cancel Activity
+                  </button>
+                </div>
+              ))}
+              {upcomingActivities.length === 0 && (
+                <p className="text-gray-500 italic">No upcoming activities.</p>
+              )}
             </div>
-          ))
-        ) : (
-          <p className="text-grayText">No upcoming itineraries.</p>
-        )}
-      </section>
-
-      {/* completed Section */}
-      <section className="mb-8">
-        <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Activities</h2>
-        {completedActivities.length > 0 ? (
-          completedActivities.map((activity) => (
-            <div key={activity._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {activity.activity.Name}</p>
-              <p>Status: completed </p>
-              <p>Activity Date: {new Date(activity.chosenDate).toLocaleDateString()}</p>
-              <p>Activity Time: {activity.activity.Time}</p>
-              <p>Price: ${activity.activity.Price}</p>
-              <button
-                onClick={() => redirectToRatingsPageActivity(activity._id, 'activity')}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Rate Activity
-              </button>
-
             </div>
-          ))
-        ) : (
-          <p className="text-grayText">No completed activities.</p>
-        )}
 
-        <h2 className="text-3xl font-semibold text-secondary mb-4">Completed Itineraries</h2>
-        {completedItineraries.length > 0 ? (
-          completedItineraries.map((booking) => (
-            <div key={booking._id} className="bg-cardBackground shadow-md rounded-lg p-6 mb-4">
-              <p className="text-secondary font-semibold">Name: {booking.itinerary.name}</p>
-              <p>Status: completed</p>
-              <p>
-                Itinerary Date:
-                {booking.chosenDates.map((date) => new Date(date).toLocaleDateString('en-GB')).join(', ')}
-              </p>
-              <p>Itinerary Time: {booking.chosenTimes}</p>
-              <p>Price: ${booking.totalPrice}</p>
-              <button
-                onClick={() => redirectToRatingsPageItinerary(booking._id, 'itinerary')}
-                className="mt-4 bg-primary text-white p-2 mr-8 rounded-lg hover:bg-hover"
-              >
-                Rate Itinerary
-              </button>
 
-              <button
-                onClick={() => redirectToRatingsPageGuide(booking.itinerary.guide, 'guide')}
-                className="mt-4 bg-primary text-white p-2 rounded-lg hover:bg-hover"
-              >
-                Rate Guide
-              </button>
+            {/* Upcoming Itineraries */}
+            <div>
+              <h3 className="text-2xl font-semibold text-black mb-4">
+                Upcoming Itineraries
+              </h3>
+              <div className="space-y-4">
+                {upcomingItineraries.map((booking) => (
+                  <div key={booking._id} 
+                  className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out"
+                  >
+                    <h4 className="text-lg font-semibold text-secondary">{booking.itinerary.name}</h4>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <p className="flex items-center"><FaCalendar className="mr-2 text-primary" /> {booking.chosenDates.map(date => new Date(date).toLocaleDateString()).join(', ')}</p>
+                      <p className="flex items-center"><FaClock className="mr-2 text-primary" /> {booking.chosenTimes.join(', ')}</p>
+                      <p className="flex items-center"><FaDollarSign className="mr-2 text-primary" /> {booking.totalPrice.toFixed(2)}</p>
+                    </div>
+                    <button
+                      onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
+                      className="mt-3 bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-700 transition duration-200 inline-block"
+                      style={{ width: 'auto' }}
+                    >
+                      Cancel Itinerary
+                    </button>
+                  </div>
+                ))}
+                {upcomingItineraries.length === 0 && (
+                  <p className="text-gray-500 italic">No upcoming itineraries.</p>
+                )}
+              </div>
             </div>
-          ))
-        ) : (
-          <p className="text-grayText">No completed itineraries.</p>
-        )}
 
+            {/* Completed Activities */}
+            <div>
+              <h3 className="text-2xl font-semibold text-black mb-4">
+                Completed Activities
+              </h3>
+              <div className="space-y-4">
+                {completedActivities.map((activity) => (
+                  <div key={activity._id} 
+                  className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out"
+                  >
+                    <h4 className="text-lg font-semibold text-secondary">{activity.activity.Name}</h4>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <p className="flex items-center"><FaCalendar className="mr-2 text-primary" /> {new Date(activity.chosenDate).toLocaleDateString()}</p>
+                      <p className="flex items-center"><FaClock className="mr-2 text-primary" /> {activity.activity.Time}</p>
+                      <p className="flex items-center"><FaDollarSign className="mr-2 text-primary" /> {activity.activity.Price.toFixed(2)}</p>
+                    </div>
+                    <button
+                      onClick={() => redirectToRatingsPage(activity._id, 'activity')}
+                      className="mt-3 bg-primary text-white text-sm px-4 py-2 rounded-full hover:bg-hover transition duration-200 inline-flex items-center"
+                      style={{ width: 'auto' }}
+                    >
+                      <FaStar className="mr-2" /> Rate Activity
+                    </button>
 
-      </section>
-      <WalletComponent touristId={id} />
+                  </div>
+                ))}
+                {completedActivities.length === 0 && (
+                  <p className="text-gray-500 italic">No completed activities.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Completed Itineraries */}
+            <div>
+              <h3 className="text-2xl font-semibold text-black mb-4">
+                Completed Itineraries
+              </h3>
+              <div className="space-y-4">
+                {completedItineraries.map((booking) => (
+                  <div key={booking._id} 
+                  className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out"
+                  >
+                    <h4 className="text-lg font-semibold text-secondary">{booking.itinerary.name}</h4>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <p className="flex items-center"><FaCalendar className="mr-2 text-primary" /> {booking.chosenDates.map(date => new Date(date).toLocaleDateString()).join(', ')}</p>
+                      <p className="flex items-center"><FaClock className="mr-2 text-primary" /> {booking.chosenTimes.join(', ')}</p>
+                      <p className="flex items-center"><FaDollarSign className="mr-2 text-primary" /> {booking.totalPrice.toFixed(2)}</p>
+                    </div>
+                    <div className="mt-3 space-x-2">
+                      <div className="mt-3 flex space-x-4">
+                        <button
+                          onClick={() => redirectToRatingsPage(booking._id, 'itinerary')}
+                          className="bg-primary text-white text-sm px-4 py-2 rounded-full hover:bg-hover transition duration-200 inline-flex items-center"
+                          style={{ width: 'auto' }}
+                        >
+                          <FaStar className="mr-2" /> Rate Itinerary
+                        </button>
+                        <button
+                          onClick={() => redirectToRatingsPage(booking.itinerary.guide, 'guide')}
+                          className="bg-secondary text-white text-sm px-4 py-2 rounded-full hover:bg-secondaryHover transition duration-200 inline-flex items-center"
+                          style={{ width: 'auto' }}
+                        >
+                          <FaStar className="mr-2" /> Rate Guide
+                        </button>
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+                {completedItineraries.length === 0 && (
+                  <p className="text-gray-500 italic">No completed itineraries.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default MyBookings;
+}

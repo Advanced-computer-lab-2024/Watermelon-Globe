@@ -96,6 +96,7 @@ const TouristHomePage = () => {
               >
                 MyBookings
               </Link>
+            
             </div>
             <div className="flex items-center space-x-2">
               <button className="px-4 py-1 border rounded">EN</button>

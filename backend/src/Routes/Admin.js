@@ -64,10 +64,12 @@ const {
   markItineraryAppropriate,
   getMonthlyRevenue,
   filterRevenueByDate,
+  getAdmin,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
 router.post("/CreateAdmin", createAdmin);
+router.get("/getAdmin/:id", getAdmin);
 router.delete("/DeleteAdmin/:id", deleteAdmin);
 router.put("/changePasswordAdmin/:id", changePasswordAdmin),
   router.get("/GetAllGoverner", getAllGoverner);

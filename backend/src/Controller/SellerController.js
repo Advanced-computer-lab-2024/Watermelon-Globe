@@ -1,5 +1,8 @@
 const Seller = require("../Models/SellerModel");
 const Product = require("../Models/ProductModel");
+const Tourist = require("../Models/touristModel");
+const bookedItinerary = require("../Models/touristItineraryModel");
+const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
 const { findById } = require("../Models/touristModel");
 
@@ -839,6 +842,207 @@ const loginSeller = async (req, res) => {
   }
 };
 
+const totalProductRevenueForSeller = async (req, res) => {
+  try {
+    const sellerId = req.params.sellerId; // Assuming the seller ID is passed as a route parameter
+
+    if (!sellerId) {
+      return res.status(400).json({ message: "Seller ID is required" });
+    }
+
+    const result = await Tourist.aggregate([
+      { $unwind: '$orders' },
+      { $unwind: '$orders.items' },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'orders.items.productId',
+          foreignField: '_id',
+          as: 'product'
+        }
+      },
+      { $unwind: '$product' },
+      {
+        $match: {
+          'product.seller': new mongoose.Types.ObjectId(sellerId)
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: {
+            $sum: {
+              $multiply: ['$orders.items.quantity', '$product.price']
+            }
+          }
+        }
+      }
+    ]);
+
+    if (result.length === 0) {
+      return res.status(200).json({
+        message: "No completed orders found for this seller",
+        totalRevenue: 0
+      });
+    }
+
+    const totalRevenue = result[0].totalRevenue;
+
+    res.status(200).json({
+      message: "Total product revenue calculated successfully for the seller",
+      totalRevenue: totalRevenue.toFixed(2)
+    });
+
+  } catch (error) {
+    console.error("Error calculating total product revenue:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+const SellerMonthlyRevenue = async (req, res) => {
+  try {
+    const sellerId = req.params.sellerId; // Assuming sellerId is passed as a route parameter
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1); // January 1st of the current year
+    const endDate = new Date(currentYear, 11, 31); // December 31st of the current year
+
+    if (!sellerId) {
+      return res.status(400).json({ message: "Seller ID is required" });
+    }
+
+    // Aggregate product revenue for the current year
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: '$orders' }, // Unwind the orders array
+      { $unwind: '$orders.items' }, // Unwind the items within each order
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'orders.items.productId',
+          foreignField: '_id',
+          as: 'product'
+        }
+      },
+      { $unwind: '$product' }, // Unwind the product after the lookup
+      {
+        $match: {
+          'product.seller': new mongoose.Types.ObjectId(sellerId), // Match the sellerId
+          'orders.orderDate': { $gte: startDate, $lte: endDate } // Filter by current year
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$orders.orderDate' } }, // Group by month
+          totalRevenue: {
+            $sum: { $multiply: ['$orders.items.quantity', '$product.price'] } // Calculate total revenue
+          }
+        }
+      },
+      { $sort: { '_id.month': 1 } } // Sort by month
+    ]);
+
+    // Initialize an array for all 12 months with zero revenue
+    const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      productRevenue: 0,
+      totalRevenue: 0
+    }));
+
+    // Populate the monthly revenue with the actual data from aggregation
+    productRevenue.forEach(entry => {
+      const monthIndex = entry._id.month - 1; // Month is 1-based, array is 0-based
+      monthlyRevenue[monthIndex].productRevenue = entry.totalRevenue;
+      monthlyRevenue[monthIndex].totalRevenue = entry.totalRevenue;
+    });
+
+    // Add month names and format numbers
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedRevenue = monthlyRevenue.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1],
+      productRevenue: Number(item.productRevenue.toFixed(2)),
+      totalRevenue: Number(item.totalRevenue.toFixed(2))
+    }));
+
+    // Return the response with the formatted revenue data
+    res.status(200).json({
+      message: "Yearly product revenue calculated successfully",
+      year: currentYear,
+      data: formattedRevenue
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly product revenue:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterRevenueByDateSeller = async (req, res) => {
+  try {
+    const { date } = req.query;
+    const { sellerId } = req.params; // sellerId passed as a route parameter
+
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    if (!sellerId) {
+      return res.status(400).json({ message: "Seller ID is required" });
+    }
+
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: "$orders" }, // Unwind the orders array
+      { $unwind: "$orders.items" }, // Unwind the items within each order
+      {
+        $lookup: {
+          from: "products", // Lookup products collection
+          localField: "orders.items.productId", // Match by productId from the orders
+          foreignField: "_id", // Match to product's _id
+          as: "product", // Store matched product data
+        },
+      },
+      { $unwind: "$product" }, // Unwind the product data after lookup
+      {
+        $match: {
+          "product.seller": new mongoose.Types.ObjectId(sellerId), // Filter by sellerId
+          "orders.orderDate": { $gte: selectedDate, $lt: nextDate }, // Filter by the selected date
+        },
+      },
+      {
+        $group: {
+          _id: null, // Grouping to calculate total revenue
+          totalRevenue: { $sum: { $multiply: ['$orders.items.quantity', '$product.price'] } }, // Sum up the total price for orders
+        },
+      },
+    ]);
+
+    const totalProductRevenue =
+      productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
+
+    const totalRevenue = totalProductRevenue;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully",
+      date: selectedDate.toISOString().split("T")[0],
+      productRevenue: Number(totalProductRevenue.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed(2)),
+    });
+  } catch (error) {
+    console.error("Error filtering revenue by date:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
+
 module.exports = {
   createSeller,
   getAllSellers,
@@ -872,4 +1076,7 @@ module.exports = {
   getProducts,
   deleteProductById,
   loginSeller,
+  totalProductRevenueForSeller,
+  SellerMonthlyRevenue,
+  filterRevenueByDateSeller
 };

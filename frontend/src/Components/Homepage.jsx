@@ -25,10 +25,7 @@ const HomePage = () => {
         <button className="home-btn" onClick={() => navigate("/advertiser")}>
           Go to Advertiser Page
         </button>
-        <button
-          className="home-btn"
-          onClick={() => navigate("/TouristLogin")}
-        >
+        <button className="home-btn" onClick={() => navigate("/TouristLogin")}>
           Go to Tourist Page
         </button>
         <button
@@ -37,17 +34,13 @@ const HomePage = () => {
         >
           Go to Tour Guide Page
         </button>
-        <button
-          className="home-btn"
-          onClick={() =>
-            navigate("/GovernorLogin")
-          }
-        >
+        <button className="home-btn" onClick={() => navigate("/GovernorLogin")}>
           Go to Tourism Governor Page
         </button>
+
         <button
           className="home-btn"
-          onClick={() => navigate("/AdminSales/674f760ed6b7ba513c4ea84d")}
+          onClick={() => navigate("/AdminSales/674a3e827a6dcbe8e5bd8069")}
         >
           Go to Admin Page
         </button>
