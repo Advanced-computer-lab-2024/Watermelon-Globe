@@ -13,6 +13,7 @@ const TourGuide = require('../Models/tourGuideModel'); // Adjust path if needed
 const ActivityBooking = require('../Models/activityBookingModel');
 const Transportation = require('../Models/TransportationModel');
 const Admin = require("../Models/AdminModel.js");
+const nodemailer = require("nodemailer");
 
 //Tourist
 
@@ -382,35 +383,7 @@ const fileComplaint = async (req, res) => {
 };
 
 
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',  // Use Gmail as the email service
-      auth: {
-        user: 'watermelonglobe@gmail.com', // Replace with your Gmail address
-        pass: 'tzve vdjr usit evdu',    // Use your generated Gmail app password here
-      },
-    });
 
-    // Email options
-    const mailOptions = {
-      from: '"Watermelon Globe" <watermelonglobe@gmail.com>', // Sender's address
-      to,  // Recipient's email address
-      subject,  // Subject of the email
-      text,  // Plain text content
-      html,  // HTML content (optional)
-    };
-
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', info.response);
-    return { success: true, message: 'Email sent successfully!' };
-  } catch (error) {
-    console.error('Error sending email: ', error);
-    return { success: false, message: 'Failed to send email.', error };
-  }
-};
 
 
 
@@ -2209,6 +2182,37 @@ const getNotificationsTourist = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+const sendEmail = async (to, subject, text, html) => {
+  try {
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: "watermelonglobe@gmail.com", // Replace with your Gmail address
+        pass: "tzve vdjr usit evdu", // Use your generated Gmail app password here
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: '"Watermelon Globe" <watermelonglobe@gmail.com>',
+      to, // Recipient's email address
+      subject, // Subject of the email
+      text, // Plain text content
+      html, // HTML content (optional)
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ', info.response);
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error('Error sending email: ', error);
+    return { success: false, message: 'Failed to send email.', error };
+  }
+};
+
 const checkUpcomingEvents = async (req, res) => {
   try {
     const now = new Date();
@@ -2246,6 +2250,13 @@ const checkUpcomingEvents = async (req, res) => {
             };
             tourist.notifications.push(notification);
             notificationsAdded = true;
+
+            // Send email notification
+            const emailSubject = 'Upcoming Itinerary Reminder';
+            const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your itinerary "${booking.itinerary.name}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your trip!`;
+            const emailHtml = `<h1>Upcoming Itinerary Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your itinerary <strong>"${booking.itinerary.name}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your trip!</p>`;
+
+            await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
           }
         }
       }
@@ -2263,6 +2274,13 @@ const checkUpcomingEvents = async (req, res) => {
             };
             tourist.notifications.push(notification);
             notificationsAdded = true;
+
+            // Send email notification
+            const emailSubject = 'Upcoming Activity Reminder';
+            const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your activity "${booking.activity.name}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your activity!`;
+            const emailHtml = `<h1>Upcoming Activity Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your activity <strong>"${booking.activity.name}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your activity!</p>`;
+
+            await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
           }
         }
       }
@@ -2346,4 +2364,5 @@ module.exports = {
   frontendDataTable,
   getNotificationsTourist,
   checkUpcomingEvents,
+  sendEmail,
 };
