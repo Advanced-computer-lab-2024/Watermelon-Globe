@@ -98,7 +98,7 @@ const Sidebar = () => {
           <span className="logoAdmin">Hello , {user.Name} </span>
         </Link>
       </div>
-      <hr />
+      {/* <hr /> */}
       <div className="centerAdmin">
         <ul>
           <p className="titleAdmin">MAIN</p>
