@@ -18,52 +18,71 @@ const itinerarySchema = new Schema(
     availableDates: { type: [Date], required: true },
     availableTimes: { type: [String], required: true },
     accessibility: { type: Boolean, default: false },
-    pickupDropoffLocations: [pickupDropoffSchema], 
-    bookings: {type: Boolean, default: false},// Array of pickup/dropoff objects
-    guide: { type: mongoose.Types.ObjectId, ref: 'TourGuide', required: true } ,
-
+    pickupDropoffLocations: [pickupDropoffSchema],
+    bookings: { type: Boolean, default: false }, // Array of pickup/dropoff objects
+    guide: { type: mongoose.Types.ObjectId, ref: "TourGuide", required: true },
 
     ratings: [
       {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
-        rating: { type: Number, required: true, min: 1, max: 5 }
-      }
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tourist",
+          required: true,
+        },
+        rating: { type: Number, required: true, min: 1, max: 5 },
+      },
     ],
     rating: { type: Number, default: 0 },
-    noOfRatings: {type:Number ,required:false},
-    ratingsSum:{type:Number,required:false},// Reference to the tour guide
+    noOfRatings: { type: Number, required: false },
+    ratingsSum: { type: Number, required: false }, // Reference to the tour guide
 
-    comments: [{
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Tourist', // Reference to the user model
-      required: true
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tourist", // Reference to the user model
+          required: true,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    inappropriate: {
+      type: Boolean,
+      default: false,
     },
-    comment: {
-      type: String,
-      required: true
-    },
-    date: {
-      type: Date,
-      default: Date.now
-    }
-  }]
-  ,
-  inappropriate: {
-    type: Boolean,
-    default: false },
-    
+
     bookingsList: [
       {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
-      }
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tourist",
+          required: true,
+        },
+      },
     ],
+    picture: {
+      type: String, // URL or file path for the product image
+      default: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
+      required: false,
+    },
+     notifyRequests: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tourist'
+  }]
 
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
+ 
+ 
 
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 const pickup = mongoose.model("pickup", pickupDropoffSchema);
 module.exports = { Itinerary, pickup };
-
-
- 

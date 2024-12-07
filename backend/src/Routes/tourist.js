@@ -63,10 +63,22 @@ const {
   stripePayIntentItinerary,
   stripePayIntentActivity,
   stripePayIntentProduct,
+  bookmarkItinerary,
+  bookmarkActivity,
+  removeItineraryBookmark,
+  removeActivityBookmark,
+  getBookmarks,
   frontendDataTable,
   checkUpcomingEvents,
   getNotificationsTourist,
   loginTourist,
+  requestNotifyActivity,
+  requestNotifyItinerary,
+  getNotifications,
+  getNotificationCount,
+  markNotificationAsRead
+
+
 } = require("../Controller/touristController");
 
 router.get("/frontendInfo", frontendDataTable);
@@ -209,6 +221,18 @@ router.post('/payProduct',stripePayIntentProduct);
 router.get('/checkUpcomingEvents', checkUpcomingEvents);
 
 router.get('/getNotificationsTourist/:id', getNotificationsTourist);
+router.put('/bookmarkItinerary/:touristId/:itineraryId', bookmarkItinerary);
+router.put('/bookmarkActivity/:touristId/:activityId', bookmarkActivity);
+router.put('/removeBookmarkItinerary/:touristId/:itineraryId', removeItineraryBookmark);
+router.put('/removeBookmarkActivity/:touristId/:activityId', removeActivityBookmark);
+router.get('/getBookmarks/:touristId', getBookmarks);
+router.get('/checkBookmarkItinerary/:touristId/:itineraryId', touristController.checkBookmarkItinerary);
+router.get('/checkBookmarkActivity/:touristId/:activityId', touristController.checkBookmarkActivity);
+router.post('/requestNotifyActivity/:touristId/:activityId', requestNotifyActivity);
+router.post('/requestNotifyItinerary/:touristId/:itineraryId', requestNotifyItinerary);
+router.get('/notifications/:id',getNotifications);
+router.get('/notificationsCount/:id',getNotificationCount);
+router.put('/markNotifications/:touristId/:notificationId',markNotificationAsRead);
 
 
 module.exports = router;

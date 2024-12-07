@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "./actions.scss";
 
@@ -33,7 +33,7 @@ const ViewQuantity = () => {
       <div className="listAdminProduct">
         <Sidebar />
         <div className="listContainerAdminProduct">
-          {/* <Navbar /> */}
+          <Navbar />
           <div className=" bg-white p-6 rounded-lg ">
             <h2
               style={{ color: "#2E8B57" }}

@@ -113,12 +113,7 @@ const DatatableSeller = () => {
 
   return (
     <div className="datatable">
-      <div className="datatableTitle">
-        View Active Sellers
-        {/* <Link to="/users/new" className="link">
-          Add New
-        </Link> */}
-      </div>
+      <div className="datatableTitle">View Active Sellers</div>
       <DataGrid
         className="datagrid"
         rows={data}

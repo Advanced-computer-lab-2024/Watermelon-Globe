@@ -1159,6 +1159,56 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+const markItineraryAppropriate = async (req, res) => {
+  const { id } = req.params; // Get the itinerary ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+      id,
+      { inappropriate: false }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("guide");
+
+    // If the itinerary is not found, send a 404 error response
+    if (!itinerary) {
+      return res.status(404).json({ error: "Itinerary not found" });
+    }
+
+    // const guide = itinerary.guide;
+    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
+    // guide.notifications.push(notification);
+    // await guide.save();
+
+    // // Check if guide information is complete
+    // if (!guide || !guide.email || !guide.name) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Guide information is incomplete." });
+    // }
+
+    // const guideEmail = "shodimatar@gmail.com";
+    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+
+    // // Attempt to send the email
+    // try {
+    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+    //   console.log("Email sent to:", guideEmail);
+    // } catch (emailError) {
+    //   console.error("Error sending email:", emailError);
+    //   // Continue marking the itinerary as inappropriate even if the email fails
+    // }
+
+    // Send the updated itinerary as a response
+    res
+      .status(200)
+      .json({ message: "Itinerary marked as appropriate", itinerary });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Controller function to mark an activity as inappropriate
 const markActivityInappropriate = async (req, res) => {
   const { id } = req.params; // Get the activity ID from request parameters
@@ -1207,6 +1257,32 @@ const markActivityInappropriate = async (req, res) => {
     res
       .status(200)
       .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Controller function to mark an activity as inappropriate
+const markActivityAppropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: false }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("Advertiser");
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "activity marked as appropriate", activity });
   } catch (error) {
     // Handle any errors during the process
     res.status(500).json({ error: error.message });
@@ -1298,17 +1374,19 @@ const createTransportation = async (req, res) => {
 const totalProductRevenue = async (req, res) => {
   try {
     const result = await Tourist.aggregate([
-      { $unwind: '$orders' },
-      { $group: {
-        _id: null,
-        totalRevenue: { $sum: '$orders.totalPrice' }
-      }}
+      { $unwind: "$orders" },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$orders.totalPrice" },
+        },
+      },
     ]);
 
     if (result.length === 0) {
       return res.status(200).json({
         message: "No orders found or all orders are pending/cancelled",
-        totalRevenue: 0
+        totalRevenue: 0,
       });
     }
 
@@ -1316,9 +1394,8 @@ const totalProductRevenue = async (req, res) => {
 
     res.status(200).json({
       message: "Total product revenue calculated successfully",
-      totalRevenue: totalRevenue.toFixed(2)
+      totalRevenue: totalRevenue.toFixed(2),
     });
-
   } catch (error) {
     console.error("Error calculating total product revenue:", error);
     res.status(500).json({ message: "Server error" });
@@ -1578,37 +1655,49 @@ const getMonthlyRevenue = async (req, res) => {
     const endDate = new Date(currentYear, 11, 31); // December 31st of current year
 
     const productRevenue = await Tourist.aggregate([
-      { $unwind: '$orders' },
-      { $match: { 
-        'orders.orderDate': { $gte: startDate, $lte: endDate },
-      }},
-      { $group: {
-        _id: { month: { $month: '$orders.orderDate' } },
-        totalRevenue: { $sum: '$orders.totalPrice' }
-      }},
-      { $sort: { '_id.month': 1 } }
+      { $unwind: "$orders" },
+      {
+        $match: {
+          "orders.orderDate": { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$orders.orderDate" } },
+          totalRevenue: { $sum: "$orders.totalPrice" },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
     ]);
 
     const itineraryRevenue = await bookedItinerary.aggregate([
-      { $match: { 
-        createdAt: { $gte: startDate, $lte: endDate },
-      }},
-      { $group: {
-        _id: { month: { $month: '$createdAt' } },
-        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
-      }},
-      { $sort: { '_id.month': 1 } }
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
     ]);
 
     const activityRevenue = await bookedActivity.aggregate([
-      { $match: { 
-        createdAt: { $gte: startDate, $lte: endDate },
-      }},
-      { $group: {
-        _id: { month: { $month: '$createdAt' } },
-        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
-      }},
-      { $sort: { '_id.month': 1 } }
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
     ]);
 
     // Initialize an array for all 12 months
@@ -1617,16 +1706,16 @@ const getMonthlyRevenue = async (req, res) => {
       productRevenue: 0,
       itineraryRevenue: 0,
       activityRevenue: 0,
-      totalRevenue: 0
+      totalRevenue: 0,
     }));
 
     // Combine revenues
     [
-      { data: productRevenue, key: 'productRevenue' },
-      { data: itineraryRevenue, key: 'itineraryRevenue' },
-      { data: activityRevenue, key: 'activityRevenue' }
+      { data: productRevenue, key: "productRevenue" },
+      { data: itineraryRevenue, key: "itineraryRevenue" },
+      { data: activityRevenue, key: "activityRevenue" },
     ].forEach(({ data, key }) => {
-      data.forEach(entry => {
+      data.forEach((entry) => {
         const monthIndex = entry._id.month - 1;
         monthlyRevenue[monthIndex][key] = entry.totalRevenue;
         monthlyRevenue[monthIndex].totalRevenue += entry.totalRevenue;
@@ -1634,24 +1723,35 @@ const getMonthlyRevenue = async (req, res) => {
     });
 
     // Add month names and format numbers
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    const formattedRevenue = monthlyRevenue.map(item => ({
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const formattedRevenue = monthlyRevenue.map((item) => ({
       ...item,
       monthName: monthNames[item.month - 1],
       productRevenue: Number(item.productRevenue.toFixed(2)),
       itineraryRevenue: Number(item.itineraryRevenue.toFixed(2)),
       activityRevenue: Number(item.activityRevenue.toFixed(2)),
-      totalRevenue: Number(item.totalRevenue.toFixed(2))
+      totalRevenue: Number(item.totalRevenue.toFixed(2)),
     }));
 
     res.status(200).json({
       message: "Yearly revenue calculated successfully",
       year: currentYear,
-      data: formattedRevenue
+      data: formattedRevenue,
     });
-
   } catch (error) {
     console.error("Error calculating yearly revenue:", error);
     res.status(500).json({ message: "Server error" });
@@ -1661,7 +1761,7 @@ const getMonthlyRevenue = async (req, res) => {
 const filterRevenueByDate = async (req, res) => {
   try {
     const { date } = req.query;
-    
+
     if (!date) {
       return res.status(400).json({ message: "Date parameter is required" });
     }
@@ -1671,57 +1771,71 @@ const filterRevenueByDate = async (req, res) => {
     nextDate.setDate(nextDate.getDate() + 1);
 
     const productRevenue = await Tourist.aggregate([
-      { $unwind: '$orders' },
-      { $match: { 
-        'orders.orderDate': { $gte: selectedDate, $lt: nextDate },
-      }},
-      { $group: {
-        _id: null,
-        totalRevenue: { $sum: '$orders.totalPrice' }
-      }}
+      { $unwind: "$orders" },
+      {
+        $match: {
+          "orders.orderDate": { $gte: selectedDate, $lt: nextDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$orders.totalPrice" },
+        },
+      },
     ]);
 
     const itineraryRevenue = await bookedItinerary.aggregate([
-      { $match: { 
-        createdAt: { $gte: selectedDate, $lt: nextDate },
-      }},
-      { $group: {
-        _id: null,
-        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
-      }}
+      {
+        $match: {
+          createdAt: { $gte: selectedDate, $lt: nextDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
     ]);
 
     const activityRevenue = await bookedActivity.aggregate([
-      { $match: { 
-        createdAt: { $gte: selectedDate, $lt: nextDate },
-      }},
-      { $group: {
-        _id: null,
-        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
-      }}
+      {
+        $match: {
+          createdAt: { $gte: selectedDate, $lt: nextDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } },
+        },
+      },
     ]);
 
-    const totalProductRevenue = productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
-    const totalItineraryRevenue = itineraryRevenue.length > 0 ? itineraryRevenue[0].totalRevenue : 0;
-    const totalActivityRevenue = activityRevenue.length > 0 ? activityRevenue[0].totalRevenue : 0;
+    const totalProductRevenue =
+      productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
+    const totalItineraryRevenue =
+      itineraryRevenue.length > 0 ? itineraryRevenue[0].totalRevenue : 0;
+    const totalActivityRevenue =
+      activityRevenue.length > 0 ? activityRevenue[0].totalRevenue : 0;
 
-    const totalRevenue = totalProductRevenue + totalItineraryRevenue + totalActivityRevenue;
+    const totalRevenue =
+      totalProductRevenue + totalItineraryRevenue + totalActivityRevenue;
 
     res.status(200).json({
       message: "Revenue filtered by date successfully",
-      date: selectedDate.toISOString().split('T')[0],
+      date: selectedDate.toISOString().split("T")[0],
       productRevenue: Number(totalProductRevenue.toFixed(2)),
       itineraryRevenue: Number(totalItineraryRevenue.toFixed(2)),
       activityRevenue: Number(totalActivityRevenue.toFixed(2)),
-      totalRevenue: Number(totalRevenue.toFixed(2))
+      totalRevenue: Number(totalRevenue.toFixed(2)),
     });
-
   } catch (error) {
     console.error("Error filtering revenue by date:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 module.exports = {
   createAdmin,
@@ -1787,6 +1901,8 @@ module.exports = {
   filterRevenueByProduct,
   getNotificationsAdmin,
   getUploadedDocumentsByID,
+  markActivityAppropriate,
+  markItineraryAppropriate,
   getMonthlyRevenue,
-  filterRevenueByDate
+  filterRevenueByDate,
 };

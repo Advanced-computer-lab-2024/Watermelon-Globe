@@ -98,9 +98,15 @@ const ActivitySchema = new Schema(
       type: Boolean,
       default: false,
     },
+     notifyRequests: [{ 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tourist'
+  }]
   },
   { timestamps: true }
 );
+    
+
 
 ActivitySchema.index({ Location: "2dsphere" });
 

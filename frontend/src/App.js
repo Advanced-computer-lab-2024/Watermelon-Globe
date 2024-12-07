@@ -132,8 +132,13 @@ import HotelMain from "./Hotels/Pages/HotelMain.js";
 
 import SiteDetails from "./Tourist/pages/siteDetails.js";
 
-import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 
+
+import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
+
+
+
+import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
 import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx";
 //tourguide new
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';

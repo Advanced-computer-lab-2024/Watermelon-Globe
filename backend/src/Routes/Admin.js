@@ -60,8 +60,10 @@ const {
   filterRevenueByProduct,
   getNotificationsAdmin,
   getUploadedDocumentsByID,
+  markActivityAppropriate,
+  markItineraryAppropriate,
   getMonthlyRevenue,
-  filterRevenueByDate
+  filterRevenueByDate,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);
@@ -142,10 +144,10 @@ router.get("/getQuantity", getQuantity);
 
 //mark Itinerary Inappropriate
 router.put("/markItineraryInappropriate/:id", markItineraryInappropriate);
-
+router.put("/markItineraryAppropriate/:id", markItineraryAppropriate);
 //mark Itinerary Inappropriate
 router.put("/markActivityInappropriate/:id", markActivityInappropriate);
-
+router.put("/markActivityAppropriate/:id", markActivityAppropriate);
 //post a new transportation
 router.post("/createTransportation", createTransportation);
 
@@ -176,7 +178,6 @@ router.get("/getNotificationsAdmin", getNotificationsAdmin);
 
 router.get("/getMonthlyRevenue", getMonthlyRevenue);
 
-router.get('/filterRevenueByDate', filterRevenueByDate);
-
+router.get("/filterRevenueByDate", filterRevenueByDate);
 
 module.exports = router;

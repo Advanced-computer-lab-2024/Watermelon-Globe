@@ -20,16 +20,12 @@ import AssistantPhotoRoundedIcon from "@mui/icons-material/AssistantPhotoRounded
 const ViewItinerariesEvents = () => {
   const [activities, setActivities] = useState([]); // Ensure default state is an array
   const [filteredActivities, setFilteredActivities] = useState([]); // Ensure default state is an array
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("name");
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [itineraries, setItineraries] = useState([]); // Ensure default state is an array
+  const [filteredItineraries, setFilteredItineraries] = useState([]); // Ensure default state is an array
   const navigate = useNavigate();
   const { id } = useParams();
-  const [flagPressed, setFlagPressed] = useState(false); // Track if the flag is pressed
-
-  const watermelonGreen = "#91c297";
-  const watermelonPink = "#d32e65";
+  const [flaggedActivities, setFlaggedActivities] = useState({}); // Tracks flagged states
+  const [flaggedItineraries, setFlaggedItineraries] = useState({}); // Tracks flagged states
 
   const fetchActivities = async () => {
     try {
@@ -51,103 +47,137 @@ const ViewItinerariesEvents = () => {
     }
   };
 
+  const fetchItineraries = async () => {
+    try {
+      const response = await fetch(`/api/TourGuide/getAllItineraries`);
+      const data = await response.json();
+      console.log(data);
+
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setActivities(data);
+        setFilteredItineraries(data);
+      } else {
+        console.error("API response is not an array:", data);
+        setActivities([]);
+        setFilteredItineraries([]);
+      }
+    } catch (error) {
+      console.error("Error fetching itineraries:", error);
+    }
+  };
+
   // Fetch products of a specific seller
   useEffect(() => {
     fetchActivities();
   }, [id]);
 
-  // Filter and sort products when filters or products change
   useEffect(() => {
-    const filtered = activities.filter((activity) => {
-      const price = parseFloat(formatPrice(activity.Price));
-      return (
-        // activities.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        price >= minPrice && price <= maxPrice
-      );
-    });
+    fetchItineraries();
+  }, [id]);
 
-    const sorted = filtered.sort((a, b) => {
-      if (sortBy === "name") {
-        //return a.name.localeCompare(b.name);
-      } else if (sortBy === "price") {
-        return (
-          parseFloat(formatPrice(a.price)) - parseFloat(formatPrice(b.price))
-        );
-      } else if (sortBy === "rating") {
-        return b.rating - a.rating;
-      }
-      return 0;
-    });
-
-    setFilteredActivities(sorted);
-  }, [searchTerm, sortBy, minPrice, maxPrice, activities]);
-
-  const formatPrice = (price) => {
-    if (price && price.$numberDecimal) {
-      return parseFloat(price.$numberDecimal).toFixed(2);
-    }
-    return price;
+  const handleActivityClick = (activityId) => {
+    navigate(`/ProductsDetailsGeneral/${activityId}/`);
   };
-
-  const handleProductClick = (activityId) => {
+  const handleItineraryClick = (activityId) => {
     navigate(`/ProductsDetailsGeneral/${activityId}/`);
   };
 
-  const resetFilters = () => {
-    setSearchTerm("");
-    setSortBy("name");
-    setMinPrice(0);
-    setMaxPrice(1000);
-  };
-  const handleFlagClick = (activityId) => {
+  const handleToggleFlagClick = async (activityId) => {
+    const isCurrentlyFlagged = flaggedActivities[activityId];
+
     try {
-      fetch(`/api/Admin/markActivityInappropriate/${activityId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Activity was flagged !");
-            fetchActivities();
-          } else {
-            alert("Failed to flag activity. Please try again.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error flagging activity:", error);
-          alert("Failed to flag activity. Please try again.");
-        });
+      const response = await fetch(
+        isCurrentlyFlagged
+          ? `/api/Admin/markActivityAppropriate/${activityId}`
+          : `/api/Admin/markActivityInappropriate/${activityId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        // alert(
+        //   isCurrentlyFlagged
+        //     ? "Activity was unflagged successfully!"
+        //     : "Activity was flagged successfully!"
+        // );
+
+        // Toggle the flag status for the specific activity
+        setFlaggedActivities((prevState) => ({
+          ...prevState,
+          [activityId]: !isCurrentlyFlagged, // Toggle the current flag status
+        }));
+      } else {
+        // alert(
+        //   isCurrentlyFlagged
+        //     ? "Failed to unflag activity. Please try again."
+        //     : "Failed to flag activity. Please try again."
+        // );
+      }
     } catch (error) {
-      console.error("Error flagging activity:", error);
-      alert("Failed to flag activity. Please try again.");
+      console.error(
+        isCurrentlyFlagged
+          ? "Error unflagging activity:"
+          : "Error flagging activity:",
+        error
+      );
+      // alert(
+      //   isCurrentlyFlagged
+      //     ? "Failed to unflag activity."
+      //     : "Failed to flag activity."
+      // );
     }
   };
-  // const handleFlagClick = async (activityId) => {
-  //   try {
-  //     // Call your API here
-  //     const response = await fetch(
-  //       `/api/Admin/markActivityInappropriate/${activityId}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
 
-  //     if (response.ok) {
-  //       console.log("API call successful");
-  //       setFlagPressed(true); // Change the icon after successful API call
-  //     } else {
-  //       const errorText = await response.text(); // Get more details about the error from the response
-  //       console.error(`API call failed: ${errorText}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error calling API:", error);
-  //   }
-  // };
+  const handleToggleFlagClickItinerary = async (itineraryId) => {
+    const isCurrentlyFlaggedItinerary = flaggedItineraries[itineraryId];
+
+    try {
+      const response = await fetch(
+        isCurrentlyFlaggedItinerary
+          ? `/api/Admin/markItineraryAppropriate/${itineraryId}`
+          : `/api/Admin/markItineraryInappropriate/${itineraryId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        // alert(
+        //   isCurrentlyFlagged
+        //     ? "Activity was unflagged successfully!"
+        //     : "Activity was flagged successfully!"
+        // );
+
+        // Toggle the flag status for the specific activity
+        setFlaggedItineraries((prevState) => ({
+          ...prevState,
+          [itineraryId]: !isCurrentlyFlaggedItinerary, // Toggle the current flag status
+        }));
+      } else {
+        // alert(
+        //   isCurrentlyFlagged
+        //     ? "Failed to unflag activity. Please try again."
+        //     : "Failed to flag activity. Please try again."
+        // );
+      }
+    } catch (error) {
+      console.error(
+        isCurrentlyFlaggedItinerary
+          ? "Error unflagging itinerary:"
+          : "Error flagging itinerary:",
+        error
+      );
+      // alert(
+      //   isCurrentlyFlagged
+      //     ? "Failed to unflag activity."
+      //     : "Failed to flag activity."
+      // );
+    }
+  };
 
   return (
     <div
@@ -166,32 +196,36 @@ const ViewItinerariesEvents = () => {
         <div className="listContainerAdminProduct">
           <Navbar />
           <div style={{ padding: "20px" }}>
-            {/* <h2
-              style={{ color: "#91c297" }}
-              className="text-2xl font-bold text-800 text-center mb-6"
+            <h2
+              style={{
+                color: "#d32e65",
+                textAlign: "left",
+                fontSize: "32px", // Increase the font size
+              }}
+              className="text-2xl font-bold text-800 mb-6"
             >
-              All 
-            </h2> */}
-
-            <NavTabs />
+              Activities
+            </h2>
 
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
-                gap: "20px",
-                padding: "25px",
+                display: "flex", // Use flexbox to arrange the items horizontally
+                overflowX: "auto", // Allow horizontal scrolling
+                gap: "20px", // Space between cards
+                padding: "10px",
               }}
             >
               {filteredActivities.map((activity) => (
                 <Card
+                  key={activity._id}
                   sx={{
-                    width: 360,
+                    width: 360, // Fixed width to keep the card size consistent
+                    height: 500, // Set a fixed height (adjust as needed)
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
                     position: "relative", // To position the flag icon relative to the card
+                    flexShrink: 0, // Prevent the card from shrinking
                   }}
-                  key={activity._id}
                 >
                   <div>
                     <Typography
@@ -207,36 +241,35 @@ const ViewItinerariesEvents = () => {
                     >
                       {activity.Name}
                     </Typography>
-                    {/* Position the flag icon at the right top corner */}
-                    {/* <OutlinedFlagRoundedIcon
-                      sx={{
-                        position: "absolute",
-                        top: "10px", // Adjust this to change the vertical position
-                        right: "10px", // Adjust this to change the horizontal position
-                        marginLeft: "40px", // Optional, if you still want some space between the text and the icon
-                      }}
-                    /> */}
 
-                    {/* Conditionally render the flag icon */}
-                    {flagPressed ? (
-                      <AssistantPhotoRoundedIcon
-                        sx={{
-                          cursor: "pointer", // Change the cursor to indicate it's clickable
-                        }}
-                      />
+                    {/* Flag Icon Logic */}
+                    {flaggedActivities[activity._id] ? (
+                      <Tooltip title="Unflag" arrow>
+                        <AssistantPhotoRoundedIcon
+                          sx={{
+                            position: "absolute",
+                            top: "20px",
+                            right: "10px",
+                            color: "#d32e65",
+                          }}
+                          onClick={() => handleToggleFlagClick(activity._id)}
+                        />
+                      </Tooltip>
                     ) : (
-                      <OutlinedFlagRoundedIcon
-                        sx={{
-                          position: "absolute",
-                          top: "20px", // Adjust this to change the vertical position
-                          right: "10px",
-                          cursor: "pointer", // Change the cursor to indicate it's clickable
-                          marginLeft: "40px", // Optional, if you still want some space between the text and the icon
-                        }}
-                        onClick={handleFlagClick} // Trigger the action when clicked
-                      />
+                      <Tooltip title="Flag Inappropriate" arrow>
+                        <OutlinedFlagRoundedIcon
+                          sx={{
+                            position: "absolute",
+                            top: "20px",
+                            right: "10px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleToggleFlagClick(activity._id)} // Pass activity ID properly
+                        />
+                      </Tooltip>
                     )}
                   </div>
+
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
                       src={
@@ -319,7 +352,7 @@ const ViewItinerariesEvents = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleProductClick(activity._id)}
+                      onClick={() => handleActivityClick(activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height
@@ -339,6 +372,181 @@ const ViewItinerariesEvents = () => {
                   </CardActions>
                 </Card>
               ))}
+            </div>
+
+            {/* Itineraries */}
+            <div style={{ paddingTop: "40px" }}>
+              <h2
+                style={{
+                  color: "#d32e65",
+                  textAlign: "left",
+                  fontSize: "32px", // Increase the font size
+                }}
+                className="text-2xl font-bold text-800 mb-6"
+              >
+                Itineraries
+              </h2>
+
+              <div
+                style={{
+                  display: "flex", // Use flexbox to arrange the items horizontally
+                  overflowX: "auto", // Allow horizontal scrolling
+                  gap: "20px", // Space between cards
+                  padding: "10px",
+                }}
+              >
+                {filteredItineraries.map((itinerary) => (
+                  <Card
+                    key={itinerary._id}
+                    sx={{
+                      width: 360, // Fixed width to keep the card size consistent
+                      height: 500, // Set a fixed height (adjust as needed)
+                      border: "3px solid #91c297", // Border thickness and color
+                      borderRadius: "20px",
+                      position: "relative", // To position the flag icon relative to the card
+                      flexShrink: 0, // Prevent the card from shrinking
+                    }}
+                  >
+                    <div>
+                      <Typography
+                        level="title-lg"
+                        sx={{
+                          fontFamily: "'Poppins', sans-serif",
+                          color: "#555",
+                          fontWeight: "lg",
+                          padding: "5px",
+                          display: "inline-flex", // Ensures the elements are inline and aligned
+                          alignItems: "center", // Aligns the items vertically if needed
+                        }}
+                      >
+                        {itinerary.name}
+                      </Typography>
+
+                      {/* Flag Icon Logic */}
+                      {flaggedItineraries[itinerary._id] ? (
+                        <Tooltip title="Unflag" arrow>
+                          <AssistantPhotoRoundedIcon
+                            sx={{
+                              position: "absolute",
+                              top: "20px",
+                              right: "10px",
+                              color: "#d32e65",
+                            }}
+                            onClick={() =>
+                              handleToggleFlagClickItinerary(itinerary._id)
+                            }
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="Flag Inappropriate" arrow>
+                          <OutlinedFlagRoundedIcon
+                            sx={{
+                              position: "absolute",
+                              top: "20px",
+                              right: "10px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              handleToggleFlagClickItinerary(itinerary._id)
+                            } // Pass activity ID properly
+                          />
+                        </Tooltip>
+                      )}
+                    </div>
+
+                    <AspectRatio minHeight="260px" maxHeight="300px">
+                      <img
+                        src={
+                          itineraries.picture ||
+                          "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
+                        }
+                        alt={`Image of ${itinerary.name}`}
+                        loading="lazy"
+                      />
+                    </AspectRatio>
+                    <CardContent orientation="horizontal">
+                      <div>
+                        <Typography
+                          level="body-xs"
+                          sx={{
+                            fontFamily: "'Poppins', sans-serif",
+                            color: "#91c297",
+                            fontWeight: "lg",
+                          }} // Change font and color for Price label
+                        >
+                          Price:
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "lg",
+                            fontWeight: "lg",
+                            color: "#d32e65", // Customize color for price
+                            fontFamily: "'Poppins', sans-serif", // Change font for price
+                          }}
+                        >
+                          ${itinerary.priceOfTour}
+                        </Typography>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column", // Stack the text and stars vertically
+                            alignItems: "flex-start",
+                            marginTop: "8px",
+                          }}
+                        >
+                          {/* Rating stars */}
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Rating
+                              name="itinerary-rating"
+                              value={itinerary.rating || 0} // Use product.rating or default to 0
+                              precision={0.5}
+                              readOnly
+                              size="small"
+                              sx={{ marginRight: "8px" }}
+                            />
+                            {/* Optionally, display the number of ratings */}
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "#757575", // Custom color for the reviews text
+                                fontFamily: "'Poppins', sans-serif", // Change font for reviews
+                              }}
+                            >
+                              {itinerary.noOfRatings > 0
+                                ? `${itinerary.noOfRatings} reviews`
+                                : "No reviews"}
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+
+                    <CardActions>
+                      <Button
+                        size="small"
+                        onClick={() => handleItineraryClick(itinerary._id)}
+                        sx={{
+                          width: "50%", // Set width to 100% of the container or define a fixed width
+                          height: "40px", // Set a fixed height
+                          backgroundColor: "#91c297", // Set the background color
+                          color: "white", // Set text color
+                          fontFamily: "Poppins, sans-serif", // Set the font family
+                          fontSize: "14px", // Set the font size
+                          fontWeight: "bold", // Set the font weight
+                          borderRadius: "5px", // Set the border radius for rounded corners
+                          "&:hover": {
+                            backgroundColor: "#6b9b6d", // Set a different color on hover
+                          },
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    </CardActions>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
