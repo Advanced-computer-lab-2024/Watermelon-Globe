@@ -114,7 +114,10 @@ const Sidebar = (selectedTab, setSelectedTab) => {
 
           {isDropdownOpenEvent && (
             <ul className="dropdownAdmin">
-              <Link to="/users/admins" style={{ textDecoration: "none" }}>
+              <Link
+                to="/ViewItinerariesEvents"
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View Events/Itineraries</span>
                 </li>
