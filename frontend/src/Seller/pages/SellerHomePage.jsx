@@ -1,21 +1,24 @@
+import React, { useState } from "react";
 import Sidebar from "../Components/sidebar/Sidebar";
 import Navbar from "../Components/navbar/Navbar";
-
 import "./homeSeller.scss";
-import { useParams } from "react-router-dom";
-import Widget from "Seller/Components/widgetSeller/Widget";
-import Featured from "Seller/Components/featuredSeller/Featured";
-import Chart from "Seller/Components/chartSeller/Chart";
-import Table from "Seller/Components/tableSeller/Table";
-
+import Widget from "../Components/widgetSeller/Widget";
+import Featured from "../Components/featuredSeller/Featured";
+import Chart from "../Components/chartSeller/Chart";
+import Table from "../Components/tableSeller/Table";
 
 const SellerHome = () => {
-  const { id } = useParams();
-  return (
+  const [searchTerm, setSearchTerm] = useState("");
 
-    <div className="home-seller">
-      <Sidebar  />
-      <div className="homeContainer-seller">
+  // Handle change in search input
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  return (
+    <div className="homeAdmin">
+      <Sidebar />
+      <div className="homeContainerAdmin">
         <Navbar />
         <div className="widgetsAdminHome">
           <Widget type="user" />
@@ -28,7 +31,7 @@ const SellerHome = () => {
           <Chart title="Total Sales per Month" aspect={2 / 1} />
         </div>
         <div className="listContainerAdminHome">
-          {/* <div className="listTitleAdminHome">
+          <div className="listTitleAdminHome">
             <span>Products</span>
             <br />
             <br />
@@ -39,8 +42,8 @@ const SellerHome = () => {
               onChange={handleSearchChange}
               className="searchBar"
             />
-          </div> */}
-          {/* <Table searchTerm={searchTerm} /> */}
+          </div>
+          <Table searchTerm={searchTerm} />
         </div>
       </div>
     </div>
