@@ -4,7 +4,7 @@ import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import Widget from "../../components/widgetAdmin/Widget";
 import Featured from "../../components/featuredAdmin/Featured";
-import Chart from "../../components/chart/Chart";
+import Chart from "../../components/chart/Chart2";
 import Table from "../../components/tableAdmin/Table";
 
 const Home = () => {
@@ -28,7 +28,7 @@ const Home = () => {
         </div>
         <div className="chartsAdminHome">
           <Featured />
-          <Chart title="Total Users per Month" aspect={2 / 1} />
+          <Chart title="Total Sales per Month" aspect={2 / 1} />
         </div>
         <div className="listContainerAdminHome">
           <div className="listTitleAdminHome">

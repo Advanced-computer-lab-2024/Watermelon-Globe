@@ -1295,34 +1295,33 @@ const createTransportation = async (req, res) => {
 //   }
 // };
 
-// Function to calculate total revenue from purchased products
 const totalProductRevenue = async (req, res) => {
   try {
-    // Step 1: Retrieve all tourists and populate their purchased products
-    const tourists = await Tourist.find().populate("products");
+    const result = await Tourist.aggregate([
+      { $unwind: '$orders' },
+      { $group: {
+        _id: null,
+        totalRevenue: { $sum: '$orders.totalPrice' }
+      }}
+    ]);
 
-    // Step 2: Initialize total revenue
-    let totalRevenue = 0;
-
-    // Step 3: Loop through all tourists and their purchased products
-    tourists.forEach((tourist) => {
-      tourist.products.forEach((product) => {
-        // Step 4: Add of each product's price to the total revenue
-        totalRevenue += product.price;
+    if (result.length === 0) {
+      return res.status(200).json({
+        message: "No orders found or all orders are pending/cancelled",
+        totalRevenue: 0
       });
+    }
+
+    const totalRevenue = result[0].totalRevenue;
+
+    res.status(200).json({
+      message: "Total product revenue calculated successfully",
+      totalRevenue: totalRevenue.toFixed(2)
     });
 
-    // Step 5: Send the total revenue as a response
-    res.status(200).json({
-      message: "Total revenue calculated successfully",
-      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
-    });
   } catch (error) {
-    // Handle any errors
-    res.status(500).json({
-      message: "Error calculating total revenue",
-      error: error.message,
-    });
+    console.error("Error calculating total product revenue:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -1572,6 +1571,158 @@ const getNotificationsAdmin = async (req, res) => {
   }
 };
 
+const getMonthlyRevenue = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1); // January 1st of current year
+    const endDate = new Date(currentYear, 11, 31); // December 31st of current year
+
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: '$orders' },
+      { $match: { 
+        'orders.orderDate': { $gte: startDate, $lte: endDate },
+      }},
+      { $group: {
+        _id: { month: { $month: '$orders.orderDate' } },
+        totalRevenue: { $sum: '$orders.totalPrice' }
+      }},
+      { $sort: { '_id.month': 1 } }
+    ]);
+
+    const itineraryRevenue = await bookedItinerary.aggregate([
+      { $match: { 
+        createdAt: { $gte: startDate, $lte: endDate },
+      }},
+      { $group: {
+        _id: { month: { $month: '$createdAt' } },
+        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
+      }},
+      { $sort: { '_id.month': 1 } }
+    ]);
+
+    const activityRevenue = await bookedActivity.aggregate([
+      { $match: { 
+        createdAt: { $gte: startDate, $lte: endDate },
+      }},
+      { $group: {
+        _id: { month: { $month: '$createdAt' } },
+        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
+      }},
+      { $sort: { '_id.month': 1 } }
+    ]);
+
+    // Initialize an array for all 12 months
+    const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      productRevenue: 0,
+      itineraryRevenue: 0,
+      activityRevenue: 0,
+      totalRevenue: 0
+    }));
+
+    // Combine revenues
+    [
+      { data: productRevenue, key: 'productRevenue' },
+      { data: itineraryRevenue, key: 'itineraryRevenue' },
+      { data: activityRevenue, key: 'activityRevenue' }
+    ].forEach(({ data, key }) => {
+      data.forEach(entry => {
+        const monthIndex = entry._id.month - 1;
+        monthlyRevenue[monthIndex][key] = entry.totalRevenue;
+        monthlyRevenue[monthIndex].totalRevenue += entry.totalRevenue;
+      });
+    });
+
+    // Add month names and format numbers
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedRevenue = monthlyRevenue.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1],
+      productRevenue: Number(item.productRevenue.toFixed(2)),
+      itineraryRevenue: Number(item.itineraryRevenue.toFixed(2)),
+      activityRevenue: Number(item.activityRevenue.toFixed(2)),
+      totalRevenue: Number(item.totalRevenue.toFixed(2))
+    }));
+
+    res.status(200).json({
+      message: "Yearly revenue calculated successfully",
+      year: currentYear,
+      data: formattedRevenue
+    });
+
+  } catch (error) {
+    console.error("Error calculating yearly revenue:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const filterRevenueByDate = async (req, res) => {
+  try {
+    const { date } = req.query;
+    
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: '$orders' },
+      { $match: { 
+        'orders.orderDate': { $gte: selectedDate, $lt: nextDate },
+      }},
+      { $group: {
+        _id: null,
+        totalRevenue: { $sum: '$orders.totalPrice' }
+      }}
+    ]);
+
+    const itineraryRevenue = await bookedItinerary.aggregate([
+      { $match: { 
+        createdAt: { $gte: selectedDate, $lt: nextDate },
+      }},
+      { $group: {
+        _id: null,
+        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
+      }}
+    ]);
+
+    const activityRevenue = await bookedActivity.aggregate([
+      { $match: { 
+        createdAt: { $gte: selectedDate, $lt: nextDate },
+      }},
+      { $group: {
+        _id: null,
+        totalRevenue: { $sum: { $multiply: ['$totalPrice', 0.1] } }
+      }}
+    ]);
+
+    const totalProductRevenue = productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
+    const totalItineraryRevenue = itineraryRevenue.length > 0 ? itineraryRevenue[0].totalRevenue : 0;
+    const totalActivityRevenue = activityRevenue.length > 0 ? activityRevenue[0].totalRevenue : 0;
+
+    const totalRevenue = totalProductRevenue + totalItineraryRevenue + totalActivityRevenue;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully",
+      date: selectedDate.toISOString().split('T')[0],
+      productRevenue: Number(totalProductRevenue.toFixed(2)),
+      itineraryRevenue: Number(totalItineraryRevenue.toFixed(2)),
+      activityRevenue: Number(totalActivityRevenue.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed(2))
+    });
+
+  } catch (error) {
+    console.error("Error filtering revenue by date:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 module.exports = {
   createAdmin,
   deleteAdmin,
@@ -1636,4 +1787,6 @@ module.exports = {
   filterRevenueByProduct,
   getNotificationsAdmin,
   getUploadedDocumentsByID,
+  getMonthlyRevenue,
+  filterRevenueByDate
 };
