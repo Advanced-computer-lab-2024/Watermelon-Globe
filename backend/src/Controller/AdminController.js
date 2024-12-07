@@ -28,6 +28,20 @@ const getAllAdmin = async (req, res) => {
       .json({ message: "Error retrieving admins", error: error.message });
   }
 };
+const getAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such admin" });
+  }
+
+  const admin = await Admin.findById(id);
+
+  if (!admin) {
+    return res.status(400).json({ error: "No such admin" });
+  }
+  res.status(200).json(admin);
+};
 
 const createAdmin = async (req, res) => {
   const { username, password } = req.body;
@@ -1905,4 +1919,5 @@ module.exports = {
   markItineraryAppropriate,
   getMonthlyRevenue,
   filterRevenueByDate,
+  getAdmin,
 };

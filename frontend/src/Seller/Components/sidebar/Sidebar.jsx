@@ -69,6 +69,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
+import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
+
 const Sidebar = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -91,7 +95,6 @@ const Sidebar = () => {
   // Function to determine if the menu item is active
   const isActive = (path) => location.pathname === path;
 
-
   return (
     <div className="sidebarAdmin">
       <div className="topAdmin">
@@ -104,17 +107,14 @@ const Sidebar = () => {
         <ul>
           <p className="titleAdmin">MAIN</p>
 
-          <Link
-            to={`/SellerHome/${id}`}
-            style={{ textDecoration: "none" }}
-          >
+          <Link to={`/SellerHome/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
           </Link>
 
-          <p className="titleAdmin">MANAGE</p>
+          <p className="titleAdmin">PRODUCTS</p>
 
           {/* My Products */}
           <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
@@ -123,7 +123,7 @@ const Sidebar = () => {
                 isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""
               }
             >
-              <StoreIcon className="iconAdmin" />
+              <MovingRoundedIcon className="iconAdmin" />
               <span>My Products</span>
             </li>
           </Link>
@@ -162,6 +162,20 @@ const Sidebar = () => {
             >
               <ProductionQuantityLimitsIcon className="iconAdmin" />
               <span>Sales and Available Quantities</span>
+            </li>
+          </Link>
+
+          <p className="titleAdmin">MANAGE ACCOUNT</p>
+          <Link to="/Categories" style={{ textDecoration: "none" }}>
+            <li>
+              <AccountCircleRoundedIcon className="iconAdmin" />
+              <span>View Profile</span>
+            </li>
+          </Link>
+          <Link to="/Categories" style={{ textDecoration: "none" }}>
+            <li>
+              <PasswordRoundedIcon className="iconAdmin" />
+              <span>Change Password</span>
             </li>
           </Link>
         </ul>
