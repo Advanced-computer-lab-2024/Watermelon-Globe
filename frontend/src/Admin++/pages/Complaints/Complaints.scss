@@ -1,0 +1,26 @@
+.listComplaints {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+  }
+  
+  .listContainerComplaints {
+    flex: 1;
+    margin-left: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .complaintsDatatable {
+    width: 100%;
+  }
+  
+  @media (max-width: 768px) {
+    .listContainerComplaints {
+      margin-left: 0;
+    }
+  }
+  
+  
