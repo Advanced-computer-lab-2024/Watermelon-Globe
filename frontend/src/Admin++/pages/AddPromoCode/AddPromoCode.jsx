@@ -55,7 +55,7 @@ const AddPromoCode = () => {
     <div className="listAddPromo">
       <Sidebar />
       <div className="listContainerAddPromo">
-        {/* <Navbar /> */}
+        <Navbar />
         <div className="cardsContainerAddPromo">
           {codes.map((admin) => (
             <Card

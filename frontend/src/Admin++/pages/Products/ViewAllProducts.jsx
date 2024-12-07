@@ -31,7 +31,7 @@ const GetAllProductsGeneral = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`/api/Seller/GetAllProducts`);
+      const response = await fetch(`/api/Seller/getProducts`);
       const data = await response.json();
       console.log(data);
 
@@ -265,6 +265,7 @@ const GetAllProductsGeneral = () => {
                     width: 360,
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
+                    backgroundColor: "#fff",
                   }}
                   key={product._id}
                 >

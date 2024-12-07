@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AddActivityCategory.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
 import AddActivityCategoryForm from "../../components/addActivityCategoryForm/addActivityCategoryForm";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -109,6 +110,7 @@ const AddActivityCategory = () => {
     <div className="addActivityCategory">
       <Sidebar />
       <div className="listContainerActivity">
+        <Navbar />
         <div className="cardsContainerActivity">
           {categories.map((category) => (
             <Card

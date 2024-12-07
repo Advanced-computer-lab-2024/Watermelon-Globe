@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, TextField, Typography, Alert } from "@mui/material";
 import { FaListAlt } from "react-icons/fa"; // Icon for category
 import "./addActivityCategoryForm.scss"; // Import the CSS file
+import Navbar from "../../components/navbar/Navbar";
 
 const AddActivityCategoryForm = ({ onCategoryAdded }) => {
   const [categoryName, setCategoryName] = useState("");

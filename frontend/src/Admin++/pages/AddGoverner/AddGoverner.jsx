@@ -55,7 +55,7 @@ const AddGoverner = () => {
     <div className="listAddGoverner">
       <Sidebar />
       <div className="listContainerAddGoverner">
-        {/* <Navbar /> */}
+        <Navbar />
         <div className="cardsContainer">
           {governors.map((governor) => (
             <Card
