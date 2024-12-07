@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { FaCalendar, FaDollarSign, FaBox } from 'react-icons/fa'
 
 interface CartItem {
   itemId: string
@@ -11,24 +12,17 @@ interface CartItem {
 }
 
 interface PaymentSummaryProps {
-  totalFromCartPage?: number // If passed, use this instead of fetching the cart
-  touristId: string // ID to fetch the cart from the backend
+  touristId: string
 }
 
-const PaymentSummary: React.FC<PaymentSummaryProps> = ({ totalFromCartPage, touristId }) => {
+const PaymentSummary: React.FC<PaymentSummaryProps> = ({ touristId }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [subtotal, setSubtotal] = useState<number>(0)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (totalFromCartPage !== undefined) {
-      // Use the total provided from the ShoppingCart page
-      setSubtotal(totalFromCartPage)
-    } else {
-      // Fetch the cart from the backend
-      fetchCart()
-    }
-  }, [totalFromCartPage])
+    fetchCart()
+  }, [touristId])
 
   const fetchCart = async () => {
     try {
@@ -36,7 +30,6 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ totalFromCartPage, tour
       const fetchedCart: CartItem[] = response.data.cartItems || []
       setCartItems(fetchedCart)
 
-      // Calculate subtotal from the fetched cart
       const calculatedSubtotal = fetchedCart.reduce(
         (total, item) => total + item.price * item.quantity,
         0
@@ -49,23 +42,26 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ totalFromCartPage, tour
   }
 
   return (
-    <div className="bg-gray-100 p-4 rounded-md shadow-md">
-
+    <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+      <h4 className="text-lg font-semibold text-secondary">Order Summary</h4>
       {error && <p className="text-red-500">{error}</p>}
-
-      {cartItems.length > 0 && (
-        <ul className="space-y-2">
-          {cartItems.map((item) => (
-            <li key={item.itemId} className="flex justify-between">
-              <span>{item.name} (x{item.quantity})</span>
-              <span>${(item.price * item.quantity).toFixed(2)}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-        <h3 className="text-lg font-semibold">Subtotal: ${subtotal.toFixed(2)}</h3>
+      <div className="space-y-2 mt-4">
+        {cartItems.map((item) => (
+          <div key={item.itemId} className="flex justify-between text-grayText">
+            <span>{item.name} (x{item.quantity})</span>
+            <span>${(item.price * item.quantity).toFixed(2)}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 pt-4 border-t border-gray-200">
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">Total:</span>
+          <span className="text-xl font-bold text-primary">${subtotal.toFixed(2)}</span>
+        </div>
+      </div>
     </div>
   )
 }
 
 export default PaymentSummary
+

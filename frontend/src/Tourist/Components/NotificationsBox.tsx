@@ -74,7 +74,7 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
               key={index}
               className="px-4 py-3 border-b border-gray-200 hover:bg-[#FFF0F5] transition-colors duration-150 ease-in-out"
             >
-              <p className="text-sm text-gray-800">{notification}</p>
+              {/* <p className="text-sm text-gray-800">{notification}</p> */}
             </div>
           ))
         ) : (

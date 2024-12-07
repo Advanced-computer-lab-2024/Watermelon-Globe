@@ -131,7 +131,9 @@ const touristSchema = new Schema(
         deliveryDate: { type: Date },
         cancellationReason: { type: String },
       },
-    ], notifications: [
+    ],
+    
+    notifications: [
       {
         message: { type: String, required: false },
         date: { type: Date, default: Date.now },
@@ -139,9 +141,6 @@ const touristSchema = new Schema(
       }
     ],
 
-    
-   
-    //sprint 3 Hatem
 
     bookmarkedItineraries: [
       {
@@ -157,17 +156,8 @@ const touristSchema = new Schema(
         default: [],
       },
     ],
-     notifications: [
-      {
-        type: String,
-        required: true,
-        default: [],
-      },
-    ],
  
   },  
-  
-
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }
