@@ -7,7 +7,6 @@
 //   color: #555;
 //   position:relative;
 
-
 //   .wrapper {
 //     width: 100%;
 //     padding: 20px;
@@ -85,7 +84,7 @@
 //     margin-right: 10px; // Add space
 //     top: 20px !important; // Adjust vertical position
 //   }
-  
+
 //   .notification-item {
 //     margin-bottom: 10px; // Add spacing between notifications
 //     background-color: #b4efed !important; // Ensure pink background
@@ -98,97 +97,120 @@
 //   border: 2px solid blue !important; // Helps visualize the container
 // }
 
-.navbar-guide {
-  height: 50px;
-  border-bottom: 0.5px solid rgb(231, 228, 228);
+// .navbarAdmin {
+//   height: 100px;
+//   //border-bottom: 3px solid #91c2979b;
+//   display: flex;
+//   align-items: center;
+//   background-color: white;
+//   font-size: 14px;
+//   color: #d688a2;
+//   left: 0; /* Adjusted to ensure correct placement */
+//   top: 0;
+//   background-color: #f4eaef76;
+//   width: 100%;
+
+.navbarAdmin {
+  width: 100%; /* Makes the navbar take the full width of the page */
+  height: 70px;
   display: flex;
   align-items: center;
+  background-color: #f4eaef76; /* Your desired background color */
   font-size: 14px;
-  color: #555;
-  position: relative;
-}
-
-.navbar-guide-wrapper {
-  width: 100%;
+  color: #d688a2;
+  position: fixed; /* Ensures the navbar stays at the top while scrolling */
+  left: 0;
+  top: 0;
+  z-index: 1000; /* Keeps the navbar above other elements */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
   padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  font-family: "Poppins", sans-serif;
+  // border-bottom: 5px solid #91c297;
 
-.navbar-guide-search {
-  display: flex;
-  align-items: center;
-  border: 0.5px solid lightgray;
-  padding: 3px;
-}
+  // .navbarBorder {
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 58.5%; /* Start from the middle */
+  //   width: 84%; /* Adjust width as needed */
+  //   height: 5px;
+  //   background-color: #91c2979b;
+  //   transform: translateX(-50%); /* Align to the middle */
+  // }
 
-.navbar-guide-search input {
-  border: none;
-  outline: none;
-  background: transparent;
-}
+  .topAdmin {
+    height: 50px;
+    display: flex;
+    //padding-left: 200px;
+    width: 100%; /* Ensure full width */
 
-.navbar-guide-search input::placeholder {
-  font-size: 12px;
-}
-
-.navbar-guide-items {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-guide-item {
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
-  position: relative;
-}
-
-.navbar-guide-icon {
-  font-size: 20px;
-}
-
-.navbar-guide-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
-.navbar-guide-counter {
-  width: 15px;
-  height: 15px;
-  background-color: red;
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: bold;
-  position: absolute;
-  top: -5px;
-  right: -5px;
-}
-
-/* Global styles for notification container for guide */
-.notification-container-guide {
-  &.top-right {
-    right: 20px !important; /* Adjust this to move it horizontally */
-    margin-right: 10px; /* Add space */
-    top: 20px !important; /* Adjust vertical position */
+    .logoAdmin {
+      font-size: 25px;
+      font-weight: bold;
+      color: #d32e65;
+    }
   }
 
-  .notification-item {
-    margin-bottom: 10px; /* Add spacing between notifications */
-    background-color: #b4efed !important; /* Ensure pink background */
-    color: #fff !important; /* Ensure white text */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px;
+  .wrapperAdmin {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .searchAdmin {
+      display: flex;
+      align-items: center;
+      // border: 0.5px solid lightgray;
+      padding: 3px;
+
+      input {
+        border: none;
+        outline: none;
+        background: transparent;
+
+        &::placeholder {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .itemsAdmin {
+      display: flex;
+      align-items: center;
+
+      .itemAdmin {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+        position: relative;
+
+        .iconAdmin {
+          font-size: 25px;
+        }
+
+        .avatarAdmin {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
+
+        .counterAdmin {
+          width: 15px;
+          height: 15px;
+          //background-color: rgba(78, 192, 129, 0.721);
+          background-color: #91c297;
+          border-radius: 50%;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+          font-weight: bold;
+          position: absolute;
+          top: -5px;
+          right: -5px;
+        }
+      }
+    }
   }
 }
-
-.notification-container-guide.top-right {
-  border: 2px solid blue !important; /* Helps visualize the container */
-}
-

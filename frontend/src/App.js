@@ -33,8 +33,8 @@ import ViewProducts from "./Guest/pages/ViewProducts.js";
 
 import GuestPage from "./Guest/pages/GuestHomepage.tsx";
 //Admin++ Pages
-import AdminSales from "./Admin++/pages/home/HomeSales.jsx"; 
-import AdminUsers from "./Admin++/pages/home/HomeUsers.jsx"; 
+import AdminSales from "./Admin++/pages/home/HomeSales.jsx";
+import AdminUsers from "./Admin++/pages/home/HomeUsers.jsx";
 import ActiveUsers from "./Admin++/pages/ActiveUsers/ActiveUsers.jsx";
 import PendingUsers from "./Admin++/pages/PendingUsers/PendingUsers.jsx";
 import Categories from "./Admin++/pages/AddActivityCategory/AddActivityCategory.jsx";
@@ -48,7 +48,7 @@ import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
 // import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
 import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
-
+import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewItinerariesEvents";
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
@@ -68,7 +68,7 @@ import EditActivity from "./Advertiser/Components/EditActivity.jsx";
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from "./pages/sellerSignupConfirm.jsx";
 import SellerPage from "./SellerPage.js";
-import SellerLogin from "./Seller/pages/SellerLogin"
+import SellerLogin from "./Seller/pages/SellerLogin";
 // import SellerProduct from './Seller/pages/SellerProduct.js';//////////////////////////////
 
 import SellerProduct from "./Seller/pages/SellerProduct.jsx";
@@ -214,7 +214,10 @@ const App = () => {
           <Route path="/Tourists" element={<AllTourists />} />
 
           <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
-
+          <Route
+            path="/ViewItinerariesEvents"
+            element={<ViewItinerariesEvents />}
+          />
           <Route path="/" element={<MainHome />} />
 
           {/* <Route path="/" element={<Iteneraries />} />
@@ -353,8 +356,7 @@ const App = () => {
             element={<TouristActivityDetails />}
           />
 
-
-          <Route path="/TouristLogin" element={<TouristLogin />} /> 
+          <Route path="/TouristLogin" element={<TouristLogin />} />
 
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
@@ -416,10 +418,7 @@ const App = () => {
             element={<GovernorSiteDetails />}
           />
 
-<Route
-            path="/GovernorLogin"
-            element={<GovernorLogin />}
-          />
+          <Route path="/GovernorLogin" element={<GovernorLogin />} />
 
           <Route path="/ViewProducts" element={<ViewProducts />} />
           {/* Tour Guide Pages */}
