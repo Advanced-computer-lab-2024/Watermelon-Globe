@@ -22,7 +22,7 @@ router.get("/getPassword", guideController.getPassword);
 router.put("/updateTourGuideNew/:id", guideController.updateTourGuideNew);
 router.delete("/deleteGuide/:id", guideController.deleteTourGuide);
 router.get("/getNotificationsGuide/:id", guideController.getNotificationsGuide);
-
+router.get("/getAllItineraries", guideController.getAllItineraries);
 //accept terms and conditions
 router.put(
   "/acceptTermsAndConditions/:id",

@@ -23,25 +23,25 @@
   left: 0;
   top: 0;
   z-index: 1000; /* Keeps the navbar above other elements */
-  //box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
   padding: 20px;
   font-family: "Poppins", sans-serif;
   // border-bottom: 5px solid #91c297;
 
-  .navbarBorder {
-    position: absolute;
-    bottom: 0;
-    left: 58.5%; /* Start from the middle */
-    width: 84%; /* Adjust width as needed */
-    height: 5px;
-    background-color: #91c2979b;
-    transform: translateX(-50%); /* Align to the middle */
-  }
+  // .navbarBorder {
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 58.5%; /* Start from the middle */
+  //   width: 84%; /* Adjust width as needed */
+  //   height: 5px;
+  //   background-color: #91c2979b;
+  //   transform: translateX(-50%); /* Align to the middle */
+  // }
 
   .topAdmin {
     height: 50px;
     display: flex;
-    padding-left: 200px;
+    //padding-left: 200px;
     width: 100%; /* Ensure full width */
 
     .logoAdmin {

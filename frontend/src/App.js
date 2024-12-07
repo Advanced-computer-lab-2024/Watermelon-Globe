@@ -47,7 +47,7 @@ import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
 // import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
 import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
-
+import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewItinerariesEvents";
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
@@ -67,7 +67,7 @@ import EditActivity from "./Advertiser/Components/EditActivity.jsx";
 import SellerSignup from "./pages/SellerSignup.jsx";
 import SellerSignupConfirm from "./pages/sellerSignupConfirm.jsx";
 import SellerPage from "./SellerPage.js";
-import SellerLogin from "./Seller/pages/SellerLogin"
+import SellerLogin from "./Seller/pages/SellerLogin";
 // import SellerProduct from './Seller/pages/SellerProduct.js';//////////////////////////////
 
 import SellerProduct from "./Seller/pages/SellerProduct.jsx";
@@ -160,9 +160,7 @@ const App = () => {
         <Routes>
           {/* Main Home Page */}
           <Route path="/" element={<GuestPage />} />
-
           <Route path="/GuestPage" element={<GuestPage />} />
-
           {/* Admin Routes */}
           {/*<Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />
@@ -188,10 +186,8 @@ const App = () => {
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
           <Route path="/AdminViewDocuments" element={<ViewDocuments />} /> */}
-
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
-
           {/* Admin++ Routes */}
           <Route path="/AdminHome++/:id" element={<AdminPlusHome />} />
           <Route path="AddAdmins" element={<AddAdmin />} />
@@ -205,26 +201,25 @@ const App = () => {
           <Route path="/ViewSaleQuantities" element={<ViewSalesQuantities />} />
           <Route path="/adminAddPromoCode" element={<AddPromoCode />} />
           <Route path="/Tourists" element={<AllTourists />} />
-
           <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
-
+          <Route
+            path="/ViewItinerariesEvents"
+            element={<ViewItinerariesEvents />}
+          />
+          ViewItinerariesEvents
           <Route path="/" element={<MainHome />} />
-
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
           <Route path="/seller-signup" element={<SellerSignup />} />
           {/* <Route path="/advertiser-signup" element={<AdvertiserSignup />} /> */}
           <Route path="/tourist-signup" element={<TouristSignup />} />
           <Route path="/tourguide-signup" element={<TourguideSignup />} />
-
           <Route path="/signup-options" element={<SignupOptions />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
-
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
-
           {/* Guest Routes */}
           <Route
             path="/completed-itineraries/:id"
@@ -241,7 +236,6 @@ const App = () => {
             path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type"
             element={<RatingsAndCommentsPage />}
           />
-
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
           <Route path="/tour-guide" element={<TourGuidePage />} />
           <Route
@@ -261,7 +255,6 @@ const App = () => {
           <Route path="/AllItineraries/:id" element={<AllItineraries />} />
           <Route path="/GeneralDetails/:id" element={<GeneralDetails />} />
           <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
-
           <Route
             path="/tourism-governor/:id"
             element={<TourismGovernorPage />}
@@ -280,7 +273,6 @@ const App = () => {
           />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/BackendReq" element={<AppPage />} />
-
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
@@ -302,9 +294,7 @@ const App = () => {
             path="/SalesReportPage/:advertiserId"
             element={<SalesReportPage />}
           />
-
           {/* Signup Pages */}
-
           <Route
             path="/terms-and-conditions/:userId"
             element={<TermsAndConditions />}
@@ -331,7 +321,6 @@ const App = () => {
             element={<TourguideSignupConfirm />}
           />
           <Route path="/signup-options" element={<SignupOptions />} />
-
           {/* Tourist Pages */}
           <Route
             path="/Tourist_ProductsPage"
@@ -345,10 +334,7 @@ const App = () => {
             path="/TouristActivityDetails/:activityId/:id"
             element={<TouristActivityDetails />}
           />
-
-
-          <Route path="/TouristLogin" element={<TouristLogin />} /> 
-
+          <Route path="/TouristLogin" element={<TouristLogin />} />
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
           <Route path="/ProductTourist/:id" element={<ProductTourist />} />
@@ -365,16 +351,12 @@ const App = () => {
           />
           <Route path="/MyBookings/:id" element={<MyBookings />} />
           <Route path="/SiteDetails/:id" element={<SiteDetails />} />
-
           {/* shopping cart*/}
           <Route path="/ShoppingCart/:touristId" element={<ShoppingCart />} />
           <Route path="/CheckoutPage/:touristId" element={<CheckoutPage />} />
-
           {/* Tourist homepage draft */}
           <Route path="/Draft/:touristId" element={<DraftHomePage />} />
-
           <Route path="/OrdersPage/:touristId" element={<OrdersPage />} />
-
           {/* Seller and Other Pages */}
           <Route path="/SellerLogin" element={<SellerLogin />} />
           <Route path="/SellerPage" element={<SellerPage />} />
@@ -396,7 +378,6 @@ const App = () => {
             path="/ProductsDetailsGeneral/:id"
             element={<ProductsDetailsGeneral />}
           />
-
           {/* Governor Pages*/}
           <Route path="/AddSite/:id" element={<AddSite />} />
           <Route path="/GetMySites/:id" element={<GetMySites />} />
@@ -408,12 +389,7 @@ const App = () => {
             path="/GovernorSiteDetails/:id"
             element={<GovernorSiteDetails />}
           />
-
-<Route
-            path="/GovernorLogin"
-            element={<GovernorLogin />}
-          />
-
+          <Route path="/GovernorLogin" element={<GovernorLogin />} />
           <Route path="/ViewProducts" element={<ViewProducts />} />
           {/* Tour Guide Pages */}
           <Route path="/TourGuideHome/:id" element={<TourGuideHome />} />
@@ -421,14 +397,12 @@ const App = () => {
             path="/changePasswordTourGuide/:id"
             element={<ChangePasswordTourGuide />}
           />
-
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path="/add-activity" element={<ActivityForm />} />
           <Route
             path="/TransportationDetails/:id"
             element={<TransportationDetails />}
           />
-
           {/* Path for Flight and Hotel APIs */}
           <Route path="/Flights/:touristId" element={<FlightMain />} />
           <Route path="/Hotels/:touristId" element={<HotelMain />} />

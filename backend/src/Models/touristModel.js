@@ -131,9 +131,17 @@ const touristSchema = new Schema(
         deliveryDate: { type: Date },
         cancellationReason: { type: String },
       },
+    ], notifications: [
+      {
+        message: { type: String, required: false },
+        date: { type: Date, default: Date.now },
+        read: { type: Boolean, default: false }
+      }
     ],
+
     
   },  
+  
 
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

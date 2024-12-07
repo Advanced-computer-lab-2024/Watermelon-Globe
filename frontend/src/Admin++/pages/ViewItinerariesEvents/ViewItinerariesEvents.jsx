@@ -3,8 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import "./actions.scss";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import Tooltip from "@mui/material/Tooltip";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
@@ -15,59 +13,62 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
 import BookmarkAdd from "@mui/icons-material/BookmarkAddOutlined";
 import Rating from "@mui/material/Rating";
+import NavTabs from "Admin++/components/navTabs/navTabsEvents";
+import OutlinedFlagRoundedIcon from "@mui/icons-material/OutlinedFlagRounded";
+import AssistantPhotoRoundedIcon from "@mui/icons-material/AssistantPhotoRounded";
 
-const GetAllProductsGeneral = () => {
-  const [products, setProducts] = useState([]); // Ensure default state is an array
-  const [filteredProducts, setFilteredProducts] = useState([]); // Ensure default state is an array
+const ViewItinerariesEvents = () => {
+  const [activities, setActivities] = useState([]); // Ensure default state is an array
+  const [filteredActivities, setFilteredActivities] = useState([]); // Ensure default state is an array
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
   const navigate = useNavigate();
   const { id } = useParams();
+  const [flagPressed, setFlagPressed] = useState(false); // Track if the flag is pressed
 
   const watermelonGreen = "#91c297";
   const watermelonPink = "#d32e65";
 
-  const fetchProducts = async () => {
+  const fetchActivities = async () => {
     try {
-      const response = await fetch(`/api/Seller/getProducts`);
+      const response = await fetch(`/api/Activities/activities`);
       const data = await response.json();
       console.log(data);
 
       // Ensure data is an array
       if (Array.isArray(data)) {
-        setProducts(data);
-        setFilteredProducts(data);
+        setActivities(data);
+        setFilteredActivities(data);
       } else {
         console.error("API response is not an array:", data);
-        setProducts([]);
-        setFilteredProducts([]);
+        setActivities([]);
+        setFilteredActivities([]);
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching itineraries:", error);
     }
   };
 
   // Fetch products of a specific seller
   useEffect(() => {
-    fetchProducts();
+    fetchActivities();
   }, [id]);
 
   // Filter and sort products when filters or products change
   useEffect(() => {
-    const filtered = products.filter((product) => {
-      const price = parseFloat(formatPrice(product.price));
+    const filtered = activities.filter((activity) => {
+      const price = parseFloat(formatPrice(activity.Price));
       return (
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        price >= minPrice &&
-        price <= maxPrice
+        // activities.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        price >= minPrice && price <= maxPrice
       );
     });
 
     const sorted = filtered.sort((a, b) => {
       if (sortBy === "name") {
-        return a.name.localeCompare(b.name);
+        //return a.name.localeCompare(b.name);
       } else if (sortBy === "price") {
         return (
           parseFloat(formatPrice(a.price)) - parseFloat(formatPrice(b.price))
@@ -78,8 +79,8 @@ const GetAllProductsGeneral = () => {
       return 0;
     });
 
-    setFilteredProducts(sorted);
-  }, [searchTerm, sortBy, minPrice, maxPrice, products]);
+    setFilteredActivities(sorted);
+  }, [searchTerm, sortBy, minPrice, maxPrice, activities]);
 
   const formatPrice = (price) => {
     if (price && price.$numberDecimal) {
@@ -88,8 +89,8 @@ const GetAllProductsGeneral = () => {
     return price;
   };
 
-  const handleProductClick = (productId) => {
-    navigate(`/ProductsDetailsGeneral/${productId}/`);
+  const handleProductClick = (activityId) => {
+    navigate(`/ProductsDetailsGeneral/${activityId}/`);
   };
 
   const resetFilters = () => {
@@ -98,10 +99,9 @@ const GetAllProductsGeneral = () => {
     setMinPrice(0);
     setMaxPrice(1000);
   };
-
-  const handleArchive = (productId) => {
+  const handleFlagClick = (activityId) => {
     try {
-      fetch(`/api/Seller/archiveProduct/${productId}`, {
+      fetch(`/api/Admin/markActivityInappropriate/${activityId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -109,47 +109,45 @@ const GetAllProductsGeneral = () => {
       })
         .then((response) => {
           if (response.ok) {
-            alert("Product was archived!");
-            fetchProducts();
+            alert("Activity was flagged !");
+            fetchActivities();
           } else {
-            alert("Failed to archive product. Please try again.");
+            alert("Failed to flag activity. Please try again.");
           }
         })
         .catch((error) => {
-          console.error("Error archiving product:", error);
-          alert("Failed to archive product. Please try again.");
+          console.error("Error flagging activity:", error);
+          alert("Failed to flag activity. Please try again.");
         });
     } catch (error) {
-      console.error("Error archiving product:", error);
-      alert("Failed to archive product. Please try again.");
+      console.error("Error flagging activity:", error);
+      alert("Failed to flag activity. Please try again.");
     }
   };
+  // const handleFlagClick = async (activityId) => {
+  //   try {
+  //     // Call your API here
+  //     const response = await fetch(
+  //       `/api/Admin/markActivityInappropriate/${activityId}`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-  const handleUnArchive = (productId) => {
-    try {
-      fetch(`/api/Seller/unarchiveProduct/${productId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Product was unarchived!");
-            fetchProducts();
-          } else {
-            alert("Failed to unarchive product. Please try again.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error unarchiving product:", error);
-          alert("Failed to unarchive product. Please try again.");
-        });
-    } catch (error) {
-      console.error("Error unarchiving product:", error);
-      alert("Failed to unarchive product. Please try again.");
-    }
-  };
+  //     if (response.ok) {
+  //       console.log("API call successful");
+  //       setFlagPressed(true); // Change the icon after successful API call
+  //     } else {
+  //       const errorText = await response.text(); // Get more details about the error from the response
+  //       console.error(`API call failed: ${errorText}`);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error calling API:", error);
+  //   }
+  // };
 
   return (
     <div
@@ -168,88 +166,14 @@ const GetAllProductsGeneral = () => {
         <div className="listContainerAdminProduct">
           <Navbar />
           <div style={{ padding: "20px" }}>
-            <h2
+            {/* <h2
               style={{ color: "#91c297" }}
               className="text-2xl font-bold text-800 text-center mb-6"
             >
-              All Products
-            </h2>
+              All 
+            </h2> */}
 
-            <div style={{ marginBottom: "20px" }}>
-              <input
-                type="text"
-                placeholder="Search by name..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  marginBottom: "15px",
-                  borderRadius: "5px",
-                  border: `1px solid ${watermelonGreen}`,
-                }}
-              />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  marginBottom: "15px",
-                  borderRadius: "5px",
-                  border: `1px solid ${watermelonGreen}`,
-                }}
-              >
-                <option value="name">Sort by Name</option>
-                <option value="price">Sort by Price</option>
-                <option value="rating">Sort by Rating</option>
-              </select>
-              <div style={{ display: "flex", marginBottom: "15px" }}>
-                <div>
-                  <label>Min Price: </label>
-                  <input
-                    type="number"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(Number(e.target.value))}
-                    style={{
-                      padding: "10px",
-                      width: "80px",
-                      borderRadius: "5px",
-                      border: `1px solid ${watermelonGreen}`,
-                    }}
-                  />
-                </div>
-                <div>
-                  <label>Max Price: </label>
-                  <input
-                    type="number"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(Number(e.target.value))}
-                    style={{
-                      padding: "10px",
-                      width: "80px",
-                      borderRadius: "5px",
-                      border: `1px solid ${watermelonGreen}`,
-                    }}
-                  />
-                </div>
-              </div>
-              <button
-                onClick={resetFilters}
-                style={{
-                  backgroundColor: watermelonPink,
-                  color: "white",
-                  padding: "10px 15px",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  transition: "background-color 0.3s",
-                  width: "25%",
-                }}
-              >
-                Reset Filters
-              </button>
-            </div>
+            <NavTabs />
 
             <div
               style={{
@@ -259,14 +183,15 @@ const GetAllProductsGeneral = () => {
                 padding: "25px",
               }}
             >
-              {filteredProducts.map((product) => (
+              {filteredActivities.map((activity) => (
                 <Card
                   sx={{
                     width: 360,
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
+                    position: "relative", // To position the flag icon relative to the card
                   }}
-                  key={product._id}
+                  key={activity._id}
                 >
                   <div>
                     <Typography
@@ -276,15 +201,49 @@ const GetAllProductsGeneral = () => {
                         color: "#555",
                         fontWeight: "lg",
                         padding: "5px",
+                        display: "inline-flex", // Ensures the elements are inline and aligned
+                        alignItems: "center", // Aligns the items vertically if needed
                       }}
                     >
-                      {product.name}
+                      {activity.Name}
                     </Typography>
+                    {/* Position the flag icon at the right top corner */}
+                    {/* <OutlinedFlagRoundedIcon
+                      sx={{
+                        position: "absolute",
+                        top: "10px", // Adjust this to change the vertical position
+                        right: "10px", // Adjust this to change the horizontal position
+                        marginLeft: "40px", // Optional, if you still want some space between the text and the icon
+                      }}
+                    /> */}
+
+                    {/* Conditionally render the flag icon */}
+                    {flagPressed ? (
+                      <AssistantPhotoRoundedIcon
+                        sx={{
+                          cursor: "pointer", // Change the cursor to indicate it's clickable
+                        }}
+                      />
+                    ) : (
+                      <OutlinedFlagRoundedIcon
+                        sx={{
+                          position: "absolute",
+                          top: "20px", // Adjust this to change the vertical position
+                          right: "10px",
+                          cursor: "pointer", // Change the cursor to indicate it's clickable
+                          marginLeft: "40px", // Optional, if you still want some space between the text and the icon
+                        }}
+                        onClick={handleFlagClick} // Trigger the action when clicked
+                      />
+                    )}
                   </div>
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
-                      src={product.picture || "https://via.placeholder.com/150"}
-                      alt={`Image of ${product.name}`}
+                      src={
+                        activities.picture ||
+                        "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
+                      }
+                      alt={`Image of ${activity.Name}`}
                       loading="lazy"
                     />
                   </AspectRatio>
@@ -308,7 +267,7 @@ const GetAllProductsGeneral = () => {
                           fontFamily: "'Poppins', sans-serif", // Change font for price
                         }}
                       >
-                        ${product.price}
+                        ${activity.Price}
                       </Typography>
                       <div
                         style={{
@@ -333,8 +292,8 @@ const GetAllProductsGeneral = () => {
                         {/* Rating stars */}
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <Rating
-                            name="product-rating"
-                            value={product.rating || 0} // Use product.rating or default to 0
+                            name="activity-rating"
+                            value={activity.ratings || 0} // Use product.rating or default to 0
                             precision={0.5}
                             readOnly
                             size="small"
@@ -348,8 +307,8 @@ const GetAllProductsGeneral = () => {
                               fontFamily: "'Poppins', sans-serif", // Change font for reviews
                             }}
                           >
-                            {product.noOfRatings > 0
-                              ? `${product.noOfRatings} reviews`
+                            {activity.noOfRatings > 0
+                              ? `${activity.noOfRatings} reviews`
                               : "No reviews"}
                           </Typography>
                         </div>
@@ -360,7 +319,7 @@ const GetAllProductsGeneral = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleProductClick(product._id)}
+                      onClick={() => handleProductClick(activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height
@@ -388,4 +347,4 @@ const GetAllProductsGeneral = () => {
   );
 };
 
-export default GetAllProductsGeneral;
+export default ViewItinerariesEvents;

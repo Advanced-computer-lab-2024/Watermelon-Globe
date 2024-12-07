@@ -1,7 +1,7 @@
 .homeAdmin {
   display: flex;
   font-family: "Poppins", sans-serif;
-  height: 100vh;
+  height: 150vh;
   background-color: white;
 
   .homeContainerAdmin {
@@ -53,13 +53,13 @@
 }
 
 .searchBar {
-  color: black;  // Ensures the text color is black
-  padding: 8px;  // Adjust padding for better appearance
-  border: 1px solid #ccc;  // Optional: gives a border to the input
-  border-radius: 4px;  // Optional: gives slightly rounded corners
-  outline: none;  // Removes the default outline on focus
+  color: black; // Ensures the text color is black
+  padding: 8px; // Adjust padding for better appearance
+  border: 1px solid #ccc; // Optional: gives a border to the input
+  border-radius: 4px; // Optional: gives slightly rounded corners
+  outline: none; // Removes the default outline on focus
 
   &:focus {
-    border-color: #888;  // Optional: changes the border color when focused
+    border-color: #888; // Optional: changes the border color when focused
   }
 }
