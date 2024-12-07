@@ -14,8 +14,6 @@ import Typography from "@mui/joy/Typography";
 import BookmarkAdd from "@mui/icons-material/BookmarkAddOutlined";
 import Rating from "@mui/material/Rating";
 import NavTabs from "Admin++/components/navTabs/navTabsEvents";
-import OutlinedFlagRoundedIcon from "@mui/icons-material/OutlinedFlagRounded";
-import AssistantPhotoRoundedIcon from "@mui/icons-material/AssistantPhotoRounded";
 
 const ViewItinerariesEvents = () => {
   const [activities, setActivities] = useState([]); // Ensure default state is an array
@@ -26,7 +24,6 @@ const ViewItinerariesEvents = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [flagPressed, setFlagPressed] = useState(false); // Track if the flag is pressed
 
   const watermelonGreen = "#91c297";
   const watermelonPink = "#d32e65";
@@ -89,8 +86,8 @@ const ViewItinerariesEvents = () => {
     return price;
   };
 
-  const handleProductClick = (activityId) => {
-    navigate(`/ProductsDetailsGeneral/${activityId}/`);
+  const handleProductClick = (productId) => {
+    navigate(`/ProductsDetailsGeneral/${productId}/`);
   };
 
   const resetFilters = () => {
@@ -99,55 +96,6 @@ const ViewItinerariesEvents = () => {
     setMinPrice(0);
     setMaxPrice(1000);
   };
-  const handleFlagClick = (activityId) => {
-    try {
-      fetch(`/api/Admin/markActivityInappropriate/${activityId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Activity was flagged !");
-            fetchActivities();
-          } else {
-            alert("Failed to flag activity. Please try again.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error flagging activity:", error);
-          alert("Failed to flag activity. Please try again.");
-        });
-    } catch (error) {
-      console.error("Error flagging activity:", error);
-      alert("Failed to flag activity. Please try again.");
-    }
-  };
-  // const handleFlagClick = async (activityId) => {
-  //   try {
-  //     // Call your API here
-  //     const response = await fetch(
-  //       `/api/Admin/markActivityInappropriate/${activityId}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       console.log("API call successful");
-  //       setFlagPressed(true); // Change the icon after successful API call
-  //     } else {
-  //       const errorText = await response.text(); // Get more details about the error from the response
-  //       console.error(`API call failed: ${errorText}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error calling API:", error);
-  //   }
-  // };
 
   return (
     <div
@@ -189,7 +137,6 @@ const ViewItinerariesEvents = () => {
                     width: 360,
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
-                    position: "relative", // To position the flag icon relative to the card
                   }}
                   key={activity._id}
                 >
@@ -201,41 +148,10 @@ const ViewItinerariesEvents = () => {
                         color: "#555",
                         fontWeight: "lg",
                         padding: "5px",
-                        display: "inline-flex", // Ensures the elements are inline and aligned
-                        alignItems: "center", // Aligns the items vertically if needed
                       }}
                     >
                       {activity.Name}
                     </Typography>
-                    {/* Position the flag icon at the right top corner */}
-                    {/* <OutlinedFlagRoundedIcon
-                      sx={{
-                        position: "absolute",
-                        top: "10px", // Adjust this to change the vertical position
-                        right: "10px", // Adjust this to change the horizontal position
-                        marginLeft: "40px", // Optional, if you still want some space between the text and the icon
-                      }}
-                    /> */}
-
-                    {/* Conditionally render the flag icon */}
-                    {flagPressed ? (
-                      <AssistantPhotoRoundedIcon
-                        sx={{
-                          cursor: "pointer", // Change the cursor to indicate it's clickable
-                        }}
-                      />
-                    ) : (
-                      <OutlinedFlagRoundedIcon
-                        sx={{
-                          position: "absolute",
-                          top: "20px", // Adjust this to change the vertical position
-                          right: "10px",
-                          cursor: "pointer", // Change the cursor to indicate it's clickable
-                          marginLeft: "40px", // Optional, if you still want some space between the text and the icon
-                        }}
-                        onClick={handleFlagClick} // Trigger the action when clicked
-                      />
-                    )}
                   </div>
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
@@ -243,7 +159,7 @@ const ViewItinerariesEvents = () => {
                         activities.picture ||
                         "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
                       }
-                      alt={`Image of ${activity.Name}`}
+                      alt={`Image of ${activity.name}`}
                       loading="lazy"
                     />
                   </AspectRatio>
