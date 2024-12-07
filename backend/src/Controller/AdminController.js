@@ -1159,6 +1159,56 @@ const markItineraryInappropriate = async (req, res) => {
   }
 };
 
+const markItineraryAppropriate = async (req, res) => {
+  const { id } = req.params; // Get the itinerary ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const itinerary = await Itinerary.Itinerary.findByIdAndUpdate(
+      id,
+      { inappropriate: false }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("guide");
+
+    // If the itinerary is not found, send a 404 error response
+    if (!itinerary) {
+      return res.status(404).json({ error: "Itinerary not found" });
+    }
+
+    // const guide = itinerary.guide;
+    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
+    // guide.notifications.push(notification);
+    // await guide.save();
+
+    // // Check if guide information is complete
+    // if (!guide || !guide.email || !guide.name) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Guide information is incomplete." });
+    // }
+
+    // const guideEmail = "shodimatar@gmail.com";
+    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+
+    // // Attempt to send the email
+    // try {
+    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+    //   console.log("Email sent to:", guideEmail);
+    // } catch (emailError) {
+    //   console.error("Error sending email:", emailError);
+    //   // Continue marking the itinerary as inappropriate even if the email fails
+    // }
+
+    // Send the updated itinerary as a response
+    res
+      .status(200)
+      .json({ message: "Itinerary marked as appropriate", itinerary });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Controller function to mark an activity as inappropriate
 const markActivityInappropriate = async (req, res) => {
   const { id } = req.params; // Get the activity ID from request parameters
@@ -1207,6 +1257,32 @@ const markActivityInappropriate = async (req, res) => {
     res
       .status(200)
       .json({ message: "activity marked as inappropriate", activity });
+  } catch (error) {
+    // Handle any errors during the process
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Controller function to mark an activity as inappropriate
+const markActivityAppropriate = async (req, res) => {
+  const { id } = req.params; // Get the activity ID from request parameters
+
+  try {
+    // Find the itinerary by its ID and update the inappropriate field
+    const activity = await Activity.findByIdAndUpdate(
+      id,
+      { inappropriate: false }, // Set the inappropriate field to true
+      { new: true } // Return the updated document
+    ).populate("Advertiser");
+
+    // If the actvity is not found, send a 404 error response
+    if (!activity) {
+      return res.status(404).json({ error: "activity not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "activity marked as appropriate", activity });
   } catch (error) {
     // Handle any errors during the process
     res.status(500).json({ error: error.message });
@@ -1636,4 +1712,6 @@ module.exports = {
   filterRevenueByProduct,
   getNotificationsAdmin,
   getUploadedDocumentsByID,
+  markActivityAppropriate,
+  markItineraryAppropriate,
 };

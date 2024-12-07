@@ -92,7 +92,7 @@ const Navbar = () => {
         <div className="wrapperAdmin">
           <div className="topAdmin">
             <Link to="/" style={{ textDecoration: "none" }}>
-              <span className="logoAdmin">ADMIN DASHBOARD </span>
+              <span className="logoAdmin">Admin Dashboard </span>
             </Link>
           </div>
 
