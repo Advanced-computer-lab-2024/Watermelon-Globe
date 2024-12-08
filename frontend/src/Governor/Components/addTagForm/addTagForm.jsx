@@ -4,7 +4,7 @@ import { Button, TextField, Typography, Alert } from "@mui/material";
 import { FaTag } from "react-icons/fa6"; // Use a tag icon
 import "./addTagForm.scss"; // Import the CSS file
 
-const AddTagForm = ({ onTagAdded }) => {
+const AddTagFormGovernor = ({ onTagAdded }) => {
   const [tag, setTag] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // Error state
@@ -23,7 +23,7 @@ const AddTagForm = ({ onTagAdded }) => {
     setSuccess(null);
 
     try {
-      const response = await axios.post("/api/Admin/CreatePreferenceTag", {
+      const response = await axios.post("/api/Governor/CreatePreferenceTag", {
         tag,
       });
 
@@ -101,4 +101,4 @@ const AddTagForm = ({ onTagAdded }) => {
   );
 };
 
-export default AddTagForm;
+export default AddTagFormGovernor;

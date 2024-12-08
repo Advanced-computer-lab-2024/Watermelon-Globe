@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Navbar from "../../components/navbar/Navbar";
+import Sidebar from "../../Components/sidebar/Sidebar";
+import Navbar from "../../Components/navbar/Navbar";
 import "./actions.scss";
 import Tooltip from "@mui/material/Tooltip";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -15,7 +15,7 @@ import BookmarkAdd from "@mui/icons-material/BookmarkAddOutlined";
 import Rating from "@mui/material/Rating";
 import NavTabs from "Admin++/components/navTabs/navTabsEvents";
 
-const ViewItinerariesEvents = () => {
+const ViewActitvities = () => {
   const [activities, setActivities] = useState([]); // Ensure default state is an array
   const [filteredActivities, setFilteredActivities] = useState([]); // Ensure default state is an array
   const [searchTerm, setSearchTerm] = useState("");
@@ -263,4 +263,4 @@ const ViewItinerariesEvents = () => {
   );
 };
 
-export default ViewItinerariesEvents;
+export default ViewActitvities;

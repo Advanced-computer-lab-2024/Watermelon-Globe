@@ -14,6 +14,10 @@ const {
   loginGovernor,
   getAllGovernors,
   getGovernorById,
+  getAllTags,
+  getTagById,
+  editTag,
+  deleteTag,
 } = require("../Controller/governorController");
 
 //tourism governor/sites routes
@@ -31,7 +35,10 @@ router.get("/getMySites/:governorID", getMySites);
 router.put("/changePasswordGovernor/:id", changePasswordGovernor);
 router.get("/getPassword", getPassword);
 router.post("/loginGovernor", loginGovernor);
-
+router.get("/getAllTags", getAllTags);
+router.get("/getTagById/:id", getTagById);
+router.put("/editTag/:id", editTag);
+router.delete("/deleteTag/:id", deleteTag);
 // router.post("/addGov", createGov);
 
 module.exports = router;

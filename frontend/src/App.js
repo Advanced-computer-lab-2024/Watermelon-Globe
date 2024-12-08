@@ -237,7 +237,7 @@ const App = () => {
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
 
           {/* Guest and Advertiser Routes */}
-          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/advertiser/:id" element={<AdvertiserPage />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
 
           {/* Guest Routes */}

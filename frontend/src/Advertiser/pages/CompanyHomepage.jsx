@@ -65,7 +65,7 @@ const HomeScreen = () => {
       <div className="homeContainer">
         <Navbar advertiser={advertiser} advertiserId={advertiser?._id} />
 
-        <div className="main-content">
+        {/* <div className="main-content">
           {selectedTab === "addActivity" ? (
             <div className="full-width-form">
               <ActivityForm userId={advertiser?._id} />
@@ -127,6 +127,7 @@ const HomeScreen = () => {
             </>
           )}
         </div>
+      </div> */}
       </div>
     </div>
   );

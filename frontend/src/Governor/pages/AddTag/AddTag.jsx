@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AddTag.scss";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Navbar from "../../Components/navbar/Navbar";
-import AddTagForm from "../../Components/addTagForm/addTagForm";
+import AddTagFormGovernor from "../../Components/addTagForm/addTagForm";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import SellRoundedIcon from "@mui/icons-material/SellRounded";
 
-const AddTag = () => {
+const AddTagGovernor = () => {
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,7 +23,7 @@ const AddTag = () => {
   const fetchTags = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/Admin/GetAllPreferenceTag");
+      const response = await fetch("/api/Governor/getAllTags");
       if (!response.ok) throw new Error("Failed to fetch tags");
       const data = await response.json();
       setTags(data);
@@ -46,7 +46,7 @@ const AddTag = () => {
   // Delete tag
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`/api/Admin/DeletePreferenceTag/${id}`, {
+      const response = await fetch(`/api/Governor/deleteTag/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete tag");
@@ -59,7 +59,7 @@ const AddTag = () => {
   // Open modal for editing
   const handleEdit = (tag) => {
     setCurrentTag(tag);
-    setNewTagName(tag.tag);
+    setNewTagName(tag.type);
     setIsModalOpen(true);
   };
 
@@ -109,45 +109,91 @@ const AddTag = () => {
         <Navbar />
         <div className="cardsContainerTag">
           {tags.map((tag) => (
-            <Card key={tag._id} className="tagCard" sx={{ marginBottom: 2 }}>
-              <CardContent>
-                <Typography variant="h6" component="div">
+            <Card
+              key={tag._id}
+              className="tagCard"
+              sx={{
+                marginBottom: 2,
+                display: "flex",
+                flexDirection: "column", // Stack content vertically
+                height: "200px", // Ensure the card has a fixed height
+              }}
+            >
+              <CardContent
+                style={{ display: "flex", alignItems: "center", flexGrow: 1 }}
+              >
+                <div style={{ marginRight: "20px" }}>
                   <SellRoundedIcon />
-                  {tag.tag}
-                </Typography>
-                <div className="cardActionsTag">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleEdit(tag)}
-                    sx={{
-                      backgroundColor: "#91c297",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#77a17a" },
+
+                  {/* Tag and Historic Period */}
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    style={{
+                      fontSize: "18px", // Adjust text size
+                      color: "#666", // Adjust text color for the type
+                      marginLeft: "20px", // Space between the type and tag
                     }}
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleDelete(tag._id)}
-                    sx={{
-                      backgroundColor: "#d32e65",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#b02453" },
+                    Type: {tag.type}
+                  </Typography>
+
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    style={{
+                      fontSize: "18px", // Adjust text size
+                      color: "#666", // Adjust text color
+                      marginLeft: "20px",
                     }}
                   >
-                    Delete
-                  </Button>
+                    Period: {tag.historicPeriod}
+                  </Typography>
                 </div>
               </CardContent>
+
+              {/* Buttons container */}
+              <div
+                className="cardActionsTag"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "10px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleEdit(tag)}
+                  sx={{
+                    backgroundColor: "#91c297",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#77a17a" },
+                    width: "50%",
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleDelete(tag._id)}
+                  sx={{
+                    backgroundColor: "#d32e65",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#b02453" },
+                    width: "50%",
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
             </Card>
           ))}
         </div>
 
         {/* AddTagForm */}
-        <AddTagForm onTagAdded={handleTagAdded} />
+        <AddTagFormGovernor onTagAdded={handleTagAdded} />
       </div>
 
       {/* Modal */}
@@ -220,4 +266,4 @@ const AddTag = () => {
   );
 };
 
-export default AddTag;
+export default AddTagGovernor;

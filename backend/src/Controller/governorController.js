@@ -48,7 +48,26 @@ const getTagById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+// Delete Tag
+const deleteTag = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the tag ID from the request parameters
 
+    // Find and delete the tag by its ID
+    const deletedTag = await Tag.findByIdAndDelete(id);
+
+    if (!deletedTag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Tag deleted successfully", tag: deletedTag });
+  } catch (error) {
+    console.error("Error deleting tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 // Edit Tag
 const editTag = async (req, res) => {
   const { id } = req.params;
@@ -70,6 +89,18 @@ const editTag = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+// Get All Tags
+const getAllTags = async (req, res) => {
+  try {
+    const tags = await Tag.find(); // Fetch all tags
+    res.status(200).json(tags);
+  } catch (error) {
+    console.error("Error fetching tags:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 const getAllGovernors = async (req, res) => {
   try {
     // Fetch all governors and populate their tourismSite references
@@ -383,6 +414,30 @@ const loginGovernor = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+const createTag = async (req, res) => {
+  const { type, historicPeriod } = req.body;
+
+  // Validate input data
+  if (!type || !historicPeriod) {
+    return res
+      .status(400)
+      .json({ message: "Type and historic period are required." });
+  }
+
+  try {
+    // Create a new tag
+    const newTag = new Tag({ type, historicPeriod });
+
+    // Save the tag to the database
+    const savedTag = await newTag.save();
+
+    // Return the newly created tag in the response
+    res.status(201).json(savedTag);
+  } catch (error) {
+    console.error("Error creating tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 module.exports = {
   createSite,
@@ -397,4 +452,9 @@ module.exports = {
   loginGovernor,
   getAllGovernors,
   getGovernorById,
+  getAllTags,
+  getTagById,
+  editTag,
+  deleteTag,
+  createTag,
 };

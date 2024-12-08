@@ -72,6 +72,7 @@ import axios from "axios";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
 import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
+import LocalActivityRoundedIcon from "@mui/icons-material/LocalActivityRounded";
 
 const Sidebar = () => {
   const { id } = useParams();
@@ -82,7 +83,9 @@ const Sidebar = () => {
     const fetchUserDetails = async () => {
       try {
         // Make an API call to fetch user details using the ID
-        const response = await axios.get(`/api/Seller/GetSeller/${id}`);
+        const response = await axios.get(
+          `/api/Advertiser/getCompanyProfileById/${id}`
+        );
         setUser(response.data); // Update state with the user details
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -107,14 +110,14 @@ const Sidebar = () => {
         <ul>
           <p className="titleAdmin">MAIN</p>
 
-          <Link to={`/SellerHome/${id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/advertiser/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
           </Link>
 
-          <p className="titleAdmin">PRODUCTS</p>
+          <p className="titleAdmin">ACTIVITIES</p>
 
           {/* My Products */}
           <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
@@ -124,7 +127,7 @@ const Sidebar = () => {
               }
             >
               <MovingRoundedIcon className="iconAdmin" />
-              <span>My Products</span>
+              <span>My Activities </span>
             </li>
           </Link>
 
@@ -138,20 +141,16 @@ const Sidebar = () => {
                 isActive(`/GetAllProductsGeneral/${id}`) ? "active-seller" : ""
               }
             >
-              <StoreIcon className="iconAdmin" />
-              <span>All Products</span>
+              <LocalActivityRoundedIcon className="iconAdmin" />
+              <span>All Activities</span>
             </li>
           </Link>
 
           {/* Create New Product */}
-          <Link to={`/CreateProduct/${id}`} style={{ textDecoration: "none" }}>
-            <li
-              className={
-                isActive(`/CreateProduct/${id}`) ? "active-seller" : ""
-              }
-            >
+          <Link to={`/add-activity/${id}`} style={{ textDecoration: "none" }}>
+            <li>
               <AddIcon className="iconAdmin" />
-              <span>Create New Product</span>
+              <span>Create New Activities</span>
             </li>
           </Link>
 

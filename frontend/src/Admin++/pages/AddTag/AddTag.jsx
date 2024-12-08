@@ -109,39 +109,58 @@ const AddTag = () => {
         <Navbar />
         <div className="cardsContainerTag">
           {tags.map((tag) => (
-            <Card key={tag._id} className="tagCard" sx={{ marginBottom: 2 }}>
-              <CardContent>
+            <Card
+              key={tag._id}
+              className="tagCard"
+              sx={{
+                marginBottom: 2,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6" component="div">
                   <SellRoundedIcon />
                   {tag.tag}
                 </Typography>
-                <div className="cardActionsTag">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleEdit(tag)}
-                    sx={{
-                      backgroundColor: "#91c297",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#77a17a" },
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleDelete(tag._id)}
-                    sx={{
-                      backgroundColor: "#d32e65",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#b02453" },
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </div>
               </CardContent>
+
+              <div
+                className="cardActionsTag"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "10px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleEdit(tag)}
+                  sx={{
+                    backgroundColor: "#91c297",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#77a17a" },
+                    width: "50%",
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleDelete(tag._id)}
+                  sx={{
+                    backgroundColor: "#d32e65",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#b02453" },
+                    width: "50%",
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
             </Card>
           ))}
         </div>
