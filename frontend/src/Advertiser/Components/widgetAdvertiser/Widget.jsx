@@ -20,7 +20,7 @@ const Widget = ({ type }) => {
       const fetchProductRevenue = async () => {
         try {
          // const response = await fetch(`/api/Seller/totalProductRevenueForSeller/${sellerId}`);
-          const response =await fetch(`/api/TourGuide/ItineraryRevenue/${id}`)
+          const response =await fetch(`/api/Advertiser/ActivityRevenue/${id}`)
           const data = await response.json();
           setProductRevenue(data.totalRevenue); // Update the state with the fetched revenue
         } catch (error) {
@@ -105,7 +105,7 @@ const Widget = ({ type }) => {
       break;
     case "product":
       data = {
-        title: "ITINERARY REVENUE",
+        title: "ACTIVITY REVENUE",
         isMoney: true,
         // link: "View all orders",
         icon: (

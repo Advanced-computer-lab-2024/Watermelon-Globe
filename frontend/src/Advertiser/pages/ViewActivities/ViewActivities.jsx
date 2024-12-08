@@ -87,7 +87,7 @@ const ViewActitvities = () => {
   };
 
   const handleProductClick = (productId) => {
-    navigate(`/ProductsDetailsGeneral/${productId}/`);
+    navigate(`/activityDetail/${productId}`);
   };
 
   return (

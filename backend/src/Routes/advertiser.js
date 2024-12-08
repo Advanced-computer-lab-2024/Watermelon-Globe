@@ -20,10 +20,12 @@ const {
   getCompanyProfileById,
   ActivityRevenue,
   advertiserMonthlyRevenue,
-  filterRevenueByDateAdvertiser
+  filterRevenueByDateAdvertiser,
+  getAllActivitiesByAdvertiser
 } = require("../Controller/companyProfileController");
 
 const { getSalesReport } = require("../Controller/companyProfileController");
+const { uploadPicture } = require("../Controller/activityController");
 
 router.get("/frontendAdvertiserTable", frontendAdvertiserTable);
 router.get("/frontendPendingAdvertiserTable", frontendPendingAdvertiserTable);
@@ -47,11 +49,15 @@ router.get("/sales-report/:advertiserId", getSalesReport);
 router.put("/requestDeletionAdvertiser/:id", requestDeletionAdvertiser);
 router.get("/getNotificationsAdvertiser/:id", getNotificationsAdvertiser);
 
+router.get("/getAllActivitiesByAdvertiser/:advertiserId", getAllActivitiesByAdvertiser);
+
 router.get("/ActivityRevenue/:advertiserId", ActivityRevenue);
 
 router.get("/advertiserMonthlyRevenue/:advertiserId", advertiserMonthlyRevenue);
 
 router.get("/filterRevenueByDateAdvertiser/:advertiserId", filterRevenueByDateAdvertiser);
+
+router.put("uploadPicture", uploadPicture);
 
 // router.post("/addAdvertiser", createAdvertiser);
 

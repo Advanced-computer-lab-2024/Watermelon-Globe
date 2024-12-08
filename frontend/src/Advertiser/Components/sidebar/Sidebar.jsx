@@ -159,18 +159,18 @@ const Sidebar = () => {
           </Link> */}
 
           <p className="titleAdmin">MANAGE ACCOUNT</p>
-          <Link to={`/viewProfile/${id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/advertiserProfile/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />
               <span>View Profile</span>
             </li>
           </Link>
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          {/* <Link to={`/ChangePasswordAdvertiser/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <PasswordRoundedIcon className="iconAdmin" />
               <span>Change Password</span>
             </li>
-          </Link>
+          </Link> */}
         </ul>
       </div>
     </div>
