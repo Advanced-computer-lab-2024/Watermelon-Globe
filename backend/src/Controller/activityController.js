@@ -98,6 +98,7 @@ const createActivity = async (req, res) => {
       bookingOpen,
       Advertiser,
       tags,
+      Category
     } = req.body;
 
     if (!Advertiser) {
@@ -125,6 +126,7 @@ const createActivity = async (req, res) => {
       Discount,
       bookingOpen,
       Advertiser,
+      Category,
       tags: tagDocuments.map((tag) => tag._id),
     });
 

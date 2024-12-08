@@ -64,6 +64,7 @@ import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import AccountPage from "./Advertiser/pages/AccountPage/AccountPage.jsx";
 import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
 import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.jsx";
+import ActivityDetails from "./Advertiser/Components/ActivityDetails/ActivityDetails.jsx";
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
 import ViewActitvities from "Advertiser/pages/ViewActivities/ViewActivities";
@@ -334,6 +335,7 @@ const App = () => {
             path="/activityDetails/:id/:profileId"
             element={<AdvertiserActivityDetails />}
           />
+          <Route path="/activityDetail/:id" element={<ActivityDetails />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
