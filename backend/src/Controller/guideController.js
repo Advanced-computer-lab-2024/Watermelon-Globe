@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const itineraryModel = require("../Models/itineraryModel.js");
 const tourGuide = require("../Models/tourGuideModel.js");
+const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
 
 
@@ -896,6 +897,270 @@ const getNotificationsGuide = async (req, res) => {
   }
 };
 
+const getAllItinerariesByGuide = async (req, res) => {
+  try {
+    const { guideId } = req.params; // Assuming the guideId is passed as a parameter
+
+    // Fetch all itineraries that have the matching guideId
+    const itineraries = await itineraryModel.Itinerary.find({ guide: guideId }).populate('guide').populate('activities'); // Optionally, populate related data
+
+    // Check if any itineraries are found
+    if (!itineraries || itineraries.length === 0) {
+      return res.status(404).json({
+        message: "No itineraries found for this guide",
+      });
+    }
+
+    // Return the list of itineraries
+    res.status(200).json({
+      message: "Itineraries retrieved successfully",
+      itineraries,
+    });
+  } catch (error) {
+    console.error("Error retrieving itineraries for guide:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+// Function to calculate total revenue from booked itineraries filtered by guide ID (10% of their price)
+const ItineraryRevenue = async (req, res) => {
+  try {
+    const { guideId } = req.params; // Assuming the guideId is passed as a parameter
+
+    // Step 1: Retrieve all child itineraries (booked itineraries)
+    const childItineraries = await ChildItinerary.find({});
+
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all child itineraries and check if the associated itinerary has the guideId
+    for (const childItinerary of childItineraries) {
+      // Fetch the parent itinerary (itinerary model)
+      const itinerary = await itineraryModel.Itinerary.findById(childItinerary.itinerary);
+
+      // Check if the guide of the itinerary matches the provided guideId
+      if (itinerary && itinerary.guide.toString() === guideId) {
+        if (childItinerary.totalPrice) {
+          // Add 10% of the total price for this child itinerary to the total revenue
+          totalRevenue += childItinerary.totalPrice * 0.1;
+        }
+      }
+    }
+
+    // Step 4: Send the total revenue as a response
+    res.status(200).json({
+      message: "Total revenue calculated successfully for the tour guide",
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: "Error calculating total revenue for the tour guide",
+      error: error.message,
+    });
+  }
+};
+
+
+// Function to calculate total revenue from booked itineraries filtered by itinerary ID (10% of their price)
+const RevenuefilterItinerary = async (req, res) => {
+  try {
+    const { itineraryId } = req.params; // Assuming the itineraryId is passed as a parameter
+
+    // Step 1: Retrieve all child itineraries (booked itineraries) for the specific itinerary
+    const childItineraries = await ChildItinerary.find({ itinerary: itineraryId });
+
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all child itineraries and calculate the revenue
+    for (const childItinerary of childItineraries) {
+      if (childItinerary.totalPrice) {
+        // Add 10% of the total price for this child itinerary to the total revenue
+        totalRevenue += childItinerary.totalPrice * 0.1;
+      }
+    }
+
+    // Step 4: Fetch the parent itinerary to include its name in the response
+    const parentItinerary = await Itinerary.findById(itineraryId);
+    const itineraryName = parentItinerary ? parentItinerary.name : 'Unknown Itinerary';
+
+    // Step 5: Send the total revenue as a response
+    res.status(200).json({
+      message: "Total revenue calculated successfully for the itinerary",
+      itineraryId,
+      itineraryName,
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+      bookingsCount: childItineraries.length
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error('Error calculating itinerary revenue:', error);
+    res.status(500).json({
+      message: "Error calculating total revenue for the itinerary",
+      error: error.message,
+    });
+  }
+};
+
+
+const guideMonthlyRevenue = async (req, res) => {
+  try {
+    const { guideId } = req.params; // Assuming guideId is passed as a route parameter
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1); // January 1st of the current year
+    const endDate = new Date(currentYear, 11, 31); // December 31st of the current year
+
+    if (!guideId) {
+      return res.status(400).json({ message: "Guide ID is required" });
+    }
+
+    // Aggregate itinerary revenue for the current year
+    const itineraryRevenue = await ChildItinerary.aggregate([
+      {
+        $lookup: {
+          from: 'itineraries',
+          localField: 'itinerary',
+          foreignField: '_id',
+          as: 'parentItinerary'
+        }
+      },
+      { $unwind: '$parentItinerary' },
+      {
+        $match: {
+          'parentItinerary.guide': new mongoose.Types.ObjectId(guideId),
+          'createdAt': { $gte: startDate, $lte: endDate },
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          totalRevenue: {
+            $sum: { $multiply: ['$totalPrice', 0.1] } // Calculate 10% of the total price
+          },
+          bookingsCount: { $sum: 1 }
+        }
+      },
+      { $sort: { '_id.month': 1 } }
+    ]);
+
+    // Initialize an array for all 12 months with zero revenue
+    const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      itineraryRevenue: 0,
+      bookingsCount: 0,
+      totalRevenue: 0
+    }));
+
+    // Populate the monthly revenue with the actual data from aggregation
+    itineraryRevenue.forEach(entry => {
+      const monthIndex = entry._id.month - 1; // Month is 1-based, array is 0-based
+      monthlyRevenue[monthIndex].itineraryRevenue = entry.totalRevenue;
+      monthlyRevenue[monthIndex].bookingsCount = entry.bookingsCount;
+      monthlyRevenue[monthIndex].totalRevenue = entry.totalRevenue;
+    });
+
+    // Add month names and format numbers
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedRevenue = monthlyRevenue.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1],
+      itineraryRevenue: Number(item.itineraryRevenue.toFixed(2)),
+      totalRevenue: Number(item.totalRevenue.toFixed(2))
+    }));
+
+    // Calculate total yearly revenue and bookings
+    const yearlyTotals = formattedRevenue.reduce((acc, month) => {
+      acc.totalRevenue += month.totalRevenue;
+      acc.totalBookings += month.bookingsCount;
+      return acc;
+    }, { totalRevenue: 0, totalBookings: 0 });
+
+    // Return the response with the formatted revenue data
+    res.status(200).json({
+      message: "Yearly itinerary revenue calculated successfully for the tour guide",
+      year: currentYear,
+      guideId,
+      data: formattedRevenue,
+      yearlyTotals: {
+        totalRevenue: Number(yearlyTotals.totalRevenue.toFixed(2)),
+        totalBookings: yearlyTotals.totalBookings
+      }
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly itinerary revenue:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const filterRevenueByDateGuide = async (req, res) => {
+  try {
+    const { date } = req.query;
+    const { guideId } = req.params; // guideId passed as a route parameter
+
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    if (!guideId) {
+      return res.status(400).json({ message: "Guide ID is required" });
+    }
+
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const itineraryRevenue = await ChildItinerary.aggregate([
+      {
+        $lookup: {
+          from: "itineraries",
+          localField: "itinerary",
+          foreignField: "_id",
+          as: "parentItinerary"
+        }
+      },
+      { $unwind: "$parentItinerary" },
+      {
+        $match: {
+          "parentItinerary.guide": new mongoose.Types.ObjectId(guideId),
+          "createdAt": { $gte: selectedDate, $lt: nextDate },
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } }, // Calculate 10% of the total price
+          bookingsCount: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const totalItineraryRevenue = itineraryRevenue.length > 0 ? itineraryRevenue[0].totalRevenue : 0;
+    const bookingsCount = itineraryRevenue.length > 0 ? itineraryRevenue[0].bookingsCount : 0;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully for the tour guide",
+      date: selectedDate.toISOString().split("T")[0],
+      itineraryRevenue: Number(totalItineraryRevenue.toFixed(2)),
+      bookingsCount: bookingsCount,
+      totalRevenue: Number(totalItineraryRevenue.toFixed(2))
+    });
+  } catch (error) {
+    console.error("Error filtering revenue by date for guide:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
+
 module.exports = {
   deleteTourGuide,
 };
@@ -930,4 +1195,8 @@ module.exports = {
   getNotificationsGuide,
   frontendGuidesTable,
   frontendPendingGuidesTable,
+  getAllItinerariesByGuide,
+  ItineraryRevenue,
+  guideMonthlyRevenue,
+  filterRevenueByDateGuide
 };
