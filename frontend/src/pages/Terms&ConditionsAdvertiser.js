@@ -1,14 +1,15 @@
-//for seller
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { FaFileSignature } from "react-icons/fa6";
+import Alert from "@mui/material/Alert";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 const TermsAndConditions = () => {
   const { userId } = useParams();
-  console.log(userId);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleAcceptChange = () => {
     setAccepted(!accepted);
@@ -36,13 +37,9 @@ const TermsAndConditions = () => {
       }
 
       const data = await response.json();
-      //alert("Thank you for accepting the terms and conditions!");
       console.log("API response:", data);
 
-      // Redirect to a new page (e.g., seller dashboard or homepage) after accepting terms
-      // navigate("/advertiser"); // Replace with your target path
-      navigate(`/AdvertiserSignupConfirm/${userId}`);
-      //navigate(`/SellerPage/${sellerId}`); // Replace with your target path
+      navigate(`/advertiserSignupConfirm/${userId}`);
     } catch (error) {
       console.error("Error:", error);
       alert("There was a problem accepting the terms. Please try again.");
@@ -51,18 +48,18 @@ const TermsAndConditions = () => {
     }
   };
 
+  const handleDecline = () => {
+    setShowAlert(true);
+  };
+
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <div style={styles.header}>
-          <img
-            src="https://img.icons8.com/ios-filled/50/000000/document.png"
-            alt="terms-icon"
-            style={styles.icon}
-          />
+          <DescriptionIcon sx={styles.icon} />
           <h2 style={styles.title}>TERMS OF SERVICE</h2>
         </div>
-        <div style={styles.content}>
+        {/* <div style={styles.content}>
           <p>
             This summary is provided only for convenience. Please review the
             Terms of Service below in their entirety for important information
@@ -73,6 +70,158 @@ const TermsAndConditions = () => {
             "User Content" means content that Users have created and posted to
             the Platform for other Users to view and comment on. You represent
             and warrant that you own the User Content you post to the Platform.
+          </p>
+        </div> */}
+        <div style={styles.content}>
+          <p>
+            Welcome to{" "}
+            <span style={{ color: "#d32e65", fontWeight: "bold" }}>
+              ✨ Watermelon Globe ✨
+            </span>
+            ! By using our platform, you agree to the following terms and
+            conditions. Please read them carefully, as they contain important
+            information about your rights and responsibilities when accessing or
+            using our services.
+          </p>
+
+          <h3 style={styles.subheading}>1. ACCEPTANCE OF TERMS</h3>
+          <p>
+            By accessing or using the website and associated services
+            (collectively, the “Platform”), you confirm that you accept these
+            Terms of Service and agree to abide by them. If you do not agree
+            with these terms, you must not use the Platform.
+          </p>
+
+          <h3 style={styles.subheading}>2. USE OF THE PLATFORM</h3>
+          <p>
+            You may use the Platform only for lawful purposes and in accordance
+            with these Terms of Service. You agree not to:
+          </p>
+          <ul>
+            <li>
+              Violate any applicable local, state, national, or international
+              laws or regulations.
+            </li>
+            <li>Use the Platform for fraudulent or misleading purposes.</li>
+            <li>
+              Post or transmit any harmful, threatening, or otherwise
+              objectionable material.
+            </li>
+            <li>
+              Interfere with or disrupt the integrity or security of the
+              Platform.
+            </li>
+          </ul>
+
+          <h3 style={styles.subheading}>3. USER CONTENT</h3>
+          <p>
+            "User Content" includes reviews, travel tips, photos, or other
+            materials that Users post on the Platform. By posting User Content,
+            you grant us a non-exclusive, worldwide, royalty-free, perpetual,
+            and irrevocable license to use, reproduce, display, and distribute
+            your content for purposes related to our services. You represent and
+            warrant that:
+          </p>
+          <ul>
+            <li>
+              You own or have the necessary permissions to post your User
+              Content.
+            </li>
+            <li>
+              Your User Content does not violate any third-party rights,
+              including copyright or privacy rights.
+            </li>
+          </ul>
+
+          <h3 style={styles.subheading}>4. ACCOUNTS AND SECURITY</h3>
+          <p>
+            To access certain features of the Platform, you may be required to
+            create an account. You are responsible for maintaining the
+            confidentiality of your account credentials and for all activities
+            that occur under your account. Notify us immediately if you suspect
+            any unauthorized use of your account.
+          </p>
+
+          <h3 style={styles.subheading}>5. TRAVEL PLANNING AND LIABILITY</h3>
+          <p>
+            While we strive to provide accurate and up-to-date information about
+            destinations, travel services, and itineraries, we do not guarantee
+            the completeness or reliability of such information. You acknowledge
+            that:
+          </p>
+          <ul>
+            <li>
+              All bookings and arrangements are made directly with third-party
+              providers, and we are not responsible for their performance or
+              services.
+            </li>
+            <li>
+              We are not liable for any injuries, losses, or damages resulting
+              from travel activities or reliance on information provided through
+              the Platform.
+            </li>
+          </ul>
+
+          <h3 style={styles.subheading}>6. INTELLECTUAL PROPERTY</h3>
+          <p>
+            The Platform and its content, including but not limited to text,
+            graphics, logos, and software, are owned by us or our licensors and
+            are protected by copyright, trademark, and other intellectual
+            property laws. You may not copy, reproduce, or distribute any part
+            of the Platform without our prior written consent.
+          </p>
+
+          <h3 style={styles.subheading}>7. TERMINATION</h3>
+          <p>
+            We reserve the right to suspend or terminate your access to the
+            Platform at our sole discretion, without notice, if you violate
+            these Terms of Service or engage in prohibited activities.
+          </p>
+
+          <h3 style={styles.subheading}>8. DISCLAIMER OF WARRANTIES</h3>
+          <p>
+            The Platform is provided "as is" and "as available" without
+            warranties of any kind, either express or implied. We do not warrant
+            that the Platform will be uninterrupted, error-free, or secure.
+          </p>
+
+          <h3 style={styles.subheading}>9. LIMITATION OF LIABILITY</h3>
+          <p>
+            To the fullest extent permitted by law, we shall not be liable for
+            any indirect, incidental, or consequential damages arising from your
+            use of the Platform.
+          </p>
+
+          <h3 style={styles.subheading}>10. GOVERNING LAW</h3>
+          <p>
+            These Terms of Service are governed by and construed in accordance
+            with the laws of [Your Jurisdiction], without regard to its conflict
+            of law principles.
+          </p>
+
+          <h3 style={styles.subheading}>11. CHANGES TO THESE TERMS</h3>
+          <p>
+            We may revise these Terms of Service from time to time. Any changes
+            will be effective upon posting on the Platform. Your continued use
+            of the Platform after such changes constitutes your acceptance of
+            the revised terms.
+          </p>
+
+          <h3 style={styles.subheading}>12. CONTACT US</h3>
+          <p>
+            If you have any questions or concerns about these Terms of Service,
+            please contact us at
+            <a
+              href="mailto:support@WatermelonGlobe.com"
+              style={{
+                color: "#d32e65", // Set your desired color
+                textDecoration: "underline", // Add underline
+                fontWeight: "bold", // Optional: Make the text bold
+              }}
+            >
+              support@WatermelonGlobe.com
+            </a>
+            .
           </p>
         </div>
 
@@ -96,22 +245,24 @@ const TermsAndConditions = () => {
             >
               {loading ? "Processing..." : "Accept"}
             </button>
-            <button
-              style={styles.declineButton}
-              onClick={() =>
-                alert(
-                  "You can't access the system without accepting terms and conditions"
-                )
-              }
-            >
+            <button style={styles.declineButton} onClick={handleDecline}>
               Decline
             </button>
           </div>
         </div>
+        {showAlert && (
+          <div style={styles.alertContainer}>
+            <Alert severity="warning" onClose={() => {}} sx={{ color: "#888" }}>
+              You cannot access the system without accepting terms and
+              conditions
+            </Alert>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
 const styles = {
   overlay: {
     position: "fixed",
@@ -119,40 +270,44 @@ const styles = {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)", // Darker overlay
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
   },
   modal: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f9fafb", // Light gray background
     padding: "30px",
     borderRadius: "12px",
-    width: "450px",
+    width: "550px",
     maxWidth: "90%",
     textAlign: "center",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
-    fontFamily: "'Arial', sans-serif",
-    color: "#333",
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
+    fontFamily: "'Poppins', sans-serif", // Google Font
+    color: "#222", // Text color
   },
   header: {
     marginBottom: "20px",
+    display: "flex",
+    alignItems: "center", // Align icon and text horizontally
+    justifyContent: "center", // Center them horizontally
   },
   icon: {
-    width: "40px",
-    marginBottom: "10px",
+    fontSize: "30px", // Increase icon size
+    marginRight: "10px", // Space between icon and text
+    color: "#d32e65", // Optional: Adjust color of the icon
   },
   title: {
-    fontSize: "18px",
+    fontSize: "20px",
     fontWeight: "bold",
-    color: "#333",
+    color: "#91c297",
     textTransform: "uppercase",
     letterSpacing: "1px",
   },
   content: {
     fontSize: "14px",
-    color: "#666",
+    color: "#888",
     textAlign: "left",
     overflowY: "auto",
     maxHeight: "200px",
@@ -161,10 +316,11 @@ const styles = {
     borderBottom: "1px solid #ddd",
     margin: "10px 0",
   },
+
   subheading: {
     fontSize: "15px",
     fontWeight: "bold",
-    color: "#555",
+    color: "#91c297",
     marginTop: "15px",
   },
   actions: {
@@ -176,14 +332,20 @@ const styles = {
   checkboxContainer: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "flex-start", // Ensure content aligns to the left
     marginBottom: "15px",
+    width: "100%", // Make sure it takes full width
+    textAlign: "center", // Aligns text to the left
   },
   checkbox: {
-    marginRight: "8px",
+    width: "20px", // Set width for a bigger checkbox
+    height: "20px", // Set height for a bigger checkbox
+    accentColor: "#d32e65", // Change the checkbox color
+    cursor: "pointer", // Add pointer cursor for better UX
+    marginRight: "10px",
   },
   label: {
-    fontSize: "12px",
+    fontSize: "14px",
     color: "#555",
   },
   buttonContainer: {
@@ -193,7 +355,7 @@ const styles = {
     marginTop: "10px",
   },
   acceptButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#91c297", // Blue button
     color: "#fff",
     padding: "10px 20px",
     border: "none",
@@ -204,7 +366,7 @@ const styles = {
     marginRight: "10px",
   },
   disabledButton: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#ddd", // Disabled button color
     color: "#aaa",
     padding: "10px 20px",
     border: "none",
@@ -215,14 +377,18 @@ const styles = {
     cursor: "not-allowed",
   },
   declineButton: {
-    backgroundColor: "#ddd",
-    color: "#333",
+    backgroundColor: "#d32e65", // Red button
+    color: "#fff",
     padding: "10px 20px",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
     fontSize: "14px",
     flex: 1,
+  },
+  alertContainer: {
+    marginTop: "20px", // Adds space above the alert
+    width: "100%", // Ensures the alert spans the modal width
   },
 };
 

@@ -1139,9 +1139,12 @@ const markItineraryInappropriate = async (req, res) => {
     }
 
     const guide = itinerary.guide;
-    const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
+    console.log(`notifications are ${guide.notifications}`);
+    const notification = `Your Itinerary "${itinerary.name}"  has been flagged inappropriate`;
     guide.notifications.push(notification);
+    console.log(`notifications are ${guide.notifications}`);
     await guide.save();
+    console.log(`notifications are ${guide.notifications}`);
 
     // Check if guide information is complete
     if (!guide || !guide.email || !guide.name) {
@@ -1214,7 +1217,7 @@ const markActivityInappropriate = async (req, res) => {
       return res.status(404).json({ error: "activity not found" });
     }
     const advertiser = activity.Advertiser;
-    const notification = `Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`;
+    const notification = `Your Activity "${activity.Name}"  has been flagged inappropriate`;
     advertiser.notifications.push(notification);
     await advertiser.save();
 

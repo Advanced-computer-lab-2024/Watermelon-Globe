@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Sidebar from "../Components/sidebar/Sidebar";
 import Navbar from "../Components/navbar/Navbar";
 import "./homeGuide.scss";
+import { useParams } from "react-router-dom";
+import { ReactNotifications } from "react-notifications-component";
 import Widget from "../Components/widgetGuide/Widget";
 import Featured from "../Components/featuredGuide/Featured";
 import Chart from "../Components/chartGuide/Chart";
@@ -17,9 +19,9 @@ const TourguideHome = () => {
 
   return (
     <div className="homeAdmin">
-      <Sidebar />
-      <div className="homeContainerAdmin">
-        <Navbar />
+     <Sidebar/>
+      <div className="homeContainer-guide">
+        <Navbar/>
         <div className="widgetsAdminHome">
           {/* <Widget type="user" /> */}
           <Widget type="product" />

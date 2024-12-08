@@ -4,6 +4,11 @@ import "./App.css";
 // Importing all necessary components
 import SignupPage from "./Components/SignUp";
 
+// SignUpNew Page
+import SignUpSellerNew from "Tourist/pages/SellerSignUp";
+import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
+import SignupGuideNew from "Tourist/pages/GuideSignUp";
+import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
 import AllLogin from "./Components/AllLogin";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
@@ -54,7 +59,7 @@ import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewIti
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
-import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
+// import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import AccountPage from "./Advertiser/pages/AccountPage/AccountPage.jsx";
 import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
@@ -82,7 +87,7 @@ import ViewQuantity from "./Seller/Components/ViewAvailableQuantity.js";
 import ProductDetails from "./Seller/Components/productDetails.jsx";
 import SearchProductByName from "./Seller/Components/SearchProductByName.js";
 import SellerProfile from "./Seller/Components/sellerProfile.jsx";
-import ViewProfile from "./Seller/Components/viewProfile.js";
+import ViewProfile from "./Seller/Components/viewProfile.tsx";
 import ChangePasswordSeller from "./Seller/Components/changePasswordSeller.js";
 import GetAllProductsGeneral from "./Seller/Components/GetAllProductsGeneral.jsx";
 import ProductsDetailsGeneral from "./Seller/Components/ProductsDetailsGeneral.jsx";
@@ -174,6 +179,12 @@ const App = () => {
 
           <Route path="/GuestPage" element={<GuestPage />} />
 
+          <Route path="/sign-in/sellers" element={<SignUpSellerNew />} />
+          <Route
+            path="/sign-in/advertisers"
+            element={<SignupAdvertiserNew />}
+          />
+          <Route path="/sign-in/tour-guides" element={<SignupGuideNew />} />
           {/* Admin Routes */}
           {/*<Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />

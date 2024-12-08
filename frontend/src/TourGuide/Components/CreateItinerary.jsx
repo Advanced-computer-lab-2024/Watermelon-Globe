@@ -194,11 +194,23 @@ const handleSubmit = async (e) => {
   };
   
   return (
-    <div className="listGuide">
-      <Sidebar />
-      <div className="listContainerGuide">
-        <Navbar />
-        <div className="min-h-screen bg-gradient-to-b from-green-100 via-pink-50 to-green-200 py-10">
+    <div
+    style={{
+      backgroundColor: "#fff",
+      minHeight: "100vh", // Ensures it covers the full viewport
+      width: "102%", // Full width of the viewport
+      margin: 0, // Remove default margins
+      padding: 0, // Remove default padding
+      display: "flex", // Optional: for flexible alignment
+      flexDirection: "column",
+    }}
+  >
+    <div className="listAdminProduct">
+      <Sidebar/>
+      <div className="listContainerAdminProduct">
+        <Navbar/>
+        <div style={{ padding: "20px" }}>
+        <div className="min-h-screen ">
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
              <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">
               Create Itinerary
@@ -530,6 +542,8 @@ const handleSubmit = async (e) => {
           </div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
