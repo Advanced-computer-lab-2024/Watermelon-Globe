@@ -122,8 +122,7 @@ export default function MyBookings() {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
-      <p>hello</p>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto mt-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-primary p-5 relative">
             <div className="flex items-center space-x-4">

@@ -43,7 +43,7 @@ const HotelSearch: React.FC<HotelSearchProps> = ({ token, setHotels, hotels }) =
   };
 
   const handleHotelClick = (hotelId: string, hotelName: string | undefined) => {
-    navigate(`/HotelOffers/${hotelId}/${hotelName || 'UnnamedHotel'}`);
+    navigate(`/HotelOffers/${hotelId}/${hotelName}`);
   };
 
   return (
