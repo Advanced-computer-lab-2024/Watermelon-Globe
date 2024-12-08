@@ -197,15 +197,15 @@ export default function TouristDetails() {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
-
+      <p>hello</p>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <p>hello</p>
+          
           <div className="bg-primary p-5 relative">
             <div className="absolute top-4 right-4">
               <button
                 onClick={handleUpdate}
-                className="flex items-center px-3 py-1 bg-white text-primary hover:bg-hover/90 rounded shadow"
+                className="flex items-center px-3 py-1 bg-white text-primary hover:bg-darkPinkHover/90 rounded shadow"
               >
                 <FaEdit className="mr-1" size="1em" />
                 Edit
@@ -334,92 +334,109 @@ export default function TouristDetails() {
               </div>
             </div>
             <div className="border-t border-gray-200 my-6"></div>
-            <div className="flex justify-between items-center" >
-              {isEditing ? (
-                <div className="flex space-x-4" style={{ marginLeft: "610px" }}>
-                  <button
-                    onClick={handleConfirm}
-                    className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-                  >
-                    <FaCheck className="mr-2" size="1em" />
-                    Confirm
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
-                  >
-                    <FaTimes className="mr-2" size="1em" />
-                    Cancel
-                  </button>
+
+            {isEditing ? (
+              <div className="flex justify-end items-center" >
+                <div className="flex space-x-4">
+                  <div>
+                    <div className="flex justify-end">
+                      <button
+                        onClick={handleConfirm}
+                        className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
+                      >
+                        <FaCheck className="mr-2" size="1em" />
+                        Confirm
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                      >
+                        <FaTimes className="mr-2" size="1em" />
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <>
-                  <div className="flex space-x-4" style={{ marginRight: "236px" }}>
+              </div>
+            ) : (
+              <>
+                <div className="flex justify-between items-center" >
+                  <div className="flex space-x-4">
+                    <div className="flex justify-left">
+                      <button
+                        onClick={() => setShowRedeemModal(true)}
+                        className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
+                      >
+                        <FaGift className="mr-2" size="1em" />
+                        Redeem Points
+                      </button>
+                      <button
+                        onClick={() => setShowPasswordModal(true)}
+                        className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
+                      >
+                        <FaKey className="mr-2" size="1em" />
+                        Change Password
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    className="flex justify-end"
+                  >
                     <button
-                      onClick={() => setShowRedeemModal(true)}
-                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
+                      onClick={handleDeleteAccount}
+                      className="flex items-center px-4 py-2 bg-darkPink hover:bg-darkPinkHover text-white rounded whitespace-nowrap"
                     >
-                      <FaGift className="mr-2" size="1em" />
-                      Redeem Points
-                    </button>
-                    <button
-                      onClick={() => setShowPasswordModal(true)}
-                      className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
-                    >
-                      <FaKey className="mr-2" size="1em" />
-                      Change Password
+                      <FaTrash className="mr-2" size="1em" />
+                      Request Account Deletion
                     </button>
                   </div>
-                  <button
-                    onClick={handleDeleteAccount}
-                    className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded whitespace-nowrap"
-                  >
-                    <FaTrash className="mr-2" size="1em" />
-                    Request Account Deletion
-                  </button>
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
+        </div>
+      </div>
+    </div>
+      {
+    showRedeemModal && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white p-6 rounded-lg w-96">
+          <h3 className="text-xl font-bold mb-4">Redeem Points</h3>
+          <input
+            type="number"
+            value={pointsToRedeem}
+            onChange={(e) => setPointsToRedeem(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mb-4"
+            placeholder="Enter points to redeem"
+            step="10000"
+          />
+          <div className="flex justify-end space-x-2">
+            <button
+              onClick={() => setShowRedeemModal(false)}
+              className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+            >
+              <FaTimes className="mr-2" size="1em" />
+              Cancel
+            </button>
+            <button
+              onClick={handleRedeemPoints}
+              className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
+            >
+              <FaCheck className="mr-2" size="1em" />
+              Confirm
+            </button>
           </div>
         </div>
       </div>
-      {showRedeemModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h3 className="text-xl font-bold mb-4">Redeem Points</h3>
-            <input
-              type="number"
-              value={pointsToRedeem}
-              onChange={(e) => setPointsToRedeem(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mb-4"
-              placeholder="Enter points to redeem"
-              step="10000"
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={() => setShowRedeemModal(false)}
-                className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
-              >
-                <FaTimes className="mr-2" size="1em" />
-                Cancel
-              </button>
-              <button
-                onClick={handleRedeemPoints}
-                className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
-              >
-                <FaCheck className="mr-2" size="1em" />
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showPasswordModal && (
-        <ChangePasswordTourist
-          id={id}
-          onClose={() => setShowPasswordModal(false)}
-        />
-      )}
-    </div>
+    )
+  }
+  {
+    showPasswordModal && (
+      <ChangePasswordTourist
+        id={id}
+        onClose={() => setShowPasswordModal(false)}
+      />
+    )
+  }
+    </div >
   );
 }
