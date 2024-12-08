@@ -118,7 +118,7 @@ import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.tsx";
 import MyBookings from "./Tourist/pages/MyBookings.tsx";
 import TouristActivityDetails from "./Tourist/pages/ActivityDetails.tsx";
-import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+import TouristComplaints from "./Tourist/pages/TouristComplaints.tsx";
 import ShoppingCart from "./Tourist/pages/shoppingCart.tsx";
 import CheckoutPage from "./Tourist/pages/CheckoutPage.tsx";
 import DraftHomePage from "./Tourist/pages/TouristHomepage.jsx";

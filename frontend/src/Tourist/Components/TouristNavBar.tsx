@@ -215,6 +215,14 @@ const openWallet = () => {
                 </li>
                 <li>
                   <button
+                    onClick={() => handleNavigation(`/TouristComplaints/${id}`)}
+                    className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                  >
+                    Complaints
+                  </button>
+                </li>
+                <li>
+                  <button
                     onClick={() => handleNavigation(`/TouristBookmarks/${id}`)}
                     className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                   >
