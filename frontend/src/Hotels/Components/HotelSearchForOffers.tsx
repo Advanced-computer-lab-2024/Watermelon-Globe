@@ -20,9 +20,19 @@ const BookingPage = () => {
   const [roomQuantity, setRoomQuantity] = useState(1)
   const [message, setMessage] = useState('')
   const [token, setToken] = useState('')
-  const [hotelOffers, setHotelOffers] = useState([])
+  const [hotelOffers, setHotelOffers] = useState<Offer[]>([])
   const [loading, setLoading] = useState(false)
 
+  interface Offer {
+    room: { description: { text: string } };
+    price: { base: string; currency: string };
+    checkInDate: string;
+    checkOutDate: string;
+  }
+  
+
+  
+  
   useEffect(() => {
     const fetchToken = async () => {
       try {
@@ -58,6 +68,8 @@ const BookingPage = () => {
         checkOutDate: formattedCheckOutDate,
         adults: parseInt(adults.toString(), 10),
         roomQuantity: parseInt(roomQuantity.toString(), 10),
+        priceRange: null,
+        rating: null,
         currency: 'USD',
       })
 
@@ -76,7 +88,7 @@ const BookingPage = () => {
     }
   }
 
-  const handleBookClick = async (offer) => {
+  const handleBookClick = async (offer: Offer) => { // Update 2: Updated handleBookClick function
     try {
       const response = await axios.post(`/api/Tourist/bookHotel/${touristId}`, {
         hotelId,
@@ -126,7 +138,7 @@ const BookingPage = () => {
                     <DatePicker
                       id="checkInDate"
                       selected={checkInDate}
-                      onChange={(date: Date) => setCheckInDate(date)}
+                      onChange={(date: Date | null) => setCheckInDate(date || new Date())}
                       dateFormat="yyyy-MM-dd"
                       className="w-full p-2 border rounded-md pl-10"
                     />
@@ -139,7 +151,7 @@ const BookingPage = () => {
                     <DatePicker
                       id="checkOutDate"
                       selected={checkOutDate}
-                      onChange={(date: Date) => setCheckOutDate(date)}
+                      onChange={(date: Date | null) => setCheckInDate(date || new Date())}
                       dateFormat="yyyy-MM-dd"
                       className="w-full p-2 border rounded-md pl-10"
                     />
@@ -209,7 +221,12 @@ const BookingPage = () => {
                       <p className="mb-1"><strong>Check-In:</strong> {offer?.checkInDate}</p>
                       <p className="mb-1"><strong>Check-Out:</strong> {offer?.checkOutDate}</p>
                       <p className="mb-3"><strong>Room Type:</strong> {offer?.room?.description?.text}</p>
-                      <HotelBooking hotel={offer} touristId={touristId} hotelName={hotelName} />
+                      <HotelBooking 
+                        hotel={offer} 
+                        touristId={touristId} 
+                        hotelName={hotelName} 
+                        onBookClick={handleBookClick} // Update 3: Added handleBookClick prop
+                      />
                     </div>
                   ))}
                 </div>
@@ -222,4 +239,4 @@ const BookingPage = () => {
   )
 }
 
-export default BookingPage
+export default BookingPage  

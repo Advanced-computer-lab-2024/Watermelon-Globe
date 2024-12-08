@@ -11,6 +11,7 @@ interface HotelBookingProps {
   hotel: any;
   touristId: string;
   hotelName: string;
+  onBookClick: (offer: any) => Promise<void>; // Added this prop for handling booking
 }
 
 const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotelName }) => {
@@ -161,11 +162,11 @@ const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotel
   );
 };
 
-const HotelBooking: React.FC<HotelBookingProps> = ({ hotel, touristId, hotelName}) => {
+const HotelBooking: React.FC<HotelBookingProps> = ( props ) => {
   return (
     <div className="bg-background p-6 flex items-center justify-center">
       <Elements stripe={stripePromise}>
-        <HotelPaymentForm hotel={hotel} touristId={touristId} hotelName= {hotelName} />
+        <HotelPaymentForm {...props} />
       </Elements>
     </div>
   );
