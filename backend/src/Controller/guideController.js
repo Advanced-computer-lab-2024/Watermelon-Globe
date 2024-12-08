@@ -235,58 +235,58 @@ const createItinerary = async (req, res) => {
   }
 };
 
-// Controller to fetch itineraries for a specific tour guide
-const getMyItineraries = async (req, res) => {
-  // const { guideID } = req.params.id; // Extract guide ID from URL parameters
+// // Controller to fetch itineraries for a specific tour guide
+// const getMyItineraries = async (req, res) => {
+//   // const { guideID } = req.params.id; // Extract guide ID from URL parameters
 
-  // // Check if the provided ID is a valid MongoDB ObjectId
-  // if (!mongoose.Types.ObjectId.isValid(guideID)) {
-  //   return res.status(400).json({ error: "Invalid guide ID" });
-  // }
+//   // // Check if the provided ID is a valid MongoDB ObjectId
+//   // if (!mongoose.Types.ObjectId.isValid(guideID)) {
+//   //   return res.status(400).json({ error: "Invalid guide ID" });
+//   // }
 
-  // try {
-  //   // Fetch all itineraries that belong to the guide and populate 'activities' and 'guide'
-  //   const itineraries = await itineraryModel.Itinerary.find({ guide: guideID })
-  //     .populate("activities") // Populates activities linked to the itinerary
-  //     .populate("guide"); // Populates the guide details
+//   // try {
+//   //   // Fetch all itineraries that belong to the guide and populate 'activities' and 'guide'
+//   //   const itineraries = await itineraryModel.Itinerary.find({ guide: guideID })
+//   //     .populate("activities") // Populates activities linked to the itinerary
+//   //     .populate("guide"); // Populates the guide details
 
-  //   // If no itineraries are found, return a 404 error
-  //   if (!itineraries || itineraries.length === 0) {
-  //     return res
-  //       .status(404)
-  //       .json({ message: "No itineraries found for this guide" });
-  //   }
+//   //   // If no itineraries are found, return a 404 error
+//   //   if (!itineraries || itineraries.length === 0) {
+//   //     return res
+//   //       .status(404)
+//   //       .json({ message: "No itineraries found for this guide" });
+//   //   }
 
-  //   // Return the itineraries as a response
-  //   res.status(200).json(itineraries);
-  // } catch (error) {
-  //   // Handle any server errors
-  //   console.error("Error fetching itineraries:", error.message);
-  //   res.status(500).json({ error: "Server error, please try again later." });
-  // }
-  try {
-    const guideId = req.params.id;
+//   //   // Return the itineraries as a response
+//   //   res.status(200).json(itineraries);
+//   // } catch (error) {
+//   //   // Handle any server errors
+//   //   console.error("Error fetching itineraries:", error.message);
+//   //   res.status(500).json({ error: "Server error, please try again later." });
+//   // }
+//   try {
+//     const guideId = req.params.id;
 
-    // Fetch the guide with their itineraries populated
-    const guide = await tourGuide
-      .findById(guideId)
-      .populate("itineraries") // Populate the itineraries array
-      .exec();
+//     // Fetch the guide with their itineraries populated
+//     const guide = await tourGuide
+//       .findById(guideId)
+//       .populate("itineraries") // Populate the itineraries array
+//       .exec();
 
-    if (!guide) {
-      return res.status(404).json({ message: "Tour guide not found" });
-    }
+//     if (!guide) {
+//       return res.status(404).json({ message: "Tour guide not found" });
+//     }
 
-    // Return the itineraries
-    res.status(200).json({
-      success: true,
-      itineraries: guide.itineraries,
-    });
-  } catch (error) {
-    console.error("Error fetching itineraries:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
+//     // Return the itineraries
+//     res.status(200).json({
+//       success: true,
+//       itineraries: guide.itineraries,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching itineraries:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 const getAllItineraries = async (req, res) => {
   try {
@@ -307,6 +307,34 @@ const getAllItineraries = async (req, res) => {
   } catch (error) {
     // Catch and handle any errors
     res.status(500).json({ error: error.message });
+  }
+};
+
+// API to fetch itineraries by guide id
+const getMyItineraries = async (req, res) => {
+  const { guideId } = req.params; // Extract the guideId from route parameters
+
+  try {
+    // Fetch itineraries where guide matches guideId
+    const itineraries = await itineraryModel.Itinerary.find({
+      Advertiser: guideId,
+    })
+      .populate("activities") // Optionally populate activities
+      .populate("tag") // Optionally populate tags
+      .populate("pickupDropoffLocations"); // Optionally populate pickup/dropoff details
+
+    // If no itineraries found
+    if (!itineraries || itineraries.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No itineraries found for this guide" });
+    }
+
+    // Return the itineraries as a JSON response
+    res.status(200).json(itineraries);
+  } catch (error) {
+    console.error("Error fetching itineraries:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 

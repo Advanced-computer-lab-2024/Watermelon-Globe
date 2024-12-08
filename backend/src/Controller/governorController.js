@@ -1,7 +1,7 @@
 const governorModel = require("../Models/tourismGovernorModel");
 const siteModel = require("../Models/tourismSiteModel");
 const { default: mongoose } = require("mongoose");
-
+const Tag = require("../Models/tagModel");
 // const createSite = async (req, res) => {
 //   const{id}=req.params;
 //   const {
@@ -34,6 +34,42 @@ const { default: mongoose } = require("mongoose");
 //   }
 // };
 
+// Get Tag by ID
+const getTagById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tag = await Tag.findById(id);
+    if (!tag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+    res.status(200).json(tag);
+  } catch (error) {
+    console.error("Error fetching tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Edit Tag
+const editTag = async (req, res) => {
+  const { id } = req.params;
+  const { type, historicPeriod } = req.body;
+  try {
+    const tag = await Tag.findById(id);
+    if (!tag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+
+    // Update fields if provided
+    if (type) tag.type = type;
+    if (historicPeriod) tag.historicPeriod = historicPeriod;
+
+    await tag.save();
+    res.status(200).json(tag);
+  } catch (error) {
+    console.error("Error editing tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 const getAllGovernors = async (req, res) => {
   try {
     // Fetch all governors and populate their tourismSite references
@@ -43,6 +79,27 @@ const getAllGovernors = async (req, res) => {
     res.status(200).json(governors);
   } catch (error) {
     console.error("Error fetching governors:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const getGovernorById = async (req, res) => {
+  try {
+    // Extract the governor ID from the URL parameters
+    const { id } = req.params;
+
+    // Find the governor by ID and populate their tourismSite references
+    const governor = await governorModel.findById(id).populate("tourismSite");
+
+    // If no governor is found, return a 404 error
+    if (!governor) {
+      return res.status(404).json({ message: "Governor not found" });
+    }
+
+    // Return the governor as a JSON response
+    res.status(200).json(governor);
+  } catch (error) {
+    console.error("Error fetching governor by ID:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -339,4 +396,5 @@ module.exports = {
   getPassword,
   loginGovernor,
   getAllGovernors,
+  getGovernorById,
 };

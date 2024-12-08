@@ -72,8 +72,6 @@ import axios from "axios";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
 import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
-import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
-import { FaTag } from "react-icons/fa6"; // Use a tag icon
 
 const Sidebar = () => {
   const { id } = useParams();
@@ -84,7 +82,7 @@ const Sidebar = () => {
     const fetchUserDetails = async () => {
       try {
         // Make an API call to fetch user details using the ID
-        const response = await axios.get(`/api/Governor/getGovernorById/${id}`);
+        const response = await axios.get(`/api/Seller/GetSeller/${id}`);
         setUser(response.data); // Update state with the user details
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -101,62 +99,59 @@ const Sidebar = () => {
     <div className="sidebarAdmin">
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Hello , {user.username} </span>
+          <span className="logoAdmin">Hello , {user.Name} </span>
         </Link>
       </div>
       {/* <hr /> */}
       <div className="centerAdmin">
         <ul>
-          {/* <p className="titleAdmin">MAIN</p>
+          <p className="titleAdmin">MAIN</p>
 
-          <Link
-            to={`/GovernorHomePage/${id}`}
-            style={{ textDecoration: "none" }}
-          >
+          <Link to={`/SellerHome/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
-          </Link> */}
+          </Link>
 
-          <p className="titleAdmin">TOURISM SITES</p>
+          <p className="titleAdmin">PRODUCTS</p>
 
           {/* My Products */}
-          <Link to={`/ViewMySites/${id}`} style={{ textDecoration: "none" }}>
-            <li>
+          <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
+            <li
+              className={
+                isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""
+              }
+            >
               <MovingRoundedIcon className="iconAdmin" />
-              <span>My Sites</span>
+              <span>My Products</span>
             </li>
           </Link>
 
           {/* All Products */}
-          <Link to={`/ViewSites/${id}`} style={{ textDecoration: "none" }}>
+          <Link
+            to={`/GetAllProductsGeneral/${id}`}
+            style={{ textDecoration: "none" }}
+          >
             <li
               className={
                 isActive(`/GetAllProductsGeneral/${id}`) ? "active-seller" : ""
               }
             >
-              <AccountBalanceRoundedIcon className="iconAdmin" />
-              <span>All Sites</span>
+              <StoreIcon className="iconAdmin" />
+              <span>All Products</span>
             </li>
           </Link>
 
           {/* Create New Product */}
           <Link to={`/CreateProduct/${id}`} style={{ textDecoration: "none" }}>
-            <li>
-              <AddIcon className="iconAdmin" />
-              <span>Create New Site</span>
-            </li>
-          </Link>
-
-          <Link to={`/AddTag/${id}`} style={{ textDecoration: "none" }}>
             <li
               className={
                 isActive(`/CreateProduct/${id}`) ? "active-seller" : ""
               }
             >
-              <FaTag className="iconAdmin" />
-              <span>&nbsp;&nbsp;&nbsp;Create New Tag</span>
+              <AddIcon className="iconAdmin" />
+              <span>Create New Product</span>
             </li>
           </Link>
 

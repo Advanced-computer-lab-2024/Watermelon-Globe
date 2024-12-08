@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../../Components/sidebar/Sidebar";
-import Navbar from "../../Components/navbar/Navbar";
+import NavbarGovernor from "Governor/Components/navbar/Navbar";
+// import Navbar from "../../Components/navbar/Navbar";
 import "./actions.scss";
 import Tooltip from "@mui/material/Tooltip";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -9,37 +10,52 @@ import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardActions from "@mui/joy/CardActions"; // Import CardActions
-import IconButton from "@mui/joy/IconButton";
-import Typography from "@mui/joy/Typography";
-import BookmarkAdd from "@mui/icons-material/BookmarkAddOutlined";
-import Rating from "@mui/material/Rating";
-import NavTabs from "Admin++/components/navTabs/navTabsEvents";
-import OutlinedFlagRoundedIcon from "@mui/icons-material/OutlinedFlagRounded";
-import AssistantPhotoRoundedIcon from "@mui/icons-material/AssistantPhotoRounded";
+import axios from "axios";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const ViewItineraries = () => {
-  const [itineraries, setItineraries] = useState([]); // Ensure default state is an array
-  const [filteredItineraries, setFilteredItineraries] = useState([]); // Ensure default state is an array
+import Typography from "@mui/joy/Typography";
+
+const ImageCarousel = ({ site }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    // Check if site.picture is an array
+    if (Array.isArray(site.pictures) && site.pictures.length > 0) {
+      const intervalId = setInterval(() => {
+        setCurrentImageIndex(
+          (prevIndex) => (prevIndex + 1) % site.pictures.length
+        );
+      }, 3000); // Change image every 3 seconds (3000 ms)
+
+      // Cleanup the interval on component unmount
+      return () => clearInterval(intervalId);
+    }
+  }, [site.pictures]);
+};
+
+const ViewMySites = () => {
+  const [sites, setSite] = useState([]); // Ensure default state is an array
+  const [filteredSites, setFilteredSites] = useState([]); // Ensure default state is an array
   const navigate = useNavigate();
   const { id } = useParams();
 
   const fetchItineraries = async () => {
     try {
-      const response = await fetch(`/api/TourGuide/getMyItineraries/${id}`);
+      const response = await fetch(`/api/Governor/getMySites/${id}`);
       const data = await response.json();
       console.log(data);
 
       // Ensure data is an array
       if (Array.isArray(data)) {
-        setItineraries(data);
-        setFilteredItineraries(data);
+        setSite(data);
+        setFilteredSites(data);
       } else {
         console.error("API response is not an array:", data);
-        setItineraries([]);
-        setFilteredItineraries([]);
+        setSite([]);
+        setFilteredSites([]);
       }
     } catch (error) {
-      console.error("Error fetching itineraries:", error);
+      console.error("Error fetching sites:", error);
     }
   };
 
@@ -49,6 +65,13 @@ const ViewItineraries = () => {
 
   const handleItineraryClick = (activityId) => {
     navigate(`/ProductsDetailsGeneral/${activityId}/`);
+  };
+
+  const handleSiteDelete = (id) => {
+    setSite(sites.filter((item) => item.id !== id));
+    axios
+      .delete(`/api/Governor/deleteSite/${id}`)
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -66,7 +89,7 @@ const ViewItineraries = () => {
       <div className="listAdminProduct">
         <Sidebar />
         <div className="listContainerAdminProduct">
-          <Navbar />
+          <NavbarGovernor />
 
           {/* Itineraries */}
           <div style={{ paddingTop: "20px" }}>
@@ -78,7 +101,7 @@ const ViewItineraries = () => {
               }}
               className="text-2xl font-bold text-800 mb-6"
             >
-              My Itineraries
+              My Sites
             </h2>
 
             <div
@@ -89,9 +112,9 @@ const ViewItineraries = () => {
                 padding: "25px",
               }}
             >
-              {filteredItineraries.map((itinerary) => (
+              {filteredSites.map((site) => (
                 <Card
-                  key={itinerary._id}
+                  key={site._id}
                   sx={{
                     width: 360, // Fixed width to keep the card size consistent
                     height: 500, // Set a fixed height (adjust as needed)
@@ -113,20 +136,23 @@ const ViewItineraries = () => {
                         alignItems: "center", // Aligns the items vertically if needed
                       }}
                     >
-                      {itinerary.name}
+                      {site.name}
                     </Typography>
                   </div>
 
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
                       src={
-                        itineraries.picture ||
+                        site.pictures ||
                         "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
                       }
-                      alt={`Image of ${itinerary.name}`}
+                      alt={`Image of ${site.name}`}
                       loading="lazy"
                     />
                   </AspectRatio>
+
+                  {/* <ImageCarousel pictures={site.pictures} /> */}
+
                   <CardContent orientation="horizontal">
                     <div>
                       <Typography
@@ -137,7 +163,7 @@ const ViewItineraries = () => {
                           fontWeight: "lg",
                         }} // Change font and color for Price label
                       >
-                        Price:
+                        Ticket Price:
                       </Typography>
                       <Typography
                         sx={{
@@ -147,7 +173,7 @@ const ViewItineraries = () => {
                           fontFamily: "'Poppins', sans-serif", // Change font for price
                         }}
                       >
-                        ${itinerary.priceOfTour}
+                        ${site.ticketPrices}
                       </Typography>
                       <div
                         style={{
@@ -156,38 +182,14 @@ const ViewItineraries = () => {
                           alignItems: "flex-start",
                           marginTop: "8px",
                         }}
-                      >
-                        {/* Rating stars */}
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <Rating
-                            name="itinerary-rating"
-                            value={itinerary.rating || 0} // Use product.rating or default to 0
-                            precision={0.5}
-                            readOnly
-                            size="small"
-                            sx={{ marginRight: "8px" }}
-                          />
-                          {/* Optionally, display the number of ratings */}
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: "#757575", // Custom color for the reviews text
-                              fontFamily: "'Poppins', sans-serif", // Change font for reviews
-                            }}
-                          >
-                            {itinerary.noOfRatings > 0
-                              ? `${itinerary.noOfRatings} reviews`
-                              : "No reviews"}
-                          </Typography>
-                        </div>
-                      </div>
+                      ></div>
                     </div>
                   </CardContent>
 
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleItineraryClick(itinerary._id)}
+                      onClick={() => handleItineraryClick(site._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height
@@ -204,6 +206,29 @@ const ViewItineraries = () => {
                     >
                       View Details
                     </Button>
+
+                    <Button
+                      size="small"
+                      onClick={() => handleSiteDelete(site._id)}
+                      startIcon={
+                        <DeleteIcon sx={{ color: "#fff", fontSize: "4rem" }} />
+                      }
+                      sx={{
+                        width: "50%", // Set width to 100% of the container or define a fixed width
+                        height: "40px", // Set a fixed height
+                        backgroundColor: "#d32e65", // Set the background color
+                        color: "white", // Set text color
+                        fontFamily: "Poppins, sans-serif", // Set the font family
+                        fontSize: "14px", // Set the font size
+                        fontWeight: "bold", // Set the font weight
+                        borderRadius: "5px", // Set the border radius for rounded corners
+                        "&:hover": {
+                          backgroundColor: "#e91e63", // Set a different color on hover
+                        },
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </CardActions>
                 </Card>
               ))}
@@ -215,4 +240,4 @@ const ViewItineraries = () => {
   );
 };
 
-export default ViewItineraries;
+export default ViewMySites;

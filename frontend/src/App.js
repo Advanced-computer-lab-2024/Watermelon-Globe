@@ -105,7 +105,9 @@ import GetMySites from "./Governor/Components/GetMySites.js";
 import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
 import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
 import GovernorLogin from "./Governor/pages/GovernorLogin.jsx";
-
+import AddTagGovernor from "Governor/pages/AddTag/AddTag";
+import ViewMySites from "Governor/pages/ViewSites/ViewMySites";
+import ViewSites from "Governor/pages/ViewSites/ViewSites";
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TouristLogin from "./Tourist/pages/TouristLogin.jsx";
@@ -131,7 +133,7 @@ import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
 import HotelMain from "./Hotels/Pages/HotelMain.js";
-import Complaints from "./Admin++/pages/Complaints/Complaints.jsx"
+import Complaints from "./Admin++/pages/Complaints/Complaints.jsx";
 
 import SiteDetails from "./Tourist/pages/siteDetails.js";
 
@@ -222,7 +224,7 @@ const App = () => {
           />
           <Route path="/" element={<MainHome />} />
 
-          <Route path="/complaintss" element={<Complaints/>} />
+          <Route path="/complaintss" element={<Complaints />} />
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
           <Route path="/seller-signup" element={<SellerSignup />} />
@@ -425,6 +427,10 @@ const App = () => {
             path="/GovernorSiteDetails/:id"
             element={<GovernorSiteDetails />}
           />
+
+          <Route path="/ViewSites/:id" element={<ViewSites />} />
+          <Route path="/ViewMySites/:id" element={<ViewMySites />} />
+          <Route path="/AddTag/:id" element={<AddTagGovernor />} />
 
           <Route path="/GovernorLogin" element={<GovernorLogin />} />
 

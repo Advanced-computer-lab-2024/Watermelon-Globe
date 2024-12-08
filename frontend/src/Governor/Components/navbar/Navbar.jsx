@@ -15,7 +15,7 @@ import NotificationsBox from "../NotificationsBox";
 import { useParams } from "react-router-dom";
 import { Bell } from "lucide-react";
 
-const Navbar = () => {
+const NavbarGovernor = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const { id } = useParams();
@@ -61,4 +61,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarGovernor;

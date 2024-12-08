@@ -13,10 +13,12 @@ const {
   getPassword,
   loginGovernor,
   getAllGovernors,
+  getGovernorById,
 } = require("../Controller/governorController");
 
 //tourism governor/sites routes
 router.get("/getAllGovernors", getAllGovernors);
+router.get("/getGovernorById/:id", getGovernorById);
 router.post("/addSite", createSite);
 router.get("/getSite", getSite);
 router.post("/addSite/:id", createSite);
