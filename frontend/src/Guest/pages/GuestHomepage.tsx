@@ -25,6 +25,16 @@ export default function DraftHomePage() {
   const [isSignedUp, setIsSignedUp] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    "1- Use the 'Discover' button to find amazing destinations.",
+    "2- Search for hotels, flights, or guides using the top navigation.",
+    "3- Click 'Explore' to dive deeper into your favorite spots.",
+    "4- Sign up to create personalized travel plans and access special offers.",
+    "5- Stay connected through our social media channels for updates!"
+  ];
+
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,12 +46,38 @@ export default function DraftHomePage() {
   };
 
   const handleButtonClick = () => {
-    setShowModal(true); // Show the modal when a button is clicked
+    setCurrentStep(0); // Ensure the steps array starts from the first step
+    setShowModal(true); // Show the modal
+  };
+  
+
+  const openHowToUse = () => {
+    setShowModal(true); // Show the "How to Use" modal
   };
 
   const closeModal = () => {
     setShowModal(false); // Close the modal
   };
+
+  const handleNextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1); // Go to the next step
+    }
+  };
+  
+  const handlePreviousStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1); // Go back to the previous step
+    }
+  };
+  
+  const handleFinish = () => {
+    setShowModal(false); // Close the modal
+    setCurrentStep(0); // Reset to the first step for the next time the modal is opened
+  };
+  
+
+
 
   return (
     <div className="min-h-screen flex flex-col bg-background" style={{ margin: '-20px' }}>
@@ -76,6 +112,13 @@ export default function DraftHomePage() {
             >
               Products
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:mb--1"></span>
+            </button>
+            <button
+              onClick={openHowToUse}
+              className="text-secondary hover:text-secondaryHover relative group no-underline"
+            >
+              How to Use
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
             </button>
 
           </div>
@@ -275,21 +318,58 @@ export default function DraftHomePage() {
         </div>
       </footer>
 
-      {/* Modal */}
-      {showModal && (
-        <Modal onClose={closeModal}>
-          <div className="p-8  max-w-sm mx-auto">
-            <h2 className="text-2xl font-bold text-center text-primary mb-4">Join the Adventure!</h2>
-            <p className="text-center text-gray-600 mb-6">Unlock exclusive access to your personal tour guide and travel companion—sign up now to start your journey with us!</p>
-            <Button
-              onClick={handleSignUpRedirect}
-              className="bg-primary text-white font-semibold py-2 px-4 rounded-full w-full transition duration-300 hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
-              Start Your Adventure
-            </Button>
-          </div>
-        </Modal>
+      {/* How to Use Modal */}
+{showModal && (
+  <Modal onClose={closeModal}>
+    <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg relative">
+      {/* Modal Content */}
+      <h2 className="text-2xl font-bold text-center text-primary mb-4">
+        How to Use WaterMelon Globe
+      </h2>
+      <p className="text-gray-700 mb-6 text-center">
+        Learn how to navigate and explore our features with this simple guide.
+      </p>
+      
+      {/* Step Content */}
+      <div className="text-gray-600 text-center mb-6">
+        <p>{steps[currentStep]}</p>
+      </div>
+      
+      {/* Navigation Buttons */}
+      <div className="flex justify-between mt-4">
+      <Button
+        onClick={handlePreviousStep}
+        disabled={currentStep === 0}
+        className={`py-2 px-4 rounded-lg font-semibold transition ${
+          currentStep === 0
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            : 'bg-secondary text-white hover:bg-primary'
+        }`}
+      >
+        Back
+      </Button>
+        {currentStep === steps.length - 1 ? (
+          <Button
+            onClick={handleFinish}
+            className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
+          >
+            Finish
+          </Button>
+        ) : (
+          <Button
+            onClick={handleNextStep}
+            className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
+          >
+            Next
+          </Button>
+        )}
+      </div>
+    </div>
+  </Modal>
+)}
 
-      )}
+
+
 
 
     </div>
