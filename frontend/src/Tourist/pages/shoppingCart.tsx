@@ -77,7 +77,7 @@ export default function ShoppingCart() {
   )
 
   const handleProceedToCheckout = () => {
-    navigate(`/CheckoutPage/${touristId}`,{ state: { total: total } })
+    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } })
   }
 
   if (loading) {
@@ -108,7 +108,7 @@ export default function ShoppingCart() {
 
           <div className="p-6 space-y-6">
             {error && <p className="text-red-500 text-center">{error}</p>}
-            
+
             {cartItems.length === 0 ? (
               <p className="text-center text-gray-500">Your cart is empty.</p>
             ) : (
@@ -129,7 +129,7 @@ export default function ShoppingCart() {
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
-                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white"
+                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
                           aria-label={`Decrease quantity of ${item.product.name}`}
                           disabled={item.quantity <= 1}
                         >
@@ -138,19 +138,20 @@ export default function ShoppingCart() {
                         <span className="w-8 text-center">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
-                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white"
+                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
                           aria-label={`Increase quantity of ${item.product.name}`}
                         >
                           <FaPlus size={16} />
                         </button>
                         <button
                           onClick={() => removeItem(item.product._id)}
-                          className="text-darkPink p-2 hover:bg-darkPink hover:text-white"
+                          className="text-darkPink p-2 hover:bg-darkPink hover:text-white flex items-center justify-center"
                           aria-label={`Remove ${item.product.name} from cart`}
                         >
                           <FaTrashAlt size={16} />
                         </button>
                       </div>
+
                     </li>
                   ))}
                 </ul>
