@@ -8,6 +8,7 @@ import SignupPage from "./Components/SignUp";
 import SignUpSellerNew from "Tourist/pages/SellerSignUp";
 import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
 import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
+import AllLogin from "./Components/AllLogin";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
@@ -293,6 +294,9 @@ const App = () => {
           <Route path="/AllItineraries/:id" element={<AllItineraries />} />
           <Route path="/GeneralDetails/:id" element={<GeneralDetails />} />
           <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
+
+          <Route path="/AllLogin" element={<AllLogin />} />
+
 
           <Route
             path="/tourism-governor/:id"
