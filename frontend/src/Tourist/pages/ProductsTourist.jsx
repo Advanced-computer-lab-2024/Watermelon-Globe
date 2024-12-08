@@ -222,7 +222,7 @@ const ProductList = () => {
               <div key={product._id} className="bg-cardBackground rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
                 <div className="relative">
                   <img
-                    src={product.picture || "/placeholder.svg"}
+                    src={product.picture ? (product.picture.startsWith('http') ? product.picture : `/uploads/${product.picture}`) : "https://via.placeholder.com/150"}
                     alt={product.name}
                     className="w-full h-32 object-cover rounded-t-lg"
                   />

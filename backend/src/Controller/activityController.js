@@ -1,6 +1,9 @@
 const ActivityModel = require("../Models/activityModel.js");
 const Tag = require("../Models/PreferenceTagModel.js");
 const CompanyProfile = require("../Models/companyProfileModel");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const createTags = async (req, res) => {
   const tags = [
@@ -430,6 +433,72 @@ const getActivitiesByAdvertiserId = async (req, res) => {
   }
 };
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Ensure this directory exists
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append the file extension
+  },
+});
+
+const upload = multer({ storage: storage });
+const uploadMiddleware = upload.single("picture");
+
+const uploadPicture = async (req, res) => {
+  uploadMiddleware(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: "Multer error: " + err.message });
+    } else if (err) {
+      return res.status(500).json({ error: "Unknown error: " + err.message });
+    }
+
+    const { id } = req.query;
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    try {
+      const Activity = await ActivityModel.findById(id);
+
+      if (!Activity) {
+        // Delete the uploaded file if product not found
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ error: "No activity found with this ID" });
+      }
+
+      // Delete the old picture if it exists
+      if (Activity.picture) {
+        const oldPicturePath = path.join(
+          __dirname,
+          "..",
+          "uploads",
+          Activity.picture
+        );
+        if (fs.existsSync(oldPicturePath)) {
+          fs.unlinkSync(oldPicturePath);
+        }
+      }
+
+      // Update the activity with the new picture filename
+      Activity.picture = req.file.filename;
+      await Activity.save();
+
+      res
+        .status(200)
+        .json({ message: "Activity picture updated successfully", Activity });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: "An error occurred while updating the activity picture",
+        });
+    }
+  });
+};
+
 module.exports = {
   createTags,
   getTags,
@@ -447,4 +516,5 @@ module.exports = {
   addComment,
   getAllTags,
   getActivitiesByAdvertiserId,
+  uploadPicture
 };

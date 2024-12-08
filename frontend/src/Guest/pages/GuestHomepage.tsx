@@ -190,9 +190,9 @@ export default function DraftHomePage() {
             <h3 className="text-3xl font-bold text-center mb-12 text-secondary">Popular Destinations</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: "Bali, Indonesia", image: "/placeholder.svg?height=200&width=300" },
-                { name: "Paris, France", image: "/placeholder.svg?height=200&width=300" },
-                { name: "Santorini, Greece", image: "/placeholder.svg?height=200&width=300" }
+                { name: "Bali, Indonesia", image: "https://www.outlooktravelmag.com/media/bali-1-1582544096.profileImage.2x-1536x884.webp" },
+                { name: "Paris, France", image: "https://media.timeout.com/images/106181719/750/562/image.jpg" },
+                { name: "Santorini, Greece", image: "https://lp-cms-production.imgix.net/2024-06/iStock-166471469.jpg" }
               ].map((destination, index) => (
                 <Card key={index} className="overflow-hidden">
                   <img src={destination.image} alt={destination.name} className="w-full h-48 object-cover" />
