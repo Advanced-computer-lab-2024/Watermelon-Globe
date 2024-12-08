@@ -2534,7 +2534,7 @@ const requestNotifyItinerary = async (req, res) => {
     }
 
     if (itinerary.notifyRequests.includes(touristId)) {
-      return res.status(400).json({ error: 'Tourist already in notify list for this itinerary' });
+      return res.status(400).json({ message: 'Tourist already in notify list for this itinerary' });
     }
 
     itinerary.notifyRequests.push(touristId);
@@ -2658,7 +2658,52 @@ const deleteFromWishlist = async (req, res) => {
   }
 };
 
+const removeNotifyItinerary = async (req, res) => {
+  const { touristId, itineraryId } = req.params;
+  const Itinerary = itineraryModel.Itinerary;
 
+  try {
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+
+    const index = itinerary.notifyRequests.indexOf(touristId);
+    if (index === -1) {
+      return res.status(400).json({ error: 'Tourist not found in notify list for this itinerary' });
+    }
+
+    itinerary.notifyRequests.splice(index, 1);
+    await itinerary.save();
+
+    res.status(200).json({ message: 'Notification request removed successfully for itinerary' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error removing notification request for itinerary', details: error.message });
+  }
+};
+
+const removeNotifyActivity = async (req, res) => {
+  const { touristId, activityId } = req.params;
+
+  try {
+    const activity = await Activity.findById(activityId);
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    const index = activity.notifyRequests.indexOf(touristId);
+    if (index === -1) {
+      return res.status(400).json({ error: 'Tourist not found in notify list for this activity' });
+    }
+
+    activity.notifyRequests.splice(index, 1);
+    await activity.save();
+
+    res.status(200).json({ message: 'Notification request removed successfully for activity' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error removing notification request for activity', details: error.message });
+  }
+};
 
 
 module.exports = {
@@ -2751,5 +2796,6 @@ module.exports = {
   addToWishList,
   getWishList,
   deleteFromWishlist,
-
+  removeNotifyItinerary,
+  removeNotifyActivity
 };
