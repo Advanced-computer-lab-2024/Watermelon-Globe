@@ -16,6 +16,7 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const Activity = require("../Models/activityModel");
 const PromoCode = require("../Models/promoCodes");
+const CompanyProfile = require("../Models/companyProfileModel");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -1513,7 +1514,7 @@ const getUsersPerMonth = async (req, res) => {
     // Get counts for each type of user
     const touristsCount = await countUsersPerMonth(Tourist);
     const sellersCount = await countUsersPerMonth(Seller);
-    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const advertisersCount = await countUsersPerMonth(CompanyProfile);
     const tourGuidesCount = await countUsersPerMonth(TourGuide);
 
     // Combine results from all user types
