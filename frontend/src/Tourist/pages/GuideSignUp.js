@@ -3,23 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { Star, ChevronDown, Eye, EyeOff } from "lucide-react";
 import NavTabs from "Components/navTabs/navTabs";
 import backgroundImage from "./Login-amico.png";
+import SignupAdvertiser from "pages/AdvertiserSignup";
 //import backgroundImage from "./Login-rafiki.png";
-const SignUpSellerNew = () => {
-  const [Name, setName] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
+const SignupGuideNew = () => {
+  const [username, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [sellerId, setSellerId] = useState(null);
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [dob, setDOB] = useState("");
-  const [status, setStatus] = useState("");
-  const [errors, setErrors] = useState({});
+
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   // Keep all existing validation functions
   const validateUsername = () => {
-    if (Name.length < 3 || Name.length > 20) {
+    if (username.length < 3 || username.length > 20) {
       return "Username must be between 3 and 20 characters.";
     }
     return null;
@@ -27,14 +24,14 @@ const SignUpSellerNew = () => {
 
   const validateEmail = () => {
     const emailRegex = /.+@.+\..+/;
-    if (!emailRegex.test(Email)) {
+    if (!emailRegex.test(email)) {
       return "Please enter a valid email address.";
     }
     return null;
   };
 
   const validatePassword = () => {
-    if (Password.length < 8) {
+    if (password.length < 8) {
       return "Password must be at least 8 characters.";
     }
     return null;
@@ -43,17 +40,17 @@ const SignUpSellerNew = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!Name || !Email || !Password) {
+    if (!username || !email || !password) {
       setError("Please fill in all fields.");
       return;
     }
 
-    const seller = { Name, Email, Password };
+    const tourguide = { username, email, password };
 
     try {
-      const response = await fetch("/api/seller/CreateSeller", {
+      const response = await fetch("/api/TourGuide/addGuide", {
         method: "POST",
-        body: JSON.stringify(seller),
+        body: JSON.stringify(tourguide),
         headers: {
           "Content-Type": "application/json",
         },
@@ -70,7 +67,7 @@ const SignUpSellerNew = () => {
       setPassword("");
       setError(null);
 
-      navigate(`/terms-and-conditions/${json._id}`);
+      navigate(`/terms-and-conditionsGuide/${json._id}`);
     } catch (error) {
       console.error("Error signing up:", error);
       setError(error.message);
@@ -168,7 +165,7 @@ const SignUpSellerNew = () => {
               </label>
               <input
                 type="text"
-                value={Name}
+                value={username}
                 onChange={(e) => setName(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
@@ -218,7 +215,7 @@ const SignUpSellerNew = () => {
               </label>
               <input
                 type="email"
-                value={Email}
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onFocus={() => setIsFocusedEmail(true)}
                 onBlur={() => setIsFocusedEmail(false)}
@@ -252,7 +249,7 @@ const SignUpSellerNew = () => {
               <div style={{ position: "relative" }}>
                 <input
                   type={showPassword ? "text" : "password"}
-                  value={Password}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setIsFocusedPassword(true)}
                   onBlur={() => setIsFocusedPassword(false)}
@@ -336,4 +333,4 @@ const SignUpSellerNew = () => {
   );
 };
 
-export default SignUpSellerNew;
+export default SignupGuideNew;

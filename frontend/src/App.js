@@ -7,6 +7,7 @@ import SignupPage from "./Components/SignUp";
 // SignUpNew Page
 import SignUpSellerNew from "Tourist/pages/SellerSignUp";
 import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
+import SignupGuideNew from "Tourist/pages/GuideSignUp";
 import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
@@ -182,6 +183,7 @@ const App = () => {
             path="/sign-in/advertisers"
             element={<SignupAdvertiserNew />}
           />
+          <Route path="/sign-in/tour-guides" element={<SignupGuideNew />} />
           {/* Admin Routes */}
           {/*<Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />

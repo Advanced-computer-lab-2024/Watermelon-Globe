@@ -61,7 +61,7 @@ const AdvertiserSignupConfirm = () => {
 
   return (
     <div style={styles.container}>
-      <h3 style={styles.title}>Document Upload for Seller Registration</h3>
+      <h3 style={styles.title}>Document Upload for Advertiser Registration</h3>
       <p style={styles.text}>
         To complete your advertiser registration, please upload the required
         documents. Once uploaded, your documents will be reviewed by our admin

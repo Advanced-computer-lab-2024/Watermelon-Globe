@@ -128,7 +128,7 @@ const SignupAdvertiserNew = () => {
             marginLeft: "20px",
           }}
         >
-          Sign Up
+          Register
         </h2>
         <NavTabs />
         <div
