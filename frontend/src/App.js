@@ -128,10 +128,12 @@ import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
-import HotelMain from "./Hotels/Pages/HotelMain.js";
+import HotelMain from "./Hotels/Pages/HotelMain.tsx";
+import Complaints from "./Admin++/pages/Complaints/Complaints.jsx";
 
 import SiteDetails from "./Tourist/pages/siteDetails.js";
 
+import HotelOffers from "./Hotels/Components/HotelSearchForOffers.tsx";
 
 
 import HotelOffers from './Hotels/Components/HotelSearchForOffers.js';
