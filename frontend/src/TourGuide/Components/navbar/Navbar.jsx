@@ -15,10 +15,10 @@ import NotificationsBox from "../NotificationsBox";
 import { useParams } from "react-router-dom";
 import {Bell} from "lucide-react";
 
-const Navbar = ({id}) => {
+const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  // const{id}=useParams();
+  const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const[guideLogo, setGuideLogo]=useState(null);
 

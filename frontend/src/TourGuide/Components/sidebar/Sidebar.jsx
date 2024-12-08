@@ -123,8 +123,8 @@ import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
 import AddIcon from "@mui/icons-material/Add";
 
 import axios from "axios";
-const Sidebar = ({id}) => {
-  // const { id } = useParams();
+const Sidebar = () => {
+  const { id } = useParams();
   const [user, setUser] = useState(""); // State to store user details
 
   useEffect(() => {
