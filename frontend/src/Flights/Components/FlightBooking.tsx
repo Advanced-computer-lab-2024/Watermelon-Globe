@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { FaWallet, FaCreditCard } from 'react-icons/fa'; // Font Awesome icons
+import { FaWallet, FaCreditCard, FaSearch } from 'react-icons/fa'; // Font Awesome icons
 
 // Load Stripe Publishable Key
 const stripePromise = loadStripe('pk_test_51QQWIBKTPpyea1n0DvMMy6pxbX2ihuoDsD1K5Hbrsrh5hkw2mG214K159dORl0oA9otHspuTTPMP7NbqgP8buKhE00qzg5wBBP');
 
 interface FlightBookingProps {
   flight: any;
-  touristId: string;
+  touristId: string | undefined;
 }
 
 const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) => {
@@ -121,7 +121,7 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
           <button
             type="button"
             onClick={() => setPaymentMethod('wallet')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
           >
             <FaWallet className="text-xl" />
             <span>Wallet</span>
@@ -129,7 +129,7 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
           <button
             type="button"
             onClick={() => setPaymentMethod('stripe')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
           >
             <FaCreditCard className="text-xl" />
             <span>Credit Card (Stripe)</span>
@@ -161,7 +161,7 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
 
 const FlightBooking: React.FC<FlightBookingProps> = ({ flight, touristId }) => {
   return (
-    <div className="bg-background p-6 flex items-center justify-center">
+    <div className="bg-white p-6 flex items-center justify-center">
       <Elements stripe={stripePromise}>
         <FlightPaymentForm flight={flight} touristId={touristId} />
       </Elements>

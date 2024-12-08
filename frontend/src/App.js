@@ -128,7 +128,7 @@ import OrdersPage from "./Tourist/pages/OrdersPage.tsx";
 import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 
 //Flights
-import FlightMain from "./Flights/Pages/FlightMain.js";
+import FlightMain from "./Flights/Pages/FlightMain.tsx";
 import HotelMain from "./Hotels/Pages/HotelMain.tsx";
 // import Complaints from "./Admin++/pages/Complaints/Complaints.jsx";
 

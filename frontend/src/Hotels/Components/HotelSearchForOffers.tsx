@@ -22,6 +22,7 @@ const BookingPage = () => {
   const [token, setToken] = useState('')
   const [hotelOffers, setHotelOffers] = useState<Offer[]>([])
   const [loading, setLoading] = useState(false)
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
 
   interface Offer {
     room: { description: { text: string } };
@@ -29,14 +30,18 @@ const BookingPage = () => {
     checkInDate: string;
     checkOutDate: string;
   }
-  
 
-  
-  
+
+
+
+
+
   useEffect(() => {
     const fetchToken = async () => {
       try {
         const fetchedToken = await fetchAccessToken()
+        const randomRoomNumber = Math.floor(Math.random() * 200) + 1;
+        setRoomNumber(randomRoomNumber);
         setToken(fetchedToken)
       } catch (error) {
         console.error('Error fetching access token:', error)
@@ -114,7 +119,7 @@ const BookingPage = () => {
   return (
     <div className="min-h-screen bg-background p-8">
       <TouristNavbar id={touristId} />
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto mt-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-primary p-5 relative">
             <div className="flex items-center space-x-4">
@@ -151,7 +156,7 @@ const BookingPage = () => {
                     <DatePicker
                       id="checkOutDate"
                       selected={checkOutDate}
-                      onChange={(date: Date | null) => setCheckInDate(date || new Date())}
+                      onChange={(date: Date | null) => setCheckOutDate(date || new Date())}
                       dateFormat="yyyy-MM-dd"
                       className="w-full p-2 border rounded-md pl-10"
                     />
@@ -189,9 +194,9 @@ const BookingPage = () => {
               </div>
               <button
                 onClick={handleSearchClick}
-                className="mt-4 w-full bg-primary text-white px-6 py-3 rounded-md hover:bg-hover transition-colors flex items-center justify-center"
+                className="w-full bg-primary text-white mt-4 py-2 px-4 rounded-lg hover:bg-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors text-2xl font-semibold shadow-md hover:shadow-lg"
               >
-                <FaSearch className="mr-2" />
+                <FaSearch className="inline-block mr-2 mb-1" />
                 Search Offers
               </button>
             </div>
@@ -216,15 +221,11 @@ const BookingPage = () => {
                 <div className="space-y-4">
                   {hotelOffers.map((offer, index) => (
                     <div key={index} className="border p-4 rounded-lg shadow-sm">
-                      <h3 className="font-semibold text-lg mb-2">{hotelName}</h3>
-                      <p className="mb-1"><strong>Price:</strong> {offer?.price?.base} {offer?.price?.currency}</p>
-                      <p className="mb-1"><strong>Check-In:</strong> {offer?.checkInDate}</p>
-                      <p className="mb-1"><strong>Check-Out:</strong> {offer?.checkOutDate}</p>
-                      <p className="mb-3"><strong>Room Type:</strong> {offer?.room?.description?.text}</p>
-                      <HotelBooking 
-                        hotel={offer} 
-                        touristId={touristId} 
-                        hotelName={hotelName} 
+                      <HotelBooking
+                        hotel={offer}
+                        touristId={touristId}
+                        hotelName={hotelName}
+                        roomNumber={roomNumber}
                         onBookClick={handleBookClick} // Update 3: Added handleBookClick prop
                       />
                     </div>

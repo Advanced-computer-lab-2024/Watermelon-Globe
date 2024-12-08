@@ -11,10 +11,11 @@ interface HotelBookingProps {
   hotel: any;
   touristId: string;
   hotelName: string;
+  roomNumber: number | null;
   onBookClick: (offer: any) => Promise<void>; // Added this prop for handling booking
 }
 
-const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotelName }) => {
+const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotelName, roomNumber }) => {
   console.log(hotelName);
   const [message, setMessage] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('stripe'); // Default to stripe payment
@@ -117,6 +118,10 @@ const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotel
       <p className="text-grayText mb-4">
         Total Price: {hotel?.price?.base} {hotel.price?.currency}
       </p>
+      <p className="text-grayText mb-4">
+        Room Number: {roomNumber}
+      </p>
+
 
       <div className="mb-4">
         <label className="block text-secondary font-semibold mb-2">Select Payment Method:</label>
@@ -124,7 +129,7 @@ const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotel
           <button
             type="button"
             onClick={() => setPaymentMethod('wallet')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
           >
             <FaWallet className="text-xl" />
             <span>Wallet</span>
@@ -132,7 +137,7 @@ const HotelPaymentForm: React.FC<HotelBookingProps> = ({ hotel, touristId, hotel
           <button
             type="button"
             onClick={() => setPaymentMethod('stripe')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
           >
             <FaCreditCard className="text-xl" />
             <span>Credit Card (Stripe)</span>

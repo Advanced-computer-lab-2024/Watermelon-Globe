@@ -9,12 +9,11 @@ import HotelSearch from "../Components/HotelSearch";
 import TouristNavbar from "../../Tourist/Components/TouristNavBar";
 
 interface Hotel {
-  hotelId: string;
+  id: string;
   name: string;
-  address: { countryCode: string };
-  geoCode: { latitude: number; longitude: number };
-  distance?: { value: number; unit: string };
-  lastUpdate: string;
+  location: string;
+  latitude: number;
+  longitude: number;
 }
 
 const HotelMain: React.FC = () => {
@@ -26,20 +25,25 @@ const HotelMain: React.FC = () => {
   const touristId = params.touristId as string;
 
   const getHotelDetails = (hotel: Hotel) => {
+    console.log(hotel.id);
+    console.log(hotel.name);
+    
+
     return {
       name: hotel.name,
-      address: hotel.address.countryCode,
-      latitude: hotel.geoCode.latitude,
-      longitude: hotel.geoCode.longitude,
-      distance: hotel.distance ? `${hotel.distance.value} ${hotel.distance.unit}` : '',
-      lastUpdate: hotel.lastUpdate,
+      address: hotel.location ,
+      latitude: hotel.latitude,
+      longitude: hotel.longitude,
     };
+
+    
+
   };
 
   const handleHotelSelect = (hotel: Hotel) => {
-    if (hotel.hotelId) {
+    if (hotel.id) {
       setSelectedHotel(hotel);
-      navigate(`/HotelBooking/${hotel.hotelId}`);
+      navigate(`/HotelOffers/${hotel.id}/${touristId}/${hotel.name || 'UnnamedHotel'}`);
     }
   };
 
@@ -50,8 +54,7 @@ const HotelMain: React.FC = () => {
   return (
     <div className="min-h-screen bg-background p-8" style={{margin: "-20px"}}>
       <TouristNavbar id={touristId} />
-      <p>hello</p>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto mt-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-primary p-5 relative">
             <div className="flex items-center space-x-4">
@@ -75,7 +78,7 @@ const HotelMain: React.FC = () => {
               <>
                 <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
                   <h2 className="text-xl font-semibold text-secondary mb-4">Search Hotels</h2>
-                  <HotelSearch token={token} setHotels={setHotels} hotels={hotels}/>
+                  <HotelSearch token={token} setHotels={setHotels} hotels={hotels} touristId = {touristId}/>
                 </div>
 
                 {hotels?.length > 0 && (
@@ -86,7 +89,7 @@ const HotelMain: React.FC = () => {
                         const details = getHotelDetails(hotel)
                         return (
                           <div
-                            key={hotel.hotelId}
+                            key={hotel.id}
                             className="border rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
                             onClick={() => handleHotelSelect(hotel)}
                           >
@@ -94,10 +97,9 @@ const HotelMain: React.FC = () => {
                               <div>
                                 <h3 className="text-lg font-semibold">{details.name}</h3>
                                 <p className="mt-2 text-sm text-gray-600">Address: {details.address}</p>
-                                <p className="mt-2 text-sm text-gray-600">Distance: {details.distance}</p>
+                                <p className="mt-2 text-sm text-gray-600">Coordinates: {details.latitude} {details.longitude}</p>
                               </div>
                               <div className="mt-4">
-                                <p className="text-sm text-gray-600">Last Update: {details.lastUpdate}</p>
                                 <button
                                   className="mt-2 w-full bg-primary text-white font-bold py-2 px-4 rounded hover:bg-hover transition-colors"
                                 >

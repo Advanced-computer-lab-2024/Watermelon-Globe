@@ -9,10 +9,11 @@ interface HotelSearchProps {
   token: string;
   setHotels: React.Dispatch<React.SetStateAction<any[]>>;
   hotels: any[]; // Adding hotels prop to the interface
+  touristId: string;
 }
 
 interface Hotel {
-  hotelId: string;
+  id: string;
   name?: string;
   location?: string;
   distance?: string;
@@ -20,7 +21,7 @@ interface Hotel {
   latitude?: number;
 }
 
-const HotelSearch: React.FC<HotelSearchProps> = ({ token, setHotels, hotels }) => {
+const HotelSearch: React.FC<HotelSearchProps> = ({ token, setHotels, hotels , touristId }) => {
   const [cityCode, setCityCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +30,7 @@ const HotelSearch: React.FC<HotelSearchProps> = ({ token, setHotels, hotels }) =
 
   const handleSearch = async () => {
     setLoading(true);
+    console.log(cityCode);
     setError(null);
 
     try {
@@ -43,7 +45,7 @@ const HotelSearch: React.FC<HotelSearchProps> = ({ token, setHotels, hotels }) =
   };
 
   const handleHotelClick = (hotelId: string, hotelName: string | undefined) => {
-    navigate(`/HotelOffers/${hotelId}/${hotelName}`);
+    navigate(`/HotelOffers/${hotelId}/${touristId}/${hotelName || 'UnnamedHotel'}`);
   };
 
   return (
@@ -67,42 +69,6 @@ const HotelSearch: React.FC<HotelSearchProps> = ({ token, setHotels, hotels }) =
       </div>
 
       {error && <p className="text-red-500">{error}</p>}
-
-      <div className="hotel-list space-y-4">
-        {hotels?.length > 0 ? (
-          hotels.map((hotel: Hotel) => {
-            const {
-              hotelId,
-              name = 'No name available',
-              location = 'Location not available',
-              distance = 'Distance not available',
-              latitude = 'Latitude not available',
-              longitude = 'Longitude not available',
-            } = hotel;
-
-            return (
-              <div
-                key={hotelId}
-                className="border rounded-md p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => handleHotelClick(hotelId, name)}
-              >
-                <h4 className="font-bold text-lg">{name}</h4>
-                <p className="text-gray-700">
-                  <strong>Location:</strong> {location}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Distance:</strong> {distance}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Coordinates:</strong> {latitude}, {longitude}
-                </p>
-              </div>
-            );
-          })
-        ) : (
-          <p className="text-gray-500">No hotels found. Please search for a city.</p>
-        )}
-      </div>
     </div>
   );
 };
