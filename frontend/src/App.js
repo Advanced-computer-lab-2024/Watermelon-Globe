@@ -4,6 +4,8 @@ import "./App.css";
 // Importing all necessary components
 import SignupPage from "./Components/SignUp";
 
+import AllLogin from "./Components/AllLogin";
+
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
 import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
@@ -283,6 +285,9 @@ const App = () => {
           <Route path="/AllItineraries/:id" element={<AllItineraries />} />
           <Route path="/GeneralDetails/:id" element={<GeneralDetails />} />
           <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
+
+          <Route path="/AllLogin" element={<AllLogin />} />
+
 
           <Route
             path="/tourism-governor/:id"
