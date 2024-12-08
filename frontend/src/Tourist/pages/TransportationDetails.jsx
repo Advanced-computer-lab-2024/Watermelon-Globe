@@ -10,7 +10,7 @@ export default function TransportationDetails() {
   const [error, setError] = useState(null);
   const [bookingStatus, setBookingStatus] = useState(null);
   const { touristId, id } = useParams();
-  const { selectedCurrency, currencies } = useCurrency();  // Ensure currencies are available in context
+  const { selectedCurrency, currencies } = useCurrency();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,10 +52,42 @@ export default function TransportationDetails() {
     const rates = {
       USD: 1,
       EUR: 0.85,
-      GBP: 0.75,
+      GBP: 0.73,
+      JPY: 110.0,
+      BGN: 1.96,
+      CZK: 21.5,
+      AUD: 1.34,
+      BRL: 5.0,
+      CAD: 1.25,
+      CHF: 0.92,
+      CNY: 6.45,
+      DKK: 6.36,
+      EGP: 50.04,
+      HKD: 7.8,
+      HRK: 6.63,
+      HUF: 310.0,
+      IDR: 14400,
+      ILS: 3.2,
+      INR: 74.0,
+      ISK: 129.0,
+      KRW: 1180.0,
+      MXN: 20.0,
+      MYR: 4.2,
+      NOK: 8.6,
+      NZD: 1.4,
+      PHP: 50.0,
+      PLN: 3.9,
+      RON: 4.1,
+      RUB: 74.0,
+      SEK: 8.8,
+      SGD: 1.35,
+      THB: 33.0,
+      TRY: 8.8,
+      ZAR: 14.0,
     };
     return rates[currency] || 1; // Default to 1 if currency not found
   }
+  
 
   if (loading) {
     return (

@@ -34,8 +34,8 @@ import ViewProducts from "./Guest/pages/ViewProducts.js";
 
 import GuestPage from "./Guest/pages/GuestHomepage.tsx";
 //Admin++ Pages
-import AdminSales from "./Admin++/pages/home/HomeSales.jsx"; 
-import AdminUsers from "./Admin++/pages/home/HomeUsers.jsx"; 
+import AdminSales from "./Admin++/pages/home/HomeSales.jsx";
+import AdminUsers from "./Admin++/pages/home/HomeUsers.jsx";
 import ActiveUsers from "./Admin++/pages/ActiveUsers/ActiveUsers.jsx";
 import PendingUsers from "./Admin++/pages/PendingUsers/PendingUsers.jsx";
 import Categories from "./Admin++/pages/AddActivityCategory/AddActivityCategory.jsx";
@@ -160,14 +160,15 @@ const App = () => {
     window.location.reload();
   };
 
-  ReactDOM.render(
-    <CurrencyProvider>
-      <App />
-    </CurrencyProvider>,
-    document.getElementById("root")
-  );
+  // ReactDOM.render(
+  //   <CurrencyProvider>
+  //     <App />
+  //   </CurrencyProvider>,
+  //   document.getElementById("root")
+  // );
 
   return (
+    <CurrencyProvider>
     <Router>
       <div style={{ padding: "20px" }}>
         <Routes>
@@ -361,7 +362,7 @@ const App = () => {
           />
 
 
-          <Route path="/TouristLogin" element={<TouristLogin />} /> 
+          <Route path="/TouristLogin" element={<TouristLogin />} />
 
           <Route path="/MainTouristPage/:id" element={<MainTouristPage />} />
           <Route path="/TouristDetails/:id" element={<TouristDetails />} />
@@ -423,7 +424,7 @@ const App = () => {
             element={<GovernorSiteDetails />}
           />
 
-<Route
+          <Route
             path="/GovernorLogin"
             element={<GovernorLogin />}
           />
@@ -457,6 +458,7 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    </CurrencyProvider>
   );
 };
 

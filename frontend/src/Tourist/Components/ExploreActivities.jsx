@@ -11,6 +11,7 @@ import {
   Filter,
   RefreshCw,
 } from "lucide-react";
+import { useCurrency } from "../Components/CurrencyContext";
 
 export default function ExploreActivities() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function ExploreActivities() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { selectedCurrency, currencies } = useCurrency();
 
   const activitiesScrollRef = useRef(null);
 
@@ -179,6 +181,49 @@ export default function ExploreActivities() {
 
     setFilteredActivities(filtered);
   };
+
+  function getCurrencyConversionRate(currency) {
+    const rates = {
+      USD: 1,
+      EUR: 0.85,
+      GBP: 0.73,
+      JPY: 110.0,
+      BGN: 1.96,
+      CZK: 21.5,
+      AUD: 1.34,
+      BRL: 5.0,
+      CAD: 1.25,
+      CHF: 0.92,
+      CNY: 6.45,
+      DKK: 6.36,
+      EGP: 50.04,
+      HKD: 7.8,
+      HRK: 6.63,
+      HUF: 310.0,
+      IDR: 14400,
+      ILS: 3.2,
+      INR: 74.0,
+      ISK: 129.0,
+      KRW: 1180.0,
+      MXN: 20.0,
+      MYR: 4.2,
+      NOK: 8.6,
+      NZD: 1.4,
+      PHP: 50.0,
+      PLN: 3.9,
+      RON: 4.1,
+      RUB: 74.0,
+      SEK: 8.8,
+      SGD: 1.35,
+      THB: 33.0,
+      TRY: 8.8,
+      ZAR: 14.0,
+    };
+    return rates[currency] || 1; // Default to 1 if currency not found
+  }
+
+  const currencySymbol = selectedCurrency ? currencies[selectedCurrency]?.symbol_native : "$";
+
 
   return (
     <section className="container mx-auto px-4 py-12 bg-gray-50">
@@ -352,9 +397,10 @@ export default function ExploreActivities() {
                       "Location not specified"}
                   </p>
                   <p className="text-lg font-semibold text-blue-600 mb-2">
-                    {activity.Price
-                      ? `$${activity.Price}`
-                      : "Price not available"}
+                    {currencySymbol}
+                    {selectedCurrency
+                      ? (activity.Price * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
+                      : activity.Price.toFixed(2)}
                   </p>
                   {activity.Date && (
                     <p className="text-sm text-gray-600 mb-1">

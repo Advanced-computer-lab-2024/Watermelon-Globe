@@ -7,7 +7,7 @@ import NotificationsBox from "./NotificationsBox";
 import { FaShoppingCart, FaWallet, FaGlobe } from 'react-icons/fa'
 import WalletComponent from '../Components/Wallet';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
-import { useCurrency } from "../Components/CurrencyContext"; 
+import { useCurrency } from "../Components/CurrencyContext";
 
 
 interface TouristNavbarProps {
@@ -37,7 +37,7 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
         const result = await freecurrencyapi.currencies();
         if (result.data) {
           setCurrencies(result.data);
-          console.log(result.data.USD.symbol_native);
+          console.log(result.data);
         }
       } catch (error) {
         console.error("Error fetching currencies:", error);
@@ -190,39 +190,55 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
         {/* Right Section - Actions */}
         <div className="flex items-center justify-end space-x-3 relative w-1/3" ref={dropdownRef}>
           <div className="relative">
-          <button
+            <button
               onClick={toggleCurrencyDropdown}
               className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
             >
               {/* Conditionally render the selected currency symbol or globe icon */}
               {selectedCurrency ? (
-                <span>{currencies[selectedCurrency]?.symbol_native}</span>
+                selectedCurrency === 'EGP' ? ( // Check if EGP is selected
+                  <span>E£</span> // EGP symbol
+                ) : (
+                  <span>{currencies[selectedCurrency]?.symbol_native}</span> // Other currencies
+                )
               ) : (
-                <FaGlobe />
+                <FaGlobe /> // Show globe icon if no currency is selected
               )}
             </button>
 
             {/* Dropdown List */}
             {isCurrencyDropdownOpen && (
               <ul className="absolute top-full right-0 w-48 mt-2 bg-white border rounded-lg shadow-md max-h-60 overflow-y-auto z-10">
+                {/* Manually add the EGP at the top of the list */}
+                <li
+                  key="EGP"
+                  onClick={() => handleCurrencySelect('EGP')}
+                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                >
+                  <span className="text-xl text-primary">E£</span>
+                  <span className="ml-2 text-secondary">EGP</span>
+                </li>
+                {/* Render the rest of the currencies */}
                 {Object.entries(currencies).map(([code, currency]) => {
-                  // Type assertion to ensure 'currency' is of type 'Currency'
-                  const currencyData = currency as Currency;
-                  return (
-                    <li
-                      key={code}
-                      onClick={() => handleCurrencySelect(code)}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                    >
-                      {/* Access the symbol_native from the currency object */}
-                      <span className="text-xl text-primary">{currencyData.symbol_native}</span>
-                      <span className="ml-2 text-secondary">{code}</span>
-                    </li>
-                  );
+                  if (code !== 'EGP') { // Exclude EGP from this part of the list
+                    const currencyData = currency as Currency;
+                    return (
+                      <li
+                        key={code}
+                        onClick={() => handleCurrencySelect(code)}
+                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      >
+                        <span className="text-xl text-primary">{currencyData.symbol_native}</span>
+                        <span className="ml-2 text-secondary">{code}</span>
+                      </li>
+                    );
+                  }
+                  return null;
                 })}
               </ul>
             )}
           </div>
+
           <button
             onClick={() => handleNavigation(`/shoppingCart/${id}`)}
             className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"

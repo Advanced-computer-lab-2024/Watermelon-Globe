@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import TouristNavbar from "../Components/TouristNavBar";
 import { FaCalendar, FaDollarSign, FaBox } from 'react-icons/fa';
+import { useCurrency } from "../Components/CurrencyContext";
 
 const OrdersPage = () => {
     const { touristId } = useParams<{ touristId: string }>();
@@ -12,6 +13,17 @@ const OrdersPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [cancelReason, setCancelReason] = useState<string>('');
     const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
+    const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
+
+    interface Currency {
+        symbol_native: string;
+        // Add other fields from the currency object as needed
+    }
+
+    interface CurrencyContextType {
+        selectedCurrency: string | null;
+        currencies: { [key: string]: Currency };
+    }
 
     interface Order {
         _id: string;
@@ -69,6 +81,48 @@ const OrdersPage = () => {
         fetchOrders();
     }, [touristId]);
 
+    function getCurrencyConversionRate(currency: string): number {
+        const rates: { [key: string]: number } = {
+            USD: 1,
+            EUR: 0.85,
+            GBP: 0.73,
+            JPY: 110.0,
+            BGN: 1.96,
+            CZK: 21.5,
+            AUD: 1.34,
+            BRL: 5.0,
+            CAD: 1.25,
+            CHF: 0.92,
+            CNY: 6.45,
+            DKK: 6.36,
+            EGP: 50.04,
+            HKD: 7.8,
+            HRK: 6.63,
+            HUF: 310.0,
+            IDR: 14400,
+            ILS: 3.2,
+            INR: 74.0,
+            ISK: 129.0,
+            KRW: 1180.0,
+            MXN: 20.0,
+            MYR: 4.2,
+            NOK: 8.6,
+            NZD: 1.4,
+            PHP: 50.0,
+            PLN: 3.9,
+            RON: 4.1,
+            RUB: 74.0,
+            SEK: 8.8,
+            SGD: 1.35,
+            THB: 33.0,
+            TRY: 8.8,
+            ZAR: 14.0,
+        };
+        return rates[currency] || 1;
+    }
+
+    const currencySymbol = selectedCurrency ? currencies[selectedCurrency]?.symbol_native : "$";
+
     return (
         <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
             <TouristNavbar id={touristId} />
@@ -102,7 +156,11 @@ const OrdersPage = () => {
                                                 <FaCalendar className="mr-2 text-primary" /> {new Date(order.orderDate).toLocaleDateString()}
                                             </p>
                                             <p className="flex items-center">
-                                                <FaDollarSign className="mr-2 text-primary" /> ${order.totalPrice.toFixed(2)}
+                                                <FaDollarSign className="mr-2 text-primary" />
+                                                {currencySymbol}
+                                                {selectedCurrency
+                                                    ? (order.totalPrice * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
+                                                    : order.totalPrice.toFixed(2)}
                                             </p>
                                         </div>
                                         <p className="text-grayText mt-2">
@@ -122,16 +180,16 @@ const OrdersPage = () => {
                                             ))}
                                         </ul>
                                         <div className="flex justify-end">
-                                        <button
-                                            onClick={() => {
-                                                setSelectedOrder(order);
-                                                setShowCancelModal(true);
-                                            }}
-                                            className="mt-3 bg-darkPink text-white text-sm px-4 py-2 rounded-full hover:bg-darkPinkHover transition duration-200 inline-block"
-                      style={{ width: 'auto' }}
-                      >
-                                            Cancel Order
-                                        </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedOrder(order);
+                                                    setShowCancelModal(true);
+                                                }}
+                                                className="mt-3 bg-darkPink text-white text-sm px-4 py-2 rounded-full hover:bg-darkPinkHover transition duration-200 inline-block"
+                                                style={{ width: 'auto' }}
+                                            >
+                                                Cancel Order
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -154,7 +212,11 @@ const OrdersPage = () => {
                                                 <FaCalendar className="mr-2 text-primary" /> {new Date(order.orderDate).toLocaleDateString()}
                                             </p>
                                             <p className="flex items-center">
-                                                <FaDollarSign className="mr-2 text-primary" /> ${order.totalPrice.toFixed(2)}
+                                                <FaDollarSign className="mr-2 text-primary" />
+                                                {currencySymbol}
+                                                {selectedCurrency
+                                                    ? (order.totalPrice * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
+                                                    : order.totalPrice.toFixed(2)}
                                             </p>
                                         </div>
                                         <p className="text-grayText mt-2">

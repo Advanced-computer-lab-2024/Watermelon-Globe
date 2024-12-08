@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaStar, FaMapMarkerAlt, FaClock, FaCalendar, FaDollarSign, FaLanguage,
-  FaWheelchair, FaShare, FaEnvelope, FaBookmark } from 'react-icons/fa'
+import {
+  FaStar, FaMapMarkerAlt, FaClock, FaCalendar, FaDollarSign, FaLanguage,
+  FaWheelchair, FaShare, FaEnvelope, FaBookmark
+} from 'react-icons/fa'
 import axios from "axios";
 import PaymentOptions2 from "../Components/PaymentOptions2";
 import WalletComponent from "../Components/Wallet";
 import TouristNavbar from "../Components/TouristNavBar";
+import { useCurrency } from "../Components/CurrencyContext";
+
+interface Currency {
+  symbol_native: string;
+  // Add other fields from the currency object as needed
+}
+
+interface CurrencyContextType {
+  selectedCurrency: string | null;
+  currencies: { [key: string]: Currency };
+}
 
 interface Itinerary {
   name: string
@@ -34,6 +47,7 @@ const ItineraryDetails = () => {
   const [bookingMessage, setBookingMessage] = useState<string | null>(null)
   const [bookingInProgress, setBookingInProgress] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
+  const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -179,6 +193,49 @@ const ItineraryDetails = () => {
 
   if (!itinerary) return null
 
+  function getCurrencyConversionRate(currency: string): number {
+    const rates: { [key: string]: number } = {
+      USD: 1,
+      EUR: 0.85,
+      GBP: 0.73,
+      JPY: 110.0,
+      BGN: 1.96,
+      CZK: 21.5,
+      AUD: 1.34,
+      BRL: 5.0,
+      CAD: 1.25,
+      CHF: 0.92,
+      CNY: 6.45,
+      DKK: 6.36,
+      EGP: 50.04,
+      HKD: 7.8,
+      HRK: 6.63,
+      HUF: 310.0,
+      IDR: 14400,
+      ILS: 3.2,
+      INR: 74.0,
+      ISK: 129.0,
+      KRW: 1180.0,
+      MXN: 20.0,
+      MYR: 4.2,
+      NOK: 8.6,
+      NZD: 1.4,
+      PHP: 50.0,
+      PLN: 3.9,
+      RON: 4.1,
+      RUB: 74.0,
+      SEK: 8.8,
+      SGD: 1.35,
+      THB: 33.0,
+      TRY: 8.8,
+      ZAR: 14.0,
+    };
+    return rates[currency] || 1;
+  }
+
+  const currencySymbol = selectedCurrency ? currencies[selectedCurrency]?.symbol_native : "$";
+
+
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
@@ -226,7 +283,14 @@ const ItineraryDetails = () => {
                 <h3 className="text-lg font-semibold text-secondary mb-2 flex items-center">
                   <FaDollarSign className="mr-2" /> Price
                 </h3>
-                <p className="text-gray-600 text-2xl font-bold">${itinerary.priceOfTour}</p>
+                <p className="text-gray-600 text-2xl font-bold">
+                  {currencySymbol}
+                  {selectedCurrency
+                    ? (itinerary.priceOfTour * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
+                    : itinerary.priceOfTour.toFixed(2)}
+
+
+                </p>
               </div>
 
               <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
@@ -315,9 +379,8 @@ const ItineraryDetails = () => {
               <div className="space-y-4">
                 <button
                   onClick={handleBookmark}
-                  className={`flex items-center justify-center px-4 py-2 text-sm font-semibold text-white rounded-lg ${
-                    isBookmarked ? 'bg-primary hover:bg-hover' : 'bg-secondary hover:bg-secondaryHover '
-                  }`}
+                  className={`flex items-center justify-center px-4 py-2 text-sm font-semibold text-white rounded-lg ${isBookmarked ? 'bg-primary hover:bg-hover' : 'bg-secondary hover:bg-secondaryHover '
+                    }`}
                   aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
                 >
                   <FaBookmark className="mr-2" />
@@ -325,15 +388,15 @@ const ItineraryDetails = () => {
                 </button>
                 <div className="flex justify-between">
                   <button
-                  className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
-                  onClick={handleShareLink}
+                    className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
+                    onClick={handleShareLink}
                   >
                     <FaShare className="mr-2 inline" />
                     Share Link
                   </button>
                   <button
-                  className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
-                  onClick={handleShareEmail}
+                    className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
+                    onClick={handleShareEmail}
                   >
                     <FaEnvelope className="mr-2 inline" />
                     Share via Email
