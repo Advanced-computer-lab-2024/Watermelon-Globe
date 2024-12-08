@@ -91,6 +91,7 @@ const ItineraryDetails = () => {
         }
         const data = await response.json();
         setItinerary(data);
+        setTotal(data.priceOfTour);
       } catch (error) {
         setError((error as Error).message);
       } finally {
@@ -135,7 +136,8 @@ const ItineraryDetails = () => {
         const walletResponse = await axios.put(
           `/api/Tourist/updateWallet/${id}`,
           {
-            amount: -itinerary.priceOfTour,
+            // amount: -itinerary.priceOfTour,
+            amount: total,
           }
         );
 
@@ -147,18 +149,21 @@ const ItineraryDetails = () => {
             buyer: id,
             chosenDates: [selectedDate],
             chosenTimes: [selectedTime],
-            totalPrice: itinerary.priceOfTour,
+            // totalPrice: itinerary.priceOfTour,
+            totalPrice: total,
             status: "pending",
           });
 
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-            amountPaid: itinerary.priceOfTour,
+            // amountPaid: itinerary.priceOfTour,
+            amountPaid: total,
           });
 
           alert("Itinerary booked successfully!");
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
-            amount: +itinerary.priceOfTour,
+            // amount: +itinerary.priceOfTour,
+            amount: total,
           });
           alert("Insufficient wallet balance.");
         }
@@ -170,12 +175,14 @@ const ItineraryDetails = () => {
           buyer: id,
           chosenDates: [selectedDate],
           chosenTimes: [selectedTime],
-          totalPrice: itinerary.priceOfTour,
+          // totalPrice: itinerary.priceOfTour,
+          totalPrice: total,
           status: "pending",
         });
 
         await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-          amountPaid: itinerary.priceOfTour,
+          // amountPaid: itinerary.priceOfTour,
+          amountPaid: total,
         });
 
         alert("Itinerary booked successfully!");
