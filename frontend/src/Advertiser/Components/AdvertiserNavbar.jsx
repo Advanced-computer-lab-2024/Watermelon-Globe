@@ -21,7 +21,23 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [Logo, setLogo] = useState(null);
 
+
+  useEffect(() => {
+    async function fetchLogo() {
+      try {
+       const response = await fetch(`/api/Advertiser/profiles/${id}`);
+      const data = await response.json();
+        if (data.Logo) {
+          setLogo(`/uploads/${data.Logo}`);
+        }
+      } catch (error) {
+        console.error("Error fetching logo:", error);
+      }
+    }
+    fetchLogo();
+  }, [id]);
 
   return (
     <>
@@ -56,7 +72,8 @@ const Navbar = () => {
 
             <div className="itemAdmin">
               <img
-                src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                // src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                src={Logo}
                 alt=""
                 className="avatarAdmin"
               />
