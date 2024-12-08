@@ -85,7 +85,7 @@ import ViewQuantity from "./Seller/Components/ViewAvailableQuantity.js";
 import ProductDetails from "./Seller/Components/productDetails.jsx";
 import SearchProductByName from "./Seller/Components/SearchProductByName.js";
 import SellerProfile from "./Seller/Components/sellerProfile.jsx";
-import ViewProfile from "./Seller/Components/viewProfile.js";
+import ViewProfile from "./Seller/Components/viewProfile.tsx";
 import ChangePasswordSeller from "./Seller/Components/changePasswordSeller.js";
 import GetAllProductsGeneral from "./Seller/Components/GetAllProductsGeneral.jsx";
 import ProductsDetailsGeneral from "./Seller/Components/ProductsDetailsGeneral.jsx";
