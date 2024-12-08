@@ -11,6 +11,8 @@ import {
   Filter,
   RefreshCw,
 } from "lucide-react";
+import Modal from "../Components/Modal"; // Import a reusable modal component
+import { Button } from "../Components/ui/button";
 
 export default function ExploreActivities() {
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ export default function ExploreActivities() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const activitiesScrollRef = useRef(null);
 
@@ -179,6 +182,20 @@ export default function ExploreActivities() {
 
     setFilteredActivities(filtered);
   };
+
+
+  const handleButtonClick = () => {
+    setShowModal(true); // Show the modal when a button is clicked
+  };
+
+  const closeModal = () => {
+    setShowModal(false); // Close the modal
+  };
+
+  const handleSignUpRedirect = () => {
+    navigate(`/tourist-signup`);
+  };
+
 
   return (
     <section className="container mx-auto px-4 py-12 bg-gray-50">
@@ -332,7 +349,7 @@ export default function ExploreActivities() {
               <div
                 key={activity._id}
                 className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md mx-2 cursor-pointer"
-                onClick={() => handleActivityClick(activity._id)}
+                onClick={() => handleButtonClick()}
               >
                 <div className="h-48 overflow-x-auto">
                   <img
@@ -376,6 +393,20 @@ export default function ExploreActivities() {
             ))}
           </div>
         </div>
+      )}
+
+      {showModal && (
+        <Modal onClose={closeModal}>
+          <div className="p-8  max-w-sm mx-auto">
+            <h2 className="text-2xl font-bold text-center text-primary mb-4">Join the Adventure!</h2>
+            <p className="text-center text-gray-600 mb-6">Unlock exclusive access to your personal tour guide and travel companion—sign up now to start your journey with us!</p>
+            <Button
+              onClick={handleSignUpRedirect}
+              className="bg-primary text-white font-semibold py-2 px-4 rounded-full w-full transition duration-300 hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+              Start Your Adventure
+            </Button>
+          </div>
+        </Modal>
       )}
     </section>
   );
