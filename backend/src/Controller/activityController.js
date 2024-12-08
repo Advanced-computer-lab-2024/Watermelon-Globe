@@ -98,6 +98,7 @@ const createActivity = async (req, res) => {
       bookingOpen,
       Advertiser,
       tags,
+      Category
     } = req.body;
 
     if (!Advertiser) {
@@ -125,6 +126,7 @@ const createActivity = async (req, res) => {
       Discount,
       bookingOpen,
       Advertiser,
+      Category,
       tags: tagDocuments.map((tag) => tag._id),
     });
 
@@ -488,6 +490,7 @@ const uploadPicture = async (req, res) => {
       res
         .status(200)
         .json({ message: "Activity picture updated successfully", Activity });
+        return;
     } catch (error) {
       console.error(error);
       res
@@ -496,6 +499,7 @@ const uploadPicture = async (req, res) => {
           error: "An error occurred while updating the activity picture",
         });
     }
+    console.log("file uploaded: ",req.file);
   });
 };
 

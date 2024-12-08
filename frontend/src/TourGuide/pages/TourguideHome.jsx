@@ -19,9 +19,9 @@ const TourguideHome = () => {
 
   return (
     <div className="homeAdmin">
-     <Sidebar/>
+      <Sidebar />
       <div className="homeContainer-guide">
-        <Navbar/>
+        <Navbar />
         <div className="widgetsAdminHome">
           {/* <Widget type="user" /> */}
           <Widget type="product" />

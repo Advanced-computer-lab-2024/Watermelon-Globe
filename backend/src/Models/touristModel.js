@@ -71,7 +71,7 @@ const touristSchema = new Schema(
         ref: "Product",
       },
     ],
-  
+
     bookedItineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -84,9 +84,13 @@ const touristSchema = new Schema(
         ref: "ActivityBooking",
       },
     ],
-    loyaltyPoints: { type: Number, default: 0},
-    loyaltyLevel: { type: Number, enum: [1,2,3], default: 1 },
-    badge: { type: String, enum: ["Bronze","Silver","Gold"], default: 'Bronze' },
+    loyaltyPoints: { type: Number, default: 0 },
+    loyaltyLevel: { type: Number, enum: [1, 2, 3], default: 1 },
+    badge: {
+      type: String,
+      enum: ["Bronze", "Silver", "Gold"],
+      default: "Bronze",
+    },
 
     cart: [
       {
@@ -112,62 +116,109 @@ const touristSchema = new Schema(
         country: { type: String, required: true },
         isSelected: {
           type: Boolean,
-          default: false,  // Default to false, indicating no address is selected by default
+          default: false, // Default to false, indicating no address is selected by default
         },
-      }
+      },
     ],
 
     orders: [
       {
         items: [
           {
-            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+            productId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Product",
+              required: true,
+            },
             quantity: { type: Number, required: true },
           },
         ],
         totalPrice: { type: Number, required: true },
-        status: { type: String, enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'], default: 'Pending' },
+        status: {
+          type: String,
+          enum: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"],
+          default: "Pending",
+        },
         orderDate: { type: Date, default: Date.now },
         deliveryDate: { type: Date },
         cancellationReason: { type: String },
       },
     ],
-    
+
     notifications: [
       {
         message: { type: String, required: false },
         date: { type: Date, default: Date.now },
-        read: { type: Boolean, default: false }
-      }
+        read: { type: Boolean, default: false },
+      },
     ],
 
     bookmarkedItineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Itinerary', 
+        ref: "Itinerary",
         default: [],
       },
     ],
     bookmarkedActivities: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Activity', 
+        ref: "Activity",
         default: [],
       },
     ],
 
-    WishList: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-      required: true,
-      }, ],
-  },  
-  
+    WishList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+    ],
+  },
 
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }
 );
+
+// touristSchema.statics.sendBirthdayEmails = async function () {
+//   const today = new Date();
+//   const tourists = await this.find({
+//     $expr: {
+//       $and: [
+//         { $eq: [{ $month: "$dob" }, today.getMonth() + 1] },
+//         { $eq: [{ $dayOfMonth: "$dob" }, today.getDate()] },
+//       ],
+//     },
+//   });
+
+//   for (const tourist of tourists) {
+//     await sendBirthdayEmail(tourist);
+//   }
+// };
+
+// const sendBirthdayEmail = async (tourist) => {
+//   const subject = "Happy Birthday from Watermelon Globe!";
+//   const text = `Happy Birthday, ${tourist.username}! We hope you have a fantastic day filled with joy and adventure.`;
+//   const html = `
+//     <h1>Happy Birthday, ${tourist.username}!</h1>
+//     <p>We hope you have a fantastic day filled with joy and adventure.</p>
+//     <p>As a birthday gift, we've added 100 loyalty points to your account!</p>
+//     <p>Thank you for being a valued member of the Watermelon Globe community.</p>
+//   `;
+
+//   try {
+//     await sendEmail(tourist.email, subject, text, html);
+//     tourist.loyaltyPoints += 100;
+//     await tourist.save();
+//     console.log(
+//       `Birthday email sent to ${tourist.email} and 100 points added.`
+//     );
+//   } catch (error) {
+//     console.error(`Failed to send birthday email to ${tourist.email}:`, error);
+//   }
+// };
 
 const Tourist = mongoose.model("Tourist", touristSchema);
 module.exports = Tourist;
