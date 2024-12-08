@@ -11,25 +11,25 @@ import Paper from "@mui/material/Paper";
 import { useParams } from 'react-router-dom';
 
 const List = ({ searchTerm }) => {
-  const [itineraries, setItineraries] = useState([]);
+  const [activities, setActivities] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchItineraries = async () => {
+    const fetchActivities = async () => {
       try {
-        const response = await axios.get(`/api/TourGuide/getAllItinerariesByGuide/${id}`);
-        setItineraries(response.data.bookedItineraries);
+        const response = await axios.get(`/api/Advertiser/getAllActivitiesByAdvertiser/${id}`);
+        setActivities(response.data.bookedActivities);
       } catch (error) {
-        console.error('Error fetching itineraries:', error);
+        console.error('Error fetching activities:', error);
       }
     };
 
-    fetchItineraries();
+    fetchActivities();
   }, [id]);
 
-  // Filter itineraries by name based on the search term
-  const filteredItineraries = itineraries.filter(itinerary =>
-    itinerary.itinerary.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter activities by name based on the search term
+  const filteredActivities = activities.filter(activity =>
+    activity.activity.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -37,7 +37,7 @@ const List = ({ searchTerm }) => {
       <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell className="tableCell">Itinerary</TableCell>
+            <TableCell className="tableCell">Activity</TableCell>
             <TableCell className="tableCell">Buyer</TableCell>
             <TableCell className="tableCell">Price</TableCell>
             <TableCell className="tableCell">Chosen Dates</TableCell>
@@ -45,30 +45,30 @@ const List = ({ searchTerm }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredItineraries.map((itinerary) => (
-            <TableRow key={itinerary._id}>
+          {filteredActivities.map((activity) => (
+            <TableRow key={activity._id}>
               <TableCell className="tableCell">
                 <div className="cellWrapper">
-                  {itinerary.itinerary.name}
+                  {activity.activity.Name}
                 </div>
               </TableCell>
-              <TableCell className="tableCell">{itinerary.buyer.username}</TableCell>
-              <TableCell className="tableCell">${itinerary.totalPrice.toFixed(2)}</TableCell>
+              <TableCell className="tableCell">{activity.tourist.username}</TableCell>
+              <TableCell className="tableCell">${activity.activity.Price}</TableCell>
               <TableCell className="tableCell">
-                {itinerary.chosenDates.map(date => new Date(date).toLocaleDateString()).join(', ')}
+                  {new Date(activity.chosenDate).toLocaleDateString()}
               </TableCell>
               <TableCell className="tableCell">
                 <span
                   style={{
                     padding: '5px',
                     borderRadius: '5px',
-                    color: itinerary.status === 'confirmed' ? 'green' : 
-                           itinerary.status === 'pending' ? 'orange' : 'red',
-                    backgroundColor: itinerary.status === 'confirmed' ? 'rgba(0, 128, 0, 0.151)' : 
-                                     itinerary.status === 'pending' ? 'rgba(255, 165, 0, 0.151)' : 'rgba(255, 0, 0, 0.151)',
+                    color: activity.status === 'confirmed' ? 'green' : 
+                           activity.status === 'pending' ? 'orange' : 'red',
+                    backgroundColor: activity.status === 'confirmed' ? 'rgba(0, 128, 0, 0.151)' : 
+                                     activity.status === 'pending' ? 'rgba(255, 165, 0, 0.151)' : 'rgba(255, 0, 0, 0.151)',
                   }}
                 >
-                  {itinerary.status.charAt(0).toUpperCase() + itinerary.status.slice(1)}
+                  {activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}
                 </span>
               </TableCell>
             </TableRow>

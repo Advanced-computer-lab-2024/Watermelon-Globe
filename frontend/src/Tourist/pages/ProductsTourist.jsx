@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingCart, LogOut, ShoppingBag, Search, Filter, SortDesc, RefreshCw, Heart, ChevronDown, ChevronUp } from 'lucide-react';
+import { ShoppingCart, LogOut, ShoppingBag, Search, Filter, SortDesc, RefreshCw, Heart, ChevronDown, ChevronUp, X, Trash2 } from 'lucide-react';
 import axios from 'axios';
-import WishlistPopup from './WishlistPopup';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -18,7 +17,8 @@ const ProductList = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+    fetchWishlistItems();
+  }, [id]);
 
   const fetchProducts = async () => {
     try {
@@ -30,6 +30,26 @@ const ProductList = () => {
     } catch (error) {
       console.error('Error fetching products:', error);
       setErrorMessage('Failed to load products. Please try again.');
+    }
+  };
+
+  const fetchWishlistItems = async () => {
+    try {
+      const response = await axios.get(`/api/Tourist/getWishList/${id}`);
+      console.log('Wishlist API response:', response);
+      if (response.status === 200 && response.data && response.data.wishList) {
+        const wishlistIds = response.data.wishList;
+        console.log('Wishlist IDs:', wishlistIds);
+        const wishlistProducts = products.filter(product => wishlistIds.includes(product._id));
+        console.log('Wishlist products:', wishlistProducts);
+        setWishlistItems(wishlistProducts);
+      } else {
+        console.error('Error fetching wishlist items:', response.statusText);
+        setWishlistItems([]);
+      }
+    } catch (error) {
+      console.error('Error fetching wishlist items:', error);
+      setWishlistItems([]);
     }
   };
 
@@ -55,9 +75,10 @@ const ProductList = () => {
 
   const handleAddToWishlist = async (product) => {
     try {
-      const response = await axios.post(`/api/Tourist/addProductToWishlist/${id}`, { productId: product._id });
+      const response = await axios.put(`/api/Tourist/addToWishList/${id}/${product._id}`);
+      console.log('Add to wishlist response:', response);
       if (response.status === 200) {
-        setWishlistItems(prevItems => [...prevItems, product]);
+        await fetchWishlistItems();
         alert('Item added to wishlist!');
       } else {
         alert('Failed to add product to wishlist. Please try again.');
@@ -65,6 +86,22 @@ const ProductList = () => {
     } catch (error) {
       console.error('Error adding product to wishlist:', error);
       alert('An error occurred while adding product to wishlist. Please try again.');
+    }
+  };
+
+  const handleRemoveFromWishlist = async (productId) => {
+    try {
+      const response = await axios.put(`/api/Tourist/deleteFromWishlist/${id}/${productId}`);
+      console.log('Remove from wishlist response:', response);
+      if (response.status === 200) {
+        await fetchWishlistItems();
+        alert('Item removed from wishlist!');
+      } else {
+        alert('Failed to remove product from wishlist. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error removing product from wishlist:', error);
+      alert('An error occurred while removing product from wishlist. Please try again.');
     }
   };
 
@@ -131,7 +168,10 @@ const ProductList = () => {
               <ShoppingBag size={20} />
               View Cart
             </Link>
-            <button onClick={() => setShowWishlistPopup(true)} className="text-white flex items-center gap-2">
+            <button onClick={() => {
+              fetchWishlistItems();
+              setShowWishlistPopup(true);
+            }} className="text-white flex items-center gap-2">
               <Heart size={20} />
               Wish List
             </button>
@@ -145,9 +185,18 @@ const ProductList = () => {
 
       {/* Main Content */}
       <div className="max-w-screen-xl mx-auto px-4">
-        {/* Placeholder Image */}
-        <div className="mb-8">
-          <img src="https://static.vecteezy.com/system/resources/previews/012/996/832/non_2x/people-buying-organic-products-in-eco-shop-free-vector.jpg?height=200&width=1200" alt="Placeholder" className="w-full h-50 object-cover rounded-lg" />
+        {/* Placeholder Image with Overlay Text */}
+        <div className="mb-8 relative">
+          <img
+            src="https://img.freepik.com/premium-vector/people-mall_18591-35482.jpg?w=740"
+            alt="Placeholder"
+            className="w-full h-50 object-cover rounded-lg filter blur-sm"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <h2 className="text-4xl md:text-5xl font-bold text-white text-center px-4 py-2 bg-primary bg-opacity-75 rounded-lg shadow-lg transform -skew-x-6">
+              Embark on Your Next Adventure with Our Exclusive Travel Essentials!
+            </h2>
+          </div>
         </div>
 
         <h1 className="text-center text-3xl font-bold text-secondary mb-8">Explore Our Products</h1>
@@ -222,7 +271,7 @@ const ProductList = () => {
               <div key={product._id} className="bg-cardBackground rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
                 <div className="relative">
                   <img
-                    src={product.picture || "/placeholder.svg"}
+                    src={product.picture ? (product.picture.startsWith('http') ? product.picture : `/uploads/${product.picture}`) : "https://via.placeholder.com/150"}
                     alt={product.name}
                     className="w-full h-32 object-cover rounded-t-lg"
                   />
@@ -265,11 +314,55 @@ const ProductList = () => {
 
       {/* Wishlist Popup */}
       {showWishlistPopup && (
-        <WishlistPopup
-          wishlistItems={wishlistItems}
-          onClose={() => setShowWishlistPopup(false)}
-          onAddToCart={handleAddToCart}
-        />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Your Wishlist</h2>
+              <button onClick={() => setShowWishlistPopup(false)} className="text-gray-500 hover:text-gray-700">
+                <X size={24} />
+              </button>
+            </div>
+            {wishlistItems.length === 0 ? (
+              <p>Your wishlist is empty.</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {wishlistItems.map((item) => (
+                  <div key={item._id} className="border rounded-lg p-4 flex flex-col">
+                    <img
+                      src={item.picture || "/placeholder.svg"}
+                      alt={item.name}
+                      className="w-full h-32 object-cover rounded-lg mb-2"
+                    />
+                    <h3 className="text-lg font-semibold mb-1">{item.name}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-lg font-bold text-primary">
+                        ${item.price && item.price.$numberDecimal ? item.price.$numberDecimal : item.price}
+                      </span>
+                      <span className="text-xs text-gray-500">Rating: {item.ratings || 'N/A'}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleAddToCart(item._id)}
+                        className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-primary hover:bg-hover text-white"
+                      >
+                        <ShoppingCart size={16} />
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={() => handleRemoveFromWishlist(item._id)}
+                        className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-red-500 hover:bg-red-600 text-white"
+                      >
+                        <Trash2 size={16} />
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

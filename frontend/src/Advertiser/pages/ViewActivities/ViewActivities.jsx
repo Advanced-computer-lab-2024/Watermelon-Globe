@@ -86,8 +86,8 @@ const ViewActitvities = () => {
     return price;
   };
 
-  const handleProductClick = (productId) => {
-    navigate(`/ProductsDetailsGeneral/${productId}/`);
+  const handleActivityClick = (id) => {
+    navigate(`/activityDetail/${id}`);
   };
 
   return (
@@ -229,7 +229,7 @@ const ViewActitvities = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleProductClick(activity._id)}
+                      onClick={() => handleActivityClick(activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height
