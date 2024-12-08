@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 const SellerLogo = ({ id }) => {
   const [logo, setLogo] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     async function fetchLogo() {
@@ -47,6 +48,7 @@ const SellerLogo = ({ id }) => {
         const data = await response.json();
         alert("Logo uploaded successfully");
         setPreview(`/uploads/${data.Logo}`);
+        setIsEditing(false);
       } else {
         alert("Failed to upload logo.");
       }
@@ -77,18 +79,27 @@ const SellerLogo = ({ id }) => {
 
   return (
     <div className="logo-upload">
-      <h3>Logo</h3>
+      {/* <h3>Logo</h3> */}
       <div className="logo-preview">
         {preview ? (
           <img src={preview} alt="Logo Preview" className="h-24 w-24 rounded-full object-cover" />
         ) : (
-          <p>No logo available</p>
+          <div className="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center">
+            <span className="text-gray-600">No logo</span>
+          </div>
         )}
       </div>
-      <input type="file" accept="image/*" onChange={handleLogoChange} />
-      <button style={buttonStyle} onClick={handleLogoUpload}>
-        Upload Photo
+      <button style={buttonStyle} onClick={() => setIsEditing(!isEditing)}>
+        {isEditing ? "Cancel" : "Edit Logo"}
       </button>
+      {isEditing && (
+        <div>
+          <input type="file" accept="image/*" onChange={handleLogoChange} />
+          <button style={buttonStyle} onClick={handleLogoUpload}>
+            Upload Logo
+          </button>
+        </div>
+      )}
     </div>
   );
 };

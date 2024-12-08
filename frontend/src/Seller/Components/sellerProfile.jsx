@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Navbar from './navbar/Navbar';
 import SellerLogo from './SellerLogo';
-// import './viewProfile.scss';
 
 const id = "6729244f151b6c9e346dd732";  // This would be dynamic based on the logged-in seller
 
@@ -12,13 +11,12 @@ const SellerProfile = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [profileImage, setProfileImage] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);  // State to toggle edit mode
-  const [newPassword, setNewPassword] = useState(''); // State for the new password input
-  const [currentPassword, setCurrentPassword] = useState(''); // State for current password
-  const [confirmPassword, setConfirmPassword] = useState(''); // State for password confirmation
+  const [isEditing, setIsEditing] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  // Fetch seller profile by ID
   const fetchSellerProfile = async () => {
     try {
       const response = await fetch(`/api/Seller/getSeller/${id}`, {
@@ -47,7 +45,6 @@ const SellerProfile = () => {
     fetchSellerProfile();
   }, []);
 
-  // Handle delete account request
   const handleDeleteAccount = async () => {
     if (!seller) {
       setErrorMessage('No seller profile found to delete.');
@@ -77,7 +74,6 @@ const SellerProfile = () => {
     }
   };
 
-  // Handle image upload
   const handleImageUpload = async (event) => {
     const formData = new FormData();
     formData.append('profileImage', event.target.files[0]);
@@ -101,7 +97,6 @@ const SellerProfile = () => {
     }
   };
 
-  // Handle password change
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
       setErrorMessage('Passwords do not match.');
@@ -137,13 +132,11 @@ const SellerProfile = () => {
     }
   };
 
-  // Toggle edit mode
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
   };
 
   const handleUpdateProfile = async () => {
-    // Send the updated profile data to the backend
     const updatedData = {
       Name: seller.Name,
       Email: seller.Email,
@@ -165,7 +158,7 @@ const SellerProfile = () => {
         const json = await response.json();
         setSeller(json);
         setSuccessMessage('Profile updated successfully.');
-        setIsEditing(false); // Exit edit mode
+        setIsEditing(false);
       }
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -174,118 +167,141 @@ const SellerProfile = () => {
   };
 
   return (
-    <div className="viewProfile">
+    <div className="flex h-screen bg-gray-100">
       <Sidebar />
-      <div className="viewProfileContainer">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
-        <div className="profileDetails">
-          <h2>Seller Profile</h2>
+        <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+          <div className="container mx-auto px-6 py-8">
+            <h1 className="text-3xl font-semibold text-gray-800 mb-6">Seller Profile</h1>
 
-          {errorMessage && <p className="errorMessage">{errorMessage}</p>}
-          {successMessage && <p className="successMessage">{successMessage}</p>}
+            {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
 
-          {seller ? (
-            <div className="profileInfo">
-              <div className="profileImage">
-                {profileImage ? (
-                  <img src={profileImage} alt="Profile" />
-                ) : (
-                  <p>No profile image available</p>
-                )}
-                <input type="file" onChange={handleImageUpload} />
-              </div>
-
-              {/* Display profile fields */}
-              <div className="profileFields">
-                <div>
-                  <strong>ID:</strong> {seller._id}
+            {seller ? (
+              <div className="bg-white shadow rounded-lg p-6">
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-2/3 pr-8">
+                    <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+                    <div className="mb-4">
+                      <strong className="block text-gray-700">ID:</strong>
+                      <span>{seller._id}</span>
+                    </div>
+                    <div className="mb-4">
+                      <strong className="block text-gray-700">Name:</strong>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={seller.Name}
+                          onChange={(e) => setSeller({ ...seller, Name: e.target.value })}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                      ) : (
+                        <span>{seller.Name}</span>
+                      )}
+                    </div>
+                    <div className="mb-4">
+                      <strong className="block text-gray-700">Email:</strong>
+                      {isEditing ? (
+                        <input
+                          type="email"
+                          value={seller.Email}
+                          onChange={(e) => setSeller({ ...seller, Email: e.target.value })}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                      ) : (
+                        <span>{seller.Email}</span>
+                      )}
+                    </div>
+                    <div className="mb-4">
+                      <strong className="block text-gray-700">Description:</strong>
+                      {isEditing ? (
+                        <textarea
+                          value={seller.Description}
+                          onChange={(e) => setSeller({ ...seller, Description: e.target.value })}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                          rows="3"
+                        />
+                      ) : (
+                        <span>{seller.Description}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="md:w-1/3">
+                    <div className="mb-6">
+                      <h2 className="text-xl font-semibold mb-4">Profile Image</h2>
+                      <div className="mb-4">
+                        {profileImage ? (
+                          <img src={profileImage} alt="Profile" className="w-32 h-32 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">No Image</div>
+                        )}
+                      </div>
+                    </div>
+                    <SellerLogo id={seller._id} />
+                  </div>
                 </div>
-                <div>
-                  <strong>Name:</strong>
-                  {isEditing ? (
+
+                <div className="mt-8">
+                  <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+                  <div className="space-y-4">
                     <input
-                      type="text"
-                      value={seller.Name}
-                      onChange={(e) => setSeller({ ...seller, Name: e.target.value })}
+                      type="password"
+                      placeholder="Current Password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     />
-                  ) : (
-                    seller.Name
-                  )}
-                </div>
-                <div>
-                  <strong>Email:</strong>
-                  {isEditing ? (
                     <input
-                      type="email"
-                      value={seller.Email}
-                      onChange={(e) => setSeller({ ...seller, Email: e.target.value })}
+                      type="password"
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     />
-                  ) : (
-                    seller.Email
-                  )}
+                    <input
+                      type="password"
+                      placeholder="Confirm New Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <strong>Description:</strong>
-                  {isEditing ? (
-                    <textarea
-                      value={seller.Description}
-                      onChange={(e) => setSeller({ ...seller, Description: e.target.value })}
-                    />
-                  ) : (
-                    seller.Description
+
+                <div className="mt-8 space-x-4">
+                  <button
+                    onClick={handleEditToggle}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                  >
+                    {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+                  </button>
+                  {isEditing && (
+                    <button
+                      onClick={handleUpdateProfile}
+                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                    >
+                      Save Changes
+                    </button>
                   )}
+                  <button
+                    onClick={handleChangePassword}
+                    className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+                  >
+                    Change Password
+                  </button>
+                  <button
+                    onClick={handleDeleteAccount}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                  >
+                    Delete Account
+                  </button>
                 </div>
               </div>
-
-              {/* Edit Button */}
-              <button onClick={handleEditToggle}>
-                {isEditing ? 'Cancel Edit' : 'Edit Profile'}
-              </button>
-
-              {isEditing && (
-                <button onClick={handleUpdateProfile} style={{ backgroundColor: 'green', color: 'white' }}>
-                  Save Changes
-                </button>
-              )}
-
-              {/* Change Password Section */}
-              <div className="changePassword">
-                <h3>Change Password</h3>
-                <input
-                  type="password"
-                  placeholder="Current Password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-                <input
-                  type="password"
-                  placeholder="New Password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <input
-                  type="password"
-                  placeholder="Confirm New Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <button onClick={handleChangePassword} style={{ backgroundColor: 'blue', color: 'white' }}>
-                  Change Password
-                </button>
-              </div>
-
-              <button
-                onClick={handleDeleteAccount}
-                style={{ backgroundColor: 'red', color: 'white', padding: '2px', borderRadius: '5px' }}
-              >
-                Delete Account
-              </button>
-
-              <SellerLogo id={seller._id} />
-            </div>
-          ) : (
-            !errorMessage && <p>Loading...</p>
-          )}
+            ) : (
+              !errorMessage && <p className="text-gray-600">Loading...</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -293,3 +309,4 @@ const SellerProfile = () => {
 };
 
 export default SellerProfile;
+
