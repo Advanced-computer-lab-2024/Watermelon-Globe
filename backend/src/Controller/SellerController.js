@@ -5,8 +5,8 @@ const bookedItinerary = require("../Models/touristItineraryModel");
 const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 const { findById } = require("../Models/touristModel");
 
 //for frontend
@@ -60,15 +60,15 @@ const frontendPendingSellersTable = async (req, res) => {
 //product photo
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/') // Ensure this directory exists
+    cb(null, "uploads/"); // Ensure this directory exists
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)) // Append the file extension
-  }
+    cb(null, Date.now() + path.extname(file.originalname)); // Append the file extension
+  },
 });
 
 const upload = multer({ storage: storage });
-const uploadMiddleware = upload.single('picture');
+const uploadMiddleware = upload.single("picture");
 
 const uploadPicture = async (req, res) => {
   uploadMiddleware(req, res, async function (err) {
@@ -95,7 +95,12 @@ const uploadPicture = async (req, res) => {
 
       // Delete the old picture if it exists
       if (product.picture) {
-        const oldPicturePath = path.join(__dirname, '..', 'uploads', product.picture);
+        const oldPicturePath = path.join(
+          __dirname,
+          "..",
+          "uploads",
+          product.picture
+        );
         if (fs.existsSync(oldPicturePath)) {
           fs.unlinkSync(oldPicturePath);
         }
@@ -105,10 +110,16 @@ const uploadPicture = async (req, res) => {
       product.picture = req.file.filename;
       await product.save();
 
-      res.status(200).json({ message: "Product picture updated successfully", product });
+      res
+        .status(200)
+        .json({ message: "Product picture updated successfully", product });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "An error occurred while updating the product picture" });
+      res
+        .status(500)
+        .json({
+          error: "An error occurred while updating the product picture",
+        });
     }
   });
 };
@@ -879,38 +890,38 @@ const totalProductRevenueForSeller = async (req, res) => {
     }
 
     const result = await Tourist.aggregate([
-      { $unwind: '$orders' },
-      { $unwind: '$orders.items' },
+      { $unwind: "$orders" },
+      { $unwind: "$orders.items" },
       {
         $lookup: {
-          from: 'products',
-          localField: 'orders.items.productId',
-          foreignField: '_id',
-          as: 'product'
-        }
+          from: "products",
+          localField: "orders.items.productId",
+          foreignField: "_id",
+          as: "product",
+        },
       },
-      { $unwind: '$product' },
+      { $unwind: "$product" },
       {
         $match: {
-          'product.seller': new mongoose.Types.ObjectId(sellerId)
-        }
+          "product.seller": new mongoose.Types.ObjectId(sellerId),
+        },
       },
       {
         $group: {
           _id: null,
           totalRevenue: {
             $sum: {
-              $multiply: ['$orders.items.quantity', '$product.price']
-            }
-          }
-        }
-      }
+              $multiply: ["$orders.items.quantity", "$product.price"],
+            },
+          },
+        },
+      },
     ]);
 
     if (result.length === 0) {
       return res.status(200).json({
         message: "No completed orders found for this seller",
-        totalRevenue: 0
+        totalRevenue: 0,
       });
     }
 
@@ -918,15 +929,13 @@ const totalProductRevenueForSeller = async (req, res) => {
 
     res.status(200).json({
       message: "Total product revenue calculated successfully for the seller",
-      totalRevenue: totalRevenue.toFixed(2)
+      totalRevenue: totalRevenue.toFixed(2),
     });
-
   } catch (error) {
     console.error("Error calculating total product revenue:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const SellerMonthlyRevenue = async (req, res) => {
   try {
@@ -941,66 +950,77 @@ const SellerMonthlyRevenue = async (req, res) => {
 
     // Aggregate product revenue for the current year
     const productRevenue = await Tourist.aggregate([
-      { $unwind: '$orders' }, // Unwind the orders array
-      { $unwind: '$orders.items' }, // Unwind the items within each order
+      { $unwind: "$orders" }, // Unwind the orders array
+      { $unwind: "$orders.items" }, // Unwind the items within each order
       {
         $lookup: {
-          from: 'products',
-          localField: 'orders.items.productId',
-          foreignField: '_id',
-          as: 'product'
-        }
+          from: "products",
+          localField: "orders.items.productId",
+          foreignField: "_id",
+          as: "product",
+        },
       },
-      { $unwind: '$product' }, // Unwind the product after the lookup
+      { $unwind: "$product" }, // Unwind the product after the lookup
       {
         $match: {
-          'product.seller': new mongoose.Types.ObjectId(sellerId), // Match the sellerId
-          'orders.orderDate': { $gte: startDate, $lte: endDate } // Filter by current year
-        }
+          "product.seller": new mongoose.Types.ObjectId(sellerId), // Match the sellerId
+          "orders.orderDate": { $gte: startDate, $lte: endDate }, // Filter by current year
+        },
       },
       {
         $group: {
-          _id: { month: { $month: '$orders.orderDate' } }, // Group by month
+          _id: { month: { $month: "$orders.orderDate" } }, // Group by month
           totalRevenue: {
-            $sum: { $multiply: ['$orders.items.quantity', '$product.price'] } // Calculate total revenue
-          }
-        }
+            $sum: { $multiply: ["$orders.items.quantity", "$product.price"] }, // Calculate total revenue
+          },
+        },
       },
-      { $sort: { '_id.month': 1 } } // Sort by month
+      { $sort: { "_id.month": 1 } }, // Sort by month
     ]);
 
     // Initialize an array for all 12 months with zero revenue
     const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
       month: i + 1,
       productRevenue: 0,
-      totalRevenue: 0
+      totalRevenue: 0,
     }));
 
     // Populate the monthly revenue with the actual data from aggregation
-    productRevenue.forEach(entry => {
+    productRevenue.forEach((entry) => {
       const monthIndex = entry._id.month - 1; // Month is 1-based, array is 0-based
       monthlyRevenue[monthIndex].productRevenue = entry.totalRevenue;
       monthlyRevenue[monthIndex].totalRevenue = entry.totalRevenue;
     });
 
     // Add month names and format numbers
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    const formattedRevenue = monthlyRevenue.map(item => ({
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const formattedRevenue = monthlyRevenue.map((item) => ({
       ...item,
       monthName: monthNames[item.month - 1],
       productRevenue: Number(item.productRevenue.toFixed(2)),
-      totalRevenue: Number(item.totalRevenue.toFixed(2))
+      totalRevenue: Number(item.totalRevenue.toFixed(2)),
     }));
 
     // Return the response with the formatted revenue data
     res.status(200).json({
       message: "Yearly product revenue calculated successfully",
       year: currentYear,
-      data: formattedRevenue
+      data: formattedRevenue,
     });
-
   } catch (error) {
     console.error("Error calculating monthly product revenue:", error);
     res.status(500).json({ message: "Server error" });
@@ -1045,7 +1065,9 @@ const filterRevenueByDateSeller = async (req, res) => {
       {
         $group: {
           _id: null, // Grouping to calculate total revenue
-          totalRevenue: { $sum: { $multiply: ['$orders.items.quantity', '$product.price'] } }, // Sum up the total price for orders
+          totalRevenue: {
+            $sum: { $multiply: ["$orders.items.quantity", "$product.price"] },
+          }, // Sum up the total price for orders
         },
       },
     ]);
@@ -1066,10 +1088,6 @@ const filterRevenueByDateSeller = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
-
 
 module.exports = {
   createSeller,
@@ -1106,5 +1124,5 @@ module.exports = {
   loginSeller,
   totalProductRevenueForSeller,
   SellerMonthlyRevenue,
-  filterRevenueByDateSeller
+  filterRevenueByDateSeller,
 };
