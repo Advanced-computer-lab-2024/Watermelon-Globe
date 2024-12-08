@@ -956,38 +956,29 @@ const getAllItinerariesByGuide = async (req, res) => {
   try {
     const { guideId } = req.params; // Assuming the guideId is passed as a parameter
 
-    // Step 1: Query to find all child itineraries where the parent itinerary's guide matches the guideId
-    const bookedItineraries = await ChildItinerary.find({})
-      .populate({
-        path: 'itinerary', // Populate the parent itinerary
-        match: { guide: guideId }, // Filter itineraries where the guide matches the provided guideId
-      })
-      .populate('buyer'); // Optionally populate the buyer data
+    // Fetch all itineraries that have the matching guideId
+    const itineraries = await itineraryModel.Itinerary.find({ guide: guideId }).populate('guide').populate('activities'); // Optionally, populate related data
 
-    // Step 2: Filter out itineraries that do not have a matched guide
-    const filteredBookedItineraries = bookedItineraries.filter(itinerary => itinerary.itinerary);
-
-    // Step 3: If no booked itineraries are found for the guide, return a 404 response
-    if (filteredBookedItineraries.length === 0) {
+    // Check if any itineraries are found
+    if (!itineraries || itineraries.length === 0) {
       return res.status(404).json({
-        message: "No booked itineraries found for this guide",
+        message: "No itineraries found for this guide",
       });
     }
 
-    // Step 4: Return the filtered booked itineraries
+    // Return the list of itineraries
     res.status(200).json({
-      message: "Booked itineraries retrieved successfully for the guide",
-      bookedItineraries: filteredBookedItineraries,
+      message: "Itineraries retrieved successfully",
+      itineraries,
     });
   } catch (error) {
-    console.error("Error retrieving booked itineraries for guide:", error);
+    console.error("Error retrieving itineraries for guide:", error);
     res.status(500).json({
       message: "Server error",
       error: error.message,
     });
   }
 };
-
 
 
 // Function to calculate total revenue from booked itineraries filtered by guide ID (10% of their price)
