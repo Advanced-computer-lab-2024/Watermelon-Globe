@@ -371,7 +371,7 @@ const App = () => {
             element={<TouristComplaints />}
           />
           <Route path="/MyBookings/:id" element={<MyBookings />} />
-          <Route path="/SiteDetails/:id" element={<SiteDetails />} />
+          <Route path="/SiteDetails/:id/:touristId" element={<SiteDetails />} />
 
           {/* shopping cart*/}
           <Route path="/ShoppingCart/:touristId" element={<ShoppingCart />} />
@@ -432,7 +432,7 @@ const App = () => {
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path="/add-activity" element={<ActivityForm />} />
           <Route
-            path="/TransportationDetails/:id"
+            path="/TransportationDetails/:id/:touristId"
             element={<TransportationDetails />}
           />
 

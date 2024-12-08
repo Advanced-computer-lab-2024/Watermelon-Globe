@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { FaCalendar, FaDollarSign, FaBox } from 'react-icons/fa'
 
 interface CartItem {
   itemId: string
@@ -12,17 +11,22 @@ interface CartItem {
 }
 
 interface PaymentSummaryProps {
+  totalFromCartPage?: number
   touristId: string
 }
 
-const PaymentSummary: React.FC<PaymentSummaryProps> = ({ touristId }) => {
+const PaymentSummary: React.FC<PaymentSummaryProps> = ({ totalFromCartPage, touristId }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [subtotal, setSubtotal] = useState<number>(0)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchCart()
-  }, [touristId])
+    if (totalFromCartPage !== undefined) {
+      setSubtotal(totalFromCartPage)
+    } else {
+      fetchCart()
+    }
+  }, [totalFromCartPage, touristId])
 
   const fetchCart = async () => {
     try {
@@ -43,17 +47,19 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ touristId }) => {
 
   return (
     <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-      <h4 className="text-lg font-semibold text-secondary">Order Summary</h4>
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="space-y-2 mt-4">
-        {cartItems.map((item) => (
-          <div key={item.itemId} className="flex justify-between text-grayText">
-            <span>{item.name} (x{item.quantity})</span>
-            <span>${(item.price * item.quantity).toFixed(2)}</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4 pt-4 border-t border-gray-200">
+      <h4 className="text-lg font-semibold text-secondary mb-4">Order Summary</h4>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {cartItems.length > 0 && (
+        <ul className="space-y-2 mb-4">
+          {cartItems.map((item) => (
+            <li key={item.itemId} className="flex justify-between text-grayText">
+              <span>{item.name} (x{item.quantity})</span>
+              <span>${(item.price * item.quantity).toFixed(2)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="pt-4 border-t border-gray-200">
         <div className="flex justify-between items-center">
           <span className="font-semibold">Total:</span>
           <span className="text-xl font-bold text-primary">${subtotal.toFixed(2)}</span>

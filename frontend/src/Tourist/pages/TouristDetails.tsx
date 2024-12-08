@@ -197,10 +197,9 @@ export default function TouristDetails() {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
-
+      <p>hello</p>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <p>hello</p>
           <div className="bg-primary p-5 relative">
             <div className="absolute top-4 right-4">
               <button

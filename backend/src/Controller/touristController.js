@@ -2588,10 +2588,6 @@ const markNotificationAsRead = async (req, res) => {
 };
 
 
-
-
-
-
 module.exports = {
   createTourist,
   getTourists,

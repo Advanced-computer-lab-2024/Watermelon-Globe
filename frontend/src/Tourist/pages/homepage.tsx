@@ -187,8 +187,8 @@ export default function DraftHomePage() {
         <ForYou />
         <ExploreTrips />
         <ExploreActivities />
-        <ExploreHistoricalSites />
-        <ExploreTransportations />
+        <ExploreHistoricalSites touristId={id} />
+        <ExploreTransportations touristId={id} />
 
         <section className="bg-sectionBackground py-20">
           <div className="container mx-auto">

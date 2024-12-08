@@ -9,11 +9,15 @@ import WalletComponent from '../Components/Wallet';
 import TouristNavbar from "../Components/TouristNavBar";
 
 const CheckoutPage = () => {
-  const params = useParams()
+  const params = useParams();
+  const { state } = useLocation();
   const touristId = params.touristId as string
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | 'cashOnDelivery' | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const totalFromCartPage = state?.total || 0; // Fallback to 0 if total is not passed
+
 
   const handlePaymentMethodSelection = (method: 'wallet' | 'creditCard' | 'cashOnDelivery') => {
     setPaymentMethod(method)
@@ -46,8 +50,9 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={touristId} />
+      <p>hello</p>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-primary p-5 relative">
@@ -82,7 +87,7 @@ const CheckoutPage = () => {
             {/* Payment Summary Section */}
             <div>
               <h3 className="text-2xl font-semibold text-black mb-4">Payment Summary</h3>
-              <PaymentSummary touristId={touristId} />
+              <PaymentSummary totalFromCartPage={totalFromCartPage} touristId={touristId} />
             </div>
 
             {/* Confirm Payment Button */}
