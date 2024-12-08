@@ -2661,10 +2661,6 @@ const deleteFromWishlist = async (req, res) => {
 
 
 
-
-
-
-
 module.exports = {
   createTourist,
   getTourists,

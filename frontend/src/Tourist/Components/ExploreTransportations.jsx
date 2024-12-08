@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
 
-const ExploreTransportations = () => {
+const ExploreTransportations = ({touristId}) => {
   const [transportations, setTransportations] = useState([]);
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -20,7 +20,7 @@ const ExploreTransportations = () => {
   };
 
   const handleTransportationClick = (id) => {
-    navigate(`/TransportationDetails/${id}`); // Navigate to TransportationDetails page with the transportation ID
+    navigate(`/TransportationDetails/${id}/${touristId}`); // Navigate to TransportationDetails page with the transportation ID
   };
 
   return (

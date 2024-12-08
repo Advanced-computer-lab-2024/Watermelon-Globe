@@ -4,7 +4,7 @@ import "./App.css";
 // Importing all necessary components
 import SignupPage from "./Components/SignUp";
 
-import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
+import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
 import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
 import HomePage from "./Components/Homepage";
@@ -124,7 +124,7 @@ import PurchasedProducts from "./Tourist/pages/PurchasedProducts.jsx";
 import ItineraryDetails from "./Tourist/pages/ItineraryDetails.tsx";
 import MyBookings from "./Tourist/pages/MyBookings.tsx";
 import TouristActivityDetails from "./Tourist/pages/ActivityDetails.tsx";
-import TouristComplaints from "./Tourist/pages/TouristComplaints.jsx";
+import TouristComplaints from "./Tourist/pages/TouristComplaints.tsx";
 import ShoppingCart from "./Tourist/pages/shoppingCart.tsx";
 import CheckoutPage from "./Tourist/pages/CheckoutPage.tsx";
 import DraftHomePage from "./Tourist/pages/TouristHomepage.jsx";
@@ -385,7 +385,7 @@ const App = () => {
             element={<TouristComplaints />}
           />
           <Route path="/MyBookings/:id" element={<MyBookings />} />
-          <Route path="/SiteDetails/:id" element={<SiteDetails />} />
+          <Route path="/SiteDetails/:id/:touristId" element={<SiteDetails />} />
 
           {/* shopping cart*/}
           <Route path="/ShoppingCart/:touristId" element={<ShoppingCart />} />
@@ -452,7 +452,7 @@ const App = () => {
           {/* <Route path='/advertiserHome' element={<CompanyHomepage/>}/> */}
           <Route path="/add-activity" element={<ActivityForm />} />
           <Route
-            path="/TransportationDetails/:id"
+            path="/TransportationDetails/:id/:touristId"
             element={<TransportationDetails />}
           />
 
