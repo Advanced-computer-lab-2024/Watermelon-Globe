@@ -590,11 +590,10 @@ const GetAllProducts = () => {
                       {product.name}
                     </Typography>
                   </div>
-                  <AspectRatio minHeight="260px" maxHeight="300px">
+                  <AspectRatio ratio={16 / 9}>
                     <img
-                      src={product.picture || "https://via.placeholder.com/150"}
+                      src={product.picture ? (product.picture.startsWith('http') ? product.picture : `/uploads/${product.picture}`) : "https://via.placeholder.com/150"}
                       alt={`Image of ${product.name}`}
-                      loading="lazy"
                     />
                   </AspectRatio>
                   <CardContent orientation="horizontal">

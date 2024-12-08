@@ -29,6 +29,7 @@ const Sort = require("./Routes/sort");
 const TourGuide = require("./Routes/tourGuide");
 const Tourist = require("./Routes/tourist");
 const TouristItinerary = require("./Routes/touristItinerary");
+const login = require("./Routes/login");
 
 // App variables
 const app = express();
@@ -72,6 +73,7 @@ app.use("/api/Sort", Sort);
 app.use("/api/TourGuide", TourGuide);
 app.use("/api/Tourist", Tourist);
 app.use("/api/TouristItinerary", TouristItinerary);
+app.use("/api/login", login);
 
 //uploads
 app.use("/uploads", express.static("uploads"));

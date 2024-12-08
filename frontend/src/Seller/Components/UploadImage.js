@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 
-const UploadProductPicture = ({ id }) => { 
-   const [productId, setProductId] = useState('');
-  const [pictureUrl, setPictureUrl] = useState('');
+const UploadProductPicture = ({ id }) => {
+  const [file, setFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!file) {
+      setErrorMessage('Please select a file to upload');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('picture', file);
+
     try {
-      // Make a PUT request to update the product's picture
-      const response = await fetch(`/api/Seller/uploadPicture?id=${(id)}`, {
+      const response = await fetch(`/api/Seller/uploadPicture?id=${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ picture: pictureUrl }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: formData,
       });
 
       if (response.ok) {
@@ -33,12 +40,12 @@ const UploadProductPicture = ({ id }) => {
       setSuccessMessage('');
     }
   };
-  const watermelonGreen = '#4CAF50';
+
   const watermelonPink = '#FF4081';
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
-    width:"25%",
+    width: "auto",
     color: 'white',
     padding: '10px 20px',
     borderRadius: '5px',
@@ -50,23 +57,20 @@ const UploadProductPicture = ({ id }) => {
 
   return (
     <div>
-      {/* <h2>Upload Product Picture</h2> */}
-      <form onSubmit={handleSubmit}>
-       
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div>
-          <label>Picture URL:</label>
+          <label>Select Picture:</label>
           <input
-            type="text"
-            value={pictureUrl}
-            onChange={(e) => setPictureUrl(e.target.value)}
+            type="file"
+            name="picture"
+            accept="image/*"
+            onChange={handleFileChange}
             required
-            placeholder="Enter picture URL"
           />
         </div>
-        <button style= {buttonStyle} type="submit">Upload Picture</button>
+        <button style={buttonStyle} type="submit">Upload Picture</button>
       </form>
 
-      {/* Display success or error messages */}
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
@@ -74,3 +78,4 @@ const UploadProductPicture = ({ id }) => {
 };
 
 export default UploadProductPicture;
+

@@ -29,7 +29,7 @@ export default function AddressPage() {
   const [error, setError] = useState<string | null>(null)
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null) // Track the selected address
   const [showAddForm, setShowAddForm] = useState<boolean>(false) // Track whether to show the add address form
- 
+
 
   // Fetch existing addresses from backend
   const fetchAddresses = async () => {
@@ -158,8 +158,8 @@ export default function AddressPage() {
       {/* Error message */}
       {error && <p className="text-red-500">{error}</p>}
 
-       {/* Address List */}
-       <div>
+      {/* Address List */}
+      <div>
         {addresses.length === 0 ? (
           <p>No addresses found. Please add a new one.</p>
         ) : (
@@ -168,25 +168,25 @@ export default function AddressPage() {
               <li key={address._id} className={`flex items-center justify-between border p-4 rounded-lg shadow-sm  ${selectedAddress === address._id ? 'bg-gray-100 border-primary ' : ''}`}>
                 <div>
                   <p className="font-semibold">{address.street}</p>
-                  <p>{address.city}, {address.state} {address.zip}</p>
+                  <p>{address.city}, {address.state}, {address.zip}</p>
                   <p>{address.country}</p>
                 </div>
                 <div className="flex items-center space-x-4">
                   <button
                     onClick={() => handleCheckboxChange(address._id)}
-                    className={`py-2 px-4 rounded-md ${selectedAddress === address._id ? 'bg-primary text-white' : 'bg-transparent border border-primary text-primary'} hover:bg-primary hover:text-white transition`}
+                    className={`py-2 px-4 rounded-md ${selectedAddress === address._id ? 'bg-primary text-white' : 'bg-transparent border border-primary text-primary'} hover:bg-hover hover:text-white transition`}
                   >
                     Select
                   </button>
                   <button
                     onClick={() => handleEditAddress(index)}
-                    className="text-[#2E8B57] p-2 hover:text-[#1E6E4D]"
+                    className="text-secondary p-2 hover:bg-secondary hover:text-white"
                   >
                     <FaEdit size={20} />
                   </button>
                   <button
                     onClick={() => handleDeleteAddress(index)}
-                    className="text-[#FF3366] p-2 hover:text-[#FF1E4D]"
+                    className="text-darkPink p-2 hover:bg-darkPink hover:text-white"
                   >
                     <FaTrashAlt size={20} />
                   </button>
@@ -203,7 +203,7 @@ export default function AddressPage() {
         <button
           onClick={() => setShowAddForm(true)}
           className="flex items-center mt-4 bg-secondary hover:bg-secondaryHover text-white px-4 py-2 rounded-md"
-          >
+        >
           <FaPlus className="mr-2" />
           Add New Address
         </button>

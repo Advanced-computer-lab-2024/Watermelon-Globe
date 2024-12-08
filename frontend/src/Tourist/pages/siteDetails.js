@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import TouristNavbar from "../Components/TouristNavBar";
 
 const SiteDetails = () => {
-  const { id } = useParams();
+  const { id, touristId } = useParams();
   const [site, setSite] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -43,48 +44,47 @@ const SiteDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8">
-
-      <div className="max-w-4xl mx-auto bg-cardBackground shadow-md rounded-lg p-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-primary hover:text-secondaryHover transition duration-200 focus:outline-none focus-visible:outline-none focus:ring-0 active:outline-none"
-          style={{ backgroundColor: 'transparent' }}
-          >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <h1 className="text-secondary text-4xl font-bold mb-4">{site.name}</h1>
-        <p className="text-grayText text-lg mb-6">{site.description}</p>
-        <img
-          src={site.pictures[0]}
-          alt={site.name}
-          className="w-full h-64 object-cover rounded-lg shadow-lg mb-6"
-        />
-        <div className="text-grayText text-lg space-y-2">
-          <p>
-            <span className="font-semibold text-secondary">Location:</span> {site.location}
-          </p>
-          <p>
-            <span className="font-semibold text-secondary">Opening Hours:</span> {site.openingHours}
-          </p>
-          <p>
-            <span className="font-semibold text-secondary">Ticket Prices:</span> ${site.ticketPrices}
-          </p>
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+      <TouristNavbar id={touristId} />
+      <p>hello</p>
+      <div className="max-w-4xl mx-auto bg-cardBackground shadow-lg rounded-lg overflow-hidden">
+        <div className="bg-primary px-6 py-4">
+          <h2 className="text-3xl font-bold text-white mt-2">Site Details</h2>
         </div>
+        <div className="p-6">
+          <h1 className="text-secondary text-4xl font-bold mb-4">{site.name}</h1>
+          <p className="text-grayText text-lg mb-6">{site.description}</p>
+          <img
+            src={site.pictures[0]}
+            alt={site.name}
+            className="w-full h-64 object-cover rounded-lg shadow-lg mb-6"
+          />
+          <div className="text-grayText text-lg space-y-2">
+            <p>
+              <span className="font-semibold text-secondary">Location:</span> {site.location}
+            </p>
+            <p>
+              <span className="font-semibold text-secondary">Opening Hours:</span> {site.openingHours}
+            </p>
+            <p>
+              <span className="font-semibold text-secondary">Ticket Prices:</span> ${site.ticketPrices}
+            </p>
+          </div>
 
-        <div className="mt-6 flex gap-4">
-          <button
-            onClick={handleShareLink}
-            className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-hover transition duration-200"
-          >
-            Copy Link
-          </button>
-          <button
-            onClick={handleShareEmail}
-            className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-hover transition duration-200"
-          >
-            Share via Email
-          </button>
+          <div className="mt-6 flex gap-4">
+            <button
+              onClick={handleShareLink}
+              className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-hover transition duration-200"
+            >
+              Copy Link
+            </button>
+            <button
+              onClick={handleShareEmail}
+              className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-hover transition duration-200"
+            >
+              Share via Email
+            </button>
+          </div>
         </div>
       </div>
     </div>
