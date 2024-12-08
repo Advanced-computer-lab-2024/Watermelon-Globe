@@ -23,7 +23,7 @@ const HomeScreen = () => {
     const fetchAdvertiser = async () => {
       try {
         const response = await axios.get(
-          "/api/Advertiser/lastApprovedAdvertiser"
+          "/api/advertiser/profiles/673259c7b9feab03bdc4e4fc"
         );
         setAdvertiser(response.data);
       } catch (error) {
@@ -64,7 +64,24 @@ const HomeScreen = () => {
       />
       <div className="homeContainer">
         <Navbar advertiser={advertiser} advertiserId={advertiser?._id} />
-
+        {/* <div className="main-content">
+        <>
+              <div className="widgets">
+                <Widget type="user" />
+                <Widget type="order" />
+                <Widget type="earning" />
+                <Widget type="balance" />
+              </div>
+              <div className="charts">
+                <Featured />
+                <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+              </div>
+              <div className="listContainer">
+                <div className="listTitle">Latest Transactions</div>
+                <Table />
+              </div>
+            </>
+        </div> */}
         {/* <div className="main-content">
           {selectedTab === "addActivity" ? (
             <div className="full-width-form">
