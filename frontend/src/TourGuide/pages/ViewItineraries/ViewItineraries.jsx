@@ -17,7 +17,7 @@ import NavTabs from "Admin++/components/navTabs/navTabsEvents";
 import OutlinedFlagRoundedIcon from "@mui/icons-material/OutlinedFlagRounded";
 import AssistantPhotoRoundedIcon from "@mui/icons-material/AssistantPhotoRounded";
 
-const ViewItinerariesEvents = () => {
+const ViewItineraries = () => {
   const [itineraries, setItineraries] = useState([]); // Ensure default state is an array
   const [filteredItineraries, setFilteredItineraries] = useState([]); // Ensure default state is an array
   const navigate = useNavigate();
@@ -31,11 +31,11 @@ const ViewItinerariesEvents = () => {
 
       // Ensure data is an array
       if (Array.isArray(data)) {
-        setActivities(data);
+        setItineraries(data);
         setFilteredItineraries(data);
       } else {
         console.error("API response is not an array:", data);
-        setActivities([]);
+        setItineraries([]);
         setFilteredItineraries([]);
       }
     } catch (error) {
@@ -78,15 +78,15 @@ const ViewItinerariesEvents = () => {
               }}
               className="text-2xl font-bold text-800 mb-6"
             >
-              Itineraries
+              All Itineraries
             </h2>
 
             <div
               style={{
-                display: "flex", // Use flexbox to arrange the items horizontally
-                overflowX: "auto", // Allow horizontal scrolling
-                gap: "20px", // Space between cards
-                padding: "10px",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
+                gap: "20px",
+                padding: "25px",
               }}
             >
               {filteredItineraries.map((itinerary) => (
@@ -215,4 +215,4 @@ const ViewItinerariesEvents = () => {
   );
 };
 
-export default ViewItinerariesEvents;
+export default ViewItineraries;

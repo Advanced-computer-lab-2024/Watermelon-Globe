@@ -95,7 +95,9 @@ import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
 import TourGuideProfile from "./TourGuide/Components/viewProfile.jsx";
 import AllItineraries from "./TourGuide/Components/AllItineraries.jsx";
 import GeneralDetails from "./TourGuide/Components/AllItinerariesDetail.jsx";
-
+//Tour guide pages -- Sprint 3
+import ViewItineraries from "./TourGuide/pages/ViewItineraries/ViewItineraries";
+import ViewMyItineraries from "./TourGuide/pages/ViewItineraries/ViewMyItineraries";
 //Tourism governer pages
 import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
 import AddSite from "./Governor/Components/AddSite.js";
@@ -411,6 +413,11 @@ const App = () => {
           <Route
             path="/ChangePasswordGovernor/:id"
             element={<ChangePasswordGovernor />}
+          />
+          <Route path="/ViewItineraries/:id" element={<ViewItineraries />} />
+          <Route
+            path="/ViewMyItineraries/:id"
+            element={<ViewMyItineraries />}
           />
           <Route
             path="/GovernorSiteDetails/:id"
