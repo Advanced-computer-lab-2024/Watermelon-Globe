@@ -15,8 +15,10 @@ import {
   FaBookmark,
   FaBell,
 } from "react-icons/fa";
+
 import TouristNavbar from "../Components/TouristNavBar";
 import WalletComponent from "../Components/Wallet";
+import Alert from "@mui/material/Alert";
 
 interface Tag {
   _id: string;
@@ -64,6 +66,11 @@ interface Activity {
   notifyRequests: string[];
 }
 
+interface PromoCode {
+  code: string;
+  discountValue: number;
+}
+
 const ActivityDetails: React.FC = () => {
   const params = useParams();
   const activityId = params.activityId as string;
@@ -78,6 +85,37 @@ const ActivityDetails: React.FC = () => {
   const [bookingInProgress, setBookingInProgress] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isNotified, setIsNotified] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
+  const [total, setTotal] = useState(0);
+
+  const handleApplyPromo = async () => {
+    try {
+      // Send a GET request to your API to fetch the promo codes
+      const response = await axios.get<PromoCode[]>("/api/Admin/getPromoCodes"); // Replace with your actual backend API URL
+
+      // Find the promo code that matches the entered promo code
+      const validPromo = response.data.find((promo) => {
+        console.log(promo); // Log the promo object for each iteration
+        return promo.code === promoCode; // Check if the promo code matches
+      });
+
+      console.log(validPromo);
+      // If promo code is valid
+      if (validPromo) {
+        setPromoApplied(true);
+        const discountAmount = (total * validPromo.discountValue) / 100;
+        setTotal(total - discountAmount);
+        setInvalidPromo(false); // Reset any error message if the promo code is valid
+      } else {
+        setInvalidPromo(true); // Set error state if promo code is invalid
+      }
+    } catch (error) {
+      console.error("Error checking promo code", error);
+      setInvalidPromo(true); // Handle any errors during the API call
+    }
+  };
 
   useEffect(() => {
     const fetchActivity = async () => {
@@ -87,6 +125,7 @@ const ActivityDetails: React.FC = () => {
         );
         setActivity(response.data);
         setIsNotified(response.data.notifyRequests.includes(id));
+        setTotal(response.data.Price);
       } catch (err) {
         setError("Failed to load activity details. Please try again.");
       } finally {
@@ -182,7 +221,8 @@ const ActivityDetails: React.FC = () => {
         const walletResponse = await axios.put(
           `/api/Tourist/updateWallet/${id}`,
           {
-            amount: -activity.Price,
+            //amount: -activity.Price,
+            amount: total,
           }
         );
 
@@ -196,13 +236,15 @@ const ActivityDetails: React.FC = () => {
           });
 
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-            amountPaid: activity.Price,
+            //amountPaid: activity.Price,
+            amountPaid: total,
           });
 
           alert("Activity booked successfully!");
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
-            amount: +activity.Price,
+            // amount: +activity.Price,
+            amount: total,
           });
           alert("Insufficient wallet balance.");
         }
@@ -216,7 +258,8 @@ const ActivityDetails: React.FC = () => {
         });
 
         await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-          amountPaid: activity.Price,
+          // amountPaid: activity.Price,
+          amountPaid: total,
         });
 
         alert("Activity booked successfully!");
@@ -335,7 +378,7 @@ const ActivityDetails: React.FC = () => {
                   <p className="flex items-center text-gray-700">
                     <FaDollarSign className="mr-2 text-primary" />
                     <span className="font-medium">
-                      ${activity.Price}
+                      ${total}
                       {activity.Discount > 0 && (
                         <span className="text-secondary ml-2">{`(${activity.Discount}% Off)`}</span>
                       )}
@@ -344,6 +387,51 @@ const ActivityDetails: React.FC = () => {
                 </div>
               </div>
             </div>
+            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <h2 className="text-xl font-semibold text-secondary mb-4">
+                Apply Promo
+              </h2>
+
+              {/* Promo code input */}
+              <div className="flex flex-col mb-4">
+                <label
+                  htmlFor="promoCode"
+                  className="text-lg font-semibold mb-2"
+                >
+                  Enter Promo Code
+                </label>
+                <input
+                  type="text"
+                  id="promoCode"
+                  placeholder="Enter promo code"
+                  className="p-2 border border-gray-300 rounded-lg"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)} // Assuming you have a state for promoCode
+                />
+              </div>
+
+              {/* Apply button */}
+              <button
+                onClick={handleApplyPromo} // Function to handle promo code application
+                className="w-full bg-primary text-white p-2 rounded-lg font-semibold hover:bg-primary-dark transition duration-300"
+              >
+                Apply Promo
+              </button>
+
+              {/* Optionally, show a message if the promo code is successfully applied */}
+              {promoApplied && (
+                <Alert severity="success" style={{ marginTop: "12px" }}>
+                  Promo Code applied successfully
+                </Alert>
+              )}
+            </div>
+
+            {/* Show error message if promo code is invalid */}
+            {invalidPromo && (
+              <Alert severity="error" style={{ marginTop: "12px" }}>
+                Invalid Promo Code
+              </Alert>
+            )}
 
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">
@@ -354,6 +442,7 @@ const ActivityDetails: React.FC = () => {
                 onPaymentMethodSelection={setPaymentMethod}
               />
             </div>
+
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">
                 Actions

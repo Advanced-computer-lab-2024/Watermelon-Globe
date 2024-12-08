@@ -596,7 +596,7 @@ const SignupTourist = () => {
             >
               Already have an account?{" "}
               <a
-                href="/tourist-signup"
+                href="/AllLogin"
                 style={{
                   color: "#d32e65",
                   fontWeight: 500,

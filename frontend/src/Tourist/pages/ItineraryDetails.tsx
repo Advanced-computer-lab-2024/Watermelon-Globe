@@ -17,7 +17,7 @@ import axios from "axios";
 import PaymentOptions2 from "../Components/PaymentOptions2";
 import WalletComponent from "../Components/Wallet";
 import TouristNavbar from "../Components/TouristNavBar";
-
+import Alert from "@mui/material/Alert";
 interface Itinerary {
   name: string;
   locations: string[];
@@ -30,6 +30,10 @@ interface Itinerary {
   availableDates: string[];
   availableTimes: string[];
   notifyRequests: string[];
+}
+interface PromoCode {
+  code: string;
+  discountValue: number;
 }
 
 const ItineraryDetails = () => {
@@ -49,6 +53,37 @@ const ItineraryDetails = () => {
   const [bookingInProgress, setBookingInProgress] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isNotified, setIsNotified] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
+  const [total, setTotal] = useState(0);
+
+  const handleApplyPromo = async () => {
+    try {
+      // Send a GET request to your API to fetch the promo codes
+      const response = await axios.get<PromoCode[]>("/api/Admin/getPromoCodes"); // Replace with your actual backend API URL
+
+      // Find the promo code that matches the entered promo code
+      const validPromo = response.data.find((promo) => {
+        console.log(promo); // Log the promo object for each iteration
+        return promo.code === promoCode; // Check if the promo code matches
+      });
+
+      console.log(validPromo);
+      // If promo code is valid
+      if (validPromo) {
+        setPromoApplied(true);
+        const discountAmount = (total * validPromo.discountValue) / 100;
+        setTotal(total - discountAmount);
+        setInvalidPromo(false); // Reset any error message if the promo code is valid
+      } else {
+        setInvalidPromo(true); // Set error state if promo code is invalid
+      }
+    } catch (error) {
+      console.error("Error checking promo code", error);
+      setInvalidPromo(true); // Handle any errors during the API call
+    }
+  };
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -60,6 +95,7 @@ const ItineraryDetails = () => {
         const data = await response.json();
         setItinerary(data);
         setIsNotified(data.notifyRequests.includes(id));
+        setTotal(data.priceOfTour);
       } catch (error) {
         setError((error as Error).message);
       } finally {
@@ -110,7 +146,8 @@ const ItineraryDetails = () => {
     }
 
     if (!selectedDate || !selectedTime) {
-      alert("Please select a date and time.");
+      // alert("Please select a date and time.");
+
       return;
     }
 
@@ -122,7 +159,8 @@ const ItineraryDetails = () => {
         const walletResponse = await axios.put(
           `/api/Tourist/updateWallet/${id}`,
           {
-            amount: -itinerary.priceOfTour,
+            // amount: -itinerary.priceOfTour,
+            amount: total,
           }
         );
 
@@ -134,18 +172,21 @@ const ItineraryDetails = () => {
             buyer: id,
             chosenDates: [selectedDate],
             chosenTimes: [selectedTime],
-            totalPrice: itinerary.priceOfTour,
+            // totalPrice: itinerary.priceOfTour,
+            totalPrice: total,
             status: "pending",
           });
 
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-            amountPaid: itinerary.priceOfTour,
+            // amountPaid: itinerary.priceOfTour,
+            amountPaid: total,
           });
 
           alert("Itinerary booked successfully!");
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
-            amount: +itinerary.priceOfTour,
+            // amount: +itinerary.priceOfTour,
+            amount: total,
           });
           alert("Insufficient wallet balance.");
         }
@@ -157,12 +198,14 @@ const ItineraryDetails = () => {
           buyer: id,
           chosenDates: [selectedDate],
           chosenTimes: [selectedTime],
-          totalPrice: itinerary.priceOfTour,
+          // totalPrice: itinerary.priceOfTour,
+          totalPrice: total,
           status: "pending",
         });
 
         await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-          amountPaid: itinerary.priceOfTour,
+          // amountPaid: itinerary.priceOfTour,
+          amountPaid: total,
         });
 
         alert("Itinerary booked successfully!");
@@ -312,13 +355,13 @@ const ItineraryDetails = () => {
                 </h3>
                 <p className="text-gray-600">{itinerary.languageOfTour}</p>
               </div>
-
               <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
                 <h3 className="text-lg font-semibold text-secondary mb-2 flex items-center">
                   <FaDollarSign className="mr-2" /> Price
                 </h3>
+
                 <p className="text-gray-600 text-2xl font-bold">
-                  ${itinerary.priceOfTour}
+                  {/* ${itinerary.priceOfTour} */}${total}
                 </p>
               </div>
 
@@ -340,6 +383,52 @@ const ItineraryDetails = () => {
                 {itinerary.rating} / 5
               </p>
             </div>
+
+            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <h2 className="text-xl font-semibold text-secondary mb-4">
+                Apply Promo
+              </h2>
+
+              {/* Promo code input */}
+              <div className="flex flex-col mb-4">
+                <label
+                  htmlFor="promoCode"
+                  className="text-lg font-semibold mb-2"
+                >
+                  Enter Promo Code
+                </label>
+                <input
+                  type="text"
+                  id="promoCode"
+                  placeholder="Enter promo code"
+                  className="p-2 border border-gray-300 rounded-lg"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)} // Assuming you have a state for promoCode
+                />
+              </div>
+
+              {/* Apply button */}
+              <button
+                onClick={handleApplyPromo} // Function to handle promo code application
+                className="w-full bg-primary text-white p-2 rounded-lg font-semibold hover:bg-primary-dark transition duration-300"
+              >
+                Apply Promo
+              </button>
+
+              {/* Optionally, show a message if the promo code is successfully applied */}
+              {promoApplied && (
+                <Alert severity="success" style={{ marginTop: "12px" }}>
+                  Promo Code applied successfully
+                </Alert>
+              )}
+            </div>
+
+            {/* Show error message if promo code is invalid */}
+            {invalidPromo && (
+              <Alert severity="error" style={{ marginTop: "12px" }}>
+                Invalid Promo Code
+              </Alert>
+            )}
 
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">

@@ -21,7 +21,9 @@ const {
   ActivityRevenue,
   advertiserMonthlyRevenue,
   filterRevenueByDateAdvertiser,
-  getAllActivitiesByAdvertiser
+  getAllActivitiesByAdvertiser,
+  getTotalTouristsForActivity,
+  getMonthlyTouristsForActivity
 } = require("../Controller/companyProfileController");
 
 const { getSalesReport } = require("../Controller/companyProfileController");
@@ -57,7 +59,10 @@ router.get("/advertiserMonthlyRevenue/:advertiserId", advertiserMonthlyRevenue);
 
 router.get("/filterRevenueByDateAdvertiser/:advertiserId", filterRevenueByDateAdvertiser);
 
-router.put("uploadPicture", uploadPicture);
+router.get("/getTotalTouristsForActivity/:activityId", getTotalTouristsForActivity);
+
+router.get("/getMonthlyTouristsForActivity/:activityId", getMonthlyTouristsForActivity);
+router.put("/uploadPicture", uploadPicture);
 
 // router.post("/addAdvertiser", createAdvertiser);
 

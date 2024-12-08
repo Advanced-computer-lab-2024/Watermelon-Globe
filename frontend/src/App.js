@@ -11,6 +11,7 @@ import SignupGuideNew from "Tourist/pages/GuideSignUp";
 import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
 import AllLogin from "./Components/AllLogin";
 
+
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
 import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
@@ -59,11 +60,15 @@ import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewIti
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
+import AdvertiserProfile from "Advertiser/Components/AdvertiserProfile.tsx";
+
 // import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
+import TouristActivityReport from "./Advertiser/pages/ViewActivities/TouristActivityReport";
 import AccountPage from "./Advertiser/pages/AccountPage/AccountPage.jsx";
 import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
 import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.jsx";
+import ActivityDetails from "./Advertiser/Components/ActivityDetails/ActivityDetails.jsx";
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
 import ViewActitvities from "Advertiser/pages/ViewActivities/ViewActivities";
@@ -101,7 +106,7 @@ import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGu
 import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
 import TourguideHome from "./TourGuide/pages/TourguideHome.jsx";
 import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
-import TourGuideProfile from "./TourGuide/Components/viewProfile.jsx";
+import TourGuideProfile from "./TourGuide/Components/viewProfile.tsx";
 import AllItineraries from "./TourGuide/Components/AllItineraries.jsx";
 import GeneralDetails from "./TourGuide/Components/AllItinerariesDetail.jsx";
 //Tour guide pages -- Sprint 3
@@ -154,6 +159,9 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
+import TouristBookmarkss from './Tourist/Components/TouristBookmarks.jsx'
+
+
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -238,7 +246,7 @@ const App = () => {
             element={<ViewItinerariesEvents />}
           />
           <Route path="/" element={<MainHome />} />
-
+          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
           <Route path="/complaintss" element={<Complaints />} />
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
@@ -252,6 +260,7 @@ const App = () => {
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
 
           {/* Guest and Advertiser Routes */}
+          <Route path="/AdvertiserProfileN/:id" element={<AdvertiserProfile/>}/>
           <Route path="/advertiser/:id" element={<AdvertiserPage />} />
           <Route path="/ViewActitvities/:id" element={<ViewActitvities />} />
           <Route
@@ -321,6 +330,7 @@ const App = () => {
 
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/ActivityReport/:id" element={<TouristActivityReport />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
             path="/advertiserProfile/:advertiserId"
@@ -334,6 +344,7 @@ const App = () => {
             path="/activityDetails/:id/:profileId"
             element={<AdvertiserActivityDetails />}
           />
+          <Route path="/activityDetail/:activityId/:id" element={<ActivityDetails />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
