@@ -90,13 +90,6 @@ const ViewActitvities = () => {
     navigate(`/ProductsDetailsGeneral/${productId}/`);
   };
 
-  const resetFilters = () => {
-    setSearchTerm("");
-    setSortBy("name");
-    setMinPrice(0);
-    setMaxPrice(1000);
-  };
-
   return (
     <div
       style={{

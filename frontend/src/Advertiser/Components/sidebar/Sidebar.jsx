@@ -133,14 +133,10 @@ const Sidebar = () => {
 
           {/* All Products */}
           <Link
-            to={`/GetAllProductsGeneral/${id}`}
+            to={`/ViewActitvities/${id}`}
             style={{ textDecoration: "none" }}
           >
-            <li
-              className={
-                isActive(`/GetAllProductsGeneral/${id}`) ? "active-seller" : ""
-              }
-            >
+            <li>
               <LocalActivityRoundedIcon className="iconAdmin" />
               <span>All Activities</span>
             </li>
