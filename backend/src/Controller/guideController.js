@@ -236,34 +236,59 @@ const createItinerary = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-const getMyItineraries = async (req, res) => {
-  const { guideID } = req.params; // Extract the Governor ID from the request parameters
 
-  // Validate if the provided ID is a valid MongoDB ObjectId
+// // Controller to fetch itineraries for a specific tour guide
+// const getMyItineraries = async (req, res) => {
+//   // const { guideID } = req.params.id; // Extract guide ID from URL parameters
 
-  console.log(guideID);
-  if (!mongoose.Types.ObjectId.isValid(guideID)) {
-    return res.status(400).json({ error: "Invalid guide ID" });
-  }
+//   // // Check if the provided ID is a valid MongoDB ObjectId
+//   // if (!mongoose.Types.ObjectId.isValid(guideID)) {
+//   //   return res.status(400).json({ error: "Invalid guide ID" });
+//   // }
 
-  try {
-    // Find the tourism site by ID and populate the tourismGovernor field
-    const site = await itineraryModel.Itinerary.find({ guide: guideID })
-      .populate("activities")
-      .populate("guide");
+//   // try {
+//   //   // Fetch all itineraries that belong to the guide and populate 'activities' and 'guide'
+//   //   const itineraries = await itineraryModel.Itinerary.find({ guide: guideID })
+//   //     .populate("activities") // Populates activities linked to the itinerary
+//   //     .populate("guide"); // Populates the guide details
 
-    // If no site is found, return a 404 error
-    if (!site) {
-      return res.status(404).json({ message: "Site not found" });
-    }
+//   //   // If no itineraries are found, return a 404 error
+//   //   if (!itineraries || itineraries.length === 0) {
+//   //     return res
+//   //       .status(404)
+//   //       .json({ message: "No itineraries found for this guide" });
+//   //   }
 
-    // Return the found site as a response
-    res.status(200).json(site);
-  } catch (error) {
-    // Handle any server errors
-    res.status(500).json({ error: error.message });
-  }
-};
+//   //   // Return the itineraries as a response
+//   //   res.status(200).json(itineraries);
+//   // } catch (error) {
+//   //   // Handle any server errors
+//   //   console.error("Error fetching itineraries:", error.message);
+//   //   res.status(500).json({ error: "Server error, please try again later." });
+//   // }
+//   try {
+//     const guideId = req.params.id;
+
+//     // Fetch the guide with their itineraries populated
+//     const guide = await tourGuide
+//       .findById(guideId)
+//       .populate("itineraries") // Populate the itineraries array
+//       .exec();
+
+//     if (!guide) {
+//       return res.status(404).json({ message: "Tour guide not found" });
+//     }
+
+//     // Return the itineraries
+//     res.status(200).json({
+//       success: true,
+//       itineraries: guide.itineraries,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching itineraries:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 const getAllItineraries = async (req, res) => {
   try {
@@ -284,6 +309,34 @@ const getAllItineraries = async (req, res) => {
   } catch (error) {
     // Catch and handle any errors
     res.status(500).json({ error: error.message });
+  }
+};
+
+// API to fetch itineraries by guide id
+const getMyItineraries = async (req, res) => {
+  const { guideId } = req.params; // Extract the guideId from route parameters
+
+  try {
+    // Fetch itineraries where guide matches guideId
+    const itineraries = await itineraryModel.Itinerary.find({
+      Advertiser: guideId,
+    })
+      .populate("activities") // Optionally populate activities
+      .populate("tag") // Optionally populate tags
+      .populate("pickupDropoffLocations"); // Optionally populate pickup/dropoff details
+
+    // If no itineraries found
+    if (!itineraries || itineraries.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No itineraries found for this guide" });
+    }
+
+    // Return the itineraries as a JSON response
+    res.status(200).json(itineraries);
+  } catch (error) {
+    console.error("Error fetching itineraries:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -549,7 +602,7 @@ const activateItineraryAccessibility = async (req, res) => {
       id,
       { accessibility: true },
       { new: true }
-    ).populate('notifyRequests');
+    ).populate("notifyRequests");
 
     if (!updatedItinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
@@ -557,11 +610,13 @@ const activateItineraryAccessibility = async (req, res) => {
 
     // Add notification to all tourists who requested to be notified
     const notificationMessage = `The itinerary "${updatedItinerary.name}" is now available for booking.`;
-    const notificationPromises = updatedItinerary.notifyRequests.map(touristId => 
-      Tourist.findByIdAndUpdate(touristId, 
-        { $push: { notifications: notificationMessage } },
-        { new: true }
-      )
+    const notificationPromises = updatedItinerary.notifyRequests.map(
+      (touristId) =>
+        Tourist.findByIdAndUpdate(
+          touristId,
+          { $push: { notifications: notificationMessage } },
+          { new: true }
+        )
     );
 
     await Promise.all(notificationPromises);

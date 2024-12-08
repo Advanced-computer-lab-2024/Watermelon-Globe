@@ -1,7 +1,7 @@
 const governorModel = require("../Models/tourismGovernorModel");
 const siteModel = require("../Models/tourismSiteModel");
 const { default: mongoose } = require("mongoose");
-
+const Tag = require("../Models/tagModel");
 // const createSite = async (req, res) => {
 //   const{id}=req.params;
 //   const {
@@ -12,7 +12,7 @@ const { default: mongoose } = require("mongoose");
 //     openingHours,
 //     ticketPrices,
 //     tag,
-   
+
 //   } = req.body;
 //   try {
 //     const governor = governorModel.findById(id);
@@ -33,6 +33,107 @@ const { default: mongoose } = require("mongoose");
 //     res.status(400).json({ error: error.message });
 //   }
 // };
+
+// Get Tag by ID
+const getTagById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tag = await Tag.findById(id);
+    if (!tag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+    res.status(200).json(tag);
+  } catch (error) {
+    console.error("Error fetching tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+// Delete Tag
+const deleteTag = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the tag ID from the request parameters
+
+    // Find and delete the tag by its ID
+    const deletedTag = await Tag.findByIdAndDelete(id);
+
+    if (!deletedTag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Tag deleted successfully", tag: deletedTag });
+  } catch (error) {
+    console.error("Error deleting tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+// Edit Tag
+const editTag = async (req, res) => {
+  const { id } = req.params;
+  const { type, historicPeriod } = req.body;
+  try {
+    const tag = await Tag.findById(id);
+    if (!tag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+
+    // Update fields if provided
+    if (type) tag.type = type;
+    if (historicPeriod) tag.historicPeriod = historicPeriod;
+
+    await tag.save();
+    res.status(200).json(tag);
+  } catch (error) {
+    console.error("Error editing tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Get All Tags
+const getAllTags = async (req, res) => {
+  try {
+    const tags = await Tag.find(); // Fetch all tags
+    res.status(200).json(tags);
+  } catch (error) {
+    console.error("Error fetching tags:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const getAllGovernors = async (req, res) => {
+  try {
+    // Fetch all governors and populate their tourismSite references
+    const governors = await governorModel.find().populate("tourismSite");
+
+    // Return the governors as a JSON response
+    res.status(200).json(governors);
+  } catch (error) {
+    console.error("Error fetching governors:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const getGovernorById = async (req, res) => {
+  try {
+    // Extract the governor ID from the URL parameters
+    const { id } = req.params;
+
+    // Find the governor by ID and populate their tourismSite references
+    const governor = await governorModel.findById(id).populate("tourismSite");
+
+    // If no governor is found, return a 404 error
+    if (!governor) {
+      return res.status(404).json({ message: "Governor not found" });
+    }
+
+    // Return the governor as a JSON response
+    res.status(200).json(governor);
+  } catch (error) {
+    console.error("Error fetching governor by ID:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 const createSite = async (req, res) => {
   const { id } = req.params; // tourismGovernor ID
@@ -267,54 +368,76 @@ const changePasswordGovernor = async (req, res) => {
   }
 };
 
-const getPassword = async(req,res) =>{
-  const{id}= req.query;
+const getPassword = async (req, res) => {
+  const { id } = req.query;
   console.log(id);
-  try{
+  try {
     const governor = await governorModel.findById(id);
     console.log(governor);
-    if(!governor){
-      res.status(400).json({message:"governor is not found"});
+    if (!governor) {
+      res.status(400).json({ message: "governor is not found" });
+    } else {
+      res.status(200).json(governor.password);
     }
-    else{
-      res.status(200).json(governor.password)
-    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
   }
-  catch{
-    console.error('Error getting password:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
+};
+
+const loginGovernor = async (req, res) => {
+  const { Username, Password } = req.body;
+
+  if (!Username || !Password) {
+    return res
+      .status(400)
+      .json({ error: "Username and Password are required" });
   }
 
-  const loginGovernor = async (req, res) => {
-    const { Username, Password } = req.body;
-  
-    if (!Username || !Password) {
-      return res.status(400).json({ error: "Username and Password are required" });
+  try {
+    // Find the governor by username
+    const governor = await governorModel.findOne({ username: Username });
+
+    if (!governor) {
+      return res.status(404).json({ error: "Governor not found" });
     }
-  
-    try {
-      // Find the governor by username
-      const governor = await governorModel.findOne({ username: Username });
-  
-      if (!governor) {
-        return res.status(404).json({ error: "Governor not found" });
-      }
-  
-      // Check if the password matches
-      if (governor.password !== Password) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-  
-      // Return the governor's ID if login is successful
-      res.status(200).json({ id: governor._id });
-    } catch (error) {
-      console.error("Error during governor login:", error);
-      res.status(500).json({ error: "Server error" });
+
+    // Check if the password matches
+    if (governor.password !== Password) {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
-  };
-  
-  
+
+    // Return the governor's ID if login is successful
+    res.status(200).json({ id: governor._id });
+  } catch (error) {
+    console.error("Error during governor login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+const createTag = async (req, res) => {
+  const { type, historicPeriod } = req.body;
+
+  // Validate input data
+  if (!type || !historicPeriod) {
+    return res
+      .status(400)
+      .json({ message: "Type and historic period are required." });
+  }
+
+  try {
+    // Create a new tag
+    const newTag = new Tag({ type, historicPeriod });
+
+    // Save the tag to the database
+    const savedTag = await newTag.save();
+
+    // Return the newly created tag in the response
+    res.status(201).json(savedTag);
+  } catch (error) {
+    console.error("Error creating tag:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 module.exports = {
   createSite,
@@ -326,5 +449,12 @@ module.exports = {
   filterByTags,
   changePasswordGovernor,
   getPassword,
-  loginGovernor
+  loginGovernor,
+  getAllGovernors,
+  getGovernorById,
+  getAllTags,
+  getTagById,
+  editTag,
+  deleteTag,
+  createTag,
 };

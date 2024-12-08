@@ -1,9 +1,11 @@
-.home {
+/* .home {
     display: flex;
+    padding-top: 50px;
 }
 
 .home.sidebar {
     position: fixed;
+    top: 50px;
 }
 
 .home .homeContainer {
@@ -37,11 +39,19 @@
 .main-content {
     flex: 1;
     margin-left: 30px;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 20px;
-    height: 650px; 
+    height: calc(100vh - 100px);
     overflow-y: auto; 
     box-sizing: border-box; 
+    padding: 20px;
+}
+
+.full-width-form {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
 }
 
 .activity-grid {
@@ -64,4 +74,36 @@
 .activity-card:hover {
     transform: scale(1.02);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+} */
+
+.home-guide {
+  display: flex;
+
+  .homeContainer-guide {
+    flex: 6;
+
+    .widgets-guide,
+    .charts-guide {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .charts-guide {
+      padding: 5px 20px;
+    }
+
+    .listContainer-guide {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 20px;
+      margin: 20px;
+
+      .listTitle-guide {
+        font-weight: 500;
+        color: gray;
+        margin-bottom: 15px;
+      }
+    }
+  }
 }

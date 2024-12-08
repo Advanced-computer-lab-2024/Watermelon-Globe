@@ -177,7 +177,7 @@ const Sidebar = () => {
           <li onClick={toggleDropdownProductView} style={{ cursor: "pointer" }}>
             <FaCartArrowDown className="iconAdmin" />
             <span className="manage-textAdmin">
-              View Products
+              &nbsp;&nbsp;&nbsp;View Products
               {isDropdownOpenProductView ? (
                 <FaAngleDown className="arrowAdmin" />
               ) : (
@@ -204,14 +204,14 @@ const Sidebar = () => {
                   <span>View My Products</span>
                 </li>
               </Link>
-              <Link
+              {/* <Link
                 to={`/viewSaleQuantities/${id}`}
                 style={{ textDecoration: "none" }}
               >
                 <li>
                   <span>View Sales & Quantites</span>
                 </li>
-              </Link>
+              </Link> */}
             </ul>
           )}
 

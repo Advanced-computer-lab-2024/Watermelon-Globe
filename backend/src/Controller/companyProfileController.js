@@ -410,6 +410,47 @@ const deleteProfile = async (req, res) => {
   }
 };
 
+// GET: Fetch a company profile by ID
+const getCompanyProfileById = async (req, res) => {
+  const { id } = req.params; // Extract ID from URL parameters
+
+  try {
+    // Find the company profile by ID
+    const companyProfile = await CompanyProfile.findById(id);
+
+    // Check if the document exists
+    if (!companyProfile) {
+      return res.status(404).json({ message: "Company profile not found" });
+    }
+
+    // Return the found company profile
+    res.status(200).json(companyProfile);
+  } catch (error) {
+    console.error("Error fetching company profile by ID:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+  // GET: Fetch a company profile by ID
+  const getCompanyProfileById = async (req, res) => {
+    const { id } = req.params; // Extract ID from URL parameters
+
+    try {
+      // Find the company profile by ID
+      const companyProfile = await CompanyProfile.findById(id);
+
+      // Check if the document exists
+      if (!companyProfile) {
+        return res.status(404).json({ message: "Company profile not found" });
+      }
+
+      // Return the found company profile
+      res.status(200).json(companyProfile);
+    } catch (error) {
+      console.error("Error fetching company profile by ID:", error.message);
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };
+};
+
 module.exports = {
   createProfile,
   getProfiles,
@@ -426,4 +467,5 @@ module.exports = {
   frontendAdvertiserTable,
   deleteProfile,
   getAllProfiles,
+  getCompanyProfileById,
 };

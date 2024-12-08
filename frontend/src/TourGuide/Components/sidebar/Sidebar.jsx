@@ -120,6 +120,7 @@ import { MdOutlineTravelExplore } from "react-icons/md";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
 import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
+import AddIcon from "@mui/icons-material/Add";
 
 import axios from "axios";
 const Sidebar = () => {
@@ -153,7 +154,7 @@ const Sidebar = () => {
           <p className="titleAdmin">MAIN</p>
 
           <Link
-            to="/TourguideHome/67013950229bd3b168a94dde"
+            to={`/TourguideHome/${id}`}
             style={{ textDecoration: "none" }}
             // onClick={() => setSelectedTab("Dashboard")}
           >
@@ -166,17 +167,31 @@ const Sidebar = () => {
 
           <p className="titleAdmin">ITINERARIES</p>
 
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link
+            to={`/ViewMyItineraries/${id}`}
+            style={{ textDecoration: "none" }}
+          >
             <li>
               <MovingRoundedIcon className="iconAdmin" />
               <span>My Iteneraries</span>
             </li>
           </Link>
 
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link
+            to={`/ViewItineraries/${id}`}
+            style={{ textDecoration: "none" }}
+          >
             <li>
               <MdOutlineTravelExplore className="iconAdmin" />
-              <span>All Iteneraries</span>
+              {/* <span>All Iteneraries</span> */}
+              <span>&nbsp;&nbsp;&nbsp;All Iteneraries</span>
+            </li>
+          </Link>
+
+          <Link to={`/AddItinerary/${id}`} style={{ textDecoration: "none" }}>
+            <li>
+              <AddIcon className="iconAdmin" />
+              <span>Add Iteneraries</span>
             </li>
           </Link>
 

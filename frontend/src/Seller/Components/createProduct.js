@@ -56,14 +56,24 @@ const CreateProduct = () => {
     }
   };
 
-  return (
-    <div>
-       <div className="listSeller">
-      
-      <Sidebar />
-      <div className="listContainerSeller">
-      <Navbar/>
-      {/* <div className="flex justify-center items-start mt-9"> */}
+ 
+    return (
+      <div
+        style={{
+          backgroundColor: "#fff",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
+          flexDirection: "column",
+        }}
+      >
+        <div className="listAdminProduct">
+          <Sidebar />
+          <div className="listContainerAdminProduct">
+            <Navbar />
+            <div style={{ padding: "20px" }}>
           <div className=" bg-white p-6 rounded-lg ">
            
             <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">Create New Product</h2>
@@ -81,8 +91,7 @@ const CreateProduct = () => {
         <label>Description:</label>
         <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
 
-        <label>Ratings:</label>
-        <input type="number" value={ratings} onChange={(e) => setRatings(e.target.value)} />
+       
        
         <div className="flex justify-center">
   <button  style={{width:"25%", marginTop:10}} className="bg-green-700 text-white px-4 py-2  rounded mt-6" type="submit">
@@ -98,6 +107,7 @@ const CreateProduct = () => {
       {/* Display success or error messages */}
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    </div>
     </div>
     </div>
     </div>

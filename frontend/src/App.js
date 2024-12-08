@@ -59,6 +59,8 @@ import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
 import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.jsx";
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
+import ViewActitvities from "Advertiser/pages/ViewActivities/ViewActivities";
+import ViewMyActitvities from "Advertiser/pages/ViewActivities/ViewMyActivities";
 import SellerHome from "./Seller/pages/SellerHomePage.jsx";
 // import AdminHomePage from "./Admin/pages/home/Home.jsx";
 
@@ -95,7 +97,9 @@ import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
 import TourGuideProfile from "./TourGuide/Components/viewProfile.jsx";
 import AllItineraries from "./TourGuide/Components/AllItineraries.jsx";
 import GeneralDetails from "./TourGuide/Components/AllItinerariesDetail.jsx";
-
+//Tour guide pages -- Sprint 3
+import ViewItineraries from "./TourGuide/pages/ViewItineraries/ViewItineraries";
+import ViewMyItineraries from "./TourGuide/pages/ViewItineraries/ViewMyItineraries";
 //Tourism governer pages
 import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
 import AddSite from "./Governor/Components/AddSite.js";
@@ -103,7 +107,9 @@ import GetMySites from "./Governor/Components/GetMySites.js";
 import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
 import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
 import GovernorLogin from "./Governor/pages/GovernorLogin.jsx";
-
+import AddTagGovernor from "Governor/pages/AddTag/AddTag";
+import ViewMySites from "Governor/pages/ViewSites/ViewMySites";
+import ViewSites from "Governor/pages/ViewSites/ViewSites";
 //Tourist pages
 import TouristSignup from "./Tourist/pages/TouristSignup.js";
 import TouristLogin from "./Tourist/pages/TouristLogin.jsx";
@@ -129,7 +135,7 @@ import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
 import HotelMain from "./Hotels/Pages/HotelMain.js";
-import Complaints from "./Admin++/pages/Complaints/Complaints.jsx"
+import Complaints from "./Admin++/pages/Complaints/Complaints.jsx";
 
 import SiteDetails from "./Tourist/pages/siteDetails.js";
 
@@ -220,7 +226,7 @@ const App = () => {
           />
           <Route path="/" element={<MainHome />} />
 
-          <Route path="/complaintss" element={<Complaints/>} />
+          <Route path="/complaintss" element={<Complaints />} />
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
           <Route path="/seller-signup" element={<SellerSignup />} />
@@ -233,7 +239,12 @@ const App = () => {
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
 
           {/* Guest and Advertiser Routes */}
-          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/advertiser/:id" element={<AdvertiserPage />} />
+          <Route path="/ViewActitvities/:id" element={<ViewActitvities />} />
+          <Route
+            path="/ViewMyActitvities/:id"
+            element={<ViewMyActitvities />}
+          />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
 
           {/* Guest Routes */}
@@ -308,7 +319,7 @@ const App = () => {
             element={<AdvertiserActivityDetails />}
           />
           <Route path="/editActivity/:id" element={<EditActivity />} />
-          <Route path="/add-activity/:userId" element={<ActivityForm />} />
+          <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
             path="/SalesReportPage/:advertiserId"
             element={<SalesReportPage />}
@@ -414,10 +425,19 @@ const App = () => {
             path="/ChangePasswordGovernor/:id"
             element={<ChangePasswordGovernor />}
           />
+          <Route path="/ViewItineraries/:id" element={<ViewItineraries />} />
+          <Route
+            path="/ViewMyItineraries/:id"
+            element={<ViewMyItineraries />}
+          />
           <Route
             path="/GovernorSiteDetails/:id"
             element={<GovernorSiteDetails />}
           />
+
+          <Route path="/ViewSites/:id" element={<ViewSites />} />
+          <Route path="/ViewMySites/:id" element={<ViewMySites />} />
+          <Route path="/AddTag/:id" element={<AddTagGovernor />} />
 
           <Route path="/GovernorLogin" element={<GovernorLogin />} />
 

@@ -21,7 +21,7 @@
   margin-right: 420px; /* Adjust this to ensure the cards don't overlap with the AddAdminForm */
 }
 
-.adminCard {
+.adminCardPromo {
   width: 100%; /* Ensure cards take full width of grid cell */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   font-family: "Poppins", sans-serif; /* Default font for the card */
@@ -33,7 +33,7 @@
   transition: all 0.3s ease; /* Smooth transition effect */
 }
 
-.adminCard .MuiTypography-root {
+.adminCardPromo .MuiTypography-root {
   font-family: "Poppins", sans-serif;
   color: #666;
   font-size: 1.1rem;
@@ -42,7 +42,7 @@
   align-items: center; /* Vertically center the content */
 }
 
-.adminCard .MuiTypography-root svg {
+.adminCardPromo .MuiTypography-root svg {
   margin-right: 10px; /* Add space between the icon and the username */
   font-size: 2rem; /* Adjust the size of the icon */
 }
@@ -62,7 +62,7 @@
 }
 
 /* Button styling within the Card */
-.adminCard .MuiButton-root {
+.adminCardPromo .MuiButton-root {
   background-color: #d32e65 !important; /* Button background color */
   color: white !important; /* Button text color */
   &:hover {
@@ -71,7 +71,7 @@
 }
 
 /* Icon styling within the Card */
-.adminCard .MuiSvgIcon-root {
+.adminCardPromo .MuiSvgIcon-root {
   color: #91c297 !important; /* Icon color */
   &:hover {
     color: #91c297 !important; /* Darker color when hovering */

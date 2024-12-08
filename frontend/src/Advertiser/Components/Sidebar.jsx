@@ -10,15 +10,15 @@ import { Link } from "react-router-dom";
 import "./Sidebar.css";
 import { DarkModeContext } from "../Context/darkModeContext";
 
-const Sidebar = ({ advertiser, advertiserId, selectedTab, setSelectedTab }) => {
+const Sidebar = ({ advertiser, advertiserName, advertiserId, selectedTab, setSelectedTab }) => {
     const { dispatch } = useContext(DarkModeContext);
 
     return (
         <div className="sidebar">
         <div className="top">
-            <Link to="/" style={{ textDecoration: "none" }}>
-            <span className="logo">Watermelon Globe</span>
-            </Link>
+            {/* <Link to="/" style={{ textDecoration: "none" }}> */}
+            <span className="logo">Hello, {advertiserName}</span>
+            {/* </Link> */}
         </div>
         <hr />
         <div className="center">
