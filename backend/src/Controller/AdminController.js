@@ -16,6 +16,7 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const Activity = require("../Models/activityModel");
 const PromoCode = require("../Models/promoCodes");
+const CompanyProfile = require("../Models/companyProfileModel");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -1513,7 +1514,7 @@ const getUsersPerMonth = async (req, res) => {
     // Get counts for each type of user
     const touristsCount = await countUsersPerMonth(Tourist);
     const sellersCount = await countUsersPerMonth(Seller);
-    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const advertisersCount = await countUsersPerMonth(CompanyProfile);
     const tourGuidesCount = await countUsersPerMonth(TourGuide);
 
     // Combine results from all user types
@@ -1561,6 +1562,31 @@ const getAllPromoCodes = async (req, res) => {
   const allCodes = await PromoCode.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(allCodes);
+};
+
+const getPromoCodeByCode = async (req, res) => {
+  const { code } = req.body; // Get the promo code from the request body
+
+  try {
+    // Validate that the code exists in the request body
+    if (!code) {
+      return res.status(400).json({ error: "Promo code is required" });
+    }
+
+    // Find the promo code by the given code
+    const promo = await PromoCode.findOne({ code });
+
+    // If no promo code is found, return a 404 error
+    if (!promo) {
+      return res.status(404).json({ error: "Promo code not found" });
+    }
+
+    // If promo code is found, return it as a JSON response
+    res.status(200).json(promo);
+  } catch (error) {
+    // Handle any errors that occur during the database query
+    res.status(500).json({ error: "Failed to fetch promo code" });
+  }
 };
 
 const deletePromoCode = async (req, res) => {
@@ -1897,4 +1923,5 @@ module.exports = {
   getMonthlyRevenue,
   filterRevenueByDate,
   getAdmin,
+  getPromoCodeByCode,
 };

@@ -676,6 +676,130 @@ const getAllActivitiesByAdvertiser = async (req, res) => {
 };
 
 
+// Function to get total number of tourists who bought a specific activity
+const getTotalTouristsForActivity = async (req, res) => {
+  try {
+    const { activityId } = req.params;
+
+    if (!activityId) {
+      return res.status(400).json({ message: "Activity ID is required" });
+    }
+
+    const totalTourists = await ActivityBooking.aggregate([
+      {
+        $match: {
+          activity: new mongoose.Types.ObjectId(activityId),
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalCount: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$tourist' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalBookings: '$totalCount',
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      }
+    ]);
+
+    const result = totalTourists[0] || { totalBookings: 0, uniqueTouristsCount: 0 };
+
+    res.status(200).json({
+      message: "Total tourists calculated successfully for the activity",
+      activityId,
+      ...result
+    });
+
+  } catch (error) {
+    console.error("Error calculating total tourists for activity:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Function to get monthly tourist count for a specific activity
+const getMonthlyTouristsForActivity = async (req, res) => {
+  try {
+    const { activityId } = req.params;
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+
+    if (!activityId) {
+      return res.status(400).json({ message: "Activity ID is required" });
+    }
+
+    const monthlyTourists = await ActivityBooking.aggregate([
+      {
+        $match: {
+          activity: new mongoose.Types.ObjectId(activityId),
+          createdAt: { $gte: startDate, $lte: endDate }
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          touristsCount: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$tourist' }
+        }
+      },
+      {
+        $project: {
+          month: '$_id.month',
+          touristsCount: 1,
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      },
+      { $sort: { month: 1 } }
+    ]);
+
+    // Initialize monthly data array
+    const monthlyData = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      touristsCount: 0,
+      uniqueTouristsCount: 0
+    }));
+
+    // Populate actual data
+    monthlyTourists.forEach(entry => {
+      const monthIndex = entry.month - 1;
+      monthlyData[monthIndex].touristsCount = entry.touristsCount;
+      monthlyData[monthIndex].uniqueTouristsCount = entry.uniqueTouristsCount;
+    });
+
+    // Add month names
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedData = monthlyData.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1]
+    }));
+
+    // Calculate yearly totals
+    const yearlyTotals = formattedData.reduce((acc, month) => {
+      acc.totalTourists += month.touristsCount;
+      acc.totalUniqueTourists += month.uniqueTouristsCount;
+      return acc;
+    }, { totalTourists: 0, totalUniqueTourists: 0 });
+
+    res.status(200).json({
+      message: "Monthly tourist data calculated successfully for the activity",
+      year: currentYear,
+      activityId,
+      data: formattedData,
+      yearlyTotals
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly tourists for activity:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 
 
@@ -699,5 +823,7 @@ module.exports = {
   ActivityRevenue,
   advertiserMonthlyRevenue,
   filterRevenueByDateAdvertiser,
-  getAllActivitiesByAdvertiser
+  getAllActivitiesByAdvertiser,
+  getTotalTouristsForActivity,
+  getMonthlyTouristsForActivity
 };
