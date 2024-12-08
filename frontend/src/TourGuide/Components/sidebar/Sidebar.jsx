@@ -188,7 +188,7 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <Link to={`/AddItinerary/${id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/CreateItinerary/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AddIcon className="iconAdmin" />
               <span>Add Iteneraries</span>
