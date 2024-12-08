@@ -28,3 +28,4 @@ yarn-error.log*
 backend/package-lock.json
 frontend/package-lock.json
 /frontend/frontend/node_modules
+backend/node_modules/.package-lock.json

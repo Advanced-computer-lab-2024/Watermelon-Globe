@@ -4,7 +4,7 @@ import "./App.css";
 // Importing all necessary components
 import SignupPage from "./Components/SignUp";
 
-import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.js";
+import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
 import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
 import HomePage from "./Components/Homepage";
