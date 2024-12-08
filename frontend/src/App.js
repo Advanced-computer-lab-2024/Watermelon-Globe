@@ -323,7 +323,7 @@ const App = () => {
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
-            path="/advertiserProfile/:profileId"
+            path="/advertiserProfile/:advertiserId"
             element={<AccountPage />}
           />
           <Route
