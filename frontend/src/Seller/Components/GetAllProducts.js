@@ -477,25 +477,28 @@ const GetAllProducts = () => {
               My Products
             </h2>
 
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "20px"}}>
+              <div style={{display: "flex"}}>
               <input
                 type="text"
                 placeholder="Search by name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{
-                  width: "100%",
+                  width: "40%",
                   padding: "10px",
                   marginBottom: "15px",
                   borderRadius: "5px",
                   border: `1px solid ${watermelonGreen}`,
+                  display: "flex",
+                  marginRight:30
                 }}
               />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 style={{
-                  width: "100%",
+                  width: "30%",
                   padding: "10px",
                   marginBottom: "15px",
                   borderRadius: "5px",
@@ -506,8 +509,9 @@ const GetAllProducts = () => {
                 <option value="price">Sort by Price</option>
                 <option value="rating">Sort by Rating</option>
               </select>
+              </div>
               <div style={{ display: "flex", marginBottom: "15px" }}>
-                <div>
+                <div style={{marginRight:10}}>
                   <label>Min Price: </label>
                   <input
                     type="number"
@@ -532,42 +536,45 @@ const GetAllProducts = () => {
                       width: "80px",
                       borderRadius: "5px",
                       border: `1px solid ${watermelonGreen}`,
+                      marginRight:100
                     }}
                   />
                 </div>
-              </div>
+              
               <button
                 onClick={resetFilters}
                 style={{
                   backgroundColor: watermelonPink,
                   color: "white",
-                  padding: "10px 15px",
+                  padding: "2px 2px",
                   border: "none",
                   borderRadius: "5px",
                   cursor: "pointer",
                   transition: "background-color 0.3s",
-                  width: "25%",
+                  width: "12%",
                 }}
               >
                 Reset Filters
               </button>
+              </div>
             </div>
 
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
-                gap: "20px",
+                gap: "10px",
                 padding: "25px",
               }}
             >
               {filteredProducts.map((product) => (
                 <Card
                   sx={{
-                    width: 360,
+                    width: 300,
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
                     backgroundColor: "#fff",
+                    
                   }}
                   key={product._id}
                 >
