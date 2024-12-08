@@ -1459,7 +1459,7 @@ const countTotalUsers = async (req, res) => {
     // Count the total number of users in each collection
     const touristCount = await Tourist.countDocuments();
     const sellerCount = await Seller.countDocuments();
-    const advertiserCount = await Advertiser.countDocuments();
+    const advertiserCount = await Company.countDocuments();
     const tourGuideCount = await TourGuide.countDocuments();
 
     // Calculate the total users from all collections

@@ -21,6 +21,7 @@ const {
   ActivityRevenue,
   advertiserMonthlyRevenue,
   filterRevenueByDateAdvertiser,
+  getAllActivitiesByAdvertiser
 } = require("../Controller/companyProfileController");
 
 const { getSalesReport } = require("../Controller/companyProfileController");
@@ -47,6 +48,8 @@ router.get("/getPassword", getPassword);
 router.get("/sales-report/:advertiserId", getSalesReport);
 router.put("/requestDeletionAdvertiser/:id", requestDeletionAdvertiser);
 router.get("/getNotificationsAdvertiser/:id", getNotificationsAdvertiser);
+
+router.get("/getAllActivitiesByAdvertiser/:advertiserId", getAllActivitiesByAdvertiser);
 
 router.get("/ActivityRevenue/:advertiserId", ActivityRevenue);
 
