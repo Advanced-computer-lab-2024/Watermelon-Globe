@@ -29,7 +29,7 @@ const Navbar = () => {
         const response = await fetch(`/api/advertiser/profiles/${id}`);
         const data = await response.json();
         if (data.Logo) {
-          setAdvertiserLogo(`/uploads/${data.Logo}`);
+          setLogo(`/uploads/${data.Logo}`);
         }
       } catch (error) {
         console.error("Error fetching advertiser logo:", error);
@@ -86,7 +86,7 @@ const Navbar = () => {
 
             <div className="itemAdmin">
               <img
-                src={advertiserLogo}
+                src={Logo}
                 alt="Logo"
                 className="avatarAdmin"
               />
