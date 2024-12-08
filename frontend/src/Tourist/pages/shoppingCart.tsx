@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import React from 'react'
-import { Trash2, MinusCircle, PlusCircle } from 'lucide-react'
+import { FaTrashAlt, FaMinus, FaPlus, FaShoppingCart, FaMoneyBillWave } from 'react-icons/fa'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import PaymentSummary from '../Components/PaymentSummary'
 import WalletComponent from '../Components/Wallet';
+import TouristNavbar from "../Components/TouristNavBar";
 
 interface CartItem {
   product: {
@@ -19,12 +20,11 @@ interface CartItem {
 
 export default function ShoppingCart() {
   const params = useParams()
+  const navigate = useNavigate();
   const touristId = params.touristId as string
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-
-  const navigate = useNavigate()
 
   const fetchCart = async () => {
     if (!touristId) {
@@ -76,86 +76,109 @@ export default function ShoppingCart() {
     0
   )
 
-  if (loading) {
-    return <p>Loading your cart...</p>
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>
-  }
-
   const handleProceedToCheckout = () => {
-    // Redirect to the address page
-    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } }) // Adjust the route as needed
+    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    )
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-4">Your Shopping Cart</h1>
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <>
-          <ul className="space-y-4">
-            {cartItems.map((item) => (
-              <li
-                key={item.product._id}
-                className="flex items-center justify-between border-b pb-2"
-              >
-                <div>
-                  <h2 className="font-semibold">{item.product.name}</h2>
-                  <p className="text-sm text-gray-500">
-                    ${item.product.price?.toFixed(2)} each
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
-                    className="text-gray-500 hover:text-gray-700"
-                    aria-label={`Decrease quantity of ${item.product.name}`}
-                    disabled={item.quantity <= 1}
-                  >
-                    <MinusCircle size={20} />
-                  </button>
-                  <span className="w-8 text-center">{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
-                    className="text-gray-500 hover:text-gray-700"
-                    aria-label={`Increase quantity of ${item.product.name}`}
-                  >
-                    <PlusCircle size={20} />
-                  </button>
-                  <button
-                    onClick={() => removeItem(item.product._id)}
-                    className="text-red-500 hover:text-red-700 ml-2"
-                    aria-label={`Remove ${item.product.name} from cart`}
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-4 flex justify-between items-center">
-            <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
-            <button
-              onClick={handleProceedToCheckout}
-              style={{
-                backgroundColor: '#FF3366', 
-                color: 'white', 
-                padding: '10px 20px', 
-                borderRadius: '8px', 
-                cursor: 'pointer', 
-                transition: 'background-color 0.3s',
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#E62E5C')}
-              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#FF3366')}
-            >
-              Proceed to Checkout
-            </button>
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+      <TouristNavbar id={touristId} />
+      <p>hello</p>
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-primary p-5 relative">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white rounded-full p-2">
+                <FaShoppingCart className="h-16 w-16 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white">Your Shopping Cart</h1>
+                <p className="text-white opacity-75">{cartItems.length} item(s) in your cart</p>
+              </div>
+            </div>
           </div>
-        </>
-      )}
+
+          <div className="p-6 space-y-6">
+            {error && <p className="text-red-500 text-center">{error}</p>}
+
+            {cartItems.length === 0 ? (
+              <p className="text-center text-gray-500">Your cart is empty.</p>
+            ) : (
+              <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+                <h2 className="text-xl font-semibold text-secondary mb-4">Cart Items</h2>
+                <ul className="space-y-4">
+                  {cartItems.map((item) => (
+                    <li
+                      key={item.product._id}
+                      className="flex items-center justify-between border-b pb-4"
+                    >
+                      <div>
+                        <h3 className="font-semibold">{item.product.name}</h3>
+                        <p className="text-sm text-gray-500">
+                          ${item.product.price?.toFixed(2)} each
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
+                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
+                          aria-label={`Decrease quantity of ${item.product.name}`}
+                          disabled={item.quantity <= 1}
+                        >
+                          <FaMinus size={16} />
+                        </button>
+                        <span className="w-8 text-center">{item.quantity}</span>
+                        <button
+                          onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
+                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
+                          aria-label={`Increase quantity of ${item.product.name}`}
+                        >
+                          <FaPlus size={16} />
+                        </button>
+                        <button
+                          onClick={() => removeItem(item.product._id)}
+                          className="text-darkPink p-2 hover:bg-darkPink hover:text-white flex items-center justify-center"
+                          aria-label={`Remove ${item.product.name} from cart`}
+                        >
+                          <FaTrashAlt size={16} />
+                        </button>
+                      </div>
+
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <h2 className="text-xl font-semibold text-secondary mb-4">Order Summary</h2>
+              <div className="flex justify-between items-center">
+                <p className="text-lg font-semibold">Total:</p>
+                <p className="text-2xl font-bold text-primary">${total.toFixed(2)}</p>
+              </div>
+            </div>
+
+            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <button
+                onClick={handleProceedToCheckout}
+                className="w-full bg-primary text-white py-3 rounded-lg hover:bg-hover transition-colors flex items-center justify-center"
+                disabled={cartItems.length === 0}
+              >
+                <FaMoneyBillWave className="mr-2" />
+                Proceed to Checkout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

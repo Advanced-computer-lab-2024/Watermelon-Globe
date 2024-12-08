@@ -71,14 +71,13 @@ const BookingsPage = () => {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={touristId} />
-
+      <p>hello</p>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <p>hello</p>
           <div className="bg-primary p-5">
             <div className="flex items-center space-x-4">
               <div className="bg-white rounded-full p-3">
-                <FaUser className="h-12 w-12 text-primary" />
+                <FaUser className="h-16 w-16 text-primary" />
               </div>
               <div>
                 <h2 className="text-3xl font-bold text-white">
