@@ -46,8 +46,7 @@ const SiteDetails = () => {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={touristId} />
-      <p>hello</p>
-      <div className="max-w-4xl mx-auto bg-cardBackground shadow-lg rounded-lg overflow-hidden">
+      <div className="max-w-4xl mx-auto mt-8 bg-cardBackground shadow-lg rounded-lg overflow-hidden">
         <div className="bg-primary px-6 py-4">
           <h2 className="text-3xl font-bold text-white mt-2">Site Details</h2>
         </div>
