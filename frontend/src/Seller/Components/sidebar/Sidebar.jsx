@@ -172,7 +172,7 @@ const Sidebar = () => {
               <span>View Profile</span>
             </li>
           </Link>
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link to={`/ChangePasswordSeller/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <PasswordRoundedIcon className="iconAdmin" />
               <span>Change Password</span>

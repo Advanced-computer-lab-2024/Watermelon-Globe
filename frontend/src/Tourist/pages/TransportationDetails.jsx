@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, MapPin, CreditCard, CheckCircle, XCircle } from 'lucide-react';
+import TouristNavbar from "../Components/TouristNavBar";
+
 
 export default function TransportationDetails() {
   const [transportation, setTransportation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [bookingStatus, setBookingStatus] = useState(null);
-  const { id } = useParams();
+  const { touristId, id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,15 +68,11 @@ export default function TransportationDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+            <TouristNavbar id={touristId} />
+            <p>hello</p>
       <div className="max-w-3xl mx-auto bg-cardBackground shadow-lg rounded-lg overflow-hidden">
         <div className="bg-primary px-6 py-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-white hover:text-secondaryHover transition duration-200"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
           <h2 className="text-3xl font-bold text-white mt-2">Transportation Details</h2>
         </div>
         <div className="p-6">

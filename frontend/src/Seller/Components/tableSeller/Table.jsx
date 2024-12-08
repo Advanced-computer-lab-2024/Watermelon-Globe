@@ -50,11 +50,13 @@ const List = ({ searchTerm }) => {
           {filteredProducts.map((product) => (
             <TableRow key={product._id}>
               {/* <TableCell className="tableCell">{product._id}</TableCell> */}
-              <TableCell className="tableCell">
-                <div className="cellWrapper">
-                <img src={product.picture} className="image" style={{ width: '32px', height: '32px' }} />
-                  {product.name}
-                </div>
+              <TableCell>
+                <img
+                  src={product.picture ? (product.picture.startsWith('http') ? product.picture : `/uploads/${product.picture}`) : "https://via.placeholder.com/150"}
+                  style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '10px' }}
+                  alt={product.name}
+                />
+                {product.name}
               </TableCell>
               <TableCell className="tableCell">{product.quantity}</TableCell>
               <TableCell className="tableCell">${product.price}</TableCell>
