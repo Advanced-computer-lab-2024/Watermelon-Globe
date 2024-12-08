@@ -6,6 +6,7 @@ import AccessToken from '../Components/AccessToken';
 import FlightSearch from '../Components/FlightSearch';
 import FlightBooking from '../Components/FlightBooking';
 import TouristNavbar from '../../Tourist/Components/TouristNavBar';
+import { useCurrency } from "../../Tourist/Components/CurrencyContext";
 
 const FlightMain: React.FC = () => {
   const [token, setToken] = useState<string>('');
@@ -13,6 +14,17 @@ const FlightMain: React.FC = () => {
   const [selectedFlight, setSelectedFlight] = useState<any>(null);
   const { touristId } = useParams<{ touristId: string }>();
   const navigate = useNavigate();
+  const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
+
+  interface Currency {
+    symbol_native: string;
+    // Add other fields from the currency object as needed
+  }
+
+  interface CurrencyContextType {
+    selectedCurrency: string | null;
+    currencies: { [key: string]: Currency };
+  }
 
   // Ref for smooth scrolling to FlightBooking section
   const flightBookingRef = useRef<HTMLDivElement | null>(null);
@@ -42,6 +54,49 @@ const FlightMain: React.FC = () => {
       currency: flight.price?.currency,
     };
   };
+
+  function getCurrencyConversionRate(currency: string): number {
+    const rates: { [key: string]: number } = {
+      USD: 1,
+      EUR: 0.85,
+      GBP: 0.73,
+      JPY: 110.0,
+      BGN: 1.96,
+      CZK: 21.5,
+      AUD: 1.34,
+      BRL: 5.0,
+      CAD: 1.25,
+      CHF: 0.92,
+      CNY: 6.45,
+      DKK: 6.36,
+      EGP: 50.04,
+      HKD: 7.8,
+      HRK: 6.63,
+      HUF: 310.0,
+      IDR: 14400,
+      ILS: 3.2,
+      INR: 74.0,
+      ISK: 129.0,
+      KRW: 1180.0,
+      MXN: 20.0,
+      MYR: 4.2,
+      NOK: 8.6,
+      NZD: 1.4,
+      PHP: 50.0,
+      PLN: 3.9,
+      RON: 4.1,
+      RUB: 74.0,
+      SEK: 8.8,
+      SGD: 1.35,
+      THB: 33.0,
+      TRY: 8.8,
+      ZAR: 14.0,
+    };
+    return rates[currency] || 1;
+  }
+
+  const currencySymbol = selectedCurrency ? currencies[selectedCurrency]?.symbol_native : "$";
+
 
   const FlightTicket: React.FC<{ flight: any; onClick: () => void }> = ({ flight, onClick }) => {
     const details = getFlightDetails(flight);
@@ -78,8 +133,13 @@ const FlightMain: React.FC = () => {
           </div>
           <div className="flex-shrink-0 p-6 bg-gray-100 border-l border-gray-200">
             <div className="text-center mb-6">
-              <p className="text-sm text-gray-600 mb-1">Total Price</p>
-              <p className="text-3xl font-bold text-gray-900">{`${details.currency} ${details.price}`}</p>
+              <p className="text-sm text-gray-600 mb-1">Total Price </p>
+              <p className="text-3xl font-bold text-gray-900">
+                {currencySymbol} {" "}
+                {selectedCurrency
+                  ? (details.price * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
+                  : details.price.toFixed(2)}
+              </p>
             </div>
             <button
               className="w-full px-4 py-2 text-white font-bold bg-secondary hover:bg-secondaryHover rounded"
@@ -127,8 +187,8 @@ const FlightMain: React.FC = () => {
   };
 
   const handleBackToTop = () => {
-    if(TopBookingRef.current){
-      TopBookingRef.current.scrollIntoView({ behavior : 'smooth'});
+    if (TopBookingRef.current) {
+      TopBookingRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -158,7 +218,7 @@ const FlightMain: React.FC = () => {
             ) : (
               <>
                 <div
-                  ref={TopBookingRef} 
+                  ref={TopBookingRef}
                   className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
                   <h2 className="text-xl font-semibold text-secondary mb-4">Search Flights</h2>
                   <FlightSearch token={token} setFlights={setFlights} />
@@ -190,9 +250,9 @@ const FlightMain: React.FC = () => {
                     <h2 className="text-xl font-semibold text-secondary mb-4">Flight Booking</h2>
                     <FlightBooking flight={selectedFlight} touristId={touristId} />
                     <button
-                    onClick={() => {
-                      handleBackToTop()
-                    }}
+                      onClick={() => {
+                        handleBackToTop()
+                      }}
                       className="w-full bg-primary text-white py-2 rounded-lg shadow-md hover:bg-hover"
                     >
                       Go Back To Top

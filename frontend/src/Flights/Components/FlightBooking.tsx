@@ -3,9 +3,20 @@ import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { FaWallet, FaCreditCard, FaSearch } from 'react-icons/fa'; // Font Awesome icons
+import { useCurrency } from "../../Tourist/Components/CurrencyContext";
 
 // Load Stripe Publishable Key
 const stripePromise = loadStripe('pk_test_51QQWIBKTPpyea1n0DvMMy6pxbX2ihuoDsD1K5Hbrsrh5hkw2mG214K159dORl0oA9otHspuTTPMP7NbqgP8buKhE00qzg5wBBP');
+
+interface Currency {
+  symbol_native: string;
+  // Add other fields from the currency object as needed
+}
+
+interface CurrencyContextType {
+  selectedCurrency: string | null;
+  currencies: { [key: string]: Currency };
+}
 
 interface FlightBookingProps {
   flight: any;
@@ -17,6 +28,7 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('stripe'); // Default to stripe payment
   const stripe = useStripe();
   const elements = useElements();
+  const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
 
   const handlePaymentAndBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +81,7 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
           setMessage('Stripe has not loaded yet. Please try again.');
           return;
         }
-        
+
         const cardElement = elements.getElement(CardElement);
         if (!cardElement) return;
         const paymentResult = await stripe.confirmCardPayment(clientSecret, {
@@ -99,6 +111,50 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
     }
   };
 
+  function getCurrencyConversionRate(currency: string): number {
+    const rates: { [key: string]: number } = {
+      USD: 1,
+      EUR: 0.85,
+      GBP: 0.73,
+      JPY: 110.0,
+      BGN: 1.96,
+      CZK: 21.5,
+      AUD: 1.34,
+      BRL: 5.0,
+      CAD: 1.25,
+      CHF: 0.92,
+      CNY: 6.45,
+      DKK: 6.36,
+      EGP: 50.04,
+      HKD: 7.8,
+      HRK: 6.63,
+      HUF: 310.0,
+      IDR: 14400,
+      ILS: 3.2,
+      INR: 74.0,
+      ISK: 129.0,
+      KRW: 1180.0,
+      MXN: 20.0,
+      MYR: 4.2,
+      NOK: 8.6,
+      NZD: 1.4,
+      PHP: 50.0,
+      PLN: 3.9,
+      RON: 4.1,
+      RUB: 74.0,
+      SEK: 8.8,
+      SGD: 1.35,
+      THB: 33.0,
+      TRY: 8.8,
+      ZAR: 14.0,
+    };
+    return rates[currency] || 1;
+  }
+
+
+  const currencySymbol = selectedCurrency ? currencies[selectedCurrency]?.symbol_native : "$";
+
+
   return (
     <form
       onSubmit={handlePaymentAndBooking}
@@ -112,7 +168,11 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
         {flight.itineraries[0]?.segments[0]?.number}
       </p>
       <p className="text-grayText mb-4">
-        Total Price: {flight.price?.grandTotal} {flight.price?.currency}
+        Total Price: {" "}
+        {currencySymbol} {" "}
+        {selectedCurrency
+          ? (flight.price?.grandTotal * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
+          : flight.price?.grandTotal.toFixed(2)}
       </p>
 
       <div className="mb-4">
