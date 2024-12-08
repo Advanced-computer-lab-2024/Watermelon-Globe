@@ -1,3 +1,6 @@
+const multer = require("multer");
+const path = require("path");
+const fs = require('fs');
 const mongoose = require("mongoose");
 const itineraryModel = require("../Models/itineraryModel.js");
 const tourGuide = require("../Models/tourGuideModel.js");
@@ -206,14 +209,16 @@ const createItinerary = async (req, res) => {
     accessibility,
     pickupDropoffLocations,
     bookings,
-    rating,
   } = req.body;
-  console.log(req.body);
-  console.log(tag);
-  try {
-    const tourguide = await tourGuide.findById(id);
 
-    const itinerary = await itineraryModel.Itinerary.create({
+  try {
+    const tourguide = await TourGuide.findById(id);
+
+    if (!tourguide) {
+      return res.status(404).json({ error: "Tour guide not found" });
+    }
+
+    const itineraryData = {
       name,
       activities,
       tag,
@@ -227,7 +232,15 @@ const createItinerary = async (req, res) => {
       pickupDropoffLocations,
       bookings,
       guide: id,
-    });
+    };
+
+    // If a file was uploaded, add the file path to the itinerary data
+    if (req.file) {
+      itineraryData.picture = req.file.path;
+    }
+
+    const itinerary = await Itinerary.create(itineraryData);
+    
     tourguide.itineraries.push(itinerary._id);
     await tourguide.save();
 
@@ -235,6 +248,90 @@ const createItinerary = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
+};
+
+//itinerary photo
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, '..', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    const filetypes = /jpeg|jpg|png/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error("Error: File upload only supports the following filetypes - " + filetypes));
+  },
+  limits: {
+    fileSize: 1024 * 1024 // 1MB
+  }
+});
+
+const uploadMiddleware = upload.single('picture');
+
+const uploadPicture = async (req, res) => {
+  uploadMiddleware(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: "Multer error: " + err.message });
+    } else if (err) {
+      return res.status(500).json({ error: "Unknown error: " + err.message });
+    }
+
+    const { id } = req.query;
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    try {
+      const itinerary = await Itinerary.findById(id);
+
+      if (!itinerary) {
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ error: "No itinerary found with this ID" });
+      }
+
+      if (itinerary.picture) {
+        const oldPicturePath = path.join(__dirname, '..', 'uploads', itinerary.picture);
+        if (fs.existsSync(oldPicturePath)) {
+          fs.unlinkSync(oldPicturePath);
+        }
+      }
+
+      itinerary.picture = req.file.filename;
+      await itinerary.save();
+
+      res.status(200).json({ 
+        message: "Itinerary picture updated successfully", 
+        itinerary: {
+          id: itinerary._id,
+          name: itinerary.name,
+          picture: itinerary.picture
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+      res.status(500).json({ error: "An error occurred while updating the itinerary picture" });
+    }
+  });
 };
 
 // // Controller to fetch itineraries for a specific tour guide
@@ -1253,5 +1350,6 @@ module.exports = {
   getAllItinerariesByGuide,
   ItineraryRevenue,
   guideMonthlyRevenue,
-  filterRevenueByDateGuide
+  filterRevenueByDateGuide,
+  uploadPicture
 };
