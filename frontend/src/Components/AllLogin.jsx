@@ -51,7 +51,7 @@ const AllLogin = () => {
             navigate(`/TourguideHome/${userId}`);
             break;
           case "Advertiser":
-            navigate(`/AdvertiserPage/${userId}`);
+            navigate(`/advertiser/${userId}`);
             break;
           default:
             setErrorMessage("Invalid user type selected.");
