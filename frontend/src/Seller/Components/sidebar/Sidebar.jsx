@@ -156,17 +156,17 @@ const Sidebar = () => {
           </Link>
 
           {/* Sales and Available Quantities */}
-          <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
+          {/* <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
             <li
               className={isActive(`/ViewQuantity/${id}`) ? "active-seller" : ""}
             >
               <ProductionQuantityLimitsIcon className="iconAdmin" />
               <span>Sales and Available Quantities</span>
             </li>
-          </Link>
+          </Link> */}
 
           <p className="titleAdmin">MANAGE ACCOUNT</p>
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link to={`/viewProfile/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />
               <span>View Profile</span>

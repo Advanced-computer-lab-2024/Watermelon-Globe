@@ -15,35 +15,29 @@ import NotificationsBox from "../NotificationsBox";
 import { useParams } from "react-router-dom";
 import {Bell} from "lucide-react";
 
+
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
-
-  
-
- 
-
-
+  const{id}=useParams();
 
   return (
     <>
-     
       <div className="navbarAdmin">
         <div class="navbarBorder"></div>
         <div className="wrapperAdmin">
           <div className="topAdmin">
             <Link to="/" style={{ textDecoration: "none" }}>
-              <span className="logoAdmin">ADVERTISER DASHBOARD </span>
+              <span className="logoAdmin">Admin Dashboard </span>
             </Link>
           </div>
 
           <div className="itemsAdmin">
-             
-             
-             <div className="relative">
+            <div className="itemAdmin" >
+              {/* <NotificationsIcon className="iconAdmin" /> */}
+
+              <div className="relative">
               <button
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                 className="w-10 h-10 rounded-full bg-[#FF3366] flex items-center justify-center border-2 border-white hover:border-secondary transition-colors"
@@ -56,8 +50,8 @@ const Navbar = () => {
                 onClose={() => setIsNotificationsOpen(false)}
               />
             </div>
-
-         
+             
+            </div>
 
             <div className="itemAdmin">
               <img

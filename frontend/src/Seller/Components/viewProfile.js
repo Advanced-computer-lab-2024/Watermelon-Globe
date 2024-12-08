@@ -1,11 +1,14 @@
 
+
+
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from './navbar/Navbar';
 import Sidebar from './sidebar/Sidebar';
 import SellerLogo from './SellerLogo';
-import "./actions.scss"
-
+import { FaEdit, FaTrash, FaKey } from 'react-icons/fa'; // Import Font Awesome icons
+import "./actions.scss";
 
 const ViewProfile = () => {
   const [seller, setSeller] = useState(null);
@@ -14,7 +17,7 @@ const ViewProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedData, setUpdatedData] = useState({});
   const navigate = useNavigate();
-  const{id}=useParams();
+  const { id } = useParams();
 
   const watermelonGreen = '#4CAF50';
   const watermelonPink = '#FF4081';
@@ -102,24 +105,27 @@ const ViewProfile = () => {
     setUpdatedData(seller);
   };
 
-  // const containerStyle = {
-  //   backgroundColor: '#F8F8F8',
-  //   padding: '10px',
-  //   borderRadius: '10px',
-  //   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  //   // maxWidth: '600px',
-  //   margin: '0 auto',
-  // };
-
   const containerStyle = {
-    backgroundColor: '#F8F8F8',
-    padding: '20px',  // Increased padding for better visual separation
+    display: 'flex', // Use flexbox to divide the content
+    gap: '20px', // Add spacing between the two halves
+    padding: '20px',
+    // backgroundColor: '#F8F8F8',
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    marginTop: '20px', // Add margin-top for better spacing
-    width: '100%',
+    height:"100%"
   };
-   
+
+  const leftStyle = {
+    flex: 1, // Take half of the width
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+
+  const rightStyle = {
+    flex: 2, // Take the other half
+  };
+
   const headingStyle = {
     color: watermelonGreen,
     borderBottom: `2px solid ${watermelonPink}`,
@@ -129,16 +135,15 @@ const ViewProfile = () => {
 
   const buttonStyle = {
     backgroundColor: watermelonPink,
-    width:"20%",
     color: 'white',
-    padding: '5px 5px',
+    padding: '10px 15px',
     borderRadius: '5px',
     border: 'none',
     cursor: 'pointer',
     marginRight: '10px',
-    transition: 'background-color 0.3s',
-    display: 'inline-block' , // Prevent full-width stretching
-    textAlign: 'center',   
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '5px',
   };
 
   const inputStyle = {
@@ -150,109 +155,75 @@ const ViewProfile = () => {
   };
 
   return (
-    <div className="listSeller">
+    <div
+    style={{
+      backgroundColor: "#fff",
+      minHeight: "100vh", // Ensures it covers the full viewport
+      width: "102%", // Full width of the viewport
+      margin: 0, // Remove default margins
+      padding: 0, // Remove default padding
+      display: "flex", // Optional: for flexible alignment
+      flexDirection: "column",
+    }}
+  >
+    <div className="listAdminProduct">
       <Sidebar />
-      <div className="listContainerSeller">
+      <div className="listContainerAdminProduct">
         <Navbar />
-        <div style={containerStyle}>
+        <div style={{ padding: "20px" }}>
+      <div style={containerStyle}>
+        {/* Left Half: Logo */}
+        <div style={leftStyle}>
+          <SellerLogo id={id} />
+        </div>
+
+        {/* Right Half: Profile Info */}
+        <div style={rightStyle}>
           <h2 style={headingStyle}>Seller Profile</h2>
-          
-
           {seller ? (
-            <div>
-              {isEditing ? (
-                <div>
-                  <div>
-                    <label>Name: </label>
-                    <input
-                      type="text"
-                      name="Name"
-                      value={updatedData.Name || ''}
-                      onChange={handleInputChange}
-                      style={inputStyle}
-                    />
-                  </div>
-                  <div>
-                    <label>Email: </label>
-                    <input
-                      type="email"
-                      name="Email"
-                      value={updatedData.Email || ''}
-                      onChange={handleInputChange}
-                      style={inputStyle}
-                    />
-                  </div>
-                  <div>
-                    <label>Description: </label>
-                    <textarea
-                      name="Description"
-                      value={updatedData.Description || ''}
-                      onChange={handleInputChange}
-                      style={{...inputStyle, height: '100px'}}
-                    />
-                  </div>
-                  <button
-                    onClick={handleUpdateProfile}
-                    style={buttonStyle}
-                  >
-                    Confirm Update
-                  </button>
-                  <button
-                    onClick={handleCancelEdit}
-                    style={{...buttonStyle, backgroundColor: watermelonGreen}}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                <div>
-                
-                  <p><strong>ID:</strong> {seller._id}</p>
-                  <p><strong>Name:</strong> {seller.Name}</p>
-                  <p><strong>Email:</strong> {seller.Email}</p>
-                  <p><strong>Description:</strong> {seller.Description}</p>
-                 
-
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    style={buttonStyle}
-                  >
-                    Update Profile
-                  </button>
-                  <button
-                    onClick={handleDeleteAccount}
-                    style={{...buttonStyle, backgroundColor: watermelonPink}}
-                  >
-                    Delete Account
-                  </button>
-                  <button
-                onClick={() => navigate(`/ChangePasswordSeller/${id}`)}
-                style={{...buttonStyle, backgroundColor: watermelonGreen, marginTop: '20px'}}
-              >
-                Change Password
-              </button>
-                </div>
-              )}
-
-              
-              <div style={{}}>
-                <SellerLogo id={seller._id} />
+            isEditing ? (
+              <div>
+                <label>Name:</label>
+                <input type="text" name="Name" value={updatedData.Name || ''} onChange={handleInputChange} style={inputStyle} />
+                <label>Email:</label>
+                <input type="email" name="Email" value={updatedData.Email || ''} onChange={handleInputChange} style={inputStyle} />
+                <label>Description:</label>
+                <textarea name="Description" value={updatedData.Description || ''} onChange={handleInputChange} style={{ ...inputStyle, height: '100px' }} />
+                <button onClick={handleUpdateProfile} style={buttonStyle}>
+                  <FaEdit /> Confirm Update
+                </button>
+                <button onClick={handleCancelEdit} style={{ ...buttonStyle, backgroundColor: watermelonGreen }}>
+                  Cancel
+                </button>
               </div>
-             
-             
-            </div>
+            ) : (
+              <div>
+                <p><strong>Name:</strong> {seller.Name}</p>
+                <p><strong>Email:</strong> {seller.Email}</p>
+                <p><strong>Description:</strong> {seller.Description}</p>
+                <button onClick={() => setIsEditing(true)} style={buttonStyle}>
+                  <FaEdit /> Update Profile
+                </button>
+                <button onClick={handleDeleteAccount} style={buttonStyle}>
+                  <FaTrash /> Request Account Delete 
+                </button>
+                {/* <button onClick={() => navigate(`/ChangePasswordSeller/${id}`)} style={{ ...buttonStyle, backgroundColor: watermelonGreen }}>
+                  <FaKey /> Change Password
+                </button> */}
+              </div>
+            )
           ) : (
             !errorMessage && <p>Loading...</p>
           )}
-
           {errorMessage && <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>}
           {successMessage && <p style={{ color: 'green', marginTop: '10px' }}>{successMessage}</p>}
         </div>
       </div>
     </div>
+    </div>
+    </div>
+    </div>
   );
 };
 
 export default ViewProfile;
-
-
