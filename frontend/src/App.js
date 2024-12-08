@@ -4,6 +4,12 @@ import "./App.css";
 // Importing all necessary components
 import SignupPage from "./Components/SignUp";
 
+// SignUpNew Page
+import SignUpSellerNew from "Tourist/pages/SellerSignUp";
+import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
+import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
+import AllLogin from "./Components/AllLogin";
+
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
 import CompletedItineraries from "./Tourist/pages/CompletedItineraries.js";
@@ -52,7 +58,7 @@ import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewIti
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
-import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
+// import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import AccountPage from "./Advertiser/pages/AccountPage/AccountPage.jsx";
 import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
@@ -172,6 +178,11 @@ const App = () => {
 
           <Route path="/GuestPage" element={<GuestPage />} />
 
+          <Route path="/sign-in/sellers" element={<SignUpSellerNew />} />
+          <Route
+            path="/sign-in/advertisers"
+            element={<SignupAdvertiserNew />}
+          />
           {/* Admin Routes */}
           {/*<Route path="/AdminHomepage" element={<AdminHomePage />} />
           <Route path="/AdminHome" element={<AdminHome />} />
@@ -283,6 +294,9 @@ const App = () => {
           <Route path="/AllItineraries/:id" element={<AllItineraries />} />
           <Route path="/GeneralDetails/:id" element={<GeneralDetails />} />
           <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
+
+          <Route path="/AllLogin" element={<AllLogin />} />
+
 
           <Route
             path="/tourism-governor/:id"

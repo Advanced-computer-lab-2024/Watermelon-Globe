@@ -26,7 +26,7 @@ const Featured = () => {
   const fetchTotalRevenue = async () => {
     try {
       const [productRes, itineraryRes, activityRes] = await Promise.all([
-        fetch(`/api/Seller/totalProductRevenueForSeller/${id}`),
+        fetch(`/api/TourGuide/ItineraryRevenue/${id}`),
       ]);
 
       const productData = await productRes.json();
@@ -46,7 +46,7 @@ const Featured = () => {
   const fetchFilteredRevenue = async (date) => {
     try {
       const formattedDate = date.toISOString().split('T')[0];
-      const response = await fetch(`/api/Seller/filterRevenueByDateSeller/${id}?date=${formattedDate}`);
+      const response = await fetch(`/api/TourGuide/filterRevenueByDateGuide/${id}?date=${formattedDate}`);
       const data = await response.json();
       setFilteredRevenue(data.totalRevenue);
       setSelectedDate(date);

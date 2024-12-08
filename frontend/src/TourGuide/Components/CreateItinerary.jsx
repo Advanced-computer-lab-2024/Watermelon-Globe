@@ -206,9 +206,11 @@ const handleSubmit = async (e) => {
     }}
   >
     <div className="listAdminProduct">
-      <Sidebar />
+      <Sidebar 
+      id={id}/>
       <div className="listContainerAdminProduct">
-        <Navbar />
+        <Navbar 
+        id={id}/>
         <div style={{ padding: "20px" }}>
         <div className="min-h-screen ">
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
