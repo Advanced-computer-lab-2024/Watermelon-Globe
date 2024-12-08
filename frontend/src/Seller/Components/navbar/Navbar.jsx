@@ -13,24 +13,16 @@ import "react-notifications-component/dist/theme.css";
 import { Link } from "react-router-dom";
 import NotificationsBox from "../NotificationsBox";
 import { useParams } from "react-router-dom";
-import {Bell} from "lucide-react";
+import { Bell } from "lucide-react";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const{id}=useParams();
+  const { id } = useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
-
-  
-
- 
-
-
 
   return (
     <>
-     
       <div className="navbarAdmin">
         <div class="navbarBorder"></div>
         <div className="wrapperAdmin">
@@ -41,9 +33,7 @@ const Navbar = () => {
           </div>
 
           <div className="itemsAdmin">
-             
-             
-             <div className="relative">
+            <div className="relative">
               <button
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                 className="w-10 h-10 rounded-full bg-[#FF3366] flex items-center justify-center border-2 border-white hover:border-secondary transition-colors"
@@ -56,8 +46,6 @@ const Navbar = () => {
                 onClose={() => setIsNotificationsOpen(false)}
               />
             </div>
-
-         
 
             <div className="itemAdmin">
               <img
@@ -74,4 +62,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

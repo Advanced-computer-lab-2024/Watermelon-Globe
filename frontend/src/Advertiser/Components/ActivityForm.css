@@ -1,66 +1,65 @@
-.activity-form {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* .activity-form {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #ff545e;
-    font-size: 2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-bottom: 2px solid #589ea5;
-    padding-bottom: 0.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ff545e;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 2px solid #589ea5;
+  padding-bottom: 0.5rem;
 }
 
 .MuiTextField-root,
 .MuiFormControl-root {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .MuiFormControlLabel-root {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
-.MuiButton-root {
-    margin-top: 1rem;
-    background-color: #589ea5 !important;
+/* .MuiButton-root {
+  margin-top: 1rem;
+  background-color: #91c297 !important;
 }
 
 .MuiButton-root:hover {
-    background-color: #6ec2b1 !important;
-}
+  background-color: #6fa478 !important;
+} */
 
-.MuiTabs-root {
-    margin-bottom: 1rem;
+/* .MuiTabs-root {
+  margin-bottom: 1rem;
 }
 
 .MuiTab-root {
-    background-color: #ff7b7b;
-    color: white;
-    margin-right: 0.5rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+  background-color: #ff7b7b;
+  color: white;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .MuiTab-root:hover {
-    background-color: #ff545e;
+  background-color: #ff545e;
 }
 
 .MuiTab-root.selected-tag {
-    background-color: #589ea5;
+  background-color: #589ea5;
 }
 
 .MuiTabs-indicator {
-    display: none;
+  display: none;
 }
 
 @media (max-width: 600px) {
-    .activity-form {
-        padding: 1rem;
-    }
-}
-
+  .activity-form {
+    padding: 1rem;
+  }
+} */

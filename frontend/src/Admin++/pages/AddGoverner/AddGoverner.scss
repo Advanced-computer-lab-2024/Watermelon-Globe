@@ -21,7 +21,7 @@
 
 .cardsContainer {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  grid-template-columns: repeat(1, 1fr); /* Two cards per row */
   gap: 16px;
   margin-right: 420px; /* Adjust this to ensure the cards don't overlap with the AddGovernorForm */
 }
@@ -76,12 +76,12 @@
 }
 
 /* Icon styling within the Card */
-.governorCard .MuiSvgIcon-root {
-  color: #91c297 !important; /* Icon color */
-  &:hover {
-    color: #6a8e60 !important; /* Darker color when hovering */
-  }
-}
+// .governorCard .MuiSvgIcon-root {
+//   color: #91c297 !important; /* Icon color */
+//   &:hover {
+//     color: #6a8e60 !important; /* Darker color when hovering */
+//   }
+// }
 
 /* Position AddGovernorForm in the top-right corner */
 .addGovernorForm {

@@ -477,41 +477,41 @@ const GetAllProducts = () => {
               My Products
             </h2>
 
-            <div style={{ marginBottom: "20px"}}>
-              <div style={{display: "flex"}}>
-              <input
-                type="text"
-                placeholder="Search by name..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: "40%",
-                  padding: "10px",
-                  marginBottom: "15px",
-                  borderRadius: "5px",
-                  border: `1px solid ${watermelonGreen}`,
-                  display: "flex",
-                  marginRight:30
-                }}
-              />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                style={{
-                  width: "30%",
-                  padding: "10px",
-                  marginBottom: "15px",
-                  borderRadius: "5px",
-                  border: `1px solid ${watermelonGreen}`,
-                }}
-              >
-                <option value="name">Sort by Name</option>
-                <option value="price">Sort by Price</option>
-                <option value="rating">Sort by Rating</option>
-              </select>
+            <div style={{ marginBottom: "20px" }}>
+              <div style={{ display: "flex" }}>
+                <input
+                  type="text"
+                  placeholder="Search by name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    width: "40%",
+                    padding: "10px",
+                    marginBottom: "15px",
+                    borderRadius: "5px",
+                    border: `1px solid ${watermelonGreen}`,
+                    display: "flex",
+                    marginRight: 30,
+                  }}
+                />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={{
+                    width: "30%",
+                    padding: "10px",
+                    marginBottom: "15px",
+                    borderRadius: "5px",
+                    border: `1px solid ${watermelonGreen}`,
+                  }}
+                >
+                  <option value="name">Sort by Name</option>
+                  <option value="price">Sort by Price</option>
+                  <option value="rating">Sort by Rating</option>
+                </select>
               </div>
               <div style={{ display: "flex", marginBottom: "15px" }}>
-                <div style={{marginRight:10}}>
+                <div style={{ marginRight: 10 }}>
                   <label>Min Price: </label>
                   <input
                     type="number"
@@ -536,26 +536,26 @@ const GetAllProducts = () => {
                       width: "80px",
                       borderRadius: "5px",
                       border: `1px solid ${watermelonGreen}`,
-                      marginRight:100
+                      marginRight: 100,
                     }}
                   />
                 </div>
-              
-              <button
-                onClick={resetFilters}
-                style={{
-                  backgroundColor: watermelonPink,
-                  color: "white",
-                  padding: "2px 2px",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  transition: "background-color 0.3s",
-                  width: "12%",
-                }}
-              >
-                Reset Filters
-              </button>
+
+                <button
+                  onClick={resetFilters}
+                  style={{
+                    backgroundColor: watermelonPink,
+                    color: "white",
+                    padding: "2px 2px",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s",
+                    width: "12%",
+                  }}
+                >
+                  Reset Filters
+                </button>
               </div>
             </div>
 
@@ -574,7 +574,6 @@ const GetAllProducts = () => {
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
                     backgroundColor: "#fff",
-                    
                   }}
                   key={product._id}
                 >

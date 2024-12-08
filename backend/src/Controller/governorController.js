@@ -12,7 +12,7 @@ const { default: mongoose } = require("mongoose");
 //     openingHours,
 //     ticketPrices,
 //     tag,
-   
+
 //   } = req.body;
 //   try {
 //     const governor = governorModel.findById(id);
@@ -33,6 +33,19 @@ const { default: mongoose } = require("mongoose");
 //     res.status(400).json({ error: error.message });
 //   }
 // };
+
+const getAllGovernors = async (req, res) => {
+  try {
+    // Fetch all governors and populate their tourismSite references
+    const governors = await governorModel.find().populate("tourismSite");
+
+    // Return the governors as a JSON response
+    res.status(200).json(governors);
+  } catch (error) {
+    console.error("Error fetching governors:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 const createSite = async (req, res) => {
   const { id } = req.params; // tourismGovernor ID
@@ -267,54 +280,52 @@ const changePasswordGovernor = async (req, res) => {
   }
 };
 
-const getPassword = async(req,res) =>{
-  const{id}= req.query;
+const getPassword = async (req, res) => {
+  const { id } = req.query;
   console.log(id);
-  try{
+  try {
     const governor = await governorModel.findById(id);
     console.log(governor);
-    if(!governor){
-      res.status(400).json({message:"governor is not found"});
+    if (!governor) {
+      res.status(400).json({ message: "governor is not found" });
+    } else {
+      res.status(200).json(governor.password);
     }
-    else{
-      res.status(200).json(governor.password)
-    }
+  } catch {
+    console.error("Error getting password:", error);
+    res.status(500).json({ message: "Server error" });
   }
-  catch{
-    console.error('Error getting password:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
+};
+
+const loginGovernor = async (req, res) => {
+  const { Username, Password } = req.body;
+
+  if (!Username || !Password) {
+    return res
+      .status(400)
+      .json({ error: "Username and Password are required" });
   }
 
-  const loginGovernor = async (req, res) => {
-    const { Username, Password } = req.body;
-  
-    if (!Username || !Password) {
-      return res.status(400).json({ error: "Username and Password are required" });
+  try {
+    // Find the governor by username
+    const governor = await governorModel.findOne({ username: Username });
+
+    if (!governor) {
+      return res.status(404).json({ error: "Governor not found" });
     }
-  
-    try {
-      // Find the governor by username
-      const governor = await governorModel.findOne({ username: Username });
-  
-      if (!governor) {
-        return res.status(404).json({ error: "Governor not found" });
-      }
-  
-      // Check if the password matches
-      if (governor.password !== Password) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-  
-      // Return the governor's ID if login is successful
-      res.status(200).json({ id: governor._id });
-    } catch (error) {
-      console.error("Error during governor login:", error);
-      res.status(500).json({ error: "Server error" });
+
+    // Check if the password matches
+    if (governor.password !== Password) {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
-  };
-  
-  
+
+    // Return the governor's ID if login is successful
+    res.status(200).json({ id: governor._id });
+  } catch (error) {
+    console.error("Error during governor login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 module.exports = {
   createSite,
@@ -326,5 +337,6 @@ module.exports = {
   filterByTags,
   changePasswordGovernor,
   getPassword,
-  loginGovernor
+  loginGovernor,
+  getAllGovernors,
 };

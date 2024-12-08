@@ -60,7 +60,7 @@ const AddPromoCode = () => {
           {codes.map((admin) => (
             <Card
               key={admin._id}
-              className="adminCard"
+              className="adminCardPromo"
               sx={{ marginBottom: 2 }}
             >
               <CardContent>

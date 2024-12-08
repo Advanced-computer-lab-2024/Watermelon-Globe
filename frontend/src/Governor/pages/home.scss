@@ -1,93 +1,124 @@
-.home {
-    display: flex;
-  
-    .homeContainer {
-      flex: 6;
-  
-      .widgets,
-      .charts {
-        display: flex;
-        padding: 20px;
-        gap: 20px;
-      }
-  
-      .charts {
-        padding: 5px 20px;
-      }
-  
-      .listContainer {
-        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-        padding: 20px;
-        margin: 20px;
-  
-        .listTitle {
-          font-weight: 500;
-          color: gray;
-          margin-bottom: 15px;
-        }
+// .home {
+//     display: flex;
+
+//     .homeContainer {
+//       flex: 6;
+
+//       .widgets,
+//       .charts {
+//         display: flex;
+//         padding: 20px;
+//         gap: 20px;
+//       }
+
+//       .charts {
+//         padding: 5px 20px;
+//       }
+
+//       .listContainer {
+//         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+//         box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+//         padding: 20px;
+//         margin: 20px;
+
+//         .listTitle {
+//           font-weight: 500;
+//           color: gray;
+//           margin-bottom: 15px;
+//         }
+//       }
+//     }
+//   }
+
+//   .governor-login-page {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     min-height: 100vh;
+//     background-color: #f4f4f4;
+//   }
+
+//   .login-box {
+//     background: white;
+//     padding: 30px;
+//     border-radius: 10px;
+//     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+//     text-align: center;
+//     width: 350px;
+//   }
+
+//   .login-title {
+//     font-size: 1.8rem;
+//     margin-bottom: 20px;
+//     color: #4caf50;
+//   }
+
+//   .login-form {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 15px;
+//   }
+
+//   .login-label {
+//     font-size: 1rem;
+//     color: #ff4081;
+//     text-align: left;
+//   }
+
+//   .login-input {
+//     padding: 10px;
+//     border: 1px solid #ddd;
+//     border-radius: 5px;
+//     font-size: 1rem;
+//   }
+
+//   .login-button {
+//     background: #4caf50;
+//     color: white;
+//     padding: 10px 20px;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+//     font-size: 1rem;
+//   }
+
+//   .login-button:hover {
+//     background: #45a049;
+//   }
+
+//   .error-message {
+//     color: red;
+//     margin-top: 10px;
+//   }
+
+.home-guide {
+  display: flex;
+
+  .homeContainer-guide {
+    flex: 6;
+
+    .widgets-guide,
+    .charts-guide {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .charts-guide {
+      padding: 5px 20px;
+    }
+
+    .listContainer-guide {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 20px;
+      margin: 20px;
+
+      .listTitle-guide {
+        font-weight: 500;
+        color: gray;
+        margin-bottom: 15px;
       }
     }
   }
-
-  .governor-login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f4f4f4;
-  }
-  
-  .login-box {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 350px;
-  }
-  
-  .login-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: #4caf50;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .login-label {
-    font-size: 1rem;
-    color: #ff4081;
-    text-align: left;
-  }
-  
-  .login-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .login-button {
-    background: #4caf50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .login-button:hover {
-    background: #45a049;
-  }
-  
-  .error-message {
-    color: red;
-    margin-top: 10px;
-  }
-  
+}

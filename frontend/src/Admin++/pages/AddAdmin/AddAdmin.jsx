@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import AddAdminForm from "../../components/addAdminForm/addAdminForm"; // Import the updated form component
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const AddAdmin = () => {
   const [admins, setAdmins] = useState([]); // State to hold admin data
   const [loading, setLoading] = useState(true); // Loading state
@@ -64,7 +64,7 @@ const AddAdmin = () => {
             >
               <CardContent>
                 <Typography variant="h6" component="div">
-                  <AccountCircleRoundedIcon />
+                  <AccountCircleRoundedIcon sx={{ color: "#91c297" }} />
                   {admin.username}
                 </Typography>
                 <div className="cardActions">
@@ -72,7 +72,8 @@ const AddAdmin = () => {
                     variant="contained"
                     color="secondary"
                     size="small"
-                    onClick={() => handleDelete(admin._id)}
+                    // onClick={() => handleDelete(admin._id)}
+                    startIcon={<DeleteIcon sx={{ color: "#fff" }} />}
                   >
                     Delete
                   </Button>

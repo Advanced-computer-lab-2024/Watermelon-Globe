@@ -204,14 +204,14 @@ const Sidebar = () => {
                   <span>View My Products</span>
                 </li>
               </Link>
-              <Link
+              {/* <Link
                 to={`/viewSaleQuantities/${id}`}
                 style={{ textDecoration: "none" }}
               >
                 <li>
                   <span>View Sales & Quantites</span>
                 </li>
-              </Link>
+              </Link> */}
             </ul>
           )}
 
