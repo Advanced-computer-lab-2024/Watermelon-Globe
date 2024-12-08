@@ -484,9 +484,9 @@ const TourGuideProfile = ()=> {
         }}
       >
         <div className="listAdminProduct">
-          <Sidebar id={id} />
+          <Sidebar/>
           <div className="listContainerAdminProduct">
-            <Navbar id={id} />
+            <Navbar/>
             <div style={{ padding: "20px" }}>
         <div className="flex-1 max-w-4xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
