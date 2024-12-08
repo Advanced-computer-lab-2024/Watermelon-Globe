@@ -2,11 +2,11 @@ const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
 const mongoose = require("mongoose");
-const itineraryModel = require("../Models/itineraryModel.js");
-const tourGuide = require("../Models/tourGuideModel.js");
+const itineraryModel = require("../models/itineraryModel.js");
+const tourGuide = require("../models/tourGuideModel.js");
 const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
-
+const Itinerary = require("../models/itineraryModel.js");
 
 //for frontend
 const frontendGuidesTable = async (req, res) => {
@@ -194,61 +194,62 @@ const updateTourGuideNew = async (req, res) => {
   }
 };
 
-const createItinerary = async (req, res) => {
-  const { id } = req.params;
-  const {
-    name,
-    activities,
-    tag,
-    locations,
-    timeline,
-    languageOfTour,
-    priceOfTour,
-    availableDates,
-    availableTimes,
-    accessibility,
-    pickupDropoffLocations,
-    bookings,
-  } = req.body;
+// const createItinerary = async (req, res) => {
+//   const { id } = req.params;
+//   const {
+//     name,
+//     activities,
+//     tag,
+//     locations,
+//     timeline,
+//     languageOfTour,
+//     priceOfTour,
+//     availableDates,
+//     availableTimes,
+//     accessibility,
+//     pickupDropoffLocations,
+//     bookings,
+//   } = req.body;
 
-  try {
-    const tourguide = await TourGuide.findById(id);
+//   try {
+//     const tourguide = await tourGuide.findById(id);
 
-    if (!tourguide) {
-      return res.status(404).json({ error: "Tour guide not found" });
-    }
+//     if (!tourguide) {
+//       return res.status(404).json({ error: "Tour guide not found" });
+//     }
 
-    const itineraryData = {
-      name,
-      activities,
-      tag,
-      locations,
-      timeline,
-      languageOfTour,
-      priceOfTour,
-      availableDates,
-      availableTimes,
-      accessibility,
-      pickupDropoffLocations,
-      bookings,
-      guide: id,
-    };
+//     const itineraryData = {
+//       name,
+//       activities: Array.isArray(activities) ? activities : JSON.parse(activities),
+//       tag: Array.isArray(tag) ? tag : JSON.parse(tag),
+//       locations,
+//       timeline,
+//       languageOfTour,
+//       priceOfTour,
+//       availableDates: Array.isArray(availableDates) ? availableDates : JSON.parse(availableDates),
+//       availableTimes: Array.isArray(availableTimes) ? availableTimes : JSON.parse(availableTimes),
+//       accessibility,
+//       pickupDropoffLocations: Array.isArray(pickupDropoffLocations) ? pickupDropoffLocations : JSON.parse(pickupDropoffLocations),
+//       bookings,
+//       guide: id,
+//     };
 
-    // If a file was uploaded, add the file path to the itinerary data
-    if (req.file) {
-      itineraryData.picture = req.file.path;
-    }
+//     // If a file was uploaded, add the file path to the itinerary data
+//     if (req.file) {
+//       itineraryData.picture = req.file.path;
+//     }
 
-    const itinerary = await Itinerary.create(itineraryData);
+//     const itinerary = await itineraryModel.Itinerary.create(itineraryData);
     
-    tourguide.itineraries.push(itinerary._id);
-    await tourguide.save();
+//     tourguide.itineraries.push(itinerary._id);
+//     await tourguide.save();
 
-    res.status(200).json(itinerary);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+//     res.status(200).json(itinerary);
+//   } catch (error) {
+//     console.error("Error creating itinerary:", error);
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 
 //itinerary photo
 
@@ -332,6 +333,56 @@ const uploadPicture = async (req, res) => {
       res.status(500).json({ error: "An error occurred while updating the itinerary picture" });
     }
   });
+};
+
+const createItinerary = async (req, res) => {
+  try {
+    const { id } = req.params;  // Tour guide ID from URL params
+    const {
+      name, activities, tag, locations, timeline,
+      languageOfTour, priceOfTour, availableDates,
+      availableTimes, accessibility, pickupDropoffLocations, bookings
+    } = req.body;
+
+    // Find the tour guide
+    const TourGuide = await tourGuide.findById(id);
+    if (!TourGuide) {
+      return res.status(404).json({ error: "Tour guide not found" });
+    }
+
+    const itineraryData = {
+      name,
+      activities: Array.isArray(activities) ? activities : JSON.parse(activities),
+      tag: Array.isArray(tag) ? tag : JSON.parse(tag),
+      locations,
+      timeline,
+      languageOfTour,
+      priceOfTour,
+      availableDates: Array.isArray(availableDates) ? availableDates : JSON.parse(availableDates),
+      availableTimes: Array.isArray(availableTimes) ? availableTimes : JSON.parse(availableTimes),
+      accessibility,
+      pickupDropoffLocations: Array.isArray(pickupDropoffLocations)
+        ? pickupDropoffLocations : JSON.parse(pickupDropoffLocations),
+      bookings,
+      guide: id
+    };
+
+    if (req.file) {
+      itineraryData.picture = req.file.filename;
+    }
+
+    // Create the itinerary
+    const itinerary = await itineraryModel.Itinerary.create(itineraryData);
+
+    // Update the tour guide's itineraries
+    TourGuide.itineraries.push(itinerary._id);
+    await TourGuide.save();
+
+    res.status(201).json(itinerary);
+  } catch (error) {
+    console.error("Error creating itinerary:", error);
+    res.status(500).json({ error: "Failed to create itinerary" });
+  }
 };
 
 // // Controller to fetch itineraries for a specific tour guide
