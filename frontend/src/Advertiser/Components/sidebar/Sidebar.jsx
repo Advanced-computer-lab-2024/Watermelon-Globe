@@ -74,25 +74,25 @@ import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
 import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
 import LocalActivityRoundedIcon from "@mui/icons-material/LocalActivityRounded";
 
-const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
+const Sidebar = () => {
   const location = useLocation();
   const [user, setUser] = useState(""); // State to store user details
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        // Make an API call to fetch user details using the ID
+        const response = await axios.get(
+          `/api/Advertiser/getCompanyProfileById/${id}`
+        );
+        setUser(response.data); // Update state with the user details
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
 
-  // useEffect(() => {
-  //   const fetchUserDetails = async () => {
-  //     try {
-  //       // Make an API call to fetch user details using the ID
-  //       const response = await axios.get(
-  //         `/api/Advertiser/getCompanyProfileById/${id}`
-  //       );
-  //       setUser(response.data); // Update state with the user details
-  //     } catch (error) {
-  //       console.error("Error fetching user details:", error);
-  //     }
-  //   };
-
-  //   fetchUserDetails();
-  // }, [id]);
+    fetchUserDetails();
+  }, [id]);
 
   // Function to determine if the menu item is active
   const isActive = (path) => location.pathname === path;
@@ -101,7 +101,7 @@ const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
     <div className="sidebarAdmin">
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Hello , {advertiserName} </span>
+          <span className="logoAdmin">Hello , {user.Name} </span>
         </Link>
       </div>
       {/* <hr /> */}
@@ -109,7 +109,7 @@ const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
         <ul>
           <p className="titleAdmin">MAIN</p>
 
-          <Link to={`/advertiser/${advertiserId}`} style={{ textDecoration: "none" }}>
+          <Link to={`/advertiser/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
@@ -120,7 +120,7 @@ const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
 
           {/* My Products */}
           <Link
-            to={`/ViewMyActitvities/${advertiserId}`}
+            to={`/ViewMyActitvities/${id}`}
             style={{ textDecoration: "none" }}
           >
             <li>
@@ -131,7 +131,7 @@ const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
 
           {/* All Products */}
           <Link
-            to={`/ViewActitvities/${advertiserId}`}
+            to={`/ViewActitvities/${id}`}
             style={{ textDecoration: "none" }}
           >
             <li>
@@ -141,7 +141,7 @@ const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
           </Link>
 
           {/* Create New Product */}
-          <Link to={`/add-activity/${advertiserId}`} style={{ textDecoration: "none" }}>
+          <Link to={`/add-activity/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AddIcon className="iconAdmin" />
               <span>Create New Activities</span>
@@ -159,7 +159,7 @@ const Sidebar = ({advertiser, advertiserName, advertiserId }) => {
           </Link> */}
 
           <p className="titleAdmin">MANAGE ACCOUNT</p>
-          <Link to={`/viewProfile/${advertiserId}`} style={{ textDecoration: "none" }}>
+          <Link to={`/viewProfile/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />
               <span>View Profile</span>
