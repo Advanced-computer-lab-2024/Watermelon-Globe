@@ -17,13 +17,11 @@ const ChangePasswordSeller = () => {
 
   const containerStyle = {
     backgroundColor: '#F8F8F8',
-    padding: '40px',  // Increased padding for better visual separation
+    padding: '20px',  // Increased padding for better visual separation
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     marginTop: '20px', // Add margin-top for better spacing
-    width: '82%',
-    marginLeft: 'auto',
-    marginTop: '70px',
+    width: '100%',
   };
 
   const {id}=useParams();

@@ -86,7 +86,7 @@ export default function DraftHomePage() {
               EN
             </button>
             <button
-              onClick={() => navigate("/AllLogin")} // Redirect to AllLogin page
+              onClick={handleButtonClick}
               className="px-4 py-1 border border-lightGray rounded text-secondary hover:bg-secondaryHover hover:text-white transition-colors"
             >
               Login

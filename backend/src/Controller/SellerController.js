@@ -4,9 +4,6 @@ const Tourist = require("../Models/touristModel");
 const bookedItinerary = require("../Models/touristItineraryModel");
 const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
-const multer = require("multer");
-const path = require('path');
-const fs = require('fs');
 const { findById } = require("../Models/touristModel");
 
 //for frontend
@@ -55,62 +52,6 @@ const frontendPendingSellersTable = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error fetching pending sellers" });
   }
-};
-
-//product photo
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/') // Ensure this directory exists
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)) // Append the file extension
-  }
-});
-
-const upload = multer({ storage: storage });
-const uploadMiddleware = upload.single('picture');
-
-const uploadPicture = async (req, res) => {
-  uploadMiddleware(req, res, async function (err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: "Multer error: " + err.message });
-    } else if (err) {
-      return res.status(500).json({ error: "Unknown error: " + err.message });
-    }
-
-    const { id } = req.query;
-
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    try {
-      const product = await Product.findById(id);
-
-      if (!product) {
-        // Delete the uploaded file if product not found
-        fs.unlinkSync(req.file.path);
-        return res.status(404).json({ error: "No product found with this ID" });
-      }
-
-      // Delete the old picture if it exists
-      if (product.picture) {
-        const oldPicturePath = path.join(__dirname, '..', 'uploads', product.picture);
-        if (fs.existsSync(oldPicturePath)) {
-          fs.unlinkSync(oldPicturePath);
-        }
-      }
-
-      // Update the product with the new picture filename
-      product.picture = req.file.filename;
-      await product.save();
-
-      res.status(200).json({ message: "Product picture updated successfully", product });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "An error occurred while updating the product picture" });
-    }
-  });
 };
 
 // Get all products (unarchived)
@@ -818,6 +759,37 @@ const unarchiveProduct = async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while unarchiving the product" });
+  }
+};
+
+// upload a product picture
+const uploadPicture = async (req, res) => {
+  const { id } = req.query; // Get the product ID from the route parameters
+  const { picture } = req.body; // Get the picture URL from the request body
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid product ID" });
+  }
+
+  try {
+    // Update the product's picture field
+    const product = await Product.findOneAndUpdate(
+      { _id: id }, // Find the product by ID
+      { picture }, // Update the picture field
+      { new: true } // Return the updated product
+    );
+
+    if (!product) {
+      return res.status(404).json({ error: "No product found with this ID" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Product picture updated successfully", product });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the product picture" });
   }
 };
 

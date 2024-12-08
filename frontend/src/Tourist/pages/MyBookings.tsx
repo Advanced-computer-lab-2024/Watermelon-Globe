@@ -122,9 +122,10 @@ export default function MyBookings() {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
-      <p>hello</p>
+
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <p>hello</p>
           <div className="bg-primary p-5 relative">
             <div className="flex items-center space-x-4">
               <div className="bg-white rounded-full p-2">
@@ -162,17 +163,13 @@ export default function MyBookings() {
                       <FaDollarSign className="mr-2 text-primary" /> {activity.activity.Price.toFixed(2)}
                     </p>
                   </div>
-                  <div 
-                  className="flex justify-end"
-                  >
                   <button
                     onClick={() => cancelActivity(activity._id, activity.activity.Price)}
-                    className="mt-3 bg-darkPink text-white text-sm px-4 py-2 rounded-full hover:bg-darkPinkHover transition duration-200 inline-block"
+                    className="mt-3 bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-700 transition duration-200 inline-block"
                     style={{ width: 'auto' }}
                   >
                     Cancel Activity
                   </button>
-                  </div>
                 </div>
               ))}
               {upcomingActivities.length === 0 && (
@@ -198,17 +195,13 @@ export default function MyBookings() {
                       <p className="flex items-center"><FaClock className="mr-2 text-primary" /> {booking.chosenTimes.join(', ')}</p>
                       <p className="flex items-center"><FaDollarSign className="mr-2 text-primary" /> {booking.totalPrice.toFixed(2)}</p>
                     </div>
-                    <div 
-                  className="flex justify-end"
-                  >
                     <button
                       onClick={() => cancelItinerary(booking._id, booking.totalPrice)}
-                      className="mt-3 bg-darkPink text-white text-sm px-4 py-2 rounded-full hover:bg-darkPinkHover transition duration-200 inline-block"
+                      className="mt-3 bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-700 transition duration-200 inline-block"
                       style={{ width: 'auto' }}
                     >
                       Cancel Itinerary
                     </button>
-                    </div>
                   </div>
                 ))}
                 {upcomingItineraries.length === 0 && (

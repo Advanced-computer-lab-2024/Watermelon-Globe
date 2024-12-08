@@ -8,10 +8,6 @@ const sellerSchema = new Schema(
       type: String,
       required: true,
     },
-    Username: {
-      type: String,
-      required: true,
-    },
     Email: {
       type: String,
       required: true,

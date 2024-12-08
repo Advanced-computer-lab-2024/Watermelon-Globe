@@ -404,32 +404,6 @@ const addComment = async (req, res) => {
   }
 };
 
-// GET: Fetch activities by Advertiser ID
-const getActivitiesByAdvertiserId = async (req, res) => {
-  const { advertiserId } = req.params; // Extract Advertiser ID from the URL
-
-  try {
-    // Find activities where the Advertiser matches the provided ID
-    const activities = await ActivityModel.find({ Advertiser: advertiserId })
-      .populate("Category", "name") // Populate the Category field if needed
-      .populate("tags", "type") // Populate the tags field
-      .populate("Advertiser", "Name Email"); // Populate Advertiser details
-
-    // If no activities are found
-    if (!activities || activities.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No activities found for this advertiser" });
-    }
-
-    // Return the found activities
-    res.status(200).json(activities);
-  } catch (error) {
-    console.error("Error fetching activities by Advertiser ID:", error.message);
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
-
 module.exports = {
   createTags,
   getTags,
@@ -446,5 +420,4 @@ module.exports = {
   getActivitiesNew,
   addComment,
   getAllTags,
-  getActivitiesByAdvertiserId,
 };

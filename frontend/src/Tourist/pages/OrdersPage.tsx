@@ -70,9 +70,8 @@ const OrdersPage = () => {
     }, [touristId]);
 
     return (
-        <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+        <div className="min-h-screen bg-background p-8">
             <TouristNavbar id={touristId} />
-            <p>hello</p>
             <div className="max-w-4xl mx-auto">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div className="bg-primary p-5 relative">
@@ -122,18 +121,16 @@ const OrdersPage = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        <div className="flex justify-end">
                                         <button
                                             onClick={() => {
                                                 setSelectedOrder(order);
                                                 setShowCancelModal(true);
                                             }}
-                                            className="mt-3 bg-darkPink text-white text-sm px-4 py-2 rounded-full hover:bg-darkPinkHover transition duration-200 inline-block"
+                                            className="mt-3 bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-700 transition duration-200 inline-block"
                       style={{ width: 'auto' }}
                       >
                                             Cancel Order
                                         </button>
-                                        </div>
                                     </div>
                                 ))}
                                 {currentOrders.length === 0 && <p className="text-gray-500 italic">No current orders.</p>}
