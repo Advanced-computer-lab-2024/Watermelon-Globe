@@ -30,16 +30,4 @@ router.put(
   guideController.acceptTermsAndConditions
 );
 
-router.get("/getAllItineraries", guideController.getAllItineraries);
-
-router.get("/getAllItinerariesByGuide/:guideId", guideController.getAllItinerariesByGuide);
-
-router.get("/ItineraryRevenue/:guideId", guideController.ItineraryRevenue);
-
-router.get("/guideMonthlyRevenue/:guideId", guideController.guideMonthlyRevenue);
-
-router.get("/filterRevenueByDateGuide/:guideId", guideController.filterRevenueByDateGuide);
-
-
-
 module.exports = router;
