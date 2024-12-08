@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, MapPin, CreditCard, CheckCircle, XCircle } from 'lucide-react';
 import TouristNavbar from "../Components/TouristNavBar";
-import { useCurrency } from "../Components/CurrencyContext";
+
 
 export default function TransportationDetails() {
   const [transportation, setTransportation] = useState(null);
@@ -10,7 +10,6 @@ export default function TransportationDetails() {
   const [error, setError] = useState(null);
   const [bookingStatus, setBookingStatus] = useState(null);
   const { touristId, id } = useParams();
-  const { selectedCurrency, currencies } = useCurrency();  // Ensure currencies are available in context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,15 +47,6 @@ export default function TransportationDetails() {
     }
   };
 
-  function getCurrencyConversionRate(currency) {
-    const rates = {
-      USD: 1,
-      EUR: 0.85,
-      GBP: 0.75,
-    };
-    return rates[currency] || 1; // Default to 1 if currency not found
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
@@ -77,18 +67,11 @@ export default function TransportationDetails() {
     );
   }
 
-  // Calculate the price in the selected currency
-  const priceInSelectedCurrency = selectedCurrency
-    ? (transportation.price * getCurrencyConversionRate(selectedCurrency)).toFixed(2)
-    : transportation.price.toFixed(2);
-
-  // Get the currency symbol for the selected currency
-  const currencySymbol = selectedCurrency ? currencies[selectedCurrency]?.symbol_native : "$";
-
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
-      <TouristNavbar id={touristId} />
-      <div className="max-w-3xl mx-auto mt-8 bg-cardBackground shadow-lg rounded-lg overflow-hidden">
+            <TouristNavbar id={touristId} />
+            <p>hello</p>
+      <div className="max-w-3xl mx-auto bg-cardBackground shadow-lg rounded-lg overflow-hidden">
         <div className="bg-primary px-6 py-4">
           <h2 className="text-3xl font-bold text-white mt-2">Transportation Details</h2>
         </div>
@@ -101,9 +84,10 @@ export default function TransportationDetails() {
             <MapPin className="w-6 h-6 text-primary mr-2" />
             <p className="text-lg text-grayText">Destination: {transportation.destination}</p>
           </div>
-          <p className="text-lg text-grayText">
-            Price: {currencySymbol}{priceInSelectedCurrency}
-          </p>
+          <div className="flex items-center mb-6">
+            <CreditCard className="w-6 h-6 text-primary mr-2" />
+            <p className="text-lg text-grayText">Price: ${transportation.price}</p>
+          </div>
           {transportation.booked ? (
             <div className="bg-green-100 border-l-4 border-green-500 p-4 mb-6 rounded-lg">
               <div className="flex items-center">
@@ -121,14 +105,16 @@ export default function TransportationDetails() {
           )}
           {bookingStatus && (
             <div
-              className={`mt-4 p-4 rounded-lg text-lg font-medium ${bookingStatus.includes('failed') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-                }`}
+              className={`mt-4 p-4 rounded-lg text-lg font-medium ${
+                bookingStatus.includes('failed') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+              }`}
             >
               {bookingStatus}
             </div>
           )}
         </div>
       </div>
+
     </div>
   );
 }

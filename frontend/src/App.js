@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "./App.css";
-import ReactDOM from "react-dom";
 // Importing all necessary components
 import SignupPage from "./Components/SignUp";
 
@@ -143,8 +142,6 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
 
-import { CurrencyProvider } from "./Tourist/Components/CurrencyContext"; 
-
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [profile, setProfile] = useState(null);
@@ -159,13 +156,6 @@ const App = () => {
     localStorage.removeItem("userId");
     window.location.reload();
   };
-
-  ReactDOM.render(
-    <CurrencyProvider>
-      <App />
-    </CurrencyProvider>,
-    document.getElementById("root")
-  );
 
   return (
     <Router>

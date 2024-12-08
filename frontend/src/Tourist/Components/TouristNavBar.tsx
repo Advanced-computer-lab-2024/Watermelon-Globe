@@ -4,11 +4,8 @@ import { ArrowLeft } from "react-feather";
 import profileIcon from "../../Assets/Profile.png";
 import { Bell } from "lucide-react";
 import NotificationsBox from "./NotificationsBox";
-import { FaShoppingCart, FaWallet, FaGlobe } from 'react-icons/fa'
+import { FaShoppingCart, FaWallet } from 'react-icons/fa'
 import WalletComponent from '../Components/Wallet';
-import Freecurrencyapi from '@everapi/freecurrencyapi-js';
-import { useCurrency } from "../Components/CurrencyContext"; 
-
 
 interface TouristNavbarProps {
   id: string | undefined;
@@ -21,40 +18,6 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [currencies, setCurrencies] = useState<Record<string, Currency>>({});
-  const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
-  const { selectedCurrency, setSelectedCurrency } = useCurrency();
-  const freecurrencyapi = new Freecurrencyapi('fca_live_JvXZdckoc8RpbVAJT8vtI8gbZCDkblRt5JOrgccQ');
-
-  type Currency = {
-    symbol_native: string;
-
-  };
-
-  useEffect(() => {
-    const fetchCurrencies = async () => {
-      try {
-        const result = await freecurrencyapi.currencies();
-        if (result.data) {
-          setCurrencies(result.data);
-          console.log(result.data.USD.symbol_native);
-        }
-      } catch (error) {
-        console.error("Error fetching currencies:", error);
-      }
-    };
-
-    fetchCurrencies();
-  }, []);
-
-  const handleCurrencySelect = (currency: string) => {
-    setSelectedCurrency(currency);
-    setIsCurrencyDropdownOpen(false);
-  };
-
-  const toggleCurrencyDropdown = () => {
-    setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen);
-  };
 
   const handleSignOut = () => {
     navigate("/");
@@ -70,14 +33,14 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
 
   const toggleNotifications = () => {
     setIsNotificationsOpen((prev) => !prev);
-    const openWallet = () => {
-      setIsWalletOpen(true);
-    };
-  }
-
   const openWallet = () => {
     setIsWalletOpen(true);
   };
+}
+
+const openWallet = () => {
+  setIsWalletOpen(true);
+};
   const closeWallet = () => {
     setIsWalletOpen(false);
   };
@@ -113,20 +76,6 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
     fetchNotificationCount();
   }, [id]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsCurrencyDropdownOpen(false); // Close the dropdown if clicked outside
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside); // Clean up the event listener on unmount
-    };
-  }, []);
-
-
   return (
     <header className="fixed top-0 left-0 w-full bg-sectionBackground shadow-md z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center">
@@ -140,18 +89,12 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div className="text-3xl font-bold text-secondary">
-            {id ? <Link
-              to={`/MainTouristPage/${id}`}
-              className="homeButton hover:text-secondaryHover"
-            >
-              WaterMelon Globe
-            </Link> : <Link
+            <Link
               to="/Homepage"
               className="homeButton hover:text-secondaryHover"
             >
               WaterMelon Globe
-            </Link>}
-
+            </Link>
           </div>
         </div>
 
@@ -189,40 +132,6 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
 
         {/* Right Section - Actions */}
         <div className="flex items-center justify-end space-x-3 relative w-1/3" ref={dropdownRef}>
-          <div className="relative">
-          <button
-              onClick={toggleCurrencyDropdown}
-              className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
-            >
-              {/* Conditionally render the selected currency symbol or globe icon */}
-              {selectedCurrency ? (
-                <span>{currencies[selectedCurrency]?.symbol_native}</span>
-              ) : (
-                <FaGlobe />
-              )}
-            </button>
-
-            {/* Dropdown List */}
-            {isCurrencyDropdownOpen && (
-              <ul className="absolute top-full right-0 w-48 mt-2 bg-white border rounded-lg shadow-md max-h-60 overflow-y-auto z-10">
-                {Object.entries(currencies).map(([code, currency]) => {
-                  // Type assertion to ensure 'currency' is of type 'Currency'
-                  const currencyData = currency as Currency;
-                  return (
-                    <li
-                      key={code}
-                      onClick={() => handleCurrencySelect(code)}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                    >
-                      {/* Access the symbol_native from the currency object */}
-                      <span className="text-xl text-primary">{currencyData.symbol_native}</span>
-                      <span className="ml-2 text-secondary">{code}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
           <button
             onClick={() => handleNavigation(`/shoppingCart/${id}`)}
             className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
@@ -241,7 +150,7 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
             <button
               onClick={toggleNotifications}
               className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
-            >
+              >
               <Bell className="w-6 h-6 text-black" />
               {notificationCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
