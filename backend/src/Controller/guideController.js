@@ -1050,7 +1050,7 @@ const RevenuefilterItinerary = async (req, res) => {
     }
 
     // Step 4: Fetch the parent itinerary to include its name in the response
-    const parentItinerary = await Itinerary.findById(itineraryId);
+    const parentItinerary = await itineraryModel.Itinerary.findById(itineraryId);
     const itineraryName = parentItinerary ? parentItinerary.name : 'Unknown Itinerary';
 
     // Step 5: Send the total revenue as a response

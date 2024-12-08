@@ -3,7 +3,7 @@ const Admin = require("../Models/AdminModel");
 const Governer = require("../Models/tourismGovernorModel");
 const Tourist = require("../Models/touristModel");
 const Seller = require("../Models/SellerModel");
-const Advertiser = require("../Models/advertiserModel");
+// const Advertiser = require("../Models/advertiserModel");
 
 
 const loginUser = async (req, res) => {
