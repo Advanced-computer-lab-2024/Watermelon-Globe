@@ -61,6 +61,7 @@ import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewIti
 
 // import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
+import TouristActivityReport from "./Advertiser/pages/ViewActivities/TouristActivityReport";
 import AccountPage from "./Advertiser/pages/AccountPage/AccountPage.jsx";
 import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
 import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.jsx";
@@ -321,6 +322,7 @@ const App = () => {
 
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/ActivityReport/:id" element={<TouristActivityReport />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
             path="/advertiserProfile/:profileId"
