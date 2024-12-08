@@ -10,7 +10,6 @@ const ActivityDetails = () => {
   const { activityId } = useParams();
   const [activity, setActivity] = useState(null);
   const [category, setCategory] = useState(null); // Store category name
-  const [tags, setTags] = useState([]); // Store tags
   const [isEditing, setIsEditing] = useState(false);
   const [updatedActivity, setUpdatedActivity] = useState({
     Name: "",
@@ -33,15 +32,6 @@ const ActivityDetails = () => {
         // Fetch the category name using the Category ID
         const categoryResponse = await axios.get(`/api/Admin/GetActivityCategory/${response.data.Category}`);
         setCategory(categoryResponse.data.activity); // Assuming the response contains a "name" field
-
-        // Fetch the tags names using the tags' IDs
-        const tagNames = await Promise.all(
-          response.data.tags.map(async (tagId) => {
-            const tagResponse = await axios.get(`/api/Activities/GetActivityTag/${tagId}`);
-            return tagResponse.data.tag; // Assuming the response contains a "tag" field
-          })
-        );
-        setTags(tagNames);
 
       } catch (error) {
         console.error("Error fetching activity details:", error);
@@ -240,14 +230,14 @@ const ActivityDetails = () => {
                           <p className="text-gray-600 mb-4">{category || "Loading category..."}</p>
                           <div className="mt-4">
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">Tags</h3>
-                            {tags.length > 0 ? (
+                            {activity?.tags && activity.tags.length > 0 ? (
                               <div className="flex flex-wrap gap-2">
-                                {tags.map((tag, index) => (
+                                {activity.tags.map((tagObj, index) => (
                                   <span
                                     key={index}
                                     className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
                                   >
-                                    {tag}
+                                    {tagObj.tag}
                                   </span>
                                 ))}
                               </div>
