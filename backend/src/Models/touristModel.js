@@ -139,7 +139,6 @@ const touristSchema = new Schema(
       }
     ],
 
-    
    
     //sprint 3 Hatem
 
@@ -164,8 +163,18 @@ const touristSchema = new Schema(
         default: [],
       },
     ],
+
+    WishList: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+      }, ],
+
+
+    
  
   },  
+  
   
 
   {

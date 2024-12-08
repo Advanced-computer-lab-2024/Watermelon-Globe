@@ -1,9 +1,11 @@
 .home {
     display: flex;
+    padding-top: 50px;
 }
 
 .home.sidebar {
     position: fixed;
+    top: 50px;
 }
 
 .home .homeContainer {
@@ -37,11 +39,19 @@
 .main-content {
     flex: 1;
     margin-left: 30px;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 20px;
-    height: 650px; 
+    height: calc(100vh - 100px);
     overflow-y: auto; 
     box-sizing: border-box; 
+    padding: 20px;
+}
+
+.full-width-form {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
 }
 
 .activity-grid {

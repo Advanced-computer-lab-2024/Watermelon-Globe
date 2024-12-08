@@ -47,7 +47,7 @@ const ActivitySchema = new Schema(
     ],
     Discount: {
       type: Number,
-      required: true,
+      required: false,
     },
     bookingOpen: {
       type: Boolean,

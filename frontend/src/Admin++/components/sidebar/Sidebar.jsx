@@ -150,7 +150,7 @@ const Sidebar = () => {
                   <span>View Events/Itineraries</span>
                 </li>
               </Link>
-              <Link to="/users/governers" style={{ textDecoration: "none" }}>
+              <Link to="/complaintss" style={{ textDecoration: "none" }}>
                 <li>
                   <span>View Complaints</span>
                 </li>

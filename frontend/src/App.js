@@ -131,6 +131,7 @@ import SelectMyPref from "./Tourist/pages/SelectMyPreference.js";
 //Flights
 import FlightMain from "./Flights/Pages/FlightMain.js";
 import HotelMain from "./Hotels/Pages/HotelMain.js";
+import Complaints from "./Admin++/pages/Complaints/Complaints.jsx"
 
 import SiteDetails from "./Tourist/pages/siteDetails.js";
 
@@ -221,6 +222,7 @@ const App = () => {
           />
           <Route path="/" element={<MainHome />} />
 
+          <Route path="/complaintss" element={<Complaints/>} />
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
           <Route path="/seller-signup" element={<SellerSignup />} />

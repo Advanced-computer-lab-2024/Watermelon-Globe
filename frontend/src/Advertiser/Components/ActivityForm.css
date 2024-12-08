@@ -1,67 +1,66 @@
 .activity-form {
-    max-width: 500px;
-    margin: 0 auto;
-    background-color: #f9f9f9;
-    padding: 20px;
+    background-color: #ffffff;
+    padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.activity-form h2 {
+.form-header {
     text-align: center;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-}
-
-.form-group label {
+    margin-bottom: 2rem;
+    color: #ff545e;
+    font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #589ea5;
+    padding-bottom: 0.5rem;
 }
 
-.form-group input[type="text"],
-.form-group input[type="date"],
-.form-group input[type="time"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+.MuiTextField-root,
+.MuiFormControl-root {
+    margin-bottom: 1rem;
 }
 
-.form-group input[type="checkbox"] {
-    margin-left: 10px;
+.MuiFormControlLabel-root {
+    margin-bottom: 1rem;
 }
 
-.booking-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.MuiButton-root {
+    margin-top: 1rem;
+    background-color: #589ea5 !important;
 }
 
-.booking-group label {
-    margin: 0;
+.MuiButton-root:hover {
+    background-color: #6ec2b1 !important;
 }
 
-.activity-form input[type="checkbox"] {
-    width: auto;
+.MuiTabs-root {
+    margin-bottom: 1rem;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #007bff;
+.MuiTab-root {
+    background-color: #ff7b7b;
     color: white;
-    border: none;
+    margin-right: 0.5rem;
     border-radius: 4px;
-    cursor: pointer;
-    margin-top: 15px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.MuiTab-root:hover {
+    background-color: #ff545e;
 }
+
+.MuiTab-root.selected-tag {
+    background-color: #589ea5;
+}
+
+.MuiTabs-indicator {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .activity-form {
+        padding: 1rem;
+    }
+}
+

@@ -76,7 +76,10 @@ const {
   requestNotifyItinerary,
   getNotifications,
   getNotificationCount,
-  markNotificationAsRead
+  markNotificationAsRead,
+  addToWishList,
+  getWishList,
+  deleteFromWishlist
 
 
 } = require("../Controller/touristController");
@@ -233,6 +236,12 @@ router.post('/requestNotifyItinerary/:touristId/:itineraryId', requestNotifyItin
 router.get('/notifications/:id',getNotifications);
 router.get('/notificationsCount/:id',getNotificationCount);
 router.put('/markNotifications/:touristId/:notificationId',markNotificationAsRead);
+router.put('/addToWishList/:touristId/:productId',addToWishList);
+router.get('/getWishList/:id',getWishList);
+router.put('/deleteFromWishlist/:touristId/:productId',deleteFromWishlist);
+
+
+
 
 
 module.exports = router;
