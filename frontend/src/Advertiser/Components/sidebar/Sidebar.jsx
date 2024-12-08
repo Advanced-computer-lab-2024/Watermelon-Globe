@@ -120,12 +120,11 @@ const Sidebar = () => {
           <p className="titleAdmin">ACTIVITIES</p>
 
           {/* My Products */}
-          <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
-            <li
-              className={
-                isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""
-              }
-            >
+          <Link
+            to={`/ViewMyActitvities/${id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <li>
               <MovingRoundedIcon className="iconAdmin" />
               <span>My Activities </span>
             </li>

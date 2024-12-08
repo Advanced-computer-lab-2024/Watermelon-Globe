@@ -15,7 +15,7 @@ import BookmarkAdd from "@mui/icons-material/BookmarkAddOutlined";
 import Rating from "@mui/material/Rating";
 import NavTabs from "Admin++/components/navTabs/navTabsEvents";
 
-const ViewActitvities = () => {
+const ViewMyActitvities = () => {
   const [activities, setActivities] = useState([]); // Ensure default state is an array
   const [filteredActivities, setFilteredActivities] = useState([]); // Ensure default state is an array
   const [searchTerm, setSearchTerm] = useState("");
@@ -115,7 +115,7 @@ const ViewActitvities = () => {
               }}
               className="text-2xl font-bold text-800 mb-6"
             >
-              All Activities
+              My Activities
             </h2>
             <div
               style={{
@@ -257,4 +257,4 @@ const ViewActitvities = () => {
   );
 };
 
-export default ViewActitvities;
+export default ViewMyActitvities;

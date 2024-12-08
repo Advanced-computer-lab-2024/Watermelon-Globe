@@ -59,6 +59,8 @@ import EditProfilePage from "./Advertiser/Components/EditCompanyProfile.jsx";
 import AdvertiserActivityDetails from "./Advertiser/Components/ActivityDetails.jsx";
 import ActivityForm from "./Advertiser/Components/ActivityForm.jsx";
 import AdvertiserLogo from "./Advertiser/Components/AdvertiserLogo.jsx";
+import ViewActitvities from "Advertiser/pages/ViewActivities/ViewActivities";
+import ViewMyActitvities from "Advertiser/pages/ViewActivities/ViewMyActivities";
 import SellerHome from "./Seller/pages/SellerHomePage.jsx";
 // import AdminHomePage from "./Admin/pages/home/Home.jsx";
 
@@ -238,6 +240,11 @@ const App = () => {
 
           {/* Guest and Advertiser Routes */}
           <Route path="/advertiser/:id" element={<AdvertiserPage />} />
+          <Route path="/ViewActitvities/:id" element={<ViewActitvities />} />
+          <Route
+            path="/ViewMyActitvities/:id"
+            element={<ViewMyActitvities />}
+          />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
 
           {/* Guest Routes */}
@@ -312,7 +319,7 @@ const App = () => {
             element={<AdvertiserActivityDetails />}
           />
           <Route path="/editActivity/:id" element={<EditActivity />} />
-          <Route path="/add-activity/:userId" element={<ActivityForm />} />
+          <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
             path="/SalesReportPage/:advertiserId"
             element={<SalesReportPage />}
