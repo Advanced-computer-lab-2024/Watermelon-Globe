@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Checkbox, FormControlLabel, Button, Grid, InputAdornment, Select, MenuItem, FormControl, InputLabel, Tabs, Tab } from '@mui/material';
 import './ActivityForm.css';
+import Sidebar from './sidebar/Sidebar';
+import Navbar from './AdvertiserNavbar';
 
 const ActivityForm = ({ userId }) => {
     const [activity, setActivity] = useState({
@@ -86,6 +88,22 @@ const ActivityForm = ({ userId }) => {
     };
 
     return (
+        <div
+        style={{
+          backgroundColor: "#fff",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
+          flexDirection: "column",
+        }}
+      >
+        <div className="listAdminProduct">
+          <Sidebar />
+          <div className="listContainerAdminProduct">
+            <Navbar />
+            <div style={{ padding: "20px" }}>
         <form className="activity-form full-width-form" onSubmit={handleSubmit}>
             <h2 className="form-header">Create a New Activity</h2>
             <Grid container spacing={2}>
@@ -215,6 +233,10 @@ const ActivityForm = ({ userId }) => {
                 </Grid>
             </Grid>
         </form>
+        </div>
+        </div>
+        </div>
+        </div>
     );
 };
 

@@ -4,15 +4,17 @@ import "./homeGuide.scss";
 import { useParams } from "react-router-dom";
 import { ReactNotifications } from "react-notifications-component";
 
-
+const id = "67013950229bd3b168a94dde";
 const TourguideHome = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
   return (
 
     <div className="home-guide">
-      <Sidebar  />
+      <Sidebar  
+      id={id}/>
       <div className="homeContainer-guide">
-        <Navbar />
+        <Navbar 
+        id={id}/>
       
       </div>
     </div>

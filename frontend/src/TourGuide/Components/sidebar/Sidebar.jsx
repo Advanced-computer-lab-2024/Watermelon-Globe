@@ -123,8 +123,8 @@ import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
 import AddIcon from "@mui/icons-material/Add";
 
 import axios from "axios";
-const Sidebar = () => {
-  const { id } = useParams();
+const Sidebar = ({id}) => {
+  // const { id } = useParams();
   const [user, setUser] = useState(""); // State to store user details
 
   useEffect(() => {
@@ -188,7 +188,7 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <Link to={`/AddItinerary/${id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/CreateItinerary/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AddIcon className="iconAdmin" />
               <span>Add Iteneraries</span>
@@ -196,13 +196,13 @@ const Sidebar = () => {
           </Link>
 
           <p className="titleAdmin">MANAGE ACCOUNT</p>
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link to={`/TourGuideProfile/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />
               <span>View Profile</span>
             </li>
           </Link>
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link to={`/changePasswordTourGuide/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <PasswordRoundedIcon className="iconAdmin" />
               <span>Change Password</span>
