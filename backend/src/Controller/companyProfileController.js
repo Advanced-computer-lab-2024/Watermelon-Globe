@@ -639,6 +639,43 @@ const filterRevenueByDateAdvertiser = async (req, res) => {
 };
 
 
+const getAllActivitiesByAdvertiser = async (req, res) => {
+  try {
+    const { advertiserId } = req.params; // Assuming the advertiserId is passed as a parameter
+
+    // Step 1: Query to find all child activities where the parent activity's advertiser matches the advertiserId
+    const bookedActivities = await ActivityBooking.find({})
+      .populate({
+        path: 'activity', // Populate the parent activity
+        match: { Advertiser: advertiserId }, // Filter activities where the advertiser matches the provided advertiserId
+      })
+      .populate('tourist'); // Optionally populate the buyer data
+
+    // Step 2: Filter out activities that do not have a matched advertiser
+    const filteredBookedActivities = bookedActivities.filter(activity => activity.activity);
+
+    // Step 3: If no booked activities are found for the advertiser, return a 404 response
+    if (filteredBookedActivities.length === 0) {
+      return res.status(404).json({
+        message: "No booked activities found for this advertiser",
+      });
+    }
+
+    // Step 4: Return the filtered booked activities
+    res.status(200).json({
+      message: "Booked activities retrieved successfully for the advertiser",
+      bookedActivities: filteredBookedActivities,
+    });
+  } catch (error) {
+    console.error("Error retrieving booked activities for advertiser:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
 
 
 
@@ -661,5 +698,6 @@ module.exports = {
   getCompanyProfileById,
   ActivityRevenue,
   advertiserMonthlyRevenue,
-  filterRevenueByDateAdvertiser
+  filterRevenueByDateAdvertiser,
+  getAllActivitiesByAdvertiser
 };

@@ -19,7 +19,7 @@ const Chart = ({ aspect, title }) => {
   // Function to fetch yearly revenue data from the backend
   const fetchYearlyRevenue = async () => { 
     try {
-      const response = await axios.get(`/api/TourGuide/guideMonthlyRevenue/${id}`);
+      const response = await axios.get(`/api/Advertiser/advertiserMonthlyRevenue/${id}`);
       const revenueData = response.data.data;
 
       // The data is already formatted correctly from the backend, so we can use it directly
