@@ -266,7 +266,6 @@ const AllLogin = () => {
                 color: "#4B5563",
               }}
             >
-              Can't sign in?{" "}
               <a
                 href="/tourist-signup"
                 style={{
@@ -275,7 +274,7 @@ const AllLogin = () => {
                   textDecoration: "none",
                 }}
               >
-                Forgot Password
+                Forgot Password?
               </a>
             </p>
           </div>
