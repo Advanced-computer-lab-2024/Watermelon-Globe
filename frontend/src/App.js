@@ -159,6 +159,9 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
+import TouristBookmarkss from './Tourist/Components/TouristBookmarks.jsx'
+
+
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -243,7 +246,7 @@ const App = () => {
             element={<ViewItinerariesEvents />}
           />
           <Route path="/" element={<MainHome />} />
-
+          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
           <Route path="/complaintss" element={<Complaints />} />
           {/* <Route path="/" element={<Iteneraries />} />
             <Route path="/" element={<SignupOptions />} /> */}
