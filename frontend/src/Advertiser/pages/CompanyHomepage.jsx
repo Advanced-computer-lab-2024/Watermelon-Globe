@@ -83,7 +83,7 @@ const HomeScreen = () => {
         </div>
         <div className="listContainerAdminHome">
           <div className="listTitleAdminHome">
-            <span>Itineraries</span>
+            <span>Activities</span>
             <br />
             <br />
             <input
