@@ -57,7 +57,7 @@ router.get("/advertiserMonthlyRevenue/:advertiserId", advertiserMonthlyRevenue);
 
 router.get("/filterRevenueByDateAdvertiser/:advertiserId", filterRevenueByDateAdvertiser);
 
-router.put("uploadPicture", uploadPicture);
+router.put("/uploadPicture", uploadPicture);
 
 // router.post("/addAdvertiser", createAdvertiser);
 
