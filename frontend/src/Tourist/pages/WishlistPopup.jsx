@@ -1,7 +1,9 @@
 import React from 'react';
-import { X, ShoppingCart } from 'lucide-react';
+import { X, ShoppingCart, Trash2 } from 'lucide-react';
 
-const WishlistPopup = ({ wishlistItems, onClose, onAddToCart }) => {
+const WishlistPopup = ({ wishlistItems, onClose, onAddToCart, onRemoveFromWishlist }) => {
+  console.log('Wishlist items in popup:', wishlistItems); // Add this line for debugging
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
@@ -11,7 +13,7 @@ const WishlistPopup = ({ wishlistItems, onClose, onAddToCart }) => {
             <X size={24} />
           </button>
         </div>
-        {wishlistItems.length === 0 ? (
+        {!wishlistItems || wishlistItems.length === 0 ? (
           <p>Your wishlist is empty.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -30,13 +32,22 @@ const WishlistPopup = ({ wishlistItems, onClose, onAddToCart }) => {
                   </span>
                   <span className="text-xs text-gray-500">Rating: {item.ratings || 'N/A'}</span>
                 </div>
-                <button
-                  onClick={() => onAddToCart(item._id)}
-                  className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-primary hover:bg-hover text-white"
-                >
-                  <ShoppingCart size={16} />
-                  Add to Cart
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onAddToCart(item._id)}
+                    className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-primary hover:bg-hover text-white"
+                  >
+                    <ShoppingCart size={16} />
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={() => onRemoveFromWishlist(item._id)}
+                    className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-red-500 hover:bg-red-600 text-white"
+                  >
+                    <Trash2 size={16} />
+                    Remove
+                  </button>
+                </div>
               </div>
             ))}
           </div>

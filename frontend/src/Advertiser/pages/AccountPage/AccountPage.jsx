@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./AccountPage.css";
 
-const AccountPage = ({advertiserId}) => {
+const AccountPage = () => {
+    const {advertiserId} = useParams();
     const [profile, setProfile] = useState(null);
     const navigate = useNavigate();
 
