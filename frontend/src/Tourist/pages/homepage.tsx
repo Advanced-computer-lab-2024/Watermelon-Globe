@@ -48,7 +48,8 @@ export default function DraftHomePage() {
   const [guests, setGuests] = useState("");
   const [isSignedUp, setIsSignedUp] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
+  const [selectedTab, setSelectedTab] = useState<string>('hotels');
+  
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Searching for:", { destination, dates, guests });
@@ -81,61 +82,88 @@ export default function DraftHomePage() {
 
 
       <main className="flex-grow">
-        <section className="bg-gradient-to-r from-primary/10 to-secondary/10 py-20">
-          <div className="container mx-auto">
-            <h2 className="text-4xl font-bold mb-6 text-center text-secondary">
-              Discover Your Perfect Getaway
-            </h2>
-            <Card className="w-full max-w-3xl mx-auto">
-              <CardContent className="p-6">
-                <Tabs defaultValue="hotels" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 mb-6">
-                    <TabsTrigger value="hotels">Hotels</TabsTrigger>
-                    <TabsTrigger value="tours">Tours</TabsTrigger>
-                    <TabsTrigger value="flights">Flights</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="hotels">
-                    <div className="flex space-x-4">
-                      <Input
-                        placeholder="Where are you going?"
-                        className="flex-grow"
-                      />
-                      <Input type="date" className="w-40" />
-                      <Button className="bg-primary hover:bg-hover text-white">
-                        <Search className="w-4 h-4 mr-2" />
-                        Search
-                      </Button>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="tours">
-                    <div className="flex space-x-4">
-                      <Input
-                        placeholder="Tour destination"
-                        className="flex-grow"
-                      />
-                      <Input type="date" className="w-40" />
-                      <Button className="bg-primary hover:bg-hover text-white">
-                        <Search className="w-4 h-4 mr-2" />
-                        Find Tours
-                      </Button>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="flights">
-                    <div className="flex space-x-4">
-                      <Input placeholder="From" className="flex-grow" />
-                      <Input placeholder="To" className="flex-grow" />
-                      <Input type="date" className="w-40" />
-                      <Button className="bg-primary hover:bg-hover text-white">
-                        <Search className="w-4 h-4 mr-2" />
-                        Search Flights
-                      </Button>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+      <section className="bg-white from-primary/10 to-secondary/10 py-20">
+  <div className="container mx-auto">
+    <h2 className="text-4xl font-bold mb-6 text-center text-secondary">
+      Discover Your Perfect Getaway
+    </h2>
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardContent className="p-6">
+        <Tabs
+          defaultValue="hotels"
+          className="w-full"
+          onValueChange={(value) => setSelectedTab(value)}
+        >
+          <TabsList className="grid hw-full grid-cols-3 mb-6">
+            <TabsTrigger
+              className={`hover:bg-secondary hover:text-white ${
+                selectedTab === 'hotels' ? 'text-black hover:text-black' : ''
+              }`}
+              value="hotels"
+            >
+              Hotels
+            </TabsTrigger>
+            <TabsTrigger
+              className={`hover:bg-secondary hover:text-white ${
+                selectedTab === 'tours' ? 'text-black hover:text-black' : ''
+              }`}
+              value="tours"
+            >
+              Tours
+            </TabsTrigger>
+            <TabsTrigger
+              className={`hover:bg-secondary hover:text-white ${
+                selectedTab === 'flights' ? 'text-black hover:text-black' : ''
+              }`}
+              value="flights"
+            >
+              Flights
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="hotels">
+            <div className="flex space-x-4">
+              <Input
+                placeholder="Where are you going?"
+                className="flex-grow"
+              />
+              <Input type="date" className="w-40" />
+              <Button className="bg-primary hover:bg-hover text-white">
+                <Search className="w-4 h-4 mr-2" />
+                Search
+              </Button>
+            </div>
+          </TabsContent>
+          <TabsContent value="tours">
+            <div className="flex space-x-4">
+              <Input
+                placeholder="Tour destination"
+                className="flex-grow"
+              />
+              <Input type="date" className="w-40" />
+              <Button className="bg-primary hover:bg-hover text-white">
+                <Search className="w-4 h-4 mr-2" />
+                Search
+              </Button>
+            </div>
+          </TabsContent>
+          <TabsContent value="flights">
+            <div className="flex space-x-4">
+              <Input placeholder="From" className="flex-grow" />
+              <Input placeholder="To" className="flex-grow" />
+              <Input type="date" className="w-40" />
+              <Button className="bg-primary hover:bg-hover text-white">
+                <Search className="w-4 h-4 mr-2" />
+                Search
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
+  </div>
+</section>
+
+
 
         <section className="py-20">
           <div className="container mx-auto">
@@ -187,8 +215,8 @@ export default function DraftHomePage() {
         <ForYou />
         <ExploreTrips />
         <ExploreActivities />
-        <ExploreHistoricalSites />
-        <ExploreTransportations />
+        <ExploreHistoricalSites touristId={id} />
+        <ExploreTransportations touristId={id} />
 
         <section className="bg-sectionBackground py-20">
           <div className="container mx-auto">
@@ -241,13 +269,13 @@ export default function DraftHomePage() {
               Sign up for our newsletter and get exclusive travel deals and
               tips!
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-center mx-auto">
               <Input
                 className="w-64 mr-2"
                 placeholder="Enter your email"
                 type="email"
               />
-              <Button className="bg-primary hover:bg-hover text-white">
+              <Button className="w-64 bg-primary hover:bg-hover text-white">
                 Subscribe
               </Button>
             </div>

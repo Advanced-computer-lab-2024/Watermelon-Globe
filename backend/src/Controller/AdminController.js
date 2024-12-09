@@ -8,7 +8,6 @@ const Product = require("../Models/ProductModel");
 const Complaint = require("../Models/Complaint");
 const Itinerary = require("../Models/itineraryModel");
 const TourGuide = require("../Models/tourGuideModel");
-const Advertiser = require("../Models/advertiserModel");
 const Transportation = require("../Models/TransportationModel");
 const Seller = require("../Models/SellerModel");
 const bookedItinerary = require("../Models/touristItineraryModel");
@@ -1148,24 +1147,24 @@ const markItineraryInappropriate = async (req, res) => {
     await guide.save();
     console.log(`notifications are ${guide.notifications}`);
 
-    // // Check if guide information is complete
-    // if (!guide || !guide.email || !guide.name) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Guide information is incomplete." });
-    // }
+    // Check if guide information is complete
+    if (!guide || !guide.email || !guide.name) {
+      return res
+        .status(400)
+        .json({ error: "Guide information is incomplete." });
+    }
 
-    // const guideEmail = "shodimatar@gmail.com";
-    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+    const guideEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
 
-    // // Attempt to send the email
-    // try {
-    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
-    //   console.log("Email sent to:", guideEmail);
-    // } catch (emailError) {
-    //   console.error("Error sending email:", emailError);
-    //   // Continue marking the itinerary as inappropriate even if the email fails
-    // }
+    // Attempt to send the email
+    try {
+      await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+      console.log("Email sent to:", guideEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
+    }
 
     // Send the updated itinerary as a response
     res
@@ -1193,31 +1192,6 @@ const markItineraryAppropriate = async (req, res) => {
       return res.status(404).json({ error: "Itinerary not found" });
     }
 
-    // const guide = itinerary.guide;
-    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
-    // guide.notifications.push(notification);
-    // await guide.save();
-
-    // // Check if guide information is complete
-    // if (!guide || !guide.email || !guide.name) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Guide information is incomplete." });
-    // }
-
-    // const guideEmail = "shodimatar@gmail.com";
-    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
-
-    // // Attempt to send the email
-    // try {
-    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
-    //   console.log("Email sent to:", guideEmail);
-    // } catch (emailError) {
-    //   console.error("Error sending email:", emailError);
-    //   // Continue marking the itinerary as inappropriate even if the email fails
-    // }
-
-    // Send the updated itinerary as a response
     res
       .status(200)
       .json({ message: "Itinerary marked as appropriate", itinerary });
@@ -1248,30 +1222,30 @@ const markActivityInappropriate = async (req, res) => {
     advertiser.notifications.push(notification);
     await advertiser.save();
 
-    // if (!advertiser || !advertiser.Email || !advertiser.Name) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "advertiser information is incomplete." });
-    // }
+    if (!advertiser || !advertiser.Email || !advertiser.Name) {
+      return res
+        .status(400)
+        .json({ error: "advertiser information is incomplete." });
+    }
 
-    // const advertiserEmail = "shodimatar@gmail.com";
-    // const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+    const advertiserEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
 
-    // // Attempt to send the email
-    // try {
-    //   await sendEmail(
-    //     advertiserEmail,
-    //     "Inappropriate Activity",
-    //     emailMessage,
-    //     ""
-    //   );
-    //   console.log("Email sent to:", advertiserEmail);
-    // } catch (emailError) {
-    //   console.error("Error sending email:", emailError);
-    //   // Continue marking the itinerary as inappropriate even if the email fails
-    // }
+    // Attempt to send the email
+    try {
+      await sendEmail(
+        advertiserEmail,
+        "Inappropriate Activity",
+        emailMessage,
+        ""
+      );
+      console.log("Email sent to:", advertiserEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
+    }
 
-    // Send the updated activity as a response
+    //Send the updated activity as a response
     res
       .status(200)
       .json({ message: "activity marked as inappropriate", activity });

@@ -26,7 +26,7 @@ const Featured = () => {
   const fetchTotalRevenue = async () => {
     try {
       const [productRes, itineraryRes, activityRes] = await Promise.all([
-        fetch("/api/Admin/productrevenue/"),
+        fetch(`/api/Seller/totalProductRevenueForSeller/${id}`),
       ]);
 
       const productData = await productRes.json();

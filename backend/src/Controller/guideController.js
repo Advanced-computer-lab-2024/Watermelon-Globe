@@ -92,42 +92,20 @@ const createTourGuide = async (req, res) => {
   }
 };
 
-// const getTourGuide = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     // Query the database based on search criteria
-//     const retrievedTourGuide = await tourGuide
-//       .findById(id)
-//       .populate("itineraries");
-
-//     // Check if results are found
-//     if (retrievedTourGuide.length == 0) {
-//       return res
-//         .status(404)
-//         .json({ message: "No tour guide found matching the id" });
-//     }
-
-//     res.status(200).json(retrievedTourGuide);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// };
-
 const getTourGuide = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Query the database based on ID
+    // Query the database based on search criteria
     const retrievedTourGuide = await tourGuide
       .findById(id)
       .populate("itineraries");
 
-    // Check if the document is found
-    if (!retrievedTourGuide) {
+    // Check if results are found
+    if (retrievedTourGuide.length == 0) {
       return res
         .status(404)
-        .json({ message: "No tour guide found matching the ID" });
+        .json({ message: "No tour guide found matching the id" });
     }
 
     res.status(200).json(retrievedTourGuide);

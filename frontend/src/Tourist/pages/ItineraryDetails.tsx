@@ -82,7 +82,7 @@ const ItineraryDetails = () => {
     }
   };
 
-
+  useEffect(() => {
     const fetchItinerary = async () => {
       try {
         const response = await fetch(`/api/Itinerary/getItinerary/${tripid}`);
@@ -99,7 +99,6 @@ const ItineraryDetails = () => {
       }
     };
 
-  useEffect(() => {
     const checkBookmarkStatus = async () => {
       try {
         const bookmarkResponse = await axios.get(
@@ -138,7 +137,7 @@ const ItineraryDetails = () => {
           `/api/Tourist/updateWallet/${id}`,
           {
             // amount: -itinerary.priceOfTour,
-            amount: -total,
+            amount: total,
           }
         );
 
@@ -234,7 +233,7 @@ const ItineraryDetails = () => {
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
@@ -242,13 +241,13 @@ const ItineraryDetails = () => {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <div className="text-red-500 text-center text-xl mt-10">
-  //       Error: {error}
-  //     </div>
-  //   );
-  // }
+  if (error) {
+    return (
+      <div className="text-red-500 text-center text-xl mt-10">
+        Error: {error}
+      </div>
+    );
+  }
 
   if (!itinerary) return null;
 
@@ -506,48 +505,6 @@ const ItineraryDetails = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <button
-            type="submit"
-            className="btn btn-primary text-white"
-            disabled={bookingInProgress}
-          >
-            {bookingInProgress ? "Booking..." : "Book Now"}
-          </button>
-          {bookingMessage && (
-            <p className="text-lg text-gray-600">{bookingMessage}</p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex flex-col space-y-4 mb-8">
-        <button
-          onClick={handleBookmark}
-          className={`flex items-center justify-center px-4 py-2 rounded-md ${
-            isBookmarked
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-        >
-          <Bookmark className="mr-2" size={20} />
-          {isBookmarked ? "Bookmarked" : "Bookmark"}
-        </button>
-        <div className="flex justify-between">
-          <button
-            className="flex-1 mr-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
-            onClick={handleShareLink}
-          >
-            <span>Share Link</span>
-          </button>
-          <button
-            className="flex-1 ml-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
-            onClick={handleShareEmail}
-          >
-            <span>Share via Email</span>
-          </button>
         </div>
       </div>
     </div>

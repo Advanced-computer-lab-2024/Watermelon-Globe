@@ -113,7 +113,7 @@ const ActivityDetails: React.FC = () => {
     }
   };
 
-
+  useEffect(() => {
     const fetchActivity = async () => {
       try {
         const response = await axios.get(
@@ -128,8 +128,6 @@ const ActivityDetails: React.FC = () => {
       }
     };
 
-
-  useEffect(() => {
     const checkBookmarkStatus = async () => {
       try {
         const bookmarkResponse = await axios.get(
@@ -198,7 +196,7 @@ const ActivityDetails: React.FC = () => {
           `/api/Tourist/updateWallet/${id}`,
           {
             //amount: -activity.Price,
-            amount: -total,
+            amount: total,
           }
         );
 
@@ -449,37 +447,6 @@ const ActivityDetails: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <PaymentOptions2
-        paymentMethod={paymentMethod}
-        onPaymentMethodSelection={setPaymentMethod}
-      />
-
-      <div className="mt-6">
-        <button
-          onClick={handleBookmark}
-          className={`w-full px-4 py-2 mb-4 text-sm font-semibold rounded-lg ${
-            isBookmarked
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-        >
-          <FaBookmark className="mr-2 inline-block" size={20} />
-          {isBookmarked ? "Bookmarked" : "Bookmark"}
-        </button>
-        <button
-          onClick={handleBooking}
-          className={`w-full px-4 py-2 text-white rounded-lg ${
-            bookingInProgress
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-primary hover:bg-primary-dark"
-          }`}
-          disabled={bookingInProgress}
-        >
-          {bookingInProgress ? "Booking..." : "Book Activity"}
-        </button>
       </div>
     </div>
   );
