@@ -897,7 +897,7 @@ const getUploadedDocumentsByID = async (req, res) => {
       { _id: id },
       "username idProof certificates"
     );
-    const advertiser = await Advertiser.findOne(
+    const advertiser = await CompanyProfile.findOne(
       { _id: id },
       "Username idProof taxationRegistryCard"
     );
