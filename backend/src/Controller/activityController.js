@@ -450,14 +450,17 @@ const uploadMiddleware = upload.single("picture");
 const uploadPicture = async (req, res) => {
   uploadMiddleware(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
+      console.error("Multer error:", err);
       return res.status(400).json({ error: "Multer error: " + err.message });
     } else if (err) {
+      console.error("Unknown error:", err);
       return res.status(500).json({ error: "Unknown error: " + err.message });
     }
 
     const { id } = req.query;
 
     if (!req.file) {
+      console.error("No file uploaded");
       return res.status(400).json({ error: "No file uploaded" });
     }
 
@@ -465,12 +468,11 @@ const uploadPicture = async (req, res) => {
       const Activity = await ActivityModel.findById(id);
 
       if (!Activity) {
-        // Delete the uploaded file if product not found
+        console.error("No activity found with ID:", id);
         fs.unlinkSync(req.file.path);
         return res.status(404).json({ error: "No activity found with this ID" });
       }
 
-      // Delete the old picture if it exists
       if (Activity.picture) {
         const oldPicturePath = path.join(
           __dirname,
@@ -483,25 +485,21 @@ const uploadPicture = async (req, res) => {
         }
       }
 
-      // Update the activity with the new picture filename
       Activity.picture = req.file.filename;
       await Activity.save();
 
-      res
-        .status(200)
-        .json({ message: "Activity picture updated successfully", Activity });
-        return;
+      console.log("Activity picture updated successfully:", Activity);
+      res.status(200).json({ message: "Activity picture updated successfully", Activity });
     } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred while updating the activity picture",
-        });
+      console.error("Error updating activity picture:", error);
+      res.status(500).json({
+        error: "An error occurred while updating the activity picture",
+        details: error.message
+      });
     }
-    console.log("file uploaded: ",req.file);
   });
 };
+
 
 module.exports = {
   createTags,

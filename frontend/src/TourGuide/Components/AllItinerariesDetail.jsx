@@ -92,10 +92,22 @@ const GeneralDetails = () => {
   };
   
   return (
-    <div className="listGuide">
-    <Sidebar />
-    <div className="listContainerGuide">
-      <Navbar />
+    <div
+        style={{
+          backgroundColor: "#fff",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
+          flexDirection: "column",
+        }}
+      >
+        <div className="listAdminProduct">
+          <Sidebar />
+          <div className="listContainerAdminProduct">
+            <Navbar />
+            <div style={{ padding: "20px" }}>
     <div className="itinerary-details-container">
       <h1 style={{ color: watermelonGreen }}>{itinerary.name}</h1>
       <p><strong>Guide:</strong> {itinerary.guide && itinerary.guide.name ? itinerary.guide.name : 'Unknown'}</p>
@@ -132,6 +144,8 @@ const GeneralDetails = () => {
        
       </div>
       </div>
+    </div>
+    </div>
     </div>
     </div>
     </div>

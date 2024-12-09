@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {FaTimes, FaCheck} from 'react-icons/fa'
 
-const ChangePasswordSeller = ({ id, onClose }) => {
+const ChangePasswordAdvertiser = ({ id, onClose }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -13,7 +13,7 @@ const ChangePasswordSeller = ({ id, onClose }) => {
     }
     try {
       const response = await fetch(
-        `/api/Seller/changePasswordAdveriser/${id}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`,
+        `/api/Seller/changePasswordSeller/${id}?oldPassword=${currentPassword}&newPassword=${newPassword}&newPasswordConfirmed=${confirmNewPassword}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -113,4 +113,4 @@ const ChangePasswordSeller = ({ id, onClose }) => {
   );
 };
 
-export default ChangePasswordSeller;
+export default ChangePasswordAdvertiser;

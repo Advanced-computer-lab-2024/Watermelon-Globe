@@ -2,11 +2,13 @@ const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
 const mongoose = require("mongoose");
-const itineraryModel = require("../models/itineraryModel.js");
-const tourGuide = require("../models/tourGuideModel.js");
+ const itineraryModel = require("../Models/itineraryModel.js");
+const tourGuide = require("../Models/tourGuideModel.js");
 const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
-const Itinerary = require("../models/itineraryModel.js");
+ const Itinerary = require("../Models/itineraryModel.js");
+const Itinerary2=require("../Models/itineraryModel.js");
+const TourGuide = require("../Models/tourGuideModel.js");
 
 //for frontend
 const frontendGuidesTable = async (req, res) => {
@@ -92,42 +94,20 @@ const createTourGuide = async (req, res) => {
   }
 };
 
-// const getTourGuide = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     // Query the database based on search criteria
-//     const retrievedTourGuide = await tourGuide
-//       .findById(id)
-//       .populate("itineraries");
-
-//     // Check if results are found
-//     if (retrievedTourGuide.length == 0) {
-//       return res
-//         .status(404)
-//         .json({ message: "No tour guide found matching the id" });
-//     }
-
-//     res.status(200).json(retrievedTourGuide);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// };
-
 const getTourGuide = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Query the database based on ID
+    // Query the database based on search criteria
     const retrievedTourGuide = await tourGuide
       .findById(id)
       .populate("itineraries");
 
-    // Check if the document is found
-    if (!retrievedTourGuide) {
+    // Check if results are found
+    if (retrievedTourGuide.length == 0) {
       return res
         .status(404)
-        .json({ message: "No tour guide found matching the ID" });
+        .json({ message: "No tour guide found matching the id" });
     }
 
     res.status(200).json(retrievedTourGuide);
@@ -482,14 +462,43 @@ const getAllItineraries = async (req, res) => {
   }
 };
 
+
+
+ const myItineraries = async(req,res)=>
+{
+  const {id} = req.params;
+  try {
+
+    // Fetch the tour guide and populate itineraries
+    const tourGuide = await TourGuide.findById(id).populate("itineraries");
+
+    if (!tourGuide) {
+      return res.status(404).json({ error: "Tour guide not found" });
+    }
+
+    // Respond with the itineraries
+    res.status(200).json({ itineraries: tourGuide.itineraries });
+  } catch (error) {
+    console.error("Error fetching itineraries:", error);
+    res.status(500).json({ error: "An error occurred while fetching itineraries" });
+  }
+}
+
+
+
+
+
+
+
 // API to fetch itineraries by guide id
 const getMyItineraries = async (req, res) => {
-  const { guideId } = req.params; // Extract the guideId from route parameters
+  const { id } = req.params; 
+  console.log(id);
 
   try {
     // Fetch itineraries where guide matches guideId
     const itineraries = await itineraryModel.Itinerary.find({
-      Advertiser: guideId,
+      guide : id,
     })
       .populate("activities") // Optionally populate activities
       .populate("tag") // Optionally populate tags
@@ -780,24 +789,35 @@ const activateItineraryAccessibility = async (req, res) => {
 
     // Add notification to all tourists who requested to be notified
     const notificationMessage = `The itinerary "${updatedItinerary.name}" is now available for booking.`;
-    const notificationPromises = updatedItinerary.notifyRequests.map(
-      (touristId) =>
-        Tourist.findByIdAndUpdate(
-          touristId,
-          { $push: { notifications: notificationMessage } },
-          { new: true }
-        )
-    );
+    const notificationPromises = updatedItinerary.notifyRequests.map(async (tourist) => {
+      await Tourist.findByIdAndUpdate(
+        tourist._id,
+        { 
+          $push: { notifications: { message: notificationMessage, date: new Date() } },
+          $pull: { notifyRequests: updatedItinerary._id }
+        },
+        { new: true }
+      );
+    });
 
+    // Wait for all notifications to be sent and tourists to be updated
     await Promise.all(notificationPromises);
 
-    res.status(200).json(updatedItinerary);
+    // Remove all notifyRequests from the itinerary
+    updatedItinerary.notifyRequests = [];
+    await updatedItinerary.save();
+
+    res.status(200).json({
+      message: "Itinerary accessibility updated, notifications sent, and notify requests cleared",
+      itinerary: updatedItinerary,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Error activating accessibility: " + error.message });
+    console.error(error);
+    res.status(500).json({ error: "Error activating accessibility: " + error.message });
   }
 };
+
+
 
 const deactivateItineraryAccessibility = async (req, res) => {
   const { id } = req.params; // Get itinerary ID from request parameters
@@ -1393,6 +1413,132 @@ const filterRevenueByDateGuide = async (req, res) => {
 };
 
 
+const getTotalTouristsForItinerary = async (req, res) => {
+  try {
+    const { itineraryId } = req.params;
+
+    if (!itineraryId) {
+      return res.status(400).json({ message: "Itinerary ID is required" });
+    }
+
+    const totalTourists = await ChildItinerary.aggregate([
+      {
+        $match: {
+          itinerary: new mongoose.Types.ObjectId(itineraryId),
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalBookings: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$buyer' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalBookings: '$totalBookings',
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      }
+    ]);
+
+    const result = totalTourists[0] || { totalBookings: 0, uniqueTouristsCount: 0 };
+
+    res.status(200).json({
+      message: "Total tourists calculated successfully for the itinerary",
+      itineraryId,
+      ...result
+    });
+
+  } catch (error) {
+    console.error("Error calculating total tourists for itinerary:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+const getMonthlyTouristsForItinerary = async (req, res) => {
+  try {
+    const { itineraryId } = req.params;
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+
+    if (!itineraryId) {
+      return res.status(400).json({ message: "Itinerary ID is required" });
+    }
+
+    const monthlyTourists = await ChildItinerary.aggregate([
+      {
+        $match: {
+          itinerary: new mongoose.Types.ObjectId(itineraryId),
+          createdAt: { $gte: startDate, $lte: endDate }
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          touristsCount: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$buyer' }
+        }
+      },
+      {
+        $project: {
+          month: '$_id.month',
+          touristsCount: 1,
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      },
+      { $sort: { month: 1 } }
+    ]);
+
+    // Initialize monthly data array
+    const monthlyData = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      touristsCount: 0,
+      uniqueTouristsCount: 0
+    }));
+
+    // Populate actual data
+    monthlyTourists.forEach(entry => {
+      const monthIndex = entry.month - 1;
+      monthlyData[monthIndex].touristsCount = entry.touristsCount;
+      monthlyData[monthIndex].uniqueTouristsCount = entry.uniqueTouristsCount;
+    });
+
+    // Add month names
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedData = monthlyData.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1]
+    }));
+
+    // Calculate yearly totals
+    const yearlyTotals = formattedData.reduce((acc, month) => {
+      acc.totalTourists += month.touristsCount;
+      acc.totalUniqueTourists += month.uniqueTouristsCount;
+      return acc;
+    }, { totalTourists: 0, totalUniqueTourists: 0 });
+
+    res.status(200).json({
+      message: "Monthly tourist data calculated successfully for the itinerary",
+      year: currentYear,
+      itineraryId,
+      data: formattedData,
+      yearlyTotals
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly tourists for itinerary:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -1433,5 +1579,8 @@ module.exports = {
   ItineraryRevenue,
   guideMonthlyRevenue,
   filterRevenueByDateGuide,
-  uploadPicture
+  uploadPicture,
+  myItineraries,
+  getTotalTouristsForItinerary,
+  getMonthlyTouristsForItinerary
 };

@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaEdit, FaImage, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaEdit, FaImage, FaStar, FaStarHalfAlt, FaTrash } from "react-icons/fa";
 import UploadActivityPicture from "../UploadActivityImage";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Navbar from "../../Components/AdvertiserNavbar";
-import { Category } from "@mui/icons-material";
-import { Tags } from "lucide-react";
 
 const ActivityDetails = () => {
-  const { id } = useParams();
+  const { id, activityId } = useParams();
+  const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
   const [activity, setActivity] = useState(null);
+  const [category, setCategory] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedProduct, setUpdatedProduct] = useState({
+  const [updatedActivity, setUpdatedActivity] = useState({
     Name: "",
     Price: "",
     Date: "",
     Time: "",
     Category: "",
-    Tags: "",
+    tags: [],
     description: "",
   });
   const [showUpdatePicture, setShowUpdatePicture] = useState(false);
@@ -26,8 +27,24 @@ const ActivityDetails = () => {
   useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(`/api/Activities/getActivityById/${id}`);
-        setActivity(response.data);
+        const response = await axios.get(`/api/Activities/getActivityById/${activityId}`);
+        const activityData = response.data;
+        console.log(activityData);
+        setActivity(activityData);
+
+        const categoryResponse = await axios.get(`/api/Admin/GetActivityCategory/${response.data.Category}`);
+        setCategory(categoryResponse.data.activity);
+
+        if (activityData.tags && activityData.tags.length > 0) {
+          const tagPromises = activityData.tags.map(tagObj =>
+            axios.get(`/api/Governer/getTagById/${tagObj._id}`)
+          );
+          const tagResponses = await Promise.all(tagPromises);
+          const fetchedTags = tagResponses.map(res => res.data);
+          setTags(fetchedTags); // Store tags with names
+        }
+        console.log(tags);
+
       } catch (error) {
         console.error("Error fetching activity details:", error);
       }
@@ -37,35 +54,43 @@ const ActivityDetails = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdatedProduct((prev) => ({ ...prev, [name]: value }));
+    setUpdatedActivity((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setUpdatedProduct({ name: "", price: "", description: "" });
+    setUpdatedActivity(activity);
   };
 
-  const handleUpdateProduct = async () => {
-    const filteredUpdateData = Object.fromEntries(
-      Object.entries(updatedProduct).filter(([key, value]) => value.trim() !== "")
-    );
-
+  const handleUpdateActivity = async () => {
     try {
-      const response = await fetch(`/api/Seller/editProduct?id=${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(filteredUpdateData),
-      });
-
-      if (response.ok) {
-        const updatedDetails = await response.json();
-        setActivity({ ...activity, ...updatedDetails });
+      const response = await axios.put(`/api/Activities/updateActivity/${activityId}`, updatedActivity);
+      if (response.status === 200) {
+        setActivity(response.data.activity);
         setIsEditing(false);
       } else {
         console.error("Failed to update activity");
       }
     } catch (error) {
       console.error("Error updating activity:", error);
+    }
+  };
+
+  const handleDeleteActivity = async () => {
+    if (window.confirm("Are you sure you want to delete this activity?")) {
+      try {
+        const response = await fetch(`/api/Activities/deleteActivity/${activityId}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          navigate("/"); // Redirect to activities list
+        } else {
+          console.error("Failed to delete activity");
+        }
+      } catch (error) {
+        console.error("Error deleting activity:", error);
+      }
     }
   };
 
@@ -107,163 +132,180 @@ const ActivityDetails = () => {
           <div className="listContainerAdminProduct">
             <Navbar />
             <div style={{ padding: "20px" }}>
-        <div className="flex-1 p-8">
-          <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#91c297]">
-            <div className="md:flex">
-              <div className="md:flex-shrink-0 md:w-1/3">
-                <img
-                  className="h-full w-full object-cover md:w-full"
-                  src={activity?.picture || "https://via.placeholder.com/300"}
-                  alt={activity?.Name}
-                />
-              </div>
-              <div className="p-8 md:w-2/3">
-                {isEditing ? (
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Activity Details</h2>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                        Activity Name :
-                      </label>
-                    <input
-                      name="name"
-                      placeholder="Enter Product Name"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      onChange={handleInputChange}
-                      defaultValue={activity?.Name}
-                    />
-
-<                   label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                        Activity Price :
-                      </label>
-                    <input
-                      name="price"
-                      placeholder="Enter Product Price"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      onChange={handleInputChange}
-                      defaultValue={activity?.Price}
-                    />
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                        Description :
-                      </label>
-                    <textarea
-                    
-                      name="description"
-                      placeholder="Enter Product Description"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      onChange={handleInputChange}
-                      defaultValue={activity?.description}
-                      rows="4"
-                    />
-                    <div className="flex space-x-4">
+              <div className="flex-1 p-8">
+                <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#91c297] relative">
+                  <button
+                    onClick={handleDeleteActivity}
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 z-10"
+                    title="Delete Activity"
+                  >
+                    <FaTrash size={20} />
+                  </button>
+                  <div className="md:flex">
+                    <div className="md:flex-shrink-0 md:w-1/3 relative">
+                      <img
+                        className="h-full w-full object-cover md:w-full"
+                        src={activity?.picture ? `/uploads/${activity.picture}` : "https://via.placeholder.com/300"}
+                        alt={activity?.Name}
+                      />
                       <button
-                        className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
-                        onClick={handleUpdateProduct}
+                        onClick={() => setShowUpdatePicture(!showUpdatePicture)}
+                        className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-md"
+                        title="Update Picture"
                       >
-                        Save Changes
-                      </button>
-                      <button
-                        className="px-4 py-2 bg-[#e89bb5] text-gray-700 rounded-md hover:bg-[#d787a1] transition duration-300"
-                        onClick={handleCancel}
-                      >
-                        Cancel
+                        <FaImage size={20} className="text-[#91c297]" />
                       </button>
                     </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
-                      Acivity Details
-                    </div>
-                    <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
-                    <p style={{marginLeft:5}} className="font-semibold text-gray-900">${activity?.Price}</p>
-                    <p className="text-gray-600 mb-4">{activity?.Time}</p>
-                    <p className="text-gray-600 mb-4">{activity?.Date}</p>
-                    <p className="text-gray-600 mb-4">{activity?.Category}</p>
-                    <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-gray-200">
-                      <div className="space-x-2 flex text-sm">
-                        
-                        
-                      </div>
-                    </div>
-                    <div className="mt-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Tags</h3>
-                        {activity?.tags?.length > 0 ? (
-                            <div className="flex flex-wrap gap-2">
-                            {activity.tags.map((tag, index) => (
-                                <span
-                                key={index}
-                                className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
-                                >
-                                {tag.name}
-                                </span>
-                            ))}
-                            </div>
-                        ) : (
-                            <p className="text-gray-500">No tags associated with this activity.</p>
-                        )}
-                    </div>
+                    <div className="p-8 md:w-2/3">
+                    {isEditing ? (
+                        <div className="space-y-4">
+                          <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Activity Details</h2>
+                          <label htmlFor="Name" className="block text-sm font-medium text-gray-700 mb-1">
+                            Activity Name:
+                          </label>
+                          <input
+                            name="Name"
+                            value={updatedActivity.Name}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
 
-                    <div className="flex items-center mb-4">
-                      <div className="flex items-center">
-                        {renderRatingStars(activity?.rating || 0)}
-                      </div>
-                      <p className="ml-2 text-sm text-gray-600">
-                        {activity?.rating ? `${activity.rating} out of 5 stars` : "Not rated yet"}
-                      </p>
-                    </div>
-                    <div className="bg-[#f4eaef76] px-4 py-3 sm:px-6 rounded-md mb-4 border border-[#e89bb5]">
-                      <p className="text-sm text-gray-700">
-                        <span className="font-medium">Date </span> {activity?.Date}
-                      </p>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Reviews</h3>
-                      {activity?.reviews?.length > 0 ? (
-                        activity.reviews.map((review, index) => (
-                          <div key={index} className="mb-4 pb-4 border-b border-gray-200 last:border-b-0">
-                            <p className="text-gray-700">{review.review || "No review provided"}</p>
+                          <label htmlFor="Price" className="block text-sm font-medium text-gray-700 mb-1">
+                            Activity Price:
+                          </label>
+                          <input
+                            name="Price"
+                            value={updatedActivity.Price}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+
+                          <label htmlFor="Date" className="block text-sm font-medium text-gray-700 mb-1">
+                            Date:
+                          </label>
+                          <input
+                            name="Date"
+                            type="date"
+                            value={updatedActivity.Date ? updatedActivity.Date.split('T')[0] : ''}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+
+                          <label htmlFor="Time" className="block text-sm font-medium text-gray-700 mb-1">
+                            Time:
+                          </label>
+                          <input
+                            name="Time"
+                            type="time"
+                            value={updatedActivity.Time}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+
+                          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                            Description:
+                          </label>
+                          <textarea
+                            name="description"
+                            value={updatedActivity.description}
+                            onChange={handleInputChange}
+                            rows="4"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+
+                          <div className="flex space-x-4">
+                            <button
+                              className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
+                              onClick={handleUpdateActivity}
+                            >
+                              Save Changes
+                            </button>
+                            <button
+                              className="px-4 py-2 bg-[#e89bb5] text-gray-700 rounded-md hover:bg-[#d787a1] transition duration-300"
+                              onClick={handleCancel}
+                            >
+                              Cancel
+                            </button>
                           </div>
-                        ))
+                        </div>
                       ) : (
-                        <p className="text-gray-500">No reviews yet for this activity.</p>
+                  <>
+                  <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
+                    Activity Details
+                  </div>
+                  <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
+                  <p style={{marginLeft:5}} className="font-semibold text-gray-900">${activity?.Price}</p>
+                  <p className="text-gray-600 mb-4">{activity?.Time}</p>
+                  <p className="text-gray-600 mb-4">{activity?.Date}</p>
+                  <p className="text-gray-600 mb-4">{category}</p>
+                  <div className="mt-4">
+                    <h3 className="text-lg font-medium mb-2">Tags:</h3>
+                    {tags.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {tags.map(tagObj => (
+                          <span
+                            key={tagObj._id}
+                            className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
+                          >
+                            {tagObj.tag?.trim() || "Unnamed Tag"}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">No tags associated with this activity.</p>
+                    )}
+                  </div>
+                          <div className="flex items-center mb-4">
+                            <div className="flex items-center">{renderRatingStars(activity?.rating || 0)}</div>
+                            <p className="ml-2 text-sm text-gray-600">
+                              {activity?.rating ? `${activity.rating} out of 5 stars` : "Not rated yet"}
+                            </p>
+                          </div>
+                          <div className="bg-[#f4eaef76] px-4 py-3 sm:px-6 rounded-md mb-4 border border-[#e89bb5]">
+                            <p className="text-sm text-gray-700">
+                              <span className="font-medium">Date</span> {activity?.Date}
+                            </p>
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Reviews</h3>
+                            {activity?.reviews?.length > 0 ? (
+                              activity.reviews.map((review, index) => (
+                                <div key={index} className="mb-4 pb-4 border-b border-gray-200 last:border-b-0">
+                                  <p className="text-gray-700">{review.review || "No review provided"}</p>
+                                </div>
+                              ))
+                            ) : (
+                              <p className="text-gray-500">No reviews yet for this activity.</p>
+                            )}
+                          </div>
+                        </>
+                      )}
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="mt-4 px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
+                      >
+                        <FaEdit className="inline-block mr-2" /> Edit Activity
+                      </button>
+                      {showUpdatePicture && (
+                        <div className="mt-6">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Activity Picture</h3>
+                          <UploadActivityPicture
+                            id={activityId}
+                            onSuccess={(newPicture) => {
+                              setActivity((prev) => ({ ...prev, picture: newPicture }));
+                              setShowUpdatePicture(false);
+                            }}
+                          />
+                        </div>
                       )}
                     </div>
-                    <div className="mt-6 flex items-center space-x-4">
-                      {/* <button
-                        className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#91c297] hover:bg-[#7ab481] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        onClick={() => setIsEditing(true)}
-                      >
-                        <FaEdit className="mr-2" />
-                        Edit Product
-                      </button> */}
-                      {/* <button
-                        className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-black bg-[#e89bb5] hover:bg-[#d787a1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        onClick={() => setShowUpdatePicture(!showUpdatePicture)}
-                      >
-                        <FaImage className="mr-2" />
-                        Update Picture
-                      </button> */}
-                    </div>
-                  </>
-                )}
-               <div className="mt-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Activity Picture</h3>
-                    <UploadActivityPicture
-                        id={id}
-                        onSuccess={(newPicture) =>
-                        setActivity((prev) => ({ ...prev, picture: newPicture }))
-                        }
-                    />
+                  </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    </div>
-    </div>
     </div>
   );
 };

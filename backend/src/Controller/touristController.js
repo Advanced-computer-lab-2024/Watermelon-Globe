@@ -2416,20 +2416,39 @@ const checkUpcomingEvents = async (req, res) => {
           const eventDate = new Date(booking.chosenDates[0]);
           if (eventDate > now && eventDate <= threeDaysFromNow) {
             const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
-            const notification = {
-              message: `Upcoming itinerary "${booking.itinerary.name}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`,
-              date: now,
-              read: false
-            };
-            tourist.notifications.push(notification);
-            notificationsAdded = true;
+            const itineraryName = booking.itinerary && booking.itinerary.name ? booking.itinerary.name : 'Unknown Itinerary';
+            
+            if (!booking.itinerary || !booking.itinerary.name) {
+              console.warn(`Booking ${booking._id} has no associated itinerary or itinerary name.`);
+            }
 
-            // Send email notification
-            const emailSubject = 'Upcoming Itinerary Reminder';
-            const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your itinerary "${booking.itinerary.name}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your trip!`;
-            const emailHtml = `<h1>Upcoming Itinerary Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your itinerary <strong>"${booking.itinerary.name}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your trip!</p>`;
+            const notificationMessage = `Upcoming itinerary "${itineraryName}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`;
 
-            await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
+            // Check if the notification already exists
+            const existingNotification = tourist.notifications.find(
+              notification => notification.message === notificationMessage && !notification.read
+            );
+
+            if (!existingNotification) {
+              const notification = {
+                message: notificationMessage,
+                date: now,
+                read: false
+              };
+              tourist.notifications.push(notification);
+              notificationsAdded = true;
+
+              // Send email notification
+              const emailSubject = 'Upcoming Itinerary Reminder';
+              const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your itinerary "${itineraryName}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your trip!`;
+              const emailHtml = `<h1>Upcoming Itinerary Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your itinerary <strong>"${itineraryName}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your trip!</p>`;
+
+              try {
+                await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
+              } catch (emailError) {
+                console.error(`Failed to send email to ${tourist.email}:`, emailError);
+              }
+            }
           }
         }
       }
@@ -2440,27 +2459,50 @@ const checkUpcomingEvents = async (req, res) => {
           const eventDate = new Date(booking.chosenDate);
           if (eventDate > now && eventDate <= threeDaysFromNow) {
             const daysUntilEvent = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
-            const notification = {
-              message: `Upcoming activity "${booking.activity.name}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`,
-              date: now,
-              read: false
-            };
-            tourist.notifications.push(notification);
-            notificationsAdded = true;
+            const activityName = booking.activity && booking.activity.name ? booking.activity.name : 'Unknown Activity';
+            
+            if (!booking.activity || !booking.activity.name) {
+              console.warn(`Activity booking ${booking._id} has no associated activity or activity name.`);
+            }
 
-            // Send email notification
-            const emailSubject = 'Upcoming Activity Reminder';
-            const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your activity "${booking.activity.name}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your activity!`;
-            const emailHtml = `<h1>Upcoming Activity Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your activity <strong>"${booking.activity.name}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your activity!</p>`;
+            const notificationMessage = `Upcoming activity "${activityName}" in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}`;
 
-            await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
+            // Check if the notification already exists
+            const existingNotification = tourist.notifications.find(
+              notification => notification.message === notificationMessage && !notification.read
+            );
+
+            if (!existingNotification) {
+              const notification = {
+                message: notificationMessage,
+                date: now,
+                read: false
+              };
+              tourist.notifications.push(notification);
+              notificationsAdded = true;
+
+              // Send email notification
+              const emailSubject = 'Upcoming Activity Reminder';
+              const emailText = `Dear ${tourist.username},\n\nThis is a reminder that your activity "${activityName}" is coming up in ${daysUntilEvent} day(s) on ${eventDate.toLocaleDateString()}.\n\nEnjoy your activity!`;
+              const emailHtml = `<h1>Upcoming Activity Reminder</h1><p>Dear ${tourist.username},</p><p>This is a reminder that your activity <strong>"${activityName}"</strong> is coming up in <strong>${daysUntilEvent} day(s)</strong> on <strong>${eventDate.toLocaleDateString()}</strong>.</p><p>Enjoy your activity!</p>`;
+
+              try {
+                await sendEmail(tourist.email, emailSubject, emailText, emailHtml);
+              } catch (emailError) {
+                console.error(`Failed to send email to ${tourist.email}:`, emailError);
+              }
+            }
           }
         }
       }
 
       // Save if notifications were added
       if (notificationsAdded) {
-        await tourist.save();
+        try {
+          await tourist.save();
+        } catch (saveError) {
+          console.error(`Failed to save notifications for tourist ${tourist._id}:`, saveError);
+        }
       }
     }
 
@@ -2470,6 +2512,8 @@ const checkUpcomingEvents = async (req, res) => {
     res.status(500).json({ message: "Server error while checking upcoming events.", error: error.message });
   }
 };
+
+
 
 const loginTourist = async (req, res) => {
   const { username, password } = req.body;
@@ -2661,6 +2705,53 @@ const deleteFromWishlist = async (req, res) => {
 
 
 
+// Function to remove all notifications for a tourist
+const removeAllNotifications = async (req, res) => {
+  const { touristId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    tourist.notifications = [];
+    await tourist.save();
+
+    res.status(200).json({ message: 'All notifications removed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error removing notifications', details: error.message });
+  }
+};
+
+// Function to remove a single notification
+const removeNotification = async (req, res) => {
+  const { touristId, notificationId } = req.params;
+
+  try {
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: 'Tourist not found' });
+    }
+
+    const notificationIndex = tourist.notifications.findIndex(
+      notification => notification._id.toString() === notificationId
+    );
+
+    if (notificationIndex === -1) {
+      return res.status(404).json({ error: 'Notification not found' });
+    }
+
+    tourist.notifications.splice(notificationIndex, 1);
+    await tourist.save();
+
+    res.status(200).json({ message: 'Notification removed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error removing notification', details: error.message });
+  }
+};
+
+
 module.exports = {
   createTourist,
   getTourists,
@@ -2751,5 +2842,8 @@ module.exports = {
   addToWishList,
   getWishList,
   deleteFromWishlist,
+  removeAllNotifications,
+  removeNotification,
+
 
 };

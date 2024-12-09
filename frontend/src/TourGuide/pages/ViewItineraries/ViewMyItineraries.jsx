@@ -25,7 +25,7 @@ const ViewItineraries = () => {
 
   const fetchItineraries = async () => {
     try {
-      const response = await fetch(`/api/TourGuide/getMyItineraries/${id}`);
+      const response = await fetch(`/api/TourGuide/myItineraries/${id}`);
       const data = await response.json();
       console.log(data);
 
@@ -48,7 +48,11 @@ const ViewItineraries = () => {
   }, [id]);
 
   const handleItineraryClick = (activityId) => {
-    navigate(`/ProductsDetailsGeneral/${activityId}/`);
+    navigate(`/NewItineraryDetails/${activityId}/`);
+  };
+
+  const handleReportClick = (itinerary) => {
+    navigate(`/ItineraryReport/${itinerary}/`);
   };
 
   return (
@@ -203,6 +207,25 @@ const ViewItineraries = () => {
                       }}
                     >
                       View Details
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={() => handleReportClick(itinerary._id)}
+                      sx={{
+                        width: "50%", // Set width to 100% of the container or define a fixed width
+                        height: "40px", // Set a fixed height
+                        backgroundColor: "#91c297", // Set the background color
+                        color: "white", // Set text color
+                        fontFamily: "Poppins, sans-serif", // Set the font family
+                        fontSize: "14px", // Set the font size
+                        fontWeight: "bold", // Set the font weight
+                        borderRadius: "5px", // Set the border radius for rounded corners
+                        "&:hover": {
+                          backgroundColor: "#6b9b6d", // Set a different color on hover
+                        },
+                      }}
+                    >
+                      Tourist Report
                     </Button>
                   </CardActions>
                 </Card>

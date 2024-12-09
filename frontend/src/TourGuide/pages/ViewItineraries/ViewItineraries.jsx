@@ -48,7 +48,7 @@ const ViewItineraries = () => {
   }, [id]);
 
   const handleItineraryClick = (activityId) => {
-    navigate(`/ProductsDetailsGeneral/${activityId}/`);
+    navigate(`/NewItineraryDetailsGeneral/${activityId}/`);
   };
 
   return (

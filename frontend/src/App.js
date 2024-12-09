@@ -10,7 +10,8 @@ import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
 import SignupGuideNew from "Tourist/pages/GuideSignUp";
 import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
 import AllLogin from "./Components/AllLogin";
-
+import NewItineraryDetails from "TourGuide/Components/ItineraryDetails.tsx";
+import NewItineraryDetailsGeneral from "TourGuide/Components/itineraryDetailsG";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
@@ -60,8 +61,6 @@ import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewIti
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
-import AdvertiserProfile from "Advertiser/Components/AdvertiserProfile.tsx";
-
 // import AdvertiserSignupConfirm from "./Advertiser/Components/AdvertiserSignupConfirm.jsx";
 import AdvertiserPage from "./Advertiser/pages/CompanyHomepage.jsx";
 import TouristActivityReport from "./Advertiser/pages/ViewActivities/TouristActivityReport";
@@ -102,6 +101,7 @@ import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import TourguideSignup from "./pages/TourguideSignup.jsx";
 import TourguideSignupConfirm from "./pages/TourguideSignupConfirm.jsx";
 import TourGuidePage from "./Components/tourGuidePage";
+import TouristItineraryReport from "./TourGuide/pages/ViewItineraries/TouristItinerayReport";
 import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGuide.js";
 import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
 import TourguideHome from "./TourGuide/pages/TourguideHome.jsx";
@@ -158,7 +158,10 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 //tourguide new
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
-import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
+import CreateItinerary from "./TourGuide/Components/CreateItinerary.tsx";
+import UploadActivityPicture from "Advertiser/Components/UploadActivityImage";
+import AdvertiserProfile from "Advertiser/Components/AdvertiserProfile.tsx";
+
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -230,6 +233,7 @@ const App = () => {
           <Route path="Tags/:id" element={<AddTag />} />
           <Route path="/ViewAllProducts/:id" element={<ViewAllProducts />} />
           <Route path="/ViewMyProducts/:id" element={<ViewMyProducts />} />
+          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
           <Route
             path="/ViewSaleQuantities/:id"
             element={<ViewSalesQuantities />}
@@ -257,7 +261,6 @@ const App = () => {
           {/* <Route path="/advertiser" element={<CompanyHomepage />} /> */}
 
           {/* Guest and Advertiser Routes */}
-          <Route path="/AdvertiserProfileN/:id" element={<AdvertiserProfile/>}/>
           <Route path="/advertiser/:id" element={<AdvertiserPage />} />
           <Route path="/ViewActitvities/:id" element={<ViewActitvities />} />
           <Route
@@ -265,6 +268,7 @@ const App = () => {
             element={<ViewMyActitvities />}
           />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route path="/AdvertiserProfile/:id" element={<AdvertiserProfile />} />
 
           {/* Guest Routes */}
           <Route
@@ -328,6 +332,7 @@ const App = () => {
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/ActivityReport/:id" element={<TouristActivityReport />} />
+          <Route path="/ItineraryReport/:id" element={<TouristItineraryReport />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
             path="/advertiserProfile/:advertiserId"
@@ -341,7 +346,8 @@ const App = () => {
             path="/activityDetails/:id/:profileId"
             element={<AdvertiserActivityDetails />}
           />
-          <Route path="/activityDetail/:id" element={<ActivityDetails />} />
+          <Route path="/activityDetail/:id/:activityId" element={<ActivityDetails />} />
+          <Route path="/UploadActivityPicture/:id" element={<UploadActivityPicture />} />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
@@ -387,6 +393,16 @@ const App = () => {
             path="/ItineraryDetails/:tripid/:id"
             element={<ItineraryDetails />}
           />
+           <Route
+            path="/NewItineraryDetailsGeneral/:tripid"
+            element={<NewItineraryDetailsGeneral />}
+          />
+
+          <Route
+            path="/NewItineraryDetails/:tripid"
+            element={<NewItineraryDetails />}
+          />
+
           <Route
             path="/TouristActivityDetails/:activityId/:id"
             element={<TouristActivityDetails />}
