@@ -202,12 +202,12 @@ const Sidebar = () => {
               <span>View Profile</span>
             </li>
           </Link>
-          <Link to={`/changePasswordTourGuide/${id}`} style={{ textDecoration: "none" }}>
+          {/* <Link to={`/changePasswordTourGuide/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <PasswordRoundedIcon className="iconAdmin" />
               <span>Change Password</span>
             </li>
-          </Link>
+          </Link> */}
         </ul>
       </div>
     </div>

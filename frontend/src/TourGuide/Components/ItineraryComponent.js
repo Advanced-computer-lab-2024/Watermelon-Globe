@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ItineraryComponent.css';
+import Sidebar from './sidebar/Sidebar';
+import Navbar from './navbar/Navbar';
 
 const ItineraryComponent = ({ guideID }) => {
   const navigate = useNavigate();
@@ -103,6 +105,22 @@ const ItineraryComponent = ({ guideID }) => {
   if (error) return <p>{error}</p>;
 
   return (
+    <div
+        style={{
+          backgroundColor: "#fff",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
+          flexDirection: "column",
+        }}
+      >
+        <div className="listAdminProduct">
+          <Sidebar />
+          <div className="listContainerAdminProduct">
+            <Navbar />
+            <div style={{ padding: "20px" }}>
     <div className="itinerary-container">
       {itineraries.length > 0 ? (
         itineraries.map((itinerary) => (
@@ -208,10 +226,15 @@ const ItineraryComponent = ({ guideID }) => {
               </button>
             </div>
           </div>
+          
         ))
       ) : (
         <p>No itineraries found for this guide.</p>
       )}
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
   );
 };

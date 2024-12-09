@@ -13,7 +13,6 @@ import { Button } from "../Components/ui/button";
 import logoImage from "../../Assets/logo.png"; // Adjust the path accordingly
 
 
-
 interface TouristNavbarProps {
   id: string | undefined;
 }
@@ -87,7 +86,7 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
     const openWallet = () => {
       setIsWalletOpen(true);
     };
-  }
+  };
 
   const openWallet = () => {
     setIsWalletOpen(true);
@@ -386,9 +385,7 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
           )}
         </div>
       </nav>
-      {isWalletOpen && (
-        <WalletComponent touristId={id} onClose={closeWallet} />
-      )}
+      {isWalletOpen && <WalletComponent touristId={id} onClose={closeWallet} />}
 
 
     </header>
@@ -396,4 +393,3 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
 };
 
 export default TouristNavbar;
-

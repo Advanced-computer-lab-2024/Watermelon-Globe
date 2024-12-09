@@ -380,13 +380,11 @@ export default function ExploreActivities() {
                 onClick={() => handleActivityClick(activity._id)}
               >
                 <div className="h-48 overflow-x-auto">
-                  <img
-                    src={
-                      activity.image || "/placeholder.svg?height=200&width=300"
-                    }
-                    alt={activity.Name || "Activity"}
-                    className="w-full h-full object-cover"
-                  />
+                <img
+                      className="h-full w-full object-cover md:w-full"
+                      src={activity?.picture ? `/uploads/${activity.picture}` : "https://via.placeholder.com/300"}
+                      alt={activity?.Name}
+                    />
                 </div>
                 <div className="p-4 h-64 overflow-y-auto">
                   <h3 className="font-bold text-lg text-gray-800 mb-2 line-clamp-2">

@@ -94,10 +94,22 @@ const CreateSite = () => {
 
   return (
     <div>
-      <div className="listGovernor">
-        <Sidebar id={id} />
-        <div className="listContainerGovernor">
-          <Navbar />
+     <div
+        style={{
+          backgroundColor: "#fff",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
+          flexDirection: "column",
+        }}
+      >
+        <div className="listAdminProduct">
+          <Sidebar />
+          <div className="listContainerAdminProduct">
+            <Navbar />
+            <div style={{ padding: "20px" }}>
           <div style={cardStyle}>
             <h2 style={{ textAlign: 'center', marginBottom: '20px', color: watermelonGreen }}>
               Add a New Site
@@ -173,6 +185,8 @@ const CreateSite = () => {
           </div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

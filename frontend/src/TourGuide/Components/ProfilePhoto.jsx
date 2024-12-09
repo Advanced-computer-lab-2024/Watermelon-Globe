@@ -1,7 +1,7 @@
 import { colors } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
-const ProfilePhotoUpload = ({ id }) => {
+const ProfilePhotoUpload = ({ id,onClose }) => {
   const [photo, setPhoto] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -60,43 +60,30 @@ const ProfilePhotoUpload = ({ id }) => {
   const watermelonPink = '#FF4081';
 
   return (
-    <div style={{
-      borderRadius: 10,
-      borderColor: watermelonGreen,
-      
-      borderWidth: 2,
-      borderStyle: "solid", // Ensures the border appears
-    }}
-     className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
-      <h3 className="text-2xl font-semibold text-center mb-4">Profile Photo</h3>
-      
-      <div className="flex justify-center mb-4">
+    <div className="logo-upload">
+      <h3>Logo</h3>
+      <div className="logo-preview">
         {preview ? (
-          <img
-            src={preview}
-            alt="Profile Preview"
-            className="h-32 w-32 rounded-full object-cover border-4 border-blue-500"
-          />
+          <img src={preview} alt="Logo Preview" className="h-24 w-24 rounded-full object-cover" />
         ) : (
-          <div className="h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
-            <p>No photo available</p>
-          </div>
+          <p>No logo available</p>
         )}
       </div>
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handlePhotoChange}
-        className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:bg-gray-50 hover:file:bg-gray-100 mb-4"
-      />
-
-      <button
-        onClick={handlePhotoUpload} style={{backgroundColor:watermelonGreen}}
-        className="w-full py-2 px-4  text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      <input type="file" accept="image/*" onChange={handlePhotoChange} />
+      <div style={{display:"flex" }}>
+     <button style={{marginRight:10}}
+        className="flex items-center px-4 py-2 bg-[#91c297] hover:bg-[#7A9F77] text-white rounded mt-2"
+        onClick={handlePhotoUpload}
       >
-        Upload Photo
+        Upload 
       </button>
+      <button style={{marginRight:10}}
+        className="flex items-center px-4 py-2 bg-[#e89bb5] hover:bg-[#d787a1] text-white rounded mt-2"
+        onClick={onClose} // Trigger the onClose function when clicked
+      >
+        Cancel
+      </button>
+      </div>
     </div>
   );
 };

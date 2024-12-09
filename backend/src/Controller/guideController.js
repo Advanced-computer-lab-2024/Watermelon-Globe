@@ -2,11 +2,13 @@ const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
 const mongoose = require("mongoose");
-const itineraryModel = require("../Models/itineraryModel.js");
+ const itineraryModel = require("../Models/itineraryModel.js");
 const tourGuide = require("../Models/tourGuideModel.js");
 const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
-const Itinerary = require("../Models/itineraryModel.js");
+ const Itinerary = require("../Models/itineraryModel.js");
+const Itinerary2=require("../Models/itineraryModel.js");
+const TourGuide = require("../Models/tourGuideModel.js");
 
 //for frontend
 const frontendGuidesTable = async (req, res) => {
@@ -182,6 +184,7 @@ const updateTourGuideNew = async (req, res) => {
       new: true, // Return the updated document
       runValidators: true, // Ensure validation rules apply
     });
+    
 
     if (!updatedGuide) {
       return res.status(404).send("Tour guide not found");
@@ -460,14 +463,43 @@ const getAllItineraries = async (req, res) => {
   }
 };
 
+
+
+ const myItineraries = async(req,res)=>
+{
+  const {id} = req.params;
+  try {
+
+    // Fetch the tour guide and populate itineraries
+    const tourGuide = await TourGuide.findById(id).populate("itineraries");
+
+    if (!tourGuide) {
+      return res.status(404).json({ error: "Tour guide not found" });
+    }
+
+    // Respond with the itineraries
+    res.status(200).json({ itineraries: tourGuide.itineraries });
+  } catch (error) {
+    console.error("Error fetching itineraries:", error);
+    res.status(500).json({ error: "An error occurred while fetching itineraries" });
+  }
+}
+
+
+
+
+
+
+
 // API to fetch itineraries by guide id
 const getMyItineraries = async (req, res) => {
-  const { guideId } = req.params; // Extract the guideId from route parameters
+  const { id } = req.params; 
+  console.log(id);
 
   try {
     // Fetch itineraries where guide matches guideId
     const itineraries = await itineraryModel.Itinerary.find({
-      Advertiser: guideId,
+      guide : id,
     })
       .populate("activities") // Optionally populate activities
       .populate("tag") // Optionally populate tags
@@ -758,24 +790,35 @@ const activateItineraryAccessibility = async (req, res) => {
 
     // Add notification to all tourists who requested to be notified
     const notificationMessage = `The itinerary "${updatedItinerary.name}" is now available for booking.`;
-    const notificationPromises = updatedItinerary.notifyRequests.map(
-      (touristId) =>
-        Tourist.findByIdAndUpdate(
-          touristId,
-          { $push: { notifications: notificationMessage } },
-          { new: true }
-        )
-    );
+    const notificationPromises = updatedItinerary.notifyRequests.map(async (tourist) => {
+      await Tourist.findByIdAndUpdate(
+        tourist._id,
+        { 
+          $push: { notifications: { message: notificationMessage, date: new Date() } },
+          $pull: { notifyRequests: updatedItinerary._id }
+        },
+        { new: true }
+      );
+    });
 
+    // Wait for all notifications to be sent and tourists to be updated
     await Promise.all(notificationPromises);
 
-    res.status(200).json(updatedItinerary);
+    // Remove all notifyRequests from the itinerary
+    updatedItinerary.notifyRequests = [];
+    await updatedItinerary.save();
+
+    res.status(200).json({
+      message: "Itinerary accessibility updated, notifications sent, and notify requests cleared",
+      itinerary: updatedItinerary,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Error activating accessibility: " + error.message });
+    console.error(error);
+    res.status(500).json({ error: "Error activating accessibility: " + error.message });
   }
 };
+
+
 
 const deactivateItineraryAccessibility = async (req, res) => {
   const { id } = req.params; // Get itinerary ID from request parameters
@@ -1538,6 +1581,7 @@ module.exports = {
   guideMonthlyRevenue,
   filterRevenueByDateGuide,
   uploadPicture,
+  myItineraries,
   getTotalTouristsForItinerary,
   getMonthlyTouristsForItinerary
 };

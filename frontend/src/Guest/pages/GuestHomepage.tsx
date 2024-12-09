@@ -2,10 +2,25 @@ import React, { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "../Components/ui/button";
 import { Input } from "../Components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "../Components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../Components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../Components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../Components/ui/tabs";
 import { Calendar, MapPin, Hotel, Plane, Search, Star } from "lucide-react";
-import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa"; // Import icons from react-icons
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  FaLinkedinIn,
+} from "react-icons/fa"; // Import icons from react-icons
 import profileIcon from "../../Assets/Profile.png";
 import ExploreTrips from "../Components/ExploreTrips";
 import ExploreActivities from "../Components/ExploreActivities.jsx";
@@ -14,7 +29,6 @@ import ForYou from "../Components/ForYou.jsx";
 import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 import Modal from "../Components/Modal"; // Import a reusable modal component
 import GuestNavbar from "Guest/Components/GuestNavBar";
-
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -36,7 +50,6 @@ export default function DraftHomePage() {
     "Stay connected through our social media channels for updates!"
   ];
 
-
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Searching for:", { destination, dates, guests });
@@ -50,7 +63,6 @@ export default function DraftHomePage() {
     setCurrentStep(0); // Ensure the steps array starts from the first step
     setShowModal(true); // Show the modal
   };
-
 
   const openHowToUse = () => {
     setShowModal(true); // Show the "How to Use" modal
@@ -134,7 +146,9 @@ export default function DraftHomePage() {
 
         <section className="py-20">
           <div className="container bg-gradient-to-r from-primary/10 to-secondary/10 mx-auto  border border-lightGray rounded-lg shadow-lg p-10">
-            <h3 className="text-3xl font-bold text-center mb-12 text-secondary">Popular Destinations</h3>
+            <h3 className="text-3xl font-bold text-center mb-12 text-secondary">
+              Popular Destinations
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { name: "Bali, Indonesia", image: "https://www.outlooktravelmag.com/media/bali-1-1679062958.profileImage.2x-scaled-860x495.webp" },
@@ -142,9 +156,15 @@ export default function DraftHomePage() {
                 { name: "Santorini, Greece", image: "https://lp-cms-production.imgix.net/2024-06/iStock-166471469.jpg" }
               ].map((destination, index) => (
                 <Card key={index} className="overflow-hidden">
-                  <img src={destination.image} alt={destination.name} className="w-full h-48 object-cover" />
+                  <img
+                    src={destination.image}
+                    alt={destination.name}
+                    className="w-full h-48 object-cover"
+                  />
                   <CardContent className="p-4">
-                    <CardTitle className="text-secondary mb-2">{destination.name}</CardTitle>
+                    <CardTitle className="text-secondary mb-2">
+                      {destination.name}
+                    </CardTitle>
                     <div className="flex items-center">
                       <Star className="w-4 h-4 text-primary mr-1" />
                       <Star className="w-4 h-4 text-primary mr-1" />
@@ -170,17 +190,36 @@ export default function DraftHomePage() {
 
         <section className="bg-sectionBackground py-20">
           <div className="container mx-auto">
-            <h3 className="text-3xl font-bold text-center mb-12 text-secondary">Why Choose Watermelon Globe?</h3>
+            <h3 className="text-3xl font-bold text-center mb-12 text-secondary">
+              Why Choose Watermelon Globe?
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { title: "Best Price Guarantee", icon: MapPin, description: "We offer competitive prices on our 100 million plus product range." },
-                { title: "Easy Booking", icon: Calendar, description: "Book your trip with ease using our intuitive booking platform." },
-                { title: "24/7 Support", icon: Hotel, description: "Round-the-clock assistance for a seamless travel experience." }
+                {
+                  title: "Best Price Guarantee",
+                  icon: MapPin,
+                  description:
+                    "We offer competitive prices on our 100 million plus product range.",
+                },
+                {
+                  title: "Easy Booking",
+                  icon: Calendar,
+                  description:
+                    "Book your trip with ease using our intuitive booking platform.",
+                },
+                {
+                  title: "24/7 Support",
+                  icon: Hotel,
+                  description:
+                    "Round-the-clock assistance for a seamless travel experience.",
+                },
               ].map((feature, index) => (
                 <Card key={index} className="text-center">
                   <CardHeader>
                     <feature.icon className="w-12 h-12 mx-auto text-primary" />
-                    <CardTitle className="mt-4 text-secondary">{feature.title}</CardTitle>
+                    <CardTitle className="mt-4 text-secondary">
+                      {feature.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-grayText">{feature.description}</p>
@@ -193,10 +232,19 @@ export default function DraftHomePage() {
 
         <section className="py-20">
           <div className="container mx-auto text-center">
-            <h3 className="text-3xl font-bold mb-8 text-secondary">Ready for Your Next Adventure?</h3>
-            <p className="mb-8 text-grayText">Sign up for our newsletter and get exclusive travel deals and tips!</p>
+            <h3 className="text-3xl font-bold mb-8 text-secondary">
+              Ready for Your Next Adventure?
+            </h3>
+            <p className="mb-8 text-grayText">
+              Sign up for our newsletter and get exclusive travel deals and
+              tips!
+            </p>
             <div className="flex justify-center">
-              <Input className="w-64 mr-2" placeholder="Enter your email" type="email" />
+              <Input
+                className="w-64 mr-2"
+                placeholder="Enter your email"
+                type="email"
+              />
               <Button className="bg-primary hover:bg-hover text-white">
                 Subscribe
               </Button>
@@ -211,9 +259,21 @@ export default function DraftHomePage() {
           <div>
             <h4 className="font-bold text-lg mb-4">About Us</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="hover:text-hover transition">Our Story</a></li>
-              <li><a href="#" className="hover:text-hover transition">Team</a></li>
-              <li><a href="#" className="hover:text-hover transition">Careers</a></li>
+              <li>
+                <a href="#" className="hover:text-hover transition">
+                  Our Story
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-hover transition">
+                  Team
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-hover transition">
+                  Careers
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -221,9 +281,21 @@ export default function DraftHomePage() {
           <div>
             <h4 className="font-bold text-lg mb-4">Support</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="hover:text-hover transition">Help Center</a></li>
-              <li><a href="#" className="hover:text-hover transition">Safety Information</a></li>
-              <li><a href="#" className="hover:text-hover transition">Cancellation Options</a></li>
+              <li>
+                <a href="#" className="hover:text-hover transition">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-hover transition">
+                  Safety Information
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-hover transition">
+                  Cancellation Options
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -231,9 +303,15 @@ export default function DraftHomePage() {
           <div>
             <h4 className="font-bold text-lg mb-4">Contact Us</h4>
             <ul className="space-y-3">
-              <li><span className="block">support@watermelonglobe.com</span></li>
-              <li><span className="block">+1 (555) 123-4567</span></li>
-              <li><span className="block">123 Travel Street, Adventure City</span></li>
+              <li>
+                <span className="block">support@watermelonglobe.com</span>
+              </li>
+              <li>
+                <span className="block">+1 (555) 123-4567</span>
+              </li>
+              <li>
+                <span className="block">123 Travel Street, Adventure City</span>
+              </li>
             </ul>
           </div>
         </div>
@@ -261,14 +339,12 @@ export default function DraftHomePage() {
 
         {/* Footer copyright */}
         <div className="text-center mt-8 text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Watermelon Globe. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Watermelon Globe. All rights
+            reserved.
+          </p>
         </div>
       </footer>
-
-
-
-
-
     </div>
   )
 }

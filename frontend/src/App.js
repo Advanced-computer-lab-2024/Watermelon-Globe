@@ -13,6 +13,8 @@ import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
 import SignupGuideNew from "Tourist/pages/GuideSignUp";
 import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
 import AllLogin from "./Components/AllLogin";
+import NewItineraryDetails from "TourGuide/Components/ItineraryDetails.tsx";
+import NewItineraryDetailsGeneral from "TourGuide/Components/itineraryDetailsG";
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
 import CompletedActivities from "./Tourist/pages/CompletedActivities.js";
@@ -43,6 +45,7 @@ import ViewProducts from "./Guest/pages/ViewProducts.js";
 
 import GuestPage from "./Guest/pages/GuestHomepage.tsx";
 //Admin++ Pages
+import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments";
 import AdminSales from "./Admin++/pages/home/HomeSales.jsx";
 import AdminUsers from "./Admin++/pages/home/HomeUsers.jsx";
 import ActiveUsers from "./Admin++/pages/ActiveUsers/ActiveUsers.jsx";
@@ -57,7 +60,6 @@ import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
 // import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
-import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
 import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewItinerariesEvents";
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
@@ -104,10 +106,10 @@ import TourguideSignupConfirm from "./pages/TourguideSignupConfirm.jsx";
 import TourGuidePage from "./Components/tourGuidePage";
 import TouristItineraryReport from "./TourGuide/pages/ViewItineraries/TouristItinerayReport";
 import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGuide.js";
-import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
+// import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
 import TourguideHome from "./TourGuide/pages/TourguideHome.jsx";
 import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
-import TourGuideProfile from "./TourGuide/Components/viewProfile.jsx";
+import TourGuideProfile from "./TourGuide/Components/viewProfile.tsx";
 import AllItineraries from "./TourGuide/Components/AllItineraries.jsx";
 import GeneralDetails from "./TourGuide/Components/AllItinerariesDetail.jsx";
 //Tour guide pages -- Sprint 3
@@ -118,7 +120,7 @@ import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
 import AddSite from "./Governor/Components/AddSite.js";
 import GetMySites from "./Governor/Components/GetMySites.js";
 import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
-import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
+import GovernorSiteDetails from "./Governor/Components/siteDetails.js";
 import GovernorLogin from "./Governor/pages/GovernorLogin.jsx";
 import AddTagGovernor from "Governor/pages/AddTag/AddTag";
 import ViewMySites from "Governor/pages/ViewSites/ViewMySites";
@@ -157,9 +159,10 @@ import HotelOffers from "./Hotels/Components/HotelSearchForOffers.tsx";
 import TouristBookmarks from './Tourist/Components/TouristBookmarks.jsx'
 import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx";
 //tourguide new
-// import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
-import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
+import CreateItinerary from "./TourGuide/Components/CreateItinerary.tsx";
+import UploadActivityPicture from "Advertiser/Components/UploadActivityImage";
+import AdvertiserProfile from "Advertiser/Components/AdvertiserProfile.tsx";
 
 import { CurrencyProvider } from "./Tourist/Components/CurrencyContext"; 
 
@@ -228,7 +231,7 @@ const App = () => {
           />
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
-          <Route path="/AdminViewDocuments" element={<ViewDocuments />} /> */}
+          
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
@@ -245,13 +248,17 @@ const App = () => {
           <Route path="/ViewAllProducts/:id" element={<ViewAllProducts />} />
           <Route path="/ViewMyProducts/:id" element={<ViewMyProducts />} />
           <Route
+            path="/TouristBookmarks/:touristId"
+            element={<TouristBookmarks />}
+          />
+          <Route
             path="/ViewSaleQuantities/:id"
             element={<ViewSalesQuantities />}
           />
           <Route path="/adminAddPromoCode/:id" element={<AddPromoCode />} />
           <Route path="/Tourists/:id" element={<AllTourists />} />
 
-          <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
+          <Route path="/users/:id" element={<ViewDocuments />} />
           <Route
             path="/ViewItinerariesEvents/:id"
             element={<ViewItinerariesEvents />}
@@ -278,6 +285,10 @@ const App = () => {
             element={<ViewMyActitvities />}
           />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route
+            path="/AdvertiserProfile/:id"
+            element={<AdvertiserProfile />}
+          />
 
           {/* Guest Routes */}
           <Route
@@ -302,10 +313,10 @@ const App = () => {
             path="/GovernorHomePage/:id"
             element={<TourismGovernorPage />}
           />
-          <Route
+          {/* <Route
             path="/itineraryTourguide/:id"
             element={<ItineraryTourguide />}
-          />
+          /> */}
           <Route path="/TourguideHome/:id" element={<TourguideHome />} />
           <Route
             path="/ItineraryComponent2/:id"
@@ -317,7 +328,6 @@ const App = () => {
           <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
 
           <Route path="/AllLogin" element={<AllLogin />} />
-
 
           <Route
             path="/tourism-governor/:id"
@@ -340,8 +350,14 @@ const App = () => {
 
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path="/ActivityReport/:id" element={<TouristActivityReport />} />
-          <Route path="/ItineraryReport/:id" element={<TouristItineraryReport />} />
+          <Route
+            path="/ActivityReport/:id"
+            element={<TouristActivityReport />}
+          />
+          <Route
+            path="/ItineraryReport/:id"
+            element={<TouristItineraryReport />}
+          />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
             path="/advertiserProfile/:advertiserId"
@@ -355,7 +371,14 @@ const App = () => {
             path="/activityDetails/:id/:profileId"
             element={<AdvertiserActivityDetails />}
           />
-          <Route path="/activityDetail/:id" element={<ActivityDetails />} />
+          <Route
+            path="/activityDetail/:id/:activityId"
+            element={<ActivityDetails />}
+          />
+          <Route
+            path="/UploadActivityPicture/:id"
+            element={<UploadActivityPicture />}
+          />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
@@ -405,6 +428,16 @@ const App = () => {
               </Elements>
             }
           />
+          <Route
+            path="/NewItineraryDetailsGeneral/:tripid"
+            element={<NewItineraryDetailsGeneral />}
+          />
+
+          <Route
+            path="/NewItineraryDetails/:tripid"
+            element={<NewItineraryDetails />}
+          />
+
           <Route
             path="/TouristActivityDetails/:activityId/:id"
             element={
