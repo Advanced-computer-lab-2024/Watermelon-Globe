@@ -28,30 +28,34 @@ const ViewMyActitvities = () => {
   const watermelonGreen = "#91c297";
   const watermelonPink = "#d32e65";
 
-  const fetchActivities = async () => {
-    try {
-      const response = await fetch(`/api/Activities/activities`);
-      const data = await response.json();
-      console.log(data);
-
-      // Ensure data is an array
-      if (Array.isArray(data)) {
-        setActivities(data);
-        setFilteredActivities(data);
-      } else {
-        console.error("API response is not an array:", data);
-        setActivities([]);
-        setFilteredActivities([]);
-      }
-    } catch (error) {
-      console.error("Error fetching itineraries:", error);
-    }
-  };
-
-  // Fetch products of a specific seller
   useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await fetch(`/api/Activities/activities`);
+        const data = await response.json();
+        console.log(data);
+  
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          // Filter activities by matching advertiser ID
+          const filteredActivities = data.filter(
+            (activity) => activity.Advertiser._id === id // Assuming the advertiser ID is 'advertiserId'
+          );
+          setActivities(filteredActivities);
+          setFilteredActivities(filteredActivities);
+        } else {
+          console.error("API response is not an array:", data);
+          setActivities([]);
+          setFilteredActivities([]);
+        }
+      } catch (error) {
+        console.error("Error fetching activities:", error);
+      }
+    };
+  
     fetchActivities();
   }, [id]); // Rerun fetch when 'id' changes
+  
   
 
   // Filter and sort products when filters or products change
