@@ -40,6 +40,8 @@ router.get("/guideMonthlyRevenue/:guideId", guideController.guideMonthlyRevenue)
 
 router.get("/filterRevenueByDateGuide/:guideId", guideController.filterRevenueByDateGuide);
 
+router.get("/myItineraries/:id",guideController.myItineraries);
+
 
 
 module.exports = router;

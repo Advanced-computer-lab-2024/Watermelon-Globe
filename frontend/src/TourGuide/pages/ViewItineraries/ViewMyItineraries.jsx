@@ -25,7 +25,7 @@ const ViewItineraries = () => {
 
   const fetchItineraries = async () => {
     try {
-      const response = await fetch(`/api/TourGuide/getMyItineraries/${id}`);
+      const response = await fetch(`/api/TourGuide/myItineraries/${id}`);
       const data = await response.json();
       console.log(data);
 
@@ -48,7 +48,7 @@ const ViewItineraries = () => {
   }, [id]);
 
   const handleItineraryClick = (activityId) => {
-    navigate(`/ProductsDetailsGeneral/${activityId}/`);
+    navigate(`/NewItineraryDetails/${activityId}/`);
   };
 
   return (

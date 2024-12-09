@@ -81,10 +81,22 @@ const {id}=useParams();
 
 
   return (
-    <div className="listGuide">
-    <Sidebar />
-    <div className="listContainerGuide">
-      <Navbar />
+    <div
+    style={{
+      backgroundColor: "#fff",
+      minHeight: "100vh", // Ensures it covers the full viewport
+      width: "102%", // Full width of the viewport
+      margin: 0, // Remove default margins
+      padding: 0, // Remove default padding
+      display: "flex", // Optional: for flexible alignment
+      flexDirection: "column",
+    }}
+  >
+    <div className="listAdminProduct">
+      <Sidebar />
+      <div className="listContainerAdminProduct">
+        <Navbar />
+        <div style={{ padding: "20px" }}>
     <div className="itinerary-container">
     <h2 style={{ color: '#2E8B57' }} className="text-2xl font-bold text-800 text-center mb-6">All Itineraries</h2>
         <div style={{ marginBottom: '20px' }}>
@@ -106,6 +118,8 @@ const {id}=useParams();
     }
         {/* // <p>No itineraries found for this guide.</p> */}
 
+    </div>
+    </div>
     </div>
     </div>
     </div>

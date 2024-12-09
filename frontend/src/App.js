@@ -10,6 +10,8 @@ import SignupAdvertiserNew from "Tourist/pages/AdvertiserSignUp";
 import SignupGuideNew from "Tourist/pages/GuideSignUp";
 import AdvertiserSignupConfirm from "pages/advertiserSignUpConfirm";
 import AllLogin from "./Components/AllLogin";
+import NewItineraryDetails from "TourGuide/Components/ItineraryDetails.tsx";
+import NewItineraryDetailsGeneral from "TourGuide/Components/itineraryDetailsG";
 
 
 import RatingsAndCommentsPage from "./Tourist/pages/RatingsAndCommentsPage.tsx";
@@ -158,7 +160,7 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 //tourguide new
 // import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
-import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
+import CreateItinerary from "./TourGuide/Components/CreateItinerary.tsx";
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -230,6 +232,7 @@ const App = () => {
           <Route path="Tags/:id" element={<AddTag />} />
           <Route path="/ViewAllProducts/:id" element={<ViewAllProducts />} />
           <Route path="/ViewMyProducts/:id" element={<ViewMyProducts />} />
+          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
           <Route
             path="/ViewSaleQuantities/:id"
             element={<ViewSalesQuantities />}
@@ -387,6 +390,16 @@ const App = () => {
             path="/ItineraryDetails/:tripid/:id"
             element={<ItineraryDetails />}
           />
+           <Route
+            path="/NewItineraryDetailsGeneral/:tripid"
+            element={<NewItineraryDetailsGeneral />}
+          />
+
+          <Route
+            path="/NewItineraryDetails/:tripid"
+            element={<NewItineraryDetails />}
+          />
+
           <Route
             path="/TouristActivityDetails/:activityId/:id"
             element={<TouristActivityDetails />}
