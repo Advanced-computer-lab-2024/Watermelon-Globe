@@ -2,11 +2,11 @@ const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
 const mongoose = require("mongoose");
-const itineraryModel = require("../models/itineraryModel.js");
-const tourGuide = require("../models/tourGuideModel.js");
+const itineraryModel = require("../Models/itineraryModel.js");
+const tourGuide = require("../Models/tourGuideModel.js");
 const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
-const Itinerary = require("../models/itineraryModel.js");
+const Itinerary = require("../Models/itineraryModel.js");
 
 //for frontend
 const frontendGuidesTable = async (req, res) => {
@@ -1371,6 +1371,132 @@ const filterRevenueByDateGuide = async (req, res) => {
 };
 
 
+const getTotalTouristsForItinerary = async (req, res) => {
+  try {
+    const { itineraryId } = req.params;
+
+    if (!itineraryId) {
+      return res.status(400).json({ message: "Itinerary ID is required" });
+    }
+
+    const totalTourists = await ChildItinerary.aggregate([
+      {
+        $match: {
+          itinerary: new mongoose.Types.ObjectId(itineraryId),
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalBookings: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$buyer' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalBookings: '$totalBookings',
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      }
+    ]);
+
+    const result = totalTourists[0] || { totalBookings: 0, uniqueTouristsCount: 0 };
+
+    res.status(200).json({
+      message: "Total tourists calculated successfully for the itinerary",
+      itineraryId,
+      ...result
+    });
+
+  } catch (error) {
+    console.error("Error calculating total tourists for itinerary:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+const getMonthlyTouristsForItinerary = async (req, res) => {
+  try {
+    const { itineraryId } = req.params;
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+
+    if (!itineraryId) {
+      return res.status(400).json({ message: "Itinerary ID is required" });
+    }
+
+    const monthlyTourists = await ChildItinerary.aggregate([
+      {
+        $match: {
+          itinerary: new mongoose.Types.ObjectId(itineraryId),
+          createdAt: { $gte: startDate, $lte: endDate }
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          touristsCount: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$buyer' }
+        }
+      },
+      {
+        $project: {
+          month: '$_id.month',
+          touristsCount: 1,
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      },
+      { $sort: { month: 1 } }
+    ]);
+
+    // Initialize monthly data array
+    const monthlyData = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      touristsCount: 0,
+      uniqueTouristsCount: 0
+    }));
+
+    // Populate actual data
+    monthlyTourists.forEach(entry => {
+      const monthIndex = entry.month - 1;
+      monthlyData[monthIndex].touristsCount = entry.touristsCount;
+      monthlyData[monthIndex].uniqueTouristsCount = entry.uniqueTouristsCount;
+    });
+
+    // Add month names
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedData = monthlyData.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1]
+    }));
+
+    // Calculate yearly totals
+    const yearlyTotals = formattedData.reduce((acc, month) => {
+      acc.totalTourists += month.touristsCount;
+      acc.totalUniqueTourists += month.uniqueTouristsCount;
+      return acc;
+    }, { totalTourists: 0, totalUniqueTourists: 0 });
+
+    res.status(200).json({
+      message: "Monthly tourist data calculated successfully for the itinerary",
+      year: currentYear,
+      itineraryId,
+      data: formattedData,
+      yearlyTotals
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly tourists for itinerary:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -1411,5 +1537,7 @@ module.exports = {
   ItineraryRevenue,
   guideMonthlyRevenue,
   filterRevenueByDateGuide,
-  uploadPicture
+  uploadPicture,
+  getTotalTouristsForItinerary,
+  getMonthlyTouristsForItinerary
 };
