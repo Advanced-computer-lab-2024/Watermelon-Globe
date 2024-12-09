@@ -159,7 +159,7 @@ const Sidebar = () => {
           </Link> */}
 
           <p className="titleAdmin">MANAGE ACCOUNT</p>
-          <Link to={`/advertiserProfile/${id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/AdvertiserProfile/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />
               <span>View Profile</span>
