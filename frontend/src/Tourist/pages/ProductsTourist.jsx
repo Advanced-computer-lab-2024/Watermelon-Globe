@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, LogOut, ShoppingBag, Search, Filter, SortDesc, RefreshCw, Heart, ChevronDown, ChevronUp, X, Trash2 } from 'lucide-react';
 import axios from 'axios';
+import TouristNavbar from "../Components/TouristNavBar";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -291,9 +292,8 @@ const ProductList = () => {
                   </div>
                   <button
                     onClick={() => handleAddToCart(product._id)}
-                    className={`p-1 rounded-lg flex items-center justify-center gap-1 w-full text-sm ${
-                      addedToCart[product._id] ? 'bg-green-500 hover:bg-green-600' : 'bg-primary hover:bg-hover'
-                    }`}
+                    className={`p-1 rounded-lg flex items-center justify-center gap-1 w-full text-sm ${addedToCart[product._id] ? 'bg-green-500 hover:bg-green-600' : 'bg-primary hover:bg-hover'
+                      }`}
                   >
                     <ShoppingCart size={14} />
                     {addedToCart[product._id] ? 'Added to Cart' : 'Add to Cart'}
@@ -351,7 +351,7 @@ const ProductList = () => {
                       </button>
                       <button
                         onClick={() => handleRemoveFromWishlist(item._id)}
-                        className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-red-500 hover:bg-red-600 text-white"
+                        className="p-2 rounded-lg flex items-center justify-center gap-2 w-full text-sm bg-darkPink hover:bg-darkPinkHover text-white"
                       >
                         <Trash2 size={16} />
                         Remove
