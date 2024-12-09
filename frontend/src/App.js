@@ -103,7 +103,7 @@ import TourguideSignupConfirm from "./pages/TourguideSignupConfirm.jsx";
 import TourGuidePage from "./Components/tourGuidePage";
 import TouristItineraryReport from "./TourGuide/pages/ViewItineraries/TouristItinerayReport";
 import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGuide.js";
-import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
+// import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
 import TourguideHome from "./TourGuide/pages/TourguideHome.jsx";
 import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
 import TourGuideProfile from "./TourGuide/Components/viewProfile.tsx";
@@ -161,7 +161,6 @@ import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.tsx";
 import UploadActivityPicture from "Advertiser/Components/UploadActivityImage";
 import AdvertiserProfile from "Advertiser/Components/AdvertiserProfile.tsx";
-
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -233,7 +232,10 @@ const App = () => {
           <Route path="Tags/:id" element={<AddTag />} />
           <Route path="/ViewAllProducts/:id" element={<ViewAllProducts />} />
           <Route path="/ViewMyProducts/:id" element={<ViewMyProducts />} />
-          <Route path="/TouristBookmarks/:touristId" element={<TouristBookmarks />} />
+          <Route
+            path="/TouristBookmarks/:touristId"
+            element={<TouristBookmarks />}
+          />
           <Route
             path="/ViewSaleQuantities/:id"
             element={<ViewSalesQuantities />}
@@ -268,7 +270,10 @@ const App = () => {
             element={<ViewMyActitvities />}
           />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
-          <Route path="/AdvertiserProfile/:id" element={<AdvertiserProfile />} />
+          <Route
+            path="/AdvertiserProfile/:id"
+            element={<AdvertiserProfile />}
+          />
 
           {/* Guest Routes */}
           <Route
@@ -293,10 +298,10 @@ const App = () => {
             path="/GovernorHomePage/:id"
             element={<TourismGovernorPage />}
           />
-          <Route
+          {/* <Route
             path="/itineraryTourguide/:id"
             element={<ItineraryTourguide />}
-          />
+          /> */}
           <Route path="/TourguideHome/:id" element={<TourguideHome />} />
           <Route
             path="/ItineraryComponent2/:id"
@@ -308,7 +313,6 @@ const App = () => {
           <Route path="/CreateItinerary/:id" element={<CreateItinerary />} />
 
           <Route path="/AllLogin" element={<AllLogin />} />
-
 
           <Route
             path="/tourism-governor/:id"
@@ -331,8 +335,14 @@ const App = () => {
 
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path="/ActivityReport/:id" element={<TouristActivityReport />} />
-          <Route path="/ItineraryReport/:id" element={<TouristItineraryReport />} />
+          <Route
+            path="/ActivityReport/:id"
+            element={<TouristActivityReport />}
+          />
+          <Route
+            path="/ItineraryReport/:id"
+            element={<TouristItineraryReport />}
+          />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
             path="/advertiserProfile/:advertiserId"
@@ -346,8 +356,14 @@ const App = () => {
             path="/activityDetails/:id/:profileId"
             element={<AdvertiserActivityDetails />}
           />
-          <Route path="/activityDetail/:id/:activityId" element={<ActivityDetails />} />
-          <Route path="/UploadActivityPicture/:id" element={<UploadActivityPicture />} />
+          <Route
+            path="/activityDetail/:id/:activityId"
+            element={<ActivityDetails />}
+          />
+          <Route
+            path="/UploadActivityPicture/:id"
+            element={<UploadActivityPicture />}
+          />
           <Route path="/editActivity/:id" element={<EditActivity />} />
           <Route path="/add-activity/:id" element={<ActivityForm />} />
           <Route
@@ -393,7 +409,7 @@ const App = () => {
             path="/ItineraryDetails/:tripid/:id"
             element={<ItineraryDetails />}
           />
-           <Route
+          <Route
             path="/NewItineraryDetailsGeneral/:tripid"
             element={<NewItineraryDetailsGeneral />}
           />

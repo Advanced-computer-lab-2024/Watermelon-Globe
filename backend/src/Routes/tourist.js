@@ -79,7 +79,9 @@ const {
   markNotificationAsRead,
   addToWishList,
   getWishList,
-  deleteFromWishlist
+  deleteFromWishlist,
+  removeNotification,
+  removeAllNotifications
 
 
 } = require("../Controller/touristController");
@@ -240,7 +242,8 @@ router.put('/addToWishList/:touristId/:productId',addToWishList);
 router.get('/getWishList/:id',getWishList);
 router.put('/deleteFromWishlist/:touristId/:productId',deleteFromWishlist);
 
-
+router.delete('/removeAllNotifications/:touristId', removeAllNotifications);
+router.delete('/removeNotification/:touristId/:notificationId', removeNotification);
 
 
 

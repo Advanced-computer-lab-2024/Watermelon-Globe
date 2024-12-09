@@ -4,11 +4,10 @@ import { ArrowLeft } from "react-feather";
 import profileIcon from "../../Assets/Profile.png";
 import { Bell } from "lucide-react";
 import NotificationsBox from "./NotificationsBox";
-import { FaShoppingCart, FaWallet } from 'react-icons/fa'
-import WalletComponent from '../Components/Wallet';
+import { FaShoppingCart, FaWallet } from "react-icons/fa";
+import WalletComponent from "../Components/Wallet";
 import Modal from "../Components/Modal";
 import { Button } from "../Components/ui/button";
-
 
 interface TouristNavbarProps {
   id: string | undefined;
@@ -46,35 +45,35 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
 
   const toggleNotifications = () => {
     setIsNotificationsOpen((prev) => !prev);
+    const openWallet = () => {
+      setIsWalletOpen(true);
+    };
+  };
+
   const openWallet = () => {
     setIsWalletOpen(true);
   };
-}
 
-const openWallet = () => {
-  setIsWalletOpen(true);
-};
+  const closeWallet = () => {
+    setIsWalletOpen(false);
+  };
 
-const closeWallet = () => {
-  setIsWalletOpen(false);
-};
+  const handleNextStep = () => {
+    if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
+  };
 
-const handleNextStep = () => {
-  if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
-};
+  const handlePreviousStep = () => {
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  };
 
-const handlePreviousStep = () => {
-  if (currentStep > 0) setCurrentStep(currentStep - 1);
-};
+  const handleOpenHowToUse = () => {
+    setCurrentStep(0); // Reset to the first step
+    setShowHowToUseModal(true);
+  };
 
-const handleOpenHowToUse = () => {
-  setCurrentStep(0); // Reset to the first step
-  setShowHowToUseModal(true);
-};
-
-const closeHowToUseModal = () => {
-  setShowHowToUseModal(false);
-};
+  const closeHowToUseModal = () => {
+    setShowHowToUseModal(false);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -166,12 +165,13 @@ const closeHowToUseModal = () => {
             How to Use
             <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
           </button>
-
         </div>
 
         {/* Right Section - Actions */}
-        <div className="flex items-center justify-end space-x-3 relative w-1/3" ref={dropdownRef}>
-
+        <div
+          className="flex items-center justify-end space-x-3 relative w-1/3"
+          ref={dropdownRef}
+        >
           <button
             onClick={() => handleNavigation(`/shoppingCart/${id}`)}
             className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
@@ -190,7 +190,7 @@ const closeHowToUseModal = () => {
             <button
               onClick={toggleNotifications}
               className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
-              >
+            >
               <Bell className="w-6 h-6 text-black" />
               {notificationCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
@@ -282,9 +282,7 @@ const closeHowToUseModal = () => {
           )}
         </div>
       </nav>
-      {isWalletOpen && (
-        <WalletComponent touristId={id} onClose={closeWallet} />
-      )}
+      {isWalletOpen && <WalletComponent touristId={id} onClose={closeWallet} />}
 
       {/* How to Use Modal */}
       {showHowToUseModal && (
@@ -332,4 +330,3 @@ const closeHowToUseModal = () => {
 };
 
 export default TouristNavbar;
-

@@ -790,24 +790,35 @@ const activateItineraryAccessibility = async (req, res) => {
 
     // Add notification to all tourists who requested to be notified
     const notificationMessage = `The itinerary "${updatedItinerary.name}" is now available for booking.`;
-    const notificationPromises = updatedItinerary.notifyRequests.map(
-      (touristId) =>
-        Tourist.findByIdAndUpdate(
-          touristId,
-          { $push: { notifications: notificationMessage } },
-          { new: true }
-        )
-    );
+    const notificationPromises = updatedItinerary.notifyRequests.map(async (tourist) => {
+      await Tourist.findByIdAndUpdate(
+        tourist._id,
+        { 
+          $push: { notifications: { message: notificationMessage, date: new Date() } },
+          $pull: { notifyRequests: updatedItinerary._id }
+        },
+        { new: true }
+      );
+    });
 
+    // Wait for all notifications to be sent and tourists to be updated
     await Promise.all(notificationPromises);
 
-    res.status(200).json(updatedItinerary);
+    // Remove all notifyRequests from the itinerary
+    updatedItinerary.notifyRequests = [];
+    await updatedItinerary.save();
+
+    res.status(200).json({
+      message: "Itinerary accessibility updated, notifications sent, and notify requests cleared",
+      itinerary: updatedItinerary,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Error activating accessibility: " + error.message });
+    console.error(error);
+    res.status(500).json({ error: "Error activating accessibility: " + error.message });
   }
 };
+
+
 
 const deactivateItineraryAccessibility = async (req, res) => {
   const { id } = req.params; // Get itinerary ID from request parameters
