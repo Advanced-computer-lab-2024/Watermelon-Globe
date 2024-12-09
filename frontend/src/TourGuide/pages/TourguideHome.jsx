@@ -10,7 +10,6 @@ import Chart from "../Components/chartGuide/Chart";
 import Table from "../Components/tableGuide/Table";
 
 const TourguideHome = () => {
-  const{id}=useParams();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Handle change in search input
@@ -19,24 +18,10 @@ const TourguideHome = () => {
   };
 
   return (
-    <div
-    style={{
-      backgroundColor: "#fff",
-      minHeight: "100vh", // Ensures it covers the full viewport
-      width: "102%", // Full width of the viewport
-      margin: 0, // Remove default margins
-      padding: 0, // Remove default padding
-      display: "flex", // Optional: for flexible alignment
-      flexDirection: "column",
-    }}
-  >
-    <div className="listAdminProduct">
-      <Sidebar 
-      id={id}/>
-      <div className="listContainerAdminProduct">
-        <Navbar 
-        id={id}/>
-        <div style={{ padding: "20px" }}>
+    <div className="homeAdmin">
+     <Sidebar/>
+      <div className="homeContainerAdmin">
+        <Navbar/>
         <div className="widgetsAdminHome">
           {/* <Widget type="user" /> */}
           <Widget type="product" />
@@ -63,8 +48,6 @@ const TourguideHome = () => {
           <Table searchTerm={searchTerm} />
         </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 };

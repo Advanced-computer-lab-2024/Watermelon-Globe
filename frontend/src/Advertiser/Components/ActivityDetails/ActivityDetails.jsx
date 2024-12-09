@@ -5,20 +5,21 @@ import { FaEdit, FaImage, FaStar, FaStarHalfAlt, FaTrash } from "react-icons/fa"
 import UploadActivityPicture from "../UploadActivityImage";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Navbar from "../../Components/AdvertiserNavbar";
+import { Category } from "@mui/icons-material";
+import { Tags } from "lucide-react";
 
 const ActivityDetails = () => {
   const { activityId } = useParams();
   const navigate = useNavigate();
   const [activity, setActivity] = useState(null);
-  const [category, setCategory] = useState(null); // Store category name
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedActivity, setUpdatedActivity] = useState({
+  const [updatedProduct, setUpdatedProduct] = useState({
     Name: "",
     Price: "",
     Date: "",
     Time: "",
     Category: "",
-    Tags: [],
+    Tags: "",
     description: "",
   });
   const [showUpdatePicture, setShowUpdatePicture] = useState(false);
@@ -36,33 +37,25 @@ const ActivityDetails = () => {
       }
     };
     fetchActivity();
-  }, [activityId]);
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdatedActivity((prev) => ({ ...prev, [name]: value }));
+    setUpdatedProduct((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setUpdatedActivity({
-      Name: "",
-      Price: "",
-      Date: "",
-      Time: "",
-      Category: "",
-      Tags: [],
-      description: "",
-    });
+    setUpdatedProduct({ name: "", price: "", description: "" });
   };
 
-  const handleUpdateActivity = async () => {
+  const handleUpdateProduct = async () => {
     const filteredUpdateData = Object.fromEntries(
-      Object.entries(updatedActivity).filter(([key, value]) => value.trim() !== "")
+      Object.entries(updatedProduct).filter(([key, value]) => value.trim() !== "")
     );
 
     try {
-      const response = await fetch(`/api/Activities/editActivity?id=${activityId}`, {
+      const response = await fetch(`/api/Seller/editProduct?id=${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(filteredUpdateData),
@@ -120,14 +113,14 @@ const ActivityDetails = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f4eaef76" }}>
-      <div
+       <div
         style={{
           backgroundColor: "#fff",
-          minHeight: "100vh",
-          width: "102%",
-          margin: 0,
-          padding: 0,
-          display: "flex",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
           flexDirection: "column",
         }}
       >
@@ -168,106 +161,76 @@ const ActivityDetails = () => {
                             defaultValue={activity?.Name}
                           />
 
-                          <label htmlFor="Price" className="block text-sm font-medium text-gray-700 mb-1">
-                            Activity Price :
-                          </label>
-                          <input
-                            name="Price"
-                            placeholder="Enter Activity Price"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={activity?.Price}
-                          />
-
-                          <label htmlFor="Date" className="block text-sm font-medium text-gray-700 mb-1">
-                            Date :
-                          </label>
-                          <input
-                            name="Date"
-                            type="date"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={activity?.Date.split('T')[0]} // Formatting Date
-                          />
-
-                          <label htmlFor="Time" className="block text-sm font-medium text-gray-700 mb-1">
-                            Time :
-                          </label>
-                          <input
-                            name="Time"
-                            type="time"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={activity?.Time}
-                          />
-
-                          <label htmlFor="Category" className="block text-sm font-medium text-gray-700 mb-1">
-                            Category :
-                          </label>
-                          <input
-                            name="Category"
-                            placeholder="Enter Activity Category"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={category}
-                          />
-
-                          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                            Description :
-                          </label>
-                          <textarea
-                            name="description"
-                            placeholder="Enter Activity Description"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={activity?.description}
-                            rows="4"
-                          />
-
-                          <div className="flex space-x-4">
-                            <button
-                              className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
-                              onClick={handleUpdateActivity}
-                            >
-                              Save Changes
-                            </button>
-                            <button
-                              className="px-4 py-2 bg-[#e89bb5] text-gray-700 rounded-md hover:bg-[#d787a1] transition duration-300"
-                              onClick={handleCancel}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
-                            Activity Details
-                          </div>
-                          <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
-                          <p style={{ marginLeft: 5 }} className="font-semibold text-gray-900">
-                            ${activity?.Price}
-                          </p>
-                          <p className="text-gray-600 mb-4">{activity?.Time}</p>
-                          <p className="text-gray-600 mb-4">{activity?.Date}</p>
-                          <p className="text-gray-600 mb-4">{category || "Loading category..."}</p>
-                          <div className="mt-4">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Tags</h3>
-                            {activity?.tags && activity.tags.length > 0 ? (
-                              <div className="flex flex-wrap gap-2">
-                                {activity.tags.map((tagObj, index) => (
-                                  <span
-                                    key={index}
-                                    className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
-                                  >
-                                    {tagObj.tag}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-gray-500">No tags associated with this activity.</p>
-                            )}
-                          </div>
+<                   label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                        Activity Price :
+                      </label>
+                    <input
+                      name="price"
+                      placeholder="Enter Product Price"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onChange={handleInputChange}
+                      defaultValue={activity?.Price}
+                    />
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                        Description :
+                      </label>
+                    <textarea
+                    
+                      name="description"
+                      placeholder="Enter Product Description"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onChange={handleInputChange}
+                      defaultValue={activity?.description}
+                      rows="4"
+                    />
+                    <div className="flex space-x-4">
+                      <button
+                        className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
+                        onClick={handleUpdateProduct}
+                      >
+                        Save Changes
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-[#e89bb5] text-gray-700 rounded-md hover:bg-[#d787a1] transition duration-300"
+                        onClick={handleCancel}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
+                      Acivity Details
+                    </div>
+                    <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
+                    <p style={{marginLeft:5}} className="font-semibold text-gray-900">${activity?.Price}</p>
+                    <p className="text-gray-600 mb-4">{activity?.Time}</p>
+                    <p className="text-gray-600 mb-4">{activity?.Date}</p>
+                    <p className="text-gray-600 mb-4">{activity?.Category}</p>
+                    <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-gray-200">
+                      <div className="space-x-2 flex text-sm">
+                        
+                        
+                      </div>
+                    </div>
+                    <div className="mt-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Tags</h3>
+                        {activity?.tags?.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                            {activity.tags.map((tag, index) => (
+                                <span
+                                key={index}
+                                className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
+                                >
+                                {tag.name}
+                                </span>
+                            ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">No tags associated with this activity.</p>
+                        )}
+                    </div>
 
                           <div className="flex items-center mb-4">
                             <div className="flex items-center">{renderRatingStars(activity?.rating || 0)}</div>

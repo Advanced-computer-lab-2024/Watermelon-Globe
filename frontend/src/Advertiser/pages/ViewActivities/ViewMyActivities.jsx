@@ -24,39 +24,36 @@ const ViewMyActitvities = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
 
   const watermelonGreen = "#91c297";
   const watermelonPink = "#d32e65";
 
-  useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const response = await fetch(`/api/Activities/activities`);
-        const data = await response.json();
-        console.log(data);
-  
-        // Ensure data is an array
-        if (Array.isArray(data)) {
-          // Filter activities by matching advertiser ID
-          const filteredActivities = data.filter(
-            (activity) => activity.Advertiser._id === id // Assuming the advertiser ID is 'advertiserId'
-          );
-          setActivities(filteredActivities);
-          setFilteredActivities(filteredActivities);
-        } else {
-          console.error("API response is not an array:", data);
-          setActivities([]);
-          setFilteredActivities([]);
-        }
-      } catch (error) {
-        console.error("Error fetching activities:", error);
+  const fetchActivities = async () => {
+    try {
+      const response = await fetch(`/api/Activities/activities`);
+      const data = await response.json();
+      console.log(data);
+
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setActivities(data);
+        setFilteredActivities(data);
+      } else {
+        console.error("API response is not an array:", data);
+        setActivities([]);
+        setFilteredActivities([]);
       }
-    };
-  
+    } catch (error) {
+      console.error("Error fetching itineraries:", error);
+    }
+  };
+
+  // Fetch products of a specific seller
+  useEffect(() => {
     fetchActivities();
-  }, [id]); // Rerun fetch when 'id' changes
-    // Filter and sort products when filters or products change
+  }, [id]);
+
+  // Filter and sort products when filters or products change
   useEffect(() => {
     const filtered = activities.filter((activity) => {
       const price = parseFloat(formatPrice(activity.Price));
@@ -89,8 +86,8 @@ const ViewMyActitvities = () => {
     return price;
   };
 
-  const handleActivityClick = (activityId, id) => {
-    navigate(`/activityDetail/${activityId}/${id}`);
+  const handleProductClick = (productId) => {
+    navigate(`/ProductsDetailsGeneral/${productId}/`);
   };
 
   const handleReportClick = (activityId) => {
@@ -233,7 +230,7 @@ const ViewMyActitvities = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleActivityClick(activity._id, id)}
+                      onClick={() => handleProductClick(activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height
