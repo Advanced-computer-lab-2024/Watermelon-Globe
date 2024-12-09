@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Navbar from "../../components/navbar/Navbar";
+import Sidebar from "../../Components/sidebar/Sidebar";
+import Navbar from "../../Components/AdvertiserNavbar";
 import "./actions.scss";
 import Tooltip from "@mui/material/Tooltip";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -15,7 +15,7 @@ import BookmarkAdd from "@mui/icons-material/BookmarkAddOutlined";
 import Rating from "@mui/material/Rating";
 import NavTabs from "Admin++/components/navTabs/navTabsEvents";
 
-const ViewItinerariesEvents = () => {
+const ViewActitvities = () => {
   const [activities, setActivities] = useState([]); // Ensure default state is an array
   const [filteredActivities, setFilteredActivities] = useState([]); // Ensure default state is an array
   const [searchTerm, setSearchTerm] = useState("");
@@ -86,15 +86,8 @@ const ViewItinerariesEvents = () => {
     return price;
   };
 
-  const handleProductClick = (productId) => {
-    navigate(`/ProductsDetailsGeneral/${productId}/`);
-  };
-
-  const resetFilters = () => {
-    setSearchTerm("");
-    setSortBy("name");
-    setMinPrice(0);
-    setMaxPrice(1000);
+  const handleActivityClick = (id) => {
+    navigate(`/activityDetail/${id}`);
   };
 
   return (
@@ -114,15 +107,16 @@ const ViewItinerariesEvents = () => {
         <div className="listContainerAdminProduct">
           <Navbar />
           <div style={{ padding: "20px" }}>
-            {/* <h2
-              style={{ color: "#91c297" }}
-              className="text-2xl font-bold text-800 text-center mb-6"
+            <h2
+              style={{
+                color: "#d32e65",
+                textAlign: "left",
+                fontSize: "32px", // Increase the font size
+              }}
+              className="text-2xl font-bold text-800 mb-6"
             >
-              All 
-            </h2> */}
-
-            <NavTabs />
-
+              All Activities
+            </h2>
             <div
               style={{
                 display: "grid",
@@ -155,11 +149,8 @@ const ViewItinerariesEvents = () => {
                   </div>
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
-                      src={
-                        activities.picture ||
-                        "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-                      }
-                      alt={`Image of ${activity.name}`}
+                      src={activity.picture ? `/uploads/${activity.picture}` : "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"}
+                      alt={`Image of ${activity.Name}`}
                       loading="lazy"
                     />
                   </AspectRatio>
@@ -235,7 +226,7 @@ const ViewItinerariesEvents = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleProductClick(activity._id)}
+                      onClick={() => handleActivityClick(activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height
@@ -263,4 +254,4 @@ const ViewItinerariesEvents = () => {
   );
 };
 
-export default ViewItinerariesEvents;
+export default ViewActitvities;

@@ -21,10 +21,10 @@ const SellerHome = () => {
       <div className="homeContainerAdmin">
         <Navbar />
         <div className="widgetsAdminHome">
-          <Widget type="user" />
+          {/* <Widget type="user" /> */}
           <Widget type="product" />
-          <Widget type="itinerary" />
-          <Widget type="activity" />
+          {/* <Widget type="itinerary" />
+          <Widget type="activity" /> */}
         </div>
         <div className="chartsAdminHome">
           <Featured />

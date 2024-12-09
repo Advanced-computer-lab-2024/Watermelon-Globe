@@ -4,12 +4,11 @@ import "./home.scss";
 import { useParams } from "react-router-dom";
 
 const GovernorHome = () => {
-  const { id } = useParams(); // Extract the governor ID from the URL
+  const { id } = useParams();
   return (
-    <div className="home">
-      {/* Pass the id to the Sidebar */}
-      <Sidebar id={id} />
-      <div className="homeContainer">
+    <div className="home-guide ">
+      <Sidebar />
+      <div className="homeContainer-guide">
         <Navbar />
       </div>
     </div>

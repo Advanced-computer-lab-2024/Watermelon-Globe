@@ -5,39 +5,72 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { TextField, Button } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 const Featured = () => {
-  const [totalRevenue, setTotalRevenue] = useState(0); // State for total revenue
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [filteredRevenue, setFilteredRevenue] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const {id} = useParams();
 
   useEffect(() => {
-    const fetchTotalRevenue = async () => {
-      try {
-        const [productRes, itineraryRes, activityRes] = await Promise.all([
-          fetch("/api/Admin/productrevenue/"),
-          fetch("/api/Admin/itineraryrevenue/"),
-          fetch("/api/Admin/activityrevenue/"),
-        ]);
-
-        const productData = await productRes.json();
-        const itineraryData = await itineraryRes.json();
-        const activityData = await activityRes.json();
-
-        // Make sure to parse the revenues as numbers, in case they come as strings
-        const productRevenue = parseFloat(productData.totalRevenue) || 0;
-        const itineraryRevenue = parseFloat(itineraryData.totalRevenue) || 0;
-        const activityRevenue = parseFloat(activityData.totalRevenue) || 0;
-
-        // Calculate the total revenue by summing the individual revenues
-        const total = productRevenue + itineraryRevenue + activityRevenue;
-
-        setTotalRevenue(total); // Update state with the total revenue
-      } catch (error) {
-        console.error("Error fetching total revenue:", error);
-      }
-    };
-
     fetchTotalRevenue();
   }, []);
+
+  const fetchTotalRevenue = async () => {
+    try {
+      const [productRes, itineraryRes, activityRes] = await Promise.all([
+        fetch(`/api/Seller/totalProductRevenueForSeller/${id}`),
+      ]);
+
+      const productData = await productRes.json();
+
+      const productRevenue = parseFloat(productData.totalRevenue) || 0;
+
+      const total = productRevenue;
+
+      setTotalRevenue(total);
+      setFilteredRevenue(null);
+      setSelectedDate(null);
+    } catch (error) {
+      console.error("Error fetching total revenue:", error);
+    }
+  };
+
+  const fetchFilteredRevenue = async (date) => {
+    try {
+      const formattedDate = date.toISOString().split('T')[0];
+      const response = await fetch(`/api/Seller/filterRevenueByDateSeller/${id}?date=${formattedDate}`);
+      const data = await response.json();
+      setFilteredRevenue(data.totalRevenue);
+      setSelectedDate(date);
+    } catch (error) {
+      console.error("Error fetching filtered revenue:", error);
+    }
+  };
+
+  const handleDateChange = (date) => {
+    if (date) {
+      fetchFilteredRevenue(date);
+    }
+    setIsDatePickerOpen(false);
+  };
+
+  const resetToTotal = () => {
+    setFilteredRevenue(null);
+    setSelectedDate(null);
+  };
+
+  const displayRevenue = filteredRevenue !== null ? filteredRevenue : totalRevenue;
+  const displayDate = selectedDate
+    ? `Total sales made on ${selectedDate.toLocaleDateString()}`
+    : "Total sales made today";
 
   return (
     <div className="featured">
@@ -52,50 +85,45 @@ const Featured = () => {
             text={"70%"}
             strokeWidth={5}
             styles={{
-              path: {
-                // Change the color of the progress path
-                stroke: "#91c297", // Green color
-              },
-              text: {
-                // Change the color of the text
-                fill: " #d32e65", // Dark text color
-                fontSize: "22px", // Optional: Adjust font size
-              },
-              trail: {
-                // Change the color of the background circle
-                stroke: "#e6e6e6", // Light gray color
-              },
+              path: { stroke: "#91c297" },
+              text: { fill: "#d32e65", fontSize: "22px" },
+              trail: { stroke: "#e6e6e6" },
             }}
           />
         </div>
-        <p className="title">Total sales made today</p>
-        <p className="amount">${totalRevenue.toFixed(2)}</p>{" "}
-        {/* Display the real total revenue here */}
-        <p className="desc">
-          Previous transactions processing. Last payments may not be included.
-        </p>
+        <p className="title">{displayDate}</p>
+        <p className="amount">${displayRevenue.toFixed(2)}</p>
+        <p className="desc">Choose a date to filter the Revenue.</p>
         <div className="summary">
-          <div className="item">
-            <div className="itemTitle">Target</div>
-            <div className="itemResult negative">
-              <KeyboardArrowDownIcon fontSize="small" />
-              <div className="resultAmount">$12.4k</div>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <div className="date-picker-container">
+              <Button
+                variant="outlined"
+                startIcon={<CalendarTodayIcon />}
+                onClick={() => setIsDatePickerOpen(true)}
+                className="calendar-button"
+              >
+                Select Date
+              </Button>
+              {isDatePickerOpen && (
+                <DatePicker
+                  open={isDatePickerOpen}
+                  onClose={() => setIsDatePickerOpen(false)}
+                  onChange={handleDateChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              )}
             </div>
-          </div>
-          <div className="item">
-            <div className="itemTitle">Last Week</div>
-            <div className="itemResult positive">
-              <KeyboardArrowUpOutlinedIcon fontSize="small" />
-              <div className="resultAmount">$12.4k</div>
-            </div>
-          </div>
-          <div className="item">
-            <div className="itemTitle">Last Month</div>
-            <div className="itemResult positive">
-              <KeyboardArrowUpOutlinedIcon fontSize="small" />
-              <div className="resultAmount">$12.4k</div>
-            </div>
-          </div>
+          </LocalizationProvider>
+          {selectedDate && (
+            <Button
+              variant="outlined"
+              onClick={resetToTotal}
+              className="reset-button"
+            >
+              Back to Total
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -103,3 +131,4 @@ const Featured = () => {
 };
 
 export default Featured;
+

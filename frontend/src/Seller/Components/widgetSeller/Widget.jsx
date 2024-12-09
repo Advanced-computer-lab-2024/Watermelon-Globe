@@ -5,19 +5,22 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import { useParams } from "react-router-dom";
 
 const Widget = ({ type }) => {
   const [productRevenue, setProductRevenue] = useState(0); // State for product revenue
   const [itineraryRevenue, setItineraryRevenue] = useState(0); // State for itinerary revenue
   const [activityRevenue, setActivityRevenue] = useState(0); // State for activity revenue
   const [totalUsers, setTotalUsers] = useState(0); // State for total users
+  const {id} = useParams();
 
   // Fetch product revenue from the backend API
   useEffect(() => {
     if (type === "product") {
       const fetchProductRevenue = async () => {
         try {
-          const response = await fetch("/api/Admin/productrevenue/");
+         // const response = await fetch(`/api/Seller/totalProductRevenueForSeller/${sellerId}`);
+          const response =await fetch(`/api/Seller/totalProductRevenueForSeller/${id}`)
           const data = await response.json();
           setProductRevenue(data.totalRevenue); // Update the state with the fetched revenue
         } catch (error) {

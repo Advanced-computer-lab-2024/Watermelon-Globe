@@ -1,6 +1,9 @@
 const ActivityModel = require("../Models/activityModel.js");
-const Tag = require("../Models/tagModel");
-const CompanyProfile = require("../Models/companyProfileModel"); // Adjust the path if necessary
+const Tag = require("../Models/PreferenceTagModel.js");
+const CompanyProfile = require("../Models/companyProfileModel");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const createTags = async (req, res) => {
   const tags = [
@@ -85,7 +88,7 @@ const getActivitiesNew = async (req, res) => {
 
 const createActivity = async (req, res) => {
   try {
-    const {       
+    const {
       Name,
       Date,
       Time,
@@ -93,33 +96,27 @@ const createActivity = async (req, res) => {
       Price,
       Discount,
       bookingOpen,
-      Advertiser } = req.body; // Expect userId in the request body
+      Advertiser,
+      tags,
+      Category
+    } = req.body;
 
-    // Validate userId
     if (!Advertiser) {
-        return res.status(400).json({ message: 'Advertiser is required' });
+      return res.status(400).json({ message: "Advertiser is required" });
     }
 
-    // Find the user profile based on the user ID
-    // const userProfile = await CompanyProfile.findById(userId);
+    // Find the tags based on the tag IDs in the request body
+    const tagDocuments = await Tag.find({ _id: { $in: tags } });
 
-    // if (!userProfile) {
-    //     return res.status(404).json({ message: 'User not found' });
-    // }
+    if (tagDocuments.length !== tags.length) {
+      return res.status(400).json({
+        message: "One or more tags were not found",
+        missingTags: tags.filter(
+          (tagId) => !tagDocuments.some((doc) => doc._id.toString() === tagId)
+        ),
+      });
+    }
 
-    // Find the tags based on the tag names in the request body
-    // const tagDocuments = await Tag.find({ type: { $in: Tags } });
-
-    // if (tagDocuments.length !== Tags.length) {
-    //     return res.status(400).json({
-    //         message: 'One or more tags were not found',
-    //         missingTags: Tags.filter(tag => !tagDocuments.some(doc => doc.type === tag))
-    //     });
-    // }
-
-    // const tagIds = tagDocuments.map(tag => tag._id);
-
-    // Create a new activity with the tag ObjectIds and the advertiser's ID
     const newActivity = await ActivityModel.create({
       Name,
       Date,
@@ -128,10 +125,11 @@ const createActivity = async (req, res) => {
       Price,
       Discount,
       bookingOpen,
-      Advertiser
+      Advertiser,
+      Category,
+      tags: tagDocuments.map((tag) => tag._id),
     });
 
-    // await newActivity.save();
     res.status(201).json({ newActivity });
   } catch (error) {
     console.error("Error creating activity:", error);
@@ -142,6 +140,18 @@ const createActivity = async (req, res) => {
   }
 };
 
+const getAllTags = async (req, res) => {
+  try {
+    const tags = await Tag.find();
+    res.status(200).json(tags);
+  } catch (error) {
+    console.error("Error fetching tags:", error);
+    res.status(500).json({
+      message: "Error fetching tags",
+      error: error.message,
+    });
+  }
+};
 const getActivities = async (req, res) => {
   try {
     const activities = await ActivityModel.find({})
@@ -160,7 +170,7 @@ const getActivities = async (req, res) => {
 const getActivityById = async (req, res) => {
   try {
     const { id } = req.params;
-    const activity = await ActivityModel.findById(id).populate('Advertiser');
+    const activity = await ActivityModel.findById(id).populate("Advertiser");
 
     if (!activity) {
       return res.status(404).json({
@@ -169,7 +179,6 @@ const getActivityById = async (req, res) => {
     }
 
     res.status(200).json(activity);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -366,53 +375,148 @@ const updateActivityRating = async (req, res) => {
 };
 
 const addComment = async (req, res) => {
-    try {
-        const { id } = req.params;  // Activity ID from the URL
-        const { commentText, user } = req.body; // Comment text and user info from the request body
+  try {
+    const { id } = req.params; // Activity ID from the URL
+    const { commentText, user } = req.body; // Comment text and user info from the request body
 
-        // Find the activity by ID
-        const activity = await ActivityModel.findById(id);
-        if (!activity) {
-            return res.status(404).json({ message: 'Activity not found' });
-        }
-
-        // Add the new comment to the activity's comments array
-        const newComment = {
-            text: commentText,
-            user: user, // Assuming `user` is a string or object with user details
-            date: new Date()
-        };
-        activity.comments = activity.comments || []; // Initialize if comments field is undefined
-        activity.comments.push(newComment);
-
-        // Save the updated activity
-        await activity.save();
-
-        return res.status(200).json({
-            message: 'Comment added successfully',
-            comments: activity.comments,
-        });
-    } catch (error) {
-        console.error('Error adding comment:', error);
-        return res.status(500).json({ message: 'Error adding comment', error: error.message });
+    // Find the activity by ID
+    const activity = await ActivityModel.findById(id);
+    if (!activity) {
+      return res.status(404).json({ message: "Activity not found" });
     }
+
+    // Add the new comment to the activity's comments array
+    const newComment = {
+      text: commentText,
+      user: user, // Assuming `user` is a string or object with user details
+      date: new Date(),
+    };
+    activity.comments = activity.comments || []; // Initialize if comments field is undefined
+    activity.comments.push(newComment);
+
+    // Save the updated activity
+    await activity.save();
+
+    return res.status(200).json({
+      message: "Comment added successfully",
+      comments: activity.comments,
+    });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    return res
+      .status(500)
+      .json({ message: "Error adding comment", error: error.message });
+  }
 };
 
-  
+// GET: Fetch activities by Advertiser ID
+const getActivitiesByAdvertiserId = async (req, res) => {
+  const { advertiserId } = req.params; // Extract Advertiser ID from the URL
+
+  try {
+    // Find activities where the Advertiser matches the provided ID
+    const activities = await ActivityModel.find({ Advertiser: advertiserId })
+      .populate("Category", "name") // Populate the Category field if needed
+      .populate("tags", "type") // Populate the tags field
+      .populate("Advertiser", "Name Email"); // Populate Advertiser details
+
+    // If no activities are found
+    if (!activities || activities.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No activities found for this advertiser" });
+    }
+
+    // Return the found activities
+    res.status(200).json(activities);
+  } catch (error) {
+    console.error("Error fetching activities by Advertiser ID:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Ensure this directory exists
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append the file extension
+  },
+});
+
+const upload = multer({ storage: storage });
+const uploadMiddleware = upload.single("picture");
+
+const uploadPicture = async (req, res) => {
+  uploadMiddleware(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      console.error("Multer error:", err);
+      return res.status(400).json({ error: "Multer error: " + err.message });
+    } else if (err) {
+      console.error("Unknown error:", err);
+      return res.status(500).json({ error: "Unknown error: " + err.message });
+    }
+
+    const { id } = req.query;
+
+    if (!req.file) {
+      console.error("No file uploaded");
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    try {
+      const Activity = await ActivityModel.findById(id);
+
+      if (!Activity) {
+        console.error("No activity found with ID:", id);
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ error: "No activity found with this ID" });
+      }
+
+      if (Activity.picture) {
+        const oldPicturePath = path.join(
+          __dirname,
+          "..",
+          "uploads",
+          Activity.picture
+        );
+        if (fs.existsSync(oldPicturePath)) {
+          fs.unlinkSync(oldPicturePath);
+        }
+      }
+
+      Activity.picture = req.file.filename;
+      await Activity.save();
+
+      console.log("Activity picture updated successfully:", Activity);
+      res.status(200).json({ message: "Activity picture updated successfully", Activity });
+    } catch (error) {
+      console.error("Error updating activity picture:", error);
+      res.status(500).json({
+        error: "An error occurred while updating the activity picture",
+        details: error.message
+      });
+    }
+  });
+};
 
 
-module.exports =    
-{createTags,
-getTags,   
-createActivity, 
-getActivities, 
-getActivityById, 
-updateActivity, 
-deleteActivity,
-sortByPriceActivity,
-sortByRatingsActivity,
-filterActivities,
-updateActivityRating,
-createActivityNew,
-getActivitiesNew,
-addComment};
+module.exports = {
+  createTags,
+  getTags,
+  createActivity,
+  getActivities,
+  getActivityById,
+  updateActivity,
+  deleteActivity,
+  sortByPriceActivity,
+  sortByRatingsActivity,
+  filterActivities,
+  updateActivityRating,
+  createActivityNew,
+  getActivitiesNew,
+  addComment,
+  getAllTags,
+  getActivitiesByAdvertiserId,
+  uploadPicture
+};

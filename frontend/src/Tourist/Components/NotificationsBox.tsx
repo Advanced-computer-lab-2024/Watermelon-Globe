@@ -60,12 +60,21 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
           <Bell className="w-5 h-5 mr-2" />
           Notifications
         </div>
-        <button
+        {/* <button
           onClick={onClose}
           className="text-white hover:bg-[#E62E5C] p-1 rounded"
         >
           <X className="w-5 h-5" />
-        </button>
+        </button> */}
+
+<button
+  onClick={onClose}
+  className="text-white hover:bg-[#E62E5C] p-1 rounded flex items-center justify-center"
+  style={{ width: 'auto', height: 'auto' }}
+>
+  <X className="w-5 h-5" />
+</button>
+
       </div>
       <div className="max-h-80 overflow-y-auto">
         {notifications.length > 0 ? (

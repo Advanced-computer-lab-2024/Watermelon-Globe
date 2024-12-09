@@ -29,10 +29,11 @@ const Sort = require("./Routes/sort");
 const TourGuide = require("./Routes/tourGuide");
 const Tourist = require("./Routes/tourist");
 const TouristItinerary = require("./Routes/touristItinerary");
+const login = require("./Routes/login");
 
 // App variables
 const app = express();
-const stripe = require('stripe')(process.env.SECRET_KEY); // Replace with your Stripe secret key
+const stripe = require("stripe")(process.env.SECRET_KEY); // Replace with your Stripe secret key
 const MongoURI = process.env.MONGO_URI;
 const cors = require("cors");
 const port = "8000";
@@ -53,6 +54,7 @@ mongoose
 // Configurations
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   console.log(req.method, req.path);
@@ -72,6 +74,7 @@ app.use("/api/Sort", Sort);
 app.use("/api/TourGuide", TourGuide);
 app.use("/api/Tourist", Tourist);
 app.use("/api/TouristItinerary", TouristItinerary);
+app.use("/api/login", login);
 
 //uploads
 app.use("/uploads", express.static("uploads"));

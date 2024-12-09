@@ -100,5 +100,5 @@ const tourGuideSchema = new Schema(
 );
 
 
-const TourGuide = mongoose.model("TourGuide", tourGuideSchema);
+const TourGuide = mongoose.models.TourGuide ||  mongoose.model("TourGuide", tourGuideSchema);
 module.exports = TourGuide;

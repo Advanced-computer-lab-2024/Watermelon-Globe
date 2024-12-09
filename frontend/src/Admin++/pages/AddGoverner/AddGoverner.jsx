@@ -10,7 +10,7 @@ import axios from "axios";
 import AddGovernerForm from "../../components/addGovererForm/addGovererForm"; // Import the updated form component
 import { FaUserCircle } from "react-icons/fa";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const AddGoverner = () => {
   const [governors, setGovernors] = useState([]); // State to hold governor data
   const [loading, setLoading] = useState(true); // Loading state
@@ -65,7 +65,7 @@ const AddGoverner = () => {
             >
               <CardContent>
                 <Typography variant="h6" component="div">
-                  <AccountCircleRoundedIcon />
+                  <AccountCircleRoundedIcon sx={{ color: "#91c297" }} />
                   {governor.username}
                 </Typography>
                 <div className="cardActions">
@@ -74,6 +74,7 @@ const AddGoverner = () => {
                     color="secondary"
                     size="small"
                     onClick={() => handleDelete(governor._id)}
+                    startIcon={<DeleteIcon sx={{ color: "#fff" }} />}
                   >
                     Delete
                   </Button>

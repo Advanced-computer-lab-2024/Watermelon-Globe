@@ -1,14 +1,21 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import React from 'react'
-import { FaTrashAlt, FaMinus, FaPlus, FaShoppingCart, FaMoneyBillWave } from 'react-icons/fa'
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import PaymentSummary from '../Components/PaymentSummary'
-import WalletComponent from '../Components/Wallet';
+import { useState, useEffect } from "react";
+import React from "react";
+import {
+  FaTrashAlt,
+  FaMinus,
+  FaPlus,
+  FaShoppingCart,
+  FaMoneyBillWave,
+} from "react-icons/fa";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import PaymentSummary from "../Components/PaymentSummary";
+import WalletComponent from "../Components/Wallet";
 import TouristNavbar from "../Components/TouristNavBar";
 import { useCurrency } from "../Components/CurrencyContext";
+import Alert from "@mui/material/Alert";
 
 interface Currency {
   symbol_native: string;
@@ -22,15 +29,20 @@ interface CurrencyContextType {
 
 interface CartItem {
   product: {
-    _id: string
-    name: string
-    price: number | null // Allow null to handle edge cases
-  }
-  quantity: number
+    _id: string;
+    name: string;
+    price: number | null; // Allow null to handle edge cases
+  };
+  quantity: number;
+}
+
+interface PromoCode {
+  code: string;
+  discountValue: number;
 }
 
 export default function ShoppingCart() {
-  const params = useParams()
+  const params = useParams();
   const navigate = useNavigate();
   const touristId = params.touristId as string
   const [cartItems, setCartItems] = useState<CartItem[]>([])
@@ -38,66 +50,107 @@ export default function ShoppingCart() {
   const [error, setError] = useState<string | null>(null)
   const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType; 
 
+  const [promoCode, setPromoCode] = useState("");
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
+  const [total, setTotal] = useState(0);
+
+  const handleApplyPromo = async () => {
+    try {
+      // Send a GET request to your API to fetch the promo codes
+      const response = await axios.get<PromoCode[]>("/api/Admin/getPromoCodes"); // Replace with your actual backend API URL
+
+      // Find the promo code that matches the entered promo code
+      const validPromo = response.data.find((promo) => {
+        console.log(promo); // Log the promo object for each iteration
+        return promo.code === promoCode; // Check if the promo code matches
+      });
+
+      console.log(validPromo);
+      // If promo code is valid
+      if (validPromo) {
+        setPromoApplied(true);
+        const discountAmount = (total * validPromo.discountValue) / 100;
+        setTotal(total - discountAmount);
+        setInvalidPromo(false); // Reset any error message if the promo code is valid
+      } else {
+        setInvalidPromo(true); // Set error state if promo code is invalid
+      }
+    } catch (error) {
+      console.error("Error checking promo code", error);
+      setInvalidPromo(true); // Handle any errors during the API call
+    }
+  };
+
+
   const fetchCart = async () => {
     if (!touristId) {
-      setError('Tourist ID not found in URL parameters')
-      setLoading(false)
-      return
+      setError("Tourist ID not found in URL parameters");
+      setLoading(false);
+      return;
     }
 
     try {
-      const response = await axios.get(`/api/Tourist/viewCart/${touristId}`)
-      setCartItems(response.data.cart || [])
-      setError(null)
+      const response = await axios.get(`/api/Tourist/viewCart/${touristId}`);
+      setCartItems(response.data.cart || []);
+      setError(null);
     } catch (error) {
-      console.error('Error fetching cart:', error)
-      setError('Failed to load your cart. Please try again.')
+      console.error("Error fetching cart:", error);
+      setError("Failed to load your cart. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchCart()
-  }, [touristId])
+    fetchCart();
+  }, [touristId]);
 
   const updateQuantity = async (productId: string, newQuantity: number) => {
-    if (newQuantity < 1) return // Prevent setting quantity below 1
+    if (newQuantity < 1) return; // Prevent setting quantity below 1
 
     try {
-      await axios.put(`/api/Tourist/changeCartItemQuantity/${touristId}`, { productId, quantity: newQuantity })
-      await fetchCart() // Refetch the cart to get the updated data from the database
+      await axios.put(`/api/Tourist/changeCartItemQuantity/${touristId}`, {
+        productId,
+        quantity: newQuantity,
+      });
+      await fetchCart(); // Refetch the cart to get the updated data from the database
     } catch (error) {
-      console.error('Error updating cart quantity:', error)
-      setError('Failed to update quantity. Please try again.')
+      console.error("Error updating cart quantity:", error);
+      setError("Failed to update quantity. Please try again.");
     }
-  }
+  };
 
   const removeItem = async (productId: string) => {
     try {
-      await axios.delete(`/api/Tourist/removeProductFromCart/${touristId}`, { data: { productId } })
-      await fetchCart() // Refetch the cart to get the updated data from the database
+      await axios.delete(`/api/Tourist/removeProductFromCart/${touristId}`, {
+        data: { productId },
+      });
+      await fetchCart(); // Refetch the cart to get the updated data from the database
     } catch (error) {
-      console.error('Error removing product from cart:', error)
-      setError('Failed to remove item. Please try again.')
+      console.error("Error removing product from cart:", error);
+      setError("Failed to remove item. Please try again.");
     }
-  }
+  };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + (item.product.price || 0) * item.quantity,
-    0
-  )
+  useEffect(() => {
+    const newTotal = cartItems.reduce(
+      (sum, item) => sum + (item.product.price || 0) * item.quantity,
+      0
+    );
+    setTotal(newTotal);
+  }, [cartItems]); // Dependency array to re-run when cartItems change
 
   const handleProceedToCheckout = () => {
-    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } })
-  }
+    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } });
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
-    )
+    );
   }
 
   function getCurrencyConversionRate(currency: string): number {
@@ -153,8 +206,12 @@ export default function ShoppingCart() {
                 <FaShoppingCart className="h-16 w-16 text-primary" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white">Your Shopping Cart</h1>
-                <p className="text-white opacity-75">{cartItems.length} item(s) in your cart</p>
+                <h1 className="text-3xl font-bold text-white">
+                  Your Shopping Cart
+                </h1>
+                <p className="text-white opacity-75">
+                  {cartItems.length} item(s) in your cart
+                </p>
               </div>
             </div>
           </div>
@@ -166,7 +223,9 @@ export default function ShoppingCart() {
               <p className="text-center text-gray-500">Your cart is empty.</p>
             ) : (
               <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-                <h2 className="text-xl font-semibold text-secondary mb-4">Cart Items</h2>
+                <h2 className="text-xl font-semibold text-secondary mb-4">
+                  Cart Items
+                </h2>
                 <ul className="space-y-4">
                   {cartItems.map((item) => (
                     <li
@@ -185,7 +244,9 @@ export default function ShoppingCart() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
+                          onClick={() =>
+                            updateQuantity(item.product._id, item.quantity - 1)
+                          }
                           className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
                           aria-label={`Decrease quantity of ${item.product.name}`}
                           disabled={item.quantity <= 1}
@@ -194,7 +255,9 @@ export default function ShoppingCart() {
                         </button>
                         <span className="w-8 text-center">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
+                          onClick={() =>
+                            updateQuantity(item.product._id, item.quantity + 1)
+                          }
                           className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
                           aria-label={`Increase quantity of ${item.product.name}`}
                         >
@@ -208,11 +271,68 @@ export default function ShoppingCart() {
                           <FaTrashAlt size={16} />
                         </button>
                       </div>
-
                     </li>
                   ))}
                 </ul>
               </div>
+            )}
+
+            {/* <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <h2 className="text-xl font-semibold text-secondary mb-4">
+                Apply Promo
+              </h2>
+              <div className="flex justify-between items-center">
+                <p className="text-lg font-semibold">Total:</p>
+                <p className="text-2xl font-bold text-primary">
+                  ${total.toFixed(2)}
+                </p>
+              </div>
+            </div> */}
+
+            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <h2 className="text-xl font-semibold text-secondary mb-4">
+                Apply Promo
+              </h2>
+
+              {/* Promo code input */}
+              <div className="flex flex-col mb-4">
+                <label
+                  htmlFor="promoCode"
+                  className="text-lg font-semibold mb-2"
+                >
+                  Enter Promo Code
+                </label>
+                <input
+                  type="text"
+                  id="promoCode"
+                  placeholder="Enter promo code"
+                  className="p-2 border border-gray-300 rounded-lg"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)} // Assuming you have a state for promoCode
+                />
+              </div>
+
+              {/* Apply button */}
+              <button
+                onClick={handleApplyPromo} // Function to handle promo code application
+                className="w-full bg-primary text-white p-2 rounded-lg font-semibold hover:bg-primary-dark transition duration-300"
+              >
+                Apply Promo
+              </button>
+
+              {/* Optionally, show a message if the promo code is successfully applied */}
+              {promoApplied && (
+                <Alert severity="success" style={{ marginTop: "12px" }}>
+                  Promo Code applied successfully
+                </Alert>
+              )}
+            </div>
+
+            {/* Show error message if promo code is invalid */}
+            {invalidPromo && (
+              <Alert severity="error" style={{ marginTop: "12px" }}>
+                Invalid Promo Code
+              </Alert>
             )}
 
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
@@ -242,5 +362,5 @@ export default function ShoppingCart() {
         </div>
       </div>
     </div>
-  )
+  );
 }

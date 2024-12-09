@@ -69,6 +69,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import PasswordRoundedIcon from "@mui/icons-material/PasswordRounded";
+import MovingRoundedIcon from "@mui/icons-material/MovingRounded";
+
 const Sidebar = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -103,17 +107,14 @@ const Sidebar = () => {
         <ul>
           <p className="titleAdmin">MAIN</p>
 
-          <Link
-            to="/SellerHome/6729244f151b6c9e346dd732"
-            style={{ textDecoration: "none" }}
-          >
+          <Link to={`/SellerHome/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
           </Link>
 
-          <p className="titleAdmin">MANAGE</p>
+          <p className="titleAdmin">PRODUCTS</p>
 
           {/* My Products */}
           <Link to={`/GetAllProducts/${id}`} style={{ textDecoration: "none" }}>
@@ -122,7 +123,7 @@ const Sidebar = () => {
                 isActive(`/GetAllProducts/${id}`) ? "active-seller" : ""
               }
             >
-              <StoreIcon className="iconAdmin" />
+              <MovingRoundedIcon className="iconAdmin" />
               <span>My Products</span>
             </li>
           </Link>
@@ -155,12 +156,26 @@ const Sidebar = () => {
           </Link>
 
           {/* Sales and Available Quantities */}
-          <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
+          {/* <Link to={`/ViewQuantity/${id}`} style={{ textDecoration: "none" }}>
             <li
               className={isActive(`/ViewQuantity/${id}`) ? "active-seller" : ""}
             >
               <ProductionQuantityLimitsIcon className="iconAdmin" />
               <span>Sales and Available Quantities</span>
+            </li>
+          </Link> */}
+
+          <p className="titleAdmin">MANAGE ACCOUNT</p>
+          <Link to={`/viewProfile/${id}`} style={{ textDecoration: "none" }}>
+            <li>
+              <AccountCircleRoundedIcon className="iconAdmin" />
+              <span>View Profile</span>
+            </li>
+          </Link>
+          <Link to={`/ChangePasswordSeller/${id}`} style={{ textDecoration: "none" }}>
+            <li>
+              <PasswordRoundedIcon className="iconAdmin" />
+              <span>Change Password</span>
             </li>
           </Link>
         </ul>

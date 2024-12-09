@@ -1,7 +1,7 @@
 import "./sidebar.scss";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { FaUserCog } from "react-icons/fa";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
@@ -13,11 +13,29 @@ import { TbSettingsCode } from "react-icons/tb";
 import { HiQrcode } from "react-icons/hi";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
-const Sidebar = (selectedTab, setSelectedTab) => {
+const Sidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenEvent, setIsDropdownOpenEvent] = useState(false);
   const [isDropdownOpenProductView, setIsDropdownProductView] = useState(false);
   const [isDropdownOpenProductAdd, setIsDropdownProductAdd] = useState(false);
+
+  const { id } = useParams();
+
+  const [user, setUser] = useState(""); // State to store user details
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        // Make an API call to fetch user details using the ID
+        const response = await axios.get(`/api/Admin/getAdmin/${id}`);
+        setUser(response.data); // Update state with the user details
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [id]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -38,7 +56,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
     <div className="sidebarAdmin">
       <div className="topAdmin">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logoAdmin">Hello, </span>
+          <span className="logoAdmin">Hello, {user.username}</span>
         </Link>
       </div>
       {/* <hr /> */}
@@ -47,11 +65,12 @@ const Sidebar = (selectedTab, setSelectedTab) => {
           <p className="titleAdmin">MAIN</p>
 
           <Link
-            to="/AdminSales/674f760ed6b7ba513c4ea84d"
+            to={`/AdminSales/${id}`}
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedTab("Dashboard")}
+            // onClick={() => setSelectedTab("Dashboard")}
           >
-            <li className={selectedTab === "Dashboard" ? "active-tab" : ""}>
+            {/* <li className={selectedTab === "Dashboard" ? "active-tab" : ""}> */}
+            <li>
               <TbLayoutDashboardFilled className="iconAdmin" />
               <span>Dashboard</span>
             </li>
@@ -72,27 +91,36 @@ const Sidebar = (selectedTab, setSelectedTab) => {
 
           {isDropdownOpen && (
             <ul className="dropdownAdmin">
-              <Link to="/AddAdmins" style={{ textDecoration: "none" }}>
+              <Link to={`/AddAdmins/${id}`} style={{ textDecoration: "none" }}>
                 <li>
                   <span>Add Admin</span>
                 </li>
               </Link>
-              <Link to="/AddGoverner" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/AddGoverner/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>Add Governor</span>
                 </li>
               </Link>
-              <Link to="/Tourists" style={{ textDecoration: "none" }}>
+              <Link to={`/Tourists/${id}`} style={{ textDecoration: "none" }}>
                 <li>
                   <span>View All Tourists</span>
                 </li>
               </Link>
-              <Link to="/ManageActive" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/ManageActive/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View Active Users</span>
                 </li>
               </Link>
-              <Link to="/ManagePending" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/ManagePending/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View Pending Users</span>
                 </li>
@@ -115,14 +143,14 @@ const Sidebar = (selectedTab, setSelectedTab) => {
           {isDropdownOpenEvent && (
             <ul className="dropdownAdmin">
               <Link
-                to="/ViewItinerariesEvents"
+                to={`/ViewItinerariesEvents/${id}`}
                 style={{ textDecoration: "none" }}
               >
                 <li>
                   <span>View Events/Itineraries</span>
                 </li>
               </Link>
-              <Link to="/users/governers" style={{ textDecoration: "none" }}>
+              <Link to="/complaintss" style={{ textDecoration: "none" }}>
                 <li>
                   <span>View Complaints</span>
                 </li>
@@ -130,14 +158,14 @@ const Sidebar = (selectedTab, setSelectedTab) => {
             </ul>
           )}
 
-          <Link to="/Categories" style={{ textDecoration: "none" }}>
+          <Link to={`/Categories/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <MdCategory className="iconAdmin" />
               <span>Activity Categories</span>
             </li>
           </Link>
 
-          <Link to="/Tags" style={{ textDecoration: "none" }}>
+          <Link to={`/Tags/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <IoIosPricetags className="iconAdmin" />
               <span>Prefrence Tags</span>
@@ -149,7 +177,7 @@ const Sidebar = (selectedTab, setSelectedTab) => {
           <li onClick={toggleDropdownProductView} style={{ cursor: "pointer" }}>
             <FaCartArrowDown className="iconAdmin" />
             <span className="manage-textAdmin">
-              View Products
+              &nbsp;&nbsp;&nbsp;View Products
               {isDropdownOpenProductView ? (
                 <FaAngleDown className="arrowAdmin" />
               ) : (
@@ -160,21 +188,30 @@ const Sidebar = (selectedTab, setSelectedTab) => {
 
           {isDropdownOpenProductView && (
             <ul className="dropdownAdmin">
-              <Link to="/viewAllProducts" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/viewAllProducts/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View All Products</span>
                 </li>
               </Link>
-              <Link to="/viewMyProducts" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/viewMyProducts/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View My Products</span>
                 </li>
               </Link>
-              <Link to="/viewSaleQuantities" style={{ textDecoration: "none" }}>
+              {/* <Link
+                to={`/viewSaleQuantities/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>View Sales & Quantites</span>
                 </li>
-              </Link>
+              </Link> */}
             </ul>
           )}
 
@@ -192,12 +229,18 @@ const Sidebar = (selectedTab, setSelectedTab) => {
 
           {isDropdownOpenProductAdd && (
             <ul className="dropdownAdmin">
-              <Link to="/adminAddProduct" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/adminAddProduct/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>Add Product</span>
                 </li>
               </Link>
-              <Link to="/adminAddPromoCode" style={{ textDecoration: "none" }}>
+              <Link
+                to={`/adminAddPromoCode/${id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <li>
                   <span>Add Promo Code</span>
                 </li>

@@ -478,36 +478,40 @@ const GetAllProducts = () => {
             </h2>
 
             <div style={{ marginBottom: "20px" }}>
-              <input
-                type="text"
-                placeholder="Search by name..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  marginBottom: "15px",
-                  borderRadius: "5px",
-                  border: `1px solid ${watermelonGreen}`,
-                }}
-              />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  marginBottom: "15px",
-                  borderRadius: "5px",
-                  border: `1px solid ${watermelonGreen}`,
-                }}
-              >
-                <option value="name">Sort by Name</option>
-                <option value="price">Sort by Price</option>
-                <option value="rating">Sort by Rating</option>
-              </select>
+              <div style={{ display: "flex" }}>
+                <input
+                  type="text"
+                  placeholder="Search by name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    width: "40%",
+                    padding: "10px",
+                    marginBottom: "15px",
+                    borderRadius: "5px",
+                    border: `1px solid ${watermelonGreen}`,
+                    display: "flex",
+                    marginRight: 30,
+                  }}
+                />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={{
+                    width: "30%",
+                    padding: "10px",
+                    marginBottom: "15px",
+                    borderRadius: "5px",
+                    border: `1px solid ${watermelonGreen}`,
+                  }}
+                >
+                  <option value="name">Sort by Name</option>
+                  <option value="price">Sort by Price</option>
+                  <option value="rating">Sort by Rating</option>
+                </select>
+              </div>
               <div style={{ display: "flex", marginBottom: "15px" }}>
-                <div>
+                <div style={{ marginRight: 10 }}>
                   <label>Min Price: </label>
                   <input
                     type="number"
@@ -532,39 +536,41 @@ const GetAllProducts = () => {
                       width: "80px",
                       borderRadius: "5px",
                       border: `1px solid ${watermelonGreen}`,
+                      marginRight: 100,
                     }}
                   />
                 </div>
+
+                <button
+                  onClick={resetFilters}
+                  style={{
+                    backgroundColor: watermelonPink,
+                    color: "white",
+                    padding: "2px 2px",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s",
+                    width: "12%",
+                  }}
+                >
+                  Reset Filters
+                </button>
               </div>
-              <button
-                onClick={resetFilters}
-                style={{
-                  backgroundColor: watermelonPink,
-                  color: "white",
-                  padding: "10px 15px",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  transition: "background-color 0.3s",
-                  width: "25%",
-                }}
-              >
-                Reset Filters
-              </button>
             </div>
 
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
-                gap: "20px",
+                gap: "10px",
                 padding: "25px",
               }}
             >
               {filteredProducts.map((product) => (
                 <Card
                   sx={{
-                    width: 360,
+                    width: 300,
                     border: "3px solid #91c297", // Border thickness and color
                     borderRadius: "20px",
                     backgroundColor: "#fff",
@@ -584,11 +590,10 @@ const GetAllProducts = () => {
                       {product.name}
                     </Typography>
                   </div>
-                  <AspectRatio minHeight="260px" maxHeight="300px">
+                  <AspectRatio ratio={16 / 9}>
                     <img
-                      src={product.picture || "https://via.placeholder.com/150"}
+                      src={product.picture ? (product.picture.startsWith('http') ? product.picture : `/uploads/${product.picture}`) : "https://via.placeholder.com/150"}
                       alt={`Image of ${product.name}`}
-                      loading="lazy"
                     />
                   </AspectRatio>
                   <CardContent orientation="horizontal">

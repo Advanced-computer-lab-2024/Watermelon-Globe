@@ -20,14 +20,18 @@ const itinerarySchema = new Schema(
     accessibility: { type: Boolean, default: false },
     pickupDropoffLocations: [pickupDropoffSchema],
     bookings: { type: Boolean, default: false }, // Array of pickup/dropoff objects
-    guide: { type: mongoose.Types.ObjectId, ref: "TourGuide", required: true },
+    guide: {
+      type: mongoose.Types.ObjectId,
+      ref: "TourGuide",
+      required: true,
+    },
 
     ratings: [
       {
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tourist",
-          required: true,
+          required: false,
         },
         rating: { type: Number, required: true, min: 1, max: 5 },
       },
@@ -41,11 +45,11 @@ const itinerarySchema = new Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tourist", // Reference to the user model
-          required: true,
+          required: false,
         },
         comment: {
           type: String,
-          required: true,
+          required: false,
         },
         date: {
           type: Date,
@@ -63,7 +67,7 @@ const itinerarySchema = new Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tourist",
-          required: true,
+          required: false,
         },
       },
     ],
@@ -72,17 +76,16 @@ const itinerarySchema = new Schema(
       default: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
       required: false,
     },
-     notifyRequests: [{ 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tourist'
-  }]
-
+    notifyRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tourist",
+      },
+    ],
   },
   { timestamps: true }
 );
- 
- 
 
-const Itinerary = mongoose.model("Itinerary", itinerarySchema);
-const pickup = mongoose.model("pickup", pickupDropoffSchema);
+const Itinerary = mongoose.models.Itinerary || mongoose.model("Itinerary", itinerarySchema);
+const pickup = mongoose.models.pickup || mongoose.model("pickup", pickupDropoffSchema);
 module.exports = { Itinerary, pickup };

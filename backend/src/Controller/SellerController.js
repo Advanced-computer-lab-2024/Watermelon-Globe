@@ -4,6 +4,9 @@ const Tourist = require("../Models/touristModel");
 const bookedItinerary = require("../Models/touristItineraryModel");
 const bookedActivity = require("../Models/activityBookingModel");
 const mongoose = require("mongoose");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const { findById } = require("../Models/touristModel");
 
 //for frontend
@@ -52,6 +55,73 @@ const frontendPendingSellersTable = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error fetching pending sellers" });
   }
+};
+
+//product photo
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Ensure this directory exists
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append the file extension
+  },
+});
+
+const upload = multer({ storage: storage });
+const uploadMiddleware = upload.single("picture");
+
+const uploadPicture = async (req, res) => {
+  uploadMiddleware(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: "Multer error: " + err.message });
+    } else if (err) {
+      return res.status(500).json({ error: "Unknown error: " + err.message });
+    }
+
+    const { id } = req.query;
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    try {
+      const product = await Product.findById(id);
+
+      if (!product) {
+        // Delete the uploaded file if product not found
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ error: "No product found with this ID" });
+      }
+
+      // Delete the old picture if it exists
+      if (product.picture) {
+        const oldPicturePath = path.join(
+          __dirname,
+          "..",
+          "uploads",
+          product.picture
+        );
+        if (fs.existsSync(oldPicturePath)) {
+          fs.unlinkSync(oldPicturePath);
+        }
+      }
+
+      // Update the product with the new picture filename
+      product.picture = req.file.filename;
+      await product.save();
+
+      res
+        .status(200)
+        .json({ message: "Product picture updated successfully", product });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: "An error occurred while updating the product picture",
+        });
+    }
+  });
 };
 
 // Get all products (unarchived)
@@ -762,37 +832,6 @@ const unarchiveProduct = async (req, res) => {
   }
 };
 
-// upload a product picture
-const uploadPicture = async (req, res) => {
-  const { id } = req.query; // Get the product ID from the route parameters
-  const { picture } = req.body; // Get the picture URL from the request body
-  // Check if the ID is valid
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: "Invalid product ID" });
-  }
-
-  try {
-    // Update the product's picture field
-    const product = await Product.findOneAndUpdate(
-      { _id: id }, // Find the product by ID
-      { picture }, // Update the picture field
-      { new: true } // Return the updated product
-    );
-
-    if (!product) {
-      return res.status(404).json({ error: "No product found with this ID" });
-    }
-
-    res
-      .status(200)
-      .json({ message: "Product picture updated successfully", product });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while updating the product picture" });
-  }
-};
-
 // Delete product by ID
 const deleteProductById = async (req, res) => {
   const { id } = req.params; // Extract the ID from the URL params
@@ -851,38 +890,38 @@ const totalProductRevenueForSeller = async (req, res) => {
     }
 
     const result = await Tourist.aggregate([
-      { $unwind: '$orders' },
-      { $unwind: '$orders.items' },
+      { $unwind: "$orders" },
+      { $unwind: "$orders.items" },
       {
         $lookup: {
-          from: 'products',
-          localField: 'orders.items.productId',
-          foreignField: '_id',
-          as: 'product'
-        }
+          from: "products",
+          localField: "orders.items.productId",
+          foreignField: "_id",
+          as: "product",
+        },
       },
-      { $unwind: '$product' },
+      { $unwind: "$product" },
       {
         $match: {
-          'product.seller': new mongoose.Types.ObjectId(sellerId)
-        }
+          "product.seller": new mongoose.Types.ObjectId(sellerId),
+        },
       },
       {
         $group: {
           _id: null,
           totalRevenue: {
             $sum: {
-              $multiply: ['$orders.items.quantity', '$product.price']
-            }
-          }
-        }
-      }
+              $multiply: ["$orders.items.quantity", "$product.price"],
+            },
+          },
+        },
+      },
     ]);
 
     if (result.length === 0) {
       return res.status(200).json({
         message: "No completed orders found for this seller",
-        totalRevenue: 0
+        totalRevenue: 0,
       });
     }
 
@@ -890,15 +929,13 @@ const totalProductRevenueForSeller = async (req, res) => {
 
     res.status(200).json({
       message: "Total product revenue calculated successfully for the seller",
-      totalRevenue: totalRevenue.toFixed(2)
+      totalRevenue: totalRevenue.toFixed(2),
     });
-
   } catch (error) {
     console.error("Error calculating total product revenue:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const SellerMonthlyRevenue = async (req, res) => {
   try {
@@ -913,75 +950,144 @@ const SellerMonthlyRevenue = async (req, res) => {
 
     // Aggregate product revenue for the current year
     const productRevenue = await Tourist.aggregate([
-      { $unwind: '$orders' }, // Unwind the orders array
-      { $unwind: '$orders.items' }, // Unwind the items within each order
+      { $unwind: "$orders" }, // Unwind the orders array
+      { $unwind: "$orders.items" }, // Unwind the items within each order
       {
         $lookup: {
-          from: 'products',
-          localField: 'orders.items.productId',
-          foreignField: '_id',
-          as: 'product'
-        }
+          from: "products",
+          localField: "orders.items.productId",
+          foreignField: "_id",
+          as: "product",
+        },
       },
-      { $unwind: '$product' }, // Unwind the product after the lookup
+      { $unwind: "$product" }, // Unwind the product after the lookup
       {
         $match: {
-          'product.seller': new mongoose.Types.ObjectId(sellerId), // Match the sellerId
-          'orders.orderDate': { $gte: startDate, $lte: endDate } // Filter by current year
-        }
+          "product.seller": new mongoose.Types.ObjectId(sellerId), // Match the sellerId
+          "orders.orderDate": { $gte: startDate, $lte: endDate }, // Filter by current year
+        },
       },
       {
         $group: {
-          _id: { month: { $month: '$orders.orderDate' } }, // Group by month
+          _id: { month: { $month: "$orders.orderDate" } }, // Group by month
           totalRevenue: {
-            $sum: { $multiply: ['$orders.items.quantity', '$product.price'] } // Calculate total revenue
-          }
-        }
+            $sum: { $multiply: ["$orders.items.quantity", "$product.price"] }, // Calculate total revenue
+          },
+        },
       },
-      { $sort: { '_id.month': 1 } } // Sort by month
+      { $sort: { "_id.month": 1 } }, // Sort by month
     ]);
 
     // Initialize an array for all 12 months with zero revenue
     const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
       month: i + 1,
       productRevenue: 0,
-      totalRevenue: 0
+      totalRevenue: 0,
     }));
 
     // Populate the monthly revenue with the actual data from aggregation
-    productRevenue.forEach(entry => {
+    productRevenue.forEach((entry) => {
       const monthIndex = entry._id.month - 1; // Month is 1-based, array is 0-based
       monthlyRevenue[monthIndex].productRevenue = entry.totalRevenue;
       monthlyRevenue[monthIndex].totalRevenue = entry.totalRevenue;
     });
 
     // Add month names and format numbers
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    const formattedRevenue = monthlyRevenue.map(item => ({
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const formattedRevenue = monthlyRevenue.map((item) => ({
       ...item,
       monthName: monthNames[item.month - 1],
       productRevenue: Number(item.productRevenue.toFixed(2)),
-      totalRevenue: Number(item.totalRevenue.toFixed(2))
+      totalRevenue: Number(item.totalRevenue.toFixed(2)),
     }));
 
     // Return the response with the formatted revenue data
     res.status(200).json({
       message: "Yearly product revenue calculated successfully",
       year: currentYear,
-      data: formattedRevenue
+      data: formattedRevenue,
     });
-
   } catch (error) {
     console.error("Error calculating monthly product revenue:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+const filterRevenueByDateSeller = async (req, res) => {
+  try {
+    const { date } = req.query;
+    const { sellerId } = req.params; // sellerId passed as a route parameter
 
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
 
+    if (!sellerId) {
+      return res.status(400).json({ message: "Seller ID is required" });
+    }
 
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const productRevenue = await Tourist.aggregate([
+      { $unwind: "$orders" }, // Unwind the orders array
+      { $unwind: "$orders.items" }, // Unwind the items within each order
+      {
+        $lookup: {
+          from: "products", // Lookup products collection
+          localField: "orders.items.productId", // Match by productId from the orders
+          foreignField: "_id", // Match to product's _id
+          as: "product", // Store matched product data
+        },
+      },
+      { $unwind: "$product" }, // Unwind the product data after lookup
+      {
+        $match: {
+          "product.seller": new mongoose.Types.ObjectId(sellerId), // Filter by sellerId
+          "orders.orderDate": { $gte: selectedDate, $lt: nextDate }, // Filter by the selected date
+        },
+      },
+      {
+        $group: {
+          _id: null, // Grouping to calculate total revenue
+          totalRevenue: {
+            $sum: { $multiply: ["$orders.items.quantity", "$product.price"] },
+          }, // Sum up the total price for orders
+        },
+      },
+    ]);
+
+    const totalProductRevenue =
+      productRevenue.length > 0 ? productRevenue[0].totalRevenue : 0;
+
+    const totalRevenue = totalProductRevenue;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully",
+      date: selectedDate.toISOString().split("T")[0],
+      productRevenue: Number(totalProductRevenue.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed(2)),
+    });
+  } catch (error) {
+    console.error("Error filtering revenue by date:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   createSeller,
@@ -1017,5 +1123,6 @@ module.exports = {
   deleteProductById,
   loginSeller,
   totalProductRevenueForSeller,
-  SellerMonthlyRevenue
+  SellerMonthlyRevenue,
+  filterRevenueByDateSeller,
 };

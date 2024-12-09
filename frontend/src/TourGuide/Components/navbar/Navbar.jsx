@@ -1,110 +1,85 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { ReactNotifications, Store } from 'react-notifications-component';
-import 'react-notifications-component/dist/theme.css';
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import axios from "axios";
 import "./navbar.scss";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { ReactNotifications, Store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
+import { Link } from "react-router-dom";
+import NotificationsBox from "../NotificationsBox";
+import { useParams } from "react-router-dom";
+import {Bell} from "lucide-react";
 
 const Navbar = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const{id}=useParams();
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const[guideLogo, setGuideLogo]=useState(null);
 
-  useEffect(() => {
-    
-      fetchNotifications();
-  
-  }, [id]);
-
-  const handleViewProfile = () => {
-    navigate(`/TourGuideProfile/${id}`);
-  };
-
-  const handleNotificationsClick = async () => {
-    if (showNotifications) {
-      Store.removeAllNotifications();
-      setShowNotifications(false);
-    } else {
-      const fetchedNotifications = await fetchNotifications();
-      setNotifications(fetchedNotifications);
-      setShowNotifications(true);
-    
-     fetchedNotifications.forEach((notification, index) => {
-    Store.addNotification({
-        id: `notification-${index}`,
-        title: "New Notification",
-        message: notification,
-        type: "info",
-        insert: "top",
-        container: "top-right", // Ensure container is top-right
-        animationIn: ["animate__animated", "animate__slideInRight"], // Sliding in from right
-        animationOut: ["animate__animated", "animate__slideOutRight"], // Sliding out to right
-        dismiss: {
-          duration: 0,
-          showIcon: true,
-          click: true,
-        },
-        content: (
-          <div
-            style={{
-              position: "absolute",
-              backgroundColor: "#f1e9ed",
-              color: "#000", // Text color
-              padding: "5px", // Smaller padding
-              fontSize: "12px", // Smaller font size
-              borderRadius: "5px",
-              borderWidth: "1px",
-              borderColor: "#46975a",
-              top: "20px",
-              right: "230px",
-              width: "400px", // Smaller width
-              
-            }}
-          >
-            {notification}
-          </div> )
-        });
-      });
-    }
-  };
-
-  const fetchNotifications = async () => {
+useEffect(() => {
+  const fetchTourguideLogo = async () => {
     try {
-      const response = await fetch(`/api/tourGuide/getNotificationsGuide/${id}`);
+      const response = await fetch(`/api/TourGuide/getGuide/${id}`);
       const data = await response.json();
-      setNotifications(data);
-      return data;
+      if (data.Logo) {
+        setGuideLogo(`/uploads/${data.Logo}`);
+      }
     } catch (error) {
-      console.error("Error fetching notifications:", error);
-      return [];
+      console.error("Error fetching seller logo:", error);
     }
   };
-
+  fetchTourguideLogo();
+}, [id]);
+  
   return (
     <>
-      <ReactNotifications /> {/* Ensure this is placed at the top */}
-      <div className="navbar-guide">
-        <div className="navbar-guide-wrapper">
-          <div className="navbar-guide-search">
-            <input type="text" placeholder="Search..." />
-            <SearchOutlinedIcon />
+     
+      <div className="navbarAdmin">
+        <div class="navbarBorder"></div>
+        <div className="wrapperAdmin">
+          <div className="topAdmin">
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <span className="logoAdmin">GUIDE DASHBOARD </span>
+            </Link>
           </div>
-          <div className="navbar-guide-items">
-            <div className="navbar-guide-item">
-              <div className="navbar-guide-icon-container" onClick={handleNotificationsClick}>
-                <NotificationsNoneOutlinedIcon className="navbar-guide-icon" />
-                <div className="navbar-guide-counter">{notifications.length}</div>
-              </div>
-            </div>
-            <div className="navbar-guide-item">
-              <img
-                onClick={handleViewProfile}
-                src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                alt="Profile"
-                className="navbar-guide-avatar"
+
+          <div className="itemsAdmin">
+             
+             
+             <div className="relative">
+              <button
+                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                className="w-10 h-10 rounded-full bg-[#FF3366] flex items-center justify-center border-2 border-white hover:border-secondary transition-colors"
+              >
+                <Bell className="w-6 h-6 text-white" />
+              </button>
+              <NotificationsBox
+                id={id}
+                isOpen={isNotificationsOpen}
+                onClose={() => setIsNotificationsOpen(false)}
               />
+            </div>
+
+         
+
+            <div className="itemAdmin">
+              {guideLogo ? (
+                <img
+                  src={guideLogo}
+                  alt="Tour Guide Logo"
+                  className="avatarAdmin w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="avatarAdmin w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                  <span className="text-gray-600 text-sm">Logo</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -114,3 +89,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

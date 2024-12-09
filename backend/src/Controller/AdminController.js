@@ -8,7 +8,6 @@ const Product = require("../Models/ProductModel");
 const Complaint = require("../Models/Complaint");
 const Itinerary = require("../Models/itineraryModel");
 const TourGuide = require("../Models/tourGuideModel");
-const Advertiser = require("../Models/advertiserModel");
 const Transportation = require("../Models/TransportationModel");
 const Seller = require("../Models/SellerModel");
 const bookedItinerary = require("../Models/touristItineraryModel");
@@ -17,6 +16,7 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const Activity = require("../Models/activityModel");
 const PromoCode = require("../Models/promoCodes");
+const CompanyProfile = require("../Models/companyProfileModel");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -27,6 +27,20 @@ const getAllAdmin = async (req, res) => {
       .status(500)
       .json({ message: "Error retrieving admins", error: error.message });
   }
+};
+const getAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "No such admin" });
+  }
+
+  const admin = await Admin.findById(id);
+
+  if (!admin) {
+    return res.status(400).json({ error: "No such admin" });
+  }
+  res.status(200).json(admin);
 };
 
 const createAdmin = async (req, res) => {
@@ -1125,29 +1139,32 @@ const markItineraryInappropriate = async (req, res) => {
       return res.status(404).json({ error: "Itinerary not found" });
     }
 
-    // const guide = itinerary.guide;
-    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
-    // guide.notifications.push(notification);
-    // await guide.save();
+    const guide = itinerary.guide;
+    console.log(`notifications are ${guide.notifications}`);
+    const notification = `Your Itinerary "${itinerary.name}"  has been flagged inappropriate`;
+    guide.notifications.push(notification);
+    console.log(`notifications are ${guide.notifications}`);
+    await guide.save();
+    console.log(`notifications are ${guide.notifications}`);
 
-    // // Check if guide information is complete
-    // if (!guide || !guide.email || !guide.name) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Guide information is incomplete." });
-    // }
+    // Check if guide information is complete
+    if (!guide || !guide.email || !guide.name) {
+      return res
+        .status(400)
+        .json({ error: "Guide information is incomplete." });
+    }
 
-    // const guideEmail = "shodimatar@gmail.com";
-    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+    const guideEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
 
-    // // Attempt to send the email
-    // try {
-    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
-    //   console.log("Email sent to:", guideEmail);
-    // } catch (emailError) {
-    //   console.error("Error sending email:", emailError);
-    //   // Continue marking the itinerary as inappropriate even if the email fails
-    // }
+    // Attempt to send the email
+    try {
+      await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
+      console.log("Email sent to:", guideEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
+    }
 
     // Send the updated itinerary as a response
     res
@@ -1175,31 +1192,6 @@ const markItineraryAppropriate = async (req, res) => {
       return res.status(404).json({ error: "Itinerary not found" });
     }
 
-    // const guide = itinerary.guide;
-    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
-    // guide.notifications.push(notification);
-    // await guide.save();
-
-    // // Check if guide information is complete
-    // if (!guide || !guide.email || !guide.name) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Guide information is incomplete." });
-    // }
-
-    // const guideEmail = "shodimatar@gmail.com";
-    // const emailMessage = `Dear ${guide.name}, we are sorry to inform you that your itinerary "${itinerary.name}" with ID ${itinerary.id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
-
-    // // Attempt to send the email
-    // try {
-    //   await sendEmail(guideEmail, "Inappropriate Itinerary", emailMessage, "");
-    //   console.log("Email sent to:", guideEmail);
-    // } catch (emailError) {
-    //   console.error("Error sending email:", emailError);
-    //   // Continue marking the itinerary as inappropriate even if the email fails
-    // }
-
-    // Send the updated itinerary as a response
     res
       .status(200)
       .json({ message: "Itinerary marked as appropriate", itinerary });
@@ -1225,35 +1217,35 @@ const markActivityInappropriate = async (req, res) => {
     if (!activity) {
       return res.status(404).json({ error: "activity not found" });
     }
-    // const advertiser = activity.Advertiser;
-    // const notification = `Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`;
-    // advertiser.notifications.push(notification);
-    // await advertiser.save();
+    const advertiser = activity.Advertiser;
+    const notification = `Your Activity "${activity.Name}"  has been flagged inappropriate`;
+    advertiser.notifications.push(notification);
+    await advertiser.save();
 
-    // if (!advertiser || !advertiser.Email || !advertiser.Name) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "advertiser information is incomplete." });
-    // }
+    if (!advertiser || !advertiser.Email || !advertiser.Name) {
+      return res
+        .status(400)
+        .json({ error: "advertiser information is incomplete." });
+    }
 
-    // const advertiserEmail = "shodimatar@gmail.com";
-    // const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
+    const advertiserEmail = "shodimatar@gmail.com";
+    const emailMessage = `Dear ${advertiser.Name}, we are sorry to inform you that your itinerary "${activity.Name}" with ID ${activity._id} has been flagged inappropriate. Please review it and if you have any inquiries, don't hesitate to contact us.`;
 
-    // // Attempt to send the email
-    // try {
-    //   await sendEmail(
-    //     advertiserEmail,
-    //     "Inappropriate Activity",
-    //     emailMessage,
-    //     ""
-    //   );
-    //   console.log("Email sent to:", advertiserEmail);
-    // } catch (emailError) {
-    //   console.error("Error sending email:", emailError);
-    //   // Continue marking the itinerary as inappropriate even if the email fails
-    // }
+    // Attempt to send the email
+    try {
+      await sendEmail(
+        advertiserEmail,
+        "Inappropriate Activity",
+        emailMessage,
+        ""
+      );
+      console.log("Email sent to:", advertiserEmail);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue marking the itinerary as inappropriate even if the email fails
+    }
 
-    // Send the updated activity as a response
+    //Send the updated activity as a response
     res
       .status(200)
       .json({ message: "activity marked as inappropriate", activity });
@@ -1468,7 +1460,7 @@ const countTotalUsers = async (req, res) => {
     // Count the total number of users in each collection
     const touristCount = await Tourist.countDocuments();
     const sellerCount = await Seller.countDocuments();
-    const advertiserCount = await Advertiser.countDocuments();
+    const advertiserCount = await Company.countDocuments();
     const tourGuideCount = await TourGuide.countDocuments();
 
     // Calculate the total users from all collections
@@ -1522,7 +1514,7 @@ const getUsersPerMonth = async (req, res) => {
     // Get counts for each type of user
     const touristsCount = await countUsersPerMonth(Tourist);
     const sellersCount = await countUsersPerMonth(Seller);
-    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const advertisersCount = await countUsersPerMonth(CompanyProfile);
     const tourGuidesCount = await countUsersPerMonth(TourGuide);
 
     // Combine results from all user types
@@ -1570,6 +1562,31 @@ const getAllPromoCodes = async (req, res) => {
   const allCodes = await PromoCode.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(allCodes);
+};
+
+const getPromoCodeByCode = async (req, res) => {
+  const { code } = req.body; // Get the promo code from the request body
+
+  try {
+    // Validate that the code exists in the request body
+    if (!code) {
+      return res.status(400).json({ error: "Promo code is required" });
+    }
+
+    // Find the promo code by the given code
+    const promo = await PromoCode.findOne({ code });
+
+    // If no promo code is found, return a 404 error
+    if (!promo) {
+      return res.status(404).json({ error: "Promo code not found" });
+    }
+
+    // If promo code is found, return it as a JSON response
+    res.status(200).json(promo);
+  } catch (error) {
+    // Handle any errors that occur during the database query
+    res.status(500).json({ error: "Failed to fetch promo code" });
+  }
 };
 
 const deletePromoCode = async (req, res) => {
@@ -1636,7 +1653,7 @@ const filterRevenueByProduct = async (req, res) => {
 
 const getNotificationsAdmin = async (req, res) => {
   try {
-    const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+    const admin = await Admin.findById("674a3e827a6dcbe8e5bd8069");
     if (!admin) {
       res.status(400).json({ message: "admin is not found" });
     } else {
@@ -1905,4 +1922,6 @@ module.exports = {
   markItineraryAppropriate,
   getMonthlyRevenue,
   filterRevenueByDate,
+  getAdmin,
+  getPromoCodeByCode,
 };

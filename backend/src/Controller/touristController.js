@@ -397,7 +397,8 @@ const buyProduct = async (req, res) => {
       return res.status(400).json({ error: "Tourist not found" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId)
+    .populate("seller");
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
@@ -415,12 +416,15 @@ const buyProduct = async (req, res) => {
     }
 
     if (product.quantity === 0) {
-      const admin = await Admin.findById("674f760ed6b7ba513c4ea84d");
+      const admin = await Admin.findById("674a3e827a6dcbe8e5bd8069");
       if (admin) {
         const notification = `Product ${product.name} is out of stock.`;
         admin.notifications.push(notification);
 
         await admin.save();
+
+        const seller= product.seller;
+        seller.notifications.push(notification);
 
         // Send email notification
         const emailResult = await sendEmail(
@@ -429,6 +433,19 @@ const buyProduct = async (req, res) => {
           notification,
           `<h1>Low Stock Alert</h1><p>${notification}</p>`
         );
+
+        const emailResult2 = await sendEmail(
+          'omarhseif04@gmail.com',
+          'Low Stock Alert',
+          notification,
+          `<h1>Low Stock Alert</h1><p>${notification}</p>`
+        );
+
+        if (!emailResult2.success) {
+          console.error('Failed to send email notification for product for seller:', product._id);
+        }
+
+
 
         if (!emailResult.success) {
           console.error('Failed to send email notification for product:', product._id);
@@ -2571,6 +2588,66 @@ const markNotificationAsRead = async (req, res) => {
   }
 };
 
+const addToWishList= async(req,res) => {
+  const{touristId,productId}=req.params;
+  try{
+    const tourist = await Tourist.findById(touristId);
+    tourist.WishList.push(productId);
+    await tourist.save();
+  
+  res.status(200).json({ message: 'Product added to wish list' });
+  }
+  catch(error){
+    res.status(500).json({ error: 'Error adding product to wish list', details: error.message });
+  }
+
+}
+
+const getWishList = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tourist = await Tourist.findById(id); // Correct method for fetching a document by ID
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+    res.status(200).json({ wishList: tourist.WishList }); // Correctly referencing wishList
+  } catch (error) {
+    res.status(500).json({ error: "Error getting wish list", details: error.message });
+  }
+};
+
+const deleteFromWishlist = async (req, res) => {
+  const{touristId,productId}=req.params;
+
+  try {
+    // Find the tourist
+    const tourist = await Tourist.findById(touristId);
+    if (!tourist) {
+      return res.status(404).json({ error: "Tourist not found" });
+    }
+
+    // Check if the wishlist item exists
+    const wishlistItemIndex = tourist.WishList.findIndex(item => item._id.toString() === productId);
+    if (wishlistItemIndex === -1) {
+      return res.status(404).json({ error: "Wishlist item not found" });
+    }
+
+    // Remove the item from the wishlist
+    tourist.WishList.splice(wishlistItemIndex, 1); // Remove the item by its index
+    await tourist.save();
+
+    res.status(200).json({ message: "Item successfully removed from wishlist" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting item from wishlist", details: error.message });
+  }
+};
+
+
+
+
+
+
+
 
 module.exports = {
   createTourist,
@@ -2658,6 +2735,9 @@ module.exports = {
   requestNotifyItinerary,
   getNotifications,
   getNotificationCount,
-  markNotificationAsRead
+  markNotificationAsRead,
+  addToWishList,
+  getWishList,
+  deleteFromWishlist,
 
 };

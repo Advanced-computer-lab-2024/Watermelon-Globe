@@ -8,6 +8,10 @@ const sellerSchema = new Schema(
       type: String,
       required: true,
     },
+    Username: {
+      type: String,
+      required: true,
+    },
     Email: {
       type: String,
       required: true,
@@ -50,6 +54,13 @@ const sellerSchema = new Schema(
         {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product',
+        },
+      ],
+      notifications: [
+        {
+          type: String,
+          required: true,
+          default: [],
         },
       ],
       

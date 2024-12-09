@@ -1,0 +1,127 @@
+.listTag {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+}
+
+.sidebarAdmin {
+  //width: 100%;
+  flex-shrink: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.listContainerTag {
+  flex: 1;
+  margin-left: 290px;
+  padding: 20px;
+  overflow: auto;
+  position: relative;
+  margin-top: 50px;
+}
+
+.cardsContainerTag {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  gap: 16px;
+
+  margin-right: 420px; /* Adjust to ensure no overlap with form */
+}
+
+.tagCard {
+  width: 100%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #f4f6f9;
+  padding: 16px;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  position: relative; /* Added to position buttons relative to the card */
+
+  &:hover {
+    background-color: #f6d8e576; /* Subtle hover effect */
+  }
+
+  .MuiTypography-root {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.1rem;
+    color: #777;
+  }
+}
+.MuiSvgIcon-root {
+  font-size: 1.5rem; /* Adjust size if needed */
+  color: #d32e65; /* Set the color for the icon */
+  margin-right: 10px; /* Add space between icon and text */
+}
+
+.cardActionsTag {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  align-items: center; /* Center vertically */
+  gap: 8px; /* Space between buttons */
+  margin-top: 10px; /* Optional spacing from the content above */
+}
+
+.cardActionsTag .MuiIconButton-root {
+  color: #4caf50; /* Default color for the icon button */
+  margin-left: 8px; /* Add space between buttons */
+  &:hover {
+    background-color: #f1f1f1; /* Hover effect for icon buttons */
+  }
+}
+
+.cardActionsTag .MuiIconButton-root.delete {
+  color: #d32e65; /* Color for delete icon */
+}
+
+.cardActionsTag .MuiIconButton-root.edit {
+  color: #91c297; /* Color for edit icon */
+}
+
+.addTagForm {
+  position: absolute;
+  top: 69px;
+  right: 20px;
+  width: 300px;
+  z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .cardsContainerTag {
+    grid-template-columns: 1fr; /* Stack cards in a single column on small screens */
+    margin-right: 0; /* Remove margin on smaller screens */
+  }
+
+  .addTagForm {
+    width: 100%;
+    right: 0;
+    top: 0;
+  }
+}
+
+.modalContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+÷ .modalContent h2 {
+  margin-bottom: 16px;
+}
+
+.modalContent .MuiTextField-root {
+  margin-bottom: 16px;
+}
+
+.modalContent button {
+  margin-top: 8px;
+}
