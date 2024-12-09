@@ -158,7 +158,6 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
 import UploadActivityPicture from "Advertiser/Components/UploadActivityImage";
-
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [profile, setProfile] = useState(null);
