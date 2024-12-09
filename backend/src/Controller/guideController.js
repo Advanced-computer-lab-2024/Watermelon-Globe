@@ -2,11 +2,13 @@ const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
 const mongoose = require("mongoose");
-const itineraryModel = require("../Models/itineraryModel.js");
+ const itineraryModel = require("../Models/itineraryModel.js");
 const tourGuide = require("../Models/tourGuideModel.js");
 const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
-const Itinerary = require("../Models/itineraryModel.js");
+ const Itinerary = require("../Models/itineraryModel.js");
+const Itinerary2=require("../Models/itineraryModel.js");
+const TourGuide = require("../Models/tourGuideModel.js");
 
 //for frontend
 const frontendGuidesTable = async (req, res) => {
@@ -460,14 +462,43 @@ const getAllItineraries = async (req, res) => {
   }
 };
 
+
+
+ const myItineraries = async(req,res)=>
+{
+  const {id} = req.params;
+  try {
+
+    // Fetch the tour guide and populate itineraries
+    const tourGuide = await TourGuide.findById(id).populate("itineraries");
+
+    if (!tourGuide) {
+      return res.status(404).json({ error: "Tour guide not found" });
+    }
+
+    // Respond with the itineraries
+    res.status(200).json({ itineraries: tourGuide.itineraries });
+  } catch (error) {
+    console.error("Error fetching itineraries:", error);
+    res.status(500).json({ error: "An error occurred while fetching itineraries" });
+  }
+}
+
+
+
+
+
+
+
 // API to fetch itineraries by guide id
 const getMyItineraries = async (req, res) => {
-  const { guideId } = req.params; // Extract the guideId from route parameters
+  const { id } = req.params; 
+  console.log(id);
 
   try {
     // Fetch itineraries where guide matches guideId
     const itineraries = await itineraryModel.Itinerary.find({
-      Advertiser: guideId,
+      guide : id,
     })
       .populate("activities") // Optionally populate activities
       .populate("tag") // Optionally populate tags
@@ -1538,6 +1569,7 @@ module.exports = {
   guideMonthlyRevenue,
   filterRevenueByDateGuide,
   uploadPicture,
+  myItineraries,
   getTotalTouristsForItinerary,
   getMonthlyTouristsForItinerary
 };
