@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Bell, X } from "lucide-react";
 
+interface Notification {
+  _id: string;
+  message: string;
+  date: string;
+  read: boolean;
+}
+
 interface NotificationsBoxProps {
   id: string | undefined;
   isOpen: boolean;
@@ -12,7 +19,7 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [notifications, setNotifications] = useState<string[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,8 +33,23 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
       }
     };
 
+    const checkUpcomingEvents = async () => {
+      try {
+        const response = await fetch("/api/Tourist/checkUpcomingEvents", {
+          method: "GET",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to check upcoming events");
+        }
+        // After checking events, fetch notifications again to get any new ones
+        await fetchNotifications();
+      } catch (error) {
+        console.error("Error checking upcoming events:", error);
+      }
+    };
+
     if (isOpen) {
-      fetchNotifications();
+      checkUpcomingEvents();
     }
   }, [id, isOpen]);
 
@@ -47,6 +69,47 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
     };
   }, [isOpen, onClose]);
 
+  const removeNotification = async (notificationId: string) => {
+    try {
+      const response = await fetch(
+        `/api/Tourist/removeNotification/${id}/${notificationId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        setNotifications(
+          notifications.filter(
+            (notification) => notification._id !== notificationId
+          )
+        );
+      } else {
+        console.error("Failed to remove notification");
+      }
+    } catch (error) {
+      console.error("Error removing notification:", error);
+    }
+  };
+
+  const removeAllNotifications = async () => {
+    try {
+      const response = await fetch(
+        `/api/Tourist/removeAllNotifications/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        setNotifications([]);
+      } else {
+        console.error("Failed to remove all notifications");
+      }
+    } catch (error) {
+      console.error("Error removing all notifications:", error);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -60,30 +123,33 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
           <Bell className="w-5 h-5 mr-2" />
           Notifications
         </div>
-        {/* <button
+        <button
           onClick={onClose}
-          className="text-white hover:bg-[#E62E5C] p-1 rounded"
+          className="text-white hover:bg-[#E62E5C] p-1 rounded flex items-center justify-center"
+          style={{ width: "auto", height: "auto" }}
         >
           <X className="w-5 h-5" />
-        </button> */}
-
-<button
-  onClick={onClose}
-  className="text-white hover:bg-[#E62E5C] p-1 rounded flex items-center justify-center"
-  style={{ width: 'auto', height: 'auto' }}
->
-  <X className="w-5 h-5" />
-</button>
-
+        </button>
       </div>
       <div className="max-h-80 overflow-y-auto">
         {notifications.length > 0 ? (
-          notifications.map((notification, index) => (
+          notifications.map((notification) => (
             <div
-              key={index}
-              className="px-4 py-3 border-b border-gray-200 hover:bg-[#FFF0F5] transition-colors duration-150 ease-in-out"
+              key={notification._id}
+              className="px-4 py-3 border-b border-gray-200 hover:bg-[#FFF0F5] transition-colors duration-150 ease-in-out flex justify-between items-start"
             >
-              {/* <p className="text-sm text-gray-800">{notification}</p> */}
+              <div>
+                <p className="text-sm text-gray-800">{notification.message}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {new Date(notification.date).toLocaleString()}
+                </p>
+              </div>
+              <button
+                onClick={() => removeNotification(notification._id)}
+                className="text-gray-500 hover:text-red-500 transition-colors duration-150 ease-in-out"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
           ))
         ) : (
@@ -93,9 +159,18 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
         )}
       </div>
       {notifications.length > 0 && (
-        <div className="py-2 px-4 bg-gray-50 rounded-b-lg">
-          <button className="text-sm text-green-600 hover:text-green-800 font-medium">
+        <div className="py-2 px-4 bg-gray-50 rounded-b-lg flex justify-between items-center">
+          <button
+            className="text-sm text-green-600 hover:text-green-800 font-medium"
+            onClick={() => removeAllNotifications()}
+          >
             Mark all as read
+          </button>
+          <button
+            className="text-sm text-red-600 hover:text-red-800 font-medium"
+            onClick={() => removeAllNotifications()}
+          >
+            Remove all
           </button>
         </div>
       )}
