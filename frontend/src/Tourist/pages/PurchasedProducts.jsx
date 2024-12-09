@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingBag, LogOut, Star, Search, RefreshCw, Eye, MessageSquare, ChevronDown, ChevronUp, X } from 'lucide-react';
+import TouristNavbar from "../Components/TouristNavBar";
 
 const StarRating = ({ rating, onRate }) => {
   return (
@@ -9,11 +10,10 @@ const StarRating = ({ rating, onRate }) => {
         <Star
           key={star}
           size={16}
-          className={`cursor-pointer ${
-            star <= rating 
+          className={`cursor-pointer ${star <= rating
               ? 'fill-yellow-400 text-yellow-400'
               : 'text-yellow-300'
-          } hover:text-yellow-400`}
+            } hover:text-yellow-400`}
           onClick={() => onRate(star)}
         />
       ))}
@@ -26,7 +26,7 @@ const ViewReviewsModal = ({ productId, reviews = [], onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4 text-primary">Reviews for Product {productId}</h2>
-        
+
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
             <div key={index} className="mb-4 pb-4 border-b border-gray-200">
@@ -37,7 +37,7 @@ const ViewReviewsModal = ({ productId, reviews = [], onClose }) => {
         ) : (
           <p className="text-gray-500">No reviews yet for this product.</p>
         )}
-        
+
         <button
           onClick={onClose}
           className="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-hover transition-colors"
@@ -72,7 +72,7 @@ const PurchasedProducts = () => {
     try {
       const response = await fetch(`/api/Tourist/getPurchasedProducts/${id}`);
       const productIds = await response.json();
-      
+
       const productDetails = await Promise.all(
         productIds.map(productId =>
           fetch('/api/Seller/getProductById', {
@@ -100,13 +100,13 @@ const PurchasedProducts = () => {
       });
       const data = await response.json();
       if (data.message === 'Rating updated successfully') {
-        setProducts(prevProducts => 
-          prevProducts.map(product => 
+        setProducts(prevProducts =>
+          prevProducts.map(product =>
             product._id === productId ? { ...product, rating } : product
           )
         );
-        setFilteredProducts(prevProducts => 
-          prevProducts.map(product => 
+        setFilteredProducts(prevProducts =>
+          prevProducts.map(product =>
             product._id === productId ? { ...product, rating } : product
           )
         );
@@ -134,7 +134,7 @@ const PurchasedProducts = () => {
       console.error('Error adding review:', error);
     }
   };
-  
+
   const handleViewReviews = async (productId) => {
     try {
       const response = await fetch(`/api/Seller/getProductReviews/${productId}`);
@@ -150,9 +150,9 @@ const PurchasedProducts = () => {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-  
-    const filtered = products.filter(product => 
-      (product.name && product.name.toLowerCase().includes(term)) || 
+
+    const filtered = products.filter(product =>
+      (product.name && product.name.toLowerCase().includes(term)) ||
       (product.description && product.description.toLowerCase().includes(term))
     );
     setFilteredProducts(filtered);
@@ -166,23 +166,7 @@ const PurchasedProducts = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation Bar */}
-      <div className="bg-secondary py-4 mb-8">
-        <div className="max-w-screen-xl mx-auto flex justify-between items-center px-4">
-          <span className="text-white text-2xl font-bold">Watermelon Globe</span>
-          <div className="flex gap-6">
-            <Link to={`/ProductTourist/${id}`} className="text-white flex items-center gap-2">
-              <ShoppingBag size={20} />
-              Products
-            </Link>
-            <Link to="/signout" className="text-white flex items-center gap-2">
-              <LogOut size={20} />
-              Sign Out
-            </Link>
-          </div>
-        </div>
-      </div>
-
+      <TouristNavbar id={id} />
       {/* Main Content */}
       <div className="max-w-screen-xl mx-auto px-4">
         <h1 className="text-center text-3xl font-bold text-secondary mb-8">Your Purchased Products</h1>
@@ -252,7 +236,7 @@ const PurchasedProducts = () => {
                     </span>
                     <span className="text-xs text-grayText">Rating: {product.rating || 'N/A'}</span>
                   </div>
-                  <StarRating 
+                  <StarRating
                     rating={product.rating || 0}
                     onRate={(rating) => handleRateProduct(product._id, rating)}
                   />
