@@ -65,7 +65,6 @@ const {
   getMonthlyRevenue,
   filterRevenueByDate,
   getAdmin,
-  getPromoCodeByCode,
 } = require("../Controller/AdminController");
 
 router.get("/GetAllAdmin", getAllAdmin);

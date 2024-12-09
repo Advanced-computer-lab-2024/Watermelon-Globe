@@ -1,9 +1,6 @@
 const ActivityModel = require("../Models/activityModel.js");
 const Tag = require("../Models/PreferenceTagModel.js");
 const CompanyProfile = require("../Models/companyProfileModel");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 
 const createTags = async (req, res) => {
   const tags = [
@@ -98,7 +95,6 @@ const createActivity = async (req, res) => {
       bookingOpen,
       Advertiser,
       tags,
-      Category
     } = req.body;
 
     if (!Advertiser) {
@@ -126,7 +122,6 @@ const createActivity = async (req, res) => {
       Discount,
       bookingOpen,
       Advertiser,
-      Category,
       tags: tagDocuments.map((tag) => tag._id),
     });
 
@@ -409,100 +404,6 @@ const addComment = async (req, res) => {
   }
 };
 
-// GET: Fetch activities by Advertiser ID
-const getActivitiesByAdvertiserId = async (req, res) => {
-  const { advertiserId } = req.params; // Extract Advertiser ID from the URL
-
-  try {
-    // Find activities where the Advertiser matches the provided ID
-    const activities = await ActivityModel.find({ Advertiser: advertiserId })
-      .populate("Category", "name") // Populate the Category field if needed
-      .populate("tags", "type") // Populate the tags field
-      .populate("Advertiser", "Name Email"); // Populate Advertiser details
-
-    // If no activities are found
-    if (!activities || activities.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No activities found for this advertiser" });
-    }
-
-    // Return the found activities
-    res.status(200).json(activities);
-  } catch (error) {
-    console.error("Error fetching activities by Advertiser ID:", error.message);
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Ensure this directory exists
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Append the file extension
-  },
-});
-
-const upload = multer({ storage: storage });
-const uploadMiddleware = upload.single("picture");
-
-const uploadPicture = async (req, res) => {
-  uploadMiddleware(req, res, async function (err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: "Multer error: " + err.message });
-    } else if (err) {
-      return res.status(500).json({ error: "Unknown error: " + err.message });
-    }
-
-    const { id } = req.query;
-
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    try {
-      const Activity = await ActivityModel.findById(id);
-
-      if (!Activity) {
-        // Delete the uploaded file if product not found
-        fs.unlinkSync(req.file.path);
-        return res.status(404).json({ error: "No activity found with this ID" });
-      }
-
-      // Delete the old picture if it exists
-      if (Activity.picture) {
-        const oldPicturePath = path.join(
-          __dirname,
-          "..",
-          "uploads",
-          Activity.picture
-        );
-        if (fs.existsSync(oldPicturePath)) {
-          fs.unlinkSync(oldPicturePath);
-        }
-      }
-
-      // Update the activity with the new picture filename
-      Activity.picture = req.file.filename;
-      await Activity.save();
-
-      res
-        .status(200)
-        .json({ message: "Activity picture updated successfully", Activity });
-        return;
-    } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred while updating the activity picture",
-        });
-    }
-    console.log("file uploaded: ",req.file);
-  });
-};
-
 module.exports = {
   createTags,
   getTags,
@@ -519,6 +420,4 @@ module.exports = {
   getActivitiesNew,
   addComment,
   getAllTags,
-  getActivitiesByAdvertiserId,
-  uploadPicture
 };

@@ -91,7 +91,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const SellerLogo = ({ id,onClose }) => {
+const SellerLogo = ({ id }) => {
   const [Logo, setLogo] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -133,7 +133,7 @@ const mockFile = new File(["test"], "test.txt", { type: "text/plain" });
 
 console.log("Logo before sending:", Logo);
 
-formData.append("Logo", Logo);
+formData.append("Logo", mockFile);
     
     // Debugging FormData
     console.log("FormData content:");
@@ -150,9 +150,7 @@ formData.append("Logo", Logo);
       if (response.ok) {
         const data = await response.json();
         alert("Logo uploaded successfully");
-         setPreview(`/uploads/${data.Logo}`); // Update preview after upload
-        //setPreview(`${window.location.origin}/uploads/${data.Logo}`);
-
+        setPreview(`/uploads/${data.Logo}`); // Update preview after upload
       } else {
         alert("Failed to upload logo.");
       }
@@ -189,20 +187,9 @@ formData.append("Logo", Logo);
         )}
       </div>
       <input type="file" accept="image/*" onChange={handleLogoChange} />
-      <div style={{display:"flex" }}>
-     <button style={{marginRight:10}}
-        className="flex items-center px-4 py-2 bg-[#91c297] hover:bg-[#7A9F77] text-white rounded mt-2"
-        onClick={handleLogoUpload}
-      >
-        Upload 
+      <button style={buttonStyle} onClick={handleLogoUpload}>
+        Upload Photo
       </button>
-      <button style={{marginRight:10}}
-        className="flex items-center px-4 py-2 bg-[#e89bb5] hover:bg-[#d787a1] text-white rounded mt-2"
-        onClick={onClose} // Trigger the onClose function when clicked
-      >
-        Cancel
-      </button>
-      </div>
     </div>
   );
 };

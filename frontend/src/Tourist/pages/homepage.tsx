@@ -146,15 +146,15 @@ export default function DraftHomePage() {
               {[
                 {
                   name: "Bali, Indonesia",
-                  image: "https://www.outlooktravelmag.com/media/bali-1-1582544096.profileImage.2x-1536x884.webp",
+                  image: "/placeholder.svg?height=200&width=300",
                 },
                 {
                   name: "Paris, France",
-                  image: "https://media.timeout.com/images/106181719/750/562/image.jpg",
+                  image: "/placeholder.svg?height=200&width=300",
                 },
                 {
                   name: "Santorini, Greece",
-                  image: "https://lp-cms-production.imgix.net/2024-06/iStock-166471469.jpg",
+                  image: "/placeholder.svg?height=200&width=300",
                 },
               ].map((destination, index) => (
                 <Card key={index} className="overflow-hidden">

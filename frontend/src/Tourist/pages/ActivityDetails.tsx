@@ -3,20 +3,16 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import PaymentOptions2 from "../Components/PaymentOptions2";
 import {
-  FaCalendar,
-  FaTags,
-  FaDollarSign,
-  FaMapMarkerAlt,
-  FaClock,
-  FaTag,
-  FaStar,
-  FaShare,
-  FaEnvelope,
-  FaBookmark,
-} from "react-icons/fa";
-import TouristNavbar from "../Components/TouristNavBar";
+  MapPin,
+  Calendar,
+  Clock,
+  Tag,
+  Star,
+  Share2,
+  Mail,
+  Bookmark,
+} from "lucide-react";
 import WalletComponent from "../Components/Wallet";
-import Alert from "@mui/material/Alert";
 
 interface Tag {
   _id: string;
@@ -63,16 +59,8 @@ interface Activity {
   comments: Comment[];
 }
 
-interface PromoCode {
-  code: string;
-  discountValue: number;
-}
-
 const ActivityDetails: React.FC = () => {
-  const params = useParams();
-  const activityId = params.activityId as string;
-  const id = params.id as string;
-
+  const { activityId, id } = useParams<{ activityId: string; id: string }>();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,46 +69,14 @@ const ActivityDetails: React.FC = () => {
   >(null);
   const [bookingInProgress, setBookingInProgress] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [promoCode, setPromoCode] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
-  const [total, setTotal] = useState(0);
 
-  const handleApplyPromo = async () => {
-    try {
-      // Send a GET request to your API to fetch the promo codes
-      const response = await axios.get<PromoCode[]>("/api/Admin/getPromoCodes"); // Replace with your actual backend API URL
-
-      // Find the promo code that matches the entered promo code
-      const validPromo = response.data.find((promo) => {
-        console.log(promo); // Log the promo object for each iteration
-        return promo.code === promoCode; // Check if the promo code matches
-      });
-
-      console.log(validPromo);
-      // If promo code is valid
-      if (validPromo) {
-        setPromoApplied(true);
-        const discountAmount = (total * validPromo.discountValue) / 100;
-        setTotal(total - discountAmount);
-        setInvalidPromo(false); // Reset any error message if the promo code is valid
-      } else {
-        setInvalidPromo(true); // Set error state if promo code is invalid
-      }
-    } catch (error) {
-      console.error("Error checking promo code", error);
-      setInvalidPromo(true); // Handle any errors during the API call
-    }
-  };
-
-
+  useEffect(() => {
     const fetchActivity = async () => {
       try {
         const response = await axios.get(
           `/api/Activities/getActivityById/${activityId}`
         );
         setActivity(response.data);
-        setTotal(response.data.Price);
       } catch (err) {
         setError("Failed to load activity details. Please try again.");
       } finally {
@@ -128,6 +84,8 @@ const ActivityDetails: React.FC = () => {
       }
     };
 
+    fetchActivity();
+  }, [activityId]);
 
   useEffect(() => {
     const checkBookmarkStatus = async () => {
@@ -141,9 +99,8 @@ const ActivityDetails: React.FC = () => {
       }
     };
 
-    fetchActivity();
     checkBookmarkStatus();
-  }, [activityId, id]);
+  }, [id, activityId]);
 
   const handleShareLink = () => {
     const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
@@ -197,8 +154,7 @@ const ActivityDetails: React.FC = () => {
         const walletResponse = await axios.put(
           `/api/Tourist/updateWallet/${id}`,
           {
-            //amount: -activity.Price,
-            amount: -total,
+            amount: -activity.Price,
           }
         );
 
@@ -212,15 +168,13 @@ const ActivityDetails: React.FC = () => {
           });
 
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-            //amountPaid: activity.Price,
-            amountPaid: total,
+            amountPaid: activity.Price,
           });
 
           alert("Activity booked successfully!");
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
-            // amount: +activity.Price,
-            amount: total,
+            amount: +activity.Price,
           });
           alert("Insufficient wallet balance.");
         }
@@ -234,8 +188,7 @@ const ActivityDetails: React.FC = () => {
         });
 
         await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-          // amountPaid: activity.Price,
-          amountPaid: total,
+          amountPaid: activity.Price,
         });
 
         alert("Activity booked successfully!");
@@ -273,181 +226,62 @@ const ActivityDetails: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
-      <TouristNavbar id={id} />
-      <p>hello</p>
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-primary p-5 relative">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white rounded-full p-2">
-                <FaDollarSign className="h-16 w-16 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-3xl font-bold text-white">
-                  {activity.Name}
-                </h2>
-                <p className="text-white opacity-75">Activity Details</p>
-              </div>
-            </div>
-          </div>
+    <div className="container mx-auto px-6 py-8 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">{activity.Name}</h1>
 
-          <div className="p-6 space-y-6">
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h3 className="text-xl font-semibold text-secondary mb-4">
-                Activity Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <p className="flex items-center text-gray-700">
-                    <FaMapMarkerAlt className="mr-2 text-primary" />
-                    <span>{`Lat: ${activity.Location.coordinates[1]}, Long: ${activity.Location.coordinates[0]}`}</span>
-                  </p>
-                  <p className="flex items-center text-gray-700">
-                    <FaCalendar className="mr-2 text-primary" />
-                    <span>{new Date(activity.Date).toLocaleDateString()}</span>
-                  </p>
-                  <p className="flex items-center text-gray-700">
-                    <FaClock className="mr-2 text-primary" />
-                    <span>{activity.Time}</span>
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <p className="flex items-center text-gray-700">
-                    <FaStar className="mr-2 text-primary" />
-                    <span>
-                      {activity.rating
-                        ? `${activity.rating.toFixed(1)} / 5 (${
-                            activity.noOfRatings
-                          } ratings)`
-                        : "No Ratings Yet"}
-                    </span>
-                  </p>
-                  <p className="flex items-center text-gray-700">
-                    <FaTag className="mr-2 text-primary" />
-                    <span>
-                      {activity.tags.map((tag) => tag.name).join(", ") ||
-                        "No Tags"}
-                    </span>
-                  </p>
-                  <p className="flex items-center text-gray-700">
-                    <FaDollarSign className="mr-2 text-primary" />
-                    <span className="font-medium">
-                      ${total}
-                      {activity.Discount > 0 && (
-                        <span className="text-secondary ml-2">{`(${activity.Discount}% Off)`}</span>
-                      )}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h2 className="text-xl font-semibold text-secondary mb-4">
-                Apply Promo
-              </h2>
-
-              {/* Promo code input */}
-              <div className="flex flex-col mb-4">
-                <label
-                  htmlFor="promoCode"
-                  className="text-lg font-semibold mb-2"
-                >
-                  Enter Promo Code
-                </label>
-                <input
-                  type="text"
-                  id="promoCode"
-                  placeholder="Enter promo code"
-                  className="p-2 border border-gray-300 rounded-lg"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)} // Assuming you have a state for promoCode
-                />
-              </div>
-
-              {/* Apply button */}
-              <button
-                onClick={handleApplyPromo} // Function to handle promo code application
-                className="w-full bg-primary text-white p-2 rounded-lg font-semibold hover:bg-primary-dark transition duration-300"
-              >
-                Apply Promo
-              </button>
-
-              {/* Optionally, show a message if the promo code is successfully applied */}
-              {promoApplied && (
-                <Alert severity="success" style={{ marginTop: "12px" }}>
-                  Promo Code applied successfully
-                </Alert>
-              )}
-            </div>
-
-            {/* Show error message if promo code is invalid */}
-            {invalidPromo && (
-              <Alert severity="error" style={{ marginTop: "12px" }}>
-                Invalid Promo Code
-              </Alert>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="space-y-4">
+          <p className="flex items-center text-gray-700 space-x-2">
+            <MapPin className="text-primary-500" />
+            <span>{`Latitude: ${activity.Location.coordinates[1]}, Longitude: ${activity.Location.coordinates[0]}`}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Calendar className="text-primary-500" />
+            <span>{new Date(activity.Date).toLocaleDateString()}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Clock className="text-primary-500" />
+            <span>{activity.Time}</span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Star className="text-yellow-500" />
+            <span>
+              {activity.rating
+                ? `${activity.rating.toFixed(1)} / 5 (${
+                    activity.noOfRatings
+                  } ratings)`
+                : "No Ratings Yet"}
+            </span>
+          </p>
+          <p className="flex items-center text-gray-700 space-x-2">
+            <Tag className="text-primary-500" />
+            <span>
+              {activity.tags.map((tag) => tag.name).join(", ") || "No Tags"}
+            </span>
+          </p>
+          <p className="text-gray-800 font-medium">
+            <strong>Price:</strong> ${activity.Price}
+            {activity.Discount > 0 && (
+              <span className="text-green-500 ml-2">{`(${activity.Discount}% Off)`}</span>
             )}
+          </p>
+        </div>
 
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h3 className="text-xl font-semibold text-secondary mb-4">
-                Payment Options
-              </h3>
-              <PaymentOptions2
-                paymentMethod={paymentMethod}
-                onPaymentMethodSelection={setPaymentMethod}
-              />
-            </div>
-
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h3 className="text-xl font-semibold text-secondary mb-4">
-                Actions
-              </h3>
-              <div className="space-y-4">
-                <button
-                  onClick={handleBookmark}
-                  className={`flex items-center justify-center px-4 py-2 text-sm font-semibold text-white rounded-lg ${
-                    isBookmarked
-                      ? "bg-primary hover:bg-hover"
-                      : "bg-secondary hover:bg-secondaryHover "
-                  }`}
-                  aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-                >
-                  <FaBookmark className="mr-2" />
-                  {isBookmarked ? "Bookmarked" : "Bookmark"}
-                </button>
-                <div className="flex justify-between">
-                  <button
-                    className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
-                    onClick={handleShareLink}
-                  >
-                    <FaShare className="mr-2 inline" />
-                    Share Link
-                  </button>
-                  <button
-                    className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
-                    onClick={handleShareEmail}
-                  >
-                    <FaEnvelope className="mr-2 inline" />
-                    Share via Email
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <button
-                onClick={handleBooking}
-                className={`w-full px-4 py-2 text-white rounded-lg ${
-                  bookingInProgress
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-primary hover:bg-hover"
-                }`}
-                disabled={bookingInProgress}
-              >
-                {bookingInProgress ? "Booking..." : "Book Activity"}
-              </button>
-            </div>
-          </div>
+        <div className="space-y-4">
+          <button
+            onClick={handleShareLink}
+            className="flex items-center justify-center w-full px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none"
+          >
+            <Share2 className="mr-2" />
+            Share Link
+          </button>
+          <button
+            onClick={handleShareEmail}
+            className="flex items-center justify-center w-full px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none"
+          >
+            <Mail className="mr-2" />
+            Share via Email
+          </button>
         </div>
       </div>
 
@@ -466,7 +300,7 @@ const ActivityDetails: React.FC = () => {
           }`}
           aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
         >
-          <FaBookmark className="mr-2 inline-block" size={20} />
+          <Bookmark className="mr-2 inline-block" size={20} />
           {isBookmarked ? "Bookmarked" : "Bookmark"}
         </button>
         <button

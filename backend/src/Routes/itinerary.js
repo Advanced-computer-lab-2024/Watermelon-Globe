@@ -12,7 +12,6 @@ router.put("/updateItinerary/:id", guideController.updateItinerary); // Update a
 // router.delete("/deleteItinerary/:id", guideController.deleteItineraryById); // Delete an itinerary
 router.get("/getMyItineraries/:guideID", guideController.getMyItineraries);
 router.delete("/deleteItinerary2/:id", guideController.deleteItinerary2);
-router.put("/uploadPicture", guideController.uploadPicture);
 
 
 

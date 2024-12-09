@@ -18,24 +18,8 @@ import { Bell } from "lucide-react";
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [sellerLogo, setSellerLogo] = useState(null);
   const { id } = useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchSellerLogo = async () => {
-      try {
-        const response = await fetch(`/api/Seller/GetSeller/${id}`);
-        const data = await response.json();
-        if (data.Logo) {
-          setSellerLogo(`/uploads/${data.Logo}`);
-        }
-      } catch (error) {
-        console.error("Error fetching seller logo:", error);
-      }
-    };
-    fetchSellerLogo();
-  }, [id]);
 
   return (
     <>
@@ -64,17 +48,11 @@ const Navbar = () => {
             </div>
 
             <div className="itemAdmin">
-              {sellerLogo ? (
-                <img
-                  src={sellerLogo}
-                  alt="Seller Logo"
-                  className="avatarAdmin w-10 h-10 rounded-full object-cover"
-                />
-              ) : (
-                <div className="avatarAdmin w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                  <span className="text-gray-600 text-sm">Logo</span>
-                </div>
-              )}
+              <img
+                src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                alt=""
+                className="avatarAdmin"
+              />
             </div>
           </div>
         </div>

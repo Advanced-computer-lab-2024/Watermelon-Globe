@@ -1,12 +1,7 @@
-const multer = require("multer");
-const path = require("path");
-const fs = require('fs');
 const mongoose = require("mongoose");
 const itineraryModel = require("../Models/itineraryModel.js");
 const tourGuide = require("../Models/tourGuideModel.js");
-const ChildItinerary = require("../Models/touristItineraryModel.js");
-const Tourist = require('../Models/touristModel'); 
-const Itinerary = require("../Models/itineraryModel.js");
+const Tourist = require("../Models/touristModel");
 
 //for frontend
 const frontendGuidesTable = async (req, res) => {
@@ -92,42 +87,20 @@ const createTourGuide = async (req, res) => {
   }
 };
 
-// const getTourGuide = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     // Query the database based on search criteria
-//     const retrievedTourGuide = await tourGuide
-//       .findById(id)
-//       .populate("itineraries");
-
-//     // Check if results are found
-//     if (retrievedTourGuide.length == 0) {
-//       return res
-//         .status(404)
-//         .json({ message: "No tour guide found matching the id" });
-//     }
-
-//     res.status(200).json(retrievedTourGuide);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// };
-
 const getTourGuide = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Query the database based on ID
+    // Query the database based on search criteria
     const retrievedTourGuide = await tourGuide
       .findById(id)
       .populate("itineraries");
 
-    // Check if the document is found
-    if (!retrievedTourGuide) {
+    // Check if results are found
+    if (retrievedTourGuide.length == 0) {
       return res
         .status(404)
-        .json({ message: "No tour guide found matching the ID" });
+        .json({ message: "No tour guide found matching the id" });
     }
 
     res.status(200).json(retrievedTourGuide);
@@ -216,194 +189,49 @@ const updateTourGuideNew = async (req, res) => {
   }
 };
 
-// const createItinerary = async (req, res) => {
-//   const { id } = req.params;
-//   const {
-//     name,
-//     activities,
-//     tag,
-//     locations,
-//     timeline,
-//     languageOfTour,
-//     priceOfTour,
-//     availableDates,
-//     availableTimes,
-//     accessibility,
-//     pickupDropoffLocations,
-//     bookings,
-//   } = req.body;
-
-//   try {
-//     const tourguide = await tourGuide.findById(id);
-
-//     if (!tourguide) {
-//       return res.status(404).json({ error: "Tour guide not found" });
-//     }
-
-//     const itineraryData = {
-//       name,
-//       activities: Array.isArray(activities) ? activities : JSON.parse(activities),
-//       tag: Array.isArray(tag) ? tag : JSON.parse(tag),
-//       locations,
-//       timeline,
-//       languageOfTour,
-//       priceOfTour,
-//       availableDates: Array.isArray(availableDates) ? availableDates : JSON.parse(availableDates),
-//       availableTimes: Array.isArray(availableTimes) ? availableTimes : JSON.parse(availableTimes),
-//       accessibility,
-//       pickupDropoffLocations: Array.isArray(pickupDropoffLocations) ? pickupDropoffLocations : JSON.parse(pickupDropoffLocations),
-//       bookings,
-//       guide: id,
-//     };
-
-//     // If a file was uploaded, add the file path to the itinerary data
-//     if (req.file) {
-//       itineraryData.picture = req.file.path;
-//     }
-
-//     const itinerary = await itineraryModel.Itinerary.create(itineraryData);
-    
-//     tourguide.itineraries.push(itinerary._id);
-//     await tourguide.save();
-
-//     res.status(200).json(itinerary);
-//   } catch (error) {
-//     console.error("Error creating itinerary:", error);
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-
-//itinerary photo
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadDir = path.join(__dirname, '..', 'uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ 
-  storage: storage,
-  fileFilter: function (req, file, cb) {
-    const filetypes = /jpeg|jpg|png/;
-    const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
-    cb(new Error("Error: File upload only supports the following filetypes - " + filetypes));
-  },
-  limits: {
-    fileSize: 1024 * 1024 // 1MB
-  }
-});
-
-const uploadMiddleware = upload.single('picture');
-
-const uploadPicture = async (req, res) => {
-  uploadMiddleware(req, res, async function (err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: "Multer error: " + err.message });
-    } else if (err) {
-      return res.status(500).json({ error: "Unknown error: " + err.message });
-    }
-
-    const { id } = req.query;
-
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    try {
-      const itinerary = await Itinerary.findById(id);
-
-      if (!itinerary) {
-        fs.unlinkSync(req.file.path);
-        return res.status(404).json({ error: "No itinerary found with this ID" });
-      }
-
-      if (itinerary.picture) {
-        const oldPicturePath = path.join(__dirname, '..', 'uploads', itinerary.picture);
-        if (fs.existsSync(oldPicturePath)) {
-          fs.unlinkSync(oldPicturePath);
-        }
-      }
-
-      itinerary.picture = req.file.filename;
-      await itinerary.save();
-
-      res.status(200).json({ 
-        message: "Itinerary picture updated successfully", 
-        itinerary: {
-          id: itinerary._id,
-          name: itinerary.name,
-          picture: itinerary.picture
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      if (req.file) {
-        fs.unlinkSync(req.file.path);
-      }
-      res.status(500).json({ error: "An error occurred while updating the itinerary picture" });
-    }
-  });
-};
-
 const createItinerary = async (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    activities,
+    tag,
+    locations,
+    timeline,
+    languageOfTour,
+    priceOfTour,
+    availableDates,
+    availableTimes,
+    accessibility,
+    pickupDropoffLocations,
+    bookings,
+    rating,
+  } = req.body;
+  console.log(req.body);
+  console.log(tag);
   try {
-    const { id } = req.params;  // Tour guide ID from URL params
-    const {
-      name, activities, tag, locations, timeline,
-      languageOfTour, priceOfTour, availableDates,
-      availableTimes, accessibility, pickupDropoffLocations, bookings
-    } = req.body;
+    const tourguide = await tourGuide.findById(id);
 
-    // Find the tour guide
-    const TourGuide = await tourGuide.findById(id);
-    if (!TourGuide) {
-      return res.status(404).json({ error: "Tour guide not found" });
-    }
-
-    const itineraryData = {
+    const itinerary = await itineraryModel.Itinerary.create({
       name,
-      activities: Array.isArray(activities) ? activities : JSON.parse(activities),
-      tag: Array.isArray(tag) ? tag : JSON.parse(tag),
+      activities,
+      tag,
       locations,
       timeline,
       languageOfTour,
       priceOfTour,
-      availableDates: Array.isArray(availableDates) ? availableDates : JSON.parse(availableDates),
-      availableTimes: Array.isArray(availableTimes) ? availableTimes : JSON.parse(availableTimes),
+      availableDates,
+      availableTimes,
       accessibility,
-      pickupDropoffLocations: Array.isArray(pickupDropoffLocations)
-        ? pickupDropoffLocations : JSON.parse(pickupDropoffLocations),
+      pickupDropoffLocations,
       bookings,
-      guide: id
-    };
+      guide: id,
+    });
+    tourguide.itineraries.push(itinerary._id);
+    await tourguide.save();
 
-    if (req.file) {
-      itineraryData.picture = req.file.filename;
-    }
-
-    // Create the itinerary
-    const itinerary = await itineraryModel.Itinerary.create(itineraryData);
-
-    // Update the tour guide's itineraries
-    TourGuide.itineraries.push(itinerary._id);
-    await TourGuide.save();
-
-    res.status(201).json(itinerary);
+    res.status(200).json(itinerary);
   } catch (error) {
-    console.error("Error creating itinerary:", error);
-    res.status(500).json({ error: "Failed to create itinerary" });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -1122,6 +950,7 @@ const getNotificationsGuide = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const getAllItinerariesByGuide = async (req, res) => {
   try {
     const { guideId } = req.params; // Assuming the guideId is passed as a parameter
@@ -1521,6 +1350,8 @@ const getMonthlyTouristsForItinerary = async (req, res) => {
 
 
 
+=======
+>>>>>>> parent of 784f19bce (Merge branch 'malak-trial' of https://github.com/Advanced-computer-lab-2024/Watermelon-Globe into malak-trial)
 module.exports = {
   deleteTourGuide,
 };
@@ -1555,6 +1386,7 @@ module.exports = {
   getNotificationsGuide,
   frontendGuidesTable,
   frontendPendingGuidesTable,
+<<<<<<< HEAD
   getAllItinerariesByGuide,
   ItineraryRevenue,
   guideMonthlyRevenue,
@@ -1562,4 +1394,6 @@ module.exports = {
   uploadPicture,
   getTotalTouristsForItinerary,
   getMonthlyTouristsForItinerary
+=======
+>>>>>>> parent of 784f19bce (Merge branch 'malak-trial' of https://github.com/Advanced-computer-lab-2024/Watermelon-Globe into malak-trial)
 };

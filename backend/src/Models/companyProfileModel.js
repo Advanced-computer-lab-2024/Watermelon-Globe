@@ -7,10 +7,6 @@ const companyProfileSchema = new Schema(
       type: String,
       required: true,
     },
-    Username: {
-      type: String,
-      required: true,
-    },
     Email: {
       type: String,
       required: true,
@@ -34,7 +30,7 @@ const companyProfileSchema = new Schema(
     deletionRequest: {
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
-      default: "Pending",
+      default: null,
     },
     status: {
       type: String,

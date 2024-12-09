@@ -6,9 +6,6 @@ import { Bell } from "lucide-react";
 import NotificationsBox from "./NotificationsBox";
 import { FaShoppingCart, FaWallet } from 'react-icons/fa'
 import WalletComponent from '../Components/Wallet';
-import Modal from "../Components/Modal";
-import { Button } from "../Components/ui/button";
-
 
 interface TouristNavbarProps {
   id: string | undefined;
@@ -21,16 +18,6 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [showHowToUseModal, setShowHowToUseModal] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const steps = [
-    "1- Use the 'Discover' button to find amazing destinations.",
-    "2- Search for hotels, flights, or guides using the top navigation.",
-    "3- Click 'Explore' to dive deeper into your favorite spots.",
-    "4- Sign up to create personalized travel plans and access special offers.",
-    "5- Stay connected through our social media channels for updates!",
-  ];
 
   const handleSignOut = () => {
     navigate("/");
@@ -54,27 +41,9 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
 const openWallet = () => {
   setIsWalletOpen(true);
 };
-
-const closeWallet = () => {
-  setIsWalletOpen(false);
-};
-
-const handleNextStep = () => {
-  if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
-};
-
-const handlePreviousStep = () => {
-  if (currentStep > 0) setCurrentStep(currentStep - 1);
-};
-
-const handleOpenHowToUse = () => {
-  setCurrentStep(0); // Reset to the first step
-  setShowHowToUseModal(true);
-};
-
-const closeHowToUseModal = () => {
-  setShowHowToUseModal(false);
-};
+  const closeWallet = () => {
+    setIsWalletOpen(false);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -159,19 +128,10 @@ const closeHowToUseModal = () => {
             Purchased Products
             <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
           </Link>
-          <button
-            onClick={handleOpenHowToUse}
-            className="text-secondary hover:text-secondaryHover relative group no-underline"
-          >
-            How to Use
-            <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-          </button>
-
         </div>
 
         {/* Right Section - Actions */}
         <div className="flex items-center justify-end space-x-3 relative w-1/3" ref={dropdownRef}>
-
           <button
             onClick={() => handleNavigation(`/shoppingCart/${id}`)}
             className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
@@ -276,48 +236,6 @@ const closeHowToUseModal = () => {
       </nav>
       {isWalletOpen && (
         <WalletComponent touristId={id} onClose={closeWallet} />
-      )}
-
-      {/* How to Use Modal */}
-      {showHowToUseModal && (
-        <Modal onClose={closeHowToUseModal}>
-          <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg relative">
-            <h2 className="text-2xl font-bold text-center text-primary mb-4">
-              How to Use WaterMelon Globe
-            </h2>
-            <div className="text-gray-600 text-center mb-6">
-              <p>{steps[currentStep]}</p>
-            </div>
-            <div className="flex justify-between mt-4">
-              <Button
-                onClick={handlePreviousStep}
-                disabled={currentStep === 0}
-                className={`py-2 px-4 rounded-lg font-semibold transition ${
-                  currentStep === 0
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-secondary text-white hover:bg-primary"
-                }`}
-              >
-                Back
-              </Button>
-              {currentStep === steps.length - 1 ? (
-                <Button
-                  onClick={closeHowToUseModal}
-                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
-                >
-                  Finish
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleNextStep}
-                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
-                >
-                  Next
-                </Button>
-              )}
-            </div>
-          </div>
-        </Modal>
       )}
     </header>
   );

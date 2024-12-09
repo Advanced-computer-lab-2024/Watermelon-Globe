@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { TextField, Checkbox, FormControlLabel, Button, Grid, InputAdornment, Select, MenuItem, FormControl, InputLabel, Tabs, Tab } from '@mui/material';
 import './ActivityForm.css';
-import Sidebar from './sidebar/Sidebar';
-import Navbar from './AdvertiserNavbar';
 
-const ActivityForm = () => {
-    const {id} = useParams();
-    console.log(id);
+const ActivityForm = ({ userId }) => {
     const [activity, setActivity] = useState({
         Name: '',
         Date: '',
@@ -61,57 +57,35 @@ const ActivityForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        if (!id) {
+
+        if (!userId) {
             console.error('User ID is missing. Cannot create activity.');
             return;
         }
-    
-        const coordinatesArray = activity.coordinates
-            .split(',')
-            .map(coord => parseFloat(coord.trim()));
-    
+
+        const coordinatesArray = activity.coordinates.split(',').map(coord => parseFloat(coord.trim()));
+
         const activityData = {
             ...activity,
             Location: {
                 type: activity.LocationType,
                 coordinates: coordinatesArray,
             },
-            Advertiser: id,
+            Advertiser: userId,
         };
-    
+
         try {
             const response = await axios.post('/api/Activities/newActivity', activityData);
-            alert('Activity created successfully.');
+            alert("Activity created successfully.");
             console.log('Activity created:', response.data);
-            // navigate('/activities'); 
+            navigate('/activities'); // Adjust this route as needed
         } catch (error) {
-            console.error(
-                'Error creating activity:',
-                error.response?.data || error.message
-            );
-            alert('Error creating activity. Please try again.');
+            console.error('Error creating activity:', error.response?.data || error.message);
+            alert("Error creating activity. Please try again.");
         }
     };
-    
 
     return (
-        <div
-        style={{
-          backgroundColor: "#fff",
-          minHeight: "100vh", // Ensures it covers the full viewport
-          width: "102%", // Full width of the viewport
-          margin: 0, // Remove default margins
-          padding: 0, // Remove default padding
-          display: "flex", // Optional: for flexible alignment
-          flexDirection: "column",
-        }}
-      >
-        <div className="listAdminProduct">
-          <Sidebar />
-          <div className="listContainerAdminProduct">
-            <Navbar />
-            <div style={{ padding: "20px" }}>
         <form className="activity-form full-width-form" onSubmit={handleSubmit}>
             <h2 className="form-header">Create a New Activity</h2>
             <Grid container spacing={2}>
@@ -205,27 +179,23 @@ const ActivityForm = () => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                <FormControl component="fieldset">
-                    <InputLabel>Tags</InputLabel>
-                    <Grid container spacing={2}>
-                        {tags.map((tag) => (
-                            <Grid item key={tag._id} xs={4}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={activity.tags.includes(tag._id)}
-                                            onChange={() => handleTagToggle(tag._id)}
-                                            name={tag.tag}
-                                        />
-                                    }
+                        <Tabs
+                            value={false}
+                            onChange={() => {}}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            aria-label="activity tags"
+                        >
+                            {tags.map((tag) => (
+                                <Tab
+                                    key={tag._id}
                                     label={tag.tag}
+                                    onClick={() => handleTagToggle(tag._id)}
+                                    className={activity.tags.includes(tag._id) ? 'selected-tag' : ''}
                                 />
-                            </Grid>
-                        ))}
+                            ))}
+                        </Tabs>
                     </Grid>
-                </FormControl>
-                </Grid>
-
                 <Grid item xs={12}>
                     <FormControlLabel
                         control={
@@ -245,10 +215,6 @@ const ActivityForm = () => {
                 </Grid>
             </Grid>
         </form>
-        </div>
-        </div>
-        </div>
-        </div>
     );
 };
 

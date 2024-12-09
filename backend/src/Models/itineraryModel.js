@@ -31,7 +31,7 @@ const itinerarySchema = new Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tourist",
-          required: false,
+          required: true,
         },
         rating: { type: Number, required: true, min: 1, max: 5 },
       },
@@ -45,11 +45,11 @@ const itinerarySchema = new Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tourist", // Reference to the user model
-          required: false,
+          required: true,
         },
         comment: {
           type: String,
-          required: false,
+          required: true,
         },
         date: {
           type: Date,
@@ -67,7 +67,7 @@ const itinerarySchema = new Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tourist",
-          required: false,
+          required: true,
         },
       },
     ],
@@ -86,6 +86,6 @@ const itinerarySchema = new Schema(
   { timestamps: true }
 );
 
-const Itinerary = mongoose.models.Itinerary || mongoose.model("Itinerary", itinerarySchema);
-const pickup = mongoose.models.pickup || mongoose.model("pickup", pickupDropoffSchema);
+const Itinerary = mongoose.model("Itinerary", itinerarySchema);
+const pickup = mongoose.model("pickup", pickupDropoffSchema);
 module.exports = { Itinerary, pickup };

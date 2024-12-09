@@ -53,11 +53,6 @@ const ActivitySchema = new Schema(
       type: Boolean,
       default: true,
     },
-    picture:{
-      type: String,
-      default: "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
-      required: false,
-    },
     ratings: [
       {
         user: {
@@ -115,5 +110,5 @@ const ActivitySchema = new Schema(
 
 ActivitySchema.index({ Location: "2dsphere" });
 
-const Activity = mongoose.models.Activity || mongoose.model("Activity", ActivitySchema);
+const Activity = mongoose.model("Activity", ActivitySchema);
 module.exports = Activity;

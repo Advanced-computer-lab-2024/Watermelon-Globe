@@ -1,310 +1,106 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import React from "react";
-import {
-  FaTrashAlt,
-  FaMinus,
-  FaPlus,
-  FaShoppingCart,
-  FaMoneyBillWave,
-} from "react-icons/fa";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import PaymentSummary from "../Components/PaymentSummary";
-import WalletComponent from "../Components/Wallet";
-import TouristNavbar from "../Components/TouristNavBar";
-import Alert from "@mui/material/Alert";
+import { useState, useEffect } from 'react'
+import React from 'react'
+import { Trash2, MinusCircle, PlusCircle } from 'lucide-react'
+import { useParams, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import PaymentSummary from '../Components/PaymentSummary'
+import WalletComponent from '../Components/Wallet';
 
 interface CartItem {
   product: {
-    _id: string;
-    name: string;
-    price: number | null; // Allow null to handle edge cases
-  };
-  quantity: number;
-}
-
-interface PromoCode {
-  code: string;
-  discountValue: number;
+    _id: string
+    name: string
+    price: number | null // Allow null to handle edge cases
+  }
+  quantity: number
 }
 
 export default function ShoppingCart() {
-  const params = useParams();
-  const navigate = useNavigate();
-  const touristId = params.touristId as string;
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [promoCode, setPromoCode] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
-  const [total, setTotal] = useState(0);
-  // const handleApplyPromo = () => {
-  //   if (promoCode === "DISCOUNT10") {
-  //     setPromoApplied(true);
-  //     // Apply the discount
-  //     const discountAmount = total * 0.1;
-  //     setTotal(total - discountAmount);
-  //     setInvalidPromo(false); // Reset the error message when promo is valid
-  //   } else {
-  //     setInvalidPromo(true); // Set error state when promo is invalid
-  //   }
-  // };
+  const params = useParams()
+  const touristId = params.touristId as string
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleApplyPromo = async () => {
-    try {
-      // Send a GET request to your API to fetch the promo codes
-      const response = await axios.get<PromoCode[]>("/api/Admin/getPromoCodes"); // Replace with your actual backend API URL
-
-      // Find the promo code that matches the entered promo code
-      const validPromo = response.data.find((promo) => {
-        console.log(promo); // Log the promo object for each iteration
-        return promo.code === promoCode; // Check if the promo code matches
-      });
-
-      console.log(validPromo);
-      // If promo code is valid
-      if (validPromo) {
-        setPromoApplied(true);
-        const discountAmount = (total * validPromo.discountValue) / 100;
-        setTotal(total - discountAmount);
-        setInvalidPromo(false); // Reset any error message if the promo code is valid
-      } else {
-        setInvalidPromo(true); // Set error state if promo code is invalid
-      }
-    } catch (error) {
-      console.error("Error checking promo code", error);
-      setInvalidPromo(true); // Handle any errors during the API call
-    }
-  };
-
+  const navigate = useNavigate()
 
   const fetchCart = async () => {
     if (!touristId) {
-      setError("Tourist ID not found in URL parameters");
-      setLoading(false);
-      return;
+      setError('Tourist ID not found in URL parameters')
+      setLoading(false)
+      return
     }
 
     try {
-      const response = await axios.get(`/api/Tourist/viewCart/${touristId}`);
-      setCartItems(response.data.cart || []);
-      setError(null);
+      const response = await axios.get(`/api/Tourist/viewCart/${touristId}`)
+      setCartItems(response.data.cart || [])
+      setError(null)
     } catch (error) {
-      console.error("Error fetching cart:", error);
-      setError("Failed to load your cart. Please try again.");
+      console.error('Error fetching cart:', error)
+      setError('Failed to load your cart. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchCart();
-  }, [touristId]);
+    fetchCart()
+  }, [touristId])
 
   const updateQuantity = async (productId: string, newQuantity: number) => {
-    if (newQuantity < 1) return; // Prevent setting quantity below 1
+    if (newQuantity < 1) return // Prevent setting quantity below 1
 
     try {
-      await axios.put(`/api/Tourist/changeCartItemQuantity/${touristId}`, {
-        productId,
-        quantity: newQuantity,
-      });
-      await fetchCart(); // Refetch the cart to get the updated data from the database
+      await axios.put(`/api/Tourist/changeCartItemQuantity/${touristId}`, { productId, quantity: newQuantity })
+      await fetchCart() // Refetch the cart to get the updated data from the database
     } catch (error) {
-      console.error("Error updating cart quantity:", error);
-      setError("Failed to update quantity. Please try again.");
+      console.error('Error updating cart quantity:', error)
+      setError('Failed to update quantity. Please try again.')
     }
-  };
+  }
 
   const removeItem = async (productId: string) => {
     try {
-      await axios.delete(`/api/Tourist/removeProductFromCart/${touristId}`, {
-        data: { productId },
-      });
-      await fetchCart(); // Refetch the cart to get the updated data from the database
+      await axios.delete(`/api/Tourist/removeProductFromCart/${touristId}`, { data: { productId } })
+      await fetchCart() // Refetch the cart to get the updated data from the database
     } catch (error) {
-      console.error("Error removing product from cart:", error);
-      setError("Failed to remove item. Please try again.");
+      console.error('Error removing product from cart:', error)
+      setError('Failed to remove item. Please try again.')
     }
-  };
+  }
 
-  useEffect(() => {
-    const newTotal = cartItems.reduce(
-      (sum, item) => sum + (item.product.price || 0) * item.quantity,
-      0
-    );
-    setTotal(newTotal);
-  }, [cartItems]); // Dependency array to re-run when cartItems change
-
-  const handleProceedToCheckout = () => {
-    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } });
-  };
+  const total = cartItems.reduce(
+    (sum, item) => sum + (item.product.price || 0) * item.quantity,
+    0
+  )
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <p>Loading your cart...</p>
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>
+  }
+
+  const handleProceedToCheckout = () => {
+    // Redirect to the address page
+    navigate(`/CheckoutPage/${touristId}`, { state: { total: total } }) // Adjust the route as needed
   }
 
   return (
-    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
-      <TouristNavbar id={touristId} />
-      <p>hello</p>
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-primary p-5 relative">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white rounded-full p-2">
-                <FaShoppingCart className="h-16 w-16 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white">
-                  Your Shopping Cart
-                </h1>
-                <p className="text-white opacity-75">
-                  {cartItems.length} item(s) in your cart
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6 space-y-6">
-            {error && <p className="text-red-500 text-center">{error}</p>}
-
-            {cartItems.length === 0 ? (
-              <p className="text-center text-gray-500">Your cart is empty.</p>
-            ) : (
-              <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-                <h2 className="text-xl font-semibold text-secondary mb-4">
-                  Cart Items
-                </h2>
-                <ul className="space-y-4">
-                  {cartItems.map((item) => (
-                    <li
-                      key={item.product._id}
-                      className="flex items-center justify-between border-b pb-4"
-                    >
-                      <div>
-                        <h3 className="font-semibold">{item.product.name}</h3>
-                        <p className="text-sm text-gray-500">
-                          ${item.product.price?.toFixed(2)} each
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() =>
-                            updateQuantity(item.product._id, item.quantity - 1)
-                          }
-                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
-                          aria-label={`Decrease quantity of ${item.product.name}`}
-                          disabled={item.quantity <= 1}
-                        >
-                          <FaMinus size={16} />
-                        </button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <button
-                          onClick={() =>
-                            updateQuantity(item.product._id, item.quantity + 1)
-                          }
-                          className="text-secondary p-2 hover:bg-secondaryHover hover:text-white flex items-center justify-center"
-                          aria-label={`Increase quantity of ${item.product.name}`}
-                        >
-                          <FaPlus size={16} />
-                        </button>
-                        <button
-                          onClick={() => removeItem(item.product._id)}
-                          className="text-darkPink p-2 hover:bg-darkPink hover:text-white flex items-center justify-center"
-                          aria-label={`Remove ${item.product.name} from cart`}
-                        >
-                          <FaTrashAlt size={16} />
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h2 className="text-xl font-semibold text-secondary mb-4">
-                Apply Promo
-              </h2>
-              <div className="flex justify-between items-center">
-                <p className="text-lg font-semibold">Total:</p>
-                <p className="text-2xl font-bold text-primary">
-                  ${total.toFixed(2)}
-                </p>
-              </div>
-            </div> */}
-
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h2 className="text-xl font-semibold text-secondary mb-4">
-                Apply Promo
-              </h2>
-
-              {/* Promo code input */}
-              <div className="flex flex-col mb-4">
-                <label
-                  htmlFor="promoCode"
-                  className="text-lg font-semibold mb-2"
-                >
-                  Enter Promo Code
-                </label>
-                <input
-                  type="text"
-                  id="promoCode"
-                  placeholder="Enter promo code"
-                  className="p-2 border border-gray-300 rounded-lg"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)} // Assuming you have a state for promoCode
-                />
-              </div>
-
-              {/* Apply button */}
-              <button
-                onClick={handleApplyPromo} // Function to handle promo code application
-                className="w-full bg-primary text-white p-2 rounded-lg font-semibold hover:bg-primary-dark transition duration-300"
-              >
-                Apply Promo
-              </button>
-
-              {/* Optionally, show a message if the promo code is successfully applied */}
-              {promoApplied && (
-                <Alert severity="success" style={{ marginTop: "12px" }}>
-                  Promo Code applied successfully
-                </Alert>
-              )}
-            </div>
-
-            {/* Show error message if promo code is invalid */}
-            {invalidPromo && (
-              <Alert severity="error" style={{ marginTop: "12px" }}>
-                Invalid Promo Code
-              </Alert>
-            )}
-
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h2 className="text-xl font-semibold text-secondary mb-4">
-                Order Summary
-              </h2>
-              <div className="flex justify-between items-center">
-                <p className="text-lg font-semibold">Total:</p>
-                <p className="text-2xl font-bold text-primary">
-                  ${total.toFixed(2)}
-                </p>
-              </div>
-            </div>
-
-            {/* <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <button
-                onClick={handleProceedToCheckout}
-                className="w-full bg-primary text-white py-3 rounded-lg hover:bg-hover transition-colors flex items-center justify-center"
-                disabled={cartItems.length === 0}
+    <div className="container mx-auto p-4 max-w-2xl">
+      <h1 className="text-2xl font-bold mb-4">Your Shopping Cart</h1>
+      {cartItems.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <>
+          <ul className="space-y-4">
+            {cartItems.map((item) => (
+              <li
+                key={item.product._id}
+                className="flex items-center justify-between border-b pb-2"
               >
                 <div>
                   <h2 className="font-semibold">{item.product.name}</h2>
@@ -319,7 +115,7 @@ export default function ShoppingCart() {
                     aria-label={`Decrease quantity of ${item.product.name}`}
                     disabled={item.quantity <= 1}
                   >
-                    <FaMinus size={20} />
+                    <MinusCircle size={20} />
                   </button>
                   <span className="w-8 text-center">{item.quantity}</span>
                   <button
@@ -327,18 +123,19 @@ export default function ShoppingCart() {
                     className="text-gray-500 hover:text-gray-700"
                     aria-label={`Increase quantity of ${item.product.name}`}
                   >
-                    <FaPlus size={20} />
+                    <PlusCircle size={20} />
                   </button>
                   <button
                     onClick={() => removeItem(item.product._id)}
                     className="text-red-500 hover:text-red-700 ml-2"
                     aria-label={`Remove ${item.product.name} from cart`}
                   >
-                    <FaTrashAlt size={20} />
+                    <Trash2 size={20} />
                   </button>
                 </div>
-              </button>
-          </div> */}
+              </li>
+            ))}
+          </ul>
           <div className="mt-4 flex justify-between items-center">
             <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
             <button
@@ -357,10 +154,8 @@ export default function ShoppingCart() {
               Proceed to Checkout
             </button>
           </div>
-        </div>
-
+        </>
+      )}
     </div>
-    </div>
-    </div>
-  );
+  )
 }

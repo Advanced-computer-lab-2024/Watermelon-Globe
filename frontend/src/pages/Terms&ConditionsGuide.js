@@ -268,7 +268,7 @@ const TermsAndConditions = () => {
       const data = await response.json();
       console.log("API response:", data);
 
-      navigate(`/TourguideSignupConfirm/${userId}`);
+      navigate(`/SellerSignupConfirm/${userId}`);
     } catch (error) {
       console.error("Error:", error);
       alert("There was a problem accepting the terms. Please try again.");

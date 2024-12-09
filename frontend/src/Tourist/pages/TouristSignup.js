@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Star, ChevronDown, Eye, EyeOff } from "lucide-react";
-import NavTabs from "Components/navTabs/navTabs";
-import backgroundImage from "./Login-amico.png";
-//import backgroundImage from "./Login-rafiki.png";
+
 const SignupTourist = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -150,13 +148,6 @@ const SignupTourist = () => {
       }));
     }
   };
-  const [isFocused, setIsFocused] = useState(false);
-  const [isFocusedEmail, setIsFocusedEmail] = useState(false);
-  const [isFocusedPassword, setIsFocusedPassword] = useState(false);
-  const [isFocusedNo, setIsFocusedNo] = useState(false);
-  const [isFocusedNationality, setIsFocusedNationality] = useState(false);
-  const [isFocusedStatus, setIsFocusedStatus] = useState(false);
-  const [isFocusedDOB, setIsFocusedDOB] = useState(false);
 
   return (
     <div
@@ -164,27 +155,104 @@ const SignupTourist = () => {
       style={{
         minHeight: "100vh",
         display: "flex",
-        fontFamily: "Poppins, sans-serif",
-        backgroundColor: "#f8f8f8",
+        fontFamily: "Arial, sans-serif",
       }}
     >
+      {/* Left Section */}
       <div
         style={{
-          width: "100%",
-          height: "800px", // Adjust height as needed
-          backgroundColor: "#f8f8f8", // Light gray background color
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover", // Make the photo cover the whole area
-          backgroundPosition: "center", // Center the image
-          backgroundRepeat: "no-repeat",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: "white", // Text color for visibility
-          fontSize: "24px",
-          fontWeight: "bold",
+          display: "none",
+          width: "50%",
+          backgroundColor: "#0066FF",
+          padding: "48px",
+          flexDirection: "column",
+          justifyContent: "space-between",
         }}
-      ></div>
+        className="left-section"
+      >
+        <div>
+          <h1 style={{ color: "white", fontSize: "24px", fontWeight: 600 }}>
+            WaterMelon Globe
+          </h1>
+          <div style={{ marginTop: "80px" }}>
+            <h2
+              style={{
+                color: "white",
+                fontSize: "48px",
+                fontWeight: 700,
+                lineHeight: 1.2,
+              }}
+            >
+              Start your travel
+              <br />
+              journey today
+            </h2>
+            <p
+              style={{
+                color: "rgba(255,255,255,0.8)",
+                marginTop: "16px",
+                fontSize: "20px",
+              }}
+            >
+              Join our community of global travelers. Discover new destinations
+              and create unforgettable memories.
+            </p>
+          </div>
+        </div>
+
+        {/* Testimonial */}
+        <div
+          style={{
+            backgroundColor: "rgba(0,82,204,0.5)",
+            borderRadius: "12px",
+            padding: "24px",
+            color: "white",
+          }}
+        >
+          <p style={{ fontSize: "18px", marginBottom: "16px" }}>
+            "The perfect platform for travelers! Made my journey planning
+            seamless and helped me discover amazing destinations."
+          </p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  backgroundColor: "#0066FF",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                M
+              </div>
+              <div>
+                <p style={{ fontWeight: 500 }}>Maria Rodriguez</p>
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px" }}>
+                  Travel Enthusiast
+                </p>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "4px" }}>
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  style={{ width: "20px", height: "20px", color: "#FFD700" }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Right Section */}
       <div
         style={{
@@ -194,31 +262,88 @@ const SignupTourist = () => {
         }}
         className="right-section"
       >
-        <h2
-          style={{
-            fontSize: "40px",
-            fontWeight: 700,
-            color: "#444",
-            marginBottom: "32px",
-            marginLeft: "20px",
-          }}
-        >
-          Register
-        </h2>
-        <NavTabs />
-        <div
-          style={{
-            maxWidth: "480px",
-            margin: "0 auto",
-            marginTop: "20px", // Adds space between NavTabs and this div
-          }}
-        ></div>
         <div style={{ maxWidth: "480px", margin: "0 auto" }}>
+          {/* Progress Steps */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "48px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  backgroundColor: "#0066FF",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 500,
+                }}
+              >
+                1
+              </div>
+              <div
+                style={{
+                  height: "2px",
+                  width: "96px",
+                  backgroundColor: "#E5E7EB",
+                  marginLeft: "8px",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  border: "1px solid #D1D5DB",
+                  color: "#9CA3AF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 500,
+                }}
+              >
+                2
+              </div>
+              <div
+                style={{
+                  height: "2px",
+                  width: "96px",
+                  backgroundColor: "#E5E7EB",
+                  marginLeft: "8px",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                border: "1px solid #D1D5DB",
+                color: "#9CA3AF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 500,
+              }}
+            >
+              3
+            </div>
+          </div>
+
           <h2
             style={{
               fontSize: "32px",
               fontWeight: 700,
-              color: "#444",
+              color: "#111827",
               marginBottom: "32px",
             }}
           >
@@ -235,9 +360,8 @@ const SignupTourist = () => {
                   display: "block",
                   fontSize: "14px",
                   fontWeight: 500,
-                  color: isFocused ? "#d32e65" : "#555", // Change label color on focus
+                  color: "#374151",
                   marginBottom: "8px",
-                  transition: "color 0.3s ease",
                 }}
               >
                 Username
@@ -246,37 +370,17 @@ const SignupTourist = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
                 style={{
                   width: "100%",
                   height: "48px",
                   padding: "0 16px",
-                  backgroundColor: "white",
-                  border: `2px solid ${isFocused ? "#d32e65" : "#ccc"}`,
+                  backgroundColor: "#F8F9FF",
+                  border: "none",
                   borderRadius: "8px",
                   fontSize: "16px",
-                  transition: "border-color 0.3s ease",
                 }}
                 placeholder="Enter username"
               />
-
-              {/* <input
-                type="text"
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  fontSize: "14px",
-                  border: `2px solid ${isFocused ? "#1a73e8" : "#ccc"}`, // Outline color on focus
-                  borderRadius: "4px",
-                  outline: "none",
-                  transition: "border-color 0.3s ease",
-                  
-                }}
-                placeholder="Enter username"
-              /> */}
             </div>
 
             <div>
@@ -285,9 +389,8 @@ const SignupTourist = () => {
                   display: "block",
                   fontSize: "14px",
                   fontWeight: 500,
-                  color: isFocusedEmail ? "#d32e65" : "#555",
+                  color: "#374151",
                   marginBottom: "8px",
-                  transition: "color 0.3s ease",
                 }}
               >
                 Email
@@ -296,17 +399,14 @@ const SignupTourist = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => setIsFocusedEmail(true)}
-                onBlur={() => setIsFocusedEmail(false)}
                 style={{
                   width: "100%",
                   height: "48px",
                   padding: "0 16px",
                   backgroundColor: "white",
-                  border: `2px solid ${isFocusedEmail ? "#d32e65" : "#ccc"}`,
+                  border: "1px solid #D1D5DB",
                   borderRadius: "8px",
                   fontSize: "16px",
-                  transition: "border-color 0.3s ease",
                 }}
                 placeholder="Enter your email"
               />
@@ -318,9 +418,8 @@ const SignupTourist = () => {
                   display: "block",
                   fontSize: "14px",
                   fontWeight: 500,
-                  color: isFocusedPassword ? "#d32e65" : "#555",
+                  color: "#374151",
                   marginBottom: "8px",
-                  transition: "color 0.3s ease",
                 }}
               >
                 Password
@@ -330,23 +429,18 @@ const SignupTourist = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setIsFocusedPassword(true)}
-                  onBlur={() => setIsFocusedPassword(false)}
                   style={{
                     width: "100%",
                     height: "48px",
                     padding: "0 16px",
-                    backgroundColor: "#f6d8e576",
-                    border: `2px solid ${
-                      isFocusedPassword ? "#d32e65" : "white"
-                    }`,
+                    backgroundColor: "rgba(0,186,136,0.1)",
+                    border: "none",
                     borderRadius: "8px",
                     fontSize: "16px",
-                    transition: "border-color 0.3s ease",
                   }}
                   placeholder="Create a password"
                 />
-                <button
+                {/* <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   style={{
@@ -357,7 +451,7 @@ const SignupTourist = () => {
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    color: "#d32e65",
+                    color: "#00BA88",
                   }}
                 >
                   {showPassword ? (
@@ -365,7 +459,7 @@ const SignupTourist = () => {
                   ) : (
                     <Eye style={{ width: "20px", height: "20px" }} />
                   )}
-                </button>
+                </button> */}
               </div>
             </div>
 
@@ -375,10 +469,8 @@ const SignupTourist = () => {
                   display: "block",
                   fontSize: "14px",
                   fontWeight: 500,
-                  color: isFocusedNo ? "#d32e65" : "#555",
-
+                  color: "#374151",
                   marginBottom: "8px",
-                  transition: "color 0.3s ease",
                 }}
               >
                 Mobile Number
@@ -387,19 +479,16 @@ const SignupTourist = () => {
                 type="tel"
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
-                onFocus={() => setIsFocusedNo(true)}
-                onBlur={() => setIsFocusedNo(false)}
                 style={{
                   width: "100%",
                   height: "48px",
                   padding: "0 16px",
                   backgroundColor: "white",
-                  border: `2px solid ${isFocusedNo ? "#d32e65" : "#ccc"}`,
+                  border: "1px solid #D1D5DB",
                   borderRadius: "8px",
                   fontSize: "16px",
-                  transition: "border-color 0.3s ease",
                 }}
-                placeholder="Enter your number "
+                placeholder="+2 "
               />
             </div>
 
@@ -416,9 +505,8 @@ const SignupTourist = () => {
                     display: "block",
                     fontSize: "14px",
                     fontWeight: 500,
-                    color: isFocusedNationality ? "#d32e65" : "#555",
+                    color: "#374151",
                     marginBottom: "8px",
-                    transition: "color 0.3s ease",
                   }}
                 >
                   Nationality
@@ -427,16 +515,12 @@ const SignupTourist = () => {
                   <select
                     value={nationality}
                     onChange={(e) => setNationality(e.target.value)}
-                    onFocus={() => setIsFocusedNationality(true)}
-                    onBlur={() => setIsFocusedNationality(false)}
                     style={{
                       width: "100%",
                       height: "48px",
                       padding: "0 16px",
                       backgroundColor: "white",
-                      border: `2px solid ${
-                        isFocusedNationality ? "#d32e65" : "#ccc"
-                      }`,
+                      border: "1px solid #D1D5DB",
                       borderRadius: "8px",
                       fontSize: "16px",
                       appearance: "none",
@@ -446,7 +530,7 @@ const SignupTourist = () => {
                     <option value="US">United States</option>
                     <option value="UK">United Kingdom</option>
                     <option value="CA">Canada</option>
-                    <option value="EG">Egypt</option>
+                    <option value="CA">Egypt</option>
                   </select>
                   <ChevronDown
                     style={{
@@ -469,9 +553,8 @@ const SignupTourist = () => {
                     display: "block",
                     fontSize: "14px",
                     fontWeight: 500,
-                    color: isFocusedStatus ? "#d32e65" : "#555",
+                    color: "#374151",
                     marginBottom: "8px",
-                    transition: "color 0.3s ease",
                   }}
                 >
                   Status
@@ -480,20 +563,15 @@ const SignupTourist = () => {
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    onFocus={() => setIsFocusedStatus(true)}
-                    onBlur={() => setIsFocusedStatus(false)}
                     style={{
                       width: "100%",
                       height: "48px",
                       padding: "0 16px",
                       backgroundColor: "white",
-                      border: `2px solid ${
-                        isFocusedStatus ? "#d32e65" : "#ccc"
-                      }`,
+                      border: "1px solid #D1D5DB",
                       borderRadius: "8px",
                       fontSize: "16px",
                       appearance: "none",
-                      transition: "border-color 0.3s ease",
                     }}
                   >
                     <option value="">Select status</option>
@@ -522,9 +600,8 @@ const SignupTourist = () => {
                   display: "block",
                   fontSize: "14px",
                   fontWeight: 500,
-                  color: isFocusedDOB ? "#d32e65" : "#555",
+                  color: "#374151",
                   marginBottom: "8px",
-                  transition: "color 0.3s ease",
                 }}
               >
                 Date of Birth
@@ -539,22 +616,16 @@ const SignupTourist = () => {
                     height: "48px",
                     padding: "0 16px",
                     backgroundColor: "white",
-                    border: `2px solid ${isFocusedDOB ? "#d32e65" : "#ccc"}`, // Border color changes on focus
+                    border: "1px solid #D1D5DB",
                     borderRadius: "8px",
                     fontSize: "16px",
-                    transition: "border-color 0.3s ease", // Smooth transition for the border color
                   }}
                   placeholder="mm/dd/yyyy"
-                  onFocus={(e) => {
-                    e.target.type = "date"; // Change input type to "date" on focus
-                    setIsFocusedDOB(true); // Update focus state
-                  }}
+                  onFocus={(e) => (e.target.type = "date")}
                   onBlur={(e) => {
-                    if (!e.target.value) e.target.type = "text"; // Change back to text if input is empty
-                    setIsFocusedDOB(false); // Update focus state
+                    if (!e.target.value) e.target.type = "text";
                   }}
                 />
-
                 <ChevronDown
                   style={{
                     position: "absolute",
@@ -575,7 +646,7 @@ const SignupTourist = () => {
               style={{
                 width: "100%",
                 height: "48px",
-                backgroundColor: "#91c297",
+                backgroundColor: "#00BA88",
                 color: "white",
                 border: "none",
                 borderRadius: "8px",
@@ -596,9 +667,9 @@ const SignupTourist = () => {
             >
               Already have an account?{" "}
               <a
-                href="/AllLogin"
+                href="/tourist-signup"
                 style={{
-                  color: "#d32e65",
+                  color: "#0066FF",
                   fontWeight: 500,
                   textDecoration: "none",
                 }}

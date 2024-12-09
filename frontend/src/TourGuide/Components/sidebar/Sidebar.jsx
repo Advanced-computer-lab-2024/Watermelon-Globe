@@ -188,7 +188,7 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <Link to={`/CreateItinerary/${id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/AddItinerary/${id}`} style={{ textDecoration: "none" }}>
             <li>
               <AddIcon className="iconAdmin" />
               <span>Add Iteneraries</span>
@@ -196,13 +196,13 @@ const Sidebar = () => {
           </Link>
 
           <p className="titleAdmin">MANAGE ACCOUNT</p>
-          <Link to={`/TourGuideProfile/${id}`} style={{ textDecoration: "none" }}>
+          <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
               <AccountCircleRoundedIcon className="iconAdmin" />
               <span>View Profile</span>
             </li>
           </Link>
-          <Link to={`/changePasswordTourGuide/${id}`} style={{ textDecoration: "none" }}>
+          <Link to="/Categories" style={{ textDecoration: "none" }}>
             <li>
               <PasswordRoundedIcon className="iconAdmin" />
               <span>Change Password</span>

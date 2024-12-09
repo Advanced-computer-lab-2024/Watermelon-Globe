@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingBag, LogOut, Star, Search, RefreshCw, Eye, MessageSquare, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ShoppingBag, LogOut, Star, Search, RefreshCw, Eye, MessageSquare } from 'lucide-react';
 
 const StarRating = ({ rating, onRate }) => {
   return (
@@ -15,6 +15,8 @@ const StarRating = ({ rating, onRate }) => {
               : 'text-yellow-300'
           } hover:text-yellow-400`}
           onClick={() => onRate(star)}
+         
+          
         />
       ))}
     </div>
@@ -25,12 +27,13 @@ const ViewReviewsModal = ({ productId, reviews = [], onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4 text-primary">Reviews for Product {productId}</h2>
+        <h2 className="text-2xl font-bold mb-4 text-green-700">Reviews for Product {productId}</h2>
         
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
             <div key={index} className="mb-4 pb-4 border-b border-gray-200">
-              <p className="font-semibold text-secondary">{review.reviewer?.username || 'Anonymous'}</p>
+              {/* Display the reviewer's name and the review */}
+              <p className="font-semibold text-blue-600">{review.reviewer?.username || 'Anonymous'}</p>
               <p className="text-gray-700">{review.review || 'No review provided'}</p>
             </div>
           ))
@@ -40,7 +43,7 @@ const ViewReviewsModal = ({ productId, reviews = [], onClose }) => {
         
         <button
           onClick={onClose}
-          className="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-hover transition-colors"
+          className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
         >
           Close
         </button>
@@ -48,6 +51,7 @@ const ViewReviewsModal = ({ productId, reviews = [], onClose }) => {
     </div>
   );
 };
+
 
 const PurchasedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -61,7 +65,6 @@ const PurchasedProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     fetchPurchasedProducts();
@@ -109,8 +112,7 @@ const PurchasedProducts = () => {
           prevProducts.map(product => 
             product._id === productId ? { ...product, rating } : product
           )
-        );
-        window.location.reload();
+        );window.location.reload();
       } else {
         console.error('Error:', data.message);
       }
@@ -157,6 +159,7 @@ const PurchasedProducts = () => {
     );
     setFilteredProducts(filtered);
   };
+  
 
   const handleReset = () => {
     setSearchTerm('');
@@ -165,17 +168,45 @@ const PurchasedProducts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f0fdf4' }}>
       {/* Navigation Bar */}
-      <div className="bg-secondary py-4 mb-8">
-        <div className="max-w-screen-xl mx-auto flex justify-between items-center px-4">
-          <span className="text-white text-2xl font-bold">Watermelon Globe</span>
-          <div className="flex gap-6">
-            <Link to={`/ProductTourist/${id}`} className="text-white flex items-center gap-2">
+      <div style={{ 
+        backgroundColor: '#00b341',
+        padding: '1rem',
+        marginBottom: '2rem'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <span style={{ 
+            color: 'white', 
+            fontSize: '1.5rem', 
+            fontWeight: 'bold'
+          }}>
+            Watermelon Globe
+          </span>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            <Link to={`/ProductTourist/${id}`} style={{
+              color: 'white',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
               <ShoppingBag size={20} />
               Products
             </Link>
-            <Link to="/signout" className="text-white flex items-center gap-2">
+            <Link to="/signout" style={{
+              color: 'white',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
               <LogOut size={20} />
               Sign Out
             </Link>
@@ -184,104 +215,218 @@ const PurchasedProducts = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-screen-xl mx-auto px-4">
-        <h1 className="text-center text-3xl font-bold text-secondary mb-8">Your Purchased Products</h1>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
+        <h1 style={{ 
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          color: '#00b341',
+          textAlign: 'center',
+          marginBottom: '2rem'
+        }}>
+          Your Purchased Products
+        </h1>
 
-        {/* Toggle Filters Button */}
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="w-full bg-primary text-white p-2 rounded-lg flex items-center justify-center gap-2 hover:bg-hover mb-4"
-        >
-          {showFilters ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
-        </button>
-
-        {/* Search and Filter Section */}
-        {showFilters && (
-          <div className="flex flex-wrap justify-between mb-8 gap-4">
-            <div className="flex gap-4 items-center">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder="Search by name"
-                className="p-2 border rounded-lg border-lightGray"
-              />
-              <button
-                onClick={handleSearch}
-                className="bg-primary text-white p-2 rounded-lg flex items-center gap-2 hover:bg-hover"
-              >
-                <Search size={16} />
-                Search
-              </button>
-            </div>
-            <button
-              onClick={handleReset}
-              className="bg-yellow-500 text-white p-2 rounded-lg flex items-center gap-2 hover:bg-yellow-400"
-            >
+        {/* Search Section */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          marginBottom: '2rem',
+          gap: '1rem'
+        }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearch}
+              placeholder="Search by name"
+              style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+            />
+            <button onClick={handleReset} style={{
+              backgroundColor: '#f59e0b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '0.5rem 1rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
               <RefreshCw size={16} />
               Reset
             </button>
           </div>
-        )}
+        </div>
 
-        {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+        {errorMessage && <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>{errorMessage}</p>}
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <div style={{
+              display: 'inline-block',
+              width: '50px',
+              height: '50px',
+              border: '3px solid rgba(0, 179, 65, 0.3)',
+              borderRadius: '50%',
+              borderTopColor: '#00b341',
+              animation: 'spin 1s ease-in-out infinite',
+            }} />
           </div>
         ) : filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div style={{ 
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            gap: '1rem',
+            width: '100%'
+          }}>
             {filteredProducts.map((product) => (
-              <div key={product._id} className="bg-cardBackground rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                <div className="relative">
-                  <img
+              <div key={product._id} style={{
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                overflow: 'hidden',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: 'transform 0.3s ease-in-out',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <div style={{ position: 'relative' }}>
+                  <img 
                     src={product.picture || "/placeholder.svg"}
                     alt={product.name}
-                    className="w-full h-32 object-cover rounded-t-lg"
+                    style={{
+                      width: '100%',
+                      height: '150px',
+                      objectFit: 'cover'
+                    }}
                   />
                 </div>
 
-                <div className="p-3 flex flex-col">
-                  <h3 className="text-base font-bold mb-1">{product.name}</h3>
-                  <p className="text-sm text-grayText mb-2 flex-1">{product.description}</p>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-lg font-bold text-primary">
+                <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <h3 style={{ 
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    marginBottom: '0.5rem'
+                  }}>
+                    {product.name}
+                  </h3>
+                  <p style={{ 
+                    fontSize: '0.875rem',
+                    color: '#666',
+                    marginBottom: '1rem',
+                    flex: 1
+                  }}>
+                    {product.description}
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1rem'
+                  }}>
+                    <span style={{ 
+                      fontSize: '1.25rem',
+                      fontWeight: 'bold',
+                      color: '#00b341'
+                    }}>
                       ${product.price && product.price.$numberDecimal ? product.price.$numberDecimal : product.price}
                     </span>
-                    <span className="text-xs text-grayText">Rating: {product.rating || 'N/A'}</span>
+                    <span style={{ 
+                      fontSize: '0.875rem',
+                      color: '#666'
+                    }}>
+                      Rating: {product.rating || 'N/A'}
+                    </span>
                   </div>
+                  
                   <StarRating 
                     rating={product.rating || 0}
                     onRate={(rating) => handleRateProduct(product._id, rating)}
                   />
                   <button
                     onClick={() => setShowReviewInput(product._id)}
-                    className="p-1 rounded-lg flex items-center justify-center gap-1 w-full text-sm bg-primary hover:bg-hover text-white mt-2"
+                    style={{
+                      backgroundColor: '#00b341',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      padding: '0.5rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      width: '100%',
+                      fontSize: '0.875rem',
+                      fontWeight: 'bold',
+                      marginTop: '0.5rem',
+                      transition: 'background-color 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#009933'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00b341'}
                   >
-                    <MessageSquare size={14} />
+                    <MessageSquare size={16} />
                     Write Review
                   </button>
                   <button
                     onClick={() => handleViewReviews(product._id)}
-                    className="p-1 rounded-lg flex items-center justify-center gap-1 w-full text-sm bg-secondary hover:bg-hover text-white mt-2"
+                    style={{
+                      backgroundColor: '#3b82f6',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      padding: '0.5rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      width: '100%',
+                      fontSize: '0.875rem',
+                      fontWeight: 'bold',
+                      marginTop: '0.5rem',
+                      transition: 'background-color 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3b82f6'}
                   >
-                    <Eye size={14} />
+                    <Eye size={16} />
                     View Reviews
                   </button>
                   {showReviewInput === product._id && (
-                    <div className="mt-2">
+                    <div style={{ marginTop: '0.5rem' }}>
                       <textarea
                         value={newReview}
                         onChange={(e) => setNewReview(e.target.value)}
                         placeholder="Write your review..."
-                        className="w-full p-2 border rounded-lg border-lightGray mb-2"
+                        style={{
+                          width: '100%',
+                          padding: '0.5rem',
+                          borderRadius: '4px',
+                          border: '1px solid #ccc',
+                          marginBottom: '0.5rem'
+                        }}
                         rows="3"
                       />
                       <button
                         onClick={() => handleAddReview(product._id)}
-                        className="p-1 rounded-lg flex items-center justify-center gap-1 w-full text-sm bg-primary hover:bg-hover text-white"
+                        style={{
+                          backgroundColor: '#8b5cf6',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '0.5rem',
+                          cursor: 'pointer',
+                          width: '100%',
+                          fontSize: '0.875rem',
+                          fontWeight: 'bold',
+                          transition: 'background-color 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7c3aed'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#8b5cf6'}
                       >
                         Submit Review
                       </button>
@@ -292,7 +437,7 @@ const PurchasedProducts = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-grayText text-xl mt-8">No purchased products found.</p>
+          <p style={{ textAlign: 'center', color: '#666', fontSize: '1.25rem', marginTop: '2rem' }}>No purchased products found.</p>
         )}
 
         {showReviewsModal && (
@@ -303,9 +448,15 @@ const PurchasedProducts = () => {
           />
         )}
       </div>
+      <style jsx>{`
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 };
 
 export default PurchasedProducts;
-

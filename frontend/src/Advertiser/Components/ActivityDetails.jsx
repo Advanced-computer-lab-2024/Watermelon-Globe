@@ -55,19 +55,18 @@ const ActivityDetails = () => {
     return (
         <div>
             <h1><strong>Activity Details</strong></h1>
-            <p><strong>Photo: </strong><img src='placeholder' alt= 'activity.name'/></p>
             {/* <h2>{activity.Category}</h2> */}
             <p><strong>Date:</strong> {new Date(activity.Date).toLocaleDateString()}</p>
             <p><strong>Time:</strong> {activity.Time}</p>
             <p><strong>Location:</strong> {activity.Location.coordinates.join(', ')}</p>
             <p><strong>Price:</strong> ${activity.Price}</p>
-            {/* {activity.priceRange && (
+            {activity.priceRange && (
                 <p><strong>Price Range:</strong> {activity.priceRange.join(' - ')}</p>
-            )} */}
+            )}
             <p><strong>Discount:</strong> {activity.Discount}%</p>
             <p><strong>Advertiser:</strong> {activity.Advertiser?.Name|| 'Unknown Advertiser'}</p>
-            <p><strong>Tags:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p>
-            {/* <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p> */}
+            <p><strong>Tag Types:</strong> {activity.tags.map(tag => tag.type).join(', ')}</p>
+            <p><strong>Tag Historical Period:</strong> {activity.tags.map(tag => tag.historicPeriod).join(', ')}</p>
             {/* <button onClick={() => navigate(`/editActivity/${activity._id}`)}>Edit Activity</button> */}
             {isOwner && (
                 <div>
