@@ -86,8 +86,8 @@ const ViewActitvities = () => {
     return price;
   };
 
-  const handleActivityClick = (id) => {
-    navigate(`/activityDetail/${id}`);
+  const handleActivityClick = (id, activityId) => {
+    navigate(`/activityDetail/${id}/${activityId}`);
   };
 
   return (
@@ -149,11 +149,8 @@ const ViewActitvities = () => {
                   </div>
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
-                      src={
-                        activities.picture ||
-                        "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-                      }
-                      alt={`Image of ${activity.name}`}
+                      src={activity.picture ? `/uploads/${activity.picture}` : "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"}
+                      alt={`Image of ${activity.Name}`}
                       loading="lazy"
                     />
                   </AspectRatio>
@@ -229,7 +226,7 @@ const ViewActitvities = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleActivityClick(activity._id)}
+                      onClick={() => handleActivityClick(id, activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height

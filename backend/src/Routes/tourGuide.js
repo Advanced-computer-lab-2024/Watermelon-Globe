@@ -41,6 +41,9 @@ router.get("/guideMonthlyRevenue/:guideId", guideController.guideMonthlyRevenue)
 router.get("/filterRevenueByDateGuide/:guideId", guideController.filterRevenueByDateGuide);
 
 router.get("/myItineraries/:id",guideController.myItineraries);
+router.get("/getTotalTouristsForItinerary/:itineraryId", guideController.getTotalTouristsForItinerary);
+
+router.get("/getMonthlyTouristsForItinerary/:itineraryId", guideController.getMonthlyTouristsForItinerary);
 
 
 

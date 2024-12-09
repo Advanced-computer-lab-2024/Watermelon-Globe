@@ -6,16 +6,24 @@ const EditActivity = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [activity, setActivity] = useState(null);
-    const [newPrice, setNewPrice] = useState('');
-    const [newDiscount, setNewDiscount] = useState('');
+    const [name, setName] = useState('');
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [price, setPrice] = useState('');
+    const [category, setCategory] = useState('');
+    const [tags, setTags] = useState('');
 
     useEffect(() => {
         const fetchActivity = async () => {
             try {
                 const response = await axios.get(`/api/Activities/getActivityById/${id}`);
                 setActivity(response.data);
-                setNewPrice(response.data.Price);
-                setNewDiscount(response.data.Discount);
+                setName(response.data.Name);
+                setDate(response.data.Date);
+                setTime(response.data.Time);
+                setPrice(response.data.Price);
+                setCategory(response.data.Category);
+                setTags(response.data.Tags.join(', ')); // Assuming tags are an array
             } catch (error) {
                 console.error('Error fetching activity:', error);
             }
@@ -26,10 +34,18 @@ const EditActivity = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Convert tags to an array
+        const tagsArray = tags.split(',').map(tag => tag.trim());
+
         try {
             await axios.put(`/api/Activities/updateActivity/${id}`, {
-                Price: newPrice,
-                Discount: newDiscount
+                Name: name,
+                Date: date,
+                Time: time,
+                Price: price,
+                Category: category,
+                Tags: tagsArray
             });
             alert('Activity updated successfully');
             navigate('/advertiser');
@@ -48,19 +64,51 @@ const EditActivity = () => {
             <h1>Edit Activity</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Price:</label>
+                    <label>Name:</label>
                     <input
-                        type="number"
-                        value={newPrice}
-                        onChange={(e) => setNewPrice(e.target.value)}
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                 </div>
                 <div>
-                    <label>Discount:</label>
+                    <label>Date:</label>
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Time:</label>
+                    <input
+                        type="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Price:</label>
                     <input
                         type="number"
-                        value={newDiscount}
-                        onChange={(e) => setNewDiscount(e.target.value)}
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Category:</label>
+                    <input
+                        type="text"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Tags (comma separated):</label>
+                    <input
+                        type="text"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
                     />
                 </div>
                 <button type="submit">Update Activity</button>

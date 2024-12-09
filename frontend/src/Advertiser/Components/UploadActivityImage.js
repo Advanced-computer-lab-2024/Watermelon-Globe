@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const UploadActivityPicture = ({ id }) => {
+const UploadActivityPicture = ({ id, onUploadSuccess }) => {
   const [file, setFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -21,7 +21,7 @@ const UploadActivityPicture = ({ id }) => {
     formData.append('picture', file);
 
     try {
-      const response = await fetch(`/api/Activity/uploadPicture?id=${id}`, {
+      const response = await fetch(`/api/Activities/uploadPicture?id=${id}`, {
         method: 'PUT',
         body: formData,
       });
@@ -30,6 +30,9 @@ const UploadActivityPicture = ({ id }) => {
         const data = await response.json();
         setSuccessMessage(data.message || 'Picture uploaded successfully');
         setErrorMessage('');
+        if (onUploadSuccess) {
+          onUploadSuccess(data.Activity.picture);
+        }
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error || 'Failed to upload picture');
@@ -78,4 +81,3 @@ const UploadActivityPicture = ({ id }) => {
 };
 
 export default UploadActivityPicture;
-
