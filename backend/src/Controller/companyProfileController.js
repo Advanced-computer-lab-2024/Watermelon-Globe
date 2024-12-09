@@ -451,6 +451,358 @@ const getCompanyProfileById = async (req, res) => {
   };
 };
 
+// Function to calculate total revenue from booked itineraries filtered by guide ID (10% of their price)
+const ActivityRevenue = async (req, res) => {
+  try {
+    const { advertiserId } = req.params; // Assuming the guideId is passed as a parameter
+
+    // Step 1: Retrieve all child itineraries (booked itineraries)
+    const bookedActivities = await ActivityBooking.find({});
+
+    // Step 2: Initialize total revenue
+    let totalRevenue = 0;
+
+    // Step 3: Loop through all child itineraries and check if the associated itinerary has the guideId
+    for (const bookedActivity of bookedActivities) {
+      // Fetch the parent itinerary (itinerary model)
+      const activity = await Activity.findById(bookedActivity.activity);
+
+      // Check if the guide of the itinerary matches the provided guideId
+      if (activity && activity.Advertiser.toString() === advertiserId) {
+        if (bookedActivity.totalPrice) {
+          // Add 10% of the total price for this child itinerary to the total revenue
+          totalRevenue += bookedActivity.totalPrice * 0.1;
+        }
+      }
+    }
+
+    // Step 4: Send the total revenue as a response
+    res.status(200).json({
+      message: "Total revenue calculated successfully for the tour guide",
+      totalRevenue: totalRevenue.toFixed(2), // Round to 2 decimal places
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({
+      message: "Error calculating total revenue for the tour guide",
+      error: error.message,
+    });
+  }
+};
+
+
+const advertiserMonthlyRevenue = async (req, res) => {
+  try {
+    const { advertiserId } = req.params;
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+
+    if (!advertiserId) {
+      return res.status(400).json({ message: "Advertiser ID is required" });
+    }
+
+    // Aggregate activity revenue for the current year
+    const activityRevenue = await ActivityBooking.aggregate([
+      {
+        $lookup: {
+          from: 'activities',
+          localField: 'activity',
+          foreignField: '_id',
+          as: 'parentActivity'
+        }
+      },
+      { $unwind: '$parentActivity' },
+      {
+        $match: {
+          'parentActivity.Advertiser': new mongoose.Types.ObjectId(advertiserId),
+          'createdAt': { $gte: startDate, $lte: endDate },
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          totalRevenue: {
+            $sum: { $multiply: ['$totalPrice', 0.1] } // Assuming 10% commission
+          },
+          bookingsCount: { $sum: 1 }
+        }
+      },
+      { $sort: { '_id.month': 1 } }
+    ]);
+
+    // Initialize monthly revenue array
+    const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      totalRevenue: 0,
+      bookingsCount: 0
+    }));
+
+    // Populate actual data
+    activityRevenue.forEach(entry => {
+      const monthIndex = entry._id.month - 1;
+      monthlyRevenue[monthIndex].totalRevenue = entry.totalRevenue;
+      monthlyRevenue[monthIndex].bookingsCount = entry.bookingsCount;
+    });
+
+    // Add month names and format numbers
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedRevenue = monthlyRevenue.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1],
+      totalRevenue: Number(item.totalRevenue.toFixed(2))
+    }));
+
+    // Calculate yearly totals
+    const yearlyTotals = formattedRevenue.reduce((acc, month) => {
+      acc.totalRevenue += month.totalRevenue;
+      acc.totalBookings += month.bookingsCount;
+      return acc;
+    }, { totalRevenue: 0, totalBookings: 0 });
+
+    // Send response
+    res.status(200).json({
+      message: "Yearly activity revenue calculated successfully for the advertiser",
+      year: currentYear,
+      advertiserId,
+      data: formattedRevenue,
+      yearlyTotals: {
+        totalRevenue: Number(yearlyTotals.totalRevenue.toFixed(2)),
+        totalBookings: yearlyTotals.totalBookings
+      }
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly activity revenue:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const filterRevenueByDateAdvertiser = async (req, res) => {
+  try {
+    const { date } = req.query;
+    const { advertiserId } = req.params; // advertiserId passed as a route parameter
+
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    if (!advertiserId) {
+      return res.status(400).json({ message: "Advertiser ID is required" });
+    }
+
+    const selectedDate = new Date(date);
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const activityRevenue = await ActivityBooking.aggregate([
+      {
+        $lookup: {
+          from: "activities",
+          localField: "activity",
+          foreignField: "_id",
+          as: "parentActivity"
+        }
+      },
+      { $unwind: "$parentActivity" },
+      {
+        $match: {
+          "parentActivity.Advertiser": new mongoose.Types.ObjectId(advertiserId),
+          "createdAt": { $gte: selectedDate, $lt: nextDate },
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: { $multiply: ["$totalPrice", 0.1] } }, // Calculate 10% of the total price
+          bookingsCount: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const totalActivityRevenue = activityRevenue.length > 0 ? activityRevenue[0].totalRevenue : 0;
+    const bookingsCount = activityRevenue.length > 0 ? activityRevenue[0].bookingsCount : 0;
+
+    res.status(200).json({
+      message: "Revenue filtered by date successfully for the advertiser",
+      date: selectedDate.toISOString().split("T")[0],
+      activityRevenue: Number(totalActivityRevenue.toFixed(2)),
+      bookingsCount: bookingsCount,
+      totalRevenue: Number(totalActivityRevenue.toFixed(2))
+    });
+  } catch (error) {
+    console.error("Error filtering revenue by date for advertiser:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+const getAllActivitiesByAdvertiser = async (req, res) => {
+  try {
+    const { advertiserId } = req.params; // Assuming the advertiserId is passed as a parameter
+
+    // Step 1: Query to find all child activities where the parent activity's advertiser matches the advertiserId
+    const bookedActivities = await ActivityBooking.find({})
+      .populate({
+        path: 'activity', // Populate the parent activity
+        match: { Advertiser: advertiserId }, // Filter activities where the advertiser matches the provided advertiserId
+      })
+      .populate('tourist'); // Optionally populate the buyer data
+
+    // Step 2: Filter out activities that do not have a matched advertiser
+    const filteredBookedActivities = bookedActivities.filter(activity => activity.activity);
+
+    // Step 3: If no booked activities are found for the advertiser, return a 404 response
+    if (filteredBookedActivities.length === 0) {
+      return res.status(404).json({
+        message: "No booked activities found for this advertiser",
+      });
+    }
+
+    // Step 4: Return the filtered booked activities
+    res.status(200).json({
+      message: "Booked activities retrieved successfully for the advertiser",
+      bookedActivities: filteredBookedActivities,
+    });
+  } catch (error) {
+    console.error("Error retrieving booked activities for advertiser:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+// Function to get total number of tourists who bought a specific activity
+const getTotalTouristsForActivity = async (req, res) => {
+  try {
+    const { activityId } = req.params;
+
+    if (!activityId) {
+      return res.status(400).json({ message: "Activity ID is required" });
+    }
+
+    const totalTourists = await ActivityBooking.aggregate([
+      {
+        $match: {
+          activity: new mongoose.Types.ObjectId(activityId),
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalCount: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$tourist' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalBookings: '$totalCount',
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      }
+    ]);
+
+    const result = totalTourists[0] || { totalBookings: 0, uniqueTouristsCount: 0 };
+
+    res.status(200).json({
+      message: "Total tourists calculated successfully for the activity",
+      activityId,
+      ...result
+    });
+
+  } catch (error) {
+    console.error("Error calculating total tourists for activity:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Function to get monthly tourist count for a specific activity
+const getMonthlyTouristsForActivity = async (req, res) => {
+  try {
+    const { activityId } = req.params;
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+
+    if (!activityId) {
+      return res.status(400).json({ message: "Activity ID is required" });
+    }
+
+    const monthlyTourists = await ActivityBooking.aggregate([
+      {
+        $match: {
+          activity: new mongoose.Types.ObjectId(activityId),
+          createdAt: { $gte: startDate, $lte: endDate }
+        }
+      },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          touristsCount: { $sum: 1 },
+          uniqueTourists: { $addToSet: '$tourist' }
+        }
+      },
+      {
+        $project: {
+          month: '$_id.month',
+          touristsCount: 1,
+          uniqueTouristsCount: { $size: '$uniqueTourists' }
+        }
+      },
+      { $sort: { month: 1 } }
+    ]);
+
+    // Initialize monthly data array
+    const monthlyData = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      touristsCount: 0,
+      uniqueTouristsCount: 0
+    }));
+
+    // Populate actual data
+    monthlyTourists.forEach(entry => {
+      const monthIndex = entry.month - 1;
+      monthlyData[monthIndex].touristsCount = entry.touristsCount;
+      monthlyData[monthIndex].uniqueTouristsCount = entry.uniqueTouristsCount;
+    });
+
+    // Add month names
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const formattedData = monthlyData.map(item => ({
+      ...item,
+      monthName: monthNames[item.month - 1]
+    }));
+
+    // Calculate yearly totals
+    const yearlyTotals = formattedData.reduce((acc, month) => {
+      acc.totalTourists += month.touristsCount;
+      acc.totalUniqueTourists += month.uniqueTouristsCount;
+      return acc;
+    }, { totalTourists: 0, totalUniqueTourists: 0 });
+
+    res.status(200).json({
+      message: "Monthly tourist data calculated successfully for the activity",
+      year: currentYear,
+      activityId,
+      data: formattedData,
+      yearlyTotals
+    });
+
+  } catch (error) {
+    console.error("Error calculating monthly tourists for activity:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
 module.exports = {
   createProfile,
   getProfiles,
@@ -468,4 +820,10 @@ module.exports = {
   deleteProfile,
   getAllProfiles,
   getCompanyProfileById,
+  ActivityRevenue,
+  advertiserMonthlyRevenue,
+  filterRevenueByDateAdvertiser,
+  getAllActivitiesByAdvertiser,
+  getTotalTouristsForActivity,
+  getMonthlyTouristsForActivity
 };
