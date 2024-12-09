@@ -7,10 +7,10 @@ import Sidebar from "../../Components/sidebar/Sidebar";
 import Navbar from "../../Components/AdvertiserNavbar";
 
 const ActivityDetails = () => {
-  const { activityId } = useParams();
+  const { id, activityId } = useParams();
   const navigate = useNavigate();
   const [activity, setActivity] = useState(null);
-  const [category, setCategory] = useState(null); // Store category name
+  const [category, setCategory] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedActivity, setUpdatedActivity] = useState({
     Name: "",
@@ -88,7 +88,7 @@ const ActivityDetails = () => {
         });
 
         if (response.ok) {
-          navigate("/");
+          navigate("/activities"); // Redirect to activities list
         } else {
           console.error("Failed to delete activity");
         }
@@ -138,20 +138,27 @@ const ActivityDetails = () => {
             <div style={{ padding: "20px" }}>
               <div className="flex-1 p-8">
                 <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#91c297]">
-                <button
-                      onClick={handleDeleteActivity}
-                      className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                      title="Delete Activity"
-                    >
-                      <FaTrash size={20} />
-                    </button>
+                  <button
+                    onClick={handleDeleteActivity}
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                    title="Delete Activity"
+                  >
+                    <FaTrash size={20} />
+                  </button>
                   <div className="md:flex">
-                    <div className="md:flex-shrink-0 md:w-1/3">
+                  <div className="md:flex-shrink-0 md:w-1/3">
                     <img
                       className="h-full w-full object-cover md:w-full"
                       src={activity?.picture ? `/uploads/${activity.picture}` : "https://via.placeholder.com/300"}
                       alt={activity?.Name}
                     />
+                      <button
+                          onClick={() => setShowUpdatePicture(!showUpdatePicture)}
+                          className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-md"
+                          title="Update Picture"
+                        >
+                          <FaImage size={20} className="text-[#91c297]" />
+                        </button>
                     </div>
                     <div className="p-8 md:w-2/3">
                       {isEditing ? (
@@ -300,16 +307,18 @@ const ActivityDetails = () => {
                         >
                           <FaEdit className="inline-block mr-2" /> Edit Activity
                         </button>
-                      <div className="mt-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Activity Picture</h3>
-                        <UploadActivityPicture
+                        {showUpdatePicture && (
+                        <div className="mt-6">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Activity Picture</h3>
+                          <UploadActivityPicture
                             id={activityId}
                             onSuccess={(newPicture) => {
                               setActivity((prev) => ({ ...prev, picture: newPicture }));
                               setShowUpdatePicture(false);
                             }}
                           />
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

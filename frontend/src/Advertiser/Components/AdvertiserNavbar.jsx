@@ -21,7 +21,7 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [Logo, setLogo] = useState(null);
+  const [advertiserLogo, setAdvertiserLogo] = useState(null);
 
   useEffect(() => {
     const fetchAdvertiserLogo = async () => {
@@ -29,28 +29,13 @@ const Navbar = () => {
         const response = await fetch(`/api/advertiser/profiles/${id}`);
         const data = await response.json();
         if (data.Logo) {
-          setLogo(`/uploads/${data.Logo}`);
+          setAdvertiserLogo(`/uploads/${data.Logo}`);
         }
       } catch (error) {
         console.error("Error fetching advertiser logo:", error);
       }
     };
     fetchAdvertiserLogo();
-  }, [id]);
-
-  useEffect(() => {
-    async function fetchLogo() {
-      try {
-       const response = await fetch(`/api/Advertiser/profiles/${id}`);
-      const data = await response.json();
-        if (data.Logo) {
-          setLogo(`/uploads/${data.Logo}`);
-        }
-      } catch (error) {
-        console.error("Error fetching logo:", error);
-      }
-    }
-    fetchLogo();
   }, [id]);
 
   return (
@@ -86,7 +71,7 @@ const Navbar = () => {
 
             <div className="itemAdmin">
               <img
-                src={Logo}
+                src={advertiserLogo}
                 alt="Logo"
                 className="avatarAdmin"
               />

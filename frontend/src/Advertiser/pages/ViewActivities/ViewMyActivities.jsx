@@ -24,7 +24,6 @@ const ViewMyActitvities = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
 
   const watermelonGreen = "#91c297";
   const watermelonPink = "#d32e65";
@@ -56,7 +55,9 @@ const ViewMyActitvities = () => {
   
     fetchActivities();
   }, [id]); // Rerun fetch when 'id' changes
-    // Filter and sort products when filters or products change
+  
+
+  // Filter and sort products when filters or products change
   useEffect(() => {
     const filtered = activities.filter((activity) => {
       const price = parseFloat(formatPrice(activity.Price));
@@ -89,8 +90,8 @@ const ViewMyActitvities = () => {
     return price;
   };
 
-  const handleActivityClick = (activityId, id) => {
-    navigate(`/activityDetail/${activityId}/${id}`);
+  const handleActivityClick = (id, activityId) => {
+    navigate(`/activityDetail/${id}/${activityId}`);
   };
 
   const handleReportClick = (activityId) => {
@@ -233,7 +234,7 @@ const ViewMyActitvities = () => {
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleActivityClick(activity._id, id)}
+                      onClick={() => handleActivityClick(id, activity._id)}
                       sx={{
                         width: "50%", // Set width to 100% of the container or define a fixed width
                         height: "40px", // Set a fixed height

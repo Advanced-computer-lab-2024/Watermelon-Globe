@@ -11,47 +11,39 @@ const UploadActivityPicture = ({ id, onUploadSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!file) {
       setErrorMessage('Please select a file to upload');
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('picture', file);
-  
+
     try {
-        const response = await fetch(`/api/Activities/uploadPicture?id=${id}`, {
-            method: 'PUT',
-            body: formData,
-        });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
+      const response = await fetch(`/api/Activities/uploadPicture?id=${id}`, {
+        method: 'PUT',
+        body: formData,
+      });
+
+      if (response.ok) {
         const data = await response.json();
-        console.log('Upload successful:', data);
         setSuccessMessage(data.message || 'Picture uploaded successfully');
         setErrorMessage('');
-        if (onUploadSuccess && data.Activity && data.Activity.picture) {
+        if (onUploadSuccess) {
           onUploadSuccess(data.Activity.picture);
         }
       } else {
-        const text = await response.text();
-        console.error('Unexpected response:', text);
-        throw new Error('Unexpected response from server');
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || 'Failed to upload picture');
+        setSuccessMessage('');
       }
     } catch (error) {
-      console.error('Error during upload:', error);
       setErrorMessage('An error occurred: ' + error.message);
       setSuccessMessage('');
     }
   };
-  
-  
+
   const watermelonPink = '#FF4081';
 
   const buttonStyle = {
@@ -89,4 +81,3 @@ const UploadActivityPicture = ({ id, onUploadSuccess }) => {
 };
 
 export default UploadActivityPicture;
-
