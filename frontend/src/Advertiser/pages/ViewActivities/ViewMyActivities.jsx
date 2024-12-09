@@ -156,11 +156,8 @@ const ViewMyActitvities = () => {
                   </div>
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
-                      src={
-                        activities.picture ||
-                        "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-                      }
-                      alt={`Image of ${activity.name}`}
+                      src={activity.picture ? `/uploads/${activity.picture}` : "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"}
+                      alt={`Image of ${activity.Name}`}
                       loading="lazy"
                     />
                   </AspectRatio>

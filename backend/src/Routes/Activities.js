@@ -12,11 +12,13 @@ const {
   getActivitiesNew,
   getAllTags,
   getActivitiesByAdvertiserId,
+  uploadPicture,
 } = require("../Controller/activityController");
 
 router.post("/newActivity", createActivity); //duplicate
 router.get("/activities", getActivities); //duplicate
 router.get("/getActivityById/:id", getActivityById);
+router.put('/uploadPicture', uploadPicture);
 
 router.get("/getActivitiesByAdvertiserId/:id", getActivitiesByAdvertiserId);
 router.post("/addActivity", createActivity); //duplicate

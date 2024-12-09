@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaEdit, FaImage, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaEdit, FaImage, FaStar, FaStarHalfAlt, FaTrash } from "react-icons/fa";
 import UploadActivityPicture from "../UploadActivityImage";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Navbar from "../../Components/AdvertiserNavbar";
 
 const ActivityDetails = () => {
   const { activityId } = useParams();
+  const navigate = useNavigate();
   const [activity, setActivity] = useState(null);
   const [category, setCategory] = useState(null); // Store category name
   const [isEditing, setIsEditing] = useState(false);
@@ -25,14 +26,11 @@ const ActivityDetails = () => {
   useEffect(() => {
     const fetchActivity = async () => {
       try {
-        // Fetch the activity by ID
         const response = await axios.get(`/api/Activities/getActivityById/${activityId}`);
         setActivity(response.data);
 
-        // Fetch the category name using the Category ID
         const categoryResponse = await axios.get(`/api/Admin/GetActivityCategory/${response.data.Category}`);
-        setCategory(categoryResponse.data.activity); // Assuming the response contains a "name" field
-
+        setCategory(categoryResponse.data.activity);
       } catch (error) {
         console.error("Error fetching activity details:", error);
       }
@@ -82,6 +80,24 @@ const ActivityDetails = () => {
     }
   };
 
+  const handleDeleteActivity = async () => {
+    if (window.confirm("Are you sure you want to delete this activity?")) {
+      try {
+        const response = await fetch(`/api/Activities/deleteActivity/${activityId}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          navigate("/");
+        } else {
+          console.error("Failed to delete activity");
+        }
+      } catch (error) {
+        console.error("Error deleting activity:", error);
+      }
+    }
+  };
+
   const renderRatingStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -122,13 +138,20 @@ const ActivityDetails = () => {
             <div style={{ padding: "20px" }}>
               <div className="flex-1 p-8">
                 <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#91c297]">
+                <button
+                      onClick={handleDeleteActivity}
+                      className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                      title="Delete Activity"
+                    >
+                      <FaTrash size={20} />
+                    </button>
                   <div className="md:flex">
                     <div className="md:flex-shrink-0 md:w-1/3">
-                      <img
-                        className="h-full w-full object-cover md:w-full"
-                        src={activity?.picture || "https://via.placeholder.com/300"}
-                        alt={activity?.Name}
-                      />
+                    <img
+                      className="h-full w-full object-cover md:w-full"
+                      src={activity?.picture ? `/uploads/${activity.picture}` : "https://via.placeholder.com/300"}
+                      alt={activity?.Name}
+                    />
                     </div>
                     <div className="p-8 md:w-2/3">
                       {isEditing ? (
@@ -271,12 +294,21 @@ const ActivityDetails = () => {
                           </div>
                         </>
                       )}
+                      <button
+                          onClick={() => setIsEditing(true)}
+                          className="mt-4 px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
+                        >
+                          <FaEdit className="inline-block mr-2" /> Edit Activity
+                        </button>
                       <div className="mt-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Activity Picture</h3>
                         <UploadActivityPicture
-                          id={activityId}
-                          onSuccess={(newPicture) => setActivity((prev) => ({ ...prev, picture: newPicture }))}
-                        />
+                            id={activityId}
+                            onSuccess={(newPicture) => {
+                              setActivity((prev) => ({ ...prev, picture: newPicture }));
+                              setShowUpdatePicture(false);
+                            }}
+                          />
                       </div>
                     </div>
                   </div>

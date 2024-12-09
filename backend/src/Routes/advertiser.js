@@ -27,7 +27,6 @@ const {
 } = require("../Controller/companyProfileController");
 
 const { getSalesReport } = require("../Controller/companyProfileController");
-const { uploadPicture } = require("../Controller/activityController");
 
 router.get("/frontendAdvertiserTable", frontendAdvertiserTable);
 router.get("/frontendPendingAdvertiserTable", frontendPendingAdvertiserTable);
@@ -62,8 +61,6 @@ router.get("/filterRevenueByDateAdvertiser/:advertiserId", filterRevenueByDateAd
 router.get("/getTotalTouristsForActivity/:activityId", getTotalTouristsForActivity);
 
 router.get("/getMonthlyTouristsForActivity/:activityId", getMonthlyTouristsForActivity);
-router.put("/uploadPicture", uploadPicture);
-
 // router.post("/addAdvertiser", createAdvertiser);
 
 module.exports = router;
