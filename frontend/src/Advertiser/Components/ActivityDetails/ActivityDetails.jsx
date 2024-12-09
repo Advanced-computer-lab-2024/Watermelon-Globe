@@ -8,6 +8,7 @@ import Navbar from "../../Components/AdvertiserNavbar";
 
 const ActivityDetails = () => {
   const { id, activityId } = useParams();
+  const [tags, setTags] = useState([]);
   const navigate = useNavigate();
   const [activity, setActivity] = useState(null);
   const [category, setCategory] = useState(null);
@@ -27,10 +28,23 @@ const ActivityDetails = () => {
     const fetchActivity = async () => {
       try {
         const response = await axios.get(`/api/Activities/getActivityById/${activityId}`);
-        setActivity(response.data);
+        const activityData = response.data;
+        console.log(activityData);
+        setActivity(activityData);
 
         const categoryResponse = await axios.get(`/api/Admin/GetActivityCategory/${response.data.Category}`);
         setCategory(categoryResponse.data.activity);
+
+        if (activityData.tags && activityData.tags.length > 0) {
+          const tagPromises = activityData.tags.map(tagObj =>
+            axios.get(`/api/Governer/getTagById/${tagObj._id}`)
+          );
+          const tagResponses = await Promise.all(tagPromises);
+          const fetchedTags = tagResponses.map(res => res.data);
+          setTags(fetchedTags); // Store tags with names
+        }
+        console.log(tags);
+
       } catch (error) {
         console.error("Error fetching activity details:", error);
       }
@@ -226,22 +240,21 @@ const ActivityDetails = () => {
                   <p className="text-gray-600 mb-4">{category}</p>
                   <div className="mt-4">
                     <h3 className="text-lg font-medium mb-2">Tags:</h3>
-                    {activity?.tags && activity.tags.length > 0 ? (
+                    {tags.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
-                        {activity.tags.map((tagObj, index) => (
+                        {tags.map(tagObj => (
                           <span
                             key={tagObj._id}
                             className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
                           >
-                            {tagObj.tag}
+                            {tagObj.tag?.trim() || "Unnamed Tag"}
                           </span>
                         ))}
                       </div>
                     ) : (
                       <p className="text-gray-500">No tags associated with this activity.</p>
                     )}
-                          </div>
-
+                  </div>
                           <div className="flex items-center mb-4">
                             <div className="flex items-center">{renderRatingStars(activity?.rating || 0)}</div>
                             <p className="ml-2 text-sm text-gray-600">
