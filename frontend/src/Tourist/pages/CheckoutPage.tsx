@@ -1,54 +1,170 @@
 import React, { useState } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { FaCalendar, FaDollarSign, FaBox } from 'react-icons/fa';
+import { useLocation, useParams } from 'react-router-dom';
+import { FaDollarSign, FaWallet, FaCreditCard, FaCashRegister } from 'react-icons/fa'; // Added Cash Register icon
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import AddressPage from '../Components/AddressPage';
-import PaymentSummary from '../Components/PaymentSummary';
-import PaymentOptions from '../Components/PaymentOptions';
-import WalletComponent from '../Components/Wallet';
 import TouristNavbar from "../Components/TouristNavBar";
+import PaymentSummary  from '../Components/PaymentSummary';
 
-const CheckoutPage = () => {
-  const params = useParams();
-  const { state } = useLocation();
-  const touristId = params.touristId as string
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | 'cashOnDelivery' | null>(null)
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+const stripePromise = loadStripe('pk_test_51QQWIBKTPpyea1n0DvMMy6pxbX2ihuoDsD1K5Hbrsrh5hkw2mG214K159dORl0oA9otHspuTTPMP7NbqgP8buKhE00qzg5wBBP');
 
-  const totalFromCartPage = state?.total || 0; // Fallback to 0 if total is not passed
+interface CheckoutPageProps {
+  totalFromCartPage: number;
+  touristId: string;
+}
 
+const CheckoutPageForm: React.FC<CheckoutPageProps & {selectedAddress: string | null}> = ({ totalFromCartPage, touristId, selectedAddress }) => {
+  const [error, setError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe' | 'cash on delivery'>('stripe');
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const handlePaymentMethodSelection = (method: 'wallet' | 'creditCard' | 'cashOnDelivery') => {
-    setPaymentMethod(method)
-  }
-
-  const handleConfirmPayment = async () => {
-    if (!paymentMethod) {
-      setError('Please select a payment method.')
-      return
+  const handlePaymentAndBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedAddress == null) {
+      setError('Please select a delivery address.');
+      return;
     }
-
-    setIsProcessing(true)
-    setError(null)
 
     try {
-      // Simulating payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      alert(`Payment confirmed using ${paymentMethod}!`)
-      // Here you would typically make an API call to process the payment
-    } catch (err) {
-      setError('An error occurred while processing the payment. Please try again later.')
-      console.error(err)
-    } finally {
-      setIsProcessing(false)
+      if (paymentMethod === 'wallet') {
+        // Handle payment with wallet
+        const walletPaymentResponse = await axios.put(`/api/Tourist/updateWallet/${touristId}`, {
+          amount: -totalFromCartPage,
+        });
+
+        if (walletPaymentResponse.data.wallet >= totalFromCartPage) {
+          // If enough wallet balance, finalize booking
+          const cartResponse = await axios.put(`/api/Tourist/buyCart/${touristId}`);
+          const loyaltyResponse = await axios.put(`/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+            amountPaid: totalFromCartPage,
+          });
+
+          alert(`Purchased Products successfully! 
+          Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
+          Badge: ${loyaltyResponse.data.badge}`);
+        } else {
+          setError('Insufficient wallet balance.');
+        }
+      } else if (paymentMethod === 'stripe') {
+        // Handle payment with Stripe
+        const stripePaymentIntentResponse = await axios.post(`/api/Tourist/payProduct`, {
+          totalAmount: totalFromCartPage,
+        });
+
+        const { clientSecret } = stripePaymentIntentResponse.data;
+
+        if (!stripe || !elements) {
+          setError('Stripe has not loaded yet. Please try again.');
+          return;
+        }
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) return;
+
+        const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: { card: cardElement },
+        });
+
+        if (paymentResult.paymentIntent?.status === 'succeeded') {
+          // 1. First, create the booking
+          const cartResponse = await axios.put(`/api/Tourist/buyCart/${touristId}`);
+          const loyaltyResponse = await axios.put(`/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+            amountPaid: totalFromCartPage,
+          });
+
+          alert(`Products Purchased successfully! 
+          Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
+          Badge: ${loyaltyResponse.data.badge}`);
+        } else {
+          setError('Payment failed, please try again.');
+        }
+      } else if (paymentMethod === 'cash on delivery') {
+        // Handle payment with Cash on Delivery
+        // Proceed with the booking directly as no payment is required
+        const cartResponse = await axios.put(`/api/Tourist/buyCart/${touristId}`);
+        const loyaltyResponse = await axios.put(`/api/Tourist/updateLoyaltyPoints/${touristId}`, {
+          amountPaid: totalFromCartPage,
+        });
+
+        alert(`Your order will be delivered and paid for on delivery. 
+        Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
+        Badge: ${loyaltyResponse.data.badge}`);
+      }
+    } catch (error: any) {
+      console.error('Error during payment or booking:', error);
+      setError(`Error: ${error.message}`);
     }
-  }
+  };
 
-  if (!touristId) {
-    return <p className="text-red-500 text-center mt-8">Tourist ID is missing. Unable to proceed with checkout.</p>
-  }
+  return (
+    <form onSubmit={handlePaymentAndBooking} className="bg-cardBackground shadow-md rounded-lg p-6 max-w-md mx-auto mt-10">
+      <div className="mb-4">
+        <label className="block text-secondary font-semibold mb-2">Select Payment Method:</label>
+        <div className="flex space-x-4 mb-4">
+          <button
+            type="button"
+            onClick={() => setPaymentMethod('wallet')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+          >
+            <FaWallet className="text-xl" />
+            <span>Wallet</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentMethod('stripe')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+          >
+            <FaCreditCard className="text-xl" />
+            <span>Credit Card (Stripe)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentMethod('cash on delivery')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'cash on delivery' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+          >
+            <FaCashRegister className="text-xl" />
+            <span>Cash on Delivery</span>
+          </button>
+        </div>
+      </div>
 
+      {paymentMethod === 'stripe' && (
+        <div className="mb-4">
+          <label className="block text-secondary font-semibold mb-2">Enter Payment Details:</label>
+          <div className="border border-lightGray p-4 rounded-lg bg-lightGray">
+            <CardElement className="text-grayText" />
+          </div>
+        </div>
+      )}
+
+      <button
+        type="submit"
+        className="w-full bg-primary text-white py-2 rounded-lg shadow-md hover:bg-hover"
+        disabled={!stripe}
+      >
+        Confirm Payment
+      </button>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+    </form>
+  );
+};
+
+const CheckoutPage: React.FC = () => {
+  const params = useParams();
+  const { state } = useLocation();
+  const touristId = params.touristId as string;
+  const totalFromCartPage = state?.total || 0; // Fallback to 0 if total is not passed
+
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+
+  // Handle address selection
+  const handleAddressSelect = (addressId: string | null) => {
+    setSelectedAddress(addressId);
+  };
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={touristId} />
@@ -66,47 +182,29 @@ const CheckoutPage = () => {
             </div>
           </div>
 
+          {/* Payment Summary Section */}
+          <div className="p-6 space-y-12">
+            <PaymentSummary totalFromCartPage={totalFromCartPage} touristId={touristId} />
+          </div>
+
           <div className="p-6 space-y-12">
             {/* Delivery Address Section */}
             <div>
               <h3 className="text-2xl font-semibold text-black mb-4">Choose Delivery Address</h3>
-              <AddressPage />
+              <AddressPage onAddressSelect={handleAddressSelect} />
             </div>
 
-            {/* Payment Options Section */}
-            <div>
-              <h3 className="text-2xl font-semibold text-black mb-4">Choose Your Payment Method</h3>
-              <PaymentOptions
-                paymentMethod={paymentMethod}
-                onPaymentMethodSelection={handlePaymentMethodSelection}
-                disableCashOnDelivery={false}
-              />
+            {/* Payment Form Section */}
+            <div className="bg-white p-6 flex items-center justify-center">
+              <Elements stripe={stripePromise}>
+                <CheckoutPageForm totalFromCartPage={totalFromCartPage} touristId={touristId} selectedAddress={selectedAddress} />
+              </Elements>
             </div>
-
-            {/* Payment Summary Section */}
-            <div>
-              <h3 className="text-2xl font-semibold text-black mb-4">Payment Summary</h3>
-              <PaymentSummary totalFromCartPage={totalFromCartPage} touristId={touristId} />
-            </div>
-
-            {/* Confirm Payment Button */}
-            {paymentMethod && (
-              <div className="bg-cardBackground shadow-md rounded-lg p-4">
-                <button
-                  onClick={handleConfirmPayment}
-                  className="w-full p-4 bg-primary text-white rounded-lg hover:bg-hover transition"
-                  disabled={isProcessing}
-                >
-                  {isProcessing ? 'Processing...' : 'Confirm Payment'}
-                </button>
-                {error && <p className="text-red-500 mt-4">{error}</p>}
-              </div>
-            )}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CheckoutPage
+export default CheckoutPage;

@@ -98,17 +98,6 @@ const FlightSearch: React.FC<FlightSearchProps> = ({ token, setFlights }) => {
             <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
         </div>
-        <div className="space-y-2">
-          <label htmlFor="returnDate" className="block text-sm font-medium text-gray-600">Return Date</label>
-          <div className="relative">
-            <DatePicker
-              selected={returnDate ? new Date(returnDate) : new Date()}
-              onChange={(date: Date | null) => setReturnDate(date ? format(date, 'yyyy-MM-dd') : '')}
-              className="w-full px-3 py-2 pl-10 border border-lightGray rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-white text-black"
-            />
-            <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          </div>
-        </div>
       </div>
 
       <div className="flex items-center space-x-2">

@@ -1,5 +1,7 @@
 import { React, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import "./App.css";
 import ReactDOM from "react-dom";
 // Importing all necessary components
@@ -144,6 +146,9 @@ import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
 
 import { CurrencyProvider } from "./Tourist/Components/CurrencyContext"; 
+
+const stripePromise = loadStripe('pk_test_51QQWIBKTPpyea1n0DvMMy6pxbX2ihuoDsD1K5Hbrsrh5hkw2mG214K159dORl0oA9otHspuTTPMP7NbqgP8buKhE00qzg5wBBP');
+
 
 const App = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -354,11 +359,19 @@ const App = () => {
           />
           <Route
             path="/ItineraryDetails/:tripid/:id"
-            element={<ItineraryDetails />}
+            element={
+              <Elements stripe={stripePromise}>
+                <ItineraryDetails />
+              </Elements>
+            }
           />
           <Route
             path="/TouristActivityDetails/:activityId/:id"
-            element={<TouristActivityDetails />}
+            element={
+            <Elements stripe={stripePromise}>
+            <TouristActivityDetails />
+            </Elements>
+            }
           />
 
 

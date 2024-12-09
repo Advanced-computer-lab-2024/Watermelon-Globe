@@ -123,7 +123,6 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ totalFromCartPage, tour
       )}
       <div className="pt-4 border-t border-gray-200">
         <div className="flex justify-between items-center">
-          <span className="font-semibold">Total:</span>
           <span className="text-xl font-bold text-primary">{currencySymbol}{convertedSubtotal.toFixed(2)}</span>
         </div>
       </div>

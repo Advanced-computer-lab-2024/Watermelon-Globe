@@ -218,7 +218,6 @@ export default function ShoppingCart() {
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h2 className="text-xl font-semibold text-secondary mb-4">Order Summary</h2>
               <div className="flex justify-between items-center">
-                <p className="text-lg font-semibold">Total:</p>
                 <p className="text-2xl font-bold text-primary">
                 {currencySymbol}
                       {selectedCurrency

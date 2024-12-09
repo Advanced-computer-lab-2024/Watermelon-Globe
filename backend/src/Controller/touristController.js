@@ -14,6 +14,7 @@ const ActivityBooking = require('../Models/activityBookingModel');
 const Transportation = require('../Models/TransportationModel');
 const Admin = require("../Models/AdminModel.js");
 const nodemailer = require("nodemailer");
+const Itinerary = require('../Models/itineraryModel.js'); 
 
 //Tourist
 
@@ -2241,30 +2242,28 @@ const stripePayIntentActivity = async (req, res) => {
 
 const stripePayIntentItinerary = async (req, res) => {
   try {
-    const { childItineraryId } = req.body; // Receive child itinerary ID in the request
-
-    // Fetch the child itinerary from the database
-    const childItinerary = await ChildItinerary.findById(childItineraryId).populate('itinerary');
-
-    if (!childItinerary) {
-      return res.status(404).json({ error: 'Child Itinerary not found' });
+    const { itineraryId } = req.body; // Receive itinerary ID in the request
+    // Fetch the itinerary from the database
+    const itinerary = await Itinerary.Itinerary.findById(itineraryId);
+    if (!itinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
     }
 
-    if (childItinerary.status !== 'pending') {
-      return res.status(400).json({ error: 'Payment is only allowed for pending itineraries.' });
-    }
+    // Check if the itinerary is available for booking
+    // if (itinerary.bookings) {
+    //   return res.status(400).json({ error: 'This itinerary is already booked and cannot be paid for.' });
+    // }
 
-    // Validate the chosen dates against the parent itinerary's available dates
-    const parentItinerary = childItinerary.itinerary;
-    const availableDatesSet = new Set(parentItinerary.availableDates.map(date => date.toISOString()));
-    const allDatesAvailable = childItinerary.chosenDates.every(date => availableDatesSet.has(date.toISOString()));
+    // // Validate the chosen dates against the itinerary's available dates
+    // const availableDatesSet = new Set(itinerary.availableDates.map(date => date.toISOString()));
+    // const allDatesAvailable = req.body.chosenDates.every(date => availableDatesSet.has(date.toISOString()));
 
-    if (!allDatesAvailable) {
-      return res.status(400).json({ error: 'One or more chosen dates are not available in the parent itinerary.' });
-    }
+    // if (!allDatesAvailable) {
+    //   return res.status(400).json({ error: 'One or more chosen dates are not available in the itinerary.' });
+    // }
 
     // Calculate the payment amount
-    const amount = Math.round(childItinerary.totalPrice * 100); // Convert to cents
+    const amount = Math.round(itinerary.priceOfTour * 100); // Convert to cents
     const currency = 'usd'; // Default currency
 
     // Create the payment intent
@@ -2272,8 +2271,7 @@ const stripePayIntentItinerary = async (req, res) => {
       amount: amount,
       currency: currency,
       metadata: {
-        childItineraryId: childItinerary._id.toString(),
-        buyerId: childItinerary.buyer.toString(),
+        itineraryId: itinerary._id.toString(),
       },
     });
 
@@ -2285,45 +2283,31 @@ const stripePayIntentItinerary = async (req, res) => {
   }
 };
 
+
 const stripePayIntentProduct = async (req, res) => {
   try {
-    const { productId, quantity } = req.body; // Receive product ID and quantity in the request
+    const { totalAmount } = req.body; // Receive product ID and quantity in the request
 
-    // Fetch the product from the database
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    if (product.quantity < quantity) {
-      return res.status(400).json({ error: 'Not enough stock available' });
-    }
-
-    // Calculate the total price for the given quantity
-    const totalAmount = product.price * quantity; // Total amount for the product
-
-    // Convert the amount to cents (Stripe requires amounts in the smallest currency unit)
-    const amount = Math.round(totalAmount * 100); // Amount in cents
     const currency = 'usd'; // Default currency
+
+    // Ensure amount is in the smallest unit (cents for USD)
+    const amountInCents = totalAmount * 100;
 
     // Create the payment intent with the calculated amount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
+      amount: amountInCents, 
       currency: currency,
-      metadata: {
-        productId: product._id.toString(),
-        quantity: quantity,
-      },
     });
 
     // Respond with the client secret for the frontend to complete the payment
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error('Error creating payment intent:', error.message);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Failed to create payment intent.' });
   }
 };
+
+
 const getNotificationsTourist = async (req, res) => {
   const { id } = req.params;
   try {

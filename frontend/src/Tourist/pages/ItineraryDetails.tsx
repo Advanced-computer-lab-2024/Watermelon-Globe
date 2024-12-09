@@ -4,11 +4,15 @@ import {
   FaStar, FaMapMarkerAlt, FaClock, FaCalendar, FaDollarSign, FaLanguage,
   FaWheelchair, FaShare, FaEnvelope, FaBookmark
 } from 'react-icons/fa'
+import { FaWallet, FaCreditCard } from 'react-icons/fa';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from "axios";
-import PaymentOptions2 from "../Components/PaymentOptions2";
-import WalletComponent from "../Components/Wallet";
 import TouristNavbar from "../Components/TouristNavBar";
 import { useCurrency } from "../Components/CurrencyContext";
+
+const stripePromise = loadStripe('pk_test_51QQWIBKTPpyea1n0DvMMy6pxbX2ihuoDsD1K5Hbrsrh5hkw2mG214K159dORl0oA9otHspuTTPMP7NbqgP8buKhE00qzg5wBBP');
+
 
 interface Currency {
   symbol_native: string;
@@ -38,16 +42,21 @@ const ItineraryDetails = () => {
   const tripid = params.tripid as string
   const id = params.id as string
 
+  const [message, setMessage] = useState<string | null>(null);
+
   const [itinerary, setItinerary] = useState<Itinerary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | null>(null)
+  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('stripe'); // Default to stripe payment
   const [bookingMessage, setBookingMessage] = useState<string | null>(null)
   const [bookingInProgress, setBookingInProgress] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
   const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
+
+  const stripe = useStripe();
+  const elements = useElements();
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -115,7 +124,7 @@ const ItineraryDetails = () => {
           await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
             amountPaid: itinerary.priceOfTour,
           })
-
+          
           alert('Itinerary booked successfully!')
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
@@ -123,31 +132,49 @@ const ItineraryDetails = () => {
           })
           alert('Insufficient wallet balance.')
         }
-      } else if (paymentMethod === 'creditCard') {
-        alert('Proceeding with credit card payment (Stripe)...')
+      } else if (paymentMethod === 'stripe') {
+        // Handle payment with Stripe
+        console.log(tripid)
+        const paymentIntentResponse = await axios.post(`/api/Tourist/payItinerary`, {
+          itineraryId: tripid,
+        });
 
-        await axios.post('/api/TouristItinerary/createChildItinerary', {
-          itinerary: tripid,
-          buyer: id,
-          chosenDates: [selectedDate],
-          chosenTimes: [selectedTime],
-          totalPrice: itinerary.priceOfTour,
-          status: 'pending',
-        })
+        const { clientSecret } = paymentIntentResponse.data;
 
-        await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-          amountPaid: itinerary.priceOfTour,
-        })
+        if (!stripe || !elements) {
+          setMessage('Stripe has not loaded yet. Please try again.');
+          return;
+        }
 
-        alert('Itinerary booked successfully!')
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) return;
+        const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: { card: cardElement },
+        });
+
+        if (paymentResult.paymentIntent?.status === 'succeeded') {
+          const loyaltyResponse = await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
+            amountPaid: itinerary.priceOfTour,
+          });
+
+          alert('Payment confirmed using Stripe!')
+          alert('Itinerary booked successfully!')
+
+          await axios.post('/api/TouristItinerary/createChildItinerary', {
+            itinerary: tripid,
+            buyer: id,
+            chosenDates: [selectedDate],
+            chosenTimes: [selectedTime],
+            totalPrice: itinerary.priceOfTour,
+            status: 'pending',
+          })
+        }
       }
-    } catch (err) {
-      console.error('Error during booking:', err)
-      alert('An error occurred while processing the booking. Please try again later.')
-    } finally {
-      setBookingInProgress(false)
+    } catch (error: any) {
+      console.error('Error during payment or booking:', error);
+      setMessage(`Error: ${error.message}`);
     }
-  }
+  };
 
   const handleShareLink = () => {
     const itineraryUrl = `${window.location.origin}/ItineraryDetails/${tripid}/${id}`
@@ -308,14 +335,6 @@ const ItineraryDetails = () => {
               <p className="text-lg font-medium text-gray-800">{itinerary.rating} / 5</p>
             </div>
 
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h3 className="text-xl font-semibold text-secondary mb-4">Payment Options</h3>
-              <PaymentOptions2
-                paymentMethod={paymentMethod}
-                onPaymentMethodSelection={setPaymentMethod}
-              />
-            </div>
-
             <form onSubmit={handleBooking} className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">Book Your Itinerary</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -363,16 +382,55 @@ const ItineraryDetails = () => {
               </div>
 
               <div className="flex items-center justify-between">
-                <button
-                  type="submit"
-                  className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-hover transition-colors"
-                  disabled={bookingInProgress}
-                >
-                  {bookingInProgress ? 'Booking...' : 'Book Now'}
-                </button>
                 {bookingMessage && <p className="text-lg text-gray-600">{bookingMessage}</p>}
               </div>
             </form>
+
+              <form
+                onSubmit={handleBooking}
+                className="bg-cardBackground shadow-md rounded-lg p-6 max-w-md mx-auto mt-10"
+              >
+                <div className="mb-4">
+                  <label className="block text-secondary font-semibold mb-2">Select Payment Method:</label>
+                  <div className="flex space-x-4 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('wallet')}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+                    >
+                      <FaWallet className="text-xl" />
+                      <span>Wallet</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('stripe')}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+                    >
+                      <FaCreditCard className="text-xl" />
+                      <span>Credit Card (Stripe)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {paymentMethod === 'stripe' && (
+                  <div className="mb-4">
+                    <label className="block text-secondary font-semibold mb-2">Enter Payment Details:</label>
+                    <div className="border border-lightGray p-4 rounded-lg bg-lightGray">
+                      <CardElement className="text-grayText" />
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-primary text-white py-2 rounded-lg shadow-md hover:bg-hover"
+                  disabled={!stripe}
+                >
+                  Pay and Book
+                </button>
+
+                {message && <p className="text-red-500 mt-4">{message}</p>}
+              </form>
 
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">Actions</h3>
@@ -386,16 +444,16 @@ const ItineraryDetails = () => {
                   <FaBookmark className="mr-2" />
                   {isBookmarked ? 'Bookmarked' : 'Bookmark'}
                 </button>
-                <div className="flex justify-between">
+                <div className="flex justify-between ">
                   <button
-                    className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
+                    className="flex items-center justify-center px-4 py-2 mr-1 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
                     onClick={handleShareLink}
                   >
                     <FaShare className="mr-2 inline" />
                     Share Link
                   </button>
                   <button
-                    className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
+                    className="flex items-center justify-center px-4 py-2 ml-1 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none"
                     onClick={handleShareEmail}
                   >
                     <FaEnvelope className="mr-2 inline" />

@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import PaymentOptions2 from "../Components/PaymentOptions2";
+import { FaWallet, FaCreditCard } from 'react-icons/fa';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { FaCalendar, FaTags, FaDollarSign, FaMapMarkerAlt, FaClock, FaTag, FaStar, FaShare, FaEnvelope, FaBookmark } from 'react-icons/fa'
 import TouristNavbar from "../Components/TouristNavBar";
 import WalletComponent from "../Components/Wallet";
 import { useCurrency } from "../Components/CurrencyContext";
+
+const stripePromise = loadStripe('pk_test_51QQWIBKTPpyea1n0DvMMy6pxbX2ihuoDsD1K5Hbrsrh5hkw2mG214K159dORl0oA9otHspuTTPMP7NbqgP8buKhE00qzg5wBBP');
+
 
 
 interface Currency {
@@ -48,7 +53,7 @@ interface Comment {
 interface Activity {
   _id: string
   Name: string
-  Date: string
+  Date: string 
   Time: string
   Location: Location
   Price: number
@@ -69,13 +74,18 @@ const ActivityDetails: React.FC = () => {
   const activityId = params.activityId as string
   const id = params.id as string
 
+
+
   const [activity, setActivity] = useState<Activity | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'creditCard' | null>(null)
+  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe'>('stripe'); // Default to stripe payment
   const [bookingInProgress, setBookingInProgress] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
   const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
+  const [message, setMessage] = useState<string | null>(null)
+  const stripe = useStripe();
+  const elements = useElements();
 
   useEffect(() => {
     const fetchActivity = async () => {
@@ -132,14 +142,16 @@ const ActivityDetails: React.FC = () => {
     }
   }
 
-  const handleBooking = async () => {
+  const handleBooking = async (e: React.FormEvent) => {
+
+    e.preventDefault()
+
+
+    
     if (!paymentMethod || !activity) {
       alert('Please select a payment method before booking.')
       return
     }
-
-    setBookingInProgress(true)
-    setError(null)
 
     try {
       if (paymentMethod === 'wallet') {
@@ -167,29 +179,47 @@ const ActivityDetails: React.FC = () => {
           })
           alert('Insufficient wallet balance.')
         }
-      } else if (paymentMethod === 'creditCard') {
-        alert('Proceeding with credit card payment (Stripe)...')
+      } else if (paymentMethod === 'stripe') {
+        // Handle payment with Stripe
 
-        await axios.post('/api/TouristItinerary/createActivityBooking', {
-          activity: activityId,
-          tourist: id,
-          chosenDate: activity.Date,
-        })
+        const paymentIntentResponse = await axios.post(`/api/Tourist/payActivity`, {
+          activityId: activityId,
+        });
 
-        await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
-          amountPaid: activity.Price,
-        })
+        const { clientSecret } = paymentIntentResponse.data;
 
-        alert('Activity booked successfully!')
+        if (!stripe || !elements) {
+          setMessage('Stripe has not loaded yet. Please try again.');
+          return;
+        }
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) return;
+        const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: { card: cardElement },
+        });
+
+        if (paymentResult.paymentIntent?.status === 'succeeded') {
+          alert('Payment confirmed using Stripe!')
+
+          await axios.post('/api/TouristItinerary/createActivityBooking', {
+            activity: activityId,
+            tourist: id,
+            chosenDate: activity.Date,
+          })
+
+          await axios.put(`/api/Tourist/updateLoyaltyPoints/${id}`, {
+            amountPaid: activity.Price,
+          })
+
+          alert('Activity booked successfully!')
+        }
       }
-    } catch (err) {
-      console.error('Error during booking:', err)
-      alert('An error occurred while processing the booking. Please try again later.')
-    } finally {
-      setBookingInProgress(false)
+    } catch (error: any) {
+      console.error('Error during payment or booking:', error);
+      setMessage(`Error: ${error.message}`);
     }
-  }
-
+  };
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -314,13 +344,51 @@ const ActivityDetails: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <h3 className="text-xl font-semibold text-secondary mb-4">Payment Options</h3>
-              <PaymentOptions2
-                paymentMethod={paymentMethod}
-                onPaymentMethodSelection={setPaymentMethod}
-              />
-            </div>
+            <form
+                onSubmit={handleBooking}
+                className="bg-cardBackground shadow-md rounded-lg p-6 max-w-md mx-auto mt-10"
+              >
+                <div className="mb-4">
+                  <label className="block text-secondary font-semibold mb-2">Select Payment Method:</label>
+                  <div className="flex space-x-4 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('wallet')}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'wallet' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+                    >
+                      <FaWallet className="text-xl" />
+                      <span>Wallet</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('stripe')}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${paymentMethod === 'stripe' ? 'bg-primary text-white hover:bg-hover' : 'bg-lightGray text-secondary hover:bg-secondaryHover hover:text-white'}`}
+                    >
+                      <FaCreditCard className="text-xl" />
+                      <span>Credit Card (Stripe)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {paymentMethod === 'stripe' && (
+                  <div className="mb-4">
+                    <label className="block text-secondary font-semibold mb-2">Enter Payment Details:</label>
+                    <div className="border border-lightGray p-4 rounded-lg bg-lightGray">
+                      <CardElement className="text-grayText" />
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-primary text-white py-2 rounded-lg shadow-md hover:bg-hover"
+                  disabled={!stripe}
+                >
+                  Pay and Book
+                </button>
+
+                {message && <p className="text-red-500 mt-4">{message}</p>}
+              </form>
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">Actions</h3>
               <div className="space-y-4">
@@ -350,19 +418,6 @@ const ActivityDetails: React.FC = () => {
                   </button>
                 </div>
               </div>
-            </div>
-
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-              <button
-                onClick={handleBooking}
-                className={`w-full px-4 py-2 text-white rounded-lg ${bookingInProgress
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-primary hover:bg-hover'
-                  }`}
-                disabled={bookingInProgress}
-              >
-                {bookingInProgress ? 'Booking...' : 'Book Activity'}
-              </button>
             </div>
           </div>
         </div>

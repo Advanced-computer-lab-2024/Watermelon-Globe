@@ -14,7 +14,7 @@ interface Address {
   country: string
 }
 
-export default function AddressPage() {
+export default function AddressPage({ onAddressSelect }: { onAddressSelect: (addressId: string | null) => void }) {
   const params = useParams()
   const touristId = params.touristId
   const [addresses, setAddresses] = useState<Address[]>([])
@@ -31,6 +31,7 @@ export default function AddressPage() {
   const [showAddForm, setShowAddForm] = useState<boolean>(false) // Track whether to show the add address form
 
 
+  
   // Fetch existing addresses from backend
   const fetchAddresses = async () => {
     try {
@@ -137,10 +138,13 @@ export default function AddressPage() {
         // If the selected address is already selected, unselect it
         await axios.put(`/api/Tourist/unselectAddress/${touristId}`, { index: addresses.findIndex((address) => address._id === addressId) })
         setSelectedAddress(null) // Unselect address locally
+        onAddressSelect(null); // Pass null when no address is selected
       } else {
         // Select the new address
         await axios.put(`/api/Tourist/selectAddress/${touristId}`, { index: addresses.findIndex((address) => address._id === addressId) })
         setSelectedAddress(addressId) // Update selected address locally
+        onAddressSelect(addressId); // Pass selected address
+
       }
     } catch (error) {
       console.error('Error selecting or unselecting address:', error)
