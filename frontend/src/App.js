@@ -102,6 +102,7 @@ import TourGuideHome from "./TourGuide/pages/TourGuideHomePage.js";
 import TourguideSignup from "./pages/TourguideSignup.jsx";
 import TourguideSignupConfirm from "./pages/TourguideSignupConfirm.jsx";
 import TourGuidePage from "./Components/tourGuidePage";
+import TouristItineraryReport from "./TourGuide/pages/ViewItineraries/TouristItinerayReport";
 import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGuide.js";
 import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
 import TourguideHome from "./TourGuide/pages/TourguideHome.jsx";
@@ -328,6 +329,7 @@ const App = () => {
           {/* Advertiser Pages */}
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/ActivityReport/:id" element={<TouristActivityReport />} />
+          <Route path="/ItineraryReport/:id" element={<TouristItineraryReport />} />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
           <Route
             path="/advertiserProfile/:advertiserId"
