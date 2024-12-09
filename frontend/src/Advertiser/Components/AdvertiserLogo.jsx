@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const AdvertiserLogo = () => {
-    const {id} = useParams();
+const AdvertiserLogo = ({id,onClose}) => {
+   // const {id} = useParams();
     const [Logo, setLogo] = useState(null);
     const [preview, setPreview] = useState(null);
     const navigate = useNavigate();
@@ -71,7 +71,21 @@ const AdvertiserLogo = () => {
         )}
       </div>
       <input type="file" accept="image/*" onChange={handleLogoChange} />
-      <button onClick={handleLogoUpload}>Upload Photo</button>
+      {/* <button onClick={handleLogoUpload}>Upload Photo</button> */}
+      <div style={{display:"flex" }}>
+     <button style={{marginRight:10}}
+        className="flex items-center px-4 py-2 bg-[#91c297] hover:bg-[#7A9F77] text-white rounded mt-2"
+        onClick={handleLogoUpload}
+      >
+        Upload 
+      </button>
+      <button style={{marginRight:10}}
+        className="flex items-center px-4 py-2 bg-[#e89bb5] hover:bg-[#d787a1] text-white rounded mt-2"
+        onClick={onClose} // Trigger the onClose function when clicked
+      >
+        Cancel
+      </button>
+      </div>
     </div>
   );
 };

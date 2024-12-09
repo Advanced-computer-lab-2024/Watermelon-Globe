@@ -106,7 +106,7 @@ import ChangePasswordTourGuide from "./TourGuide/Components/changePasswordTourGu
 import ItineraryTourguide from "./TourGuide/Components/itineraryDetails.jsx";
 import TourguideHome from "./TourGuide/pages/TourguideHome.jsx";
 import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
-import TourGuideProfile from "./TourGuide/Components/viewProfile.jsx";
+import TourGuideProfile from "./TourGuide/Components/viewProfile.tsx";
 import AllItineraries from "./TourGuide/Components/AllItineraries.jsx";
 import GeneralDetails from "./TourGuide/Components/AllItinerariesDetail.jsx";
 //Tour guide pages -- Sprint 3
@@ -160,6 +160,7 @@ import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx"
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.tsx";
 import UploadActivityPicture from "Advertiser/Components/UploadActivityImage";
+import AdvertiserProfile from "Advertiser/Components/AdvertiserProfile.tsx";
 
 
 const App = () => {
@@ -267,6 +268,7 @@ const App = () => {
             element={<ViewMyActitvities />}
           />
           <Route path="/edit-logo/:id" element={<AdvertiserLogo />} />
+          <Route path="/AdvertiserProfile/:id" element={<AdvertiserProfile />} />
 
           {/* Guest Routes */}
           <Route
