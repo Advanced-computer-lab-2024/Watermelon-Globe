@@ -11,6 +11,7 @@ import {
   FaShare,
   FaEnvelope,
   FaBookmark,
+  FaBell,
 } from "react-icons/fa";
 import axios from "axios";
 import PaymentOptions2 from "../Components/PaymentOptions2";
@@ -28,6 +29,7 @@ interface Itinerary {
   rating: number;
   availableDates: string[];
   availableTimes: string[];
+  notifyRequests: string[];
 }
 interface PromoCode {
   code: string;
@@ -50,6 +52,7 @@ const ItineraryDetails = () => {
   const [bookingMessage, setBookingMessage] = useState<string | null>(null);
   const [bookingInProgress, setBookingInProgress] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isNotified, setIsNotified] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
@@ -82,7 +85,7 @@ const ItineraryDetails = () => {
     }
   };
 
-  useEffect(() => {
+
     const fetchItinerary = async () => {
       try {
         const response = await fetch(`/api/Itinerary/getItinerary/${tripid}`);
@@ -91,6 +94,7 @@ const ItineraryDetails = () => {
         }
         const data = await response.json();
         setItinerary(data);
+        setIsNotified(data.notifyRequests.includes(id));
         setTotal(data.priceOfTour);
       } catch (error) {
         setError((error as Error).message);
@@ -99,6 +103,7 @@ const ItineraryDetails = () => {
       }
     };
 
+  useEffect(() => {
     const checkBookmarkStatus = async () => {
       try {
         const bookmarkResponse = await axios.get(
@@ -113,6 +118,25 @@ const ItineraryDetails = () => {
     fetchItinerary();
     checkBookmarkStatus();
   }, [tripid, id]);
+
+  const handleNotifyRequest = async () => {
+    try {
+      if (isNotified) {
+        await axios.delete(
+          `/api/Tourist/removeNotifyItinerary/${id}/${tripid}`
+        );
+        setIsNotified(false);
+        alert("Notification request removed successfully.");
+      } else {
+        await axios.post(`/api/Tourist/requestNotifyItinerary/${id}/${tripid}`);
+        setIsNotified(true);
+        alert("You will be notified when this itinerary becomes active.");
+      }
+    } catch (error) {
+      console.error("Error handling notification request:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +161,7 @@ const ItineraryDetails = () => {
           `/api/Tourist/updateWallet/${id}`,
           {
             // amount: -itinerary.priceOfTour,
-            amount: total,
+            amount: -total,
           }
         );
 
@@ -233,7 +257,7 @@ const ItineraryDetails = () => {
     }
   };
 
-  if (loading) {
+  if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
@@ -241,20 +265,19 @@ const ItineraryDetails = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="text-red-500 text-center text-xl mt-10">
-        Error: {error}
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="text-red-500 text-center text-xl mt-10">
+  //       Error: {error}
+  //     </div>
+  //   );
+  // }
 
   if (!itinerary) return null;
 
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
-      <p>hello</p>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-primary p-5 relative">
@@ -274,6 +297,28 @@ const ItineraryDetails = () => {
           </div>
 
           <div className="p-6 space-y-6">
+            {!itinerary?.accessibility && (
+              <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+                <h3 className="text-xl font-semibold text-secondary mb-2 flex items-center">
+                  <FaBell className="mr-2" /> Itinerary Status
+                </h3>
+                <p className="text-gray-600 mb-2">
+                  This itinerary is currently inactive.
+                </p>
+                <button
+                  onClick={handleNotifyRequest}
+                  className={`flex items-center justify-center px-4 py-2 text-sm font-semibold text-white rounded-lg ${
+                    isNotified
+                      ? "bg-secondary bg-secondary"
+                      : "bg-primary hover:bg-hover"
+                  }`}
+                >
+                  <FaBell className="mr-2" />
+                  {isNotified ? "Remove Notification" : "Notify Me When Active"}
+                </button>
+              </div>
+            )}
+
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">
                 Activities
@@ -505,6 +550,48 @@ const ItineraryDetails = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="btn btn-primary text-white"
+            disabled={bookingInProgress}
+          >
+            {bookingInProgress ? "Booking..." : "Book Now"}
+          </button>
+          {bookingMessage && (
+            <p className="text-lg text-gray-600">{bookingMessage}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col space-y-4 mb-8">
+        <button
+          onClick={handleBookmark}
+          className={`flex items-center justify-center px-4 py-2 rounded-md ${
+            isBookmarked
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-800"
+          }`}
+          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+        >
+          <Bookmark className="mr-2" size={20} />
+          {isBookmarked ? "Bookmarked" : "Bookmark"}
+        </button>
+        <div className="flex justify-between">
+          <button
+            className="flex-1 mr-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            onClick={handleShareLink}
+          >
+            <span>Share Link</span>
+          </button>
+          <button
+            className="flex-1 ml-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+            onClick={handleShareEmail}
+          >
+            <span>Share via Email</span>
+          </button>
         </div>
       </div>
     </div>

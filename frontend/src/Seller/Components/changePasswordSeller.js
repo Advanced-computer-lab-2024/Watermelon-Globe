@@ -1,10 +1,56 @@
 import React, { useState } from "react";
 import {FaTimes, FaCheck} from 'react-icons/fa'
 
-const ChangePasswordSeller = ({ id, onClose }) => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  import React, { useState } from 'react';
+  import Navbar from './navbar/Navbar';
+  import Sidebar from './sidebar/Sidebar';
+import { useParams,useNavigate } from 'react-router-dom';
+
+const ChangePasswordSeller = () => {
+  const [sellerId, setSellerId] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [sellerPassword, setSellerPassword] = useState('');
+  const watermelonGreen = '#4CAF50';
+  const watermelonPink = '#FF4081';
+  const navigate=useNavigate();
+
+  const containerStyle = {
+    backgroundColor: '#F8F8F8',
+    padding: '20px',  // Increased padding for better visual separation
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    marginTop: '20px', // Add margin-top for better spacing
+    width: '100%',
+  };
+
+  const {id}=useParams();
+
+  const handleShowPassword = async () => {
+    // if (!sellerId) {
+    //   alert("Please enter a seller ID.");
+    //   return;
+    // }
+  
+    try {
+      const response = await fetch(`/api/Seller/getPassword?id=${id}`);
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setSellerPassword(data || 'Password not available');
+      } else {
+        alert(data.error || 'Failed to retrieve password.');
+      }
+    } catch (error) {
+      console.error("Error retrieving password:", error);
+      alert("An error occurred while retrieving the password.");
+    }
+  };
+
+
 
   const handleConfirmPasswordChange = async () => {
     if (newPassword !== confirmNewPassword) {

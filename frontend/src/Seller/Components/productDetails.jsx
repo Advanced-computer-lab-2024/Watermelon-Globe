@@ -1,14 +1,16 @@
+
+
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaEdit, FaImage, FaStar, FaStarHalfAlt, FaTrash } from "react-icons/fa";
+import { FaEdit, FaImage, FaStar, FaStarHalfAlt,FaTrash  } from "react-icons/fa";
 import UploadProductPicture from "./UploadImage";
 import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate=useNavigate();
   const [product, setProduct] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProduct, setUpdatedProduct] = useState({
@@ -85,34 +87,25 @@ const ProductDetails = () => {
   };
 
   const handleProductDelete = () => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      axios
-        .delete(`/api/Seller/deleteProductById/${id}`)
-        .then(() => navigate(`/GetAllProducts/${id}`))
-        .catch((err) => console.error(err));
+    if (window.confirm("Are you sure you want to delete this product?")) {{
+    //setProducts(products.filter((item) => item.id !== id));
+    axios
+      .delete(`/api/Seller/deleteProductById/${id}`)
+      .catch((err) => console.error(err));
+      navigate(`/GetAllProducts/${id}`)
     }
   };
-
-  const handleImageUploadSuccess = async () => {
-    try {
-      const response = await axios.post("/api/Seller/getProductById", { id });
-      setProduct(response.data);
-      setShowUpdatePicture(false);
-    } catch (error) {
-      console.error("Error fetching updated product details:", error);
-    }
-  };
-
+  }
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f4eaef76" }}>
-      <div
+       <div
         style={{
           backgroundColor: "#fff",
-          minHeight: "100vh",
-          width: "102%",
-          margin: 0,
-          padding: 0,
-          display: "flex",
+          minHeight: "100vh", // Ensures it covers the full viewport
+          width: "102%", // Full width of the viewport
+          margin: 0, // Remove default margins
+          padding: 0, // Remove default padding
+          display: "flex", // Optional: for flexible alignment
           flexDirection: "column",
         }}
       >
@@ -121,147 +114,156 @@ const ProductDetails = () => {
           <div className="listContainerAdminProduct">
             <Navbar />
             <div style={{ padding: "20px" }}>
-              <div className="flex-1 p-8">
-                <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#91c297]">
-                  <div className="md:flex">
-                    <div className="md:flex-shrink-0 md:w-1/3">
-                      <img
-                        className="h-full w-full object-cover md:w-full"
-                        src={product?.picture ? `/uploads/${product.picture}` : "https://via.placeholder.com/300"}
-                        alt={product?.name || "Product image"}
-                      />
-                    </div>
-                    <div className="p-8 md:w-2/3">
-                      <div className="relative">
-                        <button
-                          style={{ color: "#e89bb5" }}
-                          onClick={handleProductDelete}
-                          className="absolute top-0 right-0 p-2 text-red-500 hover:text-red-700"
-                          aria-label="Delete product"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                      
-                      {isEditing ? (
-                        <div className="space-y-4">
-                          <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Product Details</h2>
-                          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                            Product Name:
-                          </label>
-                          <input
-                            name="name"
-                            placeholder="Enter Product Name"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={product?.name}
-                          />
-                          <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                            Product Price:
-                          </label>
-                          <input
-                            name="price"
-                            placeholder="Enter Product Price"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={product?.price}
-                          />
-                          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                            Description:
-                          </label>
-                          <textarea
-                            name="description"
-                            placeholder="Enter Product Description"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={handleInputChange}
-                            defaultValue={product?.description}
-                            rows="4"
-                          />
-                          <div className="flex space-x-4">
-                            <button
-                              className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
-                              onClick={handleUpdateProduct}
-                            >
-                              Save Changes
-                            </button>
-                            <button
-                              className="px-4 py-2 bg-[#e89bb5] text-gray-700 rounded-md hover:bg-[#d787a1] transition duration-300"
-                              onClick={handleCancel}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
-                            Product Details
-                          </div>
-                          <h1 className="text-3xl font-bold text-black mb-2">{product?.name}</h1>
-                          <p style={{ marginLeft: 5 }} className="font-semibold text-gray-900">
-                            ${product?.price}
-                          </p>
-                          <p className="text-gray-600 mb-4">{product?.description}</p>
-                          <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-gray-200">
-                            <div className="space-x-2 flex text-sm"></div>
-                          </div>
-                          <div className="flex items-center mb-4">
-                            <div className="flex items-center">{renderRatingStars(product?.rating || 0)}</div>
-                            <p className="ml-2 text-sm text-gray-600">
-                              {product?.rating ? `${product.rating} out of 5 stars` : "Not rated yet"}
-                            </p>
-                          </div>
-                          <div className="bg-[#f4eaef76] px-4 py-3 sm:px-6 rounded-md mb-4 border border-[#e89bb5]">
-                            <p className="text-sm text-gray-700">
-                              <span className="font-medium">Quantity in stock:</span> {product?.quantity}
-                            </p>
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Reviews</h3>
-                            {product?.reviews?.length > 0 ? (
-                              product.reviews.map((review, index) => (
-                                <div key={index} className="mb-4 pb-4 border-b border-gray-200 last:border-b-0">
-                                  <p className="text-gray-700">{review.review || "No review provided"}</p>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="text-gray-500">No reviews yet for this product.</p>
-                            )}
-                          </div>
-                          <div className="mt-6 flex items-center space-x-4">
-                            <button
-                              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#91c297] hover:bg-[#7ab481] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                              onClick={() => setIsEditing(true)}
-                            >
-                              <FaEdit className="mr-2" />
-                              Edit Product
-                            </button>
-                            <button
-                              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#91c297] hover:bg-[#7ab481] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                              onClick={() => setShowUpdatePicture(!showUpdatePicture)}
-                            >
-                              <FaImage className="mr-2" />
-                              {showUpdatePicture ? "Cancel Update" : "Update Picture"}
-                            </button>
-                          </div>
-                        </>
-                      )}
-                      {showUpdatePicture && (
-                        <div className="mt-6">
-                          <UploadProductPicture id={id} onUploadSuccess={handleImageUploadSuccess} />
-                        </div>
-                      )}
+        <div className="flex-1 p-8">
+          <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#91c297]">
+         
+            <div className="md:flex">
+              
+              <div className="md:flex-shrink-0 md:w-1/3">
+                <img
+                  className="h-full w-full object-cover md:w-full"
+                  src={product?.picture || "https://via.placeholder.com/300"}
+                  alt={product?.name}
+                />
+              </div>
+              <div className="p-8 md:w-2/3">
+              <div className="relative">
+                  <button style={{color:"#e89bb5"}}
+                    onClick={handleProductDelete}
+                    className="absolute top-0 right-0 p-2 text-red-500 hover:text-red-700"
+                    aria-label="Delete product"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Product Details</h2>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                        Product Name :
+                      </label>
+                    <input
+                      name="name"
+                      placeholder="Enter Product Name"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onChange={handleInputChange}
+                      defaultValue={product?.name}
+                    />
+
+<                   label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                        Product Price :
+                      </label>
+                    <input
+                      name="price"
+                      placeholder="Enter Product Price"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onChange={handleInputChange}
+                      defaultValue={product?.price}
+                    />
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                        Description :
+                      </label>
+                    <textarea
+                    
+                      name="description"
+                      placeholder="Enter Product Description"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onChange={handleInputChange}
+                      defaultValue={product?.description}
+                      rows="4"
+                    />
+                    <div className="flex space-x-4">
+                      <button
+                        className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"
+                        onClick={handleUpdateProduct}
+                      >
+                        Save Changes
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-[#e89bb5] text-gray-700 rounded-md hover:bg-[#d787a1] transition duration-300"
+                        onClick={handleCancel}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
+                      Product Details
+                     
+                    </div>
+                    <h1 className="text-3xl font-bold text-black mb-2">{product?.name}</h1>
+                    <p style={{marginLeft:5}} className="font-semibold text-gray-900">${product?.price}</p>
+                    <p className="text-gray-600 mb-4">{product?.description}</p>
+                    <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-gray-200">
+                      <div className="space-x-2 flex text-sm">
+                        
+                        
+                      </div>
+                    </div>
+                    <div className="flex items-center mb-4">
+                      <div className="flex items-center">
+                        {renderRatingStars(product?.rating || 0)}
+                      </div>
+                      <p className="ml-2 text-sm text-gray-600">
+                        {product?.rating ? `${product.rating} out of 5 stars` : "Not rated yet"}
+                      </p>
+                    </div>
+                    <div className="bg-[#f4eaef76] px-4 py-3 sm:px-6 rounded-md mb-4 border border-[#e89bb5]">
+                      <p className="text-sm text-gray-700">
+                        <span className="font-medium">Quantity in stock:</span> {product?.quantity}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Reviews</h3>
+                      {product?.reviews?.length > 0 ? (
+                        product.reviews.map((review, index) => (
+                          <div key={index} className="mb-4 pb-4 border-b border-gray-200 last:border-b-0">
+                            <p className="text-gray-700">{review.review || "No review provided"}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500">No reviews yet for this product.</p>
+                      )}
+                    </div>
+                    <div className="mt-6 flex items-center space-x-4">
+                      <button
+                        className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#91c297] hover:bg-[#7ab481] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        <FaEdit className="mr-2" />
+                        Edit Product
+                      </button>
+                      <button
+                        className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-black bg-[#e89bb5] hover:bg-[#d787a1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={() => setShowUpdatePicture(!showUpdatePicture)}
+                      >
+                        <FaImage className="mr-2" />
+                        Update Picture
+                      </button>
+                    </div>
+                  </>
+                )}
+                {showUpdatePicture && (
+                  <div className="mt-6">
+                    <UploadProductPicture id={id} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </div>
+    </div>
+    </div>
   );
 };
 
 export default ProductDetails;
+
+
 

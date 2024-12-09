@@ -80,6 +80,7 @@ export default function ShoppingCart() {
     }
   };
 
+
   const fetchCart = async () => {
     if (!touristId) {
       setError("Tourist ID not found in URL parameters");
@@ -299,19 +300,67 @@ export default function ShoppingCart() {
               </div>
             </div>
 
-            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+            {/* <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <button
                 onClick={handleProceedToCheckout}
                 className="w-full bg-primary text-white py-3 rounded-lg hover:bg-hover transition-colors flex items-center justify-center"
                 disabled={cartItems.length === 0}
               >
-                <FaMoneyBillWave className="mr-2" />
-                Proceed to Checkout
+                <div>
+                  <h2 className="font-semibold">{item.product.name}</h2>
+                  <p className="text-sm text-gray-500">
+                    ${item.product.price?.toFixed(2)} each
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
+                    className="text-gray-500 hover:text-gray-700"
+                    aria-label={`Decrease quantity of ${item.product.name}`}
+                    disabled={item.quantity <= 1}
+                  >
+                    <FaMinus size={20} />
+                  </button>
+                  <span className="w-8 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
+                    className="text-gray-500 hover:text-gray-700"
+                    aria-label={`Increase quantity of ${item.product.name}`}
+                  >
+                    <FaPlus size={20} />
+                  </button>
+                  <button
+                    onClick={() => removeItem(item.product._id)}
+                    className="text-red-500 hover:text-red-700 ml-2"
+                    aria-label={`Remove ${item.product.name} from cart`}
+                  >
+                    <FaTrashAlt size={20} />
+                  </button>
+                </div>
               </button>
-            </div>
+          </div> */}
+          <div className="mt-4 flex justify-between items-center">
+            <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
+            <button
+              onClick={handleProceedToCheckout}
+              style={{
+                backgroundColor: '#FF3366', 
+                color: 'white', 
+                padding: '10px 20px', 
+                borderRadius: '8px', 
+                cursor: 'pointer', 
+                transition: 'background-color 0.3s',
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#E62E5C')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#FF3366')}
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
-      </div>
+
+    </div>
+    </div>
     </div>
   );
 }

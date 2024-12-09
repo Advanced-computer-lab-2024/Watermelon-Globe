@@ -189,9 +189,9 @@ const closeHowToUseModal = () => {
           <div className="relative">
             <button
               onClick={toggleNotifications}
-              className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-2 hover:bg-primary flex-shrink-0"
-              >
-              <Bell className="w-6 h-6 text-black" />
+              className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+            >
+              <Bell className="w-6 h-6 text-secondary" />
               {notificationCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
                   {notificationCount}
@@ -251,14 +251,6 @@ const closeHowToUseModal = () => {
                     className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                   >
                     Orders
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => handleNavigation(`/TouristComplaints/${id}`)}
-                    className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                  >
-                    Complaints
                   </button>
                 </li>
                 <li>

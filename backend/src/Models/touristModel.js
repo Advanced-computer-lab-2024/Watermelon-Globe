@@ -153,6 +153,9 @@ const touristSchema = new Schema(
       },
     ],
 
+   
+    //sprint 3 Hatem
+
     bookmarkedItineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -167,6 +170,7 @@ const touristSchema = new Schema(
         default: [],
       },
     ],
+
 
     WishList: [
       {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ExploreHistoricalSites = ({touristId}) => {
+const ExploreHistoricalSites = () => {
   const [sites, setSites] = useState([]);
   const [sitesSearch, setSiteSearch] = useState('');
   const [tags, setTags] = useState([]);
@@ -57,7 +57,7 @@ const ExploreHistoricalSites = ({touristId}) => {
   };
 
   const handleSiteClick = (id) => {
-    navigate(`/siteDetails/${id}/${touristId}`);
+    navigate(`/siteDetails/${id}`);
   };
 
   return (

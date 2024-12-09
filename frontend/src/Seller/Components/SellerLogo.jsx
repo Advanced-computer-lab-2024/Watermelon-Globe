@@ -133,7 +133,7 @@ const mockFile = new File(["test"], "test.txt", { type: "text/plain" });
 
 console.log("Logo before sending:", Logo);
 
-formData.append("Logo", mockFile);
+formData.append("Logo", Logo);
     
     // Debugging FormData
     console.log("FormData content:");

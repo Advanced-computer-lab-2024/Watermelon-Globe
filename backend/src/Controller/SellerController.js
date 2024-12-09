@@ -832,6 +832,7 @@ const unarchiveProduct = async (req, res) => {
   }
 };
 
+
 // Delete product by ID
 const deleteProductById = async (req, res) => {
   const { id } = req.params; // Extract the ID from the URL params
