@@ -38,6 +38,7 @@ import ExploreTransportations from "../Components/ExploreTransportations.jsx";
 import NotificationsBox from "../Components/NotificationsBox";
 import WalletComponent from '../Components/Wallet';
 import TouristNavbar from "../Components/TouristNavBar";
+import Modal from "../Components/Modal";
 
 export default function DraftHomePage() {
   const { id } = useParams<{ id: string }>();
@@ -49,6 +50,16 @@ export default function DraftHomePage() {
   const [isSignedUp, setIsSignedUp] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>('hotels');
+  const [showHowToUseModal, setShowHowToUseModal] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    "1- Use the 'Discover' button to find amazing destinations.",
+    "2- Search for hotels, flights, or guides using the top navigation.",
+    "3- Click 'Explore' to dive deeper into your favorite spots.",
+    "4- Sign up to create personalized travel plans and access special offers.",
+    "5- Stay connected through our social media channels for updates!",
+  ];
   
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,6 +82,23 @@ export default function DraftHomePage() {
 
   const handleViewProductsDetails = () => {
     navigate(`/ProductTourist/${id}`);
+  };
+
+  const handleNextStep = () => {
+    if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
+  };
+  
+  const handlePreviousStep = () => {
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  };
+  
+  const handleOpenHowToUse = () => {
+    setCurrentStep(0); // Reset to the first step
+    setShowHowToUseModal(true);
+  };
+  
+  const closeHowToUseModal = () => {
+    setShowHowToUseModal(false);
   };
 
   return (
@@ -127,7 +155,7 @@ export default function DraftHomePage() {
                 className="flex-grow"
               />
               <Input type="date" className="w-40" />
-              <Button className="bg-primary hover:bg-hover text-white">
+              <Button  onClick={handleOpenHowToUse} className="bg-primary hover:bg-hover text-white">
                 <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
@@ -375,6 +403,47 @@ export default function DraftHomePage() {
           </p>
         </div>
       </footer>
+       {/* How to Use Modal */}
+       {showHowToUseModal && (
+        <Modal onClose={closeHowToUseModal}>
+          <div className="p-8 max-w-md mx-auto bg-white relative">
+            <h2 className="text-2xl font-bold text-center text-primary mb-4">
+              How to Use WaterMelon Globe
+            </h2>
+            <div className="text-gray-600 text-center mb-6">
+              <p>{steps[currentStep]}</p>
+            </div>
+            <div className="flex justify-between mt-4">
+              <Button
+                onClick={handlePreviousStep}
+                disabled={currentStep === 0}
+                className={`py-2 px-4 rounded-lg font-semibold transition ${
+                  currentStep === 0
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-secondary text-white hover:bg-primary"
+                }`}
+              >
+                Back
+              </Button>
+              {currentStep === steps.length - 1 ? (
+                <Button
+                  onClick={closeHowToUseModal}
+                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
+                >
+                  Finish
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleNextStep}
+                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
+                >
+                  Next
+                </Button>
+              )}
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

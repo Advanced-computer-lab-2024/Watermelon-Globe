@@ -50,7 +50,7 @@ export default function DraftHomePage() {
     setCurrentStep(0); // Ensure the steps array starts from the first step
     setShowModal(true); // Show the modal
   };
-  
+
 
   const openHowToUse = () => {
     setShowModal(true); // Show the "How to Use" modal
@@ -65,18 +65,18 @@ export default function DraftHomePage() {
       setCurrentStep(currentStep + 1); // Go to the next step
     }
   };
-  
+
   const handlePreviousStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1); // Go back to the previous step
     }
   };
-  
+
   const handleFinish = () => {
     setShowModal(false); // Close the modal
     setCurrentStep(0); // Reset to the first step for the next time the modal is opened
   };
-  
+
 
 
 
@@ -84,30 +84,44 @@ export default function DraftHomePage() {
     <div className="min-h-screen flex flex-col bg-background" style={{ margin: '-20px' }}>
       <GuestNavbar />
       <main className="flex-grow">
-        <section className="py-20 shadow-lg"
-          style={
-            {
-              backgroundImage: "https://cdn.pixabay.com/photo/2017/08/17/07/47/travel-2650303_1280.jpg",
-            }
-          }>
-          <div className="container bg-gradient-to-r from-primary/10 to-secondary/10 mx-auto  border border-lightGray rounded-lg shadow-lg p-10">
-            <h2 className="text-4xl font-bold mb-8 text-center text-secondary">
-              Discover Your Perfect Getaway
-            </h2>
-            <p className="text-lg leading-relaxed text-grayText mb-6 text-center">
-              Welcome to your ultimate travel companion. Whether you're dreaming of serene beaches, bustling cityscapes, or breathtaking mountain views, we’re here to make your journey unforgettable.
-            </p>
-            <p className="text-lg leading-relaxed text-grayText mb-6 text-center">
-              With a wide selection of hotels, tours, and flights, your next adventure is just a few clicks away. Connect with local guides, explore hidden gems, and create stories that last a lifetime.
-            </p>
-            <p className="text-lg font-medium text-grayText italic mb-8 text-center">
-              Let your wanderlust guide you as you uncover the wonders of the world.
-            </p>
-            <p className="text-xl font-semibold text-center text-secondary mt-6">
-              "Slice through the world, one sweet adventure at a time."
-            </p>
+        <div className="p-8 max-w-md mx-auto bg-white relative">
+          <h2 className="text-2xl font-bold text-center text-primary mb-4">
+            How to Use WaterMelon Globe
+          </h2>
+          <div className="text-gray-700 text-center mb-6">
+            <p className="text-lg font-medium">{steps[currentStep]}</p>
           </div>
-        </section>
+
+          <div className="flex justify-between items-center mt-6 space-x-4">
+            <Button
+              onClick={handlePreviousStep}
+              disabled={currentStep === 0}
+              className={`py-2 px-6 rounded-lg font-semibold transition duration-300 ${currentStep === 0
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-secondary text-white hover:bg-primary hover:shadow-lg"
+                }`}
+            >
+              Back
+            </Button>
+
+            {currentStep === steps.length - 1 ? (
+              <Button
+                onClick={handleSignUpRedirect}
+                className="py-2 px-6 rounded-lg bg-primary text-white font-semibold transition duration-300 hover:bg-secondary hover:shadow-lg"
+              >
+                Get Started
+              </Button>
+            ) : (
+              <Button
+                onClick={handleNextStep}
+                className="py-2 px-6 rounded-lg bg-primary text-white font-semibold transition duration-300 hover:bg-secondary hover:shadow-lg"
+              >
+                Next
+              </Button>
+            )}
+          </div>
+
+        </div>
 
         <section className="py-20">
           <div className="container bg-gradient-to-r from-primary/10 to-secondary/10 mx-auto  border border-lightGray rounded-lg shadow-lg p-10">
@@ -243,54 +257,53 @@ export default function DraftHomePage() {
       </footer>
 
       {/* How to Use Modal */}
-{showModal && (
-  <Modal onClose={closeModal}>
-    <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg relative">
-      {/* Modal Content */}
-      <h2 className="text-2xl font-bold text-center text-primary mb-4">
-        How to Use WaterMelon Globe
-      </h2>
-      <p className="text-gray-700 mb-6 text-center">
-        Learn how to navigate and explore our features with this simple guide.
-      </p>
-      
-      {/* Step Content */}
-      <div className="text-gray-600 text-center mb-6">
-        <p>{steps[currentStep]}</p>
-      </div>
-      
-      {/* Navigation Buttons */}
-      <div className="flex justify-between mt-4">
-      <Button
-        onClick={handlePreviousStep}
-        disabled={currentStep === 0}
-        className={`py-2 px-4 rounded-lg font-semibold transition ${
-          currentStep === 0
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-secondary text-white hover:bg-primary'
-        }`}
-      >
-        Back
-      </Button>
-        {currentStep === steps.length - 1 ? (
-          <Button
-            onClick={handleFinish}
-            className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
-          >
-            Finish
-          </Button>
-        ) : (
-          <Button
-            onClick={handleNextStep}
-            className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
-          >
-            Next
-          </Button>
-        )}
-      </div>
-    </div>
-  </Modal>
-)}
+      {showModal && (
+        <Modal onClose={closeModal}>
+          <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg relative">
+            {/* Modal Content */}
+            <h2 className="text-2xl font-bold text-center text-primary mb-4">
+              How to Use WaterMelon Globe
+            </h2>
+            <p className="text-gray-700 mb-6 text-center">
+              Learn how to navigate and explore our features with this simple guide.
+            </p>
+
+            {/* Step Content */}
+            <div className="text-gray-600 text-center mb-6">
+              <p>{steps[currentStep]}</p>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between mt-4">
+              <Button
+                onClick={handlePreviousStep}
+                disabled={currentStep === 0}
+                className={`py-2 px-4 rounded-lg font-semibold transition ${currentStep === 0
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-secondary text-white hover:bg-primary'
+                  }`}
+              >
+                Back
+              </Button>
+              {currentStep === steps.length - 1 ? (
+                <Button
+                  onClick={handleFinish}
+                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
+                >
+                  Finish
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleNextStep}
+                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
+                >
+                  Next
+                </Button>
+              )}
+            </div>
+          </div>
+        </Modal>
+      )}
 
 
 
