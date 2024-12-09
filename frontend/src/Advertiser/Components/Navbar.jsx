@@ -18,15 +18,24 @@ import {Bell} from "lucide-react";
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [advertiserLogo, setAdvertiserLogo] = useState(null);
   const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-
-  
-
- 
-
-
+  useEffect(() => {
+    const fetchAdvertiserLogo = async () => {
+      try {
+        const response = await fetch(`/api/advertiser/profiles/${id}`);
+        const data = await response.json();
+        if (data.Logo) {
+          setAdvertiserLogo(`/uploads/${data.Logo}`);
+        }
+      } catch (error) {
+        console.error("Error fetching advertiser logo:", error);
+      }
+    };
+    fetchAdvertiserLogo();
+  }, [id]);
 
   return (
     <>
@@ -61,8 +70,8 @@ const Navbar = () => {
 
             <div className="itemAdmin">
               <img
-                src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                alt=""
+                src={advertiserLogo}
+                alt="Logo"
                 className="avatarAdmin"
               />
             </div>

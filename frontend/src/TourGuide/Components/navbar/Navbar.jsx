@@ -20,14 +20,23 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const[guideLogo, setGuideLogo]=useState(null);
 
-
+useEffect(() => {
+  const fetchTourguideLogo = async () => {
+    try {
+      const response = await fetch(`/api/TourGuide/getGuide/${id}`);
+      const data = await response.json();
+      if (data.Logo) {
+        setGuideLogo(`/uploads/${data.Logo}`);
+      }
+    } catch (error) {
+      console.error("Error fetching seller logo:", error);
+    }
+  };
+  fetchTourguideLogo();
+}, [id]);
   
-
- 
-
-
-
   return (
     <>
      
@@ -60,11 +69,17 @@ const Navbar = () => {
          
 
             <div className="itemAdmin">
-              <img
-                src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                alt=""
-                className="avatarAdmin"
-              />
+              {guideLogo ? (
+                <img
+                  src={guideLogo}
+                  alt="Tour Guide Logo"
+                  className="avatarAdmin w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="avatarAdmin w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                  <span className="text-gray-600 text-sm">Logo</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

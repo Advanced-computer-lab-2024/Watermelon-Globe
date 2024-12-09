@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Bookmark, MapPin, Calendar, Clock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Bookmark, MapPin, Calendar, Clock, AlertCircle, ClipboardCheckIcon as FaClipboardCheck } from 'lucide-react';
+import TouristNavbar from "../Components/TouristNavBar";
 
 const TouristBookmarks = () => {
   const { touristId } = useParams();
@@ -51,10 +52,6 @@ const TouristBookmarks = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate(`/TouristDetails/${touristId}`);
-  };
-
   const handleItemClick = (bookmark, type) => {
     if (type === 'itinerary') {
       navigate(`/ItineraryDetails/${bookmark._id}/${touristId}`);
@@ -63,160 +60,143 @@ const TouristBookmarks = () => {
     }
   };
 
+  const BookmarkCard = ({ bookmark, type }) => (
+    <div className="bg-white rounded-lg p-4 shadow-sm mb-4">
+      <h3 className="text-lg font-semibold mb-2 text-gray-800">{type === 'itinerary' ? bookmark.name : bookmark.Name}</h3>
+      <p className="text-gray-600 mb-3">{bookmark.description}</p>
+      {bookmark.location && (
+        <div className="flex items-center mb-2">
+          <MapPin className="text-primary mr-2" size={16} />
+          <span className="text-sm text-gray-600">{bookmark.location}</span>
+        </div>
+      )}
+      {bookmark.date && (
+        <div className="flex items-center mb-2">
+          <Calendar className="text-primary mr-2" size={16} />
+          <span className="text-sm text-gray-600">{new Date(bookmark.date).toLocaleDateString()}</span>
+        </div>
+      )}
+      {bookmark.duration && (
+        <div className="flex items-center mb-2">
+          <Clock className="text-primary mr-2" size={16} />
+          <span className="text-sm text-gray-600">{bookmark.duration}</span>
+        </div>
+      )}
+      <div className="flex justify-between items-center mt-4">
+        <button 
+          onClick={() => handleItemClick(bookmark, type)}
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-hover transition-colors"
+        >
+          View Details
+        </button>
+        <button 
+          onClick={() => handleRemoveBookmark(bookmark._id, type)}
+          className="text-red-500 hover:text-red-600"
+          aria-label="Remove bookmark"
+        >
+          <Bookmark size={20} />
+        </button>
+      </div>
+    </div>
+  );
+
+  if (!touristId) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Authentication Error</h1>
+          <p className="text-gray-600 mb-6">Tourist ID is missing. Please log in again to access your bookmarks.</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-hover transition duration-300 ease-in-out w-full"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#FFE4E1' }}>
-        <div style={{ animation: 'spin 1s linear infinite', border: '4px solid #4CAF50', borderTop: '4px solid transparent', borderRadius: '50%', width: '50px', height: '50px' }}></div>
+      <div className="flex justify-center items-center h-screen bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#FFE4E1' }}>
-        <AlertCircle style={{ color: '#f44336', width: '48px', height: '48px', marginBottom: '1rem' }} />
-        <p style={{ color: '#f44336', fontSize: '1.2rem', fontWeight: 'bold' }}>{error}</p>
+      <div className="flex flex-col items-center justify-center h-screen bg-background">
+        <AlertCircle className="text-red-500 w-16 h-16 mb-4" />
+        <p className="text-red-500 text-xl font-bold">{error}</p>
       </div>
     );
   }
 
-  const BookmarkCard = ({ bookmark, type }) => (
-    <div style={{ 
-      backgroundColor: 'white', 
-      borderRadius: '8px', 
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)', 
-      padding: '1rem', 
-      marginBottom: '1rem',
-      transition: 'box-shadow 0.3s ease-in-out'
-    }}
-    onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)'}
-    onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'}
-    >
-      <h3 style={{ color: '#4CAF50', marginBottom: '0.5rem' }}>{type === 'itinerary' ? bookmark.name : bookmark.Name}</h3>
-      <p style={{ marginBottom: '0.5rem' }}>{bookmark.description}</p>
-      {bookmark.location && (
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <MapPin style={{ color: '#4CAF50', marginRight: '0.5rem' }} size={16} />
-          <span>{bookmark.location}</span>
-        </div>
-      )}
-      {bookmark.date && (
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <Calendar style={{ color: '#4CAF50', marginRight: '0.5rem' }} size={16} />
-          <span>{new Date(bookmark.date).toLocaleDateString()}</span>
-        </div>
-      )}
-      {bookmark.duration && (
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <Clock style={{ color: '#4CAF50', marginRight: '0.5rem' }} size={16} />
-          <span>{bookmark.duration}</span>
-        </div>
-      )}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
-        <button 
-          onClick={() => handleItemClick(bookmark, type)}
-          style={{
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            padding: '0.5rem 1rem',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          View Details
-        </button>
-        <button 
-          onClick={() => handleRemoveBookmark(bookmark._id, type)}
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-          aria-label="Remove bookmark"
-        >
-          <Bookmark style={{ color: '#f44336' }} size={20} />
-        </button>
-      </div>
-    </div>
-  );
-
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FFE4E1', padding: '2rem' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <button 
-          onClick={handleBack}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-            border: 'none',
-            color: '#4CAF50',
-            cursor: 'pointer',
-            marginBottom: '2rem'
-          }}
-        >
-          <ArrowLeft style={{ marginRight: '0.5rem' }} />
-          Back to Profile
-        </button>
-        <h2 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#4CAF50', marginBottom: '2rem', textAlign: 'center' }}>Your Bookmarks</h2>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-          <button 
-            onClick={() => setActiveTab('itineraries')}
-            style={{
-              backgroundColor: activeTab === 'itineraries' ? '#4CAF50' : 'white',
-              color: activeTab === 'itineraries' ? 'white' : '#4CAF50',
-              border: '1px solid #4CAF50',
-              padding: '0.5rem 1rem',
-              borderRadius: '4px 0 0 4px',
-              cursor: 'pointer'
-            }}
-          >
-            Itineraries
-          </button>
-          <button 
-            onClick={() => setActiveTab('activities')}
-            style={{
-              backgroundColor: activeTab === 'activities' ? '#4CAF50' : 'white',
-              color: activeTab === 'activities' ? 'white' : '#4CAF50',
-              border: '1px solid #4CAF50',
-              padding: '0.5rem 1rem',
-              borderRadius: '0 4px 4px 0',
-              cursor: 'pointer'
-            }}
-          >
-            Activities
-          </button>
+    <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
+      <TouristNavbar id={touristId} />
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-primary p-5 relative">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white rounded-full p-2">
+                <FaClipboardCheck className="h-16 w-16 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white">Your Bookmarks</h1>
+                <p className="text-white opacity-75">View and manage your saved itineraries and activities</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 space-y-6">
+            <div className="flex justify-center mb-8">
+              <button 
+                onClick={() => setActiveTab('itineraries')}
+                className={`px-4 py-2 rounded-l-lg ${activeTab === 'itineraries' ? 'bg-primary text-white' : 'bg-white text-primary border border-primary'}`}
+              >
+                Itineraries
+              </button>
+              <button 
+                onClick={() => setActiveTab('activities')}
+                className={`px-4 py-2 rounded-r-lg ${activeTab === 'activities' ? 'bg-primary text-white' : 'bg-white text-primary border border-primary'}`}
+              >
+                Activities
+              </button>
+            </div>
+
+            <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
+              <h2 className="text-xl font-semibold text-secondary mb-4 flex items-center">
+                <Bookmark className="mr-2" />
+                {activeTab === 'itineraries' ? 'Bookmarked Itineraries' : 'Bookmarked Activities'}
+              </h2>
+              <div className="space-y-4 max-h-[calc(100vh-400px)] overflow-y-auto">
+                {activeTab === 'itineraries' && (
+                  bookmarks.itineraries.length === 0 ? (
+                    <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">You have no bookmarked itineraries yet.</p>
+                  ) : (
+                    bookmarks.itineraries.map((bookmark) => (
+                      <BookmarkCard key={bookmark._id} bookmark={bookmark} type="itinerary" />
+                    ))
+                  )
+                )}
+                {activeTab === 'activities' && (
+                  bookmarks.activities.length === 0 ? (
+                    <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">You have no bookmarked activities yet.</p>
+                  ) : (
+                    bookmarks.activities.map((bookmark) => (
+                      <BookmarkCard key={bookmark._id} bookmark={bookmark} type="activity" />
+                    ))
+                  )
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-        {activeTab === 'itineraries' && (
-          bookmarks.itineraries.length === 0 ? (
-            <p style={{ textAlign: 'center', fontSize: '1.2rem', color: '#666' }}>You have no bookmarked itineraries yet.</p>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-              {bookmarks.itineraries.map((bookmark) => (
-                <BookmarkCard key={bookmark._id} bookmark={bookmark} type="itinerary" />
-              ))}
-            </div>
-          )
-        )}
-        {activeTab === 'activities' && (
-          bookmarks.activities.length === 0 ? (
-            <p style={{ textAlign: 'center', fontSize: '1.2rem', color: '#666' }}>You have no bookmarked activities yet.</p>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-              {bookmarks.activities.map((bookmark) => (
-                <BookmarkCard key={bookmark._id} bookmark={bookmark} type="activity" />
-              ))}
-            </div>
-          )
-        )}
       </div>
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };

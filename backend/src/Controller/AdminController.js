@@ -17,6 +17,7 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const Activity = require("../Models/activityModel");
 const PromoCode = require("../Models/promoCodes");
+const CompanyProfile = require("../Models/companyProfileModel");
 
 const getAllAdmin = async (req, res) => {
   try {
@@ -1139,10 +1140,13 @@ const markItineraryInappropriate = async (req, res) => {
       return res.status(404).json({ error: "Itinerary not found" });
     }
 
-    // const guide = itinerary.guide;
-    // const notification = `Your Itinerary "${itinerary.name}" with id "${itinerary._id}"  has been flagged inappropriate`;
-    // guide.notifications.push(notification);
-    // await guide.save();
+    const guide = itinerary.guide;
+    console.log(`notifications are ${guide.notifications}`);
+    const notification = `Your Itinerary "${itinerary.name}"  has been flagged inappropriate`;
+    guide.notifications.push(notification);
+    console.log(`notifications are ${guide.notifications}`);
+    await guide.save();
+    console.log(`notifications are ${guide.notifications}`);
 
     // // Check if guide information is complete
     // if (!guide || !guide.email || !guide.name) {
@@ -1239,10 +1243,10 @@ const markActivityInappropriate = async (req, res) => {
     if (!activity) {
       return res.status(404).json({ error: "activity not found" });
     }
-    // const advertiser = activity.Advertiser;
-    // const notification = `Your Activity "${activity.Name}" with id "${activity._id}"  has been flagged inappropriate`;
-    // advertiser.notifications.push(notification);
-    // await advertiser.save();
+    const advertiser = activity.Advertiser;
+    const notification = `Your Activity "${activity.Name}"  has been flagged inappropriate`;
+    advertiser.notifications.push(notification);
+    await advertiser.save();
 
     // if (!advertiser || !advertiser.Email || !advertiser.Name) {
     //   return res
@@ -1482,7 +1486,7 @@ const countTotalUsers = async (req, res) => {
     // Count the total number of users in each collection
     const touristCount = await Tourist.countDocuments();
     const sellerCount = await Seller.countDocuments();
-    const advertiserCount = await Advertiser.countDocuments();
+    const advertiserCount = await Company.countDocuments();
     const tourGuideCount = await TourGuide.countDocuments();
 
     // Calculate the total users from all collections
@@ -1536,7 +1540,7 @@ const getUsersPerMonth = async (req, res) => {
     // Get counts for each type of user
     const touristsCount = await countUsersPerMonth(Tourist);
     const sellersCount = await countUsersPerMonth(Seller);
-    const advertisersCount = await countUsersPerMonth(Advertiser);
+    const advertisersCount = await countUsersPerMonth(CompanyProfile);
     const tourGuidesCount = await countUsersPerMonth(TourGuide);
 
     // Combine results from all user types
@@ -1584,6 +1588,31 @@ const getAllPromoCodes = async (req, res) => {
   const allCodes = await PromoCode.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(allCodes);
+};
+
+const getPromoCodeByCode = async (req, res) => {
+  const { code } = req.body; // Get the promo code from the request body
+
+  try {
+    // Validate that the code exists in the request body
+    if (!code) {
+      return res.status(400).json({ error: "Promo code is required" });
+    }
+
+    // Find the promo code by the given code
+    const promo = await PromoCode.findOne({ code });
+
+    // If no promo code is found, return a 404 error
+    if (!promo) {
+      return res.status(404).json({ error: "Promo code not found" });
+    }
+
+    // If promo code is found, return it as a JSON response
+    res.status(200).json(promo);
+  } catch (error) {
+    // Handle any errors that occur during the database query
+    res.status(500).json({ error: "Failed to fetch promo code" });
+  }
 };
 
 const deletePromoCode = async (req, res) => {
@@ -1920,4 +1949,5 @@ module.exports = {
   getMonthlyRevenue,
   filterRevenueByDate,
   getAdmin,
+  getPromoCodeByCode,
 };
