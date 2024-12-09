@@ -64,7 +64,7 @@ const ViewMySites = () => {
   }, [id]);
 
   const handleItineraryClick = (activityId) => {
-    navigate(`/ProductsDetailsGeneral/${activityId}/`);
+    navigate(`/GovernorSiteDetails/${activityId}/`);
   };
 
   const handleSiteDelete = (id) => {

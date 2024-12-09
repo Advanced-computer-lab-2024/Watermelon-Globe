@@ -117,7 +117,7 @@ import TourismGovernorPage from "./Governor/pages/GovernorHomePage.jsx";
 import AddSite from "./Governor/Components/AddSite.js";
 import GetMySites from "./Governor/Components/GetMySites.js";
 import ChangePasswordGovernor from "./Governor/Components/changePasswordGovernor.js";
-import GovernorSiteDetails from "./Governor/Components/GovernorSiteDetails.jsx";
+import GovernorSiteDetails from "./Governor/Components/siteDetails.js";
 import GovernorLogin from "./Governor/pages/GovernorLogin.jsx";
 import AddTagGovernor from "Governor/pages/AddTag/AddTag";
 import ViewMySites from "Governor/pages/ViewSites/ViewMySites";

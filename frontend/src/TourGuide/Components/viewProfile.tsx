@@ -406,9 +406,9 @@ const TourGuideProfile = ()=> {
   const handleConfirm = async () => {
     setIsEditing(false);
     try {
-      await axios.put(`/api/tourGuide/updateGuide/${id}`, formData);
+      await axios.put(`/api/tourGuide/updateTourGuideNew/${id}`, formData);
       alert('guide details updated successfully!');
-      const response = await fetch(`/api/Guide/getGuide/${id}`);
+      const response = await fetch(`/api/tourGuide/getGuide/${id}`);
       const updatedData = await response.json();
       setSeller(updatedData);
     } catch (error) {
@@ -662,7 +662,7 @@ const TourGuideProfile = ()=> {
         updateLogo && (
           <ProfilePhoto 
           id={id}
-          //onClose={() => setUpdateLogo(false)}
+          onClose={() => setUpdateLogo(false)}
           />
         )
       }
@@ -679,8 +679,8 @@ const TourGuideProfile = ()=> {
      
       {showPasswordModal && (
         <ChangePasswordTourGuide
-        //  id={id}
-         // onClose={() => setShowPasswordModal(false)}
+          id={id}
+         onClose={() => setShowPasswordModal(false)}
         />
       )}
      

@@ -184,6 +184,7 @@ const updateTourGuideNew = async (req, res) => {
       new: true, // Return the updated document
       runValidators: true, // Ensure validation rules apply
     });
+    
 
     if (!updatedGuide) {
       return res.status(404).send("Tour guide not found");
