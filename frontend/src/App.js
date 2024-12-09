@@ -40,6 +40,7 @@ import ViewProducts from "./Guest/pages/ViewProducts.js";
 
 import GuestPage from "./Guest/pages/GuestHomepage.tsx";
 //Admin++ Pages
+import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments";
 import AdminSales from "./Admin++/pages/home/HomeSales.jsx";
 import AdminUsers from "./Admin++/pages/home/HomeUsers.jsx";
 import ActiveUsers from "./Admin++/pages/ActiveUsers/ActiveUsers.jsx";
@@ -54,7 +55,6 @@ import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
 // import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
-import ViewDocuments from "./Admin++/pages/ViewDocuments/ViewDocuments.jsx";
 import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewItinerariesEvents";
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
@@ -154,7 +154,6 @@ import HotelOffers from "./Hotels/Components/HotelSearchForOffers.js";
 import TouristBookmarks from "./Tourist/Components/TouristBookmarks.jsx";
 import MyHotelFlightBookings from "./Tourist/Components/HotelFlightBookings.tsx";
 //tourguide new
-// import ViewDocuments from './Admin/pages/ViewDocuments.jsx';
 import TransportationDetails from "./Tourist/pages/TransportationDetails.jsx";
 import CreateItinerary from "./TourGuide/Components/CreateItinerary.jsx";
 
@@ -212,7 +211,7 @@ const App = () => {
           />
           <Route path="/Complaint" element={<Complaint />} />
           <Route path="/AdminViewItinerary" element={<Itinerary />} />
-          <Route path="/AdminViewDocuments" element={<ViewDocuments />} /> */}
+          
 
           {/*<Route path="/create-admin" element={<CreateAdminForm />} />
           <Route path="/CompanyHomepage" element={<CompanyHomepage />} /> */}
@@ -235,7 +234,7 @@ const App = () => {
           <Route path="/adminAddPromoCode/:id" element={<AddPromoCode />} />
           <Route path="/Tourists/:id" element={<AllTourists />} />
 
-          <Route path="/ViewDocuments/:id" element={<ViewDocuments />} />
+          <Route path="/users/:id" element={<ViewDocuments />} />
           <Route
             path="/ViewItinerariesEvents/:id"
             element={<ViewItinerariesEvents />}
