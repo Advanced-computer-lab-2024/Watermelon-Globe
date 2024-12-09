@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import {
   FaStar, FaMapMarkerAlt, FaClock, FaCalendar, FaDollarSign, FaLanguage,
   FaWheelchair, FaShare, FaEnvelope, FaBookmark
@@ -59,6 +59,8 @@ const ItineraryDetails = () => {
   const [bookingInProgress, setBookingInProgress] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
   const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
+  const navigate = useNavigate();
+
 
   const stripe = useStripe();
   const elements = useElements();
@@ -175,6 +177,7 @@ const ItineraryDetails = () => {
           })
 
           alert('Itinerary booked successfully!')
+          navigate(`/MainTouristPage/${id}`);
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
             // amount: +itinerary.priceOfTour,
@@ -218,6 +221,9 @@ const ItineraryDetails = () => {
             totalPrice: itinerary.priceOfTour,
             status: 'pending',
           })
+
+          navigate(`/MainTouristPage/${id}`);
+
         }
       }
     } catch (error: any) {

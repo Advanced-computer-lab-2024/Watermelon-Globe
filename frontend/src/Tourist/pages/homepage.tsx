@@ -54,13 +54,13 @@ export default function DraftHomePage() {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
-    "1- Use the 'Discover' button to find amazing destinations.",
-    "2- Search for hotels, flights, or guides using the top navigation.",
-    "3- Click 'Explore' to dive deeper into your favorite spots.",
-    "4- Sign up to create personalized travel plans and access special offers.",
-    "5- Stay connected through our social media channels for updates!",
+    "Use the 'Discover' button to find amazing destinations.",
+    "Search for hotels, flights, or guides using the top navigation.",
+    "Click 'Explore' to dive deeper into your favorite spots.",
+    "Sign up to create personalized travel plans and access special offers.",
+    "Stay connected through our social media channels for updates!",
   ];
-  
+
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Searching for:", { destination, dates, guests });
@@ -87,16 +87,16 @@ export default function DraftHomePage() {
   const handleNextStep = () => {
     if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
   };
-  
+
   const handlePreviousStep = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
-  
+
   const handleOpenHowToUse = () => {
     setCurrentStep(0); // Reset to the first step
     setShowHowToUseModal(true);
   };
-  
+
   const closeHowToUseModal = () => {
     setShowHowToUseModal(false);
   };
@@ -110,87 +110,52 @@ export default function DraftHomePage() {
 
 
       <main className="flex-grow">
-      <section className="bg-white from-primary/10 to-secondary/10 py-20">
-  <div className="container mx-auto">
-    <h2 className="text-4xl font-bold mb-6 text-center text-secondary">
-      Discover Your Perfect Getaway
-    </h2>
-    <Card className="w-full max-w-3xl mx-auto">
-      <CardContent className="p-6">
-        <Tabs
-          defaultValue="hotels"
-          className="w-full"
-          onValueChange={(value) => setSelectedTab(value)}
+        <div
+          className="mt-18 flex items-center justify-center w-full h-screen p-4 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://www.outlooktravelmag.com/media/bali-1-1582544096.profileImage.2x-1536x884.webp')",
+          }}
         >
-          <TabsList className="grid hw-full grid-cols-3 mb-6">
-            <TabsTrigger
-              className={`hover:bg-secondary hover:text-white ${
-                selectedTab === 'hotels' ? 'text-black hover:text-black' : ''
-              }`}
-              value="hotels"
-            >
-              Hotels
-            </TabsTrigger>
-            <TabsTrigger
-              className={`hover:bg-secondary hover:text-white ${
-                selectedTab === 'tours' ? 'text-black hover:text-black' : ''
-              }`}
-              value="tours"
-            >
-              Tours
-            </TabsTrigger>
-            <TabsTrigger
-              className={`hover:bg-secondary hover:text-white ${
-                selectedTab === 'flights' ? 'text-black hover:text-black' : ''
-              }`}
-              value="flights"
-            >
-              Flights
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="hotels">
-            <div className="flex space-x-4">
-              <Input
-                placeholder="Where are you going?"
-                className="flex-grow"
-              />
-              <Input type="date" className="w-40" />
-              <Button  onClick={handleOpenHowToUse} className="bg-primary hover:bg-hover text-white">
-                <Search className="w-4 h-4 mr-2" />
-                Search
-              </Button>
+          <div className="bg-white bg-opacity-80 p-6 ml-auto rounded-lg shadow-lg max-w-md w-full">
+            {/* Steps Section */}
+            <h2 className="text-2xl mb-10 font-bold text-center text-primary mb-4">
+              How to Use WaterMelon Globe
+            </h2>
+            <div className="text-gray-700 text-center mb-6">
+              <p className="text-lg font-medium">{steps[currentStep]}</p>
             </div>
-          </TabsContent>
-          <TabsContent value="tours">
-            <div className="flex space-x-4">
-              <Input
-                placeholder="Tour destination"
-                className="flex-grow"
-              />
-              <Input type="date" className="w-40" />
-              <Button className="bg-primary hover:bg-hover text-white">
-                <Search className="w-4 h-4 mr-2" />
-                Search
-              </Button>
-            </div>
-          </TabsContent>
-          <TabsContent value="flights">
-            <div className="flex space-x-4">
-              <Input placeholder="From" className="flex-grow" />
-              <Input placeholder="To" className="flex-grow" />
-              <Input type="date" className="w-40" />
-              <Button className="bg-primary hover:bg-hover text-white">
-                <Search className="w-4 h-4 mr-2" />
-                Search
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
-  </div>
-</section>
 
+            <div className="flex justify-between items-center mt-10 space-x-4">
+              <Button
+                onClick={handlePreviousStep}
+                disabled={currentStep === 0}
+                className={`py-2 px-6 rounded-lg font-semibold transition duration-300 ${currentStep === 0
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-secondary text-white hover:bg-secondaryHover hover:shadow-lg"
+                  }`}
+              >
+                Back
+              </Button>
+
+              {currentStep === steps.length - 1 ? (
+                <Button
+                  className="py-2 px-6 rounded-lg bg-darkPink text-white font-semibold transition duration-300 hover:bg-darkPinkHover hover:shadow-lg"
+                >
+                  Enjoy
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleNextStep}
+                  className="py-2 px-6 rounded-lg bg-primary text-white font-semibold transition duration-300 hover:bg-hover hover:shadow-lg"
+                >
+                  Next
+                </Button>
+              )}
+            </div>
+          </div>
+
+
+        </div>
 
 
         <section className="py-20">
@@ -403,8 +368,8 @@ export default function DraftHomePage() {
           </p>
         </div>
       </footer>
-       {/* How to Use Modal */}
-       {showHowToUseModal && (
+      {/* How to Use Modal */}
+      {showHowToUseModal && (
         <Modal onClose={closeHowToUseModal}>
           <div className="p-8 max-w-md mx-auto bg-white relative">
             <h2 className="text-2xl font-bold text-center text-primary mb-4">
@@ -417,11 +382,10 @@ export default function DraftHomePage() {
               <Button
                 onClick={handlePreviousStep}
                 disabled={currentStep === 0}
-                className={`py-2 px-4 rounded-lg font-semibold transition ${
-                  currentStep === 0
+                className={`py-2 px-4 rounded-lg font-semibold transition ${currentStep === 0
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-secondary text-white hover:bg-primary"
-                }`}
+                  }`}
               >
                 Back
               </Button>

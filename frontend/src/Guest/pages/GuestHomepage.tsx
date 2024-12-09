@@ -29,11 +29,11 @@ export default function DraftHomePage() {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
-    "1- Use the 'Discover' button to find amazing destinations.",
-    "2- Search for hotels, flights, or guides using the top navigation.",
-    "3- Click 'Explore' to dive deeper into your favorite spots.",
-    "4- Sign up to create personalized travel plans and access special offers.",
-    "5- Stay connected through our social media channels for updates!"
+    "Use the 'Discover' button to find amazing destinations.",
+    "Search for hotels, flights, or guides using the top navigation.",
+    "Click 'Explore' to dive deeper into your favorite spots.",
+    "Sign up to create personalized travel plans and access special offers.",
+    "Stay connected through our social media channels for updates!"
   ];
 
 
@@ -84,42 +84,51 @@ export default function DraftHomePage() {
     <div className="min-h-screen flex flex-col bg-background" style={{ margin: '-20px' }}>
       <GuestNavbar />
       <main className="flex-grow">
-        <div className="p-8 max-w-md mx-auto bg-white relative">
-          <h2 className="text-2xl font-bold text-center text-primary mb-4">
-            How to Use WaterMelon Globe
-          </h2>
-          <div className="text-gray-700 text-center mb-6">
-            <p className="text-lg font-medium">{steps[currentStep]}</p>
-          </div>
+        <div
+          className="mt-18 flex items-center justify-center w-full h-screen p-4 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://www.outlooktravelmag.com/media/bali-1-1582544096.profileImage.2x-1536x884.webp')",
+          }}
+        >
+          <div className="bg-white bg-opacity-80 p-6 ml-auto rounded-lg shadow-lg max-w-md w-full">
+            {/* Steps Section */}
+            <h2 className="text-2xl mb-10 font-bold text-center text-primary mb-4">
+              How to Use WaterMelon Globe
+            </h2>
+            <div className="text-gray-700 text-center mb-6">
+              <p className="text-lg font-medium">{steps[currentStep]}</p>
+            </div>
 
-          <div className="flex justify-between items-center mt-6 space-x-4">
-            <Button
-              onClick={handlePreviousStep}
-              disabled={currentStep === 0}
-              className={`py-2 px-6 rounded-lg font-semibold transition duration-300 ${currentStep === 0
+            <div className="flex justify-between items-center mt-10 space-x-4">
+              <Button
+                onClick={handlePreviousStep}
+                disabled={currentStep === 0}
+                className={`py-2 px-6 rounded-lg font-semibold transition duration-300 ${currentStep === 0
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-secondary text-white hover:bg-primary hover:shadow-lg"
-                }`}
-            >
-              Back
-            </Button>
+                  : "bg-secondary text-white hover:bg-secondaryHover hover:shadow-lg"
+                  }`}
+              >
+                Back
+              </Button>
 
-            {currentStep === steps.length - 1 ? (
-              <Button
-                onClick={handleSignUpRedirect}
-                className="py-2 px-6 rounded-lg bg-primary text-white font-semibold transition duration-300 hover:bg-secondary hover:shadow-lg"
-              >
-                Get Started
-              </Button>
-            ) : (
-              <Button
-                onClick={handleNextStep}
-                className="py-2 px-6 rounded-lg bg-primary text-white font-semibold transition duration-300 hover:bg-secondary hover:shadow-lg"
-              >
-                Next
-              </Button>
-            )}
+              {currentStep === steps.length - 1 ? (
+                <Button
+                  onClick={handleSignUpRedirect}
+                  className="py-2 px-6 rounded-lg bg-darkPink text-white font-semibold transition duration-300 hover:bg-darkPinkHover hover:shadow-lg"
+                >
+                  Get Started
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleNextStep}
+                  className="py-2 px-6 rounded-lg bg-primary text-white font-semibold transition duration-300 hover:bg-hover hover:shadow-lg"
+                >
+                  Next
+                </Button>
+              )}
+            </div>
           </div>
+
 
         </div>
 
@@ -128,7 +137,7 @@ export default function DraftHomePage() {
             <h3 className="text-3xl font-bold text-center mb-12 text-secondary">Popular Destinations</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: "Bali, Indonesia", image: "https://www.outlooktravelmag.com/media/bali-1-1582544096.profileImage.2x-1536x884.webp" },
+                { name: "Bali, Indonesia", image: "https://www.outlooktravelmag.com/media/bali-1-1679062958.profileImage.2x-scaled-860x495.webp" },
                 { name: "Paris, France", image: "https://media.timeout.com/images/106181719/750/562/image.jpg" },
                 { name: "Santorini, Greece", image: "https://lp-cms-production.imgix.net/2024-06/iStock-166471469.jpg" }
               ].map((destination, index) => (
@@ -255,55 +264,6 @@ export default function DraftHomePage() {
           <p>&copy; {new Date().getFullYear()} Watermelon Globe. All rights reserved.</p>
         </div>
       </footer>
-
-      {/* How to Use Modal */}
-      {showModal && (
-        <Modal onClose={closeModal}>
-          <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg relative">
-            {/* Modal Content */}
-            <h2 className="text-2xl font-bold text-center text-primary mb-4">
-              How to Use WaterMelon Globe
-            </h2>
-            <p className="text-gray-700 mb-6 text-center">
-              Learn how to navigate and explore our features with this simple guide.
-            </p>
-
-            {/* Step Content */}
-            <div className="text-gray-600 text-center mb-6">
-              <p>{steps[currentStep]}</p>
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-4">
-              <Button
-                onClick={handlePreviousStep}
-                disabled={currentStep === 0}
-                className={`py-2 px-4 rounded-lg font-semibold transition ${currentStep === 0
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-secondary text-white hover:bg-primary'
-                  }`}
-              >
-                Back
-              </Button>
-              {currentStep === steps.length - 1 ? (
-                <Button
-                  onClick={handleFinish}
-                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
-                >
-                  Finish
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleNextStep}
-                  className="py-2 px-4 rounded-lg bg-primary text-white font-semibold transition hover:bg-secondary"
-                >
-                  Next
-                </Button>
-              )}
-            </div>
-          </div>
-        </Modal>
-      )}
 
 
 

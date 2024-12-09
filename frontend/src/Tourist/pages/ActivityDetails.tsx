@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 import { FaWallet, FaCreditCard } from 'react-icons/fa';
 import { loadStripe } from '@stripe/stripe-js';
@@ -98,6 +98,7 @@ const ActivityDetails: React.FC = () => {
   const [promoApplied, setPromoApplied] = useState(false);
   const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
 
   const handleApplyPromo = async () => {
     try {
@@ -194,6 +195,7 @@ const ActivityDetails: React.FC = () => {
     }
   };
 
+
   const handleBooking = async (e: React.FormEvent) => {
 
     e.preventDefault()
@@ -231,6 +233,7 @@ const ActivityDetails: React.FC = () => {
           });
 
           alert("Activity booked successfully!");
+          navigate(`/MainTouristPage/${id}`);
         } else {
           await axios.put(`/api/Tourist/updateWallet/${id}`, {
             // amount: +activity.Price,
@@ -272,6 +275,7 @@ const ActivityDetails: React.FC = () => {
           })
 
           alert('Activity booked successfully!')
+          navigate(`/MainTouristPage/${id}`);
         }
       }
     } catch (error: any) {

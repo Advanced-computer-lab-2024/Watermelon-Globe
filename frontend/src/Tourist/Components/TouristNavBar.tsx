@@ -10,6 +10,8 @@ import Freecurrencyapi from '@everapi/freecurrencyapi-js';
 import { useCurrency } from "../Components/CurrencyContext";
 import Modal from "../Components/Modal";
 import { Button } from "../Components/ui/button";
+import logoImage from "../../Assets/logo.png"; // Adjust the path accordingly
+
 
 
 interface TouristNavbarProps {
@@ -90,28 +92,28 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
   const openWallet = () => {
     setIsWalletOpen(true);
   };
-  
+
   const closeWallet = () => {
     setIsWalletOpen(false);
   };
-  
+
   const handleNextStep = () => {
     if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
   };
-  
+
   const handlePreviousStep = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
-  
+
   const handleOpenHowToUse = () => {
     setCurrentStep(0); // Reset to the first step
     setShowHowToUseModal(true);
   };
-  
+
   const closeHowToUseModal = () => {
     setShowHowToUseModal(false);
   };
-  
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -169,6 +171,11 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
+          <img
+            src={logoImage}
+            alt="Logo"
+            className="w-8 h-8" // Adjust size as needed
+          />
           <div className="text-3xl font-bold text-secondary">
             {id ? <Link
               to={`/MainTouristPage/${id}`}
@@ -383,7 +390,7 @@ const TouristNavbar: React.FC<TouristNavbarProps> = ({ id }) => {
         <WalletComponent touristId={id} onClose={closeWallet} />
       )}
 
-     
+
     </header>
   );
 };

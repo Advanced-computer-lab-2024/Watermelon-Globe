@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import Modal from "../Components/Modal"; // Import a reusable modal component
+import logoImage from "../../Assets/logo.png"; // Adjust the path accordingly
 
 export default function GuestNavbar() {
   const [showModal, setShowModal] = useState(false);
@@ -20,12 +21,20 @@ export default function GuestNavbar() {
   };
 
 
+
+
   return (
     <header className="fixed top-0 left-0 w-full bg-sectionBackground shadow-md z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center">
+        
         {/* Logo Section */}
         <div className="text-3xl font-bold text-secondary">
-          <Link to="/Homepage" className="homeButton hover:text-secondaryHover">
+        <img
+            src={logoImage}
+            alt="Logo"
+            className="inline-block w-8 h-8 mb-1" // Adjust size as needed
+          />
+          <Link to="/Homepage" className="homeButton ml-2 hover:text-secondaryHover">
             WaterMelon Globe
           </Link>
         </div>

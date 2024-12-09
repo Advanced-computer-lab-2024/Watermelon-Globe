@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { FaDollarSign, FaWallet, FaCreditCard, FaCashRegister } from 'react-icons/fa'; // Added Cash Register icon
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -20,6 +20,8 @@ const CheckoutPageForm: React.FC<CheckoutPageProps & {selectedAddress: string | 
   const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'stripe' | 'cash on delivery'>('stripe');
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
+
 
   const handlePaymentAndBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +47,7 @@ const CheckoutPageForm: React.FC<CheckoutPageProps & {selectedAddress: string | 
           alert(`Purchased Products successfully! 
           Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
           Badge: ${loyaltyResponse.data.badge}`);
+          navigate(`/MainTouristPage/${touristId}`);
         } else {
           setError('Insufficient wallet balance.');
         }
@@ -78,6 +81,7 @@ const CheckoutPageForm: React.FC<CheckoutPageProps & {selectedAddress: string | 
           alert(`Products Purchased successfully! 
           Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
           Badge: ${loyaltyResponse.data.badge}`);
+          navigate(`/MainTouristPage/${touristId}`);
         } else {
           setError('Payment failed, please try again.');
         }
@@ -92,6 +96,8 @@ const CheckoutPageForm: React.FC<CheckoutPageProps & {selectedAddress: string | 
         alert(`Your order will be delivered and paid for on delivery. 
         Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
         Badge: ${loyaltyResponse.data.badge}`);
+        navigate(`/MainTouristPage/${touristId}`);
+
       }
     } catch (error: any) {
       console.error('Error during payment or booking:', error);

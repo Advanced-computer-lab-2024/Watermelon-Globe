@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
+
 import { FaWallet, FaCreditCard, FaSearch } from 'react-icons/fa'; // Font Awesome icons
 import { useCurrency } from "../../Tourist/Components/CurrencyContext";
 
@@ -29,6 +31,8 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
   const stripe = useStripe();
   const elements = useElements();
   const { selectedCurrency, currencies } = useCurrency() as CurrencyContextType;
+  const navigate = useNavigate();
+
 
   const handlePaymentAndBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +70,8 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
           alert(`Flight booked successfully! 
           Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
           Badge: ${loyaltyResponse.data.badge}`);
+          navigate(`/MainTouristPage/${touristId}`);
+
         } else {
           setMessage('Insufficient wallet balance.');
         }
@@ -103,6 +109,8 @@ const FlightPaymentForm: React.FC<FlightBookingProps> = ({ flight, touristId }) 
           alert(`Flight booked successfully! 
           Loyalty Points: ${loyaltyResponse.data.loyaltyPoints}
           Badge: ${loyaltyResponse.data.badge}`);
+          navigate(`/MainTouristPage/${touristId}`);
+
         }
       }
     } catch (error: any) {

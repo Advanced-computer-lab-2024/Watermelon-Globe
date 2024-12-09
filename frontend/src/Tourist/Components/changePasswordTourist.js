@@ -95,7 +95,7 @@ const ChangePasswordTourist = ({ id, onClose }) => {
         <div className="flex justify-between items-center mt-6">
           <button
             onClick={onClose}
-            className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+            className="flex items-center px-4 py-2  text-primary hover:bg-primary/10 rounded"
             >
               <FaTimes className="mr-2" size="1em" />
             Cancel

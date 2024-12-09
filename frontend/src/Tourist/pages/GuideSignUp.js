@@ -79,6 +79,16 @@ const SignupGuideNew = () => {
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const [error, setError] = useState("");
 
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    "Use the 'Discover' button to find amazing destinations.",
+    "Search for hotels, flights, or guides using the top navigation.",
+    "Click 'Explore' to dive deeper into your favorite spots.",
+    "Sign up to create personalized travel plans and access special offers.",
+    "Stay connected through our social media channels for updates!"
+  ];
+
   return (
     <div
       className="signup-tourist-wrapper"

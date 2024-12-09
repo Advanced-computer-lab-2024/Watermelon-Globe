@@ -12,6 +12,7 @@ const ActivityDetails = () => {
   const { activityId } = useParams();
   const navigate = useNavigate();
   const [activity, setActivity] = useState(null);
+  const [category, setCategory] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProduct, setUpdatedProduct] = useState({
     Name: "",
@@ -37,7 +38,7 @@ const ActivityDetails = () => {
       }
     };
     fetchActivity();
-  }, [id]);
+  }, [updatedProduct.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +56,7 @@ const ActivityDetails = () => {
     );
 
     try {
-      const response = await fetch(`/api/Seller/editProduct?id=${id}`, {
+      const response = await fetch(`/api/Seller/editProduct?id=${updatedProduct.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(filteredUpdateData),

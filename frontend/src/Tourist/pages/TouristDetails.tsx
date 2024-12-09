@@ -406,14 +406,14 @@ export default function TouristDetails() {
                     <div className="flex justify-end">
                       <button
                         onClick={handleConfirm}
-                        className="flex items-center px-4 py-2 bg-secondary hover:bg-secondaryHover text-white rounded"
+                        className="flex items-center px-4 py-2 mr-2 bg-secondary hover:bg-secondaryHover text-white rounded"
                       >
                         <FaCheck className="mr-2" size="1em" />
                         Confirm
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+                        className="flex items-center px-4 py-2 text-primary hover:bg-primary/10 rounded"
                       >
                         <FaTimes className="mr-2" size="1em" />
                         Cancel
@@ -429,14 +429,14 @@ export default function TouristDetails() {
                     <div className="flex justify-left">
                       <button
                         onClick={() => setShowRedeemModal(true)}
-                        className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
+                        className="flex items-center px-4 py-2  text-primary hover:bg-primary/10 rounded whitespace-nowrap"
                       >
                         <FaGift className="mr-2" size="1em" />
                         Redeem Points
                       </button>
                       <button
                         onClick={() => setShowPasswordModal(true)}
-                        className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded whitespace-nowrap"
+                        className="flex items-center px-4 py-2  text-primary hover:bg-primary/10 rounded whitespace-nowrap"
                       >
                         <FaKey className="mr-2" size="1em" />
                         Change Password
@@ -476,7 +476,7 @@ export default function TouristDetails() {
           <div className="flex justify-end space-x-2">
             <button
               onClick={() => setShowRedeemModal(false)}
-              className="flex items-center px-4 py-2 border border-primary text-primary hover:bg-primary/10 rounded"
+              className="flex items-center px-4 py-2  text-primary hover:bg-primary/10 rounded"
             >
               <FaTimes className="mr-2" size="1em" />
               Cancel
