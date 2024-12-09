@@ -1,14 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TextField, Checkbox, FormControlLabel, Button, Grid, InputAdornment, Select, MenuItem, FormControl, InputLabel, Tabs, Tab } from '@mui/material';
+import { TextField, Checkbox, FormControlLabel, Button, Grid, InputAdornment, Select, MenuItem, FormControl, InputLabel, Chip } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './ActivityForm.css';
 import Sidebar from './sidebar/Sidebar';
 import Navbar from './AdvertiserNavbar';
 
+const theme = createTheme({
+  components: {
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#d32e65',
+          },
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused': {
+            color: '#d32e65',
+          },
+        },
+      },
+    },
+  },
+});
+
 const ActivityForm = () => {
     const {id} = useParams();
-    console.log(id);
     const [activity, setActivity] = useState({
         Name: '',
         Date: '',
@@ -94,163 +117,200 @@ const ActivityForm = () => {
         }
     };
     
+    const isFormValid = () => {
+        return (
+            activity.Name &&
+            activity.Date &&
+            activity.Time &&
+            activity.coordinates &&
+            activity.Price &&
+            activity.Category &&
+            activity.tags.length > 0
+        );
+    };
 
-    return (
-        <div
-        style={{
-          backgroundColor: "#fff",
-          minHeight: "100vh", // Ensures it covers the full viewport
-          width: "102%", // Full width of the viewport
-          margin: 0, // Remove default margins
-          padding: 0, // Remove default padding
-          display: "flex", // Optional: for flexible alignment
-          flexDirection: "column",
-        }}
-      >
-        <div className="listAdminProduct">
-          <Sidebar />
-          <div className="listContainerAdminProduct">
-            <Navbar />
-            <div style={{ padding: "20px" }}>
-        <form className="activity-form full-width-form" onSubmit={handleSubmit}>
-            <h2 className="form-header">Create a New Activity</h2>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                        fullWidth
-                        required
-                        label="Activity Name"
-                        name="Name"
-                        value={activity.Name}
-                        onChange={handleChange}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        fullWidth
-                        required
-                        label="Date"
-                        type="date"
-                        name="Date"
-                        value={activity.Date}
-                        onChange={handleChange}
-                        InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        fullWidth
-                        required
-                        label="Time"
-                        type="time"
-                        name="Time"
-                        value={activity.Time}
-                        onChange={handleChange}
-                        InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        fullWidth
-                        required
-                        label="Coordinates (lat, long)"
-                        name="coordinates"
-                        value={activity.coordinates}
-                        onChange={handleChange}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        fullWidth
-                        required
-                        label="Price"
-                        name="Price"
-                        value={activity.Price}
-                        onChange={handleChange}
-                        type="number"
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        fullWidth
-                        label="Discount"
-                        name="Discount"
-                        value={activity.Discount}
-                        onChange={handleChange}
-                        type="number"
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl fullWidth required>
-                        <InputLabel id="category-label">Category</InputLabel>
-                        <Select
-                            labelId="category-label"
-                            name="Category"
-                            value={activity.Category}
-                            onChange={handleChange}
-                            label="Category"
-                        >
-                            {categories.map((category) => (
-                                <MenuItem key={category._id} value={category._id}>
-                                    {category.activity}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                <FormControl component="fieldset">
-                    <InputLabel>Tags</InputLabel>
-                    <Grid container spacing={2}>
-                        {tags.map((tag) => (
-                            <Grid item key={tag._id} xs={4}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={activity.tags.includes(tag._id)}
-                                            onChange={() => handleTagToggle(tag._id)}
-                                            name={tag.tag}
+     return (
+
+        <ThemeProvider theme={theme}>
+            <div style={{
+                backgroundColor: "#fff",
+                minHeight: "100vh",
+                width: "102%",
+                margin: 0,
+                padding: 0,
+                display: "flex",
+                flexDirection: "column",
+            }}>
+                <div className="listAdminProduct">
+                    <Sidebar />
+                    <div className="listContainerAdminProduct">
+                        <Navbar />
+                        <div style={{ padding: "20px" }}>
+                            <form className="activity-form full-width-form" onSubmit={handleSubmit}>
+                                <h2
+                                    style={{
+                                        color: "#d32e65",
+                                        textAlign: "left",
+                                        fontSize: "32px",
+                                    }}
+                                    className="text-2xl font-bold text-800 mb-6"
+                                >
+                                    Create a New Activity
+                                </h2>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            required
+                                            label="Activity Name"
+                                            name="Name"
+                                            value={activity.Name}
+                                            onChange={handleChange}
                                         />
-                                    }
-                                    label={tag.tag}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </FormControl>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={activity.bookingOpen}
-                                onChange={handleChange}
-                                name="bookingOpen"
-                            />
-                        }
-                        label="Booking Open"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Create Activity
-                    </Button>
-                </Grid>
-            </Grid>
-        </form>
-        </div>
-        </div>
-        </div>
-        </div>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            fullWidth
+                                            required
+                                            label="Date"
+                                            type="date"
+                                            name="Date"
+                                            value={activity.Date}
+                                            onChange={handleChange}
+                                            InputLabelProps={{ shrink: true }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            fullWidth
+                                            required
+                                            label="Time"
+                                            type="time"
+                                            name="Time"
+                                            value={activity.Time}
+                                            onChange={handleChange}
+                                            InputLabelProps={{ shrink: true }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            required
+                                            label="Coordinates (lat, long)"
+                                            name="coordinates"
+                                            value={activity.coordinates}
+                                            onChange={handleChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            fullWidth
+                                            required
+                                            label="Price"
+                                            name="Price"
+                                            value={activity.Price}
+                                            onChange={handleChange}
+                                            type="number"
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            fullWidth
+                                            label="Discount"
+                                            name="Discount"
+                                            value={activity.Discount}
+                                            onChange={handleChange}
+                                            type="number"
+                                            InputProps={{
+                                                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormControl fullWidth required>
+                                            <InputLabel id="category-label">Category</InputLabel>
+                                            <Select
+                                                labelId="category-label"
+                                                name="Category"
+                                                value={activity.Category}
+                                                onChange={handleChange}
+                                                label="Category"
+                                            >
+                                                {categories.map((category) => (
+                                                    <MenuItem key={category._id} value={category._id}>
+                                                        {category.activity}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormControl component="fieldset" fullWidth>
+                                            <InputLabel 
+                                                style={{ 
+                                                    color: "#d32e65", 
+                                                    fontSize: "24px", 
+                                                    fontWeight: "bold",
+                                                    position: 'static',
+                                                    marginBottom: '10px'
+                                                }}
+                                            >
+                                                Tags
+                                            </InputLabel>
+                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                                                {tags.map((tag) => (
+                                                    <Chip
+                                                        key={tag._id}
+                                                        label={tag.tag}
+                                                        onClick={() => handleTagToggle(tag._id)}
+                                                        style={{
+                                                            backgroundColor: activity.tags.includes(tag._id) ? "#d32e65" : "#f0f0f0",
+                                                            color: activity.tags.includes(tag._id) ? "#fff" : "#000",
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={activity.bookingOpen}
+                                                    onChange={handleChange}
+                                                    name="bookingOpen"
+                                                />
+                                            }
+                                            label="Booking Open"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <Button 
+                                            type="submit" 
+                                            variant="contained" 
+                                            disabled={!isFormValid()}
+                                            style={{ 
+                                                backgroundColor: isFormValid() ? "#d32e65" : "#ccc", 
+                                                color: "#fff",
+                                                padding: '10px 20px',
+                                                fontSize: '16px'
+                                            }}
+                                        >
+                                            Create Activity
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ThemeProvider>
     );
 };
 
 export default ActivityForm;
-
