@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Delete, Bookmark, MapPin, Calendar, Clock, AlertCircle, ClipboardCheckIcon as FaClipboardCheck } from 'lucide-react';
+import { Bookmark, MapPin, Calendar, Clock, AlertCircle, ClipboardCheckIcon as FaClipboardCheck } from 'lucide-react';
 import TouristNavbar from "../Components/TouristNavBar";
 
 const TouristBookmarks = () => {
@@ -94,7 +94,7 @@ const TouristBookmarks = () => {
           className="text-red-500 hover:text-red-600"
           aria-label="Remove bookmark"
         >
-          <Delete size={20} />
+          <Bookmark size={20} />
         </button>
       </div>
     </div>

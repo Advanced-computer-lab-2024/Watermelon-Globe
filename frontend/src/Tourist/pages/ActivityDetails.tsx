@@ -13,9 +13,7 @@ import {
   FaShare,
   FaEnvelope,
   FaBookmark,
-  FaBell,
 } from "react-icons/fa";
-
 import TouristNavbar from "../Components/TouristNavBar";
 import WalletComponent from "../Components/Wallet";
 import Alert from "@mui/material/Alert";
@@ -63,7 +61,6 @@ interface Activity {
   noOfRatings: number;
   Advertiser: string | null;
   comments: Comment[];
-  notifyRequests: string[];
 }
 
 interface PromoCode {
@@ -84,7 +81,6 @@ const ActivityDetails: React.FC = () => {
   >(null);
   const [bookingInProgress, setBookingInProgress] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isNotified, setIsNotified] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [invalidPromo, setInvalidPromo] = useState(false); // To track if the promo is invalid
@@ -124,7 +120,6 @@ const ActivityDetails: React.FC = () => {
           `/api/Activities/getActivityById/${activityId}`
         );
         setActivity(response.data);
-        setIsNotified(response.data.notifyRequests.includes(id));
         setTotal(response.data.Price);
       } catch (err) {
         setError("Failed to load activity details. Please try again.");
@@ -149,27 +144,6 @@ const ActivityDetails: React.FC = () => {
     fetchActivity();
     checkBookmarkStatus();
   }, [activityId, id]);
-
-  const handleNotifyRequest = async () => {
-    try {
-      if (isNotified) {
-        await axios.delete(
-          `/api/Tourist/removeNotifyActivity/${id}/${activityId}`
-        );
-        setIsNotified(false);
-        alert("Notification request removed successfully.");
-      } else {
-        await axios.post(
-          `/api/Tourist/requestNotifyActivity/${id}/${activityId}`
-        );
-        setIsNotified(true);
-        alert("You will be notified when this activity becomes active.");
-      }
-    } catch (error) {
-      console.error("Error handling notification request:", error);
-      alert("An error occurred. Please try again.");
-    }
-  };
 
   const handleShareLink = () => {
     const activityUrl = `${window.location.origin}/TouristActivityDetails/${activityId}/${id}`;
@@ -301,6 +275,7 @@ const ActivityDetails: React.FC = () => {
   return (
     <div className="min-h-screen bg-background p-8" style={{ margin: "-20px" }}>
       <TouristNavbar id={id} />
+      <p>hello</p>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-primary p-5 relative">
@@ -318,28 +293,6 @@ const ActivityDetails: React.FC = () => {
           </div>
 
           <div className="p-6 space-y-6">
-            {!activity.bookingOpen && (
-              <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
-                <h3 className="text-xl font-semibold text-secondary mb-2 flex items-center">
-                  <FaBell className="mr-2" /> Activity Status
-                </h3>
-                <p className="text-gray-600 mb-2">
-                  This activity is currently not open for booking.
-                </p>
-                <button
-                  onClick={handleNotifyRequest}
-                  className={`flex items-center justify-center px-4 py-2 text-sm font-semibold text-white rounded-lg ${
-                    isNotified
-                      ? "bg-red-500 hover:bg-red-600"
-                      : "bg-primary hover:bg-hover"
-                  }`}
-                >
-                  <FaBell className="mr-2" />
-                  {isNotified ? "Remove Notification" : "Notify Me When Active"}
-                </button>
-              </div>
-            )}
-
             <div className="bg-cardBackground shadow-md rounded-lg p-4 hover:shadow-lg transition-transform duration-300 ease-in-out">
               <h3 className="text-xl font-semibold text-secondary mb-4">
                 Activity Information
@@ -489,7 +442,7 @@ const ActivityDetails: React.FC = () => {
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-primary hover:bg-hover"
                 }`}
-                disabled={bookingInProgress || !activity.bookingOpen}
+                disabled={bookingInProgress}
               >
                 {bookingInProgress ? "Booking..." : "Book Activity"}
               </button>
