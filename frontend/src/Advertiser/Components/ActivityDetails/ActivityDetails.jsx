@@ -50,7 +50,7 @@ const ActivityDetails = () => {
       }
     };
     fetchActivity();
-  }, [updatedProduct.id]);
+  }, [updatedActivity.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

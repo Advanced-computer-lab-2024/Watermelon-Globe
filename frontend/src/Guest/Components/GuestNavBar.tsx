@@ -70,7 +70,7 @@ export default function GuestNavbar() {
             Login
           </Button>
           <Button 
-          onClick={() => navigate(`/signup-options`)}
+          onClick={() => navigate(`/tourist-signup`)}
           variant="outline" className="text-secondary hover:bg-secondaryHover hover:text-white">
             Sign Up
           </Button>
