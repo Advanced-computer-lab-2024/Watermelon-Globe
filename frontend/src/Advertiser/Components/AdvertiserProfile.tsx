@@ -58,7 +58,7 @@ const AdvertiserProfile = () => {
   useEffect(() => {
     const fetchAdvertiser = async () => {
       try {
-        const response = await fetch(`/api/advertiser/getCompanyProfileById/${id}`);
+        const response = await fetch(`/api/advertiser/profiles/${id}`);
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }

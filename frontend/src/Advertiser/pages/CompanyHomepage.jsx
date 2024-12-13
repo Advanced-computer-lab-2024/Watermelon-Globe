@@ -24,7 +24,7 @@ const HomeScreen = () => {
     const fetchAdvertiser = async () => {
       try {
         const response = await axios.get(
-          "/api/advertiser/profiles/673259c7b9feab03bdc4e4fc"
+          "/api/advertiser/profiles/6728a73cf4ea4e0bd3d3b965"
         );
         setAdvertiser(response.data);
       } catch (error) {
