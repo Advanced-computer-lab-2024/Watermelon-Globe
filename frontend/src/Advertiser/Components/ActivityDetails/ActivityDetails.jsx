@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaEdit, FaImage, FaStar, FaStarHalfAlt, FaTrash } from "react-icons/fa";
+import {
+  FaEdit,
+  FaImage,
+  FaStar,
+  FaStarHalfAlt,
+  FaTrash,
+} from "react-icons/fa";
 import UploadActivityPicture from "../UploadActivityImage";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Navbar from "../../Components/AdvertiserNavbar";
@@ -27,24 +33,27 @@ const ActivityDetails = () => {
   useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(`/api/Activities/getActivityById/${activityId}`);
+        const response = await axios.get(
+          `/api/Activities/getActivityById/${activityId}`
+        );
         const activityData = response.data;
         console.log(activityData);
         setActivity(activityData);
 
-        const categoryResponse = await axios.get(`/api/Admin/GetActivityCategory/${response.data.Category}`);
+        const categoryResponse = await axios.get(
+          `/api/Admin/GetActivityCategory/${response.data.Category}`
+        );
         setCategory(categoryResponse.data.activity);
 
         if (activityData.tags && activityData.tags.length > 0) {
-          const tagPromises = activityData.tags.map(tagObj =>
+          const tagPromises = activityData.tags.map((tagObj) =>
             axios.get(`/api/Governer/getTagById/${tagObj._id}`)
           );
           const tagResponses = await Promise.all(tagPromises);
-          const fetchedTags = tagResponses.map(res => res.data);
+          const fetchedTags = tagResponses.map((res) => res.data);
           setTags(fetchedTags); // Store tags with names
         }
         console.log(tags);
-
       } catch (error) {
         console.error("Error fetching activity details:", error);
       }
@@ -64,7 +73,10 @@ const ActivityDetails = () => {
 
   const handleUpdateActivity = async () => {
     try {
-      const response = await axios.put(`/api/Activities/updateActivity/${activityId}`, updatedActivity);
+      const response = await axios.put(
+        `/api/Activities/updateActivity/${activityId}`,
+        updatedActivity
+      );
       if (response.status === 200) {
         setActivity(response.data.activity);
         setIsEditing(false);
@@ -79,9 +91,12 @@ const ActivityDetails = () => {
   const handleDeleteActivity = async () => {
     if (window.confirm("Are you sure you want to delete this activity?")) {
       try {
-        const response = await fetch(`/api/Activities/deleteActivity/${activityId}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `/api/Activities/deleteActivity/${activityId}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (response.ok) {
           navigate("/"); // Redirect to activities list
@@ -108,7 +123,9 @@ const ActivityDetails = () => {
     }
 
     while (stars.length < 5) {
-      stars.push(<FaStar key={`empty-star-${stars.length}`} className="text-gray-300" />);
+      stars.push(
+        <FaStar key={`empty-star-${stars.length}`} className="text-gray-300" />
+      );
     }
 
     return stars;
@@ -116,7 +133,7 @@ const ActivityDetails = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f4eaef76" }}>
-       <div
+      <div
         style={{
           backgroundColor: "#fff",
           minHeight: "100vh", // Ensures it covers the full viewport
@@ -145,7 +162,11 @@ const ActivityDetails = () => {
                     <div className="md:flex-shrink-0 md:w-1/3 relative">
                       <img
                         className="h-full w-full object-cover md:w-full"
-                        src={activity?.picture ? `/uploads/${activity.picture}` : "https://via.placeholder.com/300"}
+                        src={
+                          activity?.picture
+                            ? `/uploads/${activity.picture}`
+                            : "https://via.placeholder.com/300"
+                        }
                         alt={activity?.Name}
                       />
                       <button
@@ -157,10 +178,15 @@ const ActivityDetails = () => {
                       </button>
                     </div>
                     <div className="p-8 md:w-2/3">
-                    {isEditing ? (
+                      {isEditing ? (
                         <div className="space-y-4">
-                          <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Activity Details</h2>
-                          <label htmlFor="Name" className="block text-sm font-medium text-gray-700 mb-1">
+                          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                            Edit Activity Details
+                          </h2>
+                          <label
+                            htmlFor="Name"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
                             Activity Name:
                           </label>
                           <input
@@ -170,7 +196,10 @@ const ActivityDetails = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           />
 
-                          <label htmlFor="Price" className="block text-sm font-medium text-gray-700 mb-1">
+                          <label
+                            htmlFor="Price"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
                             Activity Price:
                           </label>
                           <input
@@ -180,18 +209,28 @@ const ActivityDetails = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           />
 
-                          <label htmlFor="Date" className="block text-sm font-medium text-gray-700 mb-1">
+                          <label
+                            htmlFor="Date"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
                             Date:
                           </label>
                           <input
                             name="Date"
                             type="date"
-                            value={updatedActivity.Date ? updatedActivity.Date.split('T')[0] : ''}
+                            value={
+                              updatedActivity.Date
+                                ? updatedActivity.Date.split("T")[0]
+                                : ""
+                            }
                             onChange={handleInputChange}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           />
 
-                          <label htmlFor="Time" className="block text-sm font-medium text-gray-700 mb-1">
+                          <label
+                            htmlFor="Time"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
                             Time:
                           </label>
                           <input
@@ -202,7 +241,10 @@ const ActivityDetails = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           />
 
-                          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                          <label
+                            htmlFor="description"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
                             Description:
                           </label>
                           <textarea
@@ -229,53 +271,76 @@ const ActivityDetails = () => {
                           </div>
                         </div>
                       ) : (
-                  <>
-                  <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
-                    Activity Details
-                  </div>
-                  <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
-                  <p style={{marginLeft:5}} className="font-semibold text-gray-900">${activity?.Price}</p>
-                  <p className="text-gray-600 mb-4">{activity?.Time}</p>
-                  <p className="text-gray-600 mb-4">{activity?.Date}</p>
-                  <p className="text-gray-600 mb-4">{category}</p>
-                  <div className="mt-4">
-                    <h3 className="text-lg font-medium mb-2">Tags:</h3>
-                    {tags.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
-                        {tags.map(tagObj => (
-                          <span
-                            key={tagObj._id}
-                            className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
+                        <>
+                          <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
+                            Activity Details
+                          </div>
+                          <h1 className="text-3xl font-bold text-black mb-2">
+                            {activity?.Name}
+                          </h1>
+                          <p
+                            style={{ marginLeft: 5 }}
+                            className="font-semibold text-gray-900"
                           >
-                            {tagObj.tag?.trim() || "Unnamed Tag"}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500">No tags associated with this activity.</p>
-                    )}
-                  </div>
+                            ${activity?.Price}
+                          </p>
+                          <p className="text-gray-600 mb-4">{activity?.Time}</p>
+                          <p className="text-gray-600 mb-4">{activity?.Date}</p>
+                          <p className="text-gray-600 mb-4">{category}</p>
+                          <div className="mt-4">
+                            <h3 className="text-lg font-medium mb-2">Tags:</h3>
+                            {tags.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {tags.map((tagObj) => (
+                                  <span
+                                    key={tagObj._id}
+                                    className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
+                                  >
+                                    {tagObj.tag?.trim() || "Unnamed Tag"}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-gray-500">
+                                No tags associated with this activity.
+                              </p>
+                            )}
+                          </div>
                           <div className="flex items-center mb-4">
-                            <div className="flex items-center">{renderRatingStars(activity?.rating || 0)}</div>
+                            <div className="flex items-center">
+                              {renderRatingStars(activity?.rating || 0)}
+                            </div>
                             <p className="ml-2 text-sm text-gray-600">
-                              {activity?.rating ? `${activity.rating} out of 5 stars` : "Not rated yet"}
+                              {activity?.rating
+                                ? `${activity.rating} out of 5 stars`
+                                : "Not rated yet"}
                             </p>
                           </div>
                           <div className="bg-[#f4eaef76] px-4 py-3 sm:px-6 rounded-md mb-4 border border-[#e89bb5]">
                             <p className="text-sm text-gray-700">
-                              <span className="font-medium">Date</span> {activity?.Date}
+                              <span className="font-medium">Date</span>{" "}
+                              {activity?.Date}
                             </p>
                           </div>
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Reviews</h3>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                              Reviews
+                            </h3>
                             {activity?.reviews?.length > 0 ? (
                               activity.reviews.map((review, index) => (
-                                <div key={index} className="mb-4 pb-4 border-b border-gray-200 last:border-b-0">
-                                  <p className="text-gray-700">{review.review || "No review provided"}</p>
+                                <div
+                                  key={index}
+                                  className="mb-4 pb-4 border-b border-gray-200 last:border-b-0"
+                                >
+                                  <p className="text-gray-700">
+                                    {review.review || "No review provided"}
+                                  </p>
                                 </div>
                               ))
                             ) : (
-                              <p className="text-gray-500">No reviews yet for this activity.</p>
+                              <p className="text-gray-500">
+                                No reviews yet for this activity.
+                              </p>
                             )}
                           </div>
                         </>
@@ -288,11 +353,16 @@ const ActivityDetails = () => {
                       </button>
                       {showUpdatePicture && (
                         <div className="mt-6">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Activity Picture</h3>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                            Update Activity Picture
+                          </h3>
                           <UploadActivityPicture
                             id={activityId}
                             onSuccess={(newPicture) => {
-                              setActivity((prev) => ({ ...prev, picture: newPicture }));
+                              setActivity((prev) => ({
+                                ...prev,
+                                picture: newPicture,
+                              }));
                               setShowUpdatePicture(false);
                             }}
                           />
