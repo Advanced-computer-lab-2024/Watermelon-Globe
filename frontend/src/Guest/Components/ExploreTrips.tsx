@@ -5,17 +5,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import Modal from "../Components/Modal"; // Import a reusable modal component
-import {
-  Search,
-  Calendar,
-  DollarSign,
-  Globe,
-} from "lucide-react";
+import { Search, Calendar, DollarSign, Globe } from 'lucide-react';
 
 interface Itinerary {
   _id: string;
   name: string;
-  image: string;
+  picture: string;
   inappropriate: boolean;
 }
 
@@ -303,9 +298,10 @@ const ExploreTrips: React.FC = () => {
                 onClick={() => handleButtonClick()}
               >
                 <img
-                  src={trip.image}
+                  src={trip.picture ? `/uploads/${trip.picture}` : "https://via.placeholder.com/300"}
                   alt={trip.name}
                   className="w-full h-48 object-cover"
+                  loading="lazy"
                 />
                 <div className="p-4">
                   <h3 className="text-xl font-bold mb-2 text-primary">{trip.name}</h3>
@@ -329,13 +325,10 @@ const ExploreTrips: React.FC = () => {
             </Button>
           </div>
         </Modal>
-        )}
+      )}
     </section>
-
-    
-
-
   );
 };
 
 export default ExploreTrips;
+

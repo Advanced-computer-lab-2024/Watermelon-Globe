@@ -8,11 +8,11 @@ const sellerSchema = new Schema(
       type: String,
       required: true,
     },
-    // Username: {
-    //   type: String,
-    //   required: true,
-    //   unique: true,
-    // },
+    Username: {
+      type: String,
+      required: false,
+      unique: true,
+    },
 
     Email: {
       type: String,
