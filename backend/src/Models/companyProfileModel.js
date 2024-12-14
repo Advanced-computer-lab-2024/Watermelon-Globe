@@ -10,10 +10,13 @@ const companyProfileSchema = new Schema(
     Username: {
       type: String,
       required: true,
+      unique: true,
     },
     Email: {
       type: String,
       required: true,
+      unique: true,
+      match: [/.+@.+\..+/, "Please enter a valid email address"],
     },
     Password: {
       type: String,
@@ -57,12 +60,14 @@ const companyProfileSchema = new Schema(
       type: String,
       required: false,
     },
-    notifications :[{
-      type:String,
-      required: false}
-    ]
+    notifications: [
+      {
+        type: String,
+        required: false,
+      },
+    ],
   },
-  
+
   { timestamps: true }
 );
 

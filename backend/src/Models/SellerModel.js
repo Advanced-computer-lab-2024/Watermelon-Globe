@@ -11,10 +11,14 @@ const sellerSchema = new Schema(
     Username: {
       type: String,
       required: true,
+      unique: true,
     },
+
     Email: {
       type: String,
       required: true,
+      unique: true,
+      match: [/.+@.+\..+/, "Please enter a valid email address"],
     },
     Description: {
       type: String,
@@ -47,24 +51,22 @@ const sellerSchema = new Schema(
       default: null,
     },
     Logo: {
-        type: String,
-        required: false,
-    },  
+      type: String,
+      required: false,
+    },
     Products: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
-        },
-      ],
-      notifications: [
-        {
-          type: String,
-          required: true,
-          default: [],
-        },
-      ],
-      
-    
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    notifications: [
+      {
+        type: String,
+        required: true,
+        default: [],
+      },
+    ],
   },
   { timestamps: true }
 );
