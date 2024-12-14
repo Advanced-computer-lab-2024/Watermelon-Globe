@@ -1653,7 +1653,7 @@ const filterRevenueByProduct = async (req, res) => {
 
 const getNotificationsAdmin = async (req, res) => {
   try {
-    const admin = await Admin.findById("674a3e827a6dcbe8e5bd8069");
+    const admin = await Admin.findById("675de5356791c633ae7a06b6");
     if (!admin) {
       res.status(400).json({ message: "admin is not found" });
     } else {

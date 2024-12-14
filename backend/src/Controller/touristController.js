@@ -416,7 +416,7 @@ const buyProduct = async (req, res) => {
     }
 
     if (product.quantity === 0) {
-      const admin = await Admin.findById("674a3e827a6dcbe8e5bd8069");
+      const admin = await Admin.findById("675de5356791c633ae7a06b6");
       if (admin) {
         const notification = `Product ${product.name} is out of stock.`;
         admin.notifications.push(notification);

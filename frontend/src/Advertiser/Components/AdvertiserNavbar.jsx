@@ -13,7 +13,7 @@ import "react-notifications-component/dist/theme.css";
 import { Link } from "react-router-dom";
 //import NotificationsBox from "NotificationsBox";
 import NotificationsBox from "./NotificationsBox";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import {Bell} from "lucide-react";
 
 const Navbar = () => {
@@ -22,6 +22,19 @@ const Navbar = () => {
   const{id}=useParams();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [advertiserLogo, setAdvertiserLogo] = useState(null);
+   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // For avatar dropdown
+    const navigate= useNavigate();
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+    console.log("drop down toggled")
+  };
+
+   // Handle Sign Out functionality
+   const handleSignOut = () => {
+    // Clear any stored user session or tokens if necessary
+    navigate("/"); // Redirect to the main page
+  };
 
   useEffect(() => {
     const fetchAdvertiserLogo = async () => {
@@ -68,17 +81,41 @@ const Navbar = () => {
             </div>
 
          
-
             <div className="itemAdmin">
+            <button onClick={toggleDropdown} className="avatarButton">
+            
               <img
                 src={advertiserLogo}
                 alt="Logo"
                 className="avatarAdmin"
               />
-            </div>
-          </div>
-        </div>
-      </div>
+               </button>
+
+                  {isDropdownOpen && (
+  <div
+    className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
+    onMouseLeave={() => setIsDropdownOpen(false)} // Close on mouse leave
+  >
+    <ul className="py-2">
+      <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600 font-medium"
+        onClick={handleSignOut}
+      >
+        Sign Out
+      </li>
+    </ul>
+  </div>
+)}
+</div>
+</div>
+</div>
+</div>
+
+
+
+         
+      
+    
     </>
   );
 };
