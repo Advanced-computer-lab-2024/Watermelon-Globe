@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -29,6 +27,8 @@ import {
   FaPlus,
   FaMinus
 } from "react-icons/fa";
+import PhotoUpload from './PhotoUpload';
+// import { Itinerary } from './Itineraries';
 
 interface Activity {
   _id: string;
@@ -60,6 +60,11 @@ interface Booking {
   user: string;
 }
 
+interface ItineraryGuide {
+  name: string;
+  photo: string | null;
+}
+
 interface Itinerary {
   _id: string;
   name: string;
@@ -74,7 +79,7 @@ interface Itinerary {
   accessibility: boolean;
   pickupDropoffLocations: PickupDropoff[];
   bookings: boolean;
-  guide: string;
+  guide: ItineraryGuide;
   ratings: Rating[];
   rating: number;
   noOfRatings: number;
@@ -93,7 +98,7 @@ interface GeneralTag {
 
 const NewItineraryDetailsGeneral: React.FC = () => {
   const {id}=useParams();
-  const { tripid } = useParams<{ tripid: string }>();
+  const { tripid } = useParams<{ tripid?: string }>();
   const navigate = useNavigate();
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,6 +109,7 @@ const NewItineraryDetailsGeneral: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [newDate, setNewDate] = useState<Date | null>(null);
   const [newTime, setNewTime] = useState<string>("12:00");
+  const [photoUrl, setPhotoUrl] = useState<string>(itinerary?.picture || '');
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -111,6 +117,7 @@ const NewItineraryDetailsGeneral: React.FC = () => {
         const response = await axios.get(`/api/Itinerary/getItinerary/${tripid}`);
         setItinerary(response.data);
         setSelectedTags(response.data.tag.filter(Boolean).map((tag: PreferenceTag) => tag._id));
+        setPhotoUrl(response.data.picture);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data?.message || "Failed to fetch itinerary details");
@@ -266,6 +273,11 @@ const NewItineraryDetailsGeneral: React.FC = () => {
     }
   };
 
+  const handlePhotoUpdate = (newPhotoUrl: string) => {
+    setPhotoUrl(newPhotoUrl);
+    setItinerary(prev => prev ? { ...prev, picture: newPhotoUrl } : null);
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
@@ -295,57 +307,57 @@ const NewItineraryDetailsGeneral: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="bg-white rounded-full p-2">
-                        <img src={itinerary.picture} alt={itinerary.name} className="h-16 w-16 object-cover rounded-full" />
-                      </div>
-                     <div>
-                      {editMode === 'name' ? (
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="text"
-                          value={editedValue as string}
-                          onChange={(e) => setEditedValue(e.target.value)}
-                          className="text-3xl font-bold text-white bg-transparent border-b border-white"
+                        <img
+                          src={itinerary.picture ? `/uploads/${itinerary.picture}` : "https://via.placeholder.com/300"}
+                          alt={itinerary.name}
+                          className="h-16 w-16 object-cover rounded-full"
                         />
-                        <button
-                          onClick={() => handleSave('name')} // Save changes
-                          className="bg-green-500 text-white p-2 rounded-full"
-                        >
-                          <FaCheck/>
-                        </button>
-                        <button
-                          onClick={() => setEditMode(null)} // Cancel editing
-                          className="bg-red-500 text-white p-2 rounded-full"
-                        >
-                          <FaTimes/>
-                        </button>
                       </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                                            <h2 className="text-3xl font-bold text-white flex items-center">
-                                            {itinerary.name}
-                        </h2>
-                        <button
-                                          onClick={() => handleEdit('name', itinerary.name)}
-                                          className="bg-white text-primary p-2 rounded-full"
-                        >
-                          <FaEdit />
-                        </button>
+                      <div>
+                        {editMode === 'name' ? (
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="text"
+                              value={editedValue as string}
+                              onChange={(e) => setEditedValue(e.target.value)}
+                              className="text-3xl font-bold text-white bg-transparent border-b border-white"
+                            />
+                            <button
+                              onClick={() => handleSave('name')}
+                              className="bg-green-500 text-white p-2 rounded-full"
+                            >
+                              <FaCheck/>
+                            </button>
+                            <button
+                              onClick={() => setEditMode(null)}
+                              className="bg-red-500 text-white p-2 rounded-full"
+                            >
+                              <FaTimes/>
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center space-x-2">
+                            <h2 className="text-3xl font-bold text-white flex items-center">
+                              {itinerary.name}
+                            </h2>
+                            <button
+                              onClick={() => handleEdit('name', itinerary.name)}
+                              className="bg-white text-primary p-2 rounded-full"
+                            >
+                              <FaEdit />
+                            </button>
+                          </div>
+                        )}
+                        <p className="text-white opacity-75">
+                          {itinerary.locations.join(", ")}
+                        </p>
+                        <p className="text-white opacity-75">
+                          Guide: {itinerary.guide.name}
+                        </p>
                       </div>
-                    )}
-                    <p className="text-white opacity-75">
-                      {itinerary.locations.join(", ")}
-                    </p>
+                    </div>
                   </div>
-
-                                    </div>
-                                  </div>
-
-                                  </div>  
-
-                                        
-                                    </div> 
-                                    <div>
- 
+                </div>
 
                 <div className="p-6 space-y-6">
                   {/* Activities */}
@@ -763,7 +775,6 @@ const NewItineraryDetailsGeneral: React.FC = () => {
                   <div className="bg-cardBackground shadow-md rounded-lg p-4">
                     <h3 className="text-xl font-semibold text-secondary mb-4 flex items-center justify-between">
                       Inappropriate Flag
-                     
                     </h3>
                     {editMode === 'inappropriate' ? (
                       <div>
@@ -792,7 +803,21 @@ const NewItineraryDetailsGeneral: React.FC = () => {
                   </div>
 
                   {/* Picture */}
-                 
+                  <div className="bg-cardBackground shadow-md rounded-lg p-4">
+                    <h3 className="text-xl font-semibold text-secondary mb-4 flex items-center">
+                      <FaImage className="mr-2" /> Itinerary Photo
+                    </h3>
+                    <div className="flex flex-col items-center">
+                      {/* <img src={photoUrl} alt={itinerary.name} className="w-64 h-64 object-cover rounded-lg shadow-md mb-4" /> */}
+                      {tripid && (
+                        <PhotoUpload
+                          itineraryId={tripid}
+                          currentPhoto={photoUrl}
+                          onPhotoUpdate={handlePhotoUpdate}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -804,4 +829,3 @@ const NewItineraryDetailsGeneral: React.FC = () => {
 };
 
 export default NewItineraryDetailsGeneral;
-

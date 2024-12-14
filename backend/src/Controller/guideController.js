@@ -6,7 +6,8 @@ const mongoose = require("mongoose");
 const tourGuide = require("../Models/tourGuideModel.js");
 const ChildItinerary = require("../Models/touristItineraryModel.js");
 const Tourist = require('../Models/touristModel'); 
- const Itinerary = require("../Models/itineraryModel.js");
+//  const Itinerary = require("../Models/itineraryModel.js");
+ const { Itinerary } = require('../Models/itineraryModel.js');
 const Itinerary2=require("../Models/itineraryModel.js");
 const TourGuide = require("../Models/tourGuideModel.js");
 
@@ -289,16 +290,21 @@ const upload = multer({
 const uploadMiddleware = upload.single('picture');
 
 const uploadPicture = async (req, res) => {
+  console.log('uploadPicture function called');
   uploadMiddleware(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
+      console.error("Multer error:", err);
       return res.status(400).json({ error: "Multer error: " + err.message });
     } else if (err) {
+      console.error("Unknown error:", err);
       return res.status(500).json({ error: "Unknown error: " + err.message });
     }
 
-    const { id } = req.query;
+    const { id } = req.params;
+    console.log('Itinerary ID:', id);
 
     if (!req.file) {
+      console.error("No file uploaded");
       return res.status(400).json({ error: "No file uploaded" });
     }
 
@@ -306,6 +312,7 @@ const uploadPicture = async (req, res) => {
       const itinerary = await Itinerary.findById(id);
 
       if (!itinerary) {
+        console.error("No itinerary found with ID:", id);
         fs.unlinkSync(req.file.path);
         return res.status(404).json({ error: "No itinerary found with this ID" });
       }
@@ -320,6 +327,7 @@ const uploadPicture = async (req, res) => {
       itinerary.picture = req.file.filename;
       await itinerary.save();
 
+      console.log("Itinerary updated successfully");
       res.status(200).json({ 
         message: "Itinerary picture updated successfully", 
         itinerary: {
@@ -329,7 +337,7 @@ const uploadPicture = async (req, res) => {
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error("Error updating itinerary picture:", error);
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
@@ -337,7 +345,6 @@ const uploadPicture = async (req, res) => {
     }
   });
 };
-
 const createItinerary = async (req, res) => {
   try {
     const { id } = req.params;  // Tour guide ID from URL params

@@ -124,11 +124,8 @@ const ViewItineraries = () => {
 
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
-                      src={
-                        itineraries.picture ||
-                        "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-                      }
-                      alt={`Image of ${itinerary.name}`}
+                      src={itinerary.picture ? `/uploads/${itinerary.picture}` : "https://via.placeholder.com/300"}
+                      alt={itinerary.name}
                       loading="lazy"
                     />
                   </AspectRatio>
