@@ -36,7 +36,7 @@ const HomePage = () => {
           </button>
           <button
             className="home-btn py-2 px-6 w-64 bg-secondary text-white rounded-lg shadow-md hover:bg-secondaryHover transition-colors"
-            onClick={() => navigate("/advertiser")}
+            onClick={() => navigate("/advertiser/6728a73cf4ea4e0bd3d3b965")}
           >
             Go to Advertiser Page
           </button>

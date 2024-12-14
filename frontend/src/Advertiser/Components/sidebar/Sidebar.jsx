@@ -83,7 +83,7 @@ const Sidebar = () => {
       try {
         // Make an API call to fetch user details using the ID
         const response = await axios.get(
-          `/api/Advertiser/getCompanyProfileById/${id}`
+          `/api/Advertiser/profiles/${id}`
         );
         setUser(response.data); // Update state with the user details
       } catch (error) {
