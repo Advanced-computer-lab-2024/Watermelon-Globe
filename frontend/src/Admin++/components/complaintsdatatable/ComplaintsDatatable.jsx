@@ -1,11 +1,10 @@
-import "./ComplaintsDatatable.scss";
+import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import { Button, MenuItem, Select } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReplyIcon from "@mui/icons-material/Reply";
+import axios from "axios";
+import "./ComplaintsDatatable.scss";
 
 const ComplaintsDatatable = () => {
   const [complaints, setComplaints] = useState([]);
@@ -42,7 +41,6 @@ const ComplaintsDatatable = () => {
       if (newStatus === 'resolved') {
         await axios.put(`/api/admin/Complaint/${id}`);
       } else {
-        // If changing back to pending, we need a new API endpoint
         await axios.put(`/api/admin/reopenComplaint/${id}`);
       }
       fetchComplaints();
@@ -60,39 +58,75 @@ const ComplaintsDatatable = () => {
     }
   };
 
+  const renderCellContent = (params) => (
+    <div style={{
+      whiteSpace: 'normal',
+      wordWrap: 'break-word',
+      overflowWrap: 'break-word',
+      hyphens: 'auto',
+      width: '100%',
+      lineHeight: '1.5em',
+      maxHeight: '4.5em', // Allows for 3 lines of text
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      display: '-webkit-box',
+      WebkitLineClamp: 3,
+      WebkitBoxOrient: 'vertical',
+    }}>
+      {params.value}
+    </div>
+  );
+
   const columns = [
-    { field: "title", headerName: "Title", width: 200 },
-    { field: "body", headerName: "Body", width: 300 },
+    { 
+      field: "title", 
+      headerName: "Title", 
+      flex: 1,
+      minWidth: 150,
+      renderCell: renderCellContent,
+    },
+    { 
+      field: "body", 
+      headerName: "Body", 
+      flex: 2,
+      minWidth: 200,
+      renderCell: renderCellContent,
+    },
     { 
       field: "date", 
       headerName: "Date", 
-      width: 200,
+      flex: 1,
+      minWidth: 150,
       valueFormatter: (params) => new Date(params.value).toLocaleString(),
     },
     { 
       field: "status", 
       headerName: "Status", 
-      width: 120,
+      flex: 1,
+      minWidth: 120,
       renderCell: (params) => (
         <Select
           value={params.value}
           onChange={(e) => handleUpdateStatus(params.row._id, e.target.value)}
+          style={{ width: '100%' }}
         >
           <MenuItem value="pending">Pending</MenuItem>
           <MenuItem value="resolved">Resolved</MenuItem>
         </Select>
       ),
     },
-    { field: "reply", headerName: "Reply", width: 200 },
     { 
-      field: "tourist", 
-      headerName: "Tourist ID", 
-      width: 220,
+      field: "reply", 
+      headerName: "Reply", 
+      flex: 1,
+      minWidth: 150,
+      renderCell: renderCellContent,
     },
     {
       field: "action",
       headerName: "Action",
-      width: 200,
+      flex: 1,
+      minWidth: 120,
       renderCell: (params) => {
         return (
           <div className="cellAction">
@@ -126,14 +160,6 @@ const ComplaintsDatatable = () => {
       <div className="datatableTitle">
         View All Complaints
         <div>
-          {/* <Select
-            value={sortField}
-            onChange={(e) => setSortField(e.target.value)}
-            sx={{ marginRight: 2 }}
-          >
-            <MenuItem value="date">Sort by Date</MenuItem>
-            <MenuItem value="status">Sort by Status</MenuItem>
-          </Select> */}
           <Select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -144,55 +170,63 @@ const ComplaintsDatatable = () => {
           </Select>
         </div>
       </div>
-      <DataGrid
-        className="complaintsDatagrid"
-        rows={complaints}
-        columns={columns}
-        pageSize={9}
-        rowsPerPageOptions={[9]}
-        checkboxSelection
-        getRowId={(row) => row._id}
-        sx={{
-          "& .MuiDataGrid-row:focus, & .MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#f5f5f5",
-            color: "#d688a2",
-            fontSize: "18px",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: "bold",
-          },
-          "& .MuiDataGrid-cell": {
-            color: "#888",
-            fontSize: "14px",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: "normal",
-          },
-          "& .MuiDataGrid-row.Mui-selected": {
-            backgroundColor: "#f6d8e576",
-          },
-          "& .MuiDataGrid-row.Mui-selected:hover": {
-            backgroundColor: "#f6a4c276",
-          },
-          "& .MuiDataGrid-row:hover": {
-            backgroundColor: "#f6d8e576",
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: "#ffffff",
-            color: "#888",
-          },
-          "& .MuiCheckbox-root": {
-            color: "#d32e65",
-          },
-          "& .MuiCheckbox-root.Mui-checked": {
-            color: "#d32e65",
-          },
-        }}
-      />
+      <div style={{ height: 'calc(100vh - 200px)', width: '100%' }}>
+        <DataGrid
+          className="complaintsDatagrid"
+          rows={complaints}
+          columns={columns}
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          checkboxSelection
+          getRowId={(row) => row._id}
+          autoHeight
+          sx={{
+            "& .MuiDataGrid-row": {
+              maxHeight: "unset !important",
+            },
+            "& .MuiDataGrid-cell": {
+              maxHeight: "unset !important",
+              whiteSpace: "normal",
+              wordWrap: "break-word",
+              overflow: "visible",
+              lineHeight: "1.5em",
+              paddingTop: "8px",
+              paddingBottom: "8px",
+            },
+            "& .MuiDataGrid-row:focus, & .MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: "#f5f5f5",
+              color: "#d688a2",
+              fontSize: "18px",
+              fontFamily: "Poppins, sans-serif",
+              fontWeight: "bold",
+            },
+            "& .MuiDataGrid-row.Mui-selected": {
+              backgroundColor: "#f6d8e576",
+            },
+            "& .MuiDataGrid-row.Mui-selected:hover": {
+              backgroundColor: "#f6a4c276",
+            },
+            "& .MuiDataGrid-row:hover": {
+              backgroundColor: "#f6d8e576",
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: "#ffffff",
+              color: "#888",
+            },
+            "& .MuiCheckbox-root": {
+              color: "#d32e65",
+            },
+            "& .MuiCheckbox-root.Mui-checked": {
+              color: "#d32e65",
+            },
+          }}
+        />
+      </div>
     </div>
   );
 };
 
 export default ComplaintsDatatable;
-
