@@ -463,9 +463,7 @@ const getAllItineraries = async (req, res) => {
   }
 };
 
-
-
- const myItineraries = async(req,res)=>
+const myItineraries = async(req,res)=>
 {
   const {id} = req.params;
   try {
