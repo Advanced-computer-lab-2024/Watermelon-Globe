@@ -64,7 +64,7 @@ const tourGuideSchema = new Schema(
     deletionRequest: {
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
-      default: null,
+      default: "Pending",
     },
     ratings: [
       {

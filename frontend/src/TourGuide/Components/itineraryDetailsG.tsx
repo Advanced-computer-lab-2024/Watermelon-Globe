@@ -382,8 +382,9 @@ import Sidebar from "./sidebar/Sidebar";
 
 interface Activity {
   _id: string;
-  name: string;
+  Name: string;
   duration: string;
+  Price:number;
 }
 
 interface PreferenceTag {
@@ -550,9 +551,9 @@ const NewItineraryDetailsGeneral: React.FC = () => {
                     <ul className="space-y-2 max-h-60 overflow-y-auto pr-4">
                       {itinerary.activities.map((activity) => (
                         <li key={activity._id} className="flex justify-between items-center bg-white p-3 rounded shadow">
-                          <span className="text-gray-800 font-medium">{activity.name}</span>
-                          <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                            {activity.duration}
+                          <span className="text-gray-800 font-medium">{activity.Name}</span>
+                          <span className="text-sm bg-green-100 text-black-800 px-3 py-1 rounded">
+                            {activity.Price}
                           </span>
                         </li>
                       ))}
@@ -738,16 +739,9 @@ const NewItineraryDetailsGeneral: React.FC = () => {
 
                   {/* Sharing Options */}
                   <div className="bg-cardBackground shadow-md rounded-lg p-4">
-                    <h3 className="text-xl font-semibold text-secondary mb-4">Share Itinerary</h3>
                     <div className="flex justify-between">
-                      <button className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none">
-                        <FaShare className="mr-2 inline" />
-                        Share Link
-                      </button>
-                      <button className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-secondary rounded-lg hover:bg-secondaryHover focus:outline-none">
-                        <FaEnvelope className="mr-2 inline" />
-                        Share via Email
-                      </button>
+                     
+                     
                     </div>
                   </div>
                 </div>
