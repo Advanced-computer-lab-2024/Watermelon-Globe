@@ -1089,6 +1089,21 @@ const filterRevenueByDateSeller = async (req, res) => {
   }
 };
 
+const getNotificationsSeller = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const seller = await Seller.findById(id);
+    if (!seller) {
+      res.status(400).json({ message: "seller is not found" });
+    } else {
+      res.status(200).json(seller.notifications);
+    }
+  } catch {
+    console.error("Error getting notifications:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createSeller,
   getAllSellers,
@@ -1125,4 +1140,5 @@ module.exports = {
   totalProductRevenueForSeller,
   SellerMonthlyRevenue,
   filterRevenueByDateSeller,
+  getNotificationsSeller,
 };

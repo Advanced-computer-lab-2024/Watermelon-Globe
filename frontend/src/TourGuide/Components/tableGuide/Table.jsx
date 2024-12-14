@@ -17,7 +17,7 @@ const List = ({ searchTerm }) => {
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await axios.get(`/api/TourGuide/getAllItinerariesByGuide/${id}`);
+        const response = await axios.get(`/api/Itineraries/getAllItinerariesByGuide/${id}`);
         setItineraries(response.data.bookedItineraries);
       } catch (error) {
         console.error('Error fetching itineraries:', error);

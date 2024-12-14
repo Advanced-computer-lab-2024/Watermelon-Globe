@@ -8,11 +8,11 @@ const sellerSchema = new Schema(
       type: String,
       required: true,
     },
-    Username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    // Username: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
 
     Email: {
       type: String,
@@ -47,8 +47,8 @@ const sellerSchema = new Schema(
     },
     deletionRequest: {
       type: String,
-      enum: ["Pending", "Accepted", "Rejected"],
-      default: null,
+      enum: ["Pending", "Accepted", "Rejected",null],
+      default: "Pending",
     },
     Logo: {
       type: String,

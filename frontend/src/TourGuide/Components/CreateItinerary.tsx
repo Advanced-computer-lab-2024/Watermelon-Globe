@@ -215,7 +215,7 @@ const CreateItinerary = () => {
               <label className="block text-sm font-medium text-green-600 mb-2">Tags</label>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
-                  <button
+                  <button 
                     type="button"
                     key={tag._id}
                     onClick={() => toggleTag(tag._id)}
@@ -272,11 +272,12 @@ const CreateItinerary = () => {
               />
               {errors.languageOfTour && <p className="text-red-500 text-xs mt-1">{errors.languageOfTour}</p>}
             </div> */}
-            <div className="fex">
+            <div className="flex">
 
-<div>
+<div style={{marginRight:10}}>
   <label className="block text-sm font-medium text-green-600 mb-1">Language of Tour</label>
   <select
+  style={{width:"100%",}}
     name="languageOfTour"
     value={formData.languageOfTour}
     onChange={handleInputChange}
@@ -297,9 +298,9 @@ const CreateItinerary = () => {
 </div>
 
             {/* Price of Tour */}
-              <div>
+              <div style={{marginRight:20}}>
               <label className="block text-sm font-medium text-green-600 mb-1">Price of Tour</label>
-              <input
+              <input style={{width:"100%", marginRight:10}}
                 type="number"
                 name="priceOfTour"
                 value={formData.priceOfTour}
@@ -309,7 +310,7 @@ const CreateItinerary = () => {
               />
               {errors.priceOfTour && <p className="text-red-500 text-xs mt-1">{errors.priceOfTour}</p>}
             </div> 
-            </div>
+            
 
     
 
@@ -336,6 +337,7 @@ const CreateItinerary = () => {
                 <span className="text-sm text-gray-700">Bookings</span>
               </label>
             </div>
+            </div>
 
             {/* Pickup/Dropoff Locations */}
             <div>
@@ -356,6 +358,7 @@ const CreateItinerary = () => {
                   className="flex-1 px-3 py-2 bg-pink-50 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <button
+                style={{backgroundColor:"#91c297"}}
                   type="button"
                   onClick={addPickupDropoff}
                   className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
@@ -365,11 +368,13 @@ const CreateItinerary = () => {
               </div>
               <div className="space-y-2">
                 {pickupDropoffLocations.map((location, index) => (
-                  <div key={index} className="flex items-center justify-between bg-green-100 p-2 rounded-md">
+                  <div style={{backgroundColor:"#91c297"
+                  }} key={index} className="flex items-center justify-between  p-2 rounded-md">
                     <span className="text-sm text-gray-700">
                       Pickup: {location.pickup}, Dropoff: {location.dropoff}
                     </span>
                     <button
+                    style={{backgroundColor:"#91c297"}}
                       type="button"
                       onClick={() => removePickupDropoff(index)}
                       className="text-red-500 hover:text-red-700"
@@ -390,6 +395,7 @@ const CreateItinerary = () => {
                   className="flex-1 px-3 py-2 bg-pink-50 border border-green-300 rounded-md focus:outline-none focus:ring-green-500"
                 />
                 <button
+                style={{backgroundColor:"#91c297"}}
                   type="button"
                   onClick={() => {
                     const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
@@ -408,6 +414,7 @@ const CreateItinerary = () => {
                   <div key={index} className="flex items-center bg-green-100 px-3 py-1 rounded-full">
                     <span className="text-sm text-gray-700 mr-2">{date}</span>
                     <button
+                    style={{backgroundColor:"#91c297"}}
                       type="button"
                       onClick={() => removeDate(date)}
                       className="text-red-500 hover:text-red-700"
@@ -428,6 +435,7 @@ const CreateItinerary = () => {
                   className="flex-1 px-3 py-2 bg-pink-50 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <button
+                style={{backgroundColor:"#91c297"}}
                   type="button"
                   onClick={() => {
                     const timeInput = document.querySelector('input[type="time"]') as HTMLInputElement;
@@ -446,6 +454,7 @@ const CreateItinerary = () => {
                   <div key={index} className="flex items-center bg-green-100 px-3 py-1 rounded-full">
                     <span className="text-sm text-gray-700 mr-2">{time}</span>
                     <button
+                    style={{backgroundColor:"#91c297"}}
                       type="button"
                       onClick={() => removeTime(time)}
                       className="text-red-500 hover:text-red-700"
@@ -459,8 +468,10 @@ const CreateItinerary = () => {
 
             <div className="flex justify-center mt-8">
               <button
+              
+              style={{backgroundColor:"#91c297"}}
                 type="submit"
-                className="px-8 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600 transition-colors"
+                className="px-8 py-3  text-white rounded-full text-lg hover:bg-green-600 transition-colors"
               >
                 Create Itinerary
               </button>

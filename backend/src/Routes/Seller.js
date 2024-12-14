@@ -32,7 +32,8 @@ const {
   loginSeller,
   totalProductRevenueForSeller,
   SellerMonthlyRevenue,
-  filterRevenueByDateSeller
+  filterRevenueByDateSeller,
+  getNotificationsSeller
 } = require("../Controller/SellerController");
 
 const router = express.Router();
@@ -119,5 +120,7 @@ router.get("/totalProductRevenueForSeller/:sellerId", totalProductRevenueForSell
 router.get("/SellerMonthlyRevenue/:sellerId", SellerMonthlyRevenue);
 
 router.get("/filterRevenueByDateSeller/:sellerId", filterRevenueByDateSeller);
+
+router.get("/getNotificationsSeller/:id",getNotificationsSeller);
 
 module.exports = router;
