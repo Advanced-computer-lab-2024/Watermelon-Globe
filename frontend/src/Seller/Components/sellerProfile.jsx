@@ -32,6 +32,7 @@ const SellerProfile = () => {
         setSeller(null);
       } else {
         setSeller(json);
+        setProfileImage(json.logo);  // Assuming the logo URL is returned as part of the seller data
         setErrorMessage('');
       }
     } catch (error) {
@@ -238,7 +239,7 @@ const SellerProfile = () => {
                         )}
                       </div>
                     </div>
-                    <SellerLogo id={seller._id} />
+                    <SellerLogo id={seller._id} onClose={() => setProfileImage(null)} /> {/* Adjusting to handle profile image update */}
                   </div>
                 </div>
 
@@ -266,40 +267,43 @@ const SellerProfile = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     />
+                    <button
+                      onClick={handleChangePassword}
+                      className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                    >
+                      Change Password
+                    </button>
                   </div>
                 </div>
 
-                <div className="mt-8 space-x-4">
+                <div className="mt-8 flex justify-between items-center">
                   <button
                     onClick={handleEditToggle}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    className="text-indigo-600 hover:text-indigo-800"
                   >
                     {isEditing ? 'Cancel Edit' : 'Edit Profile'}
                   </button>
                   {isEditing && (
                     <button
                       onClick={handleUpdateProfile}
-                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                      className="py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
                     >
                       Save Changes
                     </button>
                   )}
-                  <button
-                    onClick={handleChangePassword}
-                    className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
-                  >
-                    Change Password
-                  </button>
+                </div>
+
+                <div className="mt-8">
                   <button
                     onClick={handleDeleteAccount}
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    className="py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700"
                   >
                     Delete Account
                   </button>
                 </div>
               </div>
             ) : (
-              !errorMessage && <p className="text-gray-600">Loading...</p>
+              <p>Loading profile...</p>
             )}
           </div>
         </div>
@@ -309,4 +313,3 @@ const SellerProfile = () => {
 };
 
 export default SellerProfile;
-
