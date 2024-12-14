@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Star, ChevronDown, Eye, EyeOff } from "lucide-react";
-
+import GuestNavbarRegister from "./GuestNavBar";
 //import backgroundImage from "./Login-amico.png";
 import axios from "axios";
 import SignupAdvertiser from "pages/AdvertiserSignup";
@@ -32,10 +32,15 @@ const AllLogin = () => {
   const [userType, setUserType] = useState("Tourist"); // State to track user type
 
   const [showPopup, setShowPopup] = useState(false); // State for popup visibility
-  const [otp, setOtp] = useState(""); // State for OTP input
+
   const inputRefs = useRef([]);
 
   const [alertVisibleOTP, setAlertVisibleOTP] = useState(false); // State to track alert visibility
+  const [alertVisibleOTPUser, setAlertVisibleOTPUser] = useState(false);
+
+  const [generatedOtp, setGeneratedOtp] = useState(""); // To store the generated OTP
+  const [enteredOtp, setEnteredOtp] = useState(Array(6).fill("")); // To store user's entered OTP
+  const [userId, setUserId] = useState("");
 
   // LinkTab Component for handling tab clicks
   function LinkTab(props) {
@@ -70,11 +75,17 @@ const AllLogin = () => {
   const handleOtpChange = (e, index) => {
     const value = e.target.value;
 
-    if (/^\d$/.test(value) || value === "") {
-      // Only allow a digit or empty string
-      const newOtp = otp.split("");
+    // if (/^\d$/.test(value) || value === "") {
+    //   // Only allow a digit or empty string
+    //   const newOtp = otp.split("");
+    //   newOtp[index] = value;
+    //   setEnteredOtp(newOtp.join(""));
+
+    if (/^[0-9]$/.test(value) || value === "") {
+      // Accept only digits
+      const newOtp = [...enteredOtp];
       newOtp[index] = value;
-      setOtp(newOtp.join(""));
+      setEnteredOtp(newOtp);
 
       // Move to next input field after entering a digit
       if (value && index < 5) {
@@ -90,46 +101,162 @@ const AllLogin = () => {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(false);
+  const handleSubmitOtp = async () => {
+    const enteredOtpString = enteredOtp.join(""); // Combine entered OTP into a single string
 
-  const handleForgotPassword = async (e) => {
-    // Check if username is valid (not null, undefined, or empty string)
-    if (username && username.trim() !== "") {
+    if (enteredOtpString === generatedOtp.toString()) {
+      // alert("OTP verified successfully!"); // Successful OTP verification
+
+      const endpoint = `/api/login/loginOTP`; // Common API endpoint for all user types
+
       try {
-        setOtp("");
-        setIsLoading(true); // Start loading indicator
-
-        // Generate a 6-digit OTP
-        const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit number
-
-        // Call the backend to send the OTP to the user's email
-        const response = await axios.post("/api/login/send-otp", {
-          email: username, // Username is the email entered by the user
-          otp: otp, // The OTP to be sent
-        });
-
-        setIsLoading(false); // Stop loading indicator
+        // API request to log in the user
+        const response = await axios.post(
+          endpoint,
+          {
+            email: username,
+            userType: userType,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.status === 200) {
-          setShowPopup(true); // Show the OTP popup
-          setAlertVisibleOTP(false); // Hide the alert
-        } else {
-          setAlertVisibleOTP(true); // Handle errors if the OTP sending failed
+          const userId = response.data.id;
+
+          // Redirect based on user type
+          switch (userType) {
+            case "Tourist":
+              navigate(`/MainTouristPage/${userId}`);
+              break;
+            case "Seller":
+              navigate(`/SellerHome/${userId}`);
+              break;
+            case "Admin":
+              navigate(`/AdminSales/${userId}`);
+              break;
+            case "Governor":
+              navigate(`/GovernorHomePage/${userId}`);
+              break;
+            case "TourGuide":
+              navigate(`/TourguideHome/${userId}`);
+              break;
+            case "Advertiser":
+              navigate(`/advertiser/${userId}`);
+              break;
+            default:
+              setErrorMessage("Invalid user type selected.");
+          }
         }
       } catch (error) {
-        console.error("Error sending OTP:", error);
-        setIsLoading(false); // Stop loading indicator on error
-        setAlertVisibleOTP(true); // Show error alert if something goes wrong
+        console.error("Login failed:", error);
+        setErrorMessage(
+          error.response?.data?.error || "An error occurred during login."
+        );
       }
     } else {
-      setAlertVisibleOTP(true); // Show the alert if username is invalid
+      alert("Invalid OTP. Please try again."); // OTP verification failed
+    }
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  // const handleForgotPassword = async (e) => {
+  //   // Check if username is valid (not null, undefined, or empty string)
+  //   if (username && username.trim() !== "") {
+  //     try {
+  //       setOtp("");
+  //       setIsLoading(true); // Start loading indicator
+
+  //       // Check if username exists for the given userType
+  //       console.log(userType);
+  //       const userTypeEndpoint = `/api/login/check-username/${userType}`; // Make sure your backend has this route
+
+  //       const usernameCheckResponse = await axios.post(userTypeEndpoint, {
+  //         email: username,
+  //       });
+
+  //       if (usernameCheckResponse.status !== 200) {
+  //         setIsLoading(false);
+  //         setAlertVisibleOTPUser(true); // Show alert if username doesn't exist
+  //         return;
+  //       }
+
+  //       // Generate a 6-digit OTP
+  //       const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit number
+
+  //       // Call the backend to send the OTP to the user's email
+  //       const response = await axios.post("/api/login/send-otp", {
+  //         email: username, // Username is the email entered by the user
+  //         otp: otp, // The OTP to be sent
+  //       });
+
+  //       setIsLoading(false); // Stop loading indicator
+
+  //       if (response.status === 200) {
+  //         setShowPopup(true); // Show the OTP popup
+  //         setAlertVisibleOTPUser(false); // Hide the alert
+  //       } else {
+  //         setAlertVisibleOTPUser(true); // Handle errors if the OTP sending failed
+  //       }
+  //     } catch (error) {
+  //       console.error("Error sending OTP:", error);
+  //       setIsLoading(false); // Stop loading indicator on error
+  //       setAlertVisibleOTPUser(true); // Show error alert if something goes wrong
+  //     }
+  //   } else {
+  //     setAlertVisibleOTP(true); // Show the alert if username is invalid
+  //   }
+  // };
+
+  const handleForgotPassword = async (e) => {
+    if (username && username.trim() !== "") {
+      try {
+        setEnteredOtp("");
+        setIsLoading(true);
+
+        // Check if username exists
+        const userTypeEndpoint = `/api/login/check-username/${userType}`;
+        const usernameCheckResponse = await axios.post(userTypeEndpoint, {
+          email: username,
+        });
+
+        if (usernameCheckResponse.status !== 200) {
+          setIsLoading(false);
+          setAlertVisibleOTP(false);
+          setAlertVisibleOTPUser(true);
+          return;
+        }
+
+        // Generate a 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        setGeneratedOtp(otp); // Store the OTP in state
+
+        // Send the OTP to the backend
+        await axios.post("/api/login/send-otp", { email: username, otp });
+
+        setIsLoading(false);
+        setShowPopup(true);
+        setAlertVisibleOTP(false);
+        setAlertVisibleOTPUser(false);
+      } catch (error) {
+        console.error("Error sending OTP:", error);
+        setIsLoading(false);
+        setAlertVisibleOTP(false);
+        setAlertVisibleOTPUser(true);
+      }
+    } else {
+      setAlertVisibleOTP(true);
     }
   };
 
   // Handle close popup
   const handleClosePopup = () => {
     setShowPopup(false);
-    setOtp(""); // Clear OTP input when closing
+    setEnteredOtp(""); // Clear OTP input when closing
   };
 
   const handleLogin = async (e) => {
@@ -290,6 +417,7 @@ const AllLogin = () => {
         backgroundColor: "#f8f8f8",
       }}
     >
+      <GuestNavbarRegister />
       <div
         style={{
           width: "50%",
@@ -413,7 +541,7 @@ const AllLogin = () => {
               component="h2"
               sx={{
                 // textAlign: "center",
-                marginBottom: "24px", // Space below the heading
+                marginBottom: "14px", // Space below the heading
                 marginLeft: "10px",
                 color: "#91c297",
                 fontFamily: "Poppins, sans-serif",
@@ -422,6 +550,21 @@ const AllLogin = () => {
             >
               Welcome Back
             </Typography>
+
+            {/* <Typography
+              variant="h9"
+              component="h9"
+              sx={{
+                // textAlign: "center",
+                marginBottom: "24px", // Space below the heading
+                marginLeft: "30px",
+                color: "#555",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: "bold", // Makes the text bold
+              }}
+            >
+              You can sign in to access with our existing account
+            </Typography> */}
             <form
               onSubmit={handleLogin}
               style={{ display: "flex", flexDirection: "column", gap: "24px" }}
@@ -436,6 +579,18 @@ const AllLogin = () => {
                   }}
                 >
                   Please enter a valid email to receive OTP.
+                </Alert>
+              )}
+              {alertVisibleOTPUser && (
+                <Alert
+                  severity="info"
+                  sx={{
+                    backgroundColor: "#f6d8e576", // Set your desired background color
+                    color: "#333", // Optionally set text color for better contrast
+                  }}
+                >
+                  No account of type {userType} is associated with this email.
+                  Please enter a valid email to receive the OTP.
                 </Alert>
               )}
               <div>
@@ -691,7 +846,7 @@ const AllLogin = () => {
                               key={index}
                               ref={(el) => (inputRefs.current[index] = el)} // Store references to input fields
                               type="text"
-                              value={otp[index] || ""}
+                              value={enteredOtp[index] || ""}
                               onChange={(e) => handleOtpChange(e, index)}
                               maxLength={1} // Limit input to 1 character
                               placeholder=""
@@ -718,10 +873,10 @@ const AllLogin = () => {
                           }}
                         >
                           <button
-                            onClick={handleClosePopup}
+                            onClick={handleSubmitOtp}
                             style={{
-                              width: "60%", // Take up nearly half the space for Submit OTP
-                              padding: "10px 15px", // Increased padding for a larger button
+                              width: "60%",
+                              padding: "10px 15px",
                               backgroundColor: "#e89bb5",
                               color: "#fff",
                               border: "none",

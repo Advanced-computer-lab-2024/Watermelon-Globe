@@ -54,54 +54,77 @@
 
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert } from "@mui/material"; // Import Alert for error and success messages
+import { Alert } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
+import GuestNavbarRegister from "Components/GuestNavBar";
 const AdvertiserSignupConfirm = () => {
   const [idProof, setIdProof] = useState(null);
-  const [taxationRegistryCard, setTaxationRegistryCard] = useState(null);
-  const [error, setError] = useState(""); // State for error message
-  const [success, setSuccess] = useState(""); // State for success message
+  const [certificateInputs, setCertificateInputs] = useState([
+    { id: 0, file: null },
+  ]); // Tracks dynamic inputs
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    if (e.target.name === "idProof") {
-      setIdProof(e.target.files[0]);
-    } else if (e.target.name === "taxationRegistryCard") {
-      setTaxationRegistryCard(e.target.files[0]);
+  const handleFileChange = (e, inputIndex) => {
+    const { name, files } = e.target;
+
+    if (name === "idProof") {
+      setIdProof(files[0]);
+    } else if (name.startsWith("certificate")) {
+      // Update specific certificate input
+      const newInputs = certificateInputs.map((input, index) =>
+        index === inputIndex ? { ...input, file: files[0] } : input
+      );
+      setCertificateInputs(newInputs);
+    }
+  };
+
+  const addCertificateInput = () => {
+    // Only add new input if there are fewer than 5 certificates
+    if (certificateInputs.length < 5) {
+      setCertificateInputs([
+        ...certificateInputs,
+        { id: certificateInputs.length, file: null },
+      ]);
+    } else {
+      setError("You can upload a maximum of 5 certificates.");
     }
   };
 
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    // Check if both files are uploaded
-    if (!idProof || !taxationRegistryCard) {
-      setError("Both ID Proof and Taxation Registry Card are required!");
-      setSuccess(""); // Clear any success message
-      return; // Prevent form submission if files are missing
+    if (!idProof || certificateInputs.every((input) => !input.file)) {
+      setError("Both ID Proof and at least one Certificate are required!");
+      setSuccess("");
+      return;
     }
 
-    // Reset error state if files are valid
     setError("");
-    setSuccess(""); // Clear previous success message
+    setSuccess("");
 
     const formData = new FormData();
     formData.append("idProof", idProof);
-    formData.append("taxationRegistryCard", taxationRegistryCard);
+
+    certificateInputs.forEach((input, index) => {
+      if (input.file) {
+        formData.append(`certificates`, input.file);
+      }
+    });
 
     try {
-      const response = await fetch(`/api/upload/seller/${id}`, {
+      const response = await fetch(`/api/upload/tourguide/${id}`, {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
         setSuccess(
-          "Documents uploaded successfully. Please wait for admin review and approval."
+          "Documents uploaded successfully. Please wait for admin review."
         );
-        //navigate("/");
       } else {
         setError("Failed to upload documents. Please try again.");
       }
@@ -115,6 +138,7 @@ const AdvertiserSignupConfirm = () => {
 
   return (
     <div style={styles.container}>
+      <GuestNavbarRegister />
       <h3 style={styles.title}>Document Upload for Tour Guide Registration</h3>
       <p style={styles.text}>
         To complete your tour guide registration, please upload the required
@@ -123,14 +147,11 @@ const AdvertiserSignupConfirm = () => {
         approved and you can access the system.
       </p>
 
-      {/* Error Alert for missing files */}
       {error && (
         <Alert severity="error" style={styles.alert}>
           {error}
         </Alert>
       )}
-
-      {/* Success Alert after successful upload */}
       {success && (
         <Alert severity="success" style={styles.alert}>
           {success}
@@ -138,6 +159,7 @@ const AdvertiserSignupConfirm = () => {
       )}
 
       <form onSubmit={handleUpload}>
+        {/* ID Proof Input */}
         <label style={styles.label}>ID Proof:</label>
         <input
           type="file"
@@ -146,18 +168,44 @@ const AdvertiserSignupConfirm = () => {
           style={styles.input}
         />
         <br />
-        <label style={styles.label}>Taxation Registry Card:</label>
-        <input
-          type="file"
-          name="taxationRegistryCard"
-          onChange={handleFileChange}
-          style={styles.input}
-        />
-        <br />
+
+        {/* Dynamic Certificate Inputs */}
+        <label style={styles.label}>Certificates (multiple allowed):</label>
+        {certificateInputs.map((input, index) => (
+          <div key={input.id} style={{ marginBottom: "10px" }}>
+            <input
+              type="file"
+              name={`certificate-${index}`}
+              onChange={(e) => handleFileChange(e, index)}
+              style={styles.input}
+            />
+          </div>
+        ))}
+
+        <div>
+          {/* Add New Certificate Input Button */}
+          <Button
+            onClick={addCertificateInput}
+            style={{
+              ...styles.button,
+              backgroundColor: "#d32e65",
+              marginBottom: "27px",
+              padding: "8px 16px", // Smaller padding
+              fontSize: "12px", // Smaller font size
+            }}
+            disabled={certificateInputs.length >= 5} // Disable if there are already 5 inputs
+          >
+            {certificateInputs.length >= 5
+              ? "Maximum of 5 Certificates"
+              : "Add Another Certificate"}
+          </Button>
+        </div>
+
+        {/* Submit Button */}
         <Button
           type="submit"
           style={styles.button}
-          startIcon={<CloudUploadIcon sx={{ color: "#fff" }} />} // Adding the icon to the button
+          startIcon={<CloudUploadIcon sx={{ color: "#fff" }} />}
         >
           Upload Documents
         </Button>
@@ -174,7 +222,7 @@ const AdvertiserSignupConfirm = () => {
 
 const styles = {
   container: {
-    padding: "20px",
+    padding: "60px",
     maxWidth: "700px",
     margin: "0 auto",
     fontFamily: "'Poppins', sans-serif",
@@ -221,7 +269,7 @@ const styles = {
     textAlign: "center",
   },
   alert: {
-    marginBottom: "20px", // Space between alert and form
+    marginBottom: "20px",
   },
 };
 

@@ -10,7 +10,6 @@ const sellerSchema = new Schema(
     },
     Username: {
       type: String,
-      required: false,
       unique: true,
     },
 
@@ -47,7 +46,7 @@ const sellerSchema = new Schema(
     },
     deletionRequest: {
       type: String,
-      enum: ["Pending", "Accepted", "Rejected",null],
+      enum: ["Pending", "Accepted", "Rejected", null],
       default: "Pending",
     },
     Logo: {

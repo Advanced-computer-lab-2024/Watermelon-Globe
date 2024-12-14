@@ -72,7 +72,7 @@ const AddAdmin = () => {
                     variant="contained"
                     color="secondary"
                     size="small"
-                    // onClick={() => handleDelete(admin._id)}
+                    onClick={() => handleDelete(admin._id)}
                     startIcon={<DeleteIcon sx={{ color: "#fff" }} />}
                   >
                     Delete

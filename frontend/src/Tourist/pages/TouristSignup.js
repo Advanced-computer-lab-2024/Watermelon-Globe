@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Star, ChevronDown, Eye, EyeOff } from "lucide-react";
 import NavTabs from "Components/navTabs/navTabs";
 import backgroundImage from "./Login-amico.png";
+import GuestNavbarRegister from "Components/GuestNavBar";
 //import backgroundImage from "./Login-rafiki.png";
 const SignupTourist = () => {
   const [username, setUsername] = useState("");
@@ -168,6 +169,7 @@ const SignupTourist = () => {
         backgroundColor: "#f8f8f8",
       }}
     >
+      <GuestNavbarRegister />
       <div
         style={{
           width: "100%",
