@@ -16,6 +16,7 @@ const tourGuideSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      match: [/.+@.+\..+/, "Please enter a valid email address"],
     },
     password: {
       type: String,
@@ -57,7 +58,7 @@ const tourGuideSchema = new Schema(
       required: false,
     },
     photo: {
-      type: String, 
+      type: String,
       required: false,
     },
     deletionRequest: {
@@ -67,38 +68,44 @@ const tourGuideSchema = new Schema(
     },
     ratings: [
       {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Tourist', required: true },
-        rating: { type: Number, required: true, min: 1, max: 5 }
-      }
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tourist",
+          required: true,
+        },
+        rating: { type: Number, required: true, min: 1, max: 5 },
+      },
     ],
     rating: { type: Number, default: 0 },
-    noOfRatings: {type:Number ,required:false},
-    ratingsSum:{type:Number,required:false},// Reference to the tour guide
-    comments: [{
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tourist', // Reference to the user model
-        required: true
+    noOfRatings: { type: Number, required: false },
+    ratingsSum: { type: Number, required: false }, // Reference to the tour guide
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tourist", // Reference to the user model
+          required: true,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
       },
-      comment: {
+    ],
+    notifications: [
+      {
         type: String,
-        required: true
+        required: false,
       },
-      date: {
-        type: Date,
-        default: Date.now
-      }
-    }],
-    notifications :[{
-      type:String,
-      required: false}
-    ]
-
+    ],
   },
   { timestamps: true }
-
 );
 
-
-const TourGuide = mongoose.models.TourGuide ||  mongoose.model("TourGuide", tourGuideSchema);
+const TourGuide =
+  mongoose.models.TourGuide || mongoose.model("TourGuide", tourGuideSchema);
 module.exports = TourGuide;

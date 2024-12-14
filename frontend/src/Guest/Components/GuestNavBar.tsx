@@ -20,21 +20,20 @@ export default function GuestNavbar() {
     navigate(`/tourist-signup`);
   };
 
-
-
-
   return (
     <header className="fixed top-0 left-0 w-full bg-sectionBackground shadow-md z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center">
-        
         {/* Logo Section */}
         <div className="text-3xl font-bold text-secondary">
-        <img
+          <img
             src={logoImage}
             alt="Logo"
             className="inline-block w-8 h-8 mb-1" // Adjust size as needed
           />
-          <Link to="/Homepage" className="homeButton ml-2 hover:text-secondaryHover">
+          <Link
+            to="/Homepage"
+            className="homeButton ml-2 hover:text-secondaryHover"
+          >
             WaterMelon Globe
           </Link>
         </div>
@@ -66,12 +65,18 @@ export default function GuestNavbar() {
 
         {/* Actions Section */}
         <div className="flex items-center space-x-2">
-          <Button variant="outline" className="text-secondary hover:bg-secondaryHover hover:text-white">
+          <Button
+            onClick={() => navigate(`/AllLogin`)}
+            variant="outline"
+            className="text-secondary hover:bg-secondaryHover hover:text-white"
+          >
             Login
           </Button>
-          <Button 
-          onClick={() => navigate(`/tourist-signup`)}
-          variant="outline" className="text-secondary hover:bg-secondaryHover hover:text-white">
+          <Button
+            onClick={() => navigate(`/tourist-signup`)}
+            variant="outline"
+            className="text-secondary hover:bg-secondaryHover hover:text-white"
+          >
             Sign Up
           </Button>
         </div>
@@ -79,4 +84,3 @@ export default function GuestNavbar() {
     </header>
   );
 }
-
