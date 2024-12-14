@@ -6,12 +6,9 @@ const companyProfileSchema = new Schema(
     Name: {
       type: String,
       required: true,
-    },
-    Username: {
-      type: String,
-      required: true,
       unique: true,
     },
+
     Email: {
       type: String,
       required: true,

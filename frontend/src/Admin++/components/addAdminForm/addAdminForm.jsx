@@ -14,6 +14,7 @@ import "./addAdminForm.scss"; // Import the CSS file
 
 const AddAdminForm = ({ onAdminAdded }) => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // Error state
@@ -23,8 +24,8 @@ const AddAdminForm = ({ onAdminAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!username || !password) {
-      setError("Both username and password are required"); // Set error message
+    if (!email || !username || !password) {
+      setError("Username, email, and password are required"); // Set error message
       return;
     }
 
@@ -34,12 +35,14 @@ const AddAdminForm = ({ onAdminAdded }) => {
 
     try {
       const response = await axios.post("/api/Admin/CreateAdmin", {
+        email,
         username,
         password,
       });
 
       setSuccess("Admin added successfully!");
       setUsername("");
+      setEmail("");
       setPassword("");
       onAdminAdded(response.data);
 
@@ -71,6 +74,15 @@ const AddAdminForm = ({ onAdminAdded }) => {
           label="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          className="customTextField"
+        />
+        <TextField
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           variant="outlined"
           fullWidth
           margin="normal"

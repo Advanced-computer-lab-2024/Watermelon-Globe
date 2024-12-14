@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Alert } from "@mui/material"; // Import Alert for error and success messages
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
+import GuestNavbarRegister from "Components/GuestNavBar";
+
 const AdvertiserSignupConfirm = () => {
   const [idProof, setIdProof] = useState(null);
   const [taxationRegistryCard, setTaxationRegistryCard] = useState(null);
@@ -38,7 +40,7 @@ const AdvertiserSignupConfirm = () => {
     formData.append("taxationRegistryCard", taxationRegistryCard);
 
     try {
-      const response = await fetch(`/api/upload/seller/${id}`, {
+      const response = await fetch(`/api/upload/advertiser/${id}`, {
         method: "POST",
         body: formData,
       });
@@ -61,6 +63,7 @@ const AdvertiserSignupConfirm = () => {
 
   return (
     <div style={styles.container}>
+      <GuestNavbarRegister />
       <h3 style={styles.title}>Document Upload for Advertiser Registration</h3>
       <p style={styles.text}>
         To complete your advertiser registration, please upload the required
@@ -120,7 +123,7 @@ const AdvertiserSignupConfirm = () => {
 
 const styles = {
   container: {
-    padding: "20px",
+    padding: "60px",
     maxWidth: "700px",
     margin: "0 auto",
     fontFamily: "'Poppins', sans-serif",

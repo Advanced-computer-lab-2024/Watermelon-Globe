@@ -4,6 +4,7 @@ import { Star, ChevronDown, Eye, EyeOff } from "lucide-react";
 import NavTabs from "Components/navTabs/navTabs";
 import backgroundImage from "./Login-amico.png";
 import SignupAdvertiser from "pages/AdvertiserSignup";
+import GuestNavbarRegister from "Components/GuestNavBar";
 //import backgroundImage from "./Login-rafiki.png";
 const SignupGuideNew = () => {
   const [username, setName] = useState("");
@@ -86,7 +87,7 @@ const SignupGuideNew = () => {
     "Search for hotels, flights, or guides using the top navigation.",
     "Click 'Explore' to dive deeper into your favorite spots.",
     "Sign up to create personalized travel plans and access special offers.",
-    "Stay connected through our social media channels for updates!"
+    "Stay connected through our social media channels for updates!",
   ];
 
   return (
@@ -99,6 +100,7 @@ const SignupGuideNew = () => {
         backgroundColor: "#f8f8f8",
       }}
     >
+      <GuestNavbarRegister />
       <div
         style={{
           width: "100%",

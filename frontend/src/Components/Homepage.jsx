@@ -30,7 +30,7 @@ const HomePage = () => {
           </button>
           <button
             className="home-btn py-2 px-6 w-64 bg-secondary text-white rounded-lg shadow-md hover:bg-secondaryHover transition-colors"
-            onClick={() => navigate("/SellerLogin")}
+            onClick={() => navigate("/SellerHome/6729244f151b6c9e346dd732")}
           >
             Go to Seller Page
           </button>
@@ -42,7 +42,9 @@ const HomePage = () => {
           </button>
           <button
             className="home-btn py-2 px-6 w-64 bg-secondary text-white rounded-lg shadow-md hover:bg-secondaryHover transition-colors"
-            onClick={() => navigate("/TouristLogin")}
+            onClick={() =>
+              navigate("/MainTouristPage/675c8f07351063c7c85d031c")
+            }
           >
             Go to Tourist Page
           </button>
@@ -54,7 +56,7 @@ const HomePage = () => {
           </button>
           <button
             className="home-btn py-2 px-6 w-64 bg-secondary text-white rounded-lg shadow-md hover:bg-secondaryHover transition-colors"
-            onClick={() => navigate("/GovernorLogin")}
+            onClick={() => navigate("/advertiser/67065e1683d5a647b45c2142")}
           >
             Go to Tourism Governor Page
           </button>

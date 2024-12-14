@@ -103,13 +103,11 @@ const sendOtp = async (req, res) => {
   } catch (error) {
     // Log and return error
     console.error("Error sending email: ", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to send email.",
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send email.",
+      error: error.message,
+    });
   }
 };
 
@@ -172,4 +170,110 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, sendOtp };
+const loginUserOTP = async (req, res) => {
+  const { email, userType } = req.body;
+
+  // Validate input fields
+  if (!email || !userType) {
+    return res
+      .status(400)
+      .json({ error: "Email, password, and userType are required" });
+  }
+
+  // Map userType to models
+  const userTypeMap = {
+    tourguide: TourGuide,
+    admin: Admin,
+    governor: Governer,
+    tourist: Tourist,
+    seller: Seller,
+    advertiser: Advertiser,
+  };
+
+  // Check if the provided userType is valid
+  const Model = userTypeMap[userType.toLowerCase()];
+  if (!Model) {
+    return res.status(400).json({ error: "Invalid userType" });
+  }
+
+  try {
+    console.log("Request received", req.body);
+    // Dynamically find if the schema has 'email' or 'Email'
+    const emailField = Object.keys(Model.schema.paths).includes("email")
+      ? "email"
+      : "Email";
+
+    console.log(emailField);
+    // Find the user by email
+    const user = await Model.findOne({ [emailField]: email });
+
+    console.log(user);
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ error: `${userType} not found` });
+    }
+
+    // Login successful, return the user's ID
+    res
+      .status(200)
+      .json({ id: user._id, message: `${userType} login successful` });
+  } catch (error) {
+    console.error(`Error during ${userType} login:`, error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const checkUserExistenceByEmailAndType = async (req, res) => {
+  const { email } = req.body; // Email is still taken from the request body
+  const { userType } = req.params; // UserType is now taken from route params
+  console.log(userType);
+  if (!email || !userType) {
+    return res.status(400).json({ error: "Email and userType are required" });
+  }
+
+  try {
+    let user;
+    console.log(`Checking user existence for ${userType} and email ${email}`);
+
+    // Use the userType to query the appropriate model
+    switch (userType.toLowerCase()) {
+      case "seller":
+        user = await Seller.findOne({ Email: email });
+        break;
+      case "tourist":
+        user = await Tourist.findOne({ email });
+        break;
+      case "admin":
+        user = await Admin.findOne({ email });
+        break;
+      case "advertiser":
+        user = await Advertiser.findOne({ Email: email });
+        break;
+      case "tourguide":
+        user = await TourGuide.findOne({ email });
+        break;
+      case "governer":
+        user = await Governer.findOne({ email });
+        break;
+      default:
+        return res.status(400).json({ error: "Invalid user type" });
+    }
+
+    // Check if user exists
+    if (user) {
+      return res.status(200).json({ exists: true, message: "User exists" });
+    } else {
+      return res.status(404).json({ exists: false, message: "User not found" });
+    }
+  } catch (error) {
+    console.error(`Error checking user existence:`, error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = {
+  loginUser,
+  sendOtp,
+  checkUserExistenceByEmailAndType,
+  loginUserOTP,
+};

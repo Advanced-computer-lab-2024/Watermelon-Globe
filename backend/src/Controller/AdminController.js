@@ -44,10 +44,10 @@ const getAdmin = async (req, res) => {
 };
 
 const createAdmin = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
 
   // Check if username or password are empty
-  if (!username || !password) {
+  if (!email || !username || !password) {
     return res
       .status(400)
       .json({ error: "Username and password are required" });
@@ -56,7 +56,7 @@ const createAdmin = async (req, res) => {
   try {
     // Check if the username or password already exists
     const existingAdmin = await Admin.findOne({
-      $or: [{ username }, { password }],
+      $or: [{ email }, { username }, { password }],
     });
 
     if (existingAdmin) {
@@ -66,7 +66,7 @@ const createAdmin = async (req, res) => {
     }
 
     // Create new admin if validations pass
-    const admin = await Admin.create({ username, password });
+    const admin = await Admin.create({ email, username, password });
     res.status(200).json(admin);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -97,10 +97,10 @@ const getAllGoverner = async (req, res) => {
 
 //create new Governer
 const createGoverner = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
 
   // Check if username or password are empty
-  if (!username || !password) {
+  if (!email || !username || !password) {
     return res
       .status(400)
       .json({ error: "Username and password are required" });
@@ -109,7 +109,7 @@ const createGoverner = async (req, res) => {
   try {
     // Check if the username or password already exists
     const existingGoverner = await Governer.findOne({
-      $or: [{ username }, { password }],
+      $or: [{ email }, { username }, { password }],
     });
 
     if (existingGoverner) {
@@ -119,7 +119,7 @@ const createGoverner = async (req, res) => {
     }
 
     // Create new Governer if validations pass
-    const governer = await Governer.create({ username, password });
+    const governer = await Governer.create({ email, username, password });
     res.status(200).json(governer);
   } catch (error) {
     res.status(400).json({ error: error.message });
