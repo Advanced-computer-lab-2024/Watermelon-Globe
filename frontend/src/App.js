@@ -434,7 +434,7 @@ const App = () => {
           />
 
           <Route
-            path="/NewItineraryDetails/:tripid"
+            path="/NewItineraryDetails/:tripid/:id"
             element={<NewItineraryDetails />}
           />
 
