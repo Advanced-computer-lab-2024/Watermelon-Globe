@@ -119,10 +119,10 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
         const response = await fetch(`/api/Admin/getNotificationsAdmin`);
         const data = await response.json();
 
-        if (Array.isArray(data.notifications)) {
-          setNotifications(data.notifications);
+        if (Array.isArray(data)) {
+          setNotifications(data);
         } else {
-          console.warn("Invalid notifications data:", data.notifications);
+          console.warn("Invalid notifications data:", data);
           setNotifications([]);
         }
       } catch (error) {

@@ -17,7 +17,7 @@ const ItineraryComponent = ({ guideID }) => {
     const fetchItineraries = async () => {
       try {
         const response = await axios.get(
-          `/api/Itinerary/getMyItineraries/${guideID}`
+          `/api/tourGuide/myItineraries/${guideID}`
         );
         const fetchedItineraries = response.data.map((itinerary) => ({
           ...itinerary,

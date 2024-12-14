@@ -22,10 +22,10 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
         const response = await fetch(`/api/Advertiser/getNotificationsAdvertiser/${id}`);
         const data = await response.json();
 
-        if (Array.isArray(data.notifications)) {
-          setNotifications(data.notifications);
+        if (Array.isArray(data)) {
+          setNotifications(data);
         } else {
-          console.warn("Invalid notifications data:", data.notifications);
+          console.warn("Invalid notifications data:", data);
           setNotifications([]);
         }
       } catch (error) {
@@ -102,9 +102,9 @@ const NotificationsBox: React.FC<NotificationsBoxProps> = ({
       </div>
       {notifications?.length > 0 && (
         <div className="py-2 px-4 bg-gray-50 rounded-b-lg">
-          <button className="text-sm text-green-600 hover:text-green-800 font-medium">
+          {/* <button className="text-sm text-green-600 hover:text-green-800 font-medium">
             Mark all as read
-          </button>
+          </button> */}
         </div>
       )}
     </div>

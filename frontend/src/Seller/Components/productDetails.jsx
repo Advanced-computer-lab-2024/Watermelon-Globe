@@ -177,6 +177,18 @@ const ProductDetails = () => {
                             defaultValue={product?.description}
                             rows="4"
                           />
+                           <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">
+                            Product Quantity:
+                          </label>
+                          <input
+                            name="quantity"
+                            placeholder="Enter Product Quantity"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={handleInputChange}
+                            defaultValue={product?.quantity}
+                          />
+
+
                           <div className="flex space-x-4">
                             <button
                               className="px-4 py-2 bg-[#91c297] text-white rounded-md hover:bg-[#7ab481] transition duration-300"

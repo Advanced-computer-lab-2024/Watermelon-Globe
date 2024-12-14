@@ -25,16 +25,17 @@ const ViewItineraries = () => {
 
   const fetchItineraries = async () => {
     try {
-      const response = await fetch(`/api/TourGuide/myItineraries/${id}`);
-      const data = await response.json();
-      console.log(data);
+      const response = await fetch(`/api/tourGuide/myItineraries/${id}`);
+      const data = await response.json(); // Parse the response body as JSON
+      const itineraries = data.itineraries;
+            console.log(itineraries);
 
       // Ensure data is an array
-      if (Array.isArray(data)) {
-        setItineraries(data);
-        setFilteredItineraries(data);
+      if (Array.isArray(itineraries)) {
+        setItineraries(itineraries);
+        setFilteredItineraries(itineraries);
       } else {
-        console.error("API response is not an array:", data);
+        console.error("API response is not an array:", itineraries);
         setItineraries([]);
         setFilteredItineraries([]);
       }
@@ -48,7 +49,7 @@ const ViewItineraries = () => {
   }, [id]);
 
   const handleItineraryClick = (activityId) => {
-    navigate(`/NewItineraryDetails/${activityId}/`);
+    navigate(`/NewItineraryDetails/${activityId}/${id}`);
   };
 
   const handleReportClick = (itinerary) => {
@@ -123,11 +124,8 @@ const ViewItineraries = () => {
 
                   <AspectRatio minHeight="260px" maxHeight="300px">
                     <img
-                      src={
-                        itineraries.picture ||
-                        "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-                      }
-                      alt={`Image of ${itinerary.name}`}
+                      src={itinerary.picture ? `/uploads/${itinerary.picture}` : "https://via.placeholder.com/300"}
+                      alt={itinerary.name}
                       loading="lazy"
                     />
                   </AspectRatio>

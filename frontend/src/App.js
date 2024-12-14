@@ -58,9 +58,11 @@ import ViewAllProducts from "./Admin++/pages/Products/ViewAllProducts.jsx";
 import ViewMyProducts from "./Admin++/pages/Products/ViewMyProducts.jsx";
 import ViewSalesQuantities from "./Admin++/pages/Products/ViewAvailableQuantity.jsx";
 import AddPromoCode from "./Admin++/pages/AddPromoCode/AddPromoCode.jsx";
+
 // import GuestPage from "./Guest/pages/GuestHomepage.jsx";
 import AllTourists from "./Admin++/pages/AllTourists/AllTourists.jsx";
 import ViewItinerariesEvents from "./Admin++/pages/ViewItinerariesEvents/ViewItinerariesEvents";
+import CreateProductAdmin from "Admin++/components/createProduct";
 //Advertiser Pages
 //import AdvertiserSignup from "./Advertiser/Components/AdvertiserSignup.jsx";
 
@@ -247,6 +249,7 @@ const App = () => {
           <Route path="Tags/:id" element={<AddTag />} />
           <Route path="/ViewAllProducts/:id" element={<ViewAllProducts />} />
           <Route path="/ViewMyProducts/:id" element={<ViewMyProducts />} />
+          <Route path="/adminAddProduct/:id" element={<CreateProductAdmin/>}/>
           <Route
             path="/TouristBookmarks/:touristId"
             element={<TouristBookmarks />}
@@ -429,12 +432,12 @@ const App = () => {
             }
           />
           <Route
-            path="/NewItineraryDetailsGeneral/:tripid"
+            path="/NewItineraryDetailsGeneral/:tripid/:id"
             element={<NewItineraryDetailsGeneral />}
           />
 
           <Route
-            path="/NewItineraryDetails/:tripid"
+            path="/NewItineraryDetails/:tripid/:id"
             element={<NewItineraryDetails />}
           />
 
