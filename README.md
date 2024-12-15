@@ -5,7 +5,7 @@
 🍉🌍 Your ultimate trip planner with a twist! Whether you're dreaming of sandy beaches or snowy peaks, we'll slice through the planning chaos and serve up your perfect itinerary—refreshing, sweet, and oh-so-juicy! Travel planning has never been this fruitful. 🚀✈️
 
 
-![Watermelon Globe Logo](.\frontend\src\README\WatermelonLogo.jpg)
+![Watermelon Globe Logo](./frontend/src/README/WatermelonLogo.jpg)
 
 
 ## Motivation
@@ -103,34 +103,36 @@ No strict code style was used in the project,however, all of the developers used
 Here are the technologies and frameworks used in this project, along with links to download or learn more about them:
 
 - [**VS Code**](https://code.visualstudio.com/download): A powerful and lightweight code editor.  
-  *Choose the version that suits your OS.*![Visual Studio Code](https://code.visualstudio.com/assets/favicon.ico)
+  *Choose the version that suits your OS.*  
+  <img src="https://code.visualstudio.com/assets/favicon.ico" alt="VS Code Icon" width="100"/>
 
--  [**Node.js**](https://nodejs.org/): A JavaScript runtime for building scalable applications.  ![Node.js](https://nodejs.org/static/images/logo.svg) 
+- [**Node.js**](https://nodejs.org/): A JavaScript runtime for building scalable applications.  
+  <img src="https://nodejs.org/static/images/logo.svg" alt="Node.js Icon" width="100"/>
 
+- [**Nodemon**](https://www.npmjs.com/package/nodemon): A tool to automatically restart the server after code changes.
 
--  [**Nodemon**](https://www.npmjs.com/package/nodemon): A tool to automatically restart the server after code changes.  
+- [**Express**](https://www.npmjs.com/package/express): A web application framework for Node.js.  
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="Express Icon" width="100"/>
 
+- [**Mongoose**](https://www.npmjs.com/package/mongoose): An ODM library for MongoDB and Node.js.  
+  <img src="https://mongoosejs.com/docs/images/mongoose5_62x30_transparent.png" alt="Mongoose Icon" width="100"/>
 
--  [**Express**](https://www.npmjs.com/package/express): A web application framework for Node.js.![Express.js](https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png)  
+- [**React**](https://react.dev/): A JavaScript library for building user interfaces.  
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React Icon" width="100"/>
 
+- [**Git**](https://git-scm.com/): A version control system to track code changes.  
+  <img src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" alt="Git Icon" width="100"/>
 
-- [**Mongoose**](https://www.npmjs.com/package/mongoose): An ODM library for MongoDB and Node.js.![Mongoose](https://mongoosejs.com/docs/images/mongoose5_62x30_transparent.png)   
+- [**Axios**](https://www.npmjs.com/package/axios): A promise-based HTTP client for the browser and Node.js.  
+  <img src="https://axios-http.com/assets/logo.svg" alt="Axios Icon" width="100"/>
 
-
-- [**React**](https://react.dev/): A JavaScript library for building user interfaces.  ![React](https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg) 
-
-
-- [**Git**](https://git-scm.com/): A version control system to track code changes.  ![Git](https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png) 
-
-
-- [**Axios**](https://www.npmjs.com/package/axios): A promise-based HTTP client for the browser and Node.js.  ![Axios](https://axios-http.com/assets/logo.svg) 
-
-
--[**MongoDB Atlas**](https://www.mongodb.com/atlas/database): A fully managed cloud database.   ![MongoDB](https://webassets.mongodb.com/_com_assets/cms/mongodb-logo-rgb-j6w271g1xn.jpg) 
-
+- [**MongoDB Atlas**](https://www.mongodb.com/atlas/database): A fully managed cloud database.  
+  <img src="https://webassets.mongodb.com/_com_assets/cms/mongodb-logo-rgb-j6w271g1xn.jpg" alt="MongoDB Atlas Icon" width="100"/>
 
 - [**Postman**](https://www.postman.com/downloads/): A platform for API development and testing.  
-  *Choose the version that suits your OS.*
+  *Choose the version that suits your OS.*  
+  <img src="https://assets.getpostman.com/common-share/postman-logo-horizontal-320x132.png" alt="Postman Icon" width="100"/>
+
 
 ## Features
 
