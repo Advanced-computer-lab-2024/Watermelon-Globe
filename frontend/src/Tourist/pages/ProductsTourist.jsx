@@ -188,10 +188,11 @@ const ProductList = () => {
       <div className="max-w-screen-xl mx-auto px-4">
         {/* Placeholder Image with Overlay Text */}
         <div className="mb-8 relative">
+          
           <img
             src="https://img.freepik.com/premium-vector/people-mall_18591-35482.jpg?w=740"
             alt="Placeholder"
-            className="w-full h-50 object-cover rounded-lg filter blur-sm"
+            className="w-full h-72 object-cover rounded-lg filter blur-sm"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <h2 className="text-4xl md:text-5xl font-bold text-white text-center px-4 py-2 bg-primary bg-opacity-75 rounded-lg shadow-lg transform -skew-x-6">

@@ -1778,7 +1778,7 @@ const buyCart = async (req, res) => {
       const quantityToDecrement = item.quantity;
 
       // Find the product by ID
-      const product = await Product.findById(productId);
+      const product = await Product.findById(productId) .populate("seller");
 
       if (!product) {
         return res.status(400).json({ message: `Product with ID ${productId} not found` });
@@ -1794,6 +1794,7 @@ const buyCart = async (req, res) => {
       product.sales++;
       await product.save();
 
+
       // Add product to the list of products for the tourist
       productsToAdd.push(productId);
 
@@ -1805,6 +1806,49 @@ const buyCart = async (req, res) => {
 
       // Calculate the total price
       totalPrice += product.price * quantityToDecrement;
+
+      if (product.quantity === 0) {
+        const admin = await Admin.findById("675de5356791c633ae7a06b6");
+        if (admin) {
+          const notification = `Product ${product.name} is out of stock.`;
+          admin.notifications.push(notification);
+  
+          await admin.save();
+  
+          const seller= product.seller;
+          console.log(seller);
+          console.log(seller._id);
+          seller.notifications.push(notification);
+          await seller.save();
+  
+          // Send email notification
+          const emailResult = await sendEmail(
+            'omarhseif04@gmail.com',
+            'Low Stock Alert',
+            notification,
+            `<h1>Low Stock Alert</h1><p>${notification}</p>`
+          );
+  
+          const emailResult2 = await sendEmail(
+            'omarhseif04@gmail.com',
+            'Low Stock Alert',
+            notification,
+            `<h1>Low Stock Alert</h1><p>${notification}</p>`
+          );
+  
+          if (!emailResult2.success) {
+            console.error('Failed to send email notification for product for seller:', product._id);
+          }
+  
+  
+  
+          if (!emailResult.success) {
+            console.error('Failed to send email notification for product:', product._id);
+          }
+        } else {
+          console.error('Admin not found to send low stock notification');
+        }
+      }
     }
 
     // Add the products to the `products` array in the tourist's profile
@@ -1826,6 +1870,8 @@ const buyCart = async (req, res) => {
 
     // Save the updated tourist document
     await tourist.save();
+
+   
 
     return res.status(200).json({
       message: 'Cart successfully purchased. Products added to profile and orders, and cart cleared.',
