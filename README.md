@@ -84,13 +84,13 @@ No strict code style was used in the project,however, all of the developers used
 
 ## Website Screenshots
 
-![Postman5](.\frontend\src\README\register.png)
+![register](./frontend/src/README/register.png)
 
-![Postman5](.\frontend\src\README\adminDashboard.png)
+![adminDashboard](./frontend/src/README/adminDashboard.png)
 
-![Postman5](.\frontend\src\README\ProductsList.png)
+![ProductsList](./frontend/src/README/ProductsList.png)
 
-![Postman5](.\frontend\src\README\Complaints.png)
+![Complaints](./frontend/src/README/Complaints.png)
 
 
 
@@ -627,23 +627,23 @@ The following tests are included in the project to ensure the functionality of k
 
 1. **Add Product to Cart**: 
    - **Function**: Verifies that a product is successfully added to the shopping cart.
-   - **Proof**: ![Postman5](.\frontend\src\README\Postman5.png)
+   - **Proof**: ![Postman5](./frontend/src/README/Postman5.png)
    
 2. **Getting Access Token**: 
    - **Function**: Ensures that an access token is successfully retrieved for authenticated API requests.
-   - **Proof**: ![Postman6](.\frontend\src\README\Postman6.png)
+   - **Proof**: ![Postman6](./frontend/src/README/Postman6.png)
 
 3. **Updating a Completed Itinerary Rating**: 
    - **Function**: Confirms that the rating for a completed itinerary can be successfully updated.
-   - **Proof**: ![Postman7](.\frontend\src\README\Postman7.png)
+   - **Proof**: ![Postman7](./frontend/src/README/Postman7.png)
 
 4. **Using the Token to Get Data via API**: 
    - **Function**: Verifies that the API can be accessed using the obtained access token and returns the expected data.
-   - **Proof**: ![Postman8](.\frontend\src\README\Postman8.png)
+   - **Proof**: ![Postman8](./frontend/src/README/Postman8.png)
 
 5. **Update Wallet**: 
    - **Function**: Ensures that the user’s wallet balance is updated correctly after transactions.
-   - **Proof**: ![Postman9](.\frontend\src\README\Postman9.png)
+   - **Proof**: ![Postman9](./frontend/src/README/Postman9.png)
 
 
 
