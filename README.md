@@ -84,9 +84,9 @@ No strict code style was used in the project,however, all of the developers used
 
 ## Website Screenshots
 
-![register](./frontend/src/README/register.png)
+![register](./frontend/src/README/register.jpg)
 
-![adminDashboard](./frontend/src/README/adminDashboard.png)
+![adminDashboard](./frontend/src/README/adminDashboard.jpg)
 
 ![ProductsList](./frontend/src/README/ProductsList.png)
 
