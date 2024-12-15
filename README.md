@@ -645,8 +645,25 @@ The following tests are included in the project to ensure the functionality of k
    - **Function**: Ensures that the user’s wallet balance is updated correctly after transactions.
    - **Proof**: ![Postman9](./frontend/src/README/Postman9.png)
 
+6. **Get Complaints**:
+   - **Function**: Gets all the complaints submitted by users for the admin.
+   - **Proof**:![Postman10](./frontend/src/README/Postman10.png)
 
+7. **Archive Product**:
+   - **Function**: Archives/unarchives a certain product by the admin (ex. in case of no stock).
+   - **Proof**:![Postman11](./frontend/src/README/Postman11.png)
 
+8. **Get All Sites**:
+   - **Function**: Gets all the sites to view for the governor.
+   - **Proof**:![Postman12](./frontend/src/README/Postman12.png)
+
+9. **Create Promocode**:
+   - **Function**: Creates a promocode by the admin for available users (for itineraries,products,etc..).
+   - **Proof**:![Postman13](./frontend/src/README/Postman13.png)
+
+10. **Mark Itinerary**:
+   - **Function**: admin Marks Itinerary as appropriate/ inappropriate for the viewers.
+   - **Proof**:![Postman14](./frontend/src/README/Postman14.png)
 
 
 
