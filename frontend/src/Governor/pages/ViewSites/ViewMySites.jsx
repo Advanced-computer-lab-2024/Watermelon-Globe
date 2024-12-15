@@ -64,8 +64,9 @@ const ViewMySites = () => {
   }, [id]);
 
   const handleItineraryClick = (activityId) => {
-    navigate(`/GovernorSiteDetails/${activityId}/`);
+    navigate(`/mySiteDetails/${activityId}/`);
   };
+
 
   const handleSiteDelete = (id) => {
     setSite(sites.filter((item) => item.id !== id));

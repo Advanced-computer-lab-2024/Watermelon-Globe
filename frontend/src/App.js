@@ -114,6 +114,7 @@ import ItineraryComponent2 from "./TourGuide/Components/Itineraries.jsx";
 import TourGuideProfile from "./TourGuide/Components/viewProfile.tsx";
 import AllItineraries from "./TourGuide/Components/AllItineraries.jsx";
 import GeneralDetails from "./TourGuide/Components/AllItinerariesDetail.jsx";
+import MySiteDetails from "./Governor/Components/mySiteDeatils.jsx";
 //Tour guide pages -- Sprint 3
 import ViewItineraries from "./TourGuide/pages/ViewItineraries/ViewItineraries";
 import ViewMyItineraries from "./TourGuide/pages/ViewItineraries/ViewMyItineraries";
@@ -308,6 +309,11 @@ const App = () => {
           <Route
             path="/ratingsAndCommentsPage/:relatedObjectId/:touristId/:type"
             element={<RatingsAndCommentsPage />}
+          />
+          <Route
+            path="/mySiteDetails/:id"
+            element={<MySiteDetails
+             />}
           />
 
           {/* <Route path="/advertiser" element={<AdvertiserPage />} /> */}
