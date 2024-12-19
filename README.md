@@ -655,7 +655,7 @@ The provided test routes test the direct API references mentioned on the previou
 
 ### How to Use the Collection
 
-1. Download the Postman collection: [API-References.postman_collection.json](./frontend/README/API-References.postman_collection.json)
+1. Download the Postman collection: [API-References.postman_collection.json](./frontend/src/README/API-References.postman_collection.json)
 2. Open Postman and import the collection:
    - Click on *File* > *Import*.
    - Upload the downloaded .json file.
@@ -706,27 +706,27 @@ make sure you have downloaded every instance in the [installation section](#Inst
 
 1. *Admin Demo Video*:
 
-  [Click here to watch the demo](https://drive.google.com/file/d/1OXqtEiwnozX3GHcXa_ZTCGBDNR1wcxI2/view?usp=drive_link)
+  [Click here to watch the demo](https://drive.google.com/file/d/1OXqtEiwnozX3GHcXa_ZTCGBDNR1wcxI2/view?usp=sharing)
 
 2. *Advertiser*:
   
-  [Click here to watch the demo](https://drive.google.com/file/d/1F75A9kkPt3Sz3xEdzpZSRMcS5HiiGNRl/view?usp=drive_link)
+  [Click here to watch the demo](https://drive.google.com/file/d/1F75A9kkPt3Sz3xEdzpZSRMcS5HiiGNRl/view?usp=sharing)
 
 3. *Governor*:
 
-  [Click here to watch the demo](https://drive.google.com/file/d/1aYagdNPnQE4eAFX5j5_6apC1tbF67BF7/view?usp=drive_link)
+  [Click here to watch the demo](https://drive.google.com/file/d/1aYagdNPnQE4eAFX5j5_6apC1tbF67BF7/view?usp=sharing)
 
 4. *Tour Guide*:
 
-  [Click here to watch the demo](https://drive.google.com/file/d/15GWlJcNoc44s1puJR-JeiHz1FGTULYVX/view?usp=drive_link)
+  [Click here to watch the demo](https://drive.google.com/file/d/15GWlJcNoc44s1puJR-JeiHz1FGTULYVX/view?usp=sharing)
 
 5. *Seller*:
 
-  [Click here to watch the demo](https://drive.google.com/file/d/1l5zLq0UwpDYJI9XVqSV7KH2gmMVZsZqs/view?usp=drive_link)
+  [Click here to watch the demo](https://drive.google.com/file/d/1XPW0FTZLJSDo4pN3I0lqz5BCgPkXqz7Z/view?usp=sharing)
 
 6. *Tourist*:
 
-  [Click here to watch the demo](https://drive.google.com/file/d/1l5zLq0UwpDYJI9XVqSV7KH2gmMVZsZqs/view?usp=drive_link)
+  [Click here to watch the demo](https://drive.google.com/file/d/1l5zLq0UwpDYJI9XVqSV7KH2gmMVZsZqs/view?usp=sharing)
 
 
 Your backend will run at http://localhost:8000 (or the port you configure), and the frontend will run at http://localhost:3000.
