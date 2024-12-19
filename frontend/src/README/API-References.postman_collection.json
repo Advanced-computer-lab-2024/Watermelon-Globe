@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "f184d942-1581-4fca-b373-2937b36383a1",
+		"name": "API-References",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38496605"
+	},
+	"item": [
+		{
+			"name": "Get All Activities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/Activities/activities",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Activities",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Attended/Completed Itineraries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/Tourist/getMyCompletedActivities/672faa3a88b3300fd7662540",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Tourist",
+						"getMyCompletedActivities",
+						"672faa3a88b3300fd7662540"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rate Itinerary",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rating\": 5,\r\n    \"touristId\": \"6703eea15ad80263b212ca21\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/Tourist/itineraries/67042555283f62d697ad84f4/rate",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Tourist",
+						"itineraries",
+						"67042555283f62d697ad84f4",
+						"rate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Itinerary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/Itinerary/getItinerary/67042555283f62d697ad84f4",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Itinerary",
+						"getItinerary",
+						"67042555283f62d697ad84f4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting Access Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "JqFVpFzJdoaqMJhAYG9SbcgiHbKGOWWl",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "hwuh05PDn0AlbYwU",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://test.api.amadeus.com/v1/security/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"test",
+						"api",
+						"amadeus",
+						"com"
+					],
+					"path": [
+						"v1",
+						"security",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Viewing Flight Offers(Using the Token to Get Data via API)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1O60yhFlEnJY9ALYIwF42UyttcoJ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=CAI&destinationLocationCode=BKK&departureDate=2024-12-22&adults=5&nonStop=false&max=250&travelClass=FIRST&maxPrice=3000",
+					"protocol": "https",
+					"host": [
+						"test",
+						"api",
+						"amadeus",
+						"com"
+					],
+					"path": [
+						"v2",
+						"shopping",
+						"flight-offers"
+					],
+					"query": [
+						{
+							"key": "originLocationCode",
+							"value": "CAI"
+						},
+						{
+							"key": "destinationLocationCode",
+							"value": "BKK"
+						},
+						{
+							"key": "departureDate",
+							"value": "2024-12-22"
+						},
+						{
+							"key": "adults",
+							"value": "5"
+						},
+						{
+							"key": "nonStop",
+							"value": "false"
+						},
+						{
+							"key": "max",
+							"value": "250"
+						},
+						{
+							"key": "travelClass",
+							"value": "FIRST"
+						},
+						{
+							"key": "maxPrice",
+							"value": "3000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Promocode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": \"hey Promo\",\r\n    \"discountValue\": \"20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/Admin/createPromoCode",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Admin",
+						"createPromoCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product to Cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"productId\": \"6746b1fb9c2ba9064333361b\",\r\n  \"quantity\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/Tourist/addProductToCart/672f80816271465fd87bbddf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Tourist",
+						"addProductToCart",
+						"672f80816271465fd87bbddf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updating a Completed Itinerary Rating",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/Tourist/updateRating/6702a5af74633fccb7308d42?rating=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Tourist",
+						"updateRating",
+						"6702a5af74633fccb7308d42"
+					],
+					"query": [
+						{
+							"key": "rating",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Wallet",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"amount\": 1000\r\n    } ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/Tourist/updateWallet/672f80816271465fd87bbddf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Tourist",
+						"updateWallet",
+						"672f80816271465fd87bbddf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Complaints",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/Admin/Complaint",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Admin",
+						"Complaint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mark Itinerary Appropriate",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/Admin/markItineraryAppropriate/670269d48af0ff0acb1a3d62",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Admin",
+						"markItineraryAppropriate",
+						"670269d48af0ff0acb1a3d62"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Sites",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/Governor/getAllSites",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Governor",
+						"getAllSites"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Archive Product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/Admin/archiveProduct?name=Neck Pillow",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"Admin",
+						"archiveProduct"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Neck Pillow"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
