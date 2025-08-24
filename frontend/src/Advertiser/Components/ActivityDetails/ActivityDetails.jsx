@@ -50,7 +50,7 @@ const ActivityDetails = () => {
       }
     };
     fetchActivity();
-  }, [updatedProduct.id]);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -116,7 +116,7 @@ const ActivityDetails = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f4eaef76" }}>
-       <div
+      <div
         style={{
           backgroundColor: "#fff",
           minHeight: "100vh", // Ensures it covers the full viewport
@@ -157,7 +157,7 @@ const ActivityDetails = () => {
                       </button>
                     </div>
                     <div className="p-8 md:w-2/3">
-                    {isEditing ? (
+                      {isEditing ? (
                         <div className="space-y-4">
                           <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Activity Details</h2>
                           <label htmlFor="Name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -229,32 +229,32 @@ const ActivityDetails = () => {
                           </div>
                         </div>
                       ) : (
-                  <>
-                  <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
-                    Activity Details
-                  </div>
-                  <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
-                  <p style={{marginLeft:5}} className="font-semibold text-gray-900">${activity?.Price}</p>
-                  <p className="text-gray-600 mb-4">{activity?.Time}</p>
-                  <p className="text-gray-600 mb-4">{activity?.Date}</p>
-                  <p className="text-gray-600 mb-4">{category}</p>
-                  <div className="mt-4">
-                    <h3 className="text-lg font-medium mb-2">Tags:</h3>
-                    {tags.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
-                        {tags.map(tagObj => (
-                          <span
-                            key={tagObj._id}
-                            className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
-                          >
-                            {tagObj.tag?.trim() || "Unnamed Tag"}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500">No tags associated with this activity.</p>
-                    )}
-                  </div>
+                        <>
+                          <div className="uppercase tracking-wide text-sm text-[#91c297] font-semibold mb-1">
+                            Activity Details
+                          </div>
+                          <h1 className="text-3xl font-bold text-black mb-2">{activity?.Name}</h1>
+                          <p style={{ marginLeft: 5 }} className="font-semibold text-gray-900">${activity?.Price}</p>
+                          <p className="text-gray-600 mb-4">{activity?.Time}</p>
+                          <p className="text-gray-600 mb-4">{activity?.Date}</p>
+                          <p className="text-gray-600 mb-4">{category}</p>
+                          <div className="mt-4">
+                            <h3 className="text-lg font-medium mb-2">Tags:</h3>
+                            {tags.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {tags.map(tagObj => (
+                                  <span
+                                    key={tagObj._id}
+                                    className="bg-[#91c297] text-white px-3 py-1 rounded-md text-sm"
+                                  >
+                                    {tagObj.tag?.trim() || "Unnamed Tag"}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-gray-500">No tags associated with this activity.</p>
+                            )}
+                          </div>
                           <div className="flex items-center mb-4">
                             <div className="flex items-center">{renderRatingStars(activity?.rating || 0)}</div>
                             <p className="ml-2 text-sm text-gray-600">
